@@ -1,0 +1,20 @@
+{
+  "name": "@workspace/runner",
+  "version": "1.0.0",
+  "description": "Universal Process Supervision, Port Conflict Resolution and Fullstack Dev Runners for Workspace",
+  "main": "./bin/run-dev.py",
+  "type": "module",
+  "scripts": {
+    "dev": "python bin/run-dev.py --kill-port",
+    "frontend": "python bin/run-frontend.py --kill-port",
+    "backend": "python bin/run-backend.py --kill-port"
+  },
+  "keywords": [
+    "workspace",
+    "runner",
+    "supervisor",
+    "dev-server",
+    "orchestrator"
+  ],
+  "license": "MIT"
+}

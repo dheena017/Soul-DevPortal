@@ -1,0 +1,56 @@
+{
+  "name": "@workspace/packages-docs",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Interactive developer portal, architecture specs, and live package explorer for the Soul Workspace monorepo.",
+  "type": "module",
+  "workspaces": [
+    "Soul-DevPortal-Packages/*"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "dev:all": "python Soul-DevPortal-Packages/runner/bin/run-all.py --kill-port",
+    "dev:project": "python Soul-DevPortal-Packages/runner/bin/run-dev.py --kill-port",
+    "dev:client": "python Soul-DevPortal-Packages/runner/bin/run-frontend.py --kill-port",
+    "dev:frontend": "python Soul-DevPortal-Packages/runner/bin/run-frontend.py --kill-port",
+    "dev:server": "python Soul-DevPortal-Packages/runner/bin/run-backend.py --kill-port",
+    "dev:backend": "python Soul-DevPortal-Packages/runner/bin/run-backend.py --kill-port",
+    "dev:portal": "vite",
+    "dev:portal:server": "python backend/main.py --port 8008 --reload",
+    "extract": "python backend/main.py --extract-only",
+    "install:python": "pip install -e Soul-DevPortal-Packages/logger && pip install -e Soul-DevPortal-Packages/runner",
+    "install:packages": "npm install && npm run install:python",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@workspace/config": "*",
+    "@workspace/logger": "*",
+    "@workspace/runner": "*",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.7.0",
+    "postcss": "^8.5.33",
+    "rollup": "^4.68.7",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^5.8.0",
+    "vite": "^7.1.7"
+  },
+  "keywords": [
+    "workspace",
+    "devportal",
+    "monorepo",
+    "react19",
+    "fastapi",
+    "vite",
+    "tailwind",
+    "packages"
+  ],
+  "author": "Dheena",
+  "license": "MIT"
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@workspace/config",
+  "version": "1.0.0",
+  "description": "Centralized, enterprise configuration presets for TypeScript, Tailwind CSS, Prettier, ESLint, and Python",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    "./tsconfig/base.json": "./tsconfig/base.json",
+    "./tsconfig/react.json": "./tsconfig/react.json",
+    "./tsconfig/next.json": "./tsconfig/next.json",
+    "./tsconfig/node.json": "./tsconfig/node.json",
+    "./tsconfig/library.json": "./tsconfig/library.json",
+    "./tsconfig/test.json": "./tsconfig/test.json",
+    "./tailwind/preset": "./tailwind/preset.js",
+    "./tailwind/tokens": "./tailwind/tokens.js",
+    "./prettier": "./prettier/index.json",
+    "./eslint/base": "./eslint/base.js",
+    "./eslint/react": "./eslint/react.js",
+    "./eslint/next": "./eslint/next.js"
+  },
+  "files": [
+    "tsconfig",
+    "tailwind",
+    "prettier",
+    "eslint",
+    "python",
+    "README.md"
+  ],
+  "keywords": [
+    "workspace",
+    "config",
+    "tsconfig",
+    "tailwind",
+    "prettier",
+    "eslint"
+  ]
+}

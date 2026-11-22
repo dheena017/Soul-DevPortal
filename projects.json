@@ -1,0 +1,82 @@
+{
+  "apexmind-ai": {
+    "title": "APEXMIND STUDIO AI",
+    "frontend_port": 5173,
+    "backend_port": 8000,
+    "frontend_cmd": ["npx", "vite", "client", "--config", "client/vite.config.ts", "--port", "5173"],
+    "backend_cmd": ["python", "-u", "server/main.py"],
+    "framework": "React 19 + Vite 8 + Tailwind CSS v4",
+    "db_info": "SQLite (server/data/apexmind.db)",
+    "ai_engine": "Google Gemini 2.5 Flash + Text-to-Speech Engine"
+  },
+  "sonikoma": {
+    "title": "SONIKOMA AI STUDIO",
+    "frontend_port": 5176,
+    "backend_port": 8006,
+    "frontend_cmd": ["npm", "run", "dev"],
+    "backend_cmd": ["python", "-m", "uvicorn", "backend.main:app", "--reload", "--port", "8006"],
+    "framework": "React 19 + Vite 8 + Tailwind CSS v4",
+    "db_info": "SQLite / Supabase PostgreSQL",
+    "ai_engine": "Gemini AI Video & Voice"
+  },
+  "outpass-system": {
+    "title": "OUTPASS MANAGEMENT SYSTEM",
+    "frontend_port": 5174,
+    "backend_port": 8001,
+    "frontend_cmd": ["npm", "run", "dev"],
+    "backend_cmd": ["python", "-m", "uvicorn", "backend.main:app", "--reload", "--port", "8001"],
+    "framework": "React 18 + Vite + Tailwind CSS",
+    "db_info": "SQLite + SQLAlchemy",
+    "ai_engine": "N/A"
+  },
+  "free-api-hub": {
+    "title": "FREE API HUB",
+    "frontend_port": 5175,
+    "backend_port": 8002,
+    "frontend_cmd": ["npm", "run", "dev"],
+    "backend_cmd": ["python", "-m", "uvicorn", "backend.main:app", "--reload", "--port", "8002"],
+    "framework": "React 18 + Vite + Tailwind CSS",
+    "db_info": "JSON Flat Store",
+    "ai_engine": "N/A"
+  },
+  "spatial-dimensions": {
+    "title": "SPATIAL DIMENSIONS",
+    "frontend_port": 5177,
+    "backend_port": 8007,
+    "frontend_cmd": ["npm", "run", "dev:web"],
+    "backend_cmd": ["node", "server/index.mjs"],
+    "framework": "React 19 + Vite 6 + Motion",
+    "db_info": "JSONL Inquiries Store",
+    "ai_engine": "N/A"
+  },
+  "college-management-system": {
+    "title": "COLLEGE MANAGEMENT SYSTEM",
+    "frontend_port": 5178,
+    "backend_port": 8005,
+    "frontend_cmd": ["npm", "run", "dev"],
+    "backend_cmd": ["npx", "tsx", "server/index.ts"],
+    "framework": "React 19 + Vite 6 + Tailwind CSS v4",
+    "db_info": "SQLite (better-sqlite3)",
+    "ai_engine": "N/A"
+  },
+  "globalpulse-ai": {
+    "title": "GLOBALPULSE AI",
+    "frontend_port": 5179,
+    "backend_port": 8003,
+    "frontend_cmd": ["npm", "run", "dev"],
+    "backend_cmd": ["python", "-m", "uvicorn", "backend.main:app", "--reload", "--port", "8003"],
+    "framework": "Next.js 14 + React 18",
+    "db_info": "SQLite / aiosqlite",
+    "ai_engine": "Gemini AI News Synthesizer"
+  },
+  "postcraft-ai": {
+    "title": "POSTCRAFT AI",
+    "frontend_port": 5180,
+    "backend_port": 5180,
+    "frontend_cmd": ["npm", "run", "dev"],
+    "backend_cmd": null,
+    "framework": "Next.js 14 Fullstack App Router",
+    "db_info": "SQLite Database",
+    "ai_engine": "Integrated GenAI"
+  }
+}

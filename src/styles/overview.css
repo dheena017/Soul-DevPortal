@@ -1,0 +1,650 @@
+/* ==========================================================================
+   OVERVIEW DASHBOARD VIEW
+   ========================================================================== */
+
+.hero {
+  margin-bottom: 28px;
+  padding: 32px 24px;
+  background: #121212;
+  border: 1px solid #2f2f2f;
+  border-radius: 12px;
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.eyebrow {
+  color: #3b82f6;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #1e1e1e;
+  border: 1px solid #2f2f2f;
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.hero h1 {
+  margin: 0 0 8px 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+}
+
+.hero h1 em {
+  color: #60a5fa;
+  font-style: normal;
+}
+
+.hero p {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 780px;
+}
+
+/* ── Stats Cards Grid ────────────────────────────────────── */
+.stats-cards-grid,
+.stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 32px !important;
+}
+
+@media (max-width: 1024px) {
+  .stats-cards-grid,
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-cards-grid,
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.stat-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 18px 20px !important;
+  border-radius: 12px !important;
+  background: #141414 !important;
+  border: 1px solid #262626 !important;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+.stat-card-icon,
+.stat-icon {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 10px !important;
+  background: rgba(59, 130, 246, 0.12) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  color: #60a5fa !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+  font-size: 20px !important;
+}
+
+.stat-card-info,
+.stat-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+}
+
+.stat-card-label,
+.stat-label {
+  font-size: 11px !important;
+  color: #9ca3af !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.stat-card-value,
+.stat-value {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.2 !important;
+}
+
+.stat-card-sub,
+.stat-sub {
+  font-size: 11px !important;
+  color: #6b7280 !important;
+  font-family: ui-monospace, monospace !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ── Monorepo Packages Grid & Cards ──────────────────────── */
+.package-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  margin-top: 18px !important;
+}
+
+@media (max-width: 1024px) {
+  .package-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.package-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding: 22px !important;
+  border-radius: 14px !important;
+  background: #141414 !important;
+  border: 1px solid #262626 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
+  min-height: 380px !important;
+}
+
+.package-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6) !important;
+}
+
+.card-top {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.card-icon-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.package-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 20px !important;
+  background: #1e1e1e !important;
+  border: 1px solid #2f2f2f !important;
+  flex-shrink: 0 !important;
+}
+
+.package-icon.config {
+  background: rgba(59, 130, 246, 0.12) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.package-icon.logger {
+  background: rgba(139, 92, 246, 0.12) !important;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+.package-icon.runner {
+  background: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.ecosystem-tags {
+  display: flex !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.eco-tag {
+  font-size: 9.5px !important;
+  font-weight: 800 !important;
+  font-family: ui-monospace, monospace !important;
+  padding: 2px 7px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+
+.eco-tag.npm-tag {
+  background: rgba(239, 68, 68, 0.14) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+}
+
+.eco-tag.py-tag {
+  background: rgba(14, 165, 233, 0.14) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(14, 165, 233, 0.35) !important;
+}
+
+.eco-tag.ts-tag {
+  background: rgba(59, 130, 246, 0.14) !important;
+  color: #60a5fa !important;
+  border: 1px solid rgba(59, 130, 246, 0.35) !important;
+}
+
+.type-badge {
+  border: 1px solid #333333 !important;
+  border-radius: 9999px !important;
+  padding: 3px 9px !important;
+  color: #9ca3af !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  font-family: ui-monospace, monospace !important;
+  background: #1e1e1e !important;
+  white-space: nowrap !important;
+}
+
+.package-card h2 {
+  margin: 16px 0 4px 0 !important;
+  font-size: 16.5px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  letter-spacing: -0.01em !important;
+}
+
+.python-name {
+  margin: 0 !important;
+  color: #6b7280 !important;
+  font-family: ui-monospace, monospace !important;
+  font-size: 11px !important;
+}
+
+.package-card .card-description {
+  min-height: 48px !important;
+  font-size: 12.5px !important;
+  line-height: 1.6 !important;
+  color: #9ca3af !important;
+  margin: 10px 0 16px !important;
+}
+
+.package-card .card-meta {
+  margin-top: auto !important;
+  padding: 12px 0 8px !important;
+  border-top: 1px solid #222222 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  font-size: 11.5px !important;
+  color: #9ca3af !important;
+}
+
+.package-card .card-meta span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.package-card .card-meta b {
+  color: #60a5fa !important;
+  font-weight: 800 !important;
+}
+
+.card-quick-install {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  background: #0d0d0d !important;
+  border: 1px solid #242424 !important;
+  border-radius: 6px !important;
+  padding: 6px 10px !important;
+  margin: 10px 0 !important;
+  box-sizing: border-box !important;
+}
+
+.card-quick-install code {
+  font-size: 11.5px !important;
+  color: #60a5fa !important;
+  font-family: ui-monospace, monospace !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.card-actions {
+  margin-top: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+.card-link {
+  width: 100% !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #3b82f6 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 6px 0 !important;
+  transition: color 0.15s ease !important;
+  cursor: pointer !important;
+}
+
+.card-link:hover {
+  color: #60a5fa !important;
+}
+
+.card-link span {
+  font-size: 15px !important;
+}
+
+/* ── Section Titles ──────────────────────────────────────── */
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 18px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.section-kicker {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #3b82f6;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.section-header-row h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.section-subtext {
+  margin: 4px 0 0 0;
+  color: #9ca3af;
+  font-size: 12.5px;
+}
+
+.view-all-projects-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #1e1e1e;
+  border: 1px solid #2f2f2f;
+  color: #e5e5e5;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.view-all-projects-btn:hover {
+  background: #242424;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+/* ── Consumer Apps Preview Grid ──────────────────────────── */
+.consumer-apps-section {
+  margin-top: 36px;
+}
+
+.preview-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.preview-project-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border-radius: 10px;
+  background: #181818;
+  border: 1px solid #2f2f2f;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.preview-project-card:hover {
+  transform: translateY(-2px);
+  border-color: #4a4a4a;
+}
+
+.preview-project-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.preview-project-top strong {
+  font-size: 13.5px;
+  color: #ffffff;
+}
+
+.preview-ports {
+  display: flex;
+  gap: 4px;
+}
+
+.preview-port {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #121212;
+  border: 1px solid #2a2a2a;
+  color: #38bdf8;
+  font-size: 10.5px;
+  font-family: ui-monospace, monospace;
+  font-weight: 600;
+}
+
+.preview-framework {
+  margin: 0 0 6px 0;
+  color: #9ca3af;
+  font-size: 11.5px;
+}
+
+.preview-ai {
+  color: #a78bfa;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* ── Overview Documentation Grid ─────────────────────────── */
+.docs-overview-section {
+  margin-top: 36px;
+}
+
+.docs-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.doc-overview-card {
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  border-radius: 10px;
+  background: #181818;
+  border: 1px solid #2f2f2f;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.doc-overview-card:hover {
+  transform: translateY(-2px);
+  border-color: #3b82f6;
+}
+
+.doc-overview-card.featured {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.3) 0%, #181818 100%);
+}
+
+.doc-ov-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #121212;
+  border: 1px solid #2a2a2a;
+  color: #93c5fd;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.doc-overview-card.featured .doc-ov-badge {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+}
+
+.doc-overview-card h3 {
+  margin: 0 0 6px 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.doc-overview-card p {
+  margin: 0 0 12px 0;
+  color: #9ca3af;
+  font-size: 12px;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.doc-ov-link {
+  color: #3b82f6;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* ── Workspace Facts & Root Scripts ──────────────────────── */
+.workspace-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 36px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #121212;
+  border: 1px solid #2f2f2f;
+}
+
+.workspace-facts div {
+  display: flex;
+  flex-direction: column;
+}
+
+.workspace-facts span {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 4px;
+}
+
+.workspace-facts strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.workspace-scripts {
+  margin-top: 36px;
+}
+
+.scripts-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.scripts-search-wrap input {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 12px;
+  width: 240px;
+}
+
+.script-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.script-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #181818;
+  border: 1px solid #2f2f2f;
+}
+
+.script-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.script-info code {
+  color: #60a5fa;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.script-cmd {
+  color: #9ca3af;
+  font-size: 11.5px;
+  font-family: ui-monospace, monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,285 @@
+/* ==========================================================================
+   SONIKOMA DARK MODE SYSTEM & UNIVERSAL HOVER DYNAMICS
+   🌑 Base Palette: Rich Black (#0A0A0A), Charcoal (#121212), Dark Gray (#1E1E1E), Gunmetal (#2A2A2A)
+   🎨 Borders: Subtle Gray (#2F2F2F) | Accent: Electric Blue (#3B82F6)
+   ✨ Typography: Primary (#E5E5E5), Secondary (#9CA3AF), Dim (#6B7280)
+   ========================================================================== */
+
+@import "tailwindcss" source(none);
+@source "../../index.html";
+@source "../**/*.{js,ts,jsx,tsx}";
+
+:root {
+  --page-bg: #0a0a0a;
+  --sidebar-bg: #121212;
+  --surface: #1e1e1e;
+  --surface-raised: #242424;
+  --surface-inset: #0a0a0a;
+  --border: #2f2f2f;
+  --border-subtle: #242424;
+  --text-primary: #e5e5e5;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --accent: #3b82f6;
+  --accent-bg: rgba(59, 130, 246, 0.15);
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  /* GitHub Primer Dark Design Tokens */
+  --gh-canvas-default: #0d1117;
+  --gh-canvas-subtle: #161b22;
+  --gh-canvas-inset: #010409;
+  --gh-canvas-overlay: #1f242c;
+  --gh-border-default: #30363d;
+  --gh-border-muted: #21262d;
+  --gh-border-subtle: rgba(240, 246, 252, 0.1);
+  --gh-fg-default: #e6edf3;
+  --gh-fg-muted: #848d97;
+  --gh-fg-subtle: #6e7681;
+  --gh-accent-fg: #58a6ff;
+  --gh-accent-emphasis: #1f6feb;
+  --gh-success-fg: #3fb950;
+  --gh-attention-fg: #d29922;
+  --gh-danger-fg: #f85149;
+  --gh-done-fg: #a371f7;
+
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: dark !important;
+  background-color: var(--page-bg) !important;
+  color: var(--text-primary) !important;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--page-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+html.sidebar-open,
+body.sidebar-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ── Surface Utility Classes ─────────────────────────────── */
+.bg-neutral-955 { background-color: #0a0a0a !important; }
+.bg-neutral-950, .bg-neutral-925 { background-color: #121212 !important; }
+.bg-neutral-900 { background-color: #1e1e1e !important; }
+.bg-neutral-850 { background-color: #242424 !important; }
+.bg-neutral-800 { background-color: #2a2a2a !important; }
+
+/* ── Universal Inputs / Selects / Textareas Hover & Focus ──── */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.seamless-input):not(.bg-transparent),
+select:not(.seamless-select):not(.bg-transparent),
+textarea:not(.seamless-textarea):not(.bg-transparent) {
+  background-color: #1e1e1e !important;
+  color: #e5e5e5 !important;
+  border: 1px solid #2f2f2f !important;
+  border-radius: 8px;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.seamless-input):not(.bg-transparent):hover,
+select:not(.seamless-select):not(.bg-transparent):hover,
+textarea:not(.seamless-textarea):not(.bg-transparent):hover {
+  background-color: #242424 !important;
+  border-color: #4a4a4a !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.seamless-input):not(.bg-transparent):focus,
+select:not(.seamless-select):not(.bg-transparent):focus,
+textarea:not(.seamless-textarea):not(.bg-transparent):focus {
+  background-color: #262626 !important;
+  border-color: #3b82f6 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280 !important;
+}
+
+/* ── Universal Hover State for Nav Links & Interactive Buttons ── */
+nav a:hover,
+nav button:hover,
+aside nav a:hover,
+aside nav button:hover {
+  background-color: #242424 !important;
+  color: #ffffff !important;
+  border-color: #4a4a4a !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.15s ease-in-out;
+}
+
+/* ── Universal Table Row Hover ───────────────────────────── */
+tr:hover,
+[role="row"]:hover {
+  background-color: #252525 !important;
+  transition: background-color 0.15s ease;
+}
+
+/* ── Smooth Studio Scrollbars (6px Slim) ─────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2f2f2f;
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #525252 !important;
+}
+
+/* Firefox standard scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2f2f2f #0a0a0a;
+}
+
+/* ── Code & Pre Elements ─────────────────────────────────── */
+pre {
+  background-color: #0a0a0a !important;
+  color: #e5e5e5 !important;
+  border: 1px solid #282828 !important;
+  border-radius: 8px;
+}
+
+code:not(pre code) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #7dd3fc !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 4px;
+  padding: 1.5px 5px;
+  font-size: 0.86em;
+  font-weight: 500;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  margin: 0 1px;
+}
+
+pre code {
+  border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: inherit !important;
+  margin: 0 !important;
+}
+
+/* ── GitHub Primer Language Dots ─────────────────────────── */
+.lang-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.lang-dot.typescript, .lang-dot-typescript { background-color: #3178c6 !important; }
+.lang-dot.python, .lang-dot-python { background-color: #3572A5 !important; }
+.lang-dot.javascript, .lang-dot-javascript { background-color: #f1e05a !important; }
+.lang-dot.react, .lang-dot-react { background-color: #61dafb !important; }
+.lang-dot.fastapi, .lang-dot-fastapi { background-color: #009688 !important; }
+.lang-dot.tailwind, .lang-dot-tailwind { background-color: #38bdf8 !important; }
+.lang-dot.vite, .lang-dot-vite { background-color: #bd34fe !important; }
+.lang-dot.nextjs, .lang-dot-nextjs { background-color: #ffffff !important; }
+.lang-dot.sqlite, .lang-dot-sqlite { background-color: #003b57 !important; }
+.lang-dot.supabase, .lang-dot-supabase { background-color: #3ecf8e !important; }
+.lang-dot.gemini, .lang-dot-gemini { background-color: #4285f4 !important; }
+.lang-dot.pwa, .lang-dot-pwa { background-color: #5a0fc8 !important; }
+
+/* ── GitHub Repo Card Helpers ────────────────────────────── */
+.gh-repo-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.gh-repo-icon {
+  color: #848d97;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.gh-repo-title {
+  color: #58a6ff;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gh-repo-title:hover {
+  text-decoration: underline;
+}
+
+.gh-visibility-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 20px;
+  border: 1px solid #30363d;
+  background: transparent;
+  color: #848d97;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.gh-branch-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: #c9d1d9;
+  font-size: 11px;
+  font-family: ui-monospace, monospace;
+}
+
+.gh-lang-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #848d97;
+}
