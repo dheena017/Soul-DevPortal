@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import CopyButton from '../../../components/CopyButton';
 import EmptyState from '../../../components/EmptyState';
 import { PackageData } from '../../../types';
@@ -25,11 +25,61 @@ function getPythonInstallCommand(pkg: PackageData): string {
 }
 
 export default function PackagesDashboard({ packages = [], onSelectPackage, onClearSearch }: PackagesDashboardProps) {
+  const [query, setQuery] = useState<string>('');
   const [ecosystemFilter, setEcosystemFilter] = useState<'all' | 'npm' | 'python' | 'config'>('all');
   const [sortBy, setSortBy] = useState<'name' | 'exports' | 'version'>('name');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === '/' &&
+        document.activeElement !== searchInputRef.current &&
+        !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName || '')
+      ) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      } else if (e.key === 'Escape' && document.activeElement === searchInputRef.current) {
+        if (query) {
+          setQuery('');
+        } else {
+          searchInputRef.current?.blur();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [query]);
 
   const filteredPackages = useMemo(() => {
     let list = [...packages];
+
+    if (query.trim()) {
+      const needle = query.trim().toLowerCase();
+      list = list.filter((p) => {
+        const meta = PACKAGE_METADATA_MAP[p.id];
+        const tags = meta?.tags?.join(' ') || '';
+        const role = meta?.role || '';
+        return [
+          p.name,
+          p.displayName,
+          p.id,
+          p.description,
+          p.pythonName,
+          p.pythonModule,
+          role,
+          tags,
+          ...(p.exports || []),
+          ...(p.pythonExports || []),
+          ...(p.typeScriptExports || []),
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(needle);
+      });
+    }
 
     if (ecosystemFilter === 'npm') {
       list = list.filter((p) => p.hasNpmManifest && !p.name.includes('config'));
@@ -52,7 +102,7 @@ export default function PackagesDashboard({ packages = [], onSelectPackage, onCl
     }
 
     return list;
-  }, [packages, ecosystemFilter, sortBy]);
+  }, [packages, query, ecosystemFilter, sortBy]);
 
   return (
     <div className="packages-view-container">
@@ -82,55 +132,99 @@ export default function PackagesDashboard({ packages = [], onSelectPackage, onCl
           </div>
         </div>
 
-        <div className="packages-toolbar-row">
-          <div className="framework-filter-pills filter-pills" role="tablist" aria-label="Filter packages by ecosystem">
-            <button
-              type="button"
-              className={`framework-pill ${ecosystemFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setEcosystemFilter('all')}
-            >
-              <span className="fw-dot all-dot" aria-hidden="true" />
-              <span className="pill-text">All Packages</span>
-              <span className="pill-count">{packages.length}</span>
-            </button>
-            <button
-              type="button"
-              className={`framework-pill ${ecosystemFilter === 'npm' ? 'active' : ''}`}
-              onClick={() => setEcosystemFilter('npm')}
-            >
-              <span className="fw-dot react-dot" aria-hidden="true" />
-              <span className="pill-text">TypeScript / Node</span>
-            </button>
-            <button
-              type="button"
-              className={`framework-pill ${ecosystemFilter === 'python' ? 'active' : ''}`}
-              onClick={() => setEcosystemFilter('python')}
-            >
-              <span className="fw-dot next-dot" aria-hidden="true" />
-              <span className="pill-text">Python Modules</span>
-            </button>
-            <button
-              type="button"
-              className={`framework-pill ${ecosystemFilter === 'config' ? 'active' : ''}`}
-              onClick={() => setEcosystemFilter('config')}
-            >
-              <span className="fw-dot all-dot" aria-hidden="true" />
-              <span className="pill-text">Config Presets</span>
-            </button>
+        {/* Pillar 2 Key Metrics Banner */}
+        <div className="docs-hub-metrics-banner">
+          <div className="docs-metric-pill">
+            <span className="docs-metric-val">{packages.length}</span>
+            <span className="docs-metric-label">Shared Libraries</span>
+          </div>
+          <div className="docs-metric-pill">
+            <span className="docs-metric-val">Dual</span>
+            <span className="docs-metric-label">TS &amp; Python Runtime</span>
+          </div>
+          <div className="docs-metric-pill">
+            <span className="docs-metric-val">59+</span>
+            <span className="docs-metric-label">Exported APIs &amp; Symbols</span>
+          </div>
+          <div className="docs-metric-pill">
+            <span className="docs-metric-val">100%</span>
+            <span className="docs-metric-label">Monorepo Adoption</span>
+          </div>
+        </div>
+
+        <div className="projects-toolbar" style={{ marginTop: '18px', paddingTop: '18px', borderTop: '1px solid #242424' }}>
+          <div className="projects-search-input-wrap">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search packages by API, symbol, module, or tags... (Press '/' to focus)"
+              aria-label="Filter packages"
+            />
+            {query ? (
+              <button type="button" className="search-clear-inline" onClick={() => setQuery('')} aria-label="Clear search">
+                ✕
+              </button>
+            ) : (
+              <kbd style={{ position: 'absolute', right: '12px', fontSize: '11px', color: '#6b7280', background: '#1c1c1c', border: '1px solid #333', borderRadius: '4px', padding: '1px 5px' }}>/</kbd>
+            )}
           </div>
 
-          <div className="sort-control">
-            <label htmlFor="package-sort-select">Sort by:</label>
-            <select
-              id="package-sort-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="package-sort-select"
-            >
-              <option value="name">Name (A-Z)</option>
-              <option value="exports">Total Exports</option>
-              <option value="version">Version</option>
-            </select>
+          <div className="packages-toolbar-row" style={{ margin: 0, gap: '12px', flexWrap: 'wrap' }}>
+            <div className="framework-filter-pills filter-pills" role="tablist" aria-label="Filter packages by ecosystem">
+              <button
+                type="button"
+                className={`framework-pill ${ecosystemFilter === 'all' ? 'active' : ''}`}
+                onClick={() => setEcosystemFilter('all')}
+              >
+                <span className="fw-dot all-dot" aria-hidden="true" />
+                <span className="pill-text">All</span>
+                <span className="pill-count">{packages.length}</span>
+              </button>
+              <button
+                type="button"
+                className={`framework-pill ${ecosystemFilter === 'npm' ? 'active' : ''}`}
+                onClick={() => setEcosystemFilter('npm')}
+              >
+                <span className="fw-dot react-dot" aria-hidden="true" />
+                <span className="pill-text">TypeScript / Node</span>
+              </button>
+              <button
+                type="button"
+                className={`framework-pill ${ecosystemFilter === 'python' ? 'active' : ''}`}
+                onClick={() => setEcosystemFilter('python')}
+              >
+                <span className="fw-dot next-dot" aria-hidden="true" />
+                <span className="pill-text">Python Modules</span>
+              </button>
+              <button
+                type="button"
+                className={`framework-pill ${ecosystemFilter === 'config' ? 'active' : ''}`}
+                onClick={() => setEcosystemFilter('config')}
+              >
+                <span className="fw-dot all-dot" aria-hidden="true" />
+                <span className="pill-text">Config</span>
+              </button>
+            </div>
+
+            <div className="sort-control">
+              <label htmlFor="package-sort-select">Sort by:</label>
+              <select
+                id="package-sort-select"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="package-sort-select"
+              >
+                <option value="name">Name (A-Z)</option>
+                <option value="exports">Total Exports</option>
+                <option value="version">Version</option>
+              </select>
+            </div>
           </div>
         </div>
       </header>

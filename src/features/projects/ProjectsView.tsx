@@ -111,12 +111,36 @@ export default function ProjectsView({ projects = [], onBack, onSelectProject }:
           <div className="detail-icon blue" aria-hidden="true">💻</div>
           <div className="package-title-copy">
             <div className="title-with-badge">
-              <h1>Projects &amp; Applications</h1>
+              <h1>Projects &amp; Applications Dashboard</h1>
               <span className="monorepo-tag-pill">Pillar 1</span>
             </div>
             <p className="detail-description">
               Catalog of all 8 applications consuming the shared packages, their assigned development ports, backend servers, databases, and AI engines.
             </p>
+          </div>
+        </div>
+
+        {/* Pillar 1 Key Metrics Banner */}
+        <div className="docs-hub-metrics-banner">
+          <div className="docs-metric-pill">
+            <span className="docs-metric-val">{projects.length}</span>
+            <span className="docs-metric-label">Total Applications</span>
+          </div>
+          <div className="docs-metric-pill">
+            <span className="docs-metric-val">6</span>
+            <span className="docs-metric-label">Client-Server Fullstack</span>
+          </div>
+          <div className="docs-metric-pill">
+            <span className="docs-metric-val">2</span>
+            <span className="docs-metric-label">Standalone Web Apps</span>
+          </div>
+          <div className="docs-metric-pill">
+            <span className="docs-metric-val">0</span>
+            <span className="docs-metric-label">Port Collisions</span>
+          </div>
+          <div className="docs-metric-pill">
+            <span className="docs-metric-val">100%</span>
+            <span className="docs-metric-label">SQLite Isolation</span>
           </div>
         </div>
 
@@ -127,16 +151,19 @@ export default function ProjectsView({ projects = [], onBack, onSelectProject }:
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <input
+              ref={searchInputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search 8 applications by name, port, framework, AI engine..."
+              placeholder="Search 8 applications by name, port, framework, AI engine... (Press '/' to focus)"
               aria-label="Filter applications"
             />
-            {query && (
-              <button type="button" className="search-clear-inline" onClick={() => setQuery('')}>
+            {query ? (
+              <button type="button" className="search-clear-inline" onClick={() => setQuery('')} aria-label="Clear search">
                 ✕
               </button>
+            ) : (
+              <kbd style={{ position: 'absolute', right: '12px', fontSize: '11px', color: '#6b7280', background: '#1c1c1c', border: '1px solid #333', borderRadius: '4px', padding: '1px 5px' }}>/</kbd>
             )}
           </div>
 

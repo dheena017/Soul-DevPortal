@@ -72,10 +72,10 @@
   flex-direction: column;
   gap: 8px;
   padding: 12px 16px;
-  border-radius: 6px;
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-left: 4px solid #58a6ff;
+  border-radius: 8px;
+  background: #141414;
+  border: 1px solid #282828;
+  border-left: 4px solid #3b82f6;
   margin: 18px 0;
   font-size: 13.5px;
   line-height: 1.6;
@@ -102,7 +102,7 @@
 }
 
 .callout-body {
-  color: #c9d1d9;
+  color: #e5e5e5;
   font-size: 13px;
   line-height: 1.55;
 }
@@ -111,55 +111,55 @@
   margin: 0;
 }
 
-/* GFM Type Variants with GitHub Primer Colors */
+/* GFM Type Variants with Sonikoma Dark Palette */
 .callout-note,
 .markdown-alert-note {
-  border-left-color: #58a6ff;
-  background: rgba(56, 139, 253, 0.08);
+  border-left-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.08);
 }
 .callout-note .callout-header,
 .callout-note .callout-title {
-  color: #58a6ff;
+  color: #60a5fa;
 }
 
 .callout-tip,
 .markdown-alert-tip {
-  border-left-color: #3fb950;
-  background: rgba(46, 160, 67, 0.08);
+  border-left-color: #22c55e;
+  background: rgba(34, 197, 94, 0.08);
 }
 .callout-tip .callout-header,
 .callout-tip .callout-title {
-  color: #3fb950;
+  color: #4ade80;
 }
 
 .callout-important,
 .markdown-alert-important {
-  border-left-color: #a371f7;
-  background: rgba(163, 113, 247, 0.08);
+  border-left-color: #a855f7;
+  background: rgba(168, 85, 247, 0.08);
 }
 .callout-important .callout-header,
 .callout-important .callout-title {
-  color: #a371f7;
+  color: #c084fc;
 }
 
 .callout-warning,
 .markdown-alert-warning {
-  border-left-color: #d29922;
-  background: rgba(187, 128, 9, 0.08);
+  border-left-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
 }
 .callout-warning .callout-header,
 .callout-warning .callout-title {
-  color: #d29922;
+  color: #fbbf24;
 }
 
 .callout-caution,
 .markdown-alert-caution {
-  border-left-color: #f85149;
-  background: rgba(248, 81, 73, 0.08);
+  border-left-color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
 }
 .callout-caution .callout-header,
 .callout-caution .callout-title {
-  color: #f85149;
+  color: #f87171;
 }
 
 /* ── Empty State ─────────────────────────────────────────── */
