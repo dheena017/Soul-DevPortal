@@ -234,19 +234,20 @@
 nav.package-contents {
   position: sticky;
   top: 76px;
-  width: 260px;
-  min-width: 260px;
+  width: 290px;
+  min-width: 280px;
+  max-width: 320px;
   max-height: calc(100vh - 100px);
   max-height: calc(100dvh - 100px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  background: #141414;
-  border: 1px solid #282828;
+  background: #111113;
+  border: 1px solid #27272a;
   border-radius: 12px;
   padding: 14px 12px;
   box-sizing: border-box;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
 }
 
 .toc-card-header {
@@ -292,7 +293,7 @@ nav.package-contents {
 .contents-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   width: 100%;
   overflow-y: auto;
 }
@@ -300,62 +301,74 @@ nav.package-contents {
 .toc-item,
 .contents-list a {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   width: 100%;
-  padding: 6px 10px;
-  border-left: 2px solid transparent;
-  color: #9ca3af;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  color: #94a3b8;
   font-size: 12px;
   line-height: 1.45;
   text-decoration: none;
-  border-radius: 0 6px 6px 0;
+  border-radius: 8px;
   transition: all 0.15s ease;
   box-sizing: border-box;
 }
 
 .toc-item:hover,
 .contents-list a:hover {
-  background: #1e1e1e;
+  background: #1b1c22;
   color: #ffffff;
-  border-left-color: #4a4a4a;
+  border-color: #2e303b;
 }
 
 .toc-item.active,
 .contents-list a.active {
-  background: rgba(59, 130, 246, 0.12) !important;
-  border-left-color: #3b82f6 !important;
+  background: rgba(37, 99, 235, 0.16) !important;
+  border-color: rgba(59, 130, 246, 0.45) !important;
   color: #60a5fa !important;
   font-weight: 600;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.25);
 }
 
 .toc-item.toc-nested,
 .contents-list a.nested {
   padding-left: 20px;
   font-size: 11.5px;
-  color: #737373;
+  color: #64748b;
+}
+
+.toc-item.toc-nested:hover {
+  color: #e2e8f0;
+}
+
+.toc-item.toc-nested.active {
+  color: #93c5fd !important;
 }
 
 .toc-tree-dot {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background: #4a4a4a;
+  background: #475569;
   flex-shrink: 0;
+  margin-top: 5px;
 }
 
 .toc-num-tag {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
-  font-family: ui-monospace, monospace;
-  color: #6b7280;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  color: #64748b;
   flex-shrink: 0;
+  line-height: 1.45;
 }
 
 .toc-label-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.4;
   flex: 1;
 }
 

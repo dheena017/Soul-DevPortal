@@ -10,6 +10,7 @@ export interface DocsDashboardProps {
 export type DocsHubViewProps = DocsDashboardProps;
 
 export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsDashboardProps) {
+  const [activeSection, setActiveSection] = useState<'guides' | 'rules' | 'matrix'>('guides');
   const [query, setQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'rules' | 'design' | 'ports' | 'techstack' | 'cheatsheet'>('all');
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -59,8 +60,6 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
       return searchableText.includes(query.trim().toLowerCase());
     });
   }, [query, selectedCategory]);
-
-  const featuredGuide = DOCUMENTATION_GUIDES_REGISTRY.find((g) => g.id === 'rules') || DOCUMENTATION_GUIDES_REGISTRY[0];
 
   return (
     <article className="docs-hub-view" aria-label="Documentation Hub & Architecture Specifications">
@@ -120,160 +119,144 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
             <span className="docs-metric-label">Port Collisions</span>
           </div>
         </div>
-
-        {/* Search & Category Filter Toolbar */}
-        <div className="docs-hub-toolbar">
-          <div className="search-wrap docs-hub-search-wrap">
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              ref={searchInputRef}
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search guides, rules, port assignments, and topics... (Press '/' to focus)"
-              aria-label="Filter documentation guides"
-            />
-            {query ? (
-              <button
-                type="button"
-                className="search-clear-btn"
-                onClick={() => {
-                  setQuery('');
-                  searchInputRef.current?.focus();
-                }}
-                aria-label="Clear search query"
-              >
-                ✕
-              </button>
-            ) : (
-              <kbd>/</kbd>
-            )}
-          </div>
-
-          <div className="filter-pills" role="tablist" aria-label="Filter documentation guides by category">
-            <button
-              type="button"
-              className={`filter-pill ${selectedCategory === 'all' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('all')}
-            >
-              All Guides ({DOCUMENTATION_GUIDES_REGISTRY.length})
-            </button>
-            <button
-              type="button"
-              className={`filter-pill ${selectedCategory === 'rules' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('rules')}
-            >
-              📜 Projects Rules
-            </button>
-            <button
-              type="button"
-              className={`filter-pill ${selectedCategory === 'design' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('design')}
-            >
-              📘 Packages Design
-            </button>
-            <button
-              type="button"
-              className={`filter-pill ${selectedCategory === 'ports' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('ports')}
-            >
-              🌐 Port Topology
-            </button>
-            <button
-              type="button"
-              className={`filter-pill ${selectedCategory === 'techstack' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('techstack')}
-            >
-              ⚙️ Tech Stack
-            </button>
-            <button
-              type="button"
-              className={`filter-pill ${selectedCategory === 'cheatsheet' ? 'active' : ''}`}
-              onClick={() => setSelectedCategory('cheatsheet')}
-            >
-              📋 Cheatsheet
-            </button>
-          </div>
-        </div>
       </header>
 
-      {/* Featured Specification Callout (Only when category is 'all' or 'rules' and no query) */}
-      {selectedCategory === 'all' && !query && (
-        <section className="docs-hub-featured-card" aria-label="Featured Golden Specification">
-          <div className="featured-card-badge-row">
-            <span className="featured-spec-pill">★ PREMIER STANDARD</span>
-            <span className="featured-version-pill">v{featuredGuide.version}</span>
-            <span className="featured-status-pill">{featuredGuide.complianceStatus}</span>
-          </div>
+      {/* Navigation Tabs Bar */}
+      <div className="package-detail-tabs doc-tabs-bar" role="tablist" aria-label="Documentation sections">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeSection === 'guides'}
+          className={`tab-btn ${activeSection === 'guides' ? 'active' : ''}`}
+          onClick={() => setActiveSection('guides')}
+        >
+          <span className="tab-icon">📖</span>
+          <span>Complete Guide</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeSection === 'rules'}
+          className={`tab-btn ${activeSection === 'rules' ? 'active' : ''}`}
+          onClick={() => setActiveSection('rules')}
+        >
+          <span className="tab-icon">⚖️</span>
+          <span>Key Rules &amp; Standards</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeSection === 'matrix'}
+          className={`tab-btn ${activeSection === 'matrix' ? 'active' : ''}`}
+          onClick={() => setActiveSection('matrix')}
+        >
+          <span className="tab-icon">🎯</span>
+          <span>Implementations Matrix</span>
+        </button>
+      </div>
 
-          <div className="featured-card-content">
-            <div className="featured-card-left">
-              <span className="featured-icon-large" aria-hidden="true">{featuredGuide.icon}</span>
-              <div className="featured-copy">
-                <h2>{featuredGuide.title}</h2>
-                <code className="featured-filename">{featuredGuide.filename}</code>
-                <p>{featuredGuide.description}</p>
-                <div className="featured-tags-row">
-                  {featuredGuide.topics.slice(0, 4).map((topic) => (
-                    <span key={topic} className="featured-topic-chip">
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-              </div>
+      {/* Section 1: Complete Guide & Architecture Specifications */}
+      {activeSection === 'guides' && (
+        <>
+          {/* Search & Category Filter Toolbar */}
+          <div className="docs-hub-toolbar">
+            <div className="search-wrap docs-hub-search-wrap">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search guides, rules, port assignments, and topics... (Press '/' to focus)"
+                aria-label="Filter documentation guides"
+              />
+              {query ? (
+                <button
+                  type="button"
+                  className="search-clear-btn"
+                  onClick={() => {
+                    setQuery('');
+                    searchInputRef.current?.focus();
+                  }}
+                  aria-label="Clear search query"
+                >
+                  ✕
+                </button>
+              ) : (
+                <kbd>/</kbd>
+              )}
             </div>
 
-            <div className="featured-card-right">
-              <div className="featured-stats-box">
-                <div className="featured-stat-row">
-                  <span>Sections</span>
-                  <strong>{featuredGuide.sectionsCount} Sections</strong>
-                </div>
-                <div className="featured-stat-row">
-                  <span>Read Time</span>
-                  <strong>{featuredGuide.readTime}</strong>
-                </div>
-                <div className="featured-stat-row">
-                  <span>Audience</span>
-                  <strong>{featuredGuide.targetAudience}</strong>
-                </div>
-              </div>
+            <div className="filter-pills" role="tablist" aria-label="Filter documentation guides by category">
               <button
                 type="button"
-                className="featured-cta-btn"
-                onClick={() => onSelectGuide('rules')}
+                className={`filter-pill ${selectedCategory === 'all' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('all')}
               >
-                Read Full Specification <span>→</span>
+                All Guides ({DOCUMENTATION_GUIDES_REGISTRY.length})
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${selectedCategory === 'rules' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('rules')}
+              >
+                📜 Projects Rules
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${selectedCategory === 'design' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('design')}
+              >
+                📘 Packages Design
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${selectedCategory === 'ports' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('ports')}
+              >
+                🌐 Port Topology
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${selectedCategory === 'techstack' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('techstack')}
+              >
+                ⚙️ Tech Stack
+              </button>
+              <button
+                type="button"
+                className={`filter-pill ${selectedCategory === 'cheatsheet' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('cheatsheet')}
+              >
+                📋 Cheatsheet
               </button>
             </div>
           </div>
-        </section>
-      )}
 
-      {/* Guides Grid */}
-      <section className="docs-hub-grid-section" aria-label="Available Architecture Guides">
-        <div className="section-header-row">
-          <div>
-            <span className="section-kicker">MONOREPO SPECIFICATIONS</span>
-            <h2>Architectural Standards &amp; Guides</h2>
-            <p className="section-subtext">
-              Showing {filteredGuides.length} of {DOCUMENTATION_GUIDES_REGISTRY.length} official documents
-            </p>
-          </div>
-        </div>
+          {/* Guides Grid */}
+          <section className="docs-hub-grid-section" aria-label="Available Architecture Guides">
+            <div className="section-header-row">
+              <div>
+                <span className="section-kicker">MONOREPO SPECIFICATIONS</span>
+                <h2>Architectural Standards &amp; Guides</h2>
+                <p className="section-subtext">
+                  Showing {filteredGuides.length} of {DOCUMENTATION_GUIDES_REGISTRY.length} official documents
+                </p>
+              </div>
+            </div>
 
         {filteredGuides.length === 0 ? (
           <div className="docs-hub-empty-state">
@@ -346,8 +329,11 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
           </div>
         )}
       </section>
+      </>
+      )}
 
-      {/* Section: Key Rules & Standards */}
+      {/* Section 2: Key Rules & Standards */}
+      {activeSection === 'rules' && (
       <section className="docs-hub-standards-section" aria-label="Key Rules & Standards">
         <div className="section-header-row">
           <div>
@@ -601,8 +587,11 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
           </div>
         </div>
       </section>
+      )}
 
-      {/* Section: Implementations & Adoption Matrix */}
+      {/* Section 3: Implementations & Adoption Matrix */}
+      {activeSection === 'matrix' && (
+      <>
       <section className="docs-hub-implementations-section" aria-label="Ecosystem Adoption Matrix">
         <div className="section-header-row">
           <div>
@@ -760,6 +749,8 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
           </table>
         </div>
       </section>
+      </>
+      )}
     </article>
   );
 }

@@ -18,6 +18,106 @@ function getPackagePythonInstallCommand(pkg: PackageData): string {
   return '';
 }
 
+interface ScriptMeta {
+  category: 'dev' | 'portal' | 'build' | 'setup';
+  badge: string;
+  badgeClass: string;
+  description: string;
+}
+
+const SCRIPT_METADATA_MAP: Record<string, ScriptMeta> = {
+  dev: {
+    category: 'portal',
+    badge: 'PORTAL DEV',
+    badgeClass: 'badge-portal',
+    description: 'Launch Developer Portal web interface on local Vite development server',
+  },
+  build: {
+    category: 'build',
+    badge: 'BUNDLE',
+    badgeClass: 'badge-build',
+    description: 'Compile and optimize production bundle for Developer Portal',
+  },
+  preview: {
+    category: 'build',
+    badge: 'PREVIEW',
+    badgeClass: 'badge-build',
+    description: 'Spin up local preview server to test production build artifacts',
+  },
+  'dev:all': {
+    category: 'dev',
+    badge: 'ORCHESTRATE ALL',
+    badgeClass: 'badge-dev',
+    description: 'Concurrently start all 8 consumer micro-apps with automatic socket port guard',
+  },
+  'dev:project': {
+    category: 'dev',
+    badge: 'SINGLE APP',
+    badgeClass: 'badge-dev',
+    description: 'Launch single targeted consumer micro-application with port collision guard',
+  },
+  'dev:client': {
+    category: 'dev',
+    badge: 'ALL CLIENTS',
+    badgeClass: 'badge-dev',
+    description: 'Launch all 8 frontend client Vite/Next.js dev servers (:5173-:5180)',
+  },
+  'dev:frontend': {
+    category: 'dev',
+    badge: 'FRONTENDS',
+    badgeClass: 'badge-dev',
+    description: 'Standard alias for dev:client to start all frontend applications',
+  },
+  'dev:server': {
+    category: 'dev',
+    badge: 'ALL APIS',
+    badgeClass: 'badge-dev',
+    description: 'Launch all Python FastAPI & Node.js backend servers (:8000-:8008)',
+  },
+  'dev:backend': {
+    category: 'dev',
+    badge: 'BACKENDS',
+    badgeClass: 'badge-dev',
+    description: 'Standard alias for dev:server to start all backend APIs',
+  },
+  'dev:portal': {
+    category: 'portal',
+    badge: 'PORTAL SPA',
+    badgeClass: 'badge-portal',
+    description: 'Start developer portal web UI on Vite development server',
+  },
+  'dev:portal:server': {
+    category: 'portal',
+    badge: 'PORTAL API',
+    badgeClass: 'badge-portal',
+    description: 'Start portal FastAPI backend with live AST socket prober on :8008',
+  },
+  extract: {
+    category: 'setup',
+    badge: 'AST PROBE',
+    badgeClass: 'badge-setup',
+    description: 'Execute standalone AST parser to extract symbols, routes, and schemas',
+  },
+  'install:python': {
+    category: 'setup',
+    badge: 'PIP EDITABLE',
+    badgeClass: 'badge-setup',
+    description: 'Install shared packages (@workspace/logger & runner) in editable mode (-e)',
+  },
+  'install:packages': {
+    category: 'setup',
+    badge: 'BOOTSTRAP',
+    badgeClass: 'badge-setup',
+    description: 'Install all root npm workspaces and bootstrap Python editable packages',
+  },
+  typecheck: {
+    category: 'build',
+    badge: 'TYPE VALIDATION',
+    badgeClass: 'badge-build',
+    description: 'Run TypeScript compiler (tsc --noEmit) across all monorepo workspaces',
+  },
+};
+
 export interface OverviewProps {
   packages?: PackageData[];
   projects?: ProjectData[];
@@ -37,9 +137,11 @@ export default function Overview({
   onNavigate,
   onClearSearch,
 }: OverviewProps) {
+  const [activeTab, setActiveTab] = useState<'apps' | 'packages' | 'docs' | 'commands'>('apps');
   const [ecosystemFilter, setEcosystemFilter] = useState<'all' | 'npm' | 'python' | 'config'>('all');
   const [sortBy, setSortBy] = useState<'name' | 'exports' | 'version'>('name');
   const [scriptSearch, setScriptSearch] = useState<string>('');
+  const [scriptCategory, setScriptCategory] = useState<'all' | 'dev' | 'portal' | 'build' | 'setup'>('all');
 
   const filteredPackages = useMemo(() => {
     return packages
@@ -62,15 +164,30 @@ export default function Overview({
   }, [packages, ecosystemFilter, sortBy]);
 
   const filteredScripts = useMemo(() => {
-    if (!scriptSearch.trim()) return Object.entries(rootScripts || {});
-    const needle = scriptSearch.toLowerCase();
-    return Object.entries(rootScripts || {}).filter(
-      ([name, cmd]) => name.toLowerCase().includes(needle) || cmd.toLowerCase().includes(needle)
-    );
-  }, [rootScripts, scriptSearch]);
+    const all = Object.entries(rootScripts || {});
+    const needle = scriptSearch.toLowerCase().trim();
+    return all.filter(([name, cmd]) => {
+      const meta = SCRIPT_METADATA_MAP[name] || {
+        category: 'setup' as const,
+        badge: 'SCRIPT',
+        badgeClass: 'badge-setup',
+        description: cmd,
+      };
+      if (scriptCategory !== 'all' && meta.category !== scriptCategory) {
+        return false;
+      }
+      if (!needle) return true;
+      return (
+        name.toLowerCase().includes(needle) ||
+        cmd.toLowerCase().includes(needle) ||
+        meta.description.toLowerCase().includes(needle) ||
+        meta.badge.toLowerCase().includes(needle)
+      );
+    });
+  }, [rootScripts, scriptSearch, scriptCategory]);
 
   const previewProjects = useMemo(() => {
-    return (projects || []).slice(0, 6);
+    return projects || [];
   }, [projects]);
 
   return (
@@ -211,7 +328,138 @@ export default function Overview({
       {/* Codebase Telemetry Metrics Cards */}
       <StatsCards stats={stats} packagesCount={packages.length || 3} projectsCount={projects?.length || 8} />
 
-      {/* Pillar 2: Shared Libraries (Modern Cards) */}
+      {/* Ecosystem Tabs Navigation */}
+      <div className="package-detail-tabs overview-tabs-bar" role="tablist" aria-label="Ecosystem overview sections">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === 'apps'}
+          className={`tab-btn ${activeTab === 'apps' ? 'active' : ''}`}
+          onClick={() => setActiveTab('apps')}
+        >
+          <span className="tab-icon">💻</span>
+          <span>Consumer Applications ({projects.length || 8})</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === 'packages'}
+          className={`tab-btn ${activeTab === 'packages' ? 'active' : ''}`}
+          onClick={() => setActiveTab('packages')}
+        >
+          <span className="tab-icon">📦</span>
+          <span>Shared Packages ({packages.length || 3})</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === 'docs'}
+          className={`tab-btn ${activeTab === 'docs' ? 'active' : ''}`}
+          onClick={() => setActiveTab('docs')}
+        >
+          <span className="tab-icon">📚</span>
+          <span>Architecture Specifications (5)</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === 'commands'}
+          className={`tab-btn ${activeTab === 'commands' ? 'active' : ''}`}
+          onClick={() => setActiveTab('commands')}
+        >
+          <span className="tab-icon">⚡</span>
+          <span>Workspace Commands ({Object.keys(rootScripts || {}).length})</span>
+        </button>
+      </div>
+
+      {/* Tab 1: Integrated Consumer Applications */}
+      {activeTab === 'apps' && projects && projects.length > 0 && (
+        <section className="consumer-apps-section" aria-label="Integrated monorepo applications">
+          <div className="section-header-row">
+            <div>
+              <span className="section-kicker">PILLAR 1: APPLICATIONS</span>
+              <h2>Integrated Consumer Applications</h2>
+              <p className="section-subtext">
+                8 fullstack applications in this repository powered by the shared core libraries.
+              </p>
+            </div>
+            <button type="button" className="view-all-projects-btn" onClick={() => onNavigate('projects')}>
+              View all 8 apps &amp; ports <span>→</span>
+            </button>
+          </div>
+
+          <div className="preview-projects-grid">
+            {previewProjects.map((p) => {
+              const fwDotClass = p.framework?.includes('React 19')
+                ? 'react'
+                : p.framework?.includes('React 18')
+                ? 'react'
+                : p.framework?.includes('Next')
+                ? 'nextjs'
+                : 'typescript';
+
+              return (
+                <div
+                  className="preview-project-card enhanced-preview-card"
+                  key={p.id}
+                  onClick={() => onNavigate(`projects/${p.id}`)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(`projects/${p.id}`); }}
+                >
+                  <div className="preview-project-top">
+                    <div className="preview-brand-group">
+                      <div className="preview-app-logo">
+                        {p.logo ? (
+                          <img
+                            src={p.logo}
+                            alt=""
+                            className="preview-logo-img"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <span>⚡</span>
+                        )}
+                      </div>
+                      <div>
+                        <strong className="preview-project-title">{p.title}</strong>
+                        <code className="preview-app-id">{p.id}</code>
+                      </div>
+                    </div>
+
+                    <div className="preview-ports">
+                      {p.frontendPort && <span className="preview-port fe" title="Frontend Port">:{p.frontendPort}</span>}
+                      {p.backendPort && <span className="preview-port be" title="Backend Port">:{p.backendPort}</span>}
+                    </div>
+                  </div>
+
+                  <p className="preview-framework">
+                    <span className={`lang-dot ${fwDotClass}`} style={{ width: '8px', height: '8px', marginRight: '6px' }} />
+                    {p.framework || 'React + Vite'}
+                  </p>
+
+                  <div className="preview-specs-row">
+                    <span className="preview-spec-badge">🗄️ {p.dbInfo || 'SQLite'}</span>
+                    {p.aiEngine && p.aiEngine !== 'N/A' && (
+                      <span className="preview-spec-badge ai">✨ {p.aiEngine.split('+')[0].trim()}</span>
+                    )}
+                  </div>
+
+                  <div className="preview-card-cta">
+                    <span>Inspect Application</span>
+                    <span className="arrow-icon">→</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* Tab 2: Core Monorepo Packages */}
+      {activeTab === 'packages' && (
       <section className="packages-section" aria-label="Shared packages explorer">
         <div className="section-header-row">
           <div>
@@ -390,94 +638,10 @@ export default function Overview({
           />
         )}
       </section>
-
-      {/* Pillar 1: Integrated Consumer Applications */}
-      {projects && projects.length > 0 && (
-        <section className="consumer-apps-section" aria-label="Integrated monorepo applications">
-          <div className="section-header-row">
-            <div>
-              <span className="section-kicker">PILLAR 1: APPLICATIONS</span>
-              <h2>Integrated Consumer Applications</h2>
-              <p className="section-subtext">
-                8 fullstack applications in this repository powered by the shared core libraries.
-              </p>
-            </div>
-            <button type="button" className="view-all-projects-btn" onClick={() => onNavigate('projects')}>
-              View all 8 apps &amp; ports <span>→</span>
-            </button>
-          </div>
-
-          <div className="preview-projects-grid">
-            {previewProjects.map((p) => {
-              const fwDotClass = p.framework?.includes('React 19')
-                ? 'react'
-                : p.framework?.includes('React 18')
-                ? 'react'
-                : p.framework?.includes('Next')
-                ? 'nextjs'
-                : 'typescript';
-
-              return (
-                <div
-                  className="preview-project-card enhanced-preview-card"
-                  key={p.id}
-                  onClick={() => onNavigate(`projects/${p.id}`)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(`projects/${p.id}`); }}
-                >
-                  <div className="preview-project-top">
-                    <div className="preview-brand-group">
-                      <div className="preview-app-logo">
-                        {p.logo ? (
-                          <img
-                            src={p.logo}
-                            alt=""
-                            className="preview-logo-img"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLElement).style.display = 'none';
-                            }}
-                          />
-                        ) : (
-                          <span>⚡</span>
-                        )}
-                      </div>
-                      <div>
-                        <strong className="preview-project-title">{p.title}</strong>
-                        <code className="preview-app-id">{p.id}</code>
-                      </div>
-                    </div>
-
-                    <div className="preview-ports">
-                      {p.frontendPort && <span className="preview-port fe" title="Frontend Port">:{p.frontendPort}</span>}
-                      {p.backendPort && <span className="preview-port be" title="Backend Port">:{p.backendPort}</span>}
-                    </div>
-                  </div>
-
-                  <p className="preview-framework">
-                    <span className={`lang-dot ${fwDotClass}`} style={{ width: '8px', height: '8px', marginRight: '6px' }} />
-                    {p.framework || 'React + Vite'}
-                  </p>
-
-                  <div className="preview-specs-row">
-                    <span className="preview-spec-badge">🗄️ {p.dbInfo || 'SQLite'}</span>
-                    {p.aiEngine && p.aiEngine !== 'N/A' && (
-                      <span className="preview-spec-badge ai">✨ {p.aiEngine.split('+')[0].trim()}</span>
-                    )}
-                  </div>
-
-                  <div className="preview-card-cta">
-                    <span>Inspect Application</span>
-                    <span className="arrow-icon">→</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
       )}
 
-      {/* Pillar 3: Documentation Hub Overview */}
+      {/* Tab 3: Documentation Hub Overview */}
+      {activeTab === 'docs' && (
       <section className="consumer-apps-section docs-overview-section" aria-label="Docs Dashboard and architectural specifications">
         <div className="section-header-row">
           <div>
@@ -514,29 +678,32 @@ export default function Overview({
           })}
         </div>
       </section>
+      )}
 
-      {/* Workspace Facts */}
-      <section className="workspace-facts">
-        <div>
-          <span>Discovered packages</span>
-          <strong>{packages.length || 3}</strong>
+      {/* Tab 4: Workspace Facts & Commands */}
+      {activeTab === 'commands' && (
+      <>
+      <section className="workspace-facts" aria-label="Workspace scale facts">
+        <div className="fact-item">
+          <span className="fact-label">Discovered Packages</span>
+          <strong className="fact-value">{packages.length || 3}</strong>
         </div>
-        <div>
-          <span>Integrated applications</span>
-          <strong>{projects?.length || 8}</strong>
+        <div className="fact-item">
+          <span className="fact-label">Integrated Applications</span>
+          <strong className="fact-value">{projects?.length || 8}</strong>
         </div>
-        <div>
-          <span>npm workspaces</span>
-          <strong>{(rootWorkspaces || []).length || 3}</strong>
+        <div className="fact-item">
+          <span className="fact-label">npm Workspaces</span>
+          <strong className="fact-value">{(rootWorkspaces || []).length || 3}</strong>
         </div>
-        <div>
-          <span>Root npm scripts</span>
-          <strong>{Object.keys(rootScripts || {}).length}</strong>
+        <div className="fact-item">
+          <span className="fact-label">Root npm Scripts</span>
+          <strong className="fact-value">{Object.keys(rootScripts || {}).length}</strong>
         </div>
       </section>
 
       {/* Root Scripts Runner */}
-      <section className="workspace-scripts">
+      <section className="workspace-scripts" aria-label="Root npm scripts runner">
         <div className="scripts-header-row">
           <div>
             <span className="section-kicker">WORKSPACE COMMANDS</span>
@@ -548,27 +715,106 @@ export default function Overview({
               type="text"
               value={scriptSearch}
               onChange={(e) => setScriptSearch(e.target.value)}
-              placeholder="Search scripts..."
+              placeholder="Search scripts by name or command..."
               aria-label="Search workspace scripts"
             />
+            {scriptSearch && (
+              <button
+                type="button"
+                className="search-clear-btn"
+                onClick={() => setScriptSearch('')}
+                aria-label="Clear script search"
+              >
+                ✕
+              </button>
+            )}
           </div>
         </div>
 
-        <div className="script-grid">
-          {filteredScripts.map(([name, command]) => {
-            const runCmd = `npm run ${name}`;
-            return (
-              <div className="script-row" key={name}>
-                <div className="script-info">
-                  <code>{name}</code>
-                  <span className="script-cmd">{command}</span>
-                </div>
-                <CopyButton text={runCmd} label="Copy Run" copiedLabel="Copied" variant="compact" />
-              </div>
-            );
-          })}
+        {/* Category Filter Pills */}
+        <div className="scripts-category-pills" role="tablist" aria-label="Filter scripts by category">
+          <button
+            type="button"
+            className={`filter-pill ${scriptCategory === 'all' ? 'active' : ''}`}
+            onClick={() => setScriptCategory('all')}
+          >
+            All ({Object.keys(rootScripts || {}).length})
+          </button>
+          <button
+            type="button"
+            className={`filter-pill ${scriptCategory === 'dev' ? 'active' : ''}`}
+            onClick={() => setScriptCategory('dev')}
+          >
+            🚀 Dev &amp; Runners
+          </button>
+          <button
+            type="button"
+            className={`filter-pill ${scriptCategory === 'portal' ? 'active' : ''}`}
+            onClick={() => setScriptCategory('portal')}
+          >
+            💻 Portal Stack
+          </button>
+          <button
+            type="button"
+            className={`filter-pill ${scriptCategory === 'build' ? 'active' : ''}`}
+            onClick={() => setScriptCategory('build')}
+          >
+            📦 Build &amp; Preview
+          </button>
+          <button
+            type="button"
+            className={`filter-pill ${scriptCategory === 'setup' ? 'active' : ''}`}
+            onClick={() => setScriptCategory('setup')}
+          >
+            ⚙️ Setup &amp; Python
+          </button>
         </div>
+
+        {filteredScripts.length > 0 ? (
+          <div className="script-grid">
+            {filteredScripts.map(([name, command]) => {
+              const runCmd = `npm run ${name}`;
+              const meta = SCRIPT_METADATA_MAP[name] || {
+                category: 'setup' as const,
+                badge: 'SCRIPT',
+                badgeClass: 'badge-setup',
+                description: 'Execute root automation script runner',
+              };
+
+              return (
+                <article className="script-command-card" key={name}>
+                  <div className="script-card-top">
+                    <div className="script-badge-group">
+                      <span className="script-name-tag">npm run {name}</span>
+                      <span className={`script-cat-chip ${meta.badgeClass}`}>{meta.badge}</span>
+                    </div>
+                    <CopyButton text={runCmd} label="Copy Run" copiedLabel="Copied!" variant="compact" />
+                  </div>
+
+                  <p className="script-desc">{meta.description}</p>
+
+                  <div className="script-command-box">
+                    <span className="cmd-prompt">$</span>
+                    <code className="cmd-text">{command}</code>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <EmptyState
+            title="No scripts match your criteria"
+            description="Clear your search query or select 'All' to view all available npm scripts."
+            actionLabel="Reset Filters"
+            onAction={() => {
+              setScriptSearch('');
+              setScriptCategory('all');
+            }}
+          />
+        )}
       </section>
+      </>
+      )}
     </article>
   );
 }

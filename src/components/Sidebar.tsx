@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { PackageData, ProjectData } from '../types';
 import { DOCUMENTATION_GUIDES_REGISTRY, GuideMeta } from '../features/docs/docsConstants';
 
@@ -62,14 +62,28 @@ function formatCount(num: number): string {
   return String(num);
 }
 
+function formatProjectTitle(title: string): string {
+  if (!title) return '';
+  if (title === title.toUpperCase()) {
+    return title
+      .toLowerCase()
+      .split(' ')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ')
+      .replace(/\bAi\b/g, 'AI')
+      .replace(/\bApi\b/g, 'API')
+      .replace(/\bCms\b/gi, 'CMS')
+      .replace(/College Management System/gi, 'CMS');
+  }
+  return title;
+}
+
 export interface SidebarProps {
   active?: string;
   packages?: PackageData[];
   projects?: ProjectData[];
   projectsCount?: number;
   menuOpen?: boolean;
-  isPinned?: boolean;
-  onTogglePin?: () => void;
   onNavigate: (id: string) => void;
   onClose: () => void;
 }
@@ -80,19 +94,35 @@ export default function Sidebar({
   projects = [],
   projectsCount = 8,
   menuOpen = false,
-  isPinned = false,
-  onTogglePin,
   onNavigate,
   onClose,
 }: SidebarProps) {
-  const [pkgFilter, setPkgFilter] = useState<string>('');
-  const [projectFilter, setProjectFilter] = useState<string>('');
-  const [docFilter, setDocFilter] = useState<string>('');
+  const [commonFilter, setCommonFilter] = useState<string>('');
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({
     projects: false,
     packages: false,
     docs: false,
   });
+
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Keyboard shortcut '/' to focus sidebar search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === '/' &&
+        document.activeElement?.tagName !== 'INPUT' &&
+        document.activeElement?.tagName !== 'TEXTAREA'
+      ) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      } else if (e.key === 'Escape' && document.activeElement === searchInputRef.current) {
+        searchInputRef.current?.blur();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const toggleSection = (section: string) => {
     setCollapsedSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -101,38 +131,53 @@ export default function Sidebar({
   const isActive = (id: string) => active === id;
 
   const totalProjects = projects.length || projectsCount;
+  const isFiltering = Boolean(commonFilter.trim());
+  const needle = commonFilter.trim().toLowerCase();
 
   // Dynamically filter packages
   const filteredPackages = useMemo(() => {
-    if (!pkgFilter.trim()) return packages;
-    const needle = pkgFilter.toLowerCase();
+    if (!isFiltering) return packages;
     return packages.filter(
-      (p) => (p.displayName || p.name).toLowerCase().includes(needle) || (p.description || '').toLowerCase().includes(needle)
+      (p) =>
+        (p.displayName || p.name).toLowerCase().includes(needle) ||
+        (p.description || '').toLowerCase().includes(needle) ||
+        p.id.toLowerCase().includes(needle)
     );
-  }, [packages, pkgFilter]);
+  }, [packages, isFiltering, needle]);
 
   // Dynamically filter projects
   const filteredProjects = useMemo(() => {
-    if (!projectFilter.trim()) return projects;
-    const needle = projectFilter.toLowerCase();
+    if (!isFiltering) return projects;
     return projects.filter(
-      (p) => p.title.toLowerCase().includes(needle) || p.id.toLowerCase().includes(needle) || (p.framework || '').toLowerCase().includes(needle)
+      (p) =>
+        p.title.toLowerCase().includes(needle) ||
+        p.id.toLowerCase().includes(needle) ||
+        (p.framework || '').toLowerCase().includes(needle) ||
+        (p.description || '').toLowerCase().includes(needle)
     );
-  }, [projects, projectFilter]);
+  }, [projects, isFiltering, needle]);
 
   // Dynamically filter documentation guides
   const filteredGuides = useMemo(() => {
-    if (!docFilter.trim()) return DOCUMENTATION_GUIDES_REGISTRY;
-    const needle = docFilter.toLowerCase();
+    if (!isFiltering) return DOCUMENTATION_GUIDES_REGISTRY;
     return DOCUMENTATION_GUIDES_REGISTRY.filter(
-      (g) => g.title.toLowerCase().includes(needle) || g.description.toLowerCase().includes(needle) || g.id.toLowerCase().includes(needle)
+      (g) =>
+        g.title.toLowerCase().includes(needle) ||
+        g.description.toLowerCase().includes(needle) ||
+        g.id.toLowerCase().includes(needle) ||
+        (g.category || '').toLowerCase().includes(needle)
     );
-  }, [docFilter]);
+  }, [isFiltering, needle]);
+
+  const isProjectsOpen = isFiltering ? filteredProjects.length > 0 : !collapsedSections.projects;
+  const isPackagesOpen = isFiltering ? filteredPackages.length > 0 : !collapsedSections.packages;
+  const isDocsOpen = isFiltering ? filteredGuides.length > 0 : !collapsedSections.docs;
+  const totalMatches = filteredProjects.length + filteredPackages.length + filteredGuides.length;
 
   return (
     <>
       <aside
-        className={`sidebar ${(menuOpen || isPinned) ? 'open' : ''} ${isPinned ? 'pinned' : ''}`}
+        className={`sidebar ${menuOpen ? 'open' : ''}`}
         aria-label="Monorepo navigation sidebar"
       >
         <div className="sidebar-brand">
@@ -154,37 +199,67 @@ export default function Sidebar({
             </span>
           </a>
 
-          <div className="sidebar-brand-actions">
-            {onTogglePin && (
-              <button
-                type="button"
-                className={`sidebar-pin-btn ${isPinned ? 'pinned' : ''}`}
-                onClick={onTogglePin}
-                title={isPinned ? 'Unpin sidebar (floating drawer mode)' : 'Pin sidebar (dock to desktop)'}
-                aria-label={isPinned ? 'Unpin sidebar' : 'Pin sidebar'}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill={isPinned ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M12 17v5M5 12V7a5 5 0 0 1 10 0v5l2 3H3l2-3Z" />
-                </svg>
-              </button>
-            )}
-
-            <button
-              type="button"
-              className="sidebar-close"
-              aria-label="Close sidebar (Esc or Ctrl+B)"
-              title="Close sidebar (Esc or Ctrl+B)"
-              onClick={onClose}
-            >
-              <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor" aria-hidden="true">
-                <path d="m6 6 8 8M14 6l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </button>
-          </div>
+          <button
+            type="button"
+            className="sidebar-close"
+            aria-label="Close sidebar (Esc or Ctrl+B)"
+            title="Close sidebar (Esc or Ctrl+B)"
+            onClick={onClose}
+          >
+            <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <path d="m6 6 8 8M14 6l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
         </div>
 
-        <nav className="side-nav" aria-label="4 Pillars navigation">
-          {/* Overview Quick Nav */}
+        <nav className="side-nav" aria-label="Monorepo navigation">
+          {/* Unified Workspace Search */}
+          <div className="sidebar-search-container">
+            <div className="sidebar-search-box">
+              <svg
+                className="sidebar-search-icon"
+                viewBox="0 0 24 24"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={commonFilter}
+                onChange={(e) => setCommonFilter(e.target.value)}
+                placeholder="Search apps, packages, docs..."
+                aria-label="Filter monorepo items"
+                className="sidebar-search-field"
+              />
+              {commonFilter ? (
+                <button
+                  type="button"
+                  className="sidebar-search-clear-btn"
+                  onClick={() => {
+                    setCommonFilter('');
+                    searchInputRef.current?.focus();
+                  }}
+                  title="Clear filter"
+                  aria-label="Clear filter"
+                >
+                  ✕
+                </button>
+              ) : (
+                <kbd className="sidebar-search-key" title="Press / to search">/</kbd>
+              )}
+            </div>
+          </div>
+
+          {/* Top Global Hubs & Tools */}
           <div className="nav-section overview-nav-section">
             <button
               type="button"
@@ -196,10 +271,21 @@ export default function Sidebar({
               <span className="nav-text">Workspace Overview</span>
               <span className="nav-badge-count">Hub</span>
             </button>
+
+            <button
+              type="button"
+              aria-current={isActive('explore') ? 'page' : undefined}
+              className={isActive('explore') ? 'nav-item active' : 'nav-item'}
+              onClick={() => onNavigate('explore')}
+            >
+              <span className="nav-icon overview-icon" aria-hidden="true">🔍</span>
+              <span className="nav-text">Explore &amp; Prober</span>
+              <span className="nav-badge-count">Tool</span>
+            </button>
           </div>
 
           <div className="nav-section-divider">
-            <span className="nav-section-label">4 Monorepo Pillars</span>
+            <span className="nav-section-label">Core Monorepo Pillars</span>
           </div>
 
           {/* Pillar 1: Projects */}
@@ -211,7 +297,7 @@ export default function Sidebar({
                 className={isActive('projects') ? 'nav-item pillar-parent-item active' : 'nav-item pillar-parent-item'}
                 onClick={() => {
                   onNavigate('projects');
-                  if (collapsedSections.projects) {
+                  if (!isProjectsOpen) {
                     toggleSection('projects');
                   }
                 }}
@@ -225,33 +311,23 @@ export default function Sidebar({
                   </svg>
                 </span>
                 <span className="nav-text">Projects &amp; Apps</span>
-                <span className="nav-badge-count">{formatCount(totalProjects)}</span>
+                <span className="nav-badge-count">{formatCount(isFiltering ? filteredProjects.length : totalProjects)}</span>
               </button>
 
               <button
                 type="button"
                 className="pillar-chevron-toggle"
                 onClick={() => toggleSection('projects')}
-                aria-expanded={!collapsedSections.projects}
-                title={collapsedSections.projects ? 'Expand applications list' : 'Collapse applications list'}
-                aria-label={collapsedSections.projects ? 'Expand applications list' : 'Collapse applications list'}
+                aria-expanded={isProjectsOpen}
+                title={isProjectsOpen ? 'Collapse applications list' : 'Expand applications list'}
+                aria-label={isProjectsOpen ? 'Collapse applications list' : 'Expand applications list'}
               >
-                <span className={`nav-chevron ${collapsedSections.projects ? 'collapsed' : ''}`} aria-hidden="true">▼</span>
+                <span className={`nav-chevron ${!isProjectsOpen ? 'collapsed' : ''}`} aria-hidden="true">▼</span>
               </button>
             </div>
 
-            {!collapsedSections.projects && (
+            {isProjectsOpen && (
               <>
-                <div className="sidebar-filter-wrap">
-                  <input
-                    type="text"
-                    value={projectFilter}
-                    onChange={(e) => setProjectFilter(e.target.value)}
-                    placeholder={`Filter ${totalProjects} apps...`}
-                    aria-label="Filter applications"
-                  />
-                </div>
-
                 {filteredProjects.length > 0 && (
                   <div className="package-nav-list sidebar-scroll-sublist">
                     {filteredProjects.slice(0, 50).map((proj) => {
@@ -279,7 +355,7 @@ export default function Sidebar({
                               '⚡'
                             )}
                           </span>
-                          <span className="nav-text">{proj.title}</span>
+                          <span className="nav-text">{formatProjectTitle(proj.title)}</span>
                           {proj.frontendPort && (
                             <span className="sidebar-badge port">:{proj.frontendPort}</span>
                           )}
@@ -311,7 +387,7 @@ export default function Sidebar({
                 className={(isActive('packages') || isActive('packages-dashboard')) ? 'nav-item pillar-parent-item active' : 'nav-item pillar-parent-item'}
                 onClick={() => {
                   onNavigate('packages');
-                  if (collapsedSections.packages) {
+                  if (!isPackagesOpen) {
                     toggleSection('packages');
                   }
                 }}
@@ -325,33 +401,23 @@ export default function Sidebar({
                   </svg>
                 </span>
                 <span className="nav-text">Shared Packages</span>
-                <span className="nav-badge-count">{formatCount(packages.length)}</span>
+                <span className="nav-badge-count">{formatCount(isFiltering ? filteredPackages.length : packages.length)}</span>
               </button>
 
               <button
                 type="button"
                 className="pillar-chevron-toggle"
                 onClick={() => toggleSection('packages')}
-                aria-expanded={!collapsedSections.packages}
-                title={collapsedSections.packages ? 'Expand packages list' : 'Collapse packages list'}
-                aria-label={collapsedSections.packages ? 'Expand packages list' : 'Collapse packages list'}
+                aria-expanded={isPackagesOpen}
+                title={isPackagesOpen ? 'Collapse packages list' : 'Expand packages list'}
+                aria-label={isPackagesOpen ? 'Collapse packages list' : 'Expand packages list'}
               >
-                <span className={`nav-chevron ${collapsedSections.packages ? 'collapsed' : ''}`} aria-hidden="true">▼</span>
+                <span className={`nav-chevron ${!isPackagesOpen ? 'collapsed' : ''}`} aria-hidden="true">▼</span>
               </button>
             </div>
 
-            {!collapsedSections.packages && (
+            {isPackagesOpen && (
               <>
-                <div className="sidebar-filter-wrap">
-                  <input
-                    type="text"
-                    value={pkgFilter}
-                    onChange={(e) => setPkgFilter(e.target.value)}
-                    placeholder={`Filter ${packages.length} packages...`}
-                    aria-label="Filter packages"
-                  />
-                </div>
-
                 <div className="package-nav-list sidebar-scroll-sublist">
                   {filteredPackages.slice(0, 50).map((pkg) => {
                     const badge = packageBadge(pkg);
@@ -399,7 +465,7 @@ export default function Sidebar({
                 className={(isActive('docs') || isActive('docs-dashboard')) ? 'nav-item pillar-parent-item active' : 'nav-item pillar-parent-item'}
                 onClick={() => {
                   onNavigate('docs');
-                  if (collapsedSections.docs) {
+                  if (!isDocsOpen) {
                     toggleSection('docs');
                   }
                 }}
@@ -407,33 +473,23 @@ export default function Sidebar({
               >
                 <span className="nav-icon docs-icon" aria-hidden="true">📚</span>
                 <span className="nav-text">Documentation</span>
-                <span className="nav-badge-count">{formatCount(DOCUMENTATION_GUIDES_REGISTRY.length)}</span>
+                <span className="nav-badge-count">{formatCount(isFiltering ? filteredGuides.length : DOCUMENTATION_GUIDES_REGISTRY.length)}</span>
               </button>
 
               <button
                 type="button"
                 className="pillar-chevron-toggle"
                 onClick={() => toggleSection('docs')}
-                aria-expanded={!collapsedSections.docs}
-                title={collapsedSections.docs ? 'Expand documentation guides' : 'Collapse documentation guides'}
-                aria-label={collapsedSections.docs ? 'Expand documentation guides' : 'Collapse documentation guides'}
+                aria-expanded={isDocsOpen}
+                title={isDocsOpen ? 'Collapse documentation guides' : 'Expand documentation guides'}
+                aria-label={isDocsOpen ? 'Collapse documentation guides' : 'Expand documentation guides'}
               >
-                <span className={`nav-chevron ${collapsedSections.docs ? 'collapsed' : ''}`} aria-hidden="true">▼</span>
+                <span className={`nav-chevron ${!isDocsOpen ? 'collapsed' : ''}`} aria-hidden="true">▼</span>
               </button>
             </div>
 
-            {!collapsedSections.docs && (
+            {isDocsOpen && (
               <>
-                <div className="sidebar-filter-wrap">
-                  <input
-                    type="text"
-                    value={docFilter}
-                    onChange={(e) => setDocFilter(e.target.value)}
-                    placeholder={`Filter ${DOCUMENTATION_GUIDES_REGISTRY.length} guides...`}
-                    aria-label="Filter documentation guides"
-                  />
-                </div>
-
                 <div className="package-nav-list sidebar-scroll-sublist">
                   {filteredGuides.slice(0, 50).map((guide) => {
                     const isGuideActive = isDocGuideActive(active, guide);
@@ -472,19 +528,23 @@ export default function Sidebar({
             )}
           </div>
 
-          {/* Pillar 4: Explore */}
-          <div className="nav-section">
-            <button
-              type="button"
-              aria-current={isActive('explore') ? 'page' : undefined}
-              className={isActive('explore') ? 'nav-item active' : 'nav-item'}
-              onClick={() => onNavigate('explore')}
-            >
-              <span className="nav-icon overview-icon" aria-hidden="true">🔍</span>
-              <span className="nav-text">Explore &amp; Prober</span>
-              <span className="nav-badge-count">Tool</span>
-            </button>
-          </div>
+          {/* Empty Search Feedback */}
+          {isFiltering && totalMatches === 0 && (
+            <div className="sidebar-no-results">
+              <span className="sidebar-no-results-icon" aria-hidden="true">🔍</span>
+              <p>No matches found for &ldquo;{commonFilter}&rdquo;</p>
+              <button
+                type="button"
+                className="sidebar-clear-filter-btn"
+                onClick={() => {
+                  setCommonFilter('');
+                  searchInputRef.current?.focus();
+                }}
+              >
+                Clear filter
+              </button>
+            </div>
+          )}
         </nav>
 
         <div className="sidebar-footer">
