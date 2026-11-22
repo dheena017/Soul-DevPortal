@@ -15,9 +15,9 @@
   height: 28px;
   padding: 0 10px;
   border-radius: 6px;
-  background: #21262d;
-  border: 1px solid #30363d;
-  color: #c9d1d9;
+  background: #202020;
+  border: 1px solid #333333;
+  color: #e5e5e5;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
@@ -27,9 +27,9 @@
 
 .copy-button:hover,
 .copy-btn:hover {
-  background: #30363d;
-  border-color: #8b949e;
-  color: #f0f6fc;
+  background: #2a2a2a;
+  border-color: #4a4a4a;
+  color: #ffffff;
 }
 
 .copy-button.copied,
@@ -601,8 +601,8 @@ nav.package-contents {
 .code-block {
   margin: 18px 0;
   border-radius: 6px;
-  background: #161b22;
-  border: 1px solid #30363d;
+  background: #0d0d0d;
+  border: 1px solid #282828;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
@@ -612,8 +612,8 @@ nav.package-contents {
   align-items: center;
   justify-content: space-between;
   padding: 8px 14px;
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
+  background: #161616;
+  border-bottom: 1px solid #242424;
 }
 
 .code-lang-group {
@@ -626,9 +626,9 @@ nav.package-contents {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-weight: 700;
   text-transform: uppercase;
-  color: #58a6ff;
-  background: rgba(56, 139, 253, 0.12);
-  border: 1px solid rgba(56, 139, 253, 0.3);
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.3);
   padding: 2px 7px;
   border-radius: 4px;
   font-size: 10px;
@@ -636,7 +636,7 @@ nav.package-contents {
 }
 
 .code-lines-badge {
-  color: #8b949e;
+  color: #6b7280;
   font-family: ui-monospace, monospace;
   font-size: 11px;
 }
@@ -651,9 +651,9 @@ nav.package-contents {
   height: 24px;
   padding: 0 8px;
   border-radius: 5px;
-  background: #21262d;
-  border: 1px solid #30363d;
-  color: #8b949e;
+  background: #1e1e1e;
+  border: 1px solid #2f2f2f;
+  color: #9ca3af;
   font-size: 11px;
   font-family: ui-monospace, monospace;
   cursor: pointer;
@@ -663,15 +663,15 @@ nav.package-contents {
 }
 
 .code-wrap-btn:hover {
-  background: #30363d;
-  border-color: #8b949e;
-  color: #f0f6fc;
+  background: #242424;
+  border-color: #4a4a4a;
+  color: #ffffff;
 }
 
 .code-wrap-btn.active {
-  background: rgba(56, 139, 253, 0.15);
-  border-color: #58a6ff;
-  color: #58a6ff;
+  background: rgba(59, 130, 246, 0.15);
+  border-color: #3b82f6;
+  color: #60a5fa;
   font-weight: 600;
 }
 
@@ -694,7 +694,7 @@ nav.package-contents {
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
-  color: #e6edf3;
+  color: #e5e5e5;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 

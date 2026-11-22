@@ -116,8 +116,8 @@
   gap: 16px;
   padding: 20px;
   border-radius: 8px;
-  background: #161b22;
-  border: 1px solid #30363d;
+  background: #181818;
+  border: 1px solid #2f2f2f;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
   position: relative;
@@ -126,7 +126,7 @@
 .project-card:hover,
 .enhanced-project-card:hover {
   transform: translateY(-2px);
-  border-color: #58a6ff;
+  border-color: rgba(59, 130, 246, 0.55);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
@@ -143,12 +143,12 @@
 }
 
 .gh-repo-title {
-  color: #58a6ff !important;
-  font-weight: 600 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 .gh-repo-title:hover {
-  color: #79c0ff !important;
+  color: #60a5fa !important;
   text-decoration: underline !important;
 }
 
@@ -165,18 +165,18 @@
   gap: 6px !important;
   padding: 3px 9px !important;
   border-radius: 20px !important;
-  background: #21262d !important;
-  border: 1px solid #30363d !important;
-  color: #8b949e !important;
+  background: #1e1e1e !important;
+  border: 1px solid #2f2f2f !important;
+  color: #9ca3af !important;
   font-size: 11px !important;
   font-weight: 500 !important;
   white-space: nowrap !important;
 }
 
 .gh-lang-pill:hover {
-  border-color: #58a6ff !important;
-  background: #30363d !important;
-  color: #f0f6fc !important;
+  border-color: #3b82f6 !important;
+  background: #242424 !important;
+  color: #ffffff !important;
 }
 
 /* Card Top: Brand, Title, Ports */

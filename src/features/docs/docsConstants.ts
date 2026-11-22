@@ -1,5 +1,6 @@
 export interface GuideMeta {
   id: string;
+  slug: string;
   title: string;
   breadcrumb: string;
   description: string;
@@ -19,6 +20,7 @@ export interface GuideMeta {
 export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
   {
     id: 'rules',
+    slug: 'projects-rules',
     title: 'Monorepo Projects Rules & Standards',
     breadcrumb: 'Soul Workspace / Projects Rules',
     description: 'The authoritative golden rulebook governing all 8 workspace applications: directory structure, strict port allocations, shared packages integration, FastAPI routing, SQLite schemas, and environment variable security.',
@@ -47,6 +49,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
   },
   {
     id: 'design',
+    slug: 'packages-design',
     title: 'Shared Packages Design Guide',
     breadcrumb: 'Soul Workspace / Design Guide',
     description: 'Comprehensive architectural blueprint for designing, structuring, publishing, and consuming shared libraries (@workspace/logger, @workspace/runner, @workspace/config) across TypeScript and Python runtimes.',
@@ -75,6 +78,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
   },
   {
     id: 'ports',
+    slug: 'port-architecture',
     title: 'Port & Framework Architecture Guide',
     breadcrumb: 'Soul Workspace / Infrastructure & Ports',
     description: 'Complete network topology and runtime port allocation guide: Vite dev servers, Next.js runtimes, Python FastAPI backends, and zero-collision socket probing mechanisms.',
@@ -103,6 +107,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
   },
   {
     id: 'techstack',
+    slug: 'tech-stack',
     title: 'Tech Stack & Ecosystem Standards',
     breadcrumb: 'Soul Workspace / Tech Stack',
     description: 'Certified dependencies matrix, framework alignments, runtime baselines (Node.js 20+, Python 3.11+), unified Tailwind CSS design tokens, and shared ESLint / TypeScript configs.',
@@ -131,6 +136,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
   },
   {
     id: 'cheatsheet',
+    slug: 'compliance-cheatsheet',
     title: 'Monorepo Core Standards Cheatsheet',
     breadcrumb: 'Soul Workspace / Compliance Cheatsheet',
     description: 'Quick-reference compliance cheatsheet and operational rulebook covering directory anatomy, port reservation matrix, data masking, SQLite WAL pragmas, and workspace automation.',

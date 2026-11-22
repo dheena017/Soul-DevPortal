@@ -494,7 +494,7 @@ export default function Overview({
 
         <div className="docs-overview-grid">
           {DOCUMENTATION_GUIDES_REGISTRY.map((guide) => {
-            const guideRoute = `docs/${guide.id}`;
+            const guideRoute = `docs/${guide.slug || guide.id}`;
 
             return (
               <div

@@ -38,8 +38,8 @@
   flex-direction: column;
   padding: 20px;
   border-radius: 8px;
-  background: #161b22;
-  border: 1px solid #30363d;
+  background: #141414;
+  border: 1px solid #282828;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
@@ -745,20 +745,20 @@
   flex-direction: column;
   padding: 18px;
   border-radius: 8px;
-  background: #161b22;
-  border: 1px solid #30363d;
+  background: #181818;
+  border: 1px solid #2f2f2f;
   cursor: pointer;
   transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .doc-overview-card:hover {
   transform: translateY(-2px);
-  border-color: #58a6ff;
+  border-color: rgba(59, 130, 246, 0.55);
 }
 
 .doc-overview-card.featured {
   border-color: rgba(245, 158, 11, 0.5);
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, #161b22 100%);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, #181818 100%);
 }
 
 .doc-ov-badge {
@@ -766,9 +766,9 @@
   align-self: flex-start;
   padding: 2px 7px;
   border-radius: 4px;
-  background: #21262d;
-  border: 1px solid #30363d;
-  color: #8b949e;
+  background: #121212;
+  border: 1px solid #2a2a2a;
+  color: #9ca3af;
   color: #93c5fd;
   font-size: 9.5px;
   font-weight: 700;

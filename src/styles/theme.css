@@ -11,62 +11,44 @@
 
 :root {
   /* ========================================================================
-     GITHUB PRIMER DARK & PREMIER DEVELOPER PLATFORM DESIGN TOKENS
+     ORIGINAL WEBSITE DARK PALETTE (PRESERVED & RESTORED)
      ======================================================================== */
-  --page-bg: #0d1117;
-  --sidebar-bg: #010409;
-  --surface: #161b22;
-  --surface-raised: #21262d;
-  --surface-inset: #010409;
-  --surface-hover: #1f242c;
+  --page-bg: #0a0a0a;
+  --sidebar-bg: #121212;
+  --surface: #1e1e1e;
+  --surface-raised: #242424;
+  --surface-inset: #0a0a0a;
+  --surface-hover: #222222;
   
-  --border: #30363d;
-  --border-subtle: #21262d;
-  --border-muted: #21262d;
-  --border-active: #58a6ff;
+  --border: #2f2f2f;
+  --border-subtle: #242424;
+  --border-muted: #1f1f1f;
+  --border-active: #3b82f6;
 
-  --text-primary: #f0f6fc;
-  --text-secondary: #8b949e;
-  --text-muted: #6e7681;
+  --text-primary: #e5e5e5;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
 
-  --accent: #58a6ff;
-  --accent-emphasis: #1f6feb;
-  --accent-bg: rgba(56, 139, 253, 0.12);
-  --accent-border: rgba(56, 139, 253, 0.4);
+  --accent: #3b82f6;
+  --accent-emphasis: #2563eb;
+  --accent-bg: rgba(59, 130, 246, 0.15);
+  --accent-border: rgba(59, 130, 246, 0.35);
 
-  --success: #238636;
-  --success-fg: #3fb950;
-  --success-bg: rgba(46, 160, 67, 0.12);
+  --success: #22c55e;
+  --success-fg: #4ade80;
+  --success-bg: rgba(34, 197, 94, 0.15);
 
-  --warning: #d29922;
-  --warning-fg: #e3b341;
-  --warning-bg: rgba(187, 128, 9, 0.12);
+  --warning: #f59e0b;
+  --warning-fg: #fbbf24;
+  --warning-bg: rgba(245, 158, 11, 0.15);
 
-  --danger: #da3633;
-  --danger-fg: #f85149;
-  --danger-bg: rgba(248, 81, 73, 0.12);
+  --danger: #ef4444;
+  --danger-fg: #f87171;
+  --danger-bg: rgba(239, 68, 68, 0.15);
 
-  --purple: #8957e5;
-  --purple-fg: #a371f7;
-  --purple-bg: rgba(163, 113, 247, 0.12);
-
-  /* GitHub Primer System Variables */
-  --gh-canvas-default: #0d1117;
-  --gh-canvas-subtle: #161b22;
-  --gh-canvas-inset: #010409;
-  --gh-canvas-overlay: #1f242c;
-  --gh-border-default: #30363d;
-  --gh-border-muted: #21262d;
-  --gh-border-subtle: rgba(240, 246, 252, 0.1);
-  --gh-fg-default: #f0f6fc;
-  --gh-fg-muted: #8b949e;
-  --gh-fg-subtle: #6e7681;
-  --gh-accent-fg: #58a6ff;
-  --gh-accent-emphasis: #1f6feb;
-  --gh-success-fg: #3fb950;
-  --gh-attention-fg: #d29922;
-  --gh-danger-fg: #f85149;
-  --gh-done-fg: #a371f7;
+  --purple: #8b5cf6;
+  --purple-fg: #a78bfa;
+  --purple-bg: rgba(139, 92, 246, 0.15);
 
   font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color-scheme: dark !important;
