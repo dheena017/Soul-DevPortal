@@ -1,4 +1,9 @@
-# Shared Packages Guide
+# Shared Packages Design Guide
+
+> **Dual-Runtime Architecture Blueprint (@workspace/*)**  
+> Comprehensive specification for designing, building, and distributing shared TypeScript/JavaScript packages and Python distributions.
+
+---
 
 This directory contains the shared packages used across the monorepo. Packages provide one of three kinds of shared functionality:
 

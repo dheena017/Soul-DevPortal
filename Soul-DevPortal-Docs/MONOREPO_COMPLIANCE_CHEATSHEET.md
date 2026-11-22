@@ -1,6 +1,6 @@
-# Monorepo Core Compliance Rules & Architecture Cheatsheet
+# Monorepo Compliance Cheatsheet
 
-> **Authoritative Operational Reference**  
+> **Authoritative Operational Reference & Checklist**  
 > Complete rulebook, directory standards, port matrix, database conventions, and root CLI commands governing all 8 micro-applications in the Soul Workspace monorepo.
 
 ---
@@ -246,27 +246,41 @@ Every project must consume shared utilities from monorepo packages instead of du
 
 ---
 
-## 8. Monorepo Scripts Cheatsheet
+## 8. Monorepo Scripts Cheatsheet & Command Matrix
 
-Run applications from the root workspace directory:
+### Root Workspace Commands
 
-```bash
-# Start all micro-apps concurrently (clients + servers)
-npm run dev:all
+| Command | Action | Scope / Runtime |
+| :--- | :--- | :--- |
+| `npm run dev` | Starts the DevPortal interactive UI | DevPortal Frontend (:5181) |
+| `npm run dev:portal:server` | Starts the DevPortal FastAPI metadata extraction server | DevPortal Backend (:8008) |
+| `npm run dev:all` | Concurrently boots all 8 applications (clients + servers) | Workspace Supervisor |
+| `npm run dev:client` | Starts all client dev servers concurrently | Client Ecosystem (:5173-:5181) |
+| `npm run dev:server` | Starts all backend API servers concurrently | Server Ecosystem (:8000-:8008) |
+| `npm run build` | Builds the DevPortal production bundle | Production Bundler (Vite) |
+| `npm run extract` | Runs schema extraction & AST parsing across all 8 apps | Metadata Engine |
+| `npm run typecheck` | Validates TypeScript types across portal & packages | Static Analysis |
 
-# Start all client services only
-npm run dev:client
+### Direct Project Launchers (Root Shortcuts)
 
-# Start all server APIs only
-npm run dev:server
+| Command | Target Application | Client Port | Server Port |
+| :--- | :--- | :---: | :---: |
+| `npm run dev:apexmind` | ApexMind Studio AI | `:5173` | `:8000` |
+| `npm run dev:outpass` | Outpass Management System | `:5174` | `:8001` |
+| `npm run dev:free-api` | Free API Hub | `:5175` | `:8002` |
+| `npm run dev:sonikoma` | Sonikoma AI Studio | `:5176` | `:8006` |
+| `npm run dev:spatial` | Spatial Dimensions 3D | `:5177` | `:8007` |
+| `npm run dev:college` | College Management System | `:5178` | `:8005` |
+| `npm run dev:globalpulse` | GlobalPulse AI | `:5179` | `:8003` |
+| `npm run dev:postcraft` | PostCraft AI | `:5180` | `:5180` |
 
-# Start a specific project with automatic port cleanup
-npm run dev:project -- --project=apexmind-ai
-npm run dev:project -- --project=outpass-system
-npm run dev:project -- --project=free-api-hub
-npm run dev:project -- --project=sonikoma
-npm run dev:project -- --project=spatial-dimensions
-npm run dev:project -- --project=college-management-system
-npm run dev:project -- --project=globalpulse-ai
-npm run dev:project -- --project=postcraft-ai
-```
+### Unified Child Project Standard (Every `package.json`)
+
+| Command | Purpose | Target Port / Environment |
+| :--- | :--- | :--- |
+| `npm run dev` | Runs dual-stack supervisor (client + server concurrently) | Dual-Stack Supervisor |
+| `npm run dev:client` | Starts client development server on designated port | Assigned Port (:5173-:5181) |
+| `npm run dev:server` | Starts API development server on designated port | Assigned Port (:8000-:8008) |
+| `npm run build` | Compiles client / fullstack assets for production | Production Bundler |
+| `npm run typecheck` | Runs static type check verification | TypeScript / Linter |
+| `npm run clean` | Removes build artifacts (`dist/`, `.next/`, temporary files) | Filesystem Cleanup |

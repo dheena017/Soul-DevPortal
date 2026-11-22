@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { consoleLogger } from '@workspace/logger';
 import CopyButton from './CopyButton';
 import StatsCards from './StatsCards';
 import EmptyState from './EmptyState';
@@ -13,110 +14,11 @@ function getPackageInstallCommand(pkg: PackageData): string {
 }
 
 function getPackagePythonInstallCommand(pkg: PackageData): string {
-  if (pkg.id === 'logger') return 'pip install -e packages/logger';
-  if (pkg.id === 'runner') return 'pip install -e packages/runner';
+  if (pkg.id === 'logger') return 'pip install -e Soul-DevPortal-Packages/logger';
+  if (pkg.id === 'runner') return 'pip install -e Soul-DevPortal-Packages/runner';
+  if (pkg.id === 'config') return 'pip install -e Soul-DevPortal-Packages/config';
   return '';
 }
-
-interface ScriptMeta {
-  category: 'dev' | 'portal' | 'build' | 'setup';
-  badge: string;
-  badgeClass: string;
-  description: string;
-}
-
-const SCRIPT_METADATA_MAP: Record<string, ScriptMeta> = {
-  dev: {
-    category: 'portal',
-    badge: 'PORTAL DEV',
-    badgeClass: 'badge-portal',
-    description: 'Launch Developer Portal web interface on local Vite development server',
-  },
-  build: {
-    category: 'build',
-    badge: 'BUNDLE',
-    badgeClass: 'badge-build',
-    description: 'Compile and optimize production bundle for Developer Portal',
-  },
-  preview: {
-    category: 'build',
-    badge: 'PREVIEW',
-    badgeClass: 'badge-build',
-    description: 'Spin up local preview server to test production build artifacts',
-  },
-  'dev:all': {
-    category: 'dev',
-    badge: 'ORCHESTRATE ALL',
-    badgeClass: 'badge-dev',
-    description: 'Concurrently start all 8 consumer micro-apps with automatic socket port guard',
-  },
-  'dev:project': {
-    category: 'dev',
-    badge: 'SINGLE APP',
-    badgeClass: 'badge-dev',
-    description: 'Launch single targeted consumer micro-application with port collision guard',
-  },
-  'dev:client': {
-    category: 'dev',
-    badge: 'ALL CLIENTS',
-    badgeClass: 'badge-dev',
-    description: 'Launch all 8 frontend client Vite/Next.js dev servers (:5173-:5180)',
-  },
-  'dev:frontend': {
-    category: 'dev',
-    badge: 'FRONTENDS',
-    badgeClass: 'badge-dev',
-    description: 'Standard alias for dev:client to start all frontend applications',
-  },
-  'dev:server': {
-    category: 'dev',
-    badge: 'ALL APIS',
-    badgeClass: 'badge-dev',
-    description: 'Launch all Python FastAPI & Node.js backend servers (:8000-:8008)',
-  },
-  'dev:backend': {
-    category: 'dev',
-    badge: 'BACKENDS',
-    badgeClass: 'badge-dev',
-    description: 'Standard alias for dev:server to start all backend APIs',
-  },
-  'dev:portal': {
-    category: 'portal',
-    badge: 'PORTAL SPA',
-    badgeClass: 'badge-portal',
-    description: 'Start developer portal web UI on Vite development server',
-  },
-  'dev:portal:server': {
-    category: 'portal',
-    badge: 'PORTAL API',
-    badgeClass: 'badge-portal',
-    description: 'Start portal FastAPI backend with live AST socket prober on :8008',
-  },
-  extract: {
-    category: 'setup',
-    badge: 'AST PROBE',
-    badgeClass: 'badge-setup',
-    description: 'Execute standalone AST parser to extract symbols, routes, and schemas',
-  },
-  'install:python': {
-    category: 'setup',
-    badge: 'PIP EDITABLE',
-    badgeClass: 'badge-setup',
-    description: 'Install shared packages (@workspace/logger & runner) in editable mode (-e)',
-  },
-  'install:packages': {
-    category: 'setup',
-    badge: 'BOOTSTRAP',
-    badgeClass: 'badge-setup',
-    description: 'Install all root npm workspaces and bootstrap Python editable packages',
-  },
-  typecheck: {
-    category: 'build',
-    badge: 'TYPE VALIDATION',
-    badgeClass: 'badge-build',
-    description: 'Run TypeScript compiler (tsc --noEmit) across all monorepo workspaces',
-  },
-};
 
 export interface OverviewProps {
   packages?: PackageData[];
@@ -137,11 +39,9 @@ export default function Overview({
   onNavigate,
   onClearSearch,
 }: OverviewProps) {
-  const [activeTab, setActiveTab] = useState<'apps' | 'packages' | 'docs' | 'commands'>('apps');
+  const [activeTab, setActiveTab] = useState<'apps' | 'packages' | 'docs'>('apps');
   const [ecosystemFilter, setEcosystemFilter] = useState<'all' | 'npm' | 'python' | 'config'>('all');
   const [sortBy, setSortBy] = useState<'name' | 'exports' | 'version'>('name');
-  const [scriptSearch, setScriptSearch] = useState<string>('');
-  const [scriptCategory, setScriptCategory] = useState<'all' | 'dev' | 'portal' | 'build' | 'setup'>('all');
 
   const filteredPackages = useMemo(() => {
     return packages
@@ -162,29 +62,6 @@ export default function Overview({
         return 0;
       });
   }, [packages, ecosystemFilter, sortBy]);
-
-  const filteredScripts = useMemo(() => {
-    const all = Object.entries(rootScripts || {});
-    const needle = scriptSearch.toLowerCase().trim();
-    return all.filter(([name, cmd]) => {
-      const meta = SCRIPT_METADATA_MAP[name] || {
-        category: 'setup' as const,
-        badge: 'SCRIPT',
-        badgeClass: 'badge-setup',
-        description: cmd,
-      };
-      if (scriptCategory !== 'all' && meta.category !== scriptCategory) {
-        return false;
-      }
-      if (!needle) return true;
-      return (
-        name.toLowerCase().includes(needle) ||
-        cmd.toLowerCase().includes(needle) ||
-        meta.description.toLowerCase().includes(needle) ||
-        meta.badge.toLowerCase().includes(needle)
-      );
-    });
-  }, [rootScripts, scriptSearch, scriptCategory]);
 
   const previewProjects = useMemo(() => {
     return projects || [];
@@ -359,16 +236,6 @@ export default function Overview({
         >
           <span className="tab-icon">📚</span>
           <span>Architecture Specifications (5)</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'commands'}
-          className={`tab-btn ${activeTab === 'commands' ? 'active' : ''}`}
-          onClick={() => setActiveTab('commands')}
-        >
-          <span className="tab-icon">⚡</span>
-          <span>Workspace Commands ({Object.keys(rootScripts || {}).length})</span>
         </button>
       </div>
 
@@ -664,10 +531,18 @@ export default function Overview({
               <div
                 className={`doc-overview-card ${guide.id === 'rules' ? 'featured' : ''}`}
                 key={guide.id}
-                onClick={() => onNavigate(guideRoute)}
+                onClick={() => {
+                  consoleLogger.action('OVERVIEW', `Clicked doc card: ${guide.title}`);
+                  onNavigate(guideRoute);
+                }}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(guideRoute); }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    consoleLogger.action('OVERVIEW', `Pressed enter on doc card: ${guide.title}`);
+                    onNavigate(guideRoute);
+                  }
+                }}
               >
                 <div className="doc-ov-badge">{guide.badge}</div>
                 <h3>{guide.icon} {guide.title}</h3>
@@ -680,141 +555,26 @@ export default function Overview({
       </section>
       )}
 
-      {/* Tab 4: Workspace Facts & Commands */}
-      {activeTab === 'commands' && (
-      <>
-      <section className="workspace-facts" aria-label="Workspace scale facts">
-        <div className="fact-item">
-          <span className="fact-label">Discovered Packages</span>
-          <strong className="fact-value">{packages.length || 3}</strong>
-        </div>
-        <div className="fact-item">
-          <span className="fact-label">Integrated Applications</span>
-          <strong className="fact-value">{projects?.length || 8}</strong>
-        </div>
-        <div className="fact-item">
-          <span className="fact-label">npm Workspaces</span>
-          <strong className="fact-value">{(rootWorkspaces || []).length || 3}</strong>
-        </div>
-        <div className="fact-item">
-          <span className="fact-label">Root npm Scripts</span>
-          <strong className="fact-value">{Object.keys(rootScripts || {}).length}</strong>
-        </div>
-      </section>
-
-      {/* Root Scripts Runner */}
-      <section className="workspace-scripts" aria-label="Root npm scripts runner">
-        <div className="scripts-header-row">
+      {/* Monorepo Command Runners Quick Banner */}
+      <section className="overview-scripts-banner" aria-label="Monorepo command runners">
+        <div className="scripts-banner-content">
+          <div className="scripts-banner-icon" aria-hidden="true">⚡</div>
           <div>
-            <span className="section-kicker">WORKSPACE COMMANDS</span>
-            <h2>Root npm scripts</h2>
-            <p className="section-subtext">Quick execution shortcuts for root-level build, test, and dev runners.</p>
-          </div>
-          <div className="scripts-search-wrap">
-            <input
-              type="text"
-              value={scriptSearch}
-              onChange={(e) => setScriptSearch(e.target.value)}
-              placeholder="Search scripts by name or command..."
-              aria-label="Search workspace scripts"
-            />
-            {scriptSearch && (
-              <button
-                type="button"
-                className="search-clear-btn"
-                onClick={() => setScriptSearch('')}
-                aria-label="Clear script search"
-              >
-                ✕
-              </button>
-            )}
+            <h3>15 Monorepo Automation Scripts &amp; Runners</h3>
+            <p>
+              Orchestrate all 8 consumer micro-apps concurrently, launch Python FastAPI APIs,
+              run TypeScript validation gates, and manage Vite dev servers from the dedicated Command Runner.
+            </p>
           </div>
         </div>
-
-        {/* Category Filter Pills */}
-        <div className="scripts-category-pills" role="tablist" aria-label="Filter scripts by category">
-          <button
-            type="button"
-            className={`filter-pill ${scriptCategory === 'all' ? 'active' : ''}`}
-            onClick={() => setScriptCategory('all')}
-          >
-            All ({Object.keys(rootScripts || {}).length})
-          </button>
-          <button
-            type="button"
-            className={`filter-pill ${scriptCategory === 'dev' ? 'active' : ''}`}
-            onClick={() => setScriptCategory('dev')}
-          >
-            🚀 Dev &amp; Runners
-          </button>
-          <button
-            type="button"
-            className={`filter-pill ${scriptCategory === 'portal' ? 'active' : ''}`}
-            onClick={() => setScriptCategory('portal')}
-          >
-            💻 Portal Stack
-          </button>
-          <button
-            type="button"
-            className={`filter-pill ${scriptCategory === 'build' ? 'active' : ''}`}
-            onClick={() => setScriptCategory('build')}
-          >
-            📦 Build &amp; Preview
-          </button>
-          <button
-            type="button"
-            className={`filter-pill ${scriptCategory === 'setup' ? 'active' : ''}`}
-            onClick={() => setScriptCategory('setup')}
-          >
-            ⚙️ Setup &amp; Python
-          </button>
-        </div>
-
-        {filteredScripts.length > 0 ? (
-          <div className="script-grid">
-            {filteredScripts.map(([name, command]) => {
-              const runCmd = `npm run ${name}`;
-              const meta = SCRIPT_METADATA_MAP[name] || {
-                category: 'setup' as const,
-                badge: 'SCRIPT',
-                badgeClass: 'badge-setup',
-                description: 'Execute root automation script runner',
-              };
-
-              return (
-                <article className="script-command-card" key={name}>
-                  <div className="script-card-top">
-                    <div className="script-badge-group">
-                      <span className="script-name-tag">npm run {name}</span>
-                      <span className={`script-cat-chip ${meta.badgeClass}`}>{meta.badge}</span>
-                    </div>
-                    <CopyButton text={runCmd} label="Copy Run" copiedLabel="Copied!" variant="compact" />
-                  </div>
-
-                  <p className="script-desc">{meta.description}</p>
-
-                  <div className="script-command-box">
-                    <span className="cmd-prompt">$</span>
-                    <code className="cmd-text">{command}</code>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        ) : (
-          <EmptyState
-            title="No scripts match your criteria"
-            description="Clear your search query or select 'All' to view all available npm scripts."
-            actionLabel="Reset Filters"
-            onAction={() => {
-              setScriptSearch('');
-              setScriptCategory('all');
-            }}
-          />
-        )}
+        <button
+          type="button"
+          className="scripts-banner-cta"
+          onClick={() => onNavigate('scripts')}
+        >
+          Open Scripts &amp; Runners Center →
+        </button>
       </section>
-      </>
-      )}
     </article>
   );
 }

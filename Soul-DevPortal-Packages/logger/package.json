@@ -20,6 +20,11 @@
       "types": "./src/vite-plugin.ts",
       "import": "./src/vite-plugin.ts",
       "default": "./src/vite-plugin.ts"
+    },
+    "./server": {
+      "types": "./src/server.ts",
+      "import": "./src/server.ts",
+      "default": "./src/server.ts"
     }
   },
   "files": [

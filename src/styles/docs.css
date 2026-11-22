@@ -700,8 +700,8 @@
 .package-document-layout,
 .doc-document-layout {
   display: grid !important;
-  grid-template-columns: 260px minmax(0, 1fr) !important;
-  gap: 36px !important;
+  grid-template-columns: 280px minmax(0, 1fr) !important;
+  gap: 24px !important;
   align-items: flex-start !important;
   width: 100% !important;
 }
@@ -741,7 +741,8 @@
 
 /* ── Navigation Tabs Bar (Complete Guide, Rules, Matrix) ──── */
 .package-detail-tabs,
-.doc-tabs-bar {
+.doc-tabs-bar,
+.overview-tabs-bar {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
@@ -787,39 +788,66 @@
 
 /* ── Header Metadata Strip (Chapters, Snippets, Tables, Scope) ─ */
 .package-metadata,
-.doc-meta-strip {
+.doc-meta-strip,
+.doc-metadata-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
   gap: 12px !important;
-  margin-top: 18px !important;
-  padding-top: 18px !important;
-  border-top: 1px solid #242424 !important;
+  margin-top: 22px !important;
+  padding-top: 20px !important;
+  border-top: 1px solid #222222 !important;
+}
+
+@media (max-width: 1200px) {
+  .package-metadata,
+  .doc-meta-strip,
+  .doc-metadata-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .package-metadata,
+  .doc-meta-strip,
+  .doc-metadata-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
 }
 
 .package-metadata > div,
-.metadata-card {
+.metadata-card,
+.doc-metadata-grid .metadata-card {
   display: flex !important;
   flex-direction: column !important;
-  gap: 4px !important;
-  padding: 10px 14px !important;
+  gap: 5px !important;
+  padding: 12px 14px !important;
   border-radius: 8px !important;
-  background: #141414 !important;
+  background: #161616 !important;
   border: 1px solid #262626 !important;
+  transition: border-color 0.15s ease !important;
+  min-width: 0 !important;
 }
 
-.metadata-card-header {
+.doc-metadata-grid .metadata-card:hover {
+  border-color: #383838 !important;
+}
+
+.metadata-card-header,
+.doc-metadata-grid .metadata-card-header {
   display: flex !important;
   align-items: center !important;
   gap: 6px !important;
 }
 
-.metadata-icon {
-  font-size: 13px !important;
+.metadata-icon,
+.doc-metadata-grid .metadata-icon {
+  font-size: 12px !important;
 }
 
 .package-metadata span,
-.metadata-label {
-  font-size: 10px !important;
+.metadata-label,
+.doc-metadata-grid .metadata-label {
+  font-size: 9.5px !important;
   font-weight: 800 !important;
   color: #6b7280 !important;
   letter-spacing: 0.08em !important;
@@ -827,10 +855,15 @@
 }
 
 .package-metadata strong,
-.metadata-value {
+.metadata-value,
+.doc-metadata-grid .metadata-value {
   font-size: 13px !important;
   font-weight: 700 !important;
-  color: #ffffff !important;
+  color: #e5e5e5 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
 }
 
 .metadata-value.text-emerald {

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { consoleLogger } from '@workspace/logger';
 import CopyButton from '../../components/CopyButton';
 import { ProjectData } from '../../types';
 import { PROJECT_DESCRIPTIONS, PROJECT_TAGS } from './projectsConstants';
@@ -27,10 +28,20 @@ export interface ProjectsViewProps {
   onSelectProject?: (projectId: string) => void;
 }
 
-export default function ProjectsView({ projects = [], onBack, onSelectProject }: ProjectsViewProps) {
+export default function ProjectsView({
+  projects = [],
+  onBack,
+  onSelectProject,
+}: ProjectsViewProps) {
   const [query, setQuery] = useState<string>('');
   const [filterFramework, setFilterFramework] = useState<string>('all');
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const handleSelect = (projectId: string) => {
+    const proj = projects.find((p) => p.id === projectId);
+    consoleLogger.action('PROJECTS', `Selected project: ${proj ? proj.title : projectId}`, { projectId });
+    onSelectProject?.(projectId);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -199,7 +210,7 @@ export default function ProjectsView({ projects = [], onBack, onSelectProject }:
               {/* Card Top: GitHub Repo Header & Ports */}
               <div
                 className="project-card-top"
-                onClick={() => onSelectProject?.(project.id)}
+                onClick={() => handleSelect(project.id)}
                 style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
               >
                 <div className="project-card-brand-group">
@@ -254,7 +265,7 @@ export default function ProjectsView({ projects = [], onBack, onSelectProject }:
               {/* Card Body: Description */}
               <p
                 className="project-card-desc"
-                onClick={() => onSelectProject?.(project.id)}
+                onClick={() => handleSelect(project.id)}
                 style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
               >
                 {description}
@@ -263,7 +274,7 @@ export default function ProjectsView({ projects = [], onBack, onSelectProject }:
               {/* Card Specs Matrix */}
               <div
                 className="project-card-specs-grid"
-                onClick={() => onSelectProject?.(project.id)}
+                onClick={() => handleSelect(project.id)}
                 style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
               >
                 <div className="spec-badge" title={project.framework || 'Web Application'}>
@@ -325,7 +336,7 @@ export default function ProjectsView({ projects = [], onBack, onSelectProject }:
                     <button
                       type="button"
                       className="view-project-details-btn"
-                      onClick={() => onSelectProject(project.id)}
+                      onClick={() => handleSelect(project.id)}
                       title={`Open deep detail view for ${project.title}`}
                     >
                       <span>Details</span>

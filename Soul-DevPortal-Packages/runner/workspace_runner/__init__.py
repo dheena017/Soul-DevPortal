@@ -18,6 +18,11 @@ from .registry import (
 from .stats import (
     format_process_stats_table,
 )
+from .installer import (
+    inspect_project_install,
+    print_installation_banner,
+    run_project_installation,
+)
 from .supervisor import (
     ProcessController,
     enable_process_sandboxing,
@@ -42,6 +47,9 @@ __all__ = [
     "get_env_summary",
     "parse_env_file",
     "format_process_stats_table",
+    "inspect_project_install",
+    "print_installation_banner",
+    "run_project_installation",
     "ProcessController",
     "enable_process_sandboxing",
     "enable_windows_kill_on_close",

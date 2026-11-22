@@ -39,8 +39,8 @@ export const PACKAGE_METADATA_MAP: Record<string, PackageMetaInfo> = {
   config: {
     icon: '⚙️',
     theme: 'blue',
-    role: 'Centralized Design Tokens & Tooling Presets',
-    tags: ['Tailwind Tokens', 'ESLint Presets', 'TypeScript Config', 'Prettier Presets'],
-    scope: 'Workspace Standard Presets',
+    role: 'Centralized Design Tokens, Port Topology & Tooling Presets',
+    tags: ['Design Tokens', 'Port Registry', 'Tailwind Presets', 'TypeScript Presets', 'Python Tooling', 'Dual Runtime'],
+    scope: 'Dual Runtime (Node.js + Python)',
   },
 };

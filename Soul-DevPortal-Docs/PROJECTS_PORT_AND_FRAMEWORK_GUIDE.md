@@ -1,6 +1,7 @@
-# Dheena Workspace — Monorepo Architecture, Services & Ports Guide
+# Port & Network Topology Guide
 
-> Comprehensive technical specification of all projects in the monorepo, detailing dedicated ports, runtime frameworks, inter-service proxies, databases, and GitHub repositories.
+> **Zero-Collision Port Matrix & Service Architecture**  
+> Comprehensive technical specification of all projects in the monorepo, detailing dedicated ports (:5173 - :5181 / :8000 - :8008), runtime frameworks, inter-service proxies, databases, and GitHub repositories.
 
 ---
 
@@ -250,4 +251,5 @@ npm run dev:spatial        # Vite (5177) + Express (8007)
 npm run dev:college        # Vite (5178) + Express (8005)
 npm run dev:globalpulse    # Next.js (5179) + FastAPI (8003)
 npm run dev:postcraft      # Next.js (5180)
+npm run dev                # DevPortal: Vite (5181) + FastAPI (8008)
 ```

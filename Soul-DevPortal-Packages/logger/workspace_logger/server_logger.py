@@ -391,10 +391,17 @@ def get_uvicorn_log_config(use_color: bool | None = None) -> dict:
     }
 
 
-def setup_server_logging(level: int = logging.INFO, scope: str = "BACKEND "):
-    """Initializes root and third-party loggers with the 5-column universal formatter."""
+def setup_server_logging(level: int = logging.INFO, scope: str = "BACKEND ", format: str = "ansi"):
+    """Initializes root and third-party loggers with the 5-column universal formatter or structured JSON."""
     handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(UniversalColoredFormatter(scope=scope))
+    if format.lower() == "json" or os.environ.get("LOG_FORMAT", "").lower() == "json":
+        try:
+            from .json_logger import JsonFormatter
+        except ImportError:
+            from json_logger import JsonFormatter
+        handler.setFormatter(JsonFormatter(scope=scope))
+    else:
+        handler.setFormatter(UniversalColoredFormatter(scope=scope))
     handler.addFilter(UvicornNoiseFilter())
 
     root_logger = logging.getLogger()

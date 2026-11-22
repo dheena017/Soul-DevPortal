@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { consoleLogger } from '@workspace/logger';
 import { MONOREPO_PROJECT_PORTS, MonorepoPortEntry } from './exploreConstants';
 
 export interface PortProberProps {
@@ -16,26 +17,38 @@ export default function PortProber({ onRefresh }: PortProberProps) {
 
   const checkLivePorts = async () => {
     setLoading(true);
+    consoleLogger.info('PROBER', 'Probing active project ports (:5173-:5181, :8000-:8008)...');
+    const startTime = performance.now();
     try {
-      // Call backend API /api/projects or /api/explore/ports
+      consoleLogger.apiSent('GET', '/api/projects');
       const res = await fetch('/api/projects');
+      const duration = performance.now() - startTime;
+      consoleLogger.apiComing('GET', '/api/projects', res.status, duration);
+
       if (res.ok) {
         const projects = await res.json();
         const statusMap: SocketStatus = {};
+        let liveCount = 0;
         projects.forEach((proj: any) => {
           if (proj.frontend?.port) {
-            statusMap[proj.frontend.port] = proj.frontend.isLive || false;
+            const isLive = Boolean(proj.frontend.isLive);
+            statusMap[proj.frontend.port] = isLive;
+            if (isLive) liveCount++;
           }
           if (proj.backend?.port) {
-            statusMap[proj.backend.port] = proj.backend.isLive || false;
+            const isLive = Boolean(proj.backend.isLive);
+            statusMap[proj.backend.port] = isLive;
+            if (isLive) liveCount++;
           }
         });
         setProberState(statusMap);
         setLastChecked(new Date().toLocaleTimeString());
+        consoleLogger.success('PROBER', `Socket probe complete: ${liveCount} active port(s) detected`);
       }
-    } catch {
+    } catch (err) {
       // Offline fallback: simulate default probe
       setLastChecked(new Date().toLocaleTimeString() + ' (Offline fallback)');
+      consoleLogger.warn('PROBER', 'Socket probe offline fallback: DevPortal backend not reachable', err);
     } finally {
       setLoading(false);
       if (onRefresh) onRefresh();

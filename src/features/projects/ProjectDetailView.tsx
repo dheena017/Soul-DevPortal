@@ -53,23 +53,34 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
     <article className="project-detail-view">
       <header className="detail-header pillar-hero-header project-hero-header">
         <div className="breadcrumb-nav-row">
-          <div className="breadcrumb">
+          <div className="breadcrumb-left-group">
             {onBack ? (
-              <button type="button" className="back-link-btn" onClick={onBack}>
-                ← Back
+              <button type="button" className="project-back-pill-btn" onClick={onBack} title="Back to all projects">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
+                <span>Back</span>
               </button>
             ) : (
-              <a href="#projects" className="back-link-btn">
-                ← Back
+              <a href="#projects" className="project-back-pill-btn" title="Back to all projects">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
+                <span>Back</span>
               </a>
             )}
-            <span>Soul Workspace</span>
-            <span className="crumb-sep">/</span>
-            <a href="#projects" className="crumb-link" onClick={(e) => { e.preventDefault(); onBack?.(); }}>
-              Pillar 1: Projects
-            </a>
-            <span className="crumb-sep">/</span>
-            <strong className="crumb-active">{project.title}</strong>
+            <div className="breadcrumb-divider-line" aria-hidden="true" />
+            <nav className="breadcrumb-trail" aria-label="Breadcrumb navigation">
+              <span>Soul Workspace</span>
+              <span className="crumb-sep">/</span>
+              <a href="#projects" className="crumb-link" onClick={(e) => { e.preventDefault(); onBack?.(); }}>
+                Pillar 1: Projects
+              </a>
+              <span className="crumb-sep">/</span>
+              <strong className="crumb-active">{project.title}</strong>
+            </nav>
           </div>
 
           <div className="detail-top-actions">
@@ -80,15 +91,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
               disabled={portTesting}
               title="Probe socket port availability"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
               </svg>
               <span>{portTesting ? 'Probing Ports...' : 'Probe Socket Ports'}</span>
             </button>
 
             {feUrl && (
-              <a href={feUrl} target="_blank" rel="noopener noreferrer" className="live-link-btn" title="Open Client in Browser">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <a href={feUrl} target="_blank" rel="noopener noreferrer" className="live-link-btn fe-link" title="Open Client in Browser">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                   <polyline points="15 3 21 3 21 9" />
                   <line x1="10" y1="14" x2="21" y2="3" />
@@ -98,7 +109,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             )}
             {beUrl && (
               <a href={beUrl} target="_blank" rel="noopener noreferrer" className="live-link-btn be-link" title="Open Server API">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
                   <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
                   <line x1="6" y1="6" x2="6.01" y2="6" />
@@ -130,18 +141,27 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             <div className="title-with-badge">
               <h1>{project.title}</h1>
               <code className="app-id-tag">{project.id}</code>
+              {project.version && <span className="version-pill">v{project.version}</span>}
             </div>
             <p className="detail-description">
               {project.description || `${project.title} monorepo application powered by ${project.framework || 'standard frontend'}.`}
             </p>
             <div className="project-consumed-packages-row">
-              <span className="consumed-label">Consumes:</span>
-              <a href="#packages/logger" className="consumed-pkg-tag">@workspace/logger</a>
-              <a href="#packages/config" className="consumed-pkg-tag">@workspace/config</a>
-              <a href="#packages/runner" className="consumed-pkg-tag">@workspace/runner</a>
+              <span className="consumed-label">CONSUMES:</span>
+              <a href="#packages/logger" className="consumed-pkg-tag">
+                <span className="consumed-dot" aria-hidden="true" />
+                <span>@workspace/logger</span>
+              </a>
+              <a href="#packages/config" className="consumed-pkg-tag">
+                <span className="consumed-dot" aria-hidden="true" />
+                <span>@workspace/config</span>
+              </a>
+              <a href="#packages/runner" className="consumed-pkg-tag">
+                <span className="consumed-dot" aria-hidden="true" />
+                <span>@workspace/runner</span>
+              </a>
             </div>
           </div>
-          {project.version && <span className="version-pill">v{project.version}</span>}
         </div>
 
         {/* Port Prober Status Banner (if tested) */}
@@ -223,16 +243,24 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         {/* Quick Launch Commands Banner */}
         <div className="project-quick-commands-banner">
           <div className="quick-cmd-item">
-            <span className="quick-cmd-label">MONOREPO RUNNER</span>
+            <div className="quick-cmd-header">
+              <span className="quick-cmd-icon" aria-hidden="true">⚡</span>
+              <span className="quick-cmd-label">MONOREPO RUNNER</span>
+            </div>
             <div className="quick-cmd-box">
+              <span className="cmd-prompt-sym" aria-hidden="true">$</span>
               <code>{runnerCmd}</code>
               <CopyButton text={runnerCmd} variant="compact" />
             </div>
           </div>
           {project.frontendCmd && (
             <div className="quick-cmd-item">
-              <span className="quick-cmd-label">CLIENT START</span>
+              <div className="quick-cmd-header">
+                <span className="quick-cmd-icon" aria-hidden="true">💻</span>
+                <span className="quick-cmd-label">CLIENT START</span>
+              </div>
               <div className="quick-cmd-box">
+                <span className="cmd-prompt-sym" aria-hidden="true">$</span>
                 <code>{project.frontendCmd}</code>
                 <CopyButton text={project.frontendCmd} variant="compact" />
               </div>
@@ -240,8 +268,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
           )}
           {project.backendCmd && (
             <div className="quick-cmd-item">
-              <span className="quick-cmd-label">SERVER START</span>
+              <div className="quick-cmd-header">
+                <span className="quick-cmd-icon" aria-hidden="true">🔌</span>
+                <span className="quick-cmd-label">SERVER START</span>
+              </div>
               <div className="quick-cmd-box">
+                <span className="cmd-prompt-sym" aria-hidden="true">$</span>
                 <code>{project.backendCmd}</code>
                 <CopyButton text={project.backendCmd} variant="compact" />
               </div>

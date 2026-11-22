@@ -118,51 +118,27 @@ All 8 workspace projects have **strictly assigned, non-overlapping ports** to en
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Core Monorepo Commands Reference
 
-### 1. Launching the Web Portal
+The root `package.json` provides 5 canonical command contracts governing fullstack development, build orchestration, static verification, and micro-app supervision:
 
-Start the interactive developer portal:
+| Command | Action | Implementation | Scope / Runtime |
+| :--- | :--- | :--- | :--- |
+| **`npm run dev`** | Starts interactive DevPortal development server | `vite` | DevPortal Frontend (:5173) |
+| **`npm run build`** | Builds production distribution assets with minification | `vite build` | Production Assets (`dist/`) |
+| **`npm run typecheck`** | Validates TypeScript static types across codebase | `tsc --noEmit` | Static Type Analysis Engine |
+| **`npm run dev:client`** | Concurrently boots client frontends with port-conflict guards | `python runner/bin/run-frontend.py` | Client Ecosystem (:5173–:5181) |
+| **`npm run dev:server`** | Concurrently boots backend APIs with port-conflict guards | `python runner/bin/run-backend.py` | Server Ecosystem (:8000–:8008) |
 
-```powershell
-npm run dev
-```
+### Additional Platform Scripts
+- **`npm run dev:all`**: Concurrently boots all 8 applications (clients + servers) via `@workspace/runner`.
+- **`npm run dev:portal:server`**: Starts the DevPortal telemetry and AST inspection FastAPI server on port `:8008`.
+- **`npm run extract`**: Re-indexes all packages and AST symbols without running a server.
+- **`npm run install:packages`**: Installs both npm workspaces and Python editable distributions.
 
-- Portal UI: **http://localhost:5181**
-- Features live AST inspection, architecture search (`Ctrl+K`), interactive project dashboard, and real-time package API documentation.
+---
 
-### 2. Launching the FastAPI AST Backend
-
-Start the telemetry and socket probing API:
-
-```powershell
-npm run dev:backend
-```
-
-- Backend API: **http://127.0.0.1:8008**
-- Swagger / OpenAPI Docs: **http://127.0.0.1:8008/docs**
-- Live TCP Port Probes: **http://127.0.0.1:8008/api/projects**
-
-### 3. Running the Extraction Pipeline
-
-To re-index all packages and AST symbols without running a server:
-
-```powershell
-npm run extract
-```
-
-### 4. Installing Polyglot Packages
-
-Link npm workspaces and install Python packages in editable mode:
-
-```powershell
-# Install both npm workspaces and Python editable distributions
-npm run install:packages
-
-# Or individually:
-npm install
-npm run install:python
-```
+## ⚡ Quick Start
 
 ---
 

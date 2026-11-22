@@ -301,11 +301,15 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
         <div className="breadcrumb-nav-row">
           <div className="breadcrumb">
             {onBack ? (
-              <button type="button" className="back-link-btn" onClick={onBack}>
-                ← Back
+              <button type="button" className="project-back-pill-btn" onClick={onBack}>
+                <span className="back-arrow">←</span>
+                <span>Back</span>
               </button>
             ) : (
-              <a href="#packages" className="back-link-btn">← Back</a>
+              <a href="#packages" className="project-back-pill-btn">
+                <span className="back-arrow">←</span>
+                <span>Back</span>
+              </a>
             )}
             <span>Soul Workspace</span>
             <span className="crumb-sep">/</span>

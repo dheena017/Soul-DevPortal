@@ -10,14 +10,19 @@ The logger package provides a consistent terminal logging experience for the Wor
 
 ## Features
 
-- Standard 5-column ANSI log format for Python services
-- Browser console badges and route/action logging
+- Standard 5-column ANSI log format for Python and Node.js services
+- Browser console badges, route tracing, state changes, and event logging
 - Sensitive-value masking for passwords, tokens, cookies, API keys, and authorization headers
-- Vite HMR forwarding for browser logs
-- HTTP request and response logging with request IDs
-- LAN and localhost startup banners
-- Uvicorn noise filtering
-- Timer, tabular output, navigation, and global error helpers
+- Automatic `window.fetch` network tracing with latency & status code formatting
+- In-memory ring buffer (up to 300 logs) with direct browser JSON export
+- Breadcrumbs tracking for debugging unhandled errors and user workflows
+- Node.js & Express / Fastify 5-column request logging middleware
+- Vite HMR forwarding for browser logs with strict ANSI terminal output
+- Structured JSON logging (`JsonFormatter`) for Docker, Kubernetes, and Cloud Logging
+- AI & LLM telemetry logger (`log_ai_call`, `AITelemetryTracker`) for Gemini/Claude/GPT
+- Database & slow query alerting (`log_db_query`, `DBQueryTimer`)
+- LAN and localhost Unicode box-drawing startup banners
+- Windows Job Object auto-kill on process exit and port conflict auto-recovery
 
 ## Package Structure
 
@@ -83,6 +88,14 @@ Available methods include:
 | `success(module, message, detail?)` | Write a success message using an informational badge |
 | `warn(module, message, detail?)` | Write a warning |
 | `error(module, message, detail?)` | Write an error |
+| `state(module, stateName, prev, next)` | Log a reactive state transition |
+| `event(module, eventName, payload?)` | Log a user or business event |
+| `attachFetchInterceptor()` | Automatically trace all outbound `fetch()` calls with latency and masking |
+| `breadcrumb(category, message, data?)` | Record an in-memory breadcrumb for diagnostics |
+| `getHistory()` | Retrieve ring-buffered log history (up to 300 entries) |
+| `downloadLogs(filename?)` | Export current logs & breadcrumbs as a downloadable JSON file |
+| `setLevel(level)` | Filter console output (`DEBUG` • `INFO` • `ACTION` • `WARN` • `ERROR` • `SILENT`) |
+| `group(title, fn, collapsed?)` | Group related logs in browser console |
 | `api(method, endpoint, status, duration, detail?)` | Log an HTTP API result |
 | `apiSent(method, url)` | Log an outgoing request |
 | `apiComing(method, url, status, duration, err?)` | Log an HTTP response |

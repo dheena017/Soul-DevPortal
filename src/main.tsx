@@ -20,6 +20,7 @@ import PackagesView from './features/packages/PackagesView';
 import PackageDetailView from './features/packages/PackageDetailView';
 import DocsView from './features/docs/DocsView';
 import ExploreView from './features/explore/ExploreView';
+import ScriptsView from './features/scripts/ScriptsView';
 
 import { DOCUMENTATION_GUIDES_REGISTRY } from './features/docs/docsConstants';
 
@@ -42,6 +43,7 @@ function App() {
 
   useEffect(() => {
     // Announce portal initialization via @workspace/logger
+    consoleLogger.installGlobalErrorHandlers();
     consoleLogger.printDevBanner();
     consoleLogger.success('APP', 'Soul Workspace Portal connected (4 Pillars Architecture)', {
       packagesCount: packagesList.length,
@@ -65,9 +67,11 @@ function App() {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'b') {
         event.preventDefault();
+        consoleLogger.action('SHORTCUT', 'Ctrl+B: Toggled sidebar drawer');
         handleSidebarToggle();
       } else if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
+        consoleLogger.action('SHORTCUT', 'Ctrl+K: Focused command search');
         searchInputRef.current?.focus();
       } else if (
         event.key === '/' &&
@@ -75,6 +79,7 @@ function App() {
         !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName || '')
       ) {
         event.preventDefault();
+        consoleLogger.action('SHORTCUT', '/: Focused search');
         searchInputRef.current?.focus();
       } else if (
         event.key === '?' &&
@@ -82,12 +87,15 @@ function App() {
         !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName || '')
       ) {
         event.preventDefault();
+        consoleLogger.action('SHORTCUT', '?: Toggled keyboard shortcuts modal');
         setShowShortcuts((prev) => !prev);
       } else if (event.key === 'Escape') {
         if (showShortcuts) {
           setShowShortcuts(false);
+          consoleLogger.action('SHORTCUT', 'Escape: Closed shortcuts modal');
         } else if (menuOpen) {
           setMenuOpen(false);
+          consoleLogger.action('SHORTCUT', 'Escape: Closed sidebar drawer');
         } else if (document.activeElement === searchInputRef.current) {
           searchInputRef.current?.blur();
         }
@@ -228,6 +236,8 @@ function App() {
       crumbs.push({ label: activeTitle || active });
     } else if (active === 'explore' || active.startsWith('explore/')) {
       crumbs.push({ label: 'explorer & prober' });
+    } else if (active === 'scripts' || active === 'commands' || active === 'runners') {
+      crumbs.push({ label: 'scripts & runners' });
     } else {
       crumbs.push({ label: activeTitle || active });
     }
@@ -355,18 +365,23 @@ function App() {
 
           {/* Pillar 3: Docs Detail Guides */}
           {(() => {
-            let guideId = '';
             const path = active.startsWith('docs/')
               ? active.replace('docs/', '')
               : active.startsWith('doc/')
               ? active.replace('doc/', '')
               : active;
 
-            if (path === 'rules' || path === 'projects-rules') guideId = 'rules';
-            else if (path === 'design' || path === 'packages-design' || path === 'guide') guideId = 'design';
-            else if (path === 'ports' || path === 'port-architecture' || path === 'ports-guide') guideId = 'ports';
-            else if (path === 'techstack' || path === 'tech-stack') guideId = 'techstack';
-            else if (path === 'cheatsheet' || path === 'compliance-cheatsheet') guideId = 'cheatsheet';
+            const matchedGuide = DOCUMENTATION_GUIDES_REGISTRY.find(
+              (g) => g.id === path || g.slug === path || g.category === path
+            );
+
+            const guideId = matchedGuide ? matchedGuide.id : (
+              path === 'rules' || path === 'projects-rules' ? 'rules' :
+              path === 'design' || path === 'packages-design' || path === 'guide' ? 'design' :
+              path === 'ports' || path === 'port-architecture' || path === 'ports-guide' ? 'ports' :
+              path === 'techstack' || path === 'tech-stack' ? 'techstack' :
+              path === 'cheatsheet' || path === 'compliance-cheatsheet' ? 'cheatsheet' : ''
+            );
 
             if (!guideId || guideId === 'hub' || guideId === 'dashboard') return null;
 
@@ -392,6 +407,14 @@ function App() {
             <ExploreView
               packages={packagesList}
               projects={projectsList}
+              onNavigate={navigate}
+            />
+          )}
+
+          {/* Dedicated Feature View: Scripts & Automation Command Runners */}
+          {(active === 'scripts' || active === 'commands' || active === 'runners') && (
+            <ScriptsView
+              rootScripts={workspaceData?.rootScripts || {}}
               onNavigate={navigate}
             />
           )}

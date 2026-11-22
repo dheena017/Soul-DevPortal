@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { consoleLogger } from '@workspace/logger';
 import { PackageData, ProjectData } from '../types';
 import { DOCUMENTATION_GUIDES_REGISTRY, GuideMeta } from '../features/docs/docsConstants';
+import { WORKSPACE_SCRIPTS_REGISTRY } from '../features/scripts/scriptsConstants';
 
 function packageBadge(pkg: PackageData): string {
   if (pkg.pythonModule) return 'PY';
@@ -14,21 +16,36 @@ function packageSidebarIcon(pkg: PackageData): string {
   return '📦';
 }
 
+function projectSidebarIcon(proj: ProjectData): string {
+  const id = (proj.id || '').toLowerCase();
+  const title = (proj.title || '').toLowerCase();
+  if (id.includes('apex') || title.includes('apex')) return '🧠';
+  if (id.includes('sonikoma') || title.includes('sonikoma')) return '🌌';
+  if (id.includes('outpass') || title.includes('outpass')) return '🎫';
+  if (id.includes('free-api') || id.includes('api') || title.includes('api')) return '⚡';
+  if (id.includes('spatial') || title.includes('spatial')) return '🪐';
+  if (id.includes('college') || id.includes('cms') || title.includes('college')) return '🎓';
+  if (id.includes('global') || id.includes('pulse') || title.includes('global')) return '🌐';
+  if (id.includes('postcraft') || id.includes('craft') || title.includes('post')) return '✍️';
+  return '💻';
+}
+
+
 function docGuideBadge(guide: GuideMeta): string {
   if (guide.category === 'rules') return 'SPEC';
-  if (guide.category === 'cheatsheet') return 'RULES';
-  if (guide.category === 'design') return 'DESIGN';
-  if (guide.category === 'ports') return 'ARCH';
+  if (guide.category === 'cheatsheet') return 'OPS';
+  if (guide.category === 'design') return 'PKG';
+  if (guide.category === 'ports') return 'PORTS';
   if (guide.category === 'techstack') return 'STACK';
   return guide.badge?.split(' ')[0] || 'DOC';
 }
 
 function formatDocGuideTitle(guide: GuideMeta): string {
   if (guide.id === 'rules') return 'Projects Rules';
-  if (guide.id === 'cheatsheet') return 'Core Cheatsheet';
+  if (guide.id === 'cheatsheet') return 'Compliance Cheatsheet';
   if (guide.id === 'design') return 'Packages Design';
   if (guide.id === 'ports') return 'Port Architecture';
-  if (guide.id === 'techstack') return 'Tech Stack Guide';
+  if (guide.id === 'techstack') return 'Tech Stack';
   return guide.title;
 }
 
@@ -125,7 +142,11 @@ export default function Sidebar({
   }, []);
 
   const toggleSection = (section: string) => {
-    setCollapsedSections((prev) => ({ ...prev, [section]: !prev[section] }));
+    setCollapsedSections((prev) => {
+      const willCollapse = !prev[section];
+      consoleLogger.action('SIDEBAR', `${willCollapse ? 'Collapsed' : 'Expanded'} section: ${section}`);
+      return { ...prev, [section]: willCollapse };
+    });
   };
 
   const isActive = (id: string) => active === id;
@@ -169,10 +190,27 @@ export default function Sidebar({
     );
   }, [isFiltering, needle]);
 
+  // Dynamically filter root scripts & runners
+  const filteredScripts = useMemo(() => {
+    if (!isFiltering) return [];
+    return WORKSPACE_SCRIPTS_REGISTRY.filter(
+      (s) =>
+        s.name.toLowerCase().includes(needle) ||
+        s.command.toLowerCase().includes(needle) ||
+        s.description.toLowerCase().includes(needle) ||
+        s.badge.toLowerCase().includes(needle) ||
+        (s.ports || '').toLowerCase().includes(needle)
+    );
+  }, [isFiltering, needle]);
+
   const isProjectsOpen = isFiltering ? filteredProjects.length > 0 : !collapsedSections.projects;
   const isPackagesOpen = isFiltering ? filteredPackages.length > 0 : !collapsedSections.packages;
   const isDocsOpen = isFiltering ? filteredGuides.length > 0 : !collapsedSections.docs;
-  const totalMatches = filteredProjects.length + filteredPackages.length + filteredGuides.length;
+  const totalMatches =
+    filteredProjects.length +
+    filteredPackages.length +
+    filteredGuides.length +
+    filteredScripts.length;
 
   return (
     <>
@@ -274,6 +312,17 @@ export default function Sidebar({
 
             <button
               type="button"
+              aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
+              className={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'nav-item active' : 'nav-item'}
+              onClick={() => onNavigate('scripts')}
+            >
+              <span className="nav-icon overview-icon" aria-hidden="true">⚡</span>
+              <span className="nav-text">Scripts &amp; Runners</span>
+              <span className="nav-badge-count">15</span>
+            </button>
+
+            <button
+              type="button"
               aria-current={isActive('explore') ? 'page' : undefined}
               className={isActive('explore') ? 'nav-item active' : 'nav-item'}
               onClick={() => onNavigate('explore')}
@@ -283,6 +332,37 @@ export default function Sidebar({
               <span className="nav-badge-count">Tool</span>
             </button>
           </div>
+
+          {/* If searching and matching scripts exist, show them right under top tools */}
+          {isFiltering && filteredScripts.length > 0 && (
+            <div className="nav-section">
+              <div className="pillar-header-row">
+                <button
+                  type="button"
+                  className="nav-item pillar-parent-item active"
+                  onClick={() => onNavigate('scripts')}
+                >
+                  <span className="nav-icon" aria-hidden="true">⚡</span>
+                  <span className="nav-text">Matching Scripts</span>
+                  <span className="nav-badge-count">{filteredScripts.length}</span>
+                </button>
+              </div>
+              <div className="package-nav-list sidebar-scroll-sublist">
+                {filteredScripts.slice(0, 8).map((s) => (
+                  <button
+                    type="button"
+                    key={s.id}
+                    className="nav-item"
+                    onClick={() => onNavigate('scripts')}
+                    title={`${s.name} - ${s.description}`}
+                  >
+                    <span className="nav-text">{s.name}</span>
+                    <span className={`sidebar-badge ${s.badgeClass}`}>{s.badge}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="nav-section-divider">
             <span className="nav-section-label">Core Monorepo Pillars</span>
@@ -342,18 +422,7 @@ export default function Sidebar({
                           title={proj.title}
                         >
                           <span className="nav-project-avatar" aria-hidden="true">
-                            {proj.logo ? (
-                              <img
-                                src={proj.logo}
-                                alt=""
-                                className="nav-project-logo"
-                                onError={(e) => {
-                                  (e.currentTarget as HTMLElement).style.display = 'none';
-                                }}
-                              />
-                            ) : (
-                              '⚡'
-                            )}
+                            {projectSidebarIcon(proj)}
                           </span>
                           <span className="nav-text">{formatProjectTitle(proj.title)}</span>
                           {proj.frontendPort && (

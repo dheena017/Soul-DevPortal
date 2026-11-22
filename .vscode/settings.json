@@ -1,0 +1,49 @@
+{
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/Soul-DevPortal-Packages/runner",
+    "${workspaceFolder}/Soul-DevPortal-Packages/logger",
+    "${workspaceFolder}/Soul-DevPortal-Packages/config"
+  ],
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}/Soul-DevPortal-Packages/runner",
+    "${workspaceFolder}/Soul-DevPortal-Packages/logger",
+    "${workspaceFolder}/Soul-DevPortal-Packages/config"
+  ],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/*.pyo": true,
+    "**/*.pyd": true,
+    "**/.pytest_cache": true,
+    "**/.ruff_cache": true,
+    "**/.mypy_cache": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/*.pyo": true,
+    "**/*.pyd": true,
+    "**/.pytest_cache": true,
+    "**/.ruff_cache": true,
+    "**/.mypy_cache": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "**/__pycache__/**": true,
+    "**/*.pyc": true,
+    "**/.pytest_cache/**": true,
+    "**/.ruff_cache/**": true,
+    "**/.mypy_cache/**": true
+  }
+}

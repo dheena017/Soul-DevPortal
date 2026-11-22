@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "python bin/run-dev.py --kill-port",
-    "frontend": "python bin/run-frontend.py --kill-port",
-    "backend": "python bin/run-backend.py --kill-port"
+    "dev:client": "python bin/run-frontend.py --kill-port",
+    "dev:server": "python bin/run-backend.py --kill-port"
   },
   "keywords": [
     "workspace",

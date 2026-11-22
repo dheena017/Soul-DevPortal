@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { consoleLogger } from '@workspace/logger';
 import CopyButton from '../../../components/CopyButton';
 import EmptyState from '../../../components/EmptyState';
 import { PackageData } from '../../../types';
@@ -19,8 +20,9 @@ function getInstallCommand(pkg: PackageData): string {
 }
 
 function getPythonInstallCommand(pkg: PackageData): string {
-  if (pkg.id === 'logger') return 'pip install -e packages/logger';
-  if (pkg.id === 'runner') return 'pip install -e packages/runner';
+  if (pkg.id === 'logger') return 'pip install -e Soul-DevPortal-Packages/logger';
+  if (pkg.id === 'runner') return 'pip install -e Soul-DevPortal-Packages/runner';
+  if (pkg.id === 'config') return 'pip install -e Soul-DevPortal-Packages/config';
   return '';
 }
 
@@ -328,7 +330,10 @@ export default function PackagesDashboard({ packages = [], onSelectPackage, onCl
                     <button
                       type="button"
                       className="pkg-inspect-btn"
-                      onClick={() => onSelectPackage(pkg.id)}
+                      onClick={() => {
+                        consoleLogger.action('PACKAGES', `Selected package: ${pkg.displayName || pkg.name} (@workspace/${pkg.id})`);
+                        onSelectPackage(pkg.id);
+                      }}
                     >
                       <span>Inspect Package API</span>
                       <span className="arrow-icon" aria-hidden="true">→</span>

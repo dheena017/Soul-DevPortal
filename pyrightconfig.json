@@ -1,0 +1,12 @@
+{
+  "include": [
+    "scripts",
+    "backend",
+    "Soul-DevPortal-Packages"
+  ],
+  "extraPaths": [
+    "Soul-DevPortal-Packages/runner",
+    "Soul-DevPortal-Packages/logger",
+    "Soul-DevPortal-Packages/config"
+  ]
+}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { consoleLogger } from '@workspace/logger';
 import { headingId } from './Markdown';
 import { MarkdownBlock } from '../types';
 
@@ -35,7 +36,7 @@ export default function TableOfContents({
     }
   }, [activeHeading]);
 
-  // Reactive scrollspy tracking the window scroll position
+  // Reactive scrollspy tracking the scroll position inside .main or window
   useEffect(() => {
     if (!headings.length) return undefined;
 
@@ -53,18 +54,25 @@ export default function TableOfContents({
       }
       if (!targets.length) return;
 
-      const topbar = document.querySelector('.topbar');
-      const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 58;
-      const threshold = topbarHeight + 50;
+      const mainEl = document.querySelector('.main') as HTMLElement | null;
 
-      // Bottom of page check
-      const docHeight = document.documentElement.scrollHeight;
-      const scrollPos = window.scrollY + window.innerHeight;
-      if (docHeight - scrollPos < 70 && targets.length > 0) {
-        setActiveHeading(targets[targets.length - 1].id);
-        return;
+      // Check if user scrolled to bottom of main scroll container
+      if (mainEl) {
+        const isBottom = mainEl.scrollHeight - mainEl.scrollTop - mainEl.clientHeight < 40;
+        if (isBottom && targets.length > 0) {
+          setActiveHeading(targets[targets.length - 1].id);
+          return;
+        }
+      } else {
+        const docHeight = document.documentElement.scrollHeight;
+        const scrollPos = window.scrollY + window.innerHeight;
+        if (docHeight - scrollPos < 70 && targets.length > 0) {
+          setActiveHeading(targets[targets.length - 1].id);
+          return;
+        }
       }
 
+      const threshold = 120;
       let currentId = targets[0]?.id || '';
       for (const target of targets) {
         const rect = target.getBoundingClientRect();
@@ -80,11 +88,18 @@ export default function TableOfContents({
       }
     };
 
+    const mainEl = document.querySelector('.main');
+    if (mainEl) {
+      mainEl.addEventListener('scroll', updateActiveOnScroll, { passive: true });
+    }
     window.addEventListener('scroll', updateActiveOnScroll, { passive: true });
     updateActiveOnScroll();
     const timer = setTimeout(updateActiveOnScroll, 120);
 
     return () => {
+      if (mainEl) {
+        mainEl.removeEventListener('scroll', updateActiveOnScroll);
+      }
       window.removeEventListener('scroll', updateActiveOnScroll);
       clearTimeout(timer);
       if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
@@ -116,15 +131,8 @@ export default function TableOfContents({
     }
 
     if (target) {
-      const topbar = document.querySelector('.topbar');
-      const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 58;
-      const targetTop = target.getBoundingClientRect().top + window.scrollY;
-      const offsetPosition = Math.max(0, targetTop - topbarHeight - 20);
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
+      consoleLogger.action('TOC', `Jumped to section: #${id} (${titlePart.slice(0, 50)})`);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
       // Update URL hash without jumping
       if (window.history?.replaceState) {
@@ -170,8 +178,6 @@ export default function TableOfContents({
           const id = headingId(rawText);
           const isActive = activeHeading === id;
           const isH3 = heading.type === 'h3';
-          const prevHeading = index > 0 ? headings[index - 1] : null;
-          const isNewMajorSection = !isH3 && prevHeading && prevHeading.type === 'h3';
 
           // Extract number prefix if present (e.g. "1.", "2.1", "3. ")
           const numberMatch = cleanText.match(/^(\d+(?:\.\d+)?\.?)\s*(.+)$/);
@@ -180,7 +186,7 @@ export default function TableOfContents({
 
           return (
             <a
-              className={`toc-item ${isH3 ? 'toc-nested nested' : 'toc-major'}${isNewMajorSection ? ' toc-section-break' : ''}${isActive ? ' active' : ''}`}
+              className={`toc-item ${isH3 ? 'toc-nested nested' : 'toc-major'}${isActive ? ' active' : ''}`}
               aria-current={isActive ? 'location' : undefined}
               href={`#${id}`}
               key={`${heading.type}-${index}-${rawText}`}

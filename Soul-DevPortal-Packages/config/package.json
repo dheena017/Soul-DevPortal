@@ -5,6 +5,7 @@
   "type": "module",
   "license": "MIT",
   "exports": {
+    ".": "./index.js",
     "./tsconfig/base.json": "./tsconfig/base.json",
     "./tsconfig/react.json": "./tsconfig/react.json",
     "./tsconfig/next.json": "./tsconfig/next.json",
@@ -19,6 +20,8 @@
     "./eslint/next": "./eslint/next.js"
   },
   "files": [
+    "index.js",
+    "workspace_config",
     "tsconfig",
     "tailwind",
     "prettier",

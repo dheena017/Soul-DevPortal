@@ -1,4 +1,5 @@
 import React from 'react';
+import { consoleLogger } from '@workspace/logger';
 
 export interface BreadcrumbItem {
   label: string;
@@ -50,10 +51,12 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           type="button"
           className={`header-sidebar-toggle ${menuOpen ? 'open' : ''}`}
-          onClick={onToggleSidebar}
+          onClick={() => {
+            consoleLogger.action('UI', menuOpen ? 'Closing sidebar navigation' : 'Opening sidebar navigation');
+            onToggleSidebar();
+          }}
           aria-expanded={menuOpen}
           aria-label={menuOpen ? 'Close sidebar navigation (Ctrl+B)' : 'Open sidebar navigation (Ctrl+B)'}
-          title={menuOpen ? 'Close sidebar (Ctrl+B)' : 'Open sidebar (Ctrl+B)'}
         >
           <span className="toggle-icon-wrap" aria-hidden="true">
             {menuOpen ? (
@@ -70,7 +73,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </span>
           <span className="toggle-hover-tooltip" aria-hidden="true">
-            {menuOpen ? 'Close' : 'Menu'} <kbd>Ctrl+B</kbd>
+            {menuOpen ? 'Close sidebar' : 'Open sidebar'} <kbd>Ctrl+B</kbd>
           </span>
         </button>
 
@@ -229,7 +232,10 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           type="button"
           className="topbar-icon-btn"
-          onClick={onOpenShortcuts}
+          onClick={() => {
+            consoleLogger.action('SHORTCUT', 'Clicked help button: opening keyboard shortcuts modal');
+            onOpenShortcuts();
+          }}
           title="Keyboard Shortcuts (?)"
           aria-label="View keyboard shortcuts"
         >

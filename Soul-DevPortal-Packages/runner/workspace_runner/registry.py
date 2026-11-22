@@ -48,8 +48,13 @@ def auto_detect_project(proj_dir: Path) -> Dict[str, Any]:
     name = proj_dir.name
     title = name.replace("-", " ").title()
     framework = "Web Application"
-    frontend_port = 5173
-    backend_port = 8000
+    if "devportal" in name.lower() or "dev-portal" in name.lower():
+        frontend_port = 5181
+        backend_port = 8008
+        title = "Soul Developer Portal"
+    else:
+        frontend_port = 5173
+        backend_port = 8000
     frontend_cmd = [NPM_BIN, "run", "dev"]
     backend_cmd: Optional[list[str]] = None
     db_info = "Local Store"

@@ -19,6 +19,11 @@ if str(_packages_root / "runner") not in sys.path:
 if str(_packages_root / "logger") not in sys.path:
     sys.path.insert(0, str(_packages_root / "logger"))
 
+from workspace_runner.installer import (
+    inspect_project_install,
+    print_installation_banner,
+    run_project_installation,
+)
 from workspace_runner.registry import detect_target_project
 from workspace_runner.supervisor import ensure_port_free, run_dual_supervisor, run_single_process
 from workspace_logger.banners import print_fullstack_banner
@@ -26,7 +31,20 @@ from workspace_logger.banners import print_fullstack_banner
 
 def main():
     auto_kill = "--kill-port" in sys.argv
+    do_install = "--install" in sys.argv
+    check_deps = "--check-deps" in sys.argv
     proj_name, cfg, proj_dir = detect_target_project()
+
+    # Pre-flight dependency audit
+    install_info = inspect_project_install(proj_dir)
+
+    if check_deps:
+        print_installation_banner(install_info, action_message="Audit Complete (Ready to run)")
+        sys.exit(0 if install_info.get("overall_ready") else 1)
+
+    if do_install or not install_info.get("overall_ready"):
+        print_installation_banner(install_info, action_message="Installing Missing Dependencies...")
+        run_project_installation(proj_dir, scope="all")
 
     fe_port = cfg.get("frontend_port", 5173)
     be_port = cfg.get("backend_port", 8000)

@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   background-color: var(--page-bg);
+  transition: filter 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Custom Scrollbar for Main Content (Starts STRICTLY BELOW the Topbar) */
@@ -56,28 +57,34 @@
   height: 58px;
   flex-shrink: 0;
   width: 100%;
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 1050;
-  background: rgba(14, 14, 14, 0.75) !important;
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  background-color: #121212 !important;
+  border-bottom: 1px solid #282828 !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 18px;
-  gap: 14px;
+  padding: 0 16px;
+  gap: 12px;
   box-sizing: border-box;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  overflow: visible;
+  transition: filter 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+html.sidebar-open .topbar,
+body.sidebar-open .topbar {
+  filter: blur(8px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
 
 .topbar-left {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  min-width: max-content;
 }
 
 .header-sidebar-toggle {
@@ -121,28 +128,28 @@
   left: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
-  background: #16161a;
-  border: 1px solid #2e2e38;
+  gap: 7px;
+  padding: 5px 9px;
+  background: #181818;
+  border: 1px solid #333333;
   border-radius: 6px;
-  color: #f3f4f6;
-  font-size: 11px;
+  color: #e5e5e5;
+  font-size: 11.5px;
   font-weight: 500;
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
   transform: translateY(-4px);
   transition: opacity 0.15s ease, transform 0.15s ease;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
-  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  z-index: 2000;
 }
 
 .toggle-hover-tooltip kbd {
   padding: 1px 5px;
   border-radius: 4px;
-  background: #24242e;
-  border: 1px solid #3d3d4e;
+  background: #242424;
+  border: 1px solid #3d3d3d;
   color: #60a5fa;
   font-size: 10px;
   font-family: ui-monospace, SFMono-Regular, monospace;
@@ -156,8 +163,9 @@
 .topbar-breadcrumb-wrap {
   display: flex;
   align-items: center;
-  gap: 6px;
-  overflow: hidden;
+  gap: 4px;
+  flex-shrink: 0;
+  min-width: max-content;
 }
 
 .topbar-brand-link {
@@ -171,6 +179,8 @@
   cursor: pointer;
   color: inherit;
   transition: background 0.15s ease;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .topbar-brand-link:hover {
@@ -187,30 +197,35 @@
   background: rgba(59, 130, 246, 0.15);
   border: 1px solid rgba(59, 130, 246, 0.35);
   color: #3b82f6;
+  flex-shrink: 0;
 }
 
 .topbar-brand-name {
   color: #9ca3af;
   font-size: 13px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .topbar-crumb-slash {
   color: #4b5563;
   font-size: 12px;
-  margin: 0 1px;
+  margin: 0 2px;
+  flex-shrink: 0;
 }
 
 .topbar-brand-repo {
   color: #ffffff;
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .topbar-crumb-segment {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
 }
 
 .topbar-crumb-link {
@@ -223,6 +238,7 @@
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .topbar-crumb-link:hover {
@@ -234,7 +250,7 @@
   color: #e5e5e5;
   font-size: 12.5px;
   font-weight: 600;
-  max-width: 180px;
+  max-width: 160px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -242,8 +258,9 @@
 
 /* ── Omni Command Search ────────────────────────────────── */
 .search-wrap {
-  flex: 1 1 240px;
-  max-width: 420px;
+  flex: 0 1 280px;
+  min-width: 140px;
+  max-width: 340px;
   position: relative;
   display: flex;
   align-items: center;
@@ -547,18 +564,18 @@
   gap: 4px;
 }
 
-/* ── Fixed Sidebar ────────────────────────────────────────── */
+/* ── Fixed Sidebar (Full Height 100vh) ─────────────────────── */
 .sidebar {
   position: fixed;
-  top: 58px;
+  top: 0;
   bottom: 0;
   left: 0;
-  height: calc(100vh - 58px);
-  height: calc(100dvh - 58px);
-  z-index: 1000;
-  width: 280px;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 1200;
+  width: 295px;
   background-color: #121212 !important;
-  border-right: 1px solid #2f2f2f !important;
+  border-right: 1px solid #282828 !important;
   display: flex;
   flex-direction: column;
   transform: translateX(-105%);
@@ -1181,12 +1198,28 @@
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 990;
+  z-index: 1100;
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: none;
   cursor: pointer;
+  transition: opacity 0.25s ease, backdrop-filter 0.25s ease;
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+html.sidebar-open .main,
+body.sidebar-open .main {
+  filter: blur(8px);
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 /* ── Standard Hero Headers & Breadcrumbs ─────────────────── */

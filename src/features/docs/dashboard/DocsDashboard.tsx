@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { consoleLogger } from '@workspace/logger';
 import { DOCUMENTATION_GUIDES_REGISTRY, GuideMeta } from '../docsConstants';
 import CopyButton from '../../../components/CopyButton';
 
@@ -319,7 +320,10 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                   <button
                     type="button"
                     className="doc-open-btn"
-                    onClick={() => onSelectGuide(guide.id)}
+                    onClick={() => {
+                      consoleLogger.action('DOCS', `Selected guide: ${guide.title}`, { guideId: guide.id, slug: guide.slug });
+                      onSelectGuide(guide.id);
+                    }}
                   >
                     Read Guide <span>→</span>
                   </button>

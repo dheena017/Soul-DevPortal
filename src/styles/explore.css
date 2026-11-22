@@ -44,55 +44,179 @@
 }
 
 /* ── AST Symbol Search & Grid ────────────────────────────── */
-.symbol-search-panel {
+.symbol-search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.symbol-search-controls {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 20px;
+  padding: 18px 20px;
   border-radius: 10px;
   background: #121212;
-  border: 1px solid #2f2f2f;
+  border: 1px solid #282828;
 }
 
+.symbol-search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.symbol-search-input-wrap svg {
+  position: absolute;
+  left: 12px;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.symbol-search-input-wrap input {
+  width: 100%;
+  height: 38px;
+  padding: 0 36px 0 36px;
+  border-radius: 6px;
+  background: #181818 !important;
+  border: 1px solid #282828 !important;
+  color: #e5e5e5 !important;
+  font-size: 13px;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.symbol-search-input-wrap input:hover {
+  background: #1c1c1c !important;
+  border-color: #383838 !important;
+}
+
+.symbol-search-input-wrap input:focus {
+  background: #202020 !important;
+  border-color: #3b82f6 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
+}
+
+.symbol-search-input-wrap .clear-api-search {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 12px;
+}
+
+.symbol-search-input-wrap .clear-api-search:hover {
+  color: #ffffff;
+}
+
+.symbol-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.symbol-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888888;
+  margin-right: 2px;
+}
+
+.symbol-filter-group .filter-pill {
+  padding: 4px 10px;
+  border-radius: 5px;
+  background: #181818;
+  border: 1px solid #282828;
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.symbol-filter-group .filter-pill:hover {
+  background: #222222;
+  border-color: #3a3a3a;
+  color: #ffffff;
+}
+
+.symbol-filter-group .filter-pill.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.symbol-results-meta {
+  font-size: 12.5px;
+  color: #9ca3af;
+  padding: 0 4px;
+}
+
+.symbol-results-meta strong {
+  color: #ffffff;
+}
+
+/* ── Multi-Column Responsive Grid ──────────────────────── */
+.symbol-results-grid,
 .ast-symbols-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 16px;
+  width: 100%;
 }
 
 .symbol-card {
   display: flex;
   flex-direction: column;
-  padding: 18px;
-  border-radius: 10px;
-  background: #181818;
-  border: 1px solid #2f2f2f;
+  padding: 16px;
+  border-radius: 8px;
+  background: #141414;
+  border: 1px solid #262626;
   transition: transform 0.15s ease, border-color 0.15s ease;
+  box-sizing: border-box;
 }
 
 .symbol-card:hover {
   transform: translateY(-2px);
-  border-color: #3b82f6;
+  border-color: #383838;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
 }
 
-.symbol-header {
+.symbol-card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-.symbol-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: #ffffff;
-  font-family: ui-monospace, monospace;
+.symbol-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .symbol-kind-badge {
-  padding: 2px 7px;
+  padding: 2px 6px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -102,32 +226,93 @@
 .symbol-kind-badge.class { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
 .symbol-kind-badge.interface { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
 .symbol-kind-badge.type { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+.symbol-kind-badge.method { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
 
-.symbol-signature {
-  padding: 8px 10px;
-  border-radius: 6px;
-  background: #0a0a0a;
-  border: 1px solid #262626;
-  font-size: 11.5px;
-  font-family: ui-monospace, monospace;
-  color: #93c5fd;
-  overflow-x: auto;
-  margin-bottom: 10px;
-}
-
-.symbol-meta-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: auto;
-}
-
-.symbol-pkg-chip {
+.symbol-lang-badge {
   padding: 2px 6px;
   border-radius: 4px;
-  background: #121212;
-  border: 1px solid #262626;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.symbol-lang-badge.typescript {
+  background: rgba(59, 130, 246, 0.12);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.symbol-lang-badge.python {
+  background: rgba(234, 179, 8, 0.12);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.25);
+}
+
+.symbol-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #e5e5e5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  word-break: break-all;
+}
+
+.symbol-signature {
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #0d0d0d;
+  border: 1px solid #222222;
+  font-size: 11.5px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  color: #93c5fd;
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.symbol-signature pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.symbol-signature code {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.symbol-docstring {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0 0 10px 0;
+  line-height: 1.45;
+}
+
+.symbol-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #1f1f1f;
+}
+
+.symbol-origin-pkg {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.symbol-origin-pkg code {
   color: #9ca3af;
-  font-size: 10.5px;
   font-family: ui-monospace, monospace;
 }
+
+.symbol-empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  background: #121212;
+  border: 1px solid #282828;
+  border-radius: 8px;
+  color: #9ca3af;
+  font-size: 13.5px;
+}
+

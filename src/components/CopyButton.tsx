@@ -1,4 +1,5 @@
 import React, { useState, MouseEvent } from 'react';
+import { consoleLogger } from '@workspace/logger';
 
 export interface CopyButtonProps {
   text?: string;
@@ -24,9 +25,13 @@ export default function CopyButton({
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      consoleLogger.action('CLIPBOARD', `Copied text to clipboard (${text.length} chars)`, {
+        preview: text.slice(0, 100),
+      });
       window.setTimeout(() => setCopied(false), 1400);
-    } catch {
+    } catch (err) {
       setCopied(false);
+      consoleLogger.error('CLIPBOARD', 'Failed to copy to clipboard', err);
     }
   }
 

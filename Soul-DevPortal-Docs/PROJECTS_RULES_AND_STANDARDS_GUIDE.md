@@ -1,4 +1,4 @@
-# Soul Monorepo — Projects Architecture & Development Rules
+# Projects Rules & Standards Guide
 
 > **Monorepo Standard Specification v1.0.0**  
 > Official development, structure, networking, security, and integration rules governing all 8 workspace applications consuming the `@workspace/*` shared packages ecosystem.

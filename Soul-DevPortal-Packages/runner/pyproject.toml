@@ -28,6 +28,7 @@ dependencies = [
 workspace-dev = "workspace_runner.bin.run_dev:main"
 workspace-frontend = "workspace_runner.bin.run_frontend:main"
 workspace-backend = "workspace_runner.bin.run_backend:main"
+workspace-install = "workspace_runner.bin.run_install:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

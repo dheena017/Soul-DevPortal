@@ -30,6 +30,18 @@ from .server_logger import (
     init_app_logger,
     get_logger,
 )
+from .json_logger import (
+    JsonFormatter,
+    setup_json_logging,
+)
+from .ai_logger import (
+    log_ai_call,
+    AITelemetryTracker,
+)
+from .db_logger import (
+    log_db_query,
+    DBQueryTimer,
+)
 from .supervisor import (
     enable_windows_kill_on_close,
     is_port_in_use,
@@ -64,6 +76,14 @@ __all__ = [
     "setup_colored_logging",
     "init_app_logger",
     "get_logger",
+    # Structured JSON Logging
+    "JsonFormatter",
+    "setup_json_logging",
+    # AI & Database Telemetry
+    "log_ai_call",
+    "AITelemetryTracker",
+    "log_db_query",
+    "DBQueryTimer",
     # Process & Port Supervision
     "enable_windows_kill_on_close",
     "is_port_in_use",

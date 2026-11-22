@@ -25,18 +25,35 @@ export default function DocDetailView({
   onSelectGuide,
   onBack,
 }: DocDetailViewProps) {
+  // Robust resolution matching ID, slug, or category
   const guideMeta: GuideMeta =
-    DOCUMENTATION_GUIDES_REGISTRY.find((g) => g.id === guideId) || DOCUMENTATION_GUIDES_REGISTRY[0];
+    DOCUMENTATION_GUIDES_REGISTRY.find(
+      (g) => g.id === guideId || g.slug === guideId || g.category === guideId
+    ) || DOCUMENTATION_GUIDES_REGISTRY[0];
 
-  let activeBlocks = blocks;
-  if (guideId === 'rules' && projectRulesBlocks?.length) {
-    activeBlocks = projectRulesBlocks;
-  } else if (guideId === 'ports' && portGuideBlocks?.length) {
-    activeBlocks = portGuideBlocks;
-  } else if (guideId === 'techstack' && techStackBlocks?.length) {
-    activeBlocks = techStackBlocks;
-  } else if (guideId === 'cheatsheet' && cheatsheetBlocks?.length) {
-    activeBlocks = cheatsheetBlocks;
+  const resolvedId = guideMeta.id;
+
+  // Accurately map markdown content per canonical guide ID
+  let activeBlocks: MarkdownBlock[] = [];
+  if (resolvedId === 'rules') {
+    activeBlocks = projectRulesBlocks && projectRulesBlocks.length > 0 ? projectRulesBlocks : [];
+  } else if (resolvedId === 'cheatsheet') {
+    activeBlocks = cheatsheetBlocks && cheatsheetBlocks.length > 0 ? cheatsheetBlocks : [];
+  } else if (resolvedId === 'design') {
+    activeBlocks = blocks && blocks.length > 0 ? blocks : [];
+  } else if (resolvedId === 'ports') {
+    activeBlocks = portGuideBlocks && portGuideBlocks.length > 0 ? portGuideBlocks : [];
+  } else if (resolvedId === 'techstack') {
+    activeBlocks = techStackBlocks && techStackBlocks.length > 0 ? techStackBlocks : [];
+  }
+
+  // Safe fallback if blocks are still loading
+  if (!activeBlocks.length) {
+    if (resolvedId === 'rules') activeBlocks = projectRulesBlocks || [];
+    else if (resolvedId === 'cheatsheet') activeBlocks = cheatsheetBlocks || [];
+    else if (resolvedId === 'ports') activeBlocks = portGuideBlocks || [];
+    else if (resolvedId === 'techstack') activeBlocks = techStackBlocks || [];
+    else activeBlocks = blocks || [];
   }
 
   const headings = (activeBlocks || []).filter((b) => b.type === 'h2' || b.type === 'h3');
@@ -49,12 +66,14 @@ export default function DocDetailView({
         <div className="breadcrumb-nav-row">
           <div className="breadcrumb">
             {onBack ? (
-              <button type="button" className="back-link-btn" onClick={onBack} title="Return to docs dashboard">
-                ← Back
+              <button type="button" className="project-back-pill-btn" onClick={onBack} title="Return to docs dashboard">
+                <span className="back-arrow">←</span>
+                <span>Back</span>
               </button>
             ) : (
-              <a href="#docs" className="back-link-btn">
-                ← Back
+              <a href="#docs" className="project-back-pill-btn">
+                <span className="back-arrow">←</span>
+                <span>Back</span>
               </a>
             )}
             <span>Soul Workspace</span>
@@ -87,7 +106,7 @@ export default function DocDetailView({
         </div>
 
         {/* Dynamic Metadata Summary Cards */}
-        <div className="detail-metadata-grid doc-metadata-grid">
+        <div className="doc-meta-strip doc-metadata-grid">
           <div className="metadata-card">
             <div className="metadata-card-header">
               <span className="metadata-icon" aria-hidden="true">📑</span>
