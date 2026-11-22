@@ -136,9 +136,9 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             </p>
             <div className="project-consumed-packages-row">
               <span className="consumed-label">Consumes:</span>
-              <a href="#packages" className="consumed-pkg-tag">@workspace/logger</a>
-              <a href="#packages" className="consumed-pkg-tag">@workspace/config</a>
-              <a href="#packages" className="consumed-pkg-tag">@workspace/runner</a>
+              <a href="#packages/logger" className="consumed-pkg-tag">@workspace/logger</a>
+              <a href="#packages/config" className="consumed-pkg-tag">@workspace/config</a>
+              <a href="#packages/runner" className="consumed-pkg-tag">@workspace/runner</a>
             </div>
           </div>
           {project.version && <span className="version-pill">v{project.version}</span>}

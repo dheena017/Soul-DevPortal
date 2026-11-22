@@ -47,7 +47,8 @@ export default function DocsView({
       cheatsheetBlocks={cheatsheetBlocks}
       onSelectGuide={onSelectGuide}
       onBack={() => {
-        if (onSelectGuide) onSelectGuide('hub');
+        if (onBack) onBack();
+        else if (onSelectGuide) onSelectGuide('hub');
       }}
     />
   );

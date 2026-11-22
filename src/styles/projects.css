@@ -114,20 +114,20 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 16px;
-  padding: 22px;
-  border-radius: 14px;
-  background: #181818;
-  border: 1px solid #2f2f2f;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  border-radius: 8px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
   position: relative;
 }
 
 .project-card:hover,
 .enhanced-project-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(59, 130, 246, 0.55);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+  border-color: #58a6ff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 .gh-repo-header-line {
@@ -138,17 +138,18 @@
 }
 
 .gh-repo-octicon {
-  color: #6b7280;
+  color: #8b949e;
   flex-shrink: 0;
 }
 
 .gh-repo-title {
-  color: #ffffff !important;
+  color: #58a6ff !important;
+  font-weight: 600 !important;
 }
 
 .gh-repo-title:hover {
-  color: #60a5fa !important;
-  text-decoration: underline;
+  color: #79c0ff !important;
+  text-decoration: underline !important;
 }
 
 .gh-tags-row {
@@ -164,18 +165,18 @@
   gap: 6px !important;
   padding: 3px 9px !important;
   border-radius: 20px !important;
-  background: #141414 !important;
-  border: 1px solid #282828 !important;
-  color: #9ca3af !important;
+  background: #21262d !important;
+  border: 1px solid #30363d !important;
+  color: #8b949e !important;
   font-size: 11px !important;
   font-weight: 500 !important;
   white-space: nowrap !important;
 }
 
 .gh-lang-pill:hover {
-  border-color: #3b82f6 !important;
-  background: #1e1e1e !important;
-  color: #ffffff !important;
+  border-color: #58a6ff !important;
+  background: #30363d !important;
+  color: #f0f6fc !important;
 }
 
 /* Card Top: Brand, Title, Ports */
@@ -1061,9 +1062,15 @@
 }
 
 .env-keys-table {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .env-keys-table {
+    grid-template-columns: 1fr;
+  }
 }
 
 .env-table-row {

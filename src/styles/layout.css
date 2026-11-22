@@ -41,14 +41,138 @@
   justify-content: space-between;
   padding: 0 20px;
   gap: 16px;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
-body.sidebar-open .topbar,
-html.sidebar-open .topbar {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+/* ── GitHub Primer Subnavigation Bar ───────────────────────────────── */
+.gh-subnav-bar {
+  background: #121212 !important;
+  border-bottom: 1px solid #2f2f2f !important;
+  padding: 0 20px;
+  position: sticky;
+  top: 58px;
+  z-index: 45;
+}
+
+.gh-subnav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.gh-subnav-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.gh-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px 12px;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  position: relative;
+  border-radius: 6px 6px 0 0;
+}
+
+.gh-tab-btn:hover {
+  color: #ffffff;
+  background: #1e1e1e;
+}
+
+.gh-tab-btn.active {
+  color: #ffffff !important;
+  font-weight: 600;
+  border-bottom-color: #3b82f6 !important;
+}
+
+.gh-tab-btn svg {
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+.gh-tab-btn.active svg {
+  opacity: 1;
+  color: #60a5fa;
+}
+
+.gh-tab-count {
+  padding: 1px 7px;
+  border-radius: 20px;
+  background: #1e1e1e;
+  border: 1px solid #2f2f2f;
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.gh-tab-btn.active .gh-tab-count {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+}
+
+.gh-tab-github-link {
+  margin-left: auto;
+  color: #3b82f6;
+  border-bottom: none !important;
+}
+
+.gh-tab-github-link:hover {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.gh-external-arrow {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* ── Topbar Breadcrumb & Active View Indicator ─────────────────────── */
+.topbar-breadcrumb-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.topbar-active-crumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.topbar-active-crumb .active-view-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e5e5e5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+  background: #1e1e1e;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #2f2f2f;
+}
+
+.header-sidebar-toggle.pinned {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border-color: rgba(59, 130, 246, 0.4) !important;
+  color: #60a5fa !important;
 }
 
 .topbar-left {
@@ -247,7 +371,7 @@ html.sidebar-open .topbar {
   height: 100vh;
   height: 100dvh;
   z-index: 1000;
-  width: 290px;
+  width: 280px;
   background-color: #121212 !important;
   border-right: 1px solid #2f2f2f !important;
   display: flex;
@@ -264,13 +388,71 @@ html.sidebar-open .topbar {
   pointer-events: none;
 }
 
+/* ── Pinned Desktop Sidebar Mode ────────────────────────────────── */
+@media (min-width: 1024px) {
+  .app-shell.sidebar-pinned .sidebar {
+    transform: translateX(0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    box-shadow: none !important;
+    border-right: 1px solid #2f2f2f !important;
+    z-index: 40 !important;
+    width: 280px !important;
+  }
+
+  .app-shell.sidebar-pinned .main {
+    margin-left: 280px !important;
+    width: calc(100% - 280px) !important;
+    transition: margin-left 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .app-shell.sidebar-pinned .overlay {
+    display: none !important;
+  }
+
+  .app-shell.sidebar-pinned .sidebar-close {
+    display: none !important;
+  }
+}
+
 .sidebar-brand {
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 18px;
+  padding: 0 16px;
   border-bottom: 1px solid #2f2f2f;
+}
+
+.sidebar-brand-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sidebar-pin-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: #1e1e1e;
+  border: 1px solid #2f2f2f;
+  color: #9ca3af;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sidebar-pin-btn:hover {
+  background: #242424;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.sidebar-pin-btn.pinned {
+  background: rgba(59, 130, 246, 0.18) !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  color: #60a5fa !important;
 }
 
 .brand {
@@ -348,8 +530,44 @@ html.sidebar-open .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 8px;
+  padding: 0 4px;
   margin-bottom: 5px;
+}
+
+.nav-label-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  text-align: left;
+}
+
+.nav-label-toggle-btn:hover {
+  background: #181818;
+}
+
+.nav-label-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-chevron {
+  font-size: 8.5px;
+  color: #6b7280;
+  display: inline-block;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
+}
+
+.nav-chevron.collapsed {
+  transform: rotate(-90deg);
 }
 
 .nav-label {

@@ -368,7 +368,7 @@ export default function Overview({
                     <button
                       type="button"
                       className="pkg-inspect-btn"
-                      onClick={() => onNavigate(pkg.id)}
+                      onClick={() => onNavigate(`packages/${pkg.id}`)}
                     >
                       <span>Inspect Package API</span>
                       <span className="arrow-icon" aria-hidden="true">→</span>
@@ -421,10 +421,10 @@ export default function Overview({
                 <div
                   className="preview-project-card enhanced-preview-card"
                   key={p.id}
-                  onClick={() => onNavigate(`project/${p.id}`)}
+                  onClick={() => onNavigate(`projects/${p.id}`)}
                   role="button"
                   tabIndex={0}
-                  onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(`project/${p.id}`); }}
+                  onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(`projects/${p.id}`); }}
                 >
                   <div className="preview-project-top">
                     <div className="preview-brand-group">
@@ -494,15 +494,7 @@ export default function Overview({
 
         <div className="docs-overview-grid">
           {DOCUMENTATION_GUIDES_REGISTRY.map((guide) => {
-            const guideRoute = guide.id === 'rules'
-              ? 'projects-rules'
-              : guide.id === 'design'
-              ? 'guide'
-              : guide.id === 'ports'
-              ? 'ports-guide'
-              : guide.id === 'techstack'
-              ? 'tech-stack'
-              : 'cheatsheet';
+            const guideRoute = `docs/${guide.id}`;
 
             return (
               <div

@@ -621,17 +621,17 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               <div className="impl-item">
                 <strong>@workspace/config</strong>
                 <span>Tokens, Tailwind CSS v4, Vite configuration presets</span>
-                <a href="#packages" className="impl-link">View Package →</a>
+                <a href="#packages/config" className="impl-link">View Package →</a>
               </div>
               <div className="impl-item">
                 <strong>@workspace/logger</strong>
                 <span>5-column python logger, browser formatter, masking engine</span>
-                <a href="#packages" className="impl-link">View Package →</a>
+                <a href="#packages/logger" className="impl-link">View Package →</a>
               </div>
               <div className="impl-item">
                 <strong>@workspace/runner</strong>
                 <span>Process lifecycle orchestrator, socket port kill &amp; spawn</span>
-                <a href="#packages" className="impl-link">View Package →</a>
+                <a href="#packages/runner" className="impl-link">View Package →</a>
               </div>
             </div>
           </div>
@@ -642,42 +642,42 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               <div className="impl-item">
                 <strong>APEXMIND STUDIO AI</strong>
                 <span>React 19 · Vite 8 · Ports FE:5173 / BE:8000</span>
-                <a href="#projects" className="impl-link">View Project →</a>
+                <a href="#projects/apexmind-ai" className="impl-link">View Project →</a>
               </div>
               <div className="impl-item">
                 <strong>SONIKOMA AI STUDIO</strong>
                 <span>React 19 · Vite 8 · Ports FE:5176 / BE:8006</span>
-                <a href="#projects" className="impl-link">View Project →</a>
+                <a href="#projects/sonikoma" className="impl-link">View Project →</a>
               </div>
               <div className="impl-item">
                 <strong>OUTPASS MANAGEMENT SYSTEM</strong>
                 <span>React 18 · Vite · Ports FE:5174 / BE:8001</span>
-                <a href="#projects" className="impl-link">View Project →</a>
+                <a href="#projects/outpass-system" className="impl-link">View Project →</a>
               </div>
               <div className="impl-item">
                 <strong>FREE API HUB</strong>
                 <span>React 18 · Vite · Ports FE:5175 / BE:8002</span>
-                <a href="#projects" className="impl-link">View Project →</a>
+                <a href="#projects/free-api-hub" className="impl-link">View Project →</a>
               </div>
               <div className="impl-item">
                 <strong>SPATIAL DIMENSIONS</strong>
                 <span>React 19 · Vite 6 · Ports FE:5177 / BE:8007</span>
-                <a href="#projects" className="impl-link">View Project →</a>
+                <a href="#projects/spatial-dimensions" className="impl-link">View Project →</a>
               </div>
               <div className="impl-item">
                 <strong>COLLEGE MANAGEMENT SYSTEM</strong>
                 <span>React 19 · Vite 6 · Ports FE:5178 / BE:8005</span>
-                <a href="#projects" className="impl-link">View Project →</a>
+                <a href="#projects/college-management-system" className="impl-link">View Project →</a>
               </div>
               <div className="impl-item">
                 <strong>GLOBALPULSE AI</strong>
                 <span>Next.js 14 · Ports FE:5179 / BE:8003</span>
-                <a href="#projects" className="impl-link">View Project →</a>
+                <a href="#projects/globalpulse-ai" className="impl-link">View Project →</a>
               </div>
               <div className="impl-item">
                 <strong>POSTCRAFT AI</strong>
                 <span>Next.js 14 Fullstack · Port: 5180</span>
-                <a href="#projects" className="impl-link">View Project →</a>
+                <a href="#projects/postcraft-ai" className="impl-link">View Project →</a>
               </div>
             </div>
           </div>

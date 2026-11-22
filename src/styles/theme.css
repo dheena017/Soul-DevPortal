@@ -10,23 +10,47 @@
 @source "../**/*.{js,ts,jsx,tsx}";
 
 :root {
-  --page-bg: #0a0a0a;
-  --sidebar-bg: #121212;
-  --surface: #1e1e1e;
-  --surface-raised: #242424;
-  --surface-inset: #0a0a0a;
-  --border: #2f2f2f;
-  --border-subtle: #242424;
-  --text-primary: #e5e5e5;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
-  --accent: #3b82f6;
-  --accent-bg: rgba(59, 130, 246, 0.15);
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  /* ========================================================================
+     GITHUB PRIMER DARK & PREMIER DEVELOPER PLATFORM DESIGN TOKENS
+     ======================================================================== */
+  --page-bg: #0d1117;
+  --sidebar-bg: #010409;
+  --surface: #161b22;
+  --surface-raised: #21262d;
+  --surface-inset: #010409;
+  --surface-hover: #1f242c;
+  
+  --border: #30363d;
+  --border-subtle: #21262d;
+  --border-muted: #21262d;
+  --border-active: #58a6ff;
 
-  /* GitHub Primer Dark Design Tokens */
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+
+  --accent: #58a6ff;
+  --accent-emphasis: #1f6feb;
+  --accent-bg: rgba(56, 139, 253, 0.12);
+  --accent-border: rgba(56, 139, 253, 0.4);
+
+  --success: #238636;
+  --success-fg: #3fb950;
+  --success-bg: rgba(46, 160, 67, 0.12);
+
+  --warning: #d29922;
+  --warning-fg: #e3b341;
+  --warning-bg: rgba(187, 128, 9, 0.12);
+
+  --danger: #da3633;
+  --danger-fg: #f85149;
+  --danger-bg: rgba(248, 81, 73, 0.12);
+
+  --purple: #8957e5;
+  --purple-fg: #a371f7;
+  --purple-bg: rgba(163, 113, 247, 0.12);
+
+  /* GitHub Primer System Variables */
   --gh-canvas-default: #0d1117;
   --gh-canvas-subtle: #161b22;
   --gh-canvas-inset: #010409;
@@ -34,8 +58,8 @@
   --gh-border-default: #30363d;
   --gh-border-muted: #21262d;
   --gh-border-subtle: rgba(240, 246, 252, 0.1);
-  --gh-fg-default: #e6edf3;
-  --gh-fg-muted: #848d97;
+  --gh-fg-default: #f0f6fc;
+  --gh-fg-muted: #8b949e;
   --gh-fg-subtle: #6e7681;
   --gh-accent-fg: #58a6ff;
   --gh-accent-emphasis: #1f6feb;
@@ -69,10 +93,12 @@ body {
   color: var(--text-primary) !important;
 }
 
-html.sidebar-open,
-body.sidebar-open {
-  overflow: hidden;
-  overscroll-behavior: none;
+@media (max-width: 1023px) {
+  html.sidebar-open,
+  body.sidebar-open {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
 }
 
 button,
