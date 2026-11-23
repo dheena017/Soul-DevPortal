@@ -196,7 +196,13 @@ export default function Overview({
           className={`overview-tab-pill ${activeTab === 'apps' ? 'active' : ''}`}
           onClick={() => setActiveTab('apps')}
         >
-          <span className="overview-tab-icon">💻</span>
+          <span className="overview-tab-icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg>
+          </span>
           <span className="overview-tab-text">Consumer Applications</span>
           <span className="overview-tab-badge">{projects.length || 8}</span>
         </button>
@@ -207,7 +213,14 @@ export default function Overview({
           className={`overview-tab-pill ${activeTab === 'packages' ? 'active' : ''}`}
           onClick={() => setActiveTab('packages')}
         >
-          <span className="overview-tab-icon">📦</span>
+          <span className="overview-tab-icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="16.5" y1="9.4" x2="7.55" y2="4.24" />
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+          </span>
           <span className="overview-tab-text">Shared Packages</span>
           <span className="overview-tab-badge">{packages.length || 3}</span>
         </button>
@@ -218,7 +231,12 @@ export default function Overview({
           className={`overview-tab-pill ${activeTab === 'docs' ? 'active' : ''}`}
           onClick={() => setActiveTab('docs')}
         >
-          <span className="overview-tab-icon">📚</span>
+          <span className="overview-tab-icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+          </span>
           <span className="overview-tab-text">Architecture Specifications</span>
           <span className="overview-tab-badge">5</span>
         </button>

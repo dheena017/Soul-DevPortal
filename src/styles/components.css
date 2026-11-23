@@ -410,20 +410,54 @@ nav.package-contents {
 }
 
 /* ── Section & Readme Headers ────────────────────────────── */
+.detail-section {
+  background: #11141c;
+  border: 1px solid #232838;
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  margin-bottom: 24px;
+}
+
 .readme-section {
+  background: #11141c;
+  border: 1px solid #232838;
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
   min-width: 0;
   width: 100%;
 }
 
-.readme-heading {
+.readme-heading,
+.section-heading {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 20px;
   padding-bottom: 14px;
-  border-bottom: 1px solid #242424;
+  border-bottom: 1px solid #1f2433;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.section-heading h2,
+.readme-heading h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.section-kicker {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  margin-bottom: 4px;
 }
 
 .readme-source {
@@ -440,116 +474,187 @@ nav.package-contents {
 .header-tabs-separator {
   width: 100%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.02) 100%);
   border: none;
   margin: 20px 0 16px 0;
 }
 
+/* ── Universal Navigation Tabs Dock ── */
 .detail-header .package-detail-tabs,
 .detail-header .project-detail-tabs-bar,
+.detail-header .doc-detail-tabs-bar,
 .detail-header .doc-tabs-bar {
   margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  border-bottom: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: rgba(18, 20, 26, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 5px 6px !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.04) !important;
+  overflow-x: auto !important;
 }
 
 .detail-header .package-detail-tabs .tab-btn,
 .detail-header .project-detail-tabs-bar .project-tab-btn,
+.detail-header .doc-detail-tabs-bar .doc-tab-btn,
 .detail-header .doc-tabs-bar .tab-btn {
-  background: #18181c;
-  border: 1px solid #282832;
-  color: #94a3b8;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: #94a3b8 !important;
+  border-radius: 8px !important;
+  height: 36px !important;
+  padding: 0 14px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .detail-header .package-detail-tabs .tab-btn:hover,
 .detail-header .project-detail-tabs-bar .project-tab-btn:hover,
+.detail-header .doc-detail-tabs-bar .doc-tab-btn:hover,
 .detail-header .doc-tabs-bar .tab-btn:hover {
-  background: #22222a;
-  border-color: #3b82f6;
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  color: #e2e8f0 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: none !important;
 }
 
 .detail-header .package-detail-tabs .tab-btn.active,
 .detail-header .project-detail-tabs-bar .project-tab-btn.active,
+.detail-header .doc-detail-tabs-bar .doc-tab-btn.active,
 .detail-header .doc-tabs-bar .tab-btn.active {
-  background: rgba(59, 130, 246, 0.16) !important;
-  border: 1px solid rgba(59, 130, 246, 0.5) !important;
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.18) 0%, rgba(37, 99, 235, 0.1) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.45) !important;
   color: #60a5fa !important;
-  box-shadow: 0 0 14px rgba(59, 130, 246, 0.22) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35), 0 0 14px rgba(59, 130, 246, 0.22) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* ── Navigation Tabs Universal Component ─────────────────── */
+.detail-header .package-detail-tabs .tab-btn:focus-visible,
+.detail-header .project-detail-tabs-bar .project-tab-btn:focus-visible,
+.detail-header .doc-detail-tabs-bar .doc-tab-btn:focus-visible,
+.detail-header .doc-tabs-bar .tab-btn:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
+}
+
+/* ── Universal Tab Badges & Counts ── */
+.tab-count-badge,
+.tab-count-pill,
+.doc-tab-badge,
+.overview-tab-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  padding: 0 6px !important;
+  border-radius: 9999px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #8b949e !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.16s ease !important;
+}
+
+.package-detail-tabs .tab-btn.active .tab-count-pill,
+.project-detail-tabs-bar .project-tab-btn.active .tab-count-badge,
+.doc-detail-tabs-bar .doc-tab-btn.active .doc-tab-badge,
+.doc-tabs-bar .tab-btn.active .tab-count-pill,
+.overview-segmented-tabs .overview-tab-pill.active .overview-tab-badge {
+  background: rgba(59, 130, 246, 0.28) !important;
+  color: #93c5fd !important;
+  border-color: rgba(59, 130, 246, 0.4) !important;
+  font-weight: 700 !important;
+}
+
+.tab-svg-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #64748b !important;
+  flex-shrink: 0 !important;
+  transition: color 0.16s ease !important;
+}
+
+.tab-btn.active .tab-svg-icon,
+.project-tab-btn.active .tab-svg-icon,
+.doc-tab-btn.active .tab-svg-icon {
+  color: #60a5fa !important;
+}
+
+/* ── Universal Navigation Tabs Dock Component ─────────────────── */
 .package-detail-tabs,
 .doc-tabs-bar,
 .overview-tabs-bar,
-.project-tabs-bar {
-  display: flex;
+.project-tabs-bar,
+.snippet-pills-row {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid #2f2f2f;
-  padding-bottom: 14px;
-  margin: 20px 0 28px 0;
+  gap: 4px;
+  background: rgba(18, 20, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 5px 6px;
+  margin: 16px 0 24px 0;
+  max-width: 100%;
   overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #2f2f2f transparent;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.04);
+  scrollbar-width: none;
 }
 
 .package-detail-tabs::-webkit-scrollbar,
 .doc-tabs-bar::-webkit-scrollbar,
-.project-tabs-bar::-webkit-scrollbar {
-  height: 4px;
-}
-
-.package-detail-tabs::-webkit-scrollbar-track,
-.doc-tabs-bar::-webkit-scrollbar-track,
-.project-tabs-bar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.package-detail-tabs::-webkit-scrollbar-thumb,
-.doc-tabs-bar::-webkit-scrollbar-thumb,
-.project-tabs-bar::-webkit-scrollbar-thumb {
-  background: #2f2f2f;
-  border-radius: 4px;
-}
-
-.package-detail-tabs::-webkit-scrollbar-thumb:hover,
-.doc-tabs-bar::-webkit-scrollbar-thumb:hover,
-.project-tabs-bar::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+.project-tabs-bar::-webkit-scrollbar,
+.snippet-pills-row::-webkit-scrollbar {
+  display: none;
 }
 
 .tab-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 38px;
-  padding: 0 16px;
+  height: 36px;
+  padding: 0 14px;
   border-radius: 8px;
-  background: #181818;
-  border: 1px solid #2f2f2f;
-  color: #9ca3af;
-  font-size: 12.5px;
-  font-weight: 600;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
 
 .tab-btn:hover {
-  background: #242424;
-  border-color: #4a4a4a;
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  transform: translateY(-1px);
 }
 
 .tab-btn.active {
-  background: #2563eb !important;
-  border-color: #3b82f6 !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.18) 0%, rgba(37, 99, 235, 0.1) 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.45) !important;
+  color: #60a5fa !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35), 0 0 14px rgba(59, 130, 246, 0.22) !important;
+  transform: translateY(-1px);
 }
 
 .tab-icon {
