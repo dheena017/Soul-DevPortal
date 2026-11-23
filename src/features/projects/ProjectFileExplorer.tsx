@@ -171,6 +171,20 @@ function FileOrFolderIcon({ isDir, isOpen, meta }: { isDir: boolean; isOpen?: bo
   }
 }
 
+const KNOWN_EXTENSIONLESS_FILES = new Set(['license', 'licence', 'dockerfile', 'makefile', 'procfile', 'cname']);
+
+function isPathDirectDirectory(name: string, rawPath: string): boolean {
+  if (rawPath.endsWith('/')) return true;
+  const lower = name.toLowerCase();
+  if (KNOWN_EXTENSIONLESS_FILES.has(lower)) return false;
+  // Dotfiles like .gitignore, .env, .npmrc
+  if (name.startsWith('.') && !name.slice(1).includes('.')) return false;
+  // Files with an extension (e.g. App.tsx, index.css, package.json)
+  if (name.includes('.') && !name.startsWith('.')) return false;
+  // Names without extension (e.g. components, pages, data, sections, logs, src) are directories
+  return true;
+}
+
 export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFileExplorerProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterScope, setFilterScope] = useState<'all' | 'client' | 'server' | 'public' | 'root'>('all');
@@ -189,7 +203,8 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
       for (let i = 1; i < parts.length; i++) {
         dirSet.add(parts.slice(0, i).join('/'));
       }
-      if (path.endsWith('/')) {
+      const lastPart = parts[parts.length - 1];
+      if (path.endsWith('/') || isPathDirectDirectory(lastPart, path)) {
         dirSet.add(clean);
       }
     });

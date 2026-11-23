@@ -1,6 +1,5 @@
 import React from 'react';
 import CopyButton from '../../../components/CopyButton';
-import ProjectFileExplorer from '../ProjectFileExplorer';
 import { ProjectData } from '../../../types';
 import { PROJECT_DESCRIPTIONS } from '../projectsConstants';
 
@@ -14,6 +13,7 @@ export interface ProjectOverviewTabProps {
   feUrl: string | null;
   beUrl: string | null;
   fileTree: string[];
+  onNavigateToFiles?: () => void;
 }
 
 export default function ProjectOverviewTab({
@@ -26,6 +26,7 @@ export default function ProjectOverviewTab({
   feUrl,
   beUrl,
   fileTree,
+  onNavigateToFiles,
 }: ProjectOverviewTabProps) {
   return (
     <div className="w-full flex flex-col gap-6">
@@ -220,35 +221,57 @@ export default function ProjectOverviewTab({
         </div>
       </section>
 
-      {/* ── Interactive Repository File Explorer ── */}
+      {/* ── Repository Structure CTA Banner ── */}
       {fileTree.length > 0 && (
-        <section className="w-full flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">REPOSITORY STRUCTURE</span>
-              <h2 className="text-lg font-bold text-white">Project Directory &amp; Source Files</h2>
+        <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-blue-400 shrink-0">
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+              </svg>
             </div>
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#141414] border border-[#262626] text-neutral-400">
-              Soul-DevPortal-Projects/{project.id}
-            </span>
+            <div className="flex flex-col gap-0.5">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">REPOSITORY STRUCTURE</span>
+                <span className="px-2 py-0.2 rounded-full text-[10px] font-mono font-semibold bg-blue-500/10 border border-blue-500/30 text-blue-400">
+                  {fileTree.length} indexed items
+                </span>
+              </div>
+              <h3 className="text-base font-bold text-white">Project Directory &amp; Source Files</h3>
+              <p className="text-xs text-neutral-400">
+                Explore the complete source tree, client/server split, config assets, and copy relative paths.
+              </p>
+            </div>
           </div>
-          <ProjectFileExplorer fileTree={fileTree} projectId={project.id} />
+
+          {onNavigateToFiles && (
+            <button
+              type="button"
+              onClick={onNavigateToFiles}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-[#2563eb] text-white hover:bg-blue-600 shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6] transition-all shrink-0 self-start sm:self-center"
+            >
+              <span>Explore File Tree</span>
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          )}
         </section>
       )}
 
       {/* ── Local Services Card ── */}
       {project.localServices && Object.keys(project.localServices).length > 0 && (
-        <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-4">
-          <div className="flex flex-col gap-0.5 pb-2 border-b border-[#1f1f1f]">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">LOCAL ENDPOINTS</span>
+        <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-4">
+          <div className="flex flex-col gap-0.5 pb-2 border-b border-[#22222e]">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">LOCAL ENDPOINTS</span>
             <h2 className="text-lg font-bold text-white">Network Services</h2>
           </div>
           <div className="flex flex-col gap-2">
             {Object.entries(project.localServices).map(([serviceName, url]) => (
-              <div key={serviceName} className="flex items-center justify-between p-3 rounded-xl bg-[#0e0e0e] border border-[#202020] text-xs">
+              <div key={serviceName} className="flex items-center justify-between p-3 rounded-xl bg-[#14141c] border border-[#242434] hover:border-[#35354a] transition-all text-xs">
                 <span className="font-semibold text-white">{serviceName}</span>
                 <div className="flex items-center gap-2">
-                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:underline font-mono">
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline font-mono">
                     {url}
                   </a>
                   <CopyButton text={url} variant="compact" />

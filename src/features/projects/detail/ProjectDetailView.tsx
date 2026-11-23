@@ -3,6 +3,7 @@ import { ProjectData } from '../../../types';
 import { PROJECT_FEATURES_MAP } from '../projectsConstants';
 import ProjectDetailHeader, { ProjectDetailTab } from './ProjectDetailHeader';
 import ProjectOverviewTab from './ProjectOverviewTab';
+import ProjectFilesTab from './ProjectFilesTab';
 import ProjectApiTab from './ProjectApiTab';
 import ProjectDatabaseTab from './ProjectDatabaseTab';
 import ProjectScriptsTab from './ProjectScriptsTab';
@@ -100,7 +101,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
           feUrl={feUrl}
           beUrl={beUrl}
           fileTree={fileTree}
+          onNavigateToFiles={() => setActiveTab('files')}
         />
+      )}
+
+      {activeTab === 'files' && (
+        <ProjectFilesTab project={project} fileTree={fileTree} />
       )}
 
       {activeTab === 'api' && (

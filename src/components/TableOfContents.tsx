@@ -143,42 +143,43 @@ export default function TableOfContents({
 
   return (
     <nav
-      className={`sticky top-20 flex flex-col gap-3 p-4 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl ${className}`}
+      className={`sticky top-3.5 flex flex-col gap-2.5 p-4 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl shadow-black/60 ${className}`}
       aria-label="Table of contents navigation"
     >
-      {/* Refined Card Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-[#22222e]">
+      {/* Card Header using Theme Palette */}
+      <div className="flex items-center justify-between pb-2.5 border-b border-[#1f1f1f]">
         <div className="flex items-center gap-2">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-sky-400"
-            aria-hidden="true"
-          >
-            <line x1="8" y1="6" x2="21" y2="6" />
-            <line x1="8" y1="12" x2="21" y2="12" />
-            <line x1="8" y1="18" x2="21" y2="18" />
-            <line x1="3" y1="6" x2="3.01" y2="6" />
-            <line x1="3" y1="12" x2="3.01" y2="12" />
-            <line x1="3" y1="18" x2="3.01" y2="18" />
-          </svg>
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-300">
+          <div className="w-5 h-5 rounded-md bg-[#161616] border border-[#262626] flex items-center justify-center text-sky-400">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="8" y1="6" x2="21" y2="6" />
+              <line x1="8" y1="12" x2="21" y2="12" />
+              <line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" />
+              <line x1="3" y1="12" x2="3.01" y2="12" />
+              <line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg>
+          </div>
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-200">
             {title}
           </span>
         </div>
-        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#1a1a1a] border border-[#2c2c2c] text-neutral-400">
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#161616] border border-[#262626] text-neutral-300">
           {headings.length}
         </span>
       </div>
 
-      {/* Navigation List */}
-      <div className="flex flex-col gap-1 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+      {/* Navigation List using Theme Palette */}
+      <div className="flex flex-col gap-1 max-h-[calc(100vh-140px)] overflow-y-auto pr-1">
         {headings.map((heading, index) => {
           const rawText = heading.text || '';
           const cleanText = rawText.replace(/`/g, '');
@@ -197,25 +198,27 @@ export default function TableOfContents({
               href={`#${id}`}
               data-toc-id={id}
               aria-current={isActive ? 'location' : undefined}
-              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all text-left ${
+              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150 text-left ${
                 isH3 ? 'pl-5 text-neutral-400' : 'text-neutral-300'
               } ${
                 isActive
-                  ? 'bg-sky-500/10 text-sky-400 font-semibold border border-sky-500/25 shadow-sm'
-                  : 'hover:text-white hover:bg-[#161616]'
+                  ? 'bg-sky-500/15 text-sky-400 font-semibold border border-sky-500/40 shadow-sm'
+                  : 'hover:text-white hover:bg-[#161616] border border-transparent'
               }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
             >
               {isH3 && (
                 <span
-                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                    isActive ? 'bg-sky-400' : 'bg-neutral-600'
+                  className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
+                    isActive
+                      ? 'bg-sky-400 shadow-[0_0_6px_rgba(56,189,248,0.7)]'
+                      : 'bg-neutral-600'
                   }`}
                   aria-hidden="true"
                 />
               )}
               {numberPart && (
-                <span className="px-1 py-0.2 rounded text-[10px] font-mono bg-neutral-800 text-neutral-400 shrink-0">
+                <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-[#161616] border border-[#262626] text-neutral-400 shrink-0">
                   {numberPart}
                 </span>
               )}

@@ -222,73 +222,73 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#101010] border border-[#242424] rounded-xl" role="tablist" aria-label="Filter documentation guides by category">
+          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c10] border border-[#22222e] rounded-xl" role="tablist" aria-label="Filter documentation guides by category">
             <button
               type="button"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'all'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
               }`}
               onClick={() => setSelectedCategory('all')}
             >
               <span>All Guides</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${selectedCategory === 'all' ? 'bg-sky-800 text-white' : 'bg-[#1e1e1e] text-neutral-400'}`}>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${selectedCategory === 'all' ? 'bg-white/20 text-white' : 'bg-[#181824] text-neutral-400 border border-[#2a2a3a]'}`}>
                 {DOCUMENTATION_GUIDES_REGISTRY.length}
               </span>
             </button>
             <button
               type="button"
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'rules'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
               }`}
-              onClick={() => setSelectedCategory('rules')}
+              onClick={() => setSelectedCategory((prev) => (prev === 'rules' ? 'all' : 'rules'))}
             >
               📜 Projects Rules
             </button>
             <button
               type="button"
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'design'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
               }`}
-              onClick={() => setSelectedCategory('design')}
+              onClick={() => setSelectedCategory((prev) => (prev === 'design' ? 'all' : 'design'))}
             >
               📘 Packages Design
             </button>
             <button
               type="button"
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'ports'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
               }`}
-              onClick={() => setSelectedCategory('ports')}
+              onClick={() => setSelectedCategory((prev) => (prev === 'ports' ? 'all' : 'ports'))}
             >
               🌐 Port Topology
             </button>
             <button
               type="button"
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'techstack'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
               }`}
-              onClick={() => setSelectedCategory('techstack')}
+              onClick={() => setSelectedCategory((prev) => (prev === 'techstack' ? 'all' : 'techstack'))}
             >
               ⚙️ Tech Stack
             </button>
             <button
               type="button"
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'cheatsheet'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
               }`}
-              onClick={() => setSelectedCategory('cheatsheet')}
+              onClick={() => setSelectedCategory((prev) => (prev === 'cheatsheet' ? 'all' : 'cheatsheet'))}
             >
               📋 Cheatsheet
             </button>
@@ -296,16 +296,8 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
         </div>
       </header>
 
-      {/* Guides Grid */}
+      {/* Guides Grid / Showcase Area */}
       <section className="w-full flex flex-col gap-4" aria-label="Available Architecture Guides">
-        <div className="flex flex-col gap-0.5">
-          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500">MONOREPO SPECIFICATIONS</span>
-          <h2 className="text-lg font-bold text-white">Architectural Standards &amp; Guides</h2>
-          <p className="text-xs text-neutral-400">
-            Showing {filteredGuides.length} of {DOCUMENTATION_GUIDES_REGISTRY.length} official documents
-          </p>
-        </div>
-
         {filteredGuides.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111111] border border-[#222222] text-center gap-4 shadow-xl">
             <span className="text-4xl">🔍</span>
@@ -323,7 +315,102 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               Reset Filters
             </button>
           </div>
+        ) : filteredGuides.length === 1 ? (
+          /* ── Featured Wide Showcase Layout When 1 Guide Matches (Eliminating Blank Void) ── */
+          <div className="w-full rounded-2xl bg-[#111111] border border-[#222222] p-5 md:p-8 shadow-2xl flex flex-col lg:flex-row items-start justify-between gap-8 group">
+            {/* Left Column: Full Identity, Description & Key Standards */}
+            <div className="flex-1 flex flex-col gap-5 min-w-0">
+              <div className="flex items-start gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-[#161616] border border-[#262626] flex items-center justify-center shrink-0 text-3xl shadow-inner">
+                  {filteredGuides[0].icon}
+                </div>
+                <div className="flex flex-col gap-1.5 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
+                      {filteredGuides[0].badge}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
+                      v{filteredGuides[0].version}
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-purple-500/15 border border-purple-500/30 text-purple-400">
+                      {filteredGuides[0].category.toUpperCase()}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-extrabold text-white tracking-tight group-hover:text-sky-400 transition-colors">
+                    {filteredGuides[0].title}
+                  </h3>
+                  <code className="text-xs font-mono text-neutral-500">{filteredGuides[0].filename}</code>
+                </div>
+              </div>
+
+              <p className="text-sm text-neutral-300 leading-relaxed max-w-3xl">
+                {filteredGuides[0].description}
+              </p>
+
+              <div className="flex flex-col gap-2.5 p-4 rounded-xl bg-[#0c0c0c] border border-[#1f1f1f]">
+                <strong className="text-[11px] font-mono font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-2">
+                  <span>⭐</span>
+                  <span>KEY MANDATORY STANDARDS &amp; SPECIFICATIONS:</span>
+                </strong>
+                <ul className="flex flex-col gap-2 text-xs text-neutral-300 pl-4 list-disc">
+                  {filteredGuides[0].keyHighlights.map((hl, i) => (
+                    <li key={i} className="leading-relaxed">{hl}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Right Column: Telemetry, Covered Topics, and Direct Launch */}
+            <div className="w-full lg:w-96 flex flex-col gap-4 shrink-0 p-5 rounded-xl bg-[#0e0e0e] border border-[#202020]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#1c1c1c] text-xs">
+                <span className="text-neutral-500 font-mono font-semibold">EST. READ TIME</span>
+                <strong className="text-emerald-400 font-mono font-bold text-sm">{filteredGuides[0].readTime}</strong>
+              </div>
+
+              <div className="flex items-center justify-between pb-3 border-b border-[#1c1c1c] text-xs">
+                <span className="text-neutral-500 font-mono font-semibold">SPECIFICATION DEPTH</span>
+                <strong className="text-sky-400 font-mono font-bold text-sm">{filteredGuides[0].sectionsCount} Headings</strong>
+              </div>
+
+              <div className="flex flex-col gap-1 pb-3 border-b border-[#1c1c1c] text-xs">
+                <span className="text-neutral-500 font-mono font-semibold">TARGET AUDIENCE</span>
+                <span className="text-neutral-200 font-medium">{filteredGuides[0].targetAudience}</span>
+              </div>
+
+              <div className="flex flex-col gap-2 pb-2">
+                <span className="text-neutral-500 font-mono text-xs font-semibold">COVERED TOPICS</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {filteredGuides[0].topics.map((t) => (
+                    <span key={t} className="px-2 py-1 rounded-md bg-[#161616] border border-[#262626] text-[11px] font-mono text-neutral-300">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2 pt-2 border-t border-[#1c1c1c]">
+                <button
+                  type="button"
+                  className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-sky-600/25 transition-all"
+                  onClick={() => onSelectGuide(filteredGuides[0].id)}
+                >
+                  <span>Read Full Specification</span>
+                  <span>→</span>
+                </button>
+                {selectedCategory !== 'all' && (
+                  <button
+                    type="button"
+                    className="w-full py-2 px-3 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white bg-[#141414] hover:bg-[#1a1a1a] border border-[#242424] transition-all"
+                    onClick={() => setSelectedCategory('all')}
+                  >
+                    View all 5 architecture guides
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
         ) : (
+          /* ── Standard 3-Column Responsive Grid When Multiple Guides Match ── */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredGuides.map((guide) => (
               <article
