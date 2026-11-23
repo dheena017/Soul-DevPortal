@@ -2,6 +2,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
 import CopyButton from '../../components/CopyButton';
 import { ProjectData } from '../../types';
+import { PROJECT_LOGOS, PROJECT_BRAND_MAP, formatProjectTitle } from './projectsConstants';
 
 function getTagColor(tag: string): string {
   const lower = tag.toLowerCase();
@@ -201,110 +202,141 @@ export default function ProjectsView({
       <section className="projects-grid" aria-label="Monorepo projects">
         {filteredProjects.map((project) => {
           const runCmd = `npx @workspace/runner project ${project.id}`;
-          const description = project.description || `${project.title} monorepo application.`;
-          const tags = project.tags || [];
+          const brand = PROJECT_BRAND_MAP[project.id] || {
+            name: project.title,
+            shortName: project.id,
+            icon: '⚡',
+            themeColor: '#3b82f6',
+            accentBg: 'rgba(59, 130, 246, 0.12)',
+            tag: 'Web App',
+            primaryCapability: project.framework || 'Fullstack Application',
+          };
+          const formattedTitle = formatProjectTitle(project.id, project.title);
+          const logoSrc = project.logo || PROJECT_LOGOS[project.id];
+          const description = project.description || `${formattedTitle} monorepo application.`;
+          const tags = project.tags && project.tags.length > 0 ? project.tags : ['React 19', 'FastAPI', 'Tailwind v4', 'SQLite'];
 
           return (
             <article className="project-card enhanced-project-card gh-project-card" key={project.id}>
-              {/* Card Top: GitHub Repo Header & Ports */}
+              {/* Card Header: Brand, Meta, Ports */}
               <div
                 className="project-card-top"
                 onClick={() => handleSelect(project.id)}
                 style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
               >
-                <div className="project-card-brand-group">
-                  <div className="project-card-logo-container">
-                    {project.logo ? (
-                      <img
-                        src={project.logo}
-                        alt={`${project.title} logo`}
-                        className="project-card-logo-img"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLElement).style.display = 'none';
-                        }}
-                      />
-                    ) : (
-                      <span className="project-card-logo-fallback">⚡</span>
-                    )}
-                  </div>
-                  <div className="project-card-title-meta">
-                    <div className="gh-repo-header-line">
-                      <svg className="gh-repo-octicon" aria-hidden="true" height="15" viewBox="0 0 16 16" version="1.1" width="15" fill="currentColor">
-                        <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h6.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-6.5a.25.25 0 0 1-.25-.25Z" />
-                      </svg>
-                      <h3 className="project-title gh-repo-title">{project.title}</h3>
-                      <span className="gh-visibility-badge">Public</span>
+                <div className="card-top-bar">
+                  <div className="card-brand-avatar-group">
+                    <div
+                      className="project-card-logo-container"
+                      style={{
+                        borderColor: `${brand.themeColor}38`,
+                        background: `${brand.themeColor}18`,
+                      }}
+                    >
+                      {logoSrc ? (
+                        <img
+                          src={logoSrc}
+                          alt={`${formattedTitle} logo`}
+                          className="project-card-logo-img"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLElement).style.display = 'none';
+                            const fallback = e.currentTarget.parentElement?.querySelector('.project-card-logo-fallback') as HTMLElement;
+                            if (fallback) fallback.style.display = 'grid';
+                          }}
+                        />
+                      ) : null}
+                      <span
+                        className="project-card-logo-fallback"
+                        style={{ display: logoSrc ? 'none' : 'grid' }}
+                      >
+                        {brand.icon || '⚡'}
+                      </span>
                     </div>
-                    <div className="project-card-badges-row">
+
+                    <div className="card-slug-branch">
                       <code className="project-id-chip">{project.id}</code>
                       <span className="gh-branch-badge" title="Git Branch">
-                        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                        <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor">
                           <path d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.493 2.493 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25Z" />
                         </svg>
                         main
                       </span>
                     </div>
                   </div>
+
+                  <div className="port-badge-group">
+                    {project.frontendPort && (
+                      <span className="port-pill frontend-port" title={`Client Port :${project.frontendPort}`}>
+                        <span className="port-dot fe-dot" aria-hidden="true" />
+                        <span>Client :{project.frontendPort}</span>
+                      </span>
+                    )}
+                    {project.backendPort && (
+                      <span className="port-pill backend-port" title={`Server Port :${project.backendPort}`}>
+                        <span className="port-dot be-dot" aria-hidden="true" />
+                        <span>Server :{project.backendPort}</span>
+                      </span>
+                    )}
+                  </div>
                 </div>
 
-                <div className="port-badge-group">
-                  {project.frontendPort && (
-                    <span className="port-pill frontend-port" title="Client Port">
-                      Client :{project.frontendPort}
-                    </span>
-                  )}
-                  {project.backendPort && (
-                    <span className="port-pill backend-port" title="Server Port">
-                      Server :{project.backendPort}
-                    </span>
-                  )}
+                <div className="card-title-row">
+                  <h3 className="project-title gh-repo-title">{formattedTitle}</h3>
+                  <span className="gh-visibility-badge">Public</span>
                 </div>
               </div>
 
-              {/* Card Body: Description */}
+              {/* Card Body: Description with fixed height & clamp */}
               <p
                 className="project-card-desc"
                 onClick={() => handleSelect(project.id)}
                 style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
+                title={description}
               >
                 {description}
               </p>
 
-              {/* Card Specs Matrix */}
+              {/* Card Specs Matrix: 3 Uniform Rows */}
               <div
                 className="project-card-specs-grid"
                 onClick={() => handleSelect(project.id)}
                 style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
               >
-                <div className="spec-badge" title={project.framework || 'Web Application'}>
+                <div className="spec-badge" title={project.framework || 'React 19 + Vite 8 + Tailwind CSS v4'}>
                   <span className="spec-icon">⚡</span>
+                  <span className="spec-label">Stack</span>
                   <span className="spec-text">
-                    {project.framework ? project.framework.split('+').slice(0, 2).join(' + ') : 'Web App'}
+                    {project.framework ? project.framework.split('+').slice(0, 2).join(' + ') : 'React 19 + Vite 8'}
                   </span>
                 </div>
 
-                <div className="spec-badge" title={project.dbInfo || 'Local Storage'}>
+                <div className="spec-badge" title={project.dbInfo || 'SQLite (WAL Mode Engine)'}>
                   <span className="spec-icon">🗄️</span>
-                  <span className="spec-text">{project.dbInfo || 'Local Storage'}</span>
+                  <span className="spec-label">Database</span>
+                  <span className="spec-text">{project.dbInfo || 'SQLite (WAL Mode)'}</span>
                 </div>
 
-                {project.aiEngine && project.aiEngine !== 'N/A' && (
-                  <div className="spec-badge ai-spec-badge" title={project.aiEngine}>
-                    <span className="spec-icon">✨</span>
-                    <span className="spec-text ai-text">
-                      {project.aiEngine.split('+')[0].trim()}
-                    </span>
-                  </div>
-                )}
+                <div
+                  className="spec-badge ai-spec-badge"
+                  title={project.aiEngine && project.aiEngine !== 'N/A' ? project.aiEngine : brand.primaryCapability}
+                >
+                  <span className="spec-icon">{project.aiEngine && project.aiEngine !== 'N/A' ? '✨' : '🚀'}</span>
+                  <span className="spec-label">{project.aiEngine && project.aiEngine !== 'N/A' ? 'AI Engine' : 'Capability'}</span>
+                  <span className="spec-text ai-text">
+                    {project.aiEngine && project.aiEngine !== 'N/A'
+                      ? project.aiEngine.split('+')[0].trim()
+                      : brand.primaryCapability}
+                  </span>
+                </div>
               </div>
 
               {/* GitHub Language Dots Tags Row */}
               <div className="project-card-tags-row gh-tags-row">
-                {tags.map((tag) => {
+                {tags.slice(0, 4).map((tag) => {
                   const dotColor = getTagColor(tag);
                   return (
                     <span key={tag} className="project-mini-tag gh-lang-pill">
-                      <span className="lang-dot" style={{ backgroundColor: dotColor, width: '9px', height: '9px' }} aria-hidden="true" />
+                      <span className="lang-dot" style={{ backgroundColor: dotColor, width: '8px', height: '8px' }} aria-hidden="true" />
                       <span>{tag}</span>
                     </span>
                   );
@@ -314,8 +346,9 @@ export default function ProjectsView({
               {/* Card Footer: Command & Actions */}
               <div className="project-card-footer">
                 <div className="cmd-snippet">
+                  <span className="cmd-prompt-sym">$</span>
                   <code>{runCmd}</code>
-                  <CopyButton text={runCmd} variant="compact" label="" />
+                  <CopyButton text={runCmd} variant="compact" label="Copy" copiedLabel="Copied!" title={`Copy '${runCmd}'`} />
                 </div>
                 <div className="project-card-action-btns">
                   {project.frontendPort && (
@@ -328,7 +361,7 @@ export default function ProjectsView({
                       onClick={(e) => e.stopPropagation()}
                     >
                       <span>Launch</span>
-                      <span>↗</span>
+                      <span className="btn-arrow-icon">↗</span>
                     </a>
                   )}
                   {onSelectProject && (
@@ -336,10 +369,10 @@ export default function ProjectsView({
                       type="button"
                       className="view-project-details-btn"
                       onClick={() => handleSelect(project.id)}
-                      title={`Open deep detail view for ${project.title}`}
+                      title={`Open deep detail view for ${formattedTitle}`}
                     >
                       <span>Details</span>
-                      <span>→</span>
+                      <span className="btn-arrow-icon">→</span>
                     </button>
                   )}
                 </div>

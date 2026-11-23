@@ -6,6 +6,7 @@ import EmptyState from './EmptyState';
 import { PackageData, ProjectData, StatsData } from '../types';
 import { PACKAGE_METADATA_MAP } from '../features/packages/packagesConstants';
 import { DOCUMENTATION_GUIDES_REGISTRY } from '../features/docs/docsConstants';
+import { PROJECT_LOGOS, PROJECT_BRAND_MAP, formatProjectTitle } from '../features/projects/projectsConstants';
 
 function getPackageInstallCommand(pkg: PackageData): string {
   if (pkg.id === 'logger') return 'npm install @workspace/logger';
@@ -206,36 +207,39 @@ export default function Overview({
       <StatsCards stats={stats} packagesCount={packages.length || 3} projectsCount={projects?.length || 8} />
 
       {/* Ecosystem Tabs Navigation */}
-      <div className="package-detail-tabs overview-tabs-bar" role="tablist" aria-label="Ecosystem overview sections">
+      <div className="overview-segmented-tabs" role="tablist" aria-label="Ecosystem overview sections">
         <button
           type="button"
           role="tab"
           aria-selected={activeTab === 'apps'}
-          className={`tab-btn ${activeTab === 'apps' ? 'active' : ''}`}
+          className={`overview-tab-pill ${activeTab === 'apps' ? 'active' : ''}`}
           onClick={() => setActiveTab('apps')}
         >
-          <span className="tab-icon">💻</span>
-          <span>Consumer Applications ({projects.length || 8})</span>
+          <span className="overview-tab-icon">💻</span>
+          <span className="overview-tab-text">Consumer Applications</span>
+          <span className="overview-tab-badge">{projects.length || 8}</span>
         </button>
         <button
           type="button"
           role="tab"
           aria-selected={activeTab === 'packages'}
-          className={`tab-btn ${activeTab === 'packages' ? 'active' : ''}`}
+          className={`overview-tab-pill ${activeTab === 'packages' ? 'active' : ''}`}
           onClick={() => setActiveTab('packages')}
         >
-          <span className="tab-icon">📦</span>
-          <span>Shared Packages ({packages.length || 3})</span>
+          <span className="overview-tab-icon">📦</span>
+          <span className="overview-tab-text">Shared Packages</span>
+          <span className="overview-tab-badge">{packages.length || 3}</span>
         </button>
         <button
           type="button"
           role="tab"
           aria-selected={activeTab === 'docs'}
-          className={`tab-btn ${activeTab === 'docs' ? 'active' : ''}`}
+          className={`overview-tab-pill ${activeTab === 'docs' ? 'active' : ''}`}
           onClick={() => setActiveTab('docs')}
         >
-          <span className="tab-icon">📚</span>
-          <span>Architecture Specifications (5)</span>
+          <span className="overview-tab-icon">📚</span>
+          <span className="overview-tab-text">Architecture Specifications</span>
+          <span className="overview-tab-badge">5</span>
         </button>
       </div>
 
@@ -244,26 +248,28 @@ export default function Overview({
         <section className="consumer-apps-section" aria-label="Integrated monorepo applications">
           <div className="section-header-row">
             <div>
-              <span className="section-kicker">PILLAR 1: APPLICATIONS</span>
+              <div className="section-kicker-badge">
+                <span className="kicker-pulse-dot" aria-hidden="true" />
+                <span>PILLAR 1: APPLICATIONS</span>
+              </div>
               <h2>Integrated Consumer Applications</h2>
               <p className="section-subtext">
-                8 fullstack applications in this repository powered by the shared core libraries.
+                {projects.length} fullstack applications in this repository powered by shared core libraries and strict port topology.
               </p>
             </div>
             <button type="button" className="view-all-projects-btn" onClick={() => onNavigate('projects')}>
-              View all 8 apps &amp; ports <span>→</span>
+              <span>View all {projects.length} apps &amp; ports</span>
+              <span className="arrow-icon" aria-hidden="true">→</span>
             </button>
           </div>
 
           <div className="preview-projects-grid">
             {previewProjects.map((p) => {
-              const fwDotClass = p.framework?.includes('React 19')
-                ? 'react'
-                : p.framework?.includes('React 18')
-                ? 'react'
-                : p.framework?.includes('Next')
-                ? 'nextjs'
-                : 'typescript';
+              const brand = PROJECT_BRAND_MAP[p.id];
+              const displayTitle = formatProjectTitle(p.id, p.title);
+              const logoSrc = p.logo || PROJECT_LOGOS[p.id];
+              const hasAi = Boolean(p.aiEngine && p.aiEngine !== 'N/A');
+              const aiSummary = hasAi ? p.aiEngine!.split('+')[0].trim() : null;
 
               return (
                 <div
@@ -274,49 +280,99 @@ export default function Overview({
                   tabIndex={0}
                   onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(`projects/${p.id}`); }}
                 >
+                  {/* Top: Logo, Brand Info, Ports */}
                   <div className="preview-project-top">
                     <div className="preview-brand-group">
-                      <div className="preview-app-logo">
-                        {p.logo ? (
+                      <div
+                        className="preview-app-logo"
+                        style={{
+                          borderColor: brand ? `${brand.themeColor}33` : undefined,
+                          background: brand ? brand.accentBg : undefined,
+                        }}
+                      >
+                        {logoSrc ? (
                           <img
-                            src={p.logo}
-                            alt=""
+                            src={logoSrc}
+                            alt={`${displayTitle} logo`}
                             className="preview-logo-img"
                             onError={(e) => {
+                              // If image fails, fallback to brand icon
                               (e.currentTarget as HTMLElement).style.display = 'none';
+                              const parent = (e.currentTarget as HTMLElement).parentElement;
+                              if (parent) {
+                                const fallback = document.createElement('span');
+                                fallback.className = 'preview-logo-fallback-icon';
+                                fallback.textContent = brand?.icon || '⚡';
+                                parent.appendChild(fallback);
+                              }
                             }}
                           />
                         ) : (
-                          <span>⚡</span>
+                          <span className="preview-logo-fallback-icon">{brand?.icon || '⚡'}</span>
                         )}
                       </div>
-                      <div>
-                        <strong className="preview-project-title">{p.title}</strong>
-                        <code className="preview-app-id">{p.id}</code>
+                      <div className="preview-title-block">
+                        <strong className="preview-project-title" title={p.title}>
+                          {displayTitle}
+                        </strong>
+                        <div className="preview-id-row">
+                          <code className="preview-app-id">{p.id}</code>
+                          {brand?.tag && <span className="preview-brand-tag">{brand.tag}</span>}
+                        </div>
                       </div>
                     </div>
 
                     <div className="preview-ports">
-                      {p.frontendPort && <span className="preview-port fe" title="Frontend Port">:{p.frontendPort}</span>}
-                      {p.backendPort && <span className="preview-port be" title="Backend Port">:{p.backendPort}</span>}
+                      {p.frontendPort && (
+                        <span className="preview-port fe" title={`Frontend Port: http://localhost:${p.frontendPort}`}>
+                          <span className="port-dot fe-dot" aria-hidden="true" />
+                          <span className="port-role">FE</span>
+                          <span className="port-num">:{p.frontendPort}</span>
+                        </span>
+                      )}
+                      {p.backendPort && (
+                        <span className="preview-port be" title={`Backend Server: http://localhost:${p.backendPort}`}>
+                          <span className="port-dot be-dot" aria-hidden="true" />
+                          <span className="port-role">BE</span>
+                          <span className="port-num">:{p.backendPort}</span>
+                        </span>
+                      )}
                     </div>
                   </div>
 
-                  <p className="preview-framework">
-                    <span className={`lang-dot ${fwDotClass}`} style={{ width: '8px', height: '8px', marginRight: '6px' }} />
-                    {p.framework || 'React + Vite'}
-                  </p>
+                  {/* Middle: Structured Specifications List */}
+                  <div className="preview-specs-list">
+                    <div className="preview-spec-item framework">
+                      <span className="spec-indicator react" aria-hidden="true" />
+                      <span className="spec-label-text">{p.framework || 'React 19 + Vite 8 + Tailwind v4'}</span>
+                    </div>
 
-                  <div className="preview-specs-row">
-                    <span className="preview-spec-badge">🗄️ {p.dbInfo || 'SQLite'}</span>
-                    {p.aiEngine && p.aiEngine !== 'N/A' && (
-                      <span className="preview-spec-badge ai">✨ {p.aiEngine.split('+')[0].trim()}</span>
+                    <div className="preview-spec-item database">
+                      <span className="spec-indicator db" aria-hidden="true" />
+                      <span className="spec-label-text">{p.dbInfo || 'SQLite datastore'}</span>
+                    </div>
+
+                    {hasAi ? (
+                      <div className="preview-spec-item ai">
+                        <span className="spec-indicator ai" aria-hidden="true" />
+                        <span className="spec-label-text ai-highlight">
+                          <span className="ai-sparkle">✨</span> {aiSummary}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="preview-spec-item capability">
+                        <span className="spec-indicator capability" aria-hidden="true" />
+                        <span className="spec-label-text">{brand?.primaryCapability || 'Autonomous Service Engine'}</span>
+                      </div>
                     )}
                   </div>
 
+                  {/* Footer: Card CTA */}
                   <div className="preview-card-cta">
-                    <span>Inspect Application</span>
-                    <span className="arrow-icon">→</span>
+                    <span className="cta-text">Inspect Application</span>
+                    <span className="cta-arrow-circle" aria-hidden="true">
+                      <span className="arrow-icon">→</span>
+                    </span>
                   </div>
                 </div>
               );
@@ -558,12 +614,18 @@ export default function Overview({
       {/* Monorepo Command Runners Quick Banner */}
       <section className="overview-scripts-banner" aria-label="Monorepo command runners">
         <div className="scripts-banner-content">
-          <div className="scripts-banner-icon" aria-hidden="true">⚡</div>
-          <div>
-            <h3>15 Monorepo Automation Scripts &amp; Runners</h3>
-            <p>
-              Orchestrate all 8 consumer micro-apps concurrently, launch Python FastAPI APIs,
-              run TypeScript validation gates, and manage Vite dev servers from the dedicated Command Runner.
+          <div className="scripts-banner-icon-box" aria-hidden="true">
+            <span className="scripts-banner-icon">⚡</span>
+            <span className="scripts-banner-icon-glow" />
+          </div>
+          <div className="scripts-banner-text">
+            <div className="scripts-banner-title-row">
+              <h3 className="scripts-banner-title">15 Monorepo Automation Scripts &amp; Command Runners</h3>
+              <span className="scripts-banner-pill">Python FastAPI · Vite · TS Gates</span>
+            </div>
+            <p className="scripts-banner-desc">
+              Orchestrate all {projects.length || 8} fullstack applications concurrently, launch micro-app dev servers,
+              run TypeScript validation gates, and supervise port lifecycles from the dedicated Command Runner.
             </p>
           </div>
         </div>
@@ -572,7 +634,8 @@ export default function Overview({
           className="scripts-banner-cta"
           onClick={() => onNavigate('scripts')}
         >
-          Open Scripts &amp; Runners Center →
+          <span>Open Scripts &amp; Runners Center</span>
+          <span className="arrow-icon" aria-hidden="true">→</span>
         </button>
       </section>
     </article>

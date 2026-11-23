@@ -2,7 +2,7 @@
   "meta": {
     "generator": "workspace-fastapi-service",
     "version": "2.0.0",
-    "scannedAt": "2026-11-23T12:11:20.403339+00:00"
+    "scannedAt": "2026-11-23T12:38:31.913861+00:00"
   },
   "packages": [
     {
@@ -5216,6 +5216,7 @@
     {
       "id": "apexmind-ai",
       "title": "APEXMIND STUDIO AI",
+      "logo": "/project-logos/apexmind-ai.png",
       "frontendPort": 5173,
       "backendPort": 8000,
       "frontendActive": false,
@@ -5624,6 +5625,7 @@
     {
       "id": "outpass-system",
       "title": "OUTPASS MANAGEMENT SYSTEM",
+      "logo": "/project-logos/outpass-system.svg",
       "frontendPort": 5174,
       "backendPort": 8001,
       "frontendActive": false,
@@ -6784,6 +6786,7 @@
     {
       "id": "free-api-hub",
       "title": "FREE API HUB",
+      "logo": "/project-logos/free-api-hub.png",
       "frontendPort": 5175,
       "backendPort": 8002,
       "frontendActive": false,
@@ -7240,6 +7243,7 @@
     {
       "id": "sonikoma",
       "title": "SONIKOMA AI STUDIO",
+      "logo": "/project-logos/sonikoma.png",
       "frontendPort": 5176,
       "backendPort": 8006,
       "frontendActive": false,
@@ -8094,6 +8098,7 @@
     {
       "id": "spatial-dimensions",
       "title": "SPATIAL DIMENSIONS",
+      "logo": "/project-logos/spatial-dimensions.svg",
       "frontendPort": 5177,
       "backendPort": 8007,
       "frontendActive": false,
@@ -8317,6 +8322,7 @@
     {
       "id": "college-management-system",
       "title": "COLLEGE MANAGEMENT SYSTEM",
+      "logo": "/project-logos/college-management-system.svg",
       "frontendPort": 5178,
       "backendPort": 8005,
       "frontendActive": false,
@@ -9061,6 +9067,7 @@
     {
       "id": "globalpulse-ai",
       "title": "GLOBALPULSE AI",
+      "logo": "/project-logos/globalpulse-ai.svg",
       "frontendPort": 5179,
       "backendPort": 8003,
       "frontendActive": false,
@@ -9405,6 +9412,7 @@
     {
       "id": "postcraft-ai",
       "title": "POSTCRAFT AI",
+      "logo": "/project-logos/postcraft-ai.svg",
       "frontendPort": 5180,
       "backendPort": 8004,
       "frontendActive": false,
@@ -9695,10 +9703,11 @@
     {
       "id": "devportal",
       "title": "Soul Developer Portal",
+      "logo": "/favicon.svg",
       "frontendPort": 5181,
       "backendPort": 8008,
-      "frontendActive": false,
-      "backendActive": false,
+      "frontendActive": true,
+      "backendActive": true,
       "frontendCmd": "npx vite --port 5181",
       "backendCmd": "python server/main.py --port 8008 --reload",
       "framework": "React 19 + Vite 8 + Tailwind CSS v4",

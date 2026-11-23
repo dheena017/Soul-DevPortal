@@ -156,9 +156,22 @@ def inspect_consumer_project(pid: str, spec: Dict[str, Any], projects_root: Path
     if not tags:
         tags = [t.strip() for t in spec.get("framework", "Fullstack").split("+") if t.strip()]
 
+    PROJECT_LOGOS = {
+        "apexmind-ai": "/project-logos/apexmind-ai.png",
+        "outpass-system": "/project-logos/outpass-system.svg",
+        "free-api-hub": "/project-logos/free-api-hub.png",
+        "sonikoma": "/project-logos/sonikoma.png",
+        "spatial-dimensions": "/project-logos/spatial-dimensions.svg",
+        "college-management-system": "/project-logos/college-management-system.svg",
+        "globalpulse-ai": "/project-logos/globalpulse-ai.svg",
+        "postcraft-ai": "/project-logos/postcraft-ai.svg",
+        "devportal": "/favicon.svg",
+    }
+
     return {
         "id": pid,
         "title": spec.get("title", pid),
+        "logo": PROJECT_LOGOS.get(pid, "/favicon.svg"),
         "frontendPort": spec.get("frontend_port"),
         "backendPort": spec.get("backend_port"),
         "frontendActive": is_port_active(spec.get("frontend_port")),

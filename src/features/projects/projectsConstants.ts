@@ -9,6 +9,134 @@ export const MONOREPO_STANDARD_PORT_RANGES = {
 
 export const PROJECT_STATUS_REFRESH_INTERVAL_MS = 5000;
 
+export const PROJECT_LOGOS: Record<string, string> = {
+  'apexmind-ai': '/project-logos/apexmind-ai.png',
+  'outpass-system': '/project-logos/outpass-system.svg',
+  'free-api-hub': '/project-logos/free-api-hub.png',
+  'sonikoma': '/project-logos/sonikoma.png',
+  'spatial-dimensions': '/project-logos/spatial-dimensions.svg',
+  'college-management-system': '/project-logos/college-management-system.svg',
+  'globalpulse-ai': '/project-logos/globalpulse-ai.svg',
+  'postcraft-ai': '/project-logos/postcraft-ai.svg',
+  'devportal': '/favicon.svg',
+};
+
+export interface ProjectBrandInfo {
+  name: string;
+  shortName: string;
+  icon: string;
+  themeColor: string;
+  accentBg: string;
+  tag: string;
+  primaryCapability: string;
+}
+
+export const PROJECT_BRAND_MAP: Record<string, ProjectBrandInfo> = {
+  'apexmind-ai': {
+    name: 'ApexMind Studio AI',
+    shortName: 'ApexMind',
+    icon: '🧠',
+    themeColor: '#a855f7',
+    accentBg: 'rgba(168, 85, 247, 0.12)',
+    tag: 'Quote Video AI',
+    primaryCapability: 'Gemini 2.5 Flash + TTS Voice',
+  },
+  'outpass-system': {
+    name: 'Outpass Management System',
+    shortName: 'Outpass',
+    icon: '🎫',
+    themeColor: '#06b6d4',
+    accentBg: 'rgba(6, 182, 212, 0.12)',
+    tag: 'Hostel Gate Pass',
+    primaryCapability: 'QR Pass Authorization & Tracking',
+  },
+  'free-api-hub': {
+    name: 'Free API Hub',
+    shortName: 'API Hub',
+    icon: '🔌',
+    themeColor: '#10b981',
+    accentBg: 'rgba(16, 185, 129, 0.12)',
+    tag: 'Developer APIs',
+    primaryCapability: '50+ Open REST APIs & Mock Server',
+  },
+  'sonikoma': {
+    name: 'Sonikoma AI Studio',
+    shortName: 'Sonikoma',
+    icon: '🎙️',
+    themeColor: '#ec4899',
+    accentBg: 'rgba(236, 72, 153, 0.12)',
+    tag: 'Anime Voice AI',
+    primaryCapability: 'Gemini AI Video & Multitrack Dub',
+  },
+  'spatial-dimensions': {
+    name: 'Spatial Dimensions',
+    shortName: 'Spatial 3D',
+    icon: '🌐',
+    themeColor: '#14b8a6',
+    accentBg: 'rgba(20, 184, 166, 0.12)',
+    tag: '3D Web Canvas',
+    primaryCapability: 'WebGL Shaders & Spatial Audio',
+  },
+  'college-management-system': {
+    name: 'College Management System',
+    shortName: 'College ERP',
+    icon: '🎓',
+    themeColor: '#f59e0b',
+    accentBg: 'rgba(245, 158, 11, 0.12)',
+    tag: 'Campus ERP',
+    primaryCapability: 'Hostel Rooms, Mess & Biometrics',
+  },
+  'globalpulse-ai': {
+    name: 'GlobalPulse AI',
+    shortName: 'GlobalPulse',
+    icon: '📡',
+    themeColor: '#3b82f6',
+    accentBg: 'rgba(59, 130, 246, 0.12)',
+    tag: 'News Synthesizer',
+    primaryCapability: 'Gemini Breaking News & TL;DR',
+  },
+  'postcraft-ai': {
+    name: 'PostCraft AI',
+    shortName: 'PostCraft',
+    icon: '✍️',
+    themeColor: '#f97316',
+    accentBg: 'rgba(249, 115, 22, 0.12)',
+    tag: 'Social Copy GenAI',
+    primaryCapability: 'Integrated Multi-Platform GenAI',
+  },
+  'devportal': {
+    name: 'Soul Developer Portal',
+    shortName: 'DevPortal',
+    icon: '🚀',
+    themeColor: '#6366f1',
+    accentBg: 'rgba(99, 102, 241, 0.12)',
+    tag: 'Command Center',
+    primaryCapability: 'FastAPI Runtime & AST Topology',
+  },
+};
+
+/**
+ * Formats harsh all-caps titles into human-friendly Title Case
+ * while keeping abbreviations (AI, API, ERP, QR, etc.) intact.
+ */
+export function formatProjectTitle(id: string, fallbackTitle?: string): string {
+  if (PROJECT_BRAND_MAP[id]?.name) {
+    return PROJECT_BRAND_MAP[id].name;
+  }
+  if (!fallbackTitle) return id;
+
+  const acronyms = new Set(['AI', 'API', 'ERP', 'QR', 'AST', 'TTS', 'REST', 'PWA', 'CMS', 'SQL', 'DB', 'UI', 'UX', 'FE', 'BE']);
+  return fallbackTitle
+    .toLowerCase()
+    .split(' ')
+    .map((word) => {
+      const upper = word.toUpperCase();
+      if (acronyms.has(upper)) return upper;
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
 export const PROJECT_DESCRIPTIONS: Record<string, string> = {
   'apexmind-ai': 'Automated motivational quote video generation, AI scriptwriting, voiceover synthesis with Gemini, and seamless YouTube publishing.',
   'sonikoma': 'AI anime character voiceover synthesis, multi-track timeline editor, and video generation studio powered by Gemini AI.',

@@ -10,7 +10,7 @@ export interface ProjectDetailViewProps {
 }
 
 export default function ProjectDetailView({ project, onBack }: ProjectDetailViewProps) {
-  const [activeTab, setActiveTab] = useState<'overview' | 'api' | 'scripts' | 'database' | 'packages' | 'env' | 'readme'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'api' | 'scripts' | 'database' | 'env' | 'readme'>('overview');
   const [portTesting, setPortTesting] = useState<boolean>(false);
   const [portStatus, setPortStatus] = useState<{ fe: string; be: string; latency: number } | null>(null);
   const [showSecretPlaceholders, setShowSecretPlaceholders] = useState<boolean>(false);
@@ -90,7 +90,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             )}
             <div className="breadcrumb-divider-line" aria-hidden="true" />
             <nav className="breadcrumb-trail" aria-label="Breadcrumb navigation">
-              <span>Soul Workspace</span>
+              <span className="crumb-root">Soul Workspace</span>
               <span className="crumb-sep">/</span>
               <a href="#projects" className="crumb-link" onClick={(e) => { e.preventDefault(); onBack?.(); }}>
                 Pillar 1: Projects
@@ -116,6 +116,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
             {feUrl && (
               <a href={feUrl} target="_blank" rel="noopener noreferrer" className="live-link-btn fe-link" title="Open Client in Browser">
+                <span className="live-link-dot fe-dot" aria-hidden="true" />
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                   <polyline points="15 3 21 3 21 9" />
@@ -126,6 +127,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             )}
             {beUrl && (
               <a href={beUrl} target="_blank" rel="noopener noreferrer" className="live-link-btn be-link" title="Open Server API">
+                <span className="live-link-dot be-dot" aria-hidden="true" />
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
                   <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
@@ -158,7 +160,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             <div className="title-with-badge">
               <h1>{project.title}</h1>
               <code className="app-id-tag">{project.id}</code>
-              {project.version && <span className="version-pill">v{project.version}</span>}
+              {project.version && (
+                <span className="version-pill">
+                  <span className="version-pill-dot" aria-hidden="true" />
+                  v{project.version}
+                </span>
+              )}
             </div>
             <p className="detail-description">
               {project.description || `${project.title} monorepo application powered by ${project.framework || 'standard frontend'}.`}
@@ -199,60 +206,114 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
           </div>
         )}
 
-        {/* Specs Overview Row */}
-        <div className="package-metadata project-meta-strip">
-          <div className="metadata-card">
-            <div className="metadata-card-header">
-              <span className="metadata-icon" aria-hidden="true">🌐</span>
-              <span className="metadata-label">CLIENT PORT</span>
+        {/* Specs Overview Row - 6 Balanced Cards */}
+        <div className="project-meta-strip">
+          <div className="project-meta-card">
+            <div className="project-meta-card-header">
+              <span className="project-meta-icon icon-emerald" aria-hidden="true">🌐</span>
+              <span className="project-meta-label">CLIENT PORT</span>
+              {project.frontendPort && (
+                <span className="project-meta-badge badge-emerald">STANDBY</span>
+              )}
             </div>
-            <div className="metadata-value-group">
-              <strong className="metadata-value text-emerald">{project.frontendPort ? `:${project.frontendPort}` : 'N/A'}</strong>
-            </div>
-          </div>
-          <div className="metadata-card">
-            <div className="metadata-card-header">
-              <span className="metadata-icon" aria-hidden="true">🔌</span>
-              <span className="metadata-label">SERVER PORT</span>
-            </div>
-            <div className="metadata-value-group">
-              <strong className="metadata-value text-blue">{project.backendPort ? `:${project.backendPort}` : 'N/A'}</strong>
-            </div>
-          </div>
-          <div className="metadata-card">
-            <div className="metadata-card-header">
-              <span className="metadata-icon" aria-hidden="true">⚙️</span>
-              <span className="metadata-label">FRAMEWORK</span>
-            </div>
-            <div className="metadata-value-group">
-              <strong className="metadata-value">{project.framework || 'Web Application'}</strong>
-            </div>
-          </div>
-          <div className="metadata-card">
-            <div className="metadata-card-header">
-              <span className="metadata-icon" aria-hidden="true">🗄️</span>
-              <span className="metadata-label">DATABASE</span>
-            </div>
-            <div className="metadata-value-group">
-              <strong className="metadata-value">{project.dbInfo || 'Local Storage'}</strong>
+            <div className="project-meta-value-group">
+              {feUrl ? (
+                <a
+                  href={feUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-meta-value link-emerald"
+                  title={`Open client at ${feUrl}`}
+                >
+                  :{project.frontendPort}
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                </a>
+              ) : (
+                <strong className="project-meta-value text-muted">N/A</strong>
+              )}
             </div>
           </div>
-          <div className="metadata-card">
-            <div className="metadata-card-header">
-              <span className="metadata-icon" aria-hidden="true">✨</span>
-              <span className="metadata-label">AI ENGINE</span>
+
+          <div className="project-meta-card">
+            <div className="project-meta-card-header">
+              <span className="project-meta-icon icon-blue" aria-hidden="true">🔌</span>
+              <span className="project-meta-label">SERVER PORT</span>
+              {project.backendPort && (
+                <span className="project-meta-badge badge-blue">STANDBY</span>
+              )}
             </div>
-            <div className="metadata-value-group">
-              <strong className="metadata-value">{project.aiEngine && project.aiEngine !== 'N/A' ? `✨ ${project.aiEngine}` : 'Standard'}</strong>
+            <div className="project-meta-value-group">
+              {beUrl ? (
+                <a
+                  href={beUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-meta-value link-blue"
+                  title={`Open server API at ${beUrl}`}
+                >
+                  :{project.backendPort}
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                </a>
+              ) : (
+                <strong className="project-meta-value text-muted">N/A</strong>
+              )}
             </div>
           </div>
-          <div className="metadata-card">
-            <div className="metadata-card-header">
-              <span className="metadata-icon" aria-hidden="true">📁</span>
-              <span className="metadata-label">ROOT FILES</span>
+
+          <div className="project-meta-card">
+            <div className="project-meta-card-header">
+              <span className="project-meta-icon icon-amber" aria-hidden="true">📁</span>
+              <span className="project-meta-label">ROOT FILES</span>
+              <span className="project-meta-badge badge-neutral">EXPLORE</span>
             </div>
-            <div className="metadata-value-group">
-              <strong className="metadata-value">{fileTree.length} items</strong>
+            <div className="project-meta-value-group">
+              <strong className="project-meta-value" title={`${fileTree.length} items in root directory`}>
+                {fileTree.length} items
+              </strong>
+            </div>
+          </div>
+
+          <div className="project-meta-card">
+            <div className="project-meta-card-header">
+              <span className="project-meta-icon icon-purple" aria-hidden="true">⚙️</span>
+              <span className="project-meta-label">FRAMEWORK</span>
+            </div>
+            <div className="project-meta-value-group">
+              <strong className="project-meta-value" title={project.framework || 'Web Application'}>
+                {project.framework || 'Web Application'}
+              </strong>
+            </div>
+          </div>
+
+          <div className="project-meta-card">
+            <div className="project-meta-card-header">
+              <span className="project-meta-icon icon-cyan" aria-hidden="true">🗄️</span>
+              <span className="project-meta-label">DATABASE</span>
+            </div>
+            <div className="project-meta-value-group">
+              <strong className="project-meta-value" title={project.dbInfo || 'Local Storage'}>
+                {project.dbInfo || 'Local Storage'}
+              </strong>
+            </div>
+          </div>
+
+          <div className="project-meta-card">
+            <div className="project-meta-card-header">
+              <span className="project-meta-icon icon-rose" aria-hidden="true">✨</span>
+              <span className="project-meta-label">AI ENGINE</span>
+            </div>
+            <div className="project-meta-value-group">
+              <strong className="project-meta-value" title={project.aiEngine && project.aiEngine !== 'N/A' ? project.aiEngine : 'Standard'}>
+                {project.aiEngine && project.aiEngine !== 'N/A' ? `✨ ${project.aiEngine}` : 'Standard'}
+              </strong>
             </div>
           </div>
         </div>
@@ -263,6 +324,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             <div className="quick-cmd-header">
               <span className="quick-cmd-icon" aria-hidden="true">⚡</span>
               <span className="quick-cmd-label">MONOREPO RUNNER</span>
+              <span className="quick-cmd-tag">CLI</span>
             </div>
             <div className="quick-cmd-box">
               <span className="cmd-prompt-sym" aria-hidden="true">$</span>
@@ -275,6 +337,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
               <div className="quick-cmd-header">
                 <span className="quick-cmd-icon" aria-hidden="true">💻</span>
                 <span className="quick-cmd-label">CLIENT START</span>
+                <span className="quick-cmd-tag">NPM</span>
               </div>
               <div className="quick-cmd-box">
                 <span className="cmd-prompt-sym" aria-hidden="true">$</span>
@@ -288,6 +351,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
               <div className="quick-cmd-header">
                 <span className="quick-cmd-icon" aria-hidden="true">🔌</span>
                 <span className="quick-cmd-label">SERVER START</span>
+                <span className="quick-cmd-tag">NPM</span>
               </div>
               <div className="quick-cmd-box">
                 <span className="cmd-prompt-sym" aria-hidden="true">$</span>
@@ -340,16 +404,6 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         >
           <span className="tab-icon">💻</span>
           <span>Scripts ({scriptsEntries.length})</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'packages'}
-          className={`tab-btn ${activeTab === 'packages' ? 'active' : ''}`}
-          onClick={() => setActiveTab('packages')}
-        >
-          <span className="tab-icon">🔗</span>
-          <span>Shared Packages</span>
         </button>
         <button
           type="button"
@@ -735,76 +789,6 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         </section>
       )}
 
-      {/* Tab 5: Shared Packages */}
-      {activeTab === 'packages' && (
-        <section className="detail-section project-tab-content">
-          <div className="section-heading">
-            <div>
-              <span className="section-kicker">MONOREPO INTEGRATION</span>
-              <h2>Shared Libraries &amp; Presets Consumption</h2>
-            </div>
-          </div>
-
-          <div className="shared-packages-integration-grid">
-            <div className="integration-card">
-              <div className="integration-card-header">
-                <span className="detail-icon">PY</span>
-                <div>
-                  <h3>@workspace/logger</h3>
-                  <span className="int-sub">Unified DevTools, terminal banners &amp; log masking</span>
-                </div>
-              </div>
-              <p>
-                Provides 5-column python logging and client browser log formatting with sensitive data masking.
-              </p>
-              <div className="code-example-box">
-                <pre>
-                  <code>{`import { consoleLogger } from '@workspace/logger';\n\nconsoleLogger.info('INIT', 'Starting application...', { port: ${project.frontendPort || 5173} });`}</code>
-                </pre>
-                <CopyButton text={`import { consoleLogger } from '@workspace/logger';\nconsoleLogger.info('INIT', 'Starting application...', { port: ${project.frontendPort || 5173} });`} variant="compact" />
-              </div>
-            </div>
-
-            <div className="integration-card">
-              <div className="integration-card-header">
-                <span className="detail-icon">CFG</span>
-                <div>
-                  <h3>@workspace/config</h3>
-                  <span className="int-sub">Tailwind CSS tokens &amp; shared Vite configuration</span>
-                </div>
-              </div>
-              <p>
-                Standardizes color palettes, fonts, spacing tokens, and shared build presets across all applications.
-              </p>
-              <div className="code-example-box">
-                <pre>
-                  <code>{`import { tokens } from '@workspace/config/tailwind/tokens';\n\nconst brandColor = tokens.colors.brand.DEFAULT;`}</code>
-                </pre>
-                <CopyButton text={`import { tokens } from '@workspace/config/tailwind/tokens';\nconst brandColor = tokens.colors.brand.DEFAULT;`} variant="compact" />
-              </div>
-            </div>
-
-            <div className="integration-card">
-              <div className="integration-card-header">
-                <span className="detail-icon">PY</span>
-                <div>
-                  <h3>@workspace/runner</h3>
-                  <span className="int-sub">Monorepo process launcher &amp; port orchestrator</span>
-                </div>
-              </div>
-              <p>
-                Orchestrates process lifecycles, socket health probes, and kills stale port listeners before launching.
-              </p>
-              <div className="code-example-box">
-                <pre>
-                  <code>{`# Run this project via runner:\n${runnerCmd}`}</code>
-                </pre>
-                <CopyButton text={runnerCmd} variant="compact" />
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Tab 6: Environment & Config */}
       {activeTab === 'env' && (
