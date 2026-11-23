@@ -86,67 +86,64 @@ export default function DocDetailHeader({
         </div>
       </div>
 
-      {/* ── Title & Meta Row ── */}
-      <div className="flex items-start gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-[#161616] border border-[#262626] flex items-center justify-center shrink-0 text-2xl shadow-inner">
-          📜
-        </div>
-
-        <div className="flex flex-col gap-2 min-w-0">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
-              OFFICIAL SPEC V1.0
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
-              v1.0.0
-            </span>
+      {/* ── Hero Title & 2x2 Balanced Cards Row ── */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="flex items-start gap-4 min-w-0">
+          <div className="w-14 h-14 rounded-2xl bg-[#161616] border border-[#262626] flex items-center justify-center shrink-0 text-2xl shadow-inner">
+            {guideMeta.icon || '📜'}
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">{guideMeta.title}</h1>
-          <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">{guideMeta.description}</p>
-        </div>
-      </div>
+          <div className="flex flex-col gap-2 min-w-0">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
+                OFFICIAL SPEC V1.0
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
+                v1.0.0
+              </span>
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-purple-500/15 border border-purple-500/30 text-purple-400">
+                {guideMeta.category.toUpperCase()}
+              </span>
+            </div>
 
-      {/* ── 5 Balanced Metadata Cards ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
-            <span>📑</span>
-            <span>SECTIONS</span>
-          </span>
-          <strong className="text-sm font-bold text-sky-400 font-mono mt-1">{headingsCount} headings</strong>
-        </div>
-
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
-            <span>⏱️</span>
-            <span>EST. READ TIME</span>
-          </span>
-          <strong className="text-sm font-bold text-emerald-400 font-mono mt-1">{guideMeta.readTime} read</strong>
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">{guideMeta.title}</h1>
+            <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-2xl">{guideMeta.description}</p>
+          </div>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
-            <span>💻</span>
-            <span>CODE EXAMPLES</span>
-          </span>
-          <strong className="text-sm font-bold text-purple-400 font-mono mt-1">{codeBlocksCount} snippets</strong>
-        </div>
+        {/* 4-Card Balanced Metadata Grid (Aligned to right, filling previous gap) */}
+        <div className="grid grid-cols-2 gap-3 min-w-[280px] lg:min-w-[340px] shrink-0">
+          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+            <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
+              <span>📑</span>
+              <span>SECTIONS</span>
+            </span>
+            <strong className="text-base font-bold text-sky-400 font-mono mt-1">{headingsCount} headings</strong>
+          </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
-            <span>📊</span>
-            <span>TABLES &amp; MATRICES</span>
-          </span>
-          <strong className="text-sm font-bold text-emerald-400 font-mono mt-1">{tablesCount} tables</strong>
-        </div>
+          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+            <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
+              <span>⏱️</span>
+              <span>READ TIME</span>
+            </span>
+            <strong className="text-base font-bold text-emerald-400 font-mono mt-1">{guideMeta.readTime}</strong>
+          </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
-            <span>🎯</span>
-            <span>SCOPE</span>
-          </span>
-          <strong className="text-sm font-bold text-amber-400 font-mono mt-1 truncate">All 3 Pkgs &amp; 8 Apps</strong>
+          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+            <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
+              <span>💻</span>
+              <span>CODE EXAMPLES</span>
+            </span>
+            <strong className="text-base font-bold text-purple-400 font-mono mt-1">{codeBlocksCount} snippets</strong>
+          </div>
+
+          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+            <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
+              <span>📊</span>
+              <span>TABLES &amp; MATRICES</span>
+            </span>
+            <strong className="text-base font-bold text-amber-400 font-mono mt-1">{tablesCount} tables</strong>
+          </div>
         </div>
       </div>
 

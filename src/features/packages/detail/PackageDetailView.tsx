@@ -20,7 +20,7 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
   const totalExports = (pkg.exports || []).length + (pkg.pythonExports || []).length + (pkg.typeScriptExports || []).length;
 
   return (
-    <article className="package-detail">
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       {/* ── Main Hero Header & Tabs Bar ── */}
       <PackageDetailHeader
         pkg={pkg}

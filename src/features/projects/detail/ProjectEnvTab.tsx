@@ -22,18 +22,62 @@ export default function ProjectEnvTab({
   devDepsEntries,
 }: ProjectEnvTabProps) {
   const [filter, setFilter] = useState<string>('');
+  const [filterType, setFilterType] = useState<'all' | 'secrets' | 'active'>('all');
 
-  const filteredKeys = useMemo(() => {
+  const { items, secretCount, activeCount } = useMemo(() => {
+    let secrets = 0;
+    let active = 0;
+
+    const all = envKeys.map((key) => {
+      const isSecret = key.includes('SECRET') || key.includes('KEY') || key.includes('TOKEN') || key.includes('PASSWORD') || key.includes('CREDENTIAL');
+      let displayVal = 'unset';
+      let isSet = false;
+
+      if (key === 'PORT' || key === 'BACKEND_PORT') {
+        displayVal = `${project.backendPort || 8000}`;
+        isSet = true;
+      } else if (key === 'FRONTEND_PORT' || key === 'CLIENT_PORT') {
+        displayVal = `${project.frontendPort || 5173}`;
+        isSet = true;
+      } else if (key === 'BACKEND_URL') {
+        displayVal = `http://127.0.0.1:${project.backendPort || 8000}`;
+        isSet = true;
+      } else if (key === 'APP_URL' || key === 'CLIENT_URL') {
+        displayVal = `http://localhost:${project.frontendPort || 5173}`;
+        isSet = true;
+      } else if (key === 'NODE_ENV') {
+        displayVal = 'development';
+        isSet = true;
+      } else if (isSecret) {
+        displayVal = showSecretPlaceholders ? 'sk_monorepo_sample_secret_key' : '••••••••••••••••';
+        isSet = showSecretPlaceholders;
+      }
+
+      if (isSecret) secrets++;
+      if (isSet) active++;
+
+      return { key, isSecret, displayVal, isSet };
+    });
+
+    return { items: all, secretCount: secrets, activeCount: active };
+  }, [envKeys, project, showSecretPlaceholders]);
+
+  const filteredItems = useMemo(() => {
     const needle = filter.trim().toLowerCase();
-    if (!needle) return envKeys;
-    return envKeys.filter((k) => k.toLowerCase().includes(needle));
-  }, [envKeys, filter]);
+    return items.filter((item) => {
+      if (filterType === 'secrets' && !item.isSecret) return false;
+      if (filterType === 'active' && !item.isSet) return false;
+      if (!needle) return true;
+      return item.key.toLowerCase().includes(needle);
+    });
+  }, [items, filter, filterType]);
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-5">
+      {/* Top Header Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#22222e]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">CONFIGURATION REGISTRY</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">CONFIGURATION REGISTRY</span>
           <h2 className="text-lg font-bold text-white">Environment Variables &amp; Secret Keys</h2>
         </div>
         <div className="flex items-center gap-2.5 flex-wrap">
@@ -49,7 +93,7 @@ export default function ProjectEnvTab({
                 onChange={(e) => setFilter(e.target.value)}
                 placeholder="Filter env variables..."
                 aria-label="Filter env variables"
-                className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0e0e0e] border border-[#262626] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
+                className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#14141c] border border-[#262636] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono"
               />
               {filter && (
                 <button
@@ -65,7 +109,7 @@ export default function ProjectEnvTab({
           )}
           <button
             type="button"
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181818] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#444444] transition-all"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#161622] border border-[#282838] text-neutral-300 hover:text-white hover:border-[#38384e] transition-all"
             onClick={onToggleSecretPlaceholders}
           >
             {showSecretPlaceholders ? 'Mask Secrets' : 'Show Placeholders'}
@@ -76,88 +120,124 @@ export default function ProjectEnvTab({
 
       {envKeys.length > 0 ? (
         <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between pb-2">
-            <span className="text-xs font-bold text-white">Declared Configuration Keys</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
-              {filteredKeys.length} variables
-            </span>
+          {/* Section Toolbar & Quick Filter Pills */}
+          <div className="flex flex-wrap items-center justify-between gap-2.5 pb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-white">Declared Configuration Keys</span>
+              <span className="px-2 py-0.5 rounded-full text-[10.5px] font-mono font-semibold bg-blue-500/10 border border-blue-500/30 text-blue-400">
+                {filteredItems.length} of {envKeys.length} variables
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Filter variables">
+              <button
+                type="button"
+                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
+                  filterType === 'all'
+                    ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                    : 'bg-[#161622] border border-[#282838] text-neutral-400 hover:text-white hover:bg-[#1c1c28]'
+                }`}
+                onClick={() => setFilterType('all')}
+              >
+                All ({envKeys.length})
+              </button>
+              <button
+                type="button"
+                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
+                  filterType === 'secrets'
+                    ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                    : 'bg-[#161622] border border-[#282838] text-neutral-400 hover:text-white hover:bg-[#1c1c28]'
+                }`}
+                onClick={() => setFilterType('secrets')}
+              >
+                Secrets ({secretCount})
+              </button>
+              <button
+                type="button"
+                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
+                  filterType === 'active'
+                    ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                    : 'bg-[#161622] border border-[#282838] text-neutral-400 hover:text-white hover:bg-[#1c1c28]'
+                }`}
+                onClick={() => setFilterType('active')}
+              >
+                Active ({activeCount})
+              </button>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            {filteredKeys.map((key) => {
-              const isSecret = key.includes('SECRET') || key.includes('KEY') || key.includes('TOKEN') || key.includes('PASSWORD');
-              let displayVal = 'unset';
-              let isSet = false;
-
-              if (key === 'PORT' || key === 'BACKEND_PORT') {
-                displayVal = `${project.backendPort || 8000}`;
-                isSet = true;
-              } else if (key === 'FRONTEND_PORT') {
-                displayVal = `${project.frontendPort || 5173}`;
-                isSet = true;
-              } else if (key === 'BACKEND_URL') {
-                displayVal = `http://127.0.0.1:${project.backendPort || 8000}`;
-                isSet = true;
-              } else if (key === 'APP_URL') {
-                displayVal = `http://localhost:${project.frontendPort || 5173}`;
-                isSet = true;
-              } else if (key === 'NODE_ENV') {
-                displayVal = 'development';
-                isSet = true;
-              } else if (isSecret) {
-                displayVal = showSecretPlaceholders ? 'sk_monorepo_sample_secret_key' : '••••••••••••••••';
-                isSet = showSecretPlaceholders;
-              }
-
+          {/* 2-Column Responsive Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
+            {filteredItems.map((item) => {
               return (
                 <div
-                  key={key}
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#0e0e0e] border border-[#202020] hover:border-[#333333] transition-all gap-3"
+                  key={item.key}
+                  className="flex items-center justify-between p-2.5 px-3 rounded-xl bg-[#14141c] border border-[#242434] hover:border-[#35354a] hover:bg-[#181824] transition-all gap-2"
                 >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-xs">{isSecret ? '🔒' : '⚙️'}</span>
-                    <code className="text-xs font-mono font-bold text-neutral-200 truncate">{key}</code>
-                    {isSecret && (
-                      <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold uppercase bg-amber-500/10 border border-amber-500/25 text-amber-400">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <span className="text-xs shrink-0">{item.isSecret ? '🔒' : '⚙️'}</span>
+                    <code className="text-xs font-mono font-semibold text-neutral-200 truncate" title={item.key}>
+                      {item.key}
+                    </code>
+                    {item.isSecret && (
+                      <span className="px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold uppercase bg-amber-500/10 border border-amber-500/25 text-amber-400 shrink-0">
                         Secret
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 shrink-0">
                     <code
-                      className={`text-xs font-mono truncate max-w-[220px] ${
-                        isSet ? 'text-emerald-400' : 'text-neutral-500 italic'
+                      className={`text-xs font-mono truncate max-w-[140px] sm:max-w-[170px] ${
+                        item.isSet ? 'text-emerald-400' : 'text-neutral-500 italic'
                       }`}
+                      title={item.displayVal}
                     >
-                      {displayVal}
+                      {item.displayVal}
                     </code>
-                    <CopyButton text={key} variant="compact" label="Copy Key" />
+                    <CopyButton text={item.key} variant="compact" label="Copy Key" />
                   </div>
                 </div>
               );
             })}
           </div>
+
+          {filteredItems.length === 0 && (
+            <div className="py-8 flex flex-col items-center justify-center text-center gap-2 bg-[#14141c] border border-[#242434] rounded-xl">
+              <span className="text-2xl">🔍</span>
+              <p className="text-xs text-neutral-300 font-semibold">No environment variables match &ldquo;{filter}&rdquo;</p>
+              <button
+                type="button"
+                className="px-3 py-1 text-xs rounded-md bg-[#161622] border border-[#282838] text-neutral-300 hover:text-white"
+                onClick={() => {
+                  setFilter('');
+                  setFilterType('all');
+                }}
+              >
+                Reset Filter
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <p className="text-xs text-neutral-400">No environment variables explicitly declared in .env.example.</p>
       )}
 
       {/* Dependencies Breakdown */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-[#1f1f1f]">
-        <div className="flex flex-col gap-3 p-4 rounded-xl bg-[#0e0e0e] border border-[#202020]">
-          <div className="flex items-center justify-between pb-2 border-b border-[#1c1c1c]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-[#22222e]">
+        <div className="flex flex-col gap-3 p-4 rounded-xl bg-[#14141c] border border-[#242434]">
+          <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
             <span className="text-xs font-bold text-white flex items-center gap-1.5">
               <span>📦</span>
               <span>Production Dependencies</span>
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-neutral-800 text-neutral-300">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-blue-500/10 border border-blue-500/30 text-blue-400">
               {depsEntries.length}
             </span>
           </div>
           <div className="flex flex-col gap-1.5 max-h-[220px] overflow-y-auto pr-1">
             {depsEntries.length > 0 ? (
               depsEntries.map(([dep, ver]) => (
-                <div key={dep} className="flex items-center justify-between text-xs py-1 border-b border-[#161616]">
+                <div key={dep} className="flex items-center justify-between text-xs py-1 border-b border-[#1c1c28] last:border-0">
                   <code className="text-sky-300 font-mono truncate">{dep}</code>
                   <span className="text-neutral-500 font-mono text-[11px] shrink-0">{ver}</span>
                 </div>
@@ -168,20 +248,20 @@ export default function ProjectEnvTab({
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 p-4 rounded-xl bg-[#0e0e0e] border border-[#202020]">
-          <div className="flex items-center justify-between pb-2 border-b border-[#1c1c1c]">
+        <div className="flex flex-col gap-3 p-4 rounded-xl bg-[#14141c] border border-[#242434]">
+          <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
             <span className="text-xs font-bold text-white flex items-center gap-1.5">
               <span>🛠️</span>
               <span>Dev Dependencies</span>
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-neutral-800 text-neutral-300">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-purple-500/10 border border-purple-500/30 text-purple-400">
               {devDepsEntries.length}
             </span>
           </div>
           <div className="flex flex-col gap-1.5 max-h-[220px] overflow-y-auto pr-1">
             {devDepsEntries.length > 0 ? (
               devDepsEntries.map(([dep, ver]) => (
-                <div key={dep} className="flex items-center justify-between text-xs py-1 border-b border-[#161616]">
+                <div key={dep} className="flex items-center justify-between text-xs py-1 border-b border-[#1c1c28] last:border-0">
                   <code className="text-purple-300 font-mono truncate">{dep}</code>
                   <span className="text-neutral-500 font-mono text-[11px] shrink-0">{ver}</span>
                 </div>

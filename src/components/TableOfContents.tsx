@@ -143,11 +143,11 @@ export default function TableOfContents({
 
   return (
     <nav
-      className={`sticky top-20 flex flex-col gap-3 p-4 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl ${className}`}
+      className={`sticky top-20 flex flex-col gap-3 p-4 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl ${className}`}
       aria-label="Table of contents navigation"
     >
       {/* Refined Card Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-[#1f1f1f]">
+      <div className="flex items-center justify-between pb-3 border-b border-[#22222e]">
         <div className="flex items-center gap-2">
           <svg
             width="14"

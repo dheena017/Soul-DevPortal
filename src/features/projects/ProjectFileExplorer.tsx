@@ -189,12 +189,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
       for (let i = 1; i < parts.length; i++) {
         dirSet.add(parts.slice(0, i).join('/'));
       }
-    });
-
-    fileTree.forEach((path) => {
-      const clean = path.replace(/\/$/, '');
-      const lastPart = clean.split('/').pop() || '';
-      if (path.endsWith('/') || !lastPart.includes('.') || dirSet.has(clean)) {
+      if (path.endsWith('/')) {
         dirSet.add(clean);
       }
     });
@@ -243,17 +238,19 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
         current = existing;
       }
 
-      // Add to flat items if it's a leaf file
-      const rootSegment = clean.split('/')[0];
-      const group = rootSegment === 'client' ? 'client' : rootSegment === 'server' ? 'server' : rootSegment === 'public' ? 'public' : 'root';
-      const meta = getFileMeta(parts[parts.length - 1], false);
-      flatItems.push({
-        path: clean,
-        name: parts[parts.length - 1],
-        isDir: false,
-        meta,
-        group,
-      });
+      // Add leaf files to flat items
+      if (!dirSet.has(clean) && !rawPath.endsWith('/')) {
+        const rootSegment = clean.split('/')[0];
+        const group = rootSegment === 'client' ? 'client' : rootSegment === 'server' ? 'server' : rootSegment === 'public' ? 'public' : 'root';
+        const meta = getFileMeta(parts[parts.length - 1], false);
+        flatItems.push({
+          path: clean,
+          name: parts[parts.length - 1],
+          isDir: false,
+          meta,
+          group,
+        });
+      }
     }
 
     // Sort children: directories first, then alphabetical
@@ -273,7 +270,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
       tree: root.children,
       flatList: flatItems.sort((a, b) => a.path.localeCompare(b.path)),
       totalDirs: dirSet.size,
-      totalFiles: fileTree.length,
+      totalFiles: flatItems.length,
     };
   }, [fileTree]);
 
@@ -416,10 +413,10 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
     return (
       <div className="w-full flex flex-col" key={node.id}>
         <div
-          className={`group flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-neutral-800/80 transition-colors cursor-pointer select-none text-xs ${
-            open ? 'bg-neutral-800/30' : ''
+          className={`group flex items-center justify-between py-1.5 px-2.5 rounded-lg border border-transparent hover:border-[#28283a] hover:bg-[#161622] transition-all cursor-pointer select-none text-xs ${
+            open ? 'bg-[#151520]/60' : ''
           }`}
-          style={{ paddingLeft: `${Math.max(8, depth * 18 + 10)}px` }}
+          style={{ paddingLeft: `${Math.max(10, depth * 18 + 10)}px` }}
           onClick={() => (node.isDir ? toggleFolder(node.id) : null)}
           role={node.isDir ? 'button' : undefined}
           tabIndex={node.isDir ? 0 : undefined}
@@ -437,7 +434,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             <span className="w-4 h-4 flex items-center justify-center shrink-0">
               {node.isDir ? (
                 <svg
-                  className={`w-3.5 h-3.5 text-neutral-500 transition-transform duration-150 ${open ? 'rotate-90 text-sky-400' : ''}`}
+                  className={`w-3.5 h-3.5 text-neutral-500 transition-transform duration-150 ${open ? 'rotate-90 text-blue-400' : ''}`}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -465,7 +462,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
           {/* Right Side: Badges & Actions */}
           <div className="flex items-center gap-2 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
             {node.isDir ? (
-              <span className="px-2 py-0.5 rounded text-[10.5px] font-mono text-neutral-400 bg-neutral-800/60 border border-neutral-700/50">
+              <span className="px-2 py-0.5 rounded text-[10.5px] font-mono text-neutral-400 bg-[#161622] border border-[#282838]">
                 {node.children.length} {node.children.length === 1 ? 'item' : 'items'}
               </span>
             ) : (
@@ -483,7 +480,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
 
             <button
               type="button"
-              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-neutral-800 border border-neutral-700 text-neutral-400 hover:text-white hover:border-neutral-600 transition-all ${
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-[#161622] border border-[#282838] text-neutral-400 hover:text-white hover:border-[#3b82f6] transition-all ${
                 isCopied ? 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10' : ''
               }`}
               onClick={(e) => handleCopyPath(node.path, e)}
@@ -512,7 +509,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
 
         {/* Children (if directory and expanded) */}
         {node.isDir && open && hasChildren && (
-          <div className="flex flex-col relative before:absolute before:left-4 before:top-0 before:bottom-2 before:w-[1px] before:bg-neutral-800">
+          <div className="flex flex-col relative before:absolute before:left-4 before:top-0 before:bottom-2 before:w-[1px] before:bg-[#252536]">
             {node.children.map((child) => renderTreeNode(child, depth + 1))}
           </div>
         )}
@@ -521,12 +518,12 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
   };
 
   return (
-    <div className="w-full bg-[#0e1118] border border-[#283044] rounded-xl shadow-xl overflow-hidden flex flex-col transition-all duration-200">
+    <div className="w-full bg-[#111116] border border-[#282838] rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-200">
       {/* Top Banner Toolbar */}
-      <div className="p-4 md:px-5 md:py-3.5 border-b border-[#232838] bg-[#141722] flex flex-wrap items-center justify-between gap-4">
+      <div className="p-4 md:px-5 md:py-3.5 border-b border-[#22222e] bg-[#14141c] flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0d0d0d] border border-[#282828] text-xs font-mono text-neutral-300">
-            <svg className="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0e0e12] border border-[#262634] text-xs font-mono text-neutral-300">
+            <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
             </svg>
             <span className="font-medium text-neutral-200">Soul-DevPortal-Projects/{projectId}</span>
@@ -534,13 +531,13 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="px-2.5 py-1 rounded-md bg-[#1a1a1a] border border-[#2c2c2c] text-neutral-300">
+            <span className="px-2.5 py-1 rounded-md bg-[#161622] border border-[#282838] text-neutral-300">
               <strong className="text-white font-bold">{totalDirs}</strong> directories
             </span>
-            <span className="px-2.5 py-1 rounded-md bg-[#1a1a1a] border border-[#2c2c2c] text-neutral-300">
+            <span className="px-2.5 py-1 rounded-md bg-[#161622] border border-[#282838] text-neutral-300">
               <strong className="text-white font-bold">{totalFiles}</strong> source files
             </span>
-            <span className="px-2.5 py-1 rounded-md bg-sky-500/10 border border-sky-500/30 text-sky-400 font-semibold">
+            <span className="px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-400 font-semibold">
               <strong className="font-bold">{fileTree.length}</strong> indexed items
             </span>
           </div>
@@ -548,11 +545,11 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
 
         {/* View Mode & Controls */}
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="inline-flex p-1 bg-[#0d0d0d] border border-[#282828] rounded-lg gap-1">
+          <div className="inline-flex p-1 bg-[#0e0e12] border border-[#262634] rounded-lg gap-1">
             <button
               type="button"
               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
-                viewMode === 'tree' ? 'bg-[#222222] text-white shadow-sm' : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
+                viewMode === 'tree' ? 'bg-[#222232] text-white shadow-sm border border-[#353548]' : 'text-neutral-400 hover:text-white hover:bg-[#181824]'
               }`}
               onClick={() => setViewMode('tree')}
               title="Tree Explorer View"
@@ -568,7 +565,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             <button
               type="button"
               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
-                viewMode === 'flat' ? 'bg-[#222222] text-white shadow-sm' : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
+                viewMode === 'flat' ? 'bg-[#222232] text-white shadow-sm border border-[#353548]' : 'text-neutral-400 hover:text-white hover:bg-[#181824]'
               }`}
               onClick={() => setViewMode('flat')}
               title="Categorized List View"
@@ -589,7 +586,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                className="px-2.5 py-1 text-xs font-medium rounded-md bg-[#1a1a1a] border border-[#2c2c2c] text-neutral-400 hover:text-white hover:border-[#383838] transition-all"
+                className="px-2.5 py-1 text-xs font-medium rounded-md bg-[#161622] border border-[#282838] text-neutral-400 hover:text-white hover:border-[#38384e] transition-all"
                 onClick={expandAll}
                 title="Expand all folders"
               >
@@ -597,7 +594,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
               </button>
               <button
                 type="button"
-                className="px-2.5 py-1 text-xs font-medium rounded-md bg-[#1a1a1a] border border-[#2c2c2c] text-neutral-400 hover:text-white hover:border-[#383838] transition-all"
+                className="px-2.5 py-1 text-xs font-medium rounded-md bg-[#161622] border border-[#282838] text-neutral-400 hover:text-white hover:border-[#38384e] transition-all"
                 onClick={collapseAll}
                 title="Collapse all folders"
               >
@@ -610,8 +607,8 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             type="button"
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md border transition-all ${
               isFullHeight
-                ? 'bg-sky-500/15 border-sky-500/40 text-sky-400'
-                : 'bg-[#1a1a1a] border-[#2c2c2c] text-neutral-400 hover:text-white hover:border-[#383838]'
+                ? 'bg-blue-500/15 border-blue-500/40 text-blue-400'
+                : 'bg-[#161622] border-[#282838] text-neutral-400 hover:text-white hover:border-[#38384e]'
             }`}
             onClick={() => setIsFullHeight((prev) => !prev)}
             title={isFullHeight ? 'Limit explorer height' : 'Expand to full height'}
@@ -637,7 +634,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
       </div>
 
       {/* Filter and Scope Bar */}
-      <div className="p-3 md:px-5 md:py-3.5 bg-[#0e0e0e] border-b border-[#222222] flex flex-wrap items-center justify-between gap-3">
+      <div className="p-3 md:px-5 md:py-3.5 bg-[#0d0d12] border-b border-[#22222e] flex flex-wrap items-center justify-between gap-3">
         <div className="relative flex-1 min-w-[240px] flex items-center">
           <svg className="absolute left-3 w-3.5 h-3.5 text-neutral-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
@@ -645,7 +642,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
           </svg>
           <input
             type="text"
-            className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#141414] border border-[#282828] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
+            className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#14141c] border border-[#262636] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono"
             placeholder="Filter files by name or extension (e.g. .py, schema, App.tsx)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -661,7 +658,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             </button>
           )}
           {searchQuery && (
-            <span className="absolute right-8 text-[11px] font-mono text-neutral-500">
+            <span className="absolute right-8 text-[11px] font-mono text-neutral-400">
               {matchCount} {matchCount === 1 ? 'match' : 'matches'}
             </span>
           )}
@@ -678,8 +675,8 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
                 type="button"
                 className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
-                    : 'bg-[#161616] border border-[#262626] text-neutral-400 hover:text-white hover:bg-[#1e1e1e]'
+                    ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
+                    : 'bg-[#161622] border border-[#282838] text-neutral-400 hover:text-white hover:bg-[#1c1c28] hover:border-[#36364a]'
                 }`}
                 onClick={() => setFilterScope(scope)}
               >
@@ -703,7 +700,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
                 <p className="text-xs text-neutral-400 max-w-sm">No results found for &ldquo;{searchQuery}&rdquo; in current scope.</p>
                 <button
                   type="button"
-                  className="px-3 py-1.5 rounded-lg bg-[#1e1e1e] border border-[#333333] text-xs font-medium text-neutral-200 hover:text-white hover:border-neutral-500 transition-all"
+                  className="px-3 py-1.5 rounded-lg bg-[#181824] border border-[#2c2c3e] text-xs font-medium text-neutral-200 hover:text-white hover:border-[#3b82f6] transition-all"
                   onClick={() => {
                     setSearchQuery('');
                     setFilterScope('all');
@@ -724,7 +721,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
                   return (
                     <div
                       key={item.path}
-                      className="group flex items-center justify-between p-2.5 rounded-lg bg-[#141414] border border-[#242424] hover:border-[#383838] hover:bg-[#181818] transition-all"
+                      className="group flex items-center justify-between p-2.5 rounded-lg bg-[#14141c] border border-[#242434] hover:border-[#35354a] hover:bg-[#181824] transition-all"
                     >
                       <div className="flex items-center gap-2.5 min-w-0 flex-1">
                         <FileOrFolderIcon isDir={item.isDir} isOpen={false} meta={item.meta} />
@@ -748,7 +745,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
                         </span>
                         <button
                           type="button"
-                          className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-neutral-800 border border-neutral-700 text-neutral-400 hover:text-white hover:border-neutral-600 transition-all ${
+                          className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-[#161622] border border-[#282838] text-neutral-400 hover:text-white hover:border-[#3b82f6] transition-all ${
                             isCopied ? 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10' : ''
                           }`}
                           onClick={(e) => handleCopyPath(item.path, e)}
@@ -773,13 +770,13 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
       </div>
 
       {/* Explorer Footer Status Bar */}
-      <div className="px-4 py-2.5 bg-[#0e0e0e] border-t border-[#222222] flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-500 font-mono">
+      <div className="px-4 py-2.5 bg-[#0e0e12] border-t border-[#22222e] flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-500 font-mono">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
           <span>
             Showing {viewMode === 'tree' ? matchCount : filteredFlatList.length} of {fileTree.length} items
           </span>
-          {searchQuery && <span className="text-sky-400">Filter active: &ldquo;{searchQuery}&rdquo;</span>}
+          {searchQuery && <span className="text-blue-400">Filter active: &ldquo;{searchQuery}&rdquo;</span>}
         </div>
         <div className="text-neutral-500">
           <span>Click directories to expand/collapse • Copy path on hover</span>
