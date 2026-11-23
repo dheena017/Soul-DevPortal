@@ -202,7 +202,7 @@ export default function TableOfContents({
                 isH3 ? 'pl-5 text-neutral-400' : 'text-neutral-300'
               } ${
                 isActive
-                  ? 'bg-sky-500/15 text-sky-400 font-semibold border border-sky-500/40 shadow-sm'
+                  ? 'bg-[#222222] text-white font-semibold border border-[#333333] shadow-sm'
                   : 'hover:text-white hover:bg-[#161616] border border-transparent'
               }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
@@ -211,7 +211,7 @@ export default function TableOfContents({
                 <span
                   className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
                     isActive
-                      ? 'bg-sky-400 shadow-[0_0_6px_rgba(56,189,248,0.7)]'
+                      ? 'bg-neutral-200'
                       : 'bg-neutral-600'
                   }`}
                   aria-hidden="true"

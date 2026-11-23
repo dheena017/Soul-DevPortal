@@ -409,7 +409,7 @@ export default function Overview({
                       key={eco}
                       type="button"
                       className={`px-3 py-1 rounded-lg font-semibold transition-all ${
-                        isActive ? 'bg-sky-600 text-white shadow-sm' : 'text-neutral-400 hover:text-white'
+                        isActive ? 'bg-[#222222] text-white shadow-sm border border-[#333333]' : 'text-neutral-400 hover:text-white border border-transparent'
                       }`}
                       onClick={() => setEcosystemFilter(eco)}
                     >

@@ -222,18 +222,18 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c10] border border-[#22222e] rounded-xl" role="tablist" aria-label="Filter documentation guides by category">
+          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#101010] border border-[#242424] rounded-xl" role="tablist" aria-label="Filter documentation guides by category">
             <button
               type="button"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'all'
-                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => setSelectedCategory('all')}
             >
               <span>All Guides</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${selectedCategory === 'all' ? 'bg-white/20 text-white' : 'bg-[#181824] text-neutral-400 border border-[#2a2a3a]'}`}>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${selectedCategory === 'all' ? 'bg-[#161616] text-neutral-200 border border-[#2a2a2a]' : 'bg-[#1e1e1e] text-neutral-400'}`}>
                 {DOCUMENTATION_GUIDES_REGISTRY.length}
               </span>
             </button>
@@ -241,8 +241,8 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               type="button"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'rules'
-                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => setSelectedCategory((prev) => (prev === 'rules' ? 'all' : 'rules'))}
             >
@@ -252,8 +252,8 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               type="button"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'design'
-                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => setSelectedCategory((prev) => (prev === 'design' ? 'all' : 'design'))}
             >
@@ -263,8 +263,8 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               type="button"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'ports'
-                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => setSelectedCategory((prev) => (prev === 'ports' ? 'all' : 'ports'))}
             >
@@ -274,8 +274,8 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               type="button"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'techstack'
-                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => setSelectedCategory((prev) => (prev === 'techstack' ? 'all' : 'techstack'))}
             >
@@ -285,8 +285,8 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               type="button"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 selectedCategory === 'cheatsheet'
-                  ? 'bg-[#2563eb] text-white shadow-[0_2px_10px_rgba(37,99,235,0.4)] border border-[#3b82f6]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161622]'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => setSelectedCategory((prev) => (prev === 'cheatsheet' ? 'all' : 'cheatsheet'))}
             >

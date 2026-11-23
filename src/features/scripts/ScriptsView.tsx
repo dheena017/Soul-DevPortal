@@ -249,13 +249,13 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                    ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
                     : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
                 }`}
                 onClick={() => setFilterCategory(cat.id)}
               >
                 <span>{cat.label}</span>
-                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isActive ? 'bg-sky-800 text-white' : 'bg-[#1e1e1e] text-neutral-400'}`}>
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isActive ? 'bg-[#161616] text-neutral-200 border border-[#2a2a2a]' : 'bg-[#1e1e1e] text-neutral-400'}`}>
                   {cat.count}
                 </span>
               </button>
@@ -290,12 +290,12 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
             return (
               <div
                 key={script.id}
-                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#12141a] border border-[#232734] hover:border-sky-500/40 hover:bg-[#151822] hover:shadow-2xl hover:shadow-black/70 transition-all duration-200 gap-3.5"
+                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-[#333333] hover:bg-[#161616] hover:shadow-2xl hover:shadow-black/70 transition-all duration-200 gap-3.5"
               >
                 {/* Card Top: Code Pill, Category Badge, Copy Button */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-wrap min-w-0">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#181c26] border border-[#2d3548] min-w-0">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#161616] border border-[#282828] min-w-0">
                       <span className="text-emerald-400 font-mono font-bold text-xs select-none">$</span>
                       <code className="text-xs font-mono font-bold text-white truncate max-w-[190px]">
                         {formattedRunCmd}
@@ -316,7 +316,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 {/* Ports & Auto-Kill Status Tags (Consistent height on all cards) */}
                 <div className="flex items-center gap-2 flex-wrap">
                   {script.ports ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#161a24] border border-[#242b3d] text-[11px] font-mono text-sky-400">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#161616] border border-[#262626] text-[11px] font-mono text-sky-400">
                       <svg className="w-3.5 h-3.5 text-sky-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <circle cx="12" cy="12" r="2" />
                         <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
@@ -324,7 +324,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                       <span>{script.ports}</span>
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#161a24] border border-[#242b3d] text-[11px] font-mono text-purple-400">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#161616] border border-[#262626] text-[11px] font-mono text-purple-400">
                       <svg className="w-3.5 h-3.5 text-purple-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                       </svg>
@@ -340,7 +340,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 </div>
 
                 {/* Execution Details Toggle & Category Footer */}
-                <div className="pt-2.5 border-t border-[#1f2433] flex items-center justify-between">
+                <div className="pt-2.5 border-t border-[#1f1f1f] flex items-center justify-between">
                   <button
                     type="button"
                     className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-neutral-400 hover:text-sky-400 transition-colors"
@@ -368,12 +368,12 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
                 {/* Drawer with full raw command and copy option */}
                 {isExpanded && (
-                  <div className="flex flex-col gap-2.5 p-3 rounded-xl bg-[#0c0e14] border border-[#1e2332] text-xs font-mono animate-in fade-in duration-150">
+                  <div className="flex flex-col gap-2.5 p-3 rounded-xl bg-[#0c0c0c] border border-[#222222] text-xs font-mono animate-in fade-in duration-150">
                     <div className="flex flex-col gap-1">
                       <span className="text-neutral-500 font-semibold text-[10px] uppercase tracking-wider">
                         Raw Execution String:
                       </span>
-                      <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#141722] border border-[#232838]">
+                      <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#141414] border border-[#242424]">
                         <code className="text-sky-300 text-[11px] break-all">
                           {rootScripts[script.id] || script.command}
                         </code>

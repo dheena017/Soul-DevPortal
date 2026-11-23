@@ -143,8 +143,8 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
               active === 'overview'
-                ? 'bg-[#222222] text-white shadow-sm'
-                : 'text-neutral-400 hover:text-white'
+                ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                : 'text-neutral-400 hover:text-white border border-transparent'
             }`}
             onClick={() => onNavigate('overview')}
             title="Overview Dashboard"
@@ -156,14 +156,14 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
               isProjectsActive
-                ? 'bg-sky-600 text-white shadow-sm'
-                : 'text-neutral-400 hover:text-white'
+                ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                : 'text-neutral-400 hover:text-white border border-transparent'
             }`}
             onClick={() => onNavigate('projects')}
             title={`Pillar 1: Applications (${projectsCount})`}
           >
             <span>Projects</span>
-            <span className={`px-1 py-0.2 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-sky-800 text-white' : 'bg-[#202020] text-neutral-400'}`}>
+            <span className={`px-1 py-0.2 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-[#161616] text-neutral-200 border border-[#2a2a2a]' : 'bg-[#202020] text-neutral-400'}`}>
               {projectsCount}
             </span>
           </button>
@@ -172,14 +172,14 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
               isPackagesActive
-                ? 'bg-sky-600 text-white shadow-sm'
-                : 'text-neutral-400 hover:text-white'
+                ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                : 'text-neutral-400 hover:text-white border border-transparent'
             }`}
             onClick={() => onNavigate('packages')}
             title={`Pillar 2: Shared Libraries (${packagesCount})`}
           >
             <span>Packages</span>
-            <span className={`px-1 py-0.2 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-sky-800 text-white' : 'bg-[#202020] text-neutral-400'}`}>
+            <span className={`px-1 py-0.2 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-[#161616] text-neutral-200 border border-[#2a2a2a]' : 'bg-[#202020] text-neutral-400'}`}>
               {packagesCount}
             </span>
           </button>
@@ -188,14 +188,14 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
               isDocsActive
-                ? 'bg-sky-600 text-white shadow-sm'
-                : 'text-neutral-400 hover:text-white'
+                ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                : 'text-neutral-400 hover:text-white border border-transparent'
             }`}
             onClick={() => onNavigate('docs')}
             title={`Pillar 3: Documentation Hub (${docsCount} Guides)`}
           >
             <span>Docs</span>
-            <span className={`px-1 py-0.2 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-sky-800 text-white' : 'bg-[#202020] text-neutral-400'}`}>
+            <span className={`px-1 py-0.2 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-[#161616] text-neutral-200 border border-[#2a2a2a]' : 'bg-[#202020] text-neutral-400'}`}>
               {docsCount}
             </span>
           </button>

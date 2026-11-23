@@ -93,7 +93,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
                 type="button"
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   filterFramework === fw
-                    ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
+                    ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
                     : 'bg-[#161616] border border-[#262626] text-neutral-400 hover:text-white'
                 }`}
                 onClick={() => setFilterFramework(fw)}

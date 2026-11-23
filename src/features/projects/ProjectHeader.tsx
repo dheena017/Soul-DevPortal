@@ -204,13 +204,13 @@ export default function ProjectHeader({
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                    ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
                     : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
                 }`}
                 onClick={() => onFilterFrameworkChange(fw)}
               >
                 <span>{fw === 'all' ? 'All Frameworks' : fw}</span>
-                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isActive ? 'bg-sky-800 text-white' : 'bg-[#1e1e1e] text-neutral-400'}`}>
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isActive ? 'bg-[#161616] text-neutral-200 border border-[#2a2a2a]' : 'bg-[#1e1e1e] text-neutral-400'}`}>
                   {count}
                 </span>
               </button>

@@ -170,13 +170,13 @@ export default function PackagesHeader({
               aria-selected={ecosystemFilter === 'all'}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 ecosystemFilter === 'all'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
                   : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => onEcosystemFilterChange('all')}
             >
               <span>All</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${ecosystemFilter === 'all' ? 'bg-sky-800 text-white' : 'bg-[#1e1e1e] text-neutral-400'}`}>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${ecosystemFilter === 'all' ? 'bg-[#161616] text-neutral-200 border border-[#2a2a2a]' : 'bg-[#1e1e1e] text-neutral-400'}`}>
                 {packagesCount}
               </span>
             </button>
@@ -186,7 +186,7 @@ export default function PackagesHeader({
               aria-selected={ecosystemFilter === 'npm'}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 ecosystemFilter === 'npm'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
                   : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => onEcosystemFilterChange('npm')}
@@ -199,7 +199,7 @@ export default function PackagesHeader({
               aria-selected={ecosystemFilter === 'python'}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 ecosystemFilter === 'python'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
                   : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => onEcosystemFilterChange('python')}
@@ -212,7 +212,7 @@ export default function PackagesHeader({
               aria-selected={ecosystemFilter === 'config'}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 ecosystemFilter === 'config'
-                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
                   : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
               }`}
               onClick={() => onEcosystemFilterChange('config')}
