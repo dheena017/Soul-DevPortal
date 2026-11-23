@@ -29,31 +29,39 @@ function getFileMeta(fileName: string, isDir: boolean) {
     };
   }
 
+  const lowerName = fileName.toLowerCase();
+  if (lowerName === 'license') {
+    return { type: 'md', label: 'LIC', color: '#a855f7', bgColor: 'rgba(168, 85, 247, 0.12)', borderColor: 'rgba(168, 85, 247, 0.3)' };
+  }
+  if (lowerName === 'dockerfile') {
+    return { type: 'cfg', label: 'DOCK', color: '#38bdf8', bgColor: 'rgba(56, 189, 248, 0.12)', borderColor: 'rgba(56, 189, 248, 0.3)' };
+  }
+
   const ext = fileName.includes('.') ? fileName.split('.').pop()?.toLowerCase() || '' : '';
 
   switch (ext) {
     case 'ts':
-      return { type: 'ts', label: 'TS', color: '#38bdf8', bgColor: 'rgba(56, 189, 248, 0.12)', borderColor: 'rgba(56, 189, 248, 0.3)' };
+      return { type: 'ts', label: 'TS', color: '#60a5fa', bgColor: 'rgba(96, 165, 250, 0.12)', borderColor: 'rgba(96, 165, 250, 0.3)' };
     case 'tsx':
-      return { type: 'tsx', label: 'TSX', color: '#06b6d4', bgColor: 'rgba(6, 182, 212, 0.12)', borderColor: 'rgba(6, 182, 212, 0.3)' };
+      return { type: 'tsx', label: 'TSX', color: '#38bdf8', bgColor: 'rgba(56, 189, 248, 0.12)', borderColor: 'rgba(56, 189, 248, 0.3)' };
     case 'js':
     case 'mjs':
     case 'cjs':
-      return { type: 'js', label: 'JS', color: '#facc15', bgColor: 'rgba(250, 204, 21, 0.12)', borderColor: 'rgba(250, 204, 21, 0.3)' };
+      return { type: 'js', label: 'JS', color: '#fbbf24', bgColor: 'rgba(251, 191, 36, 0.12)', borderColor: 'rgba(251, 191, 36, 0.3)' };
     case 'jsx':
-      return { type: 'jsx', label: 'JSX', color: '#fbbf24', bgColor: 'rgba(251, 191, 36, 0.12)', borderColor: 'rgba(251, 191, 36, 0.3)' };
+      return { type: 'jsx', label: 'JSX', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.12)', borderColor: 'rgba(245, 158, 11, 0.3)' };
     case 'py':
       return { type: 'py', label: 'PY', color: '#3b82f6', bgColor: 'rgba(59, 130, 246, 0.12)', borderColor: 'rgba(59, 130, 246, 0.3)' };
     case 'json':
-      return { type: 'json', label: 'JSON', color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.12)', borderColor: 'rgba(16, 185, 129, 0.3)' };
+      return { type: 'json', label: 'JSON', color: '#34d399', bgColor: 'rgba(52, 211, 153, 0.12)', borderColor: 'rgba(52, 211, 153, 0.3)' };
     case 'css':
     case 'scss':
     case 'sass':
     case 'less':
-      return { type: 'css', label: 'CSS', color: '#ec4899', bgColor: 'rgba(236, 72, 153, 0.12)', borderColor: 'rgba(236, 72, 153, 0.3)' };
+      return { type: 'css', label: 'CSS', color: '#c084fc', bgColor: 'rgba(192, 132, 252, 0.12)', borderColor: 'rgba(192, 132, 252, 0.3)' };
     case 'html':
     case 'htm':
-      return { type: 'html', label: 'HTML', color: '#f97316', bgColor: 'rgba(249, 115, 22, 0.12)', borderColor: 'rgba(249, 115, 22, 0.3)' };
+      return { type: 'html', label: 'HTML', color: '#fb923c', bgColor: 'rgba(251, 146, 60, 0.12)', borderColor: 'rgba(251, 146, 60, 0.3)' };
     case 'md':
     case 'mdx':
       return { type: 'md', label: 'MD', color: '#a855f7', bgColor: 'rgba(168, 85, 247, 0.12)', borderColor: 'rgba(168, 85, 247, 0.3)' };
@@ -61,7 +69,7 @@ function getFileMeta(fileName: string, isDir: boolean) {
     case 'sqlite':
     case 'sqlite3':
     case 'sql':
-      return { type: 'db', label: 'SQL', color: '#8b5cf6', bgColor: 'rgba(139, 92, 246, 0.12)', borderColor: 'rgba(139, 92, 246, 0.3)' };
+      return { type: 'db', label: 'SQL', color: '#818cf8', bgColor: 'rgba(129, 140, 248, 0.12)', borderColor: 'rgba(129, 140, 248, 0.3)' };
     case 'yaml':
     case 'yml':
     case 'toml':
@@ -74,9 +82,9 @@ function getFileMeta(fileName: string, isDir: boolean) {
     case 'svg':
     case 'ico':
     case 'webp':
-      return { type: 'img', label: 'IMG', color: '#e879f9', bgColor: 'rgba(232, 121, 249, 0.12)', borderColor: 'rgba(232, 121, 249, 0.3)' };
+      return { type: 'img', label: 'IMG', color: '#f472b6', bgColor: 'rgba(244, 114, 182, 0.12)', borderColor: 'rgba(244, 114, 182, 0.3)' };
     default:
-      return { type: 'file', label: ext ? ext.toUpperCase().slice(0, 4) : 'FILE', color: '#9ca3af', bgColor: 'rgba(156, 163, 175, 0.12)', borderColor: 'rgba(156, 163, 175, 0.25)' };
+      return { type: 'file', label: ext ? ext.toUpperCase().slice(0, 4) : 'FILE', color: '#94a3b8', bgColor: 'rgba(148, 163, 184, 0.12)', borderColor: 'rgba(148, 163, 184, 0.25)' };
   }
 }
 

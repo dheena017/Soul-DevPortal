@@ -48,3 +48,16 @@
     padding-right: 2rem;
   }
 }
+
+/* ── Sidebar Open Header Blur State ── */
+header[role="banner"] {
+  transition: filter 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.sidebar-open header[role="banner"],
+body.sidebar-open header[role="banner"] {
+  filter: blur(6px);
+  opacity: 0.4;
+  pointer-events: none;
+  user-select: none;
+}

@@ -44,7 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
     ['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
 
   return (
-    <header className="w-full h-14 bg-[#111111]/90 backdrop-blur-md border-b border-[#222222] px-4 flex items-center justify-between gap-4 sticky top-0 z-40 shrink-0" role="banner">
+    <header className="w-full h-14 bg-[#111111]/90 backdrop-blur-md border-b border-[#222222] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
       {/* ── Left: Sidebar Toggle & Breadcrumbs ── */}
       <div className="flex items-center gap-3 min-w-0">
         <button

@@ -702,7 +702,7 @@ export default function Sidebar({
       {/* ── Backdrop Overlay ── */}
       {menuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm transition-opacity"
+          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-md transition-opacity duration-200"
           aria-label="Close menu"
           onClick={onClose}
         />
