@@ -43,14 +43,14 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
   }, [scripts, needle]);
 
   return (
-    <section className="detail-section package-reference">
-      <div className="section-heading-with-search">
-        <div>
-          <span className="section-kicker">PACKAGE API</span>
-          <h2>Exports &amp; Symbols Catalog</h2>
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PACKAGE API</span>
+          <h2 className="text-lg font-bold text-white">Exports &amp; Symbols Catalog</h2>
         </div>
-        <div className="api-search-box">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <div className="relative flex items-center min-w-[240px]">
+          <svg className="absolute left-3 w-3.5 h-3.5 text-neutral-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
@@ -60,9 +60,15 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Filter export paths or symbol names..."
             aria-label="Filter export symbols"
+            className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0e0e0e] border border-[#262626] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
           />
           {filter && (
-            <button type="button" className="clear-api-search" onClick={() => setFilter('')} title="Clear filter">
+            <button
+              type="button"
+              className="absolute right-2.5 text-xs text-neutral-400 hover:text-white p-1"
+              onClick={() => setFilter('')}
+              title="Clear filter"
+            >
               ✕
             </button>
           )}
@@ -70,23 +76,32 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
       </div>
 
       {filteredNpm.length > 0 && (
-        <div className="reference-group">
-          <div className="reference-group-header">
-            <div className="group-header-title">
-              <span className="group-header-icon npm">NPM</span>
-              <h3>npm import paths</h3>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between pb-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400">
+                NPM
+              </span>
+              <h3 className="text-xs font-bold text-white">npm import paths</h3>
             </div>
-            <span className="group-badge">{filteredNpm.length} paths</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+              {filteredNpm.length} paths
+            </span>
           </div>
-          <div className="reference-list">
+
+          <div className="flex flex-col gap-2">
             {filteredNpm.map(({ exportPath, importPath }) => (
-              <div className="reference-row npm-row" key={exportPath}>
-                <div className="ref-path-col">
-                  <span className="ref-npm-badge">import</span>
-                  <code className="ref-import-code">{importPath}</code>
-                  <span className="ref-sub">
-                    <span className="ref-sub-arrow">↳</span>
-                    export <code>{exportPath}</code>
+              <div
+                key={exportPath}
+                className="flex items-center justify-between p-3 rounded-xl bg-[#0e0e0e] border border-[#202020] hover:border-[#333333] transition-all gap-3"
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#181818] border border-[#2c2c2c] text-neutral-400">
+                    import
+                  </span>
+                  <code className="text-xs font-mono text-sky-400 font-bold truncate">{importPath}</code>
+                  <span className="text-[11px] font-mono text-neutral-500 hidden sm:inline truncate">
+                    ↳ export <code>{exportPath}</code>
                   </span>
                 </div>
                 <CopyButton text={`import {} from '${importPath}';`} label="Copy Import" copiedLabel="Copied!" variant="compact" />
@@ -97,19 +112,27 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
       )}
 
       {filteredTs.length > 0 && (
-        <div className="reference-group">
-          <div className="reference-group-header">
-            <div className="group-header-title">
-              <span className="group-header-icon ts">TS</span>
-              <h3>TypeScript exported symbols</h3>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between pb-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/15 border border-sky-500/30 text-sky-400">
+                TS
+              </span>
+              <h3 className="text-xs font-bold text-white">TypeScript Exported Symbols</h3>
             </div>
-            <span className="group-badge ts-badge">{filteredTs.length} symbols</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+              {filteredTs.length} symbols
+            </span>
           </div>
-          <div className="symbol-list">
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {filteredTs.map((name) => (
-              <div className="symbol-card ts-card" key={name} title={`TypeScript symbol: ${name}`}>
-                <span className="symbol-badge-pill ts-pill">TS</span>
-                <code className="symbol-name">{name}</code>
+              <div
+                key={name}
+                className="flex items-center justify-between p-2.5 rounded-lg bg-[#0e0e0e] border border-[#202020] hover:border-sky-500/30 transition-all gap-2"
+                title={`TypeScript symbol: ${name}`}
+              >
+                <code className="text-xs font-mono text-sky-300 truncate">{name}</code>
                 <CopyButton text={name} variant="icon-only" title={`Copy symbol ${name}`} />
               </div>
             ))}
@@ -118,23 +141,30 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
       )}
 
       {filteredPy.length > 0 && (
-        <div className="reference-group">
-          <div className="reference-group-header">
-            <div className="group-header-title">
-              <span className="group-header-icon py">PY</span>
-              <h3>Python public API symbols</h3>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between pb-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                PY
+              </span>
+              <h3 className="text-xs font-bold text-white">Python Public API Symbols</h3>
             </div>
-            <span className="group-badge py-badge">{filteredPy.length} symbols</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+              {filteredPy.length} symbols
+            </span>
           </div>
-          <div className="symbol-list">
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {filteredPy.map((name) => (
               <div
-                className="symbol-card py-card"
                 key={name}
+                className="flex items-center justify-between p-2.5 rounded-lg bg-[#0e0e0e] border border-[#202020] hover:border-emerald-500/30 transition-all gap-2"
                 title={`from ${pkg.pythonModule || pkg.pythonName} import ${name}`}
               >
-                <span className="symbol-badge-pill py-pill">def</span>
-                <code className="symbol-name">{name}</code>
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="text-[10px] font-mono text-emerald-400">def</span>
+                  <code className="text-xs font-mono text-emerald-300 truncate">{name}</code>
+                </div>
                 <CopyButton
                   text={`from ${pkg.pythonModule || pkg.pythonName} import ${name}`}
                   variant="icon-only"
@@ -147,20 +177,28 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
       )}
 
       {filteredScripts.length > 0 && (
-        <div className="reference-group">
-          <div className="reference-group-header">
-            <div className="group-header-title">
-              <span className="group-header-icon script">RUN</span>
-              <h3>Package scripts</h3>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between pb-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/15 border border-purple-500/30 text-purple-400">
+                RUN
+              </span>
+              <h3 className="text-xs font-bold text-white">Package Scripts</h3>
             </div>
-            <span className="group-badge">{filteredScripts.length} scripts</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+              {filteredScripts.length} scripts
+            </span>
           </div>
-          <div className="reference-list">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {filteredScripts.map(([name, command]) => (
-              <div className="reference-row" key={name}>
-                <div className="ref-path-col">
-                  <code className="script-name">{name}</code>
-                  <span className="script-command">{command}</span>
+              <div
+                key={name}
+                className="flex items-center justify-between p-3 rounded-xl bg-[#0e0e0e] border border-[#202020] gap-3"
+              >
+                <div className="flex flex-col min-w-0">
+                  <code className="text-xs font-mono font-bold text-white truncate">{name}</code>
+                  <span className="text-[11px] font-mono text-neutral-500 truncate">{command}</span>
                 </div>
                 <CopyButton text={`npm run ${name}`} variant="compact" label="Copy" copiedLabel="Copied!" />
               </div>
@@ -170,7 +208,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
       )}
 
       {filteredNpm.length === 0 && filteredTs.length === 0 && filteredPy.length === 0 && filteredScripts.length === 0 && (
-        <p className="no-exports-msg">No symbols or exports match &ldquo;{filter}&rdquo;.</p>
+        <p className="text-xs text-neutral-400 italic">No symbols or exports match &ldquo;{filter}&rdquo;.</p>
       )}
     </section>
   );

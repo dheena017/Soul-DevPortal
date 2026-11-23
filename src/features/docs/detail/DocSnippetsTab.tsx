@@ -8,22 +8,24 @@ export interface DocSnippetsTabProps {
 
 export default function DocSnippetsTab({ codeBlocks }: DocSnippetsTabProps) {
   return (
-    <section className="detail-section doc-snippets-section">
-      <div className="section-heading">
-        <div>
-          <span className="section-kicker">CODE EXAMPLES</span>
-          <h2>Extracted Implementation Snippets</h2>
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">CODE EXAMPLES</span>
+          <h2 className="text-lg font-bold text-white">Extracted Implementation Snippets</h2>
         </div>
-        <span className="group-badge">{codeBlocks.length} snippets</span>
+        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#181818] border border-[#2c2c2c] text-neutral-300">
+          {codeBlocks.length} snippets
+        </span>
       </div>
 
       {codeBlocks.length > 0 ? (
-        <div className="markdown-content" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div className="flex flex-col gap-4">
           <Markdown blocks={codeBlocks} />
         </div>
       ) : (
-        <div className="empty-tab-box">
-          <p>No dedicated code snippets found in this guide specification.</p>
+        <div className="p-8 rounded-xl bg-[#0e0e0e] border border-[#202020] text-center">
+          <p className="text-xs text-neutral-400">No dedicated code snippets found in this guide specification.</p>
         </div>
       )}
     </section>

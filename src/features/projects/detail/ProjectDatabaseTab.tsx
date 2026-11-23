@@ -17,15 +17,15 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
   }, [tables, filter]);
 
   return (
-    <section className="detail-section project-database-card">
-      <div className="section-heading-with-search">
-        <div>
-          <span className="section-kicker">DATA PERSISTENCE TIER</span>
-          <h2>Database Architecture &amp; Entities</h2>
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">DATA PERSISTENCE TIER</span>
+          <h2 className="text-lg font-bold text-white">Database Architecture &amp; Entities</h2>
         </div>
         {tables.length > 0 && (
-          <div className="api-search-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <div className="relative flex items-center min-w-[220px]">
+            <svg className="absolute left-3 w-3.5 h-3.5 text-neutral-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
@@ -35,9 +35,15 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter schema tables..."
               aria-label="Filter schema tables"
+              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0e0e0e] border border-[#262626] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
             />
             {filter && (
-              <button type="button" className="clear-api-search" onClick={() => setFilter('')} title="Clear filter">
+              <button
+                type="button"
+                className="absolute right-2.5 text-xs text-neutral-400 hover:text-white p-1"
+                onClick={() => setFilter('')}
+                title="Clear filter"
+              >
                 ✕
               </button>
             )}
@@ -45,40 +51,43 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
         )}
       </div>
 
-      <div className="database-overview-card" style={{ margin: 0 }}>
-        <div className="db-meta-grid">
-          <div className="db-meta-item">
-            <span className="db-meta-label">Storage Engine</span>
-            <strong className="db-meta-val">{project.dbInfo || 'SQLite'}</strong>
+      <div className="flex flex-col gap-4">
+        {/* Meta Stats Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="flex flex-col p-3 rounded-xl bg-[#0e0e0e] border border-[#202020]">
+            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Storage Engine</span>
+            <strong className="text-xs font-bold text-sky-400 font-mono mt-1">{project.dbInfo || 'SQLite'}</strong>
           </div>
-          <div className="db-meta-item">
-            <span className="db-meta-label">Dialect</span>
-            <strong className="db-meta-val">Relational SQL / JSON</strong>
+          <div className="flex flex-col p-3 rounded-xl bg-[#0e0e0e] border border-[#202020]">
+            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Dialect</span>
+            <strong className="text-xs font-bold text-white font-mono mt-1">Relational SQL / JSON</strong>
           </div>
-          <div className="db-meta-item">
-            <span className="db-meta-label">Schema Mode</span>
-            <strong className="db-meta-val">
+          <div className="flex flex-col p-3 rounded-xl bg-[#0e0e0e] border border-[#202020]">
+            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Schema Mode</span>
+            <strong className="text-xs font-bold text-emerald-400 font-mono mt-1">
               {tables.length > 0 ? `${tables.length} Tables Registered` : 'Single Database File'}
             </strong>
           </div>
         </div>
 
         {filteredTables.length > 0 ? (
-          <div className="reference-group" style={{ margin: '20px 0 0 0' }}>
-            <div className="reference-group-header">
-              <div className="group-header-title">
-                <span className="group-header-icon npm">📋</span>
-                <h3>Registered Schema Tables</h3>
-              </div>
-              <span className="group-badge">{filteredTables.length} tables</span>
+          <div className="flex flex-col gap-3 pt-2">
+            <div className="flex items-center justify-between pb-2">
+              <span className="text-xs font-bold text-white">Registered Schema Tables</span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+                {filteredTables.length} tables
+              </span>
             </div>
-            <div className="db-tables-list">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
               {filteredTables.map((tName) => (
-                <div className="db-table-item" key={tName}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span className="table-icon">📋</span>
-                    <strong className="table-name">{tName}</strong>
-                    <span className="table-badge">Table Entity</span>
+                <div
+                  key={tName}
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#0e0e0e] border border-[#202020] hover:border-[#333333] transition-all"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-neutral-500">📋</span>
+                    <strong className="text-xs font-mono text-neutral-200 truncate">{tName}</strong>
                   </div>
                   <CopyButton text={tName} variant="compact" label="Copy" />
                 </div>
@@ -86,26 +95,15 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
             </div>
           </div>
         ) : tables.length > 0 ? (
-          <div className="empty-tab-box">
-            <p>No tables match your search filter.</p>
+          <div className="p-8 rounded-xl bg-[#0e0e0e] border border-[#202020] text-center">
+            <p className="text-xs text-neutral-400">No tables match your search filter.</p>
           </div>
         ) : (
-          <div className="reference-group" style={{ margin: '20px 0 0 0' }}>
-            <div className="reference-group-header">
-              <div className="group-header-title">
-                <span className="group-header-icon py">⚙️</span>
-                <h3>Storage Configuration</h3>
-              </div>
-            </div>
-            <p className="text-secondary text-sm">
-              Configured store: <code>{project.dbInfo || 'Local store'}</code>. To run migrations or inspect records, check the project's server directory.
+          <div className="p-4 rounded-xl bg-[#0e0e0e] border border-[#202020] flex flex-col gap-2">
+            <h3 className="text-xs font-bold text-white">Storage Configuration</h3>
+            <p className="text-xs text-neutral-400 leading-relaxed">
+              Standalone embedded SQLite persistence configured with zero external cloud credentials needed. Automatic WAL mode and schema synchronization managed at startup.
             </p>
-            <div className="code-example-box" style={{ marginTop: '12px' }}>
-              <pre>
-                <code>{`# Inspect SQLite database directly:\nsqlite3 server/data/${project.id}.db ".tables"`}</code>
-              </pre>
-              <CopyButton text={`sqlite3 server/data/${project.id}.db ".tables"`} variant="compact" />
-            </div>
           </div>
         )}
       </div>

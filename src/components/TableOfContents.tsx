@@ -30,7 +30,7 @@ export default function TableOfContents({
   // Keep active item visible within the TOC scrollable container
   useEffect(() => {
     if (!activeHeading || isClickingRef.current) return;
-    const activeEl = document.querySelector(`.toc-item[href="#${activeHeading}"]`) as HTMLElement;
+    const activeEl = document.querySelector(`[data-toc-id="${activeHeading}"]`) as HTMLElement;
     if (activeEl) {
       activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
@@ -142,20 +142,23 @@ export default function TableOfContents({
   };
 
   return (
-    <nav className={`toc-container package-contents ${className}`} aria-label="Table of contents navigation">
+    <nav
+      className={`sticky top-20 flex flex-col gap-3 p-4 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl ${className}`}
+      aria-label="Table of contents navigation"
+    >
       {/* Refined Card Header */}
-      <div className="toc-card-header">
-        <div className="toc-header-left">
+      <div className="flex items-center justify-between pb-3 border-b border-[#1f1f1f]">
+        <div className="flex items-center gap-2">
           <svg
-            width="13"
-            height="13"
+            width="14"
+            height="14"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2.2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="toc-header-icon"
+            className="text-sky-400"
             aria-hidden="true"
           >
             <line x1="8" y1="6" x2="21" y2="6" />
@@ -165,13 +168,17 @@ export default function TableOfContents({
             <line x1="3" y1="12" x2="3.01" y2="12" />
             <line x1="3" y1="18" x2="3.01" y2="18" />
           </svg>
-          <span className="toc-header-title">{title}</span>
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-300">
+            {title}
+          </span>
         </div>
-        <span className="toc-counter-badge">{headings.length}</span>
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#1a1a1a] border border-[#2c2c2c] text-neutral-400">
+          {headings.length}
+        </span>
       </div>
 
       {/* Navigation List */}
-      <div className="toc-list contents-list">
+      <div className="flex flex-col gap-1 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
         {headings.map((heading, index) => {
           const rawText = heading.text || '';
           const cleanText = rawText.replace(/`/g, '');
@@ -186,15 +193,33 @@ export default function TableOfContents({
 
           return (
             <a
-              className={`toc-item ${isH3 ? 'toc-nested nested' : 'toc-major'}${isActive ? ' active' : ''}`}
-              aria-current={isActive ? 'location' : undefined}
-              href={`#${id}`}
               key={`${heading.type}-${index}-${rawText}`}
+              href={`#${id}`}
+              data-toc-id={id}
+              aria-current={isActive ? 'location' : undefined}
+              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all text-left ${
+                isH3 ? 'pl-5 text-neutral-400' : 'text-neutral-300'
+              } ${
+                isActive
+                  ? 'bg-sky-500/10 text-sky-400 font-semibold border border-sky-500/25 shadow-sm'
+                  : 'hover:text-white hover:bg-[#161616]'
+              }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
             >
-              {isH3 && <span className="toc-tree-dot" aria-hidden="true" />}
-              {numberPart && <span className="toc-num-tag">{numberPart}</span>}
-              <span className="toc-label-text">{titlePart}</span>
+              {isH3 && (
+                <span
+                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                    isActive ? 'bg-sky-400' : 'bg-neutral-600'
+                  }`}
+                  aria-hidden="true"
+                />
+              )}
+              {numberPart && (
+                <span className="px-1 py-0.2 rounded text-[10px] font-mono bg-neutral-800 text-neutral-400 shrink-0">
+                  {numberPart}
+                </span>
+              )}
+              <span className="truncate leading-tight">{titlePart}</span>
             </a>
           );
         })}

@@ -33,138 +33,134 @@ export default function ProjectHeader({
   searchInputRef,
 }: ProjectHeaderProps) {
   return (
-    <header className="detail-header pillar-hero-header project-dashboard-header">
+    <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-5">
       {/* Breadcrumb Navigation Row */}
-      <div className="breadcrumb-nav-row">
-        <div className="breadcrumb">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+        <div className="flex items-center gap-2.5 text-xs">
           {onBack ? (
             <button
               type="button"
-              className="project-back-pill-btn"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
               onClick={onBack}
               title="Back to Soul Workspace"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
               <span>Back</span>
             </button>
           ) : (
-            <a href="#overview" className="project-back-pill-btn" title="Back to Soul Workspace">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <a
+              href="#overview"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+              title="Back to Soul Workspace"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
               <span>Back</span>
             </a>
           )}
-          <span className="crumb-workspace">Soul Workspace</span>
-          <span className="crumb-sep" aria-hidden="true">›</span>
-          <strong className="crumb-active">Pillar 1: Projects</strong>
+          <span className="text-neutral-400 font-medium">Soul Workspace</span>
+          <span className="text-neutral-600 font-bold" aria-hidden="true">›</span>
+          <strong className="text-white font-bold">Pillar 1: Projects</strong>
         </div>
 
-        <div className="header-status-pill">
-          <span className="status-live-dot" aria-hidden="true" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
           <span>{totalCount} Applications Indexed</span>
         </div>
       </div>
 
       {/* Hero Title & Identity Row */}
-      <div className="project-hero-title-row">
-        <div className="project-hero-icon" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <div className="flex items-start sm:items-center gap-4">
+        <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0 shadow-lg shadow-sky-500/5">
+          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
             <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
         </div>
-        <div className="project-hero-copy">
-          <div className="title-with-badge">
-            <h1 className="project-dashboard-h1">Projects &amp; Applications Dashboard</h1>
-            <span className="monorepo-tag-pill">Pillar 1: Monorepo Apps</span>
+        <div className="flex flex-col gap-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h1 className="text-2xl font-extrabold tracking-tight text-white">Projects &amp; Applications Dashboard</h1>
+            <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
+              Pillar 1: Monorepo Apps
+            </span>
           </div>
-          <p className="detail-description">
+          <p className="text-xs text-neutral-400 leading-relaxed max-w-3xl">
             Catalog of all {totalCount} applications consuming the shared packages, their assigned development ports, backend servers, databases, and AI engines.
           </p>
         </div>
       </div>
 
       {/* 5-Metric Quick Stats Strip */}
-      <div className="project-metrics-strip" role="region" aria-label="Project metrics">
-        <div className="project-metric-card metric-total">
-          <div className="metric-card-header">
-            <span className="metric-icon">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="7" height="7" />
-                <rect x="14" y="3" width="7" height="7" />
-                <rect x="14" y="14" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" />
-              </svg>
-            </span>
-            <span className="metric-label">Total Applications</span>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" role="region" aria-label="Project metrics">
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <svg className="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            <span>Total Apps</span>
           </div>
-          <strong className="metric-val">{totalCount}</strong>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{totalCount}</strong>
         </div>
 
-        <div className="project-metric-card metric-fullstack">
-          <div className="metric-card-header">
-            <span className="metric-icon">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
-                <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
-                <line x1="6" y1="6" x2="6.01" y2="6" />
-                <line x1="6" y1="18" x2="6.01" y2="18" />
-              </svg>
-            </span>
-            <span className="metric-label">Client-Server Fullstack</span>
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+              <line x1="6" y1="6" x2="6.01" y2="6" />
+              <line x1="6" y1="18" x2="6.01" y2="18" />
+            </svg>
+            <span>Client-Server Fullstack</span>
           </div>
-          <strong className="metric-val">{fullstackCount}</strong>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{fullstackCount}</strong>
         </div>
 
-        <div className="project-metric-card metric-standalone">
-          <div className="metric-card-header">
-            <span className="metric-icon">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="2" y1="12" x2="22" y2="12" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-              </svg>
-            </span>
-            <span className="metric-label">Standalone Web Apps</span>
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span>Standalone Web</span>
           </div>
-          <strong className="metric-val">{standaloneCount}</strong>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{standaloneCount}</strong>
         </div>
 
-        <div className="project-metric-card metric-collisions">
-          <div className="metric-card-header">
-            <span className="metric-icon">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-            </span>
-            <span className="metric-label">Port Collisions</span>
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <svg className="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>Port Conflicts</span>
           </div>
-          <strong className="metric-val">{collisionsCount}</strong>
+          <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{collisionsCount}</strong>
         </div>
 
-        <div className="project-metric-card metric-isolation">
-          <div className="metric-card-header">
-            <span className="metric-icon">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <ellipse cx="12" cy="5" rx="9" ry="3" />
-                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-              </svg>
-            </span>
-            <span className="metric-label">SQLite Isolation</span>
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+            </svg>
+            <span>SQLite Isolation</span>
           </div>
-          <strong className="metric-val">{sqliteIsolationPercent}</strong>
+          <strong className="text-xl font-extrabold text-purple-300 font-mono mt-1.5">{sqliteIsolationPercent}</strong>
         </div>
       </div>
 
       {/* Search & Filter Toolbar */}
-      <div className="projects-toolbar">
-        <div className="projects-search-input-wrap">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
+        <div className="relative flex-1 min-w-[260px] flex items-center">
+          <svg className="absolute left-3 w-4 h-4 text-neutral-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
@@ -175,11 +171,12 @@ export default function ProjectHeader({
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder={`Search ${totalCount} applications by name, port, framework, AI engine... (Press '/' to focus)`}
             aria-label="Filter applications"
+            className="w-full h-10 pl-9 pr-9 rounded-xl bg-[#141414] border border-[#282828] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
           />
           {query ? (
             <button
               type="button"
-              className="search-clear-inline"
+              className="absolute right-3 text-xs text-neutral-400 hover:text-white p-1"
               onClick={() => onQueryChange('')}
               aria-label="Clear search"
               title="Clear search"
@@ -187,11 +184,13 @@ export default function ProjectHeader({
               ✕
             </button>
           ) : (
-            <kbd className="search-kbd-hint">/</kbd>
+            <kbd className="absolute right-3 px-1.5 py-0.5 rounded bg-[#1f1f1f] border border-[#2e2e2e] text-[10px] text-neutral-500 font-mono">
+              /
+            </kbd>
           )}
         </div>
 
-        <div className="framework-filter-pills filter-pills" role="tablist" aria-label="Filter by framework">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#101010] border border-[#242424] rounded-xl" role="tablist" aria-label="Filter by framework">
           {frameworksList.map((fw) => {
             const count = fw === 'all'
               ? totalCount
@@ -203,11 +202,17 @@ export default function ProjectHeader({
                 key={fw}
                 role="tab"
                 aria-selected={isActive}
-                className={`framework-pill ${isActive ? 'active' : ''}`}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  isActive
+                    ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                    : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+                }`}
                 onClick={() => onFilterFrameworkChange(fw)}
               >
-                <span className="pill-text">{fw === 'all' ? 'All Frameworks' : fw}</span>
-                <span className="pill-count">{count}</span>
+                <span>{fw === 'all' ? 'All Frameworks' : fw}</span>
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isActive ? 'bg-sky-800 text-white' : 'bg-[#1e1e1e] text-neutral-400'}`}>
+                  {count}
+                </span>
               </button>
             );
           })}

@@ -273,7 +273,7 @@ function App() {
   }, [active, activeTitle, projectsList, packagesList]);
 
   return (
-    <div className="app-shell" style={{ '--color-brand': tokens.colors.brand?.DEFAULT || '#2459d8' } as React.CSSProperties}>
+    <div className="h-screen h-[100dvh] bg-[#0a0a0a] text-neutral-200 flex flex-col overflow-hidden font-sans">
       <Sidebar
         active={active}
         packages={packagesList}
@@ -300,8 +300,8 @@ function App() {
         onOpenShortcuts={() => setShowShortcuts(true)}
       />
 
-      <main ref={mainRef} className="main">
-        <div className="content">
+      <main ref={mainRef} className="w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden flex flex-col bg-[#0a0a0a]">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 box-border">
           {active === 'overview' && (
             <Overview
               packages={filteredPackages}
@@ -442,11 +442,17 @@ function App() {
 
         {/* Global Keyboard Shortcuts Modal */}
         {showShortcuts && (
-          <div className="shortcuts-modal-backdrop" onClick={() => setShowShortcuts(false)}>
-            <div className="shortcuts-modal-card" onClick={(e) => e.stopPropagation()}>
-              <div className="shortcuts-modal-header">
-                <div className="shortcuts-modal-title">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setShowShortcuts(false)}
+          >
+            <div
+              className="w-full max-w-lg rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl p-5 md:p-6 flex flex-col gap-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-[#1f1f1f]">
+                <div className="flex items-center gap-2.5 text-sm font-bold text-white">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-sky-400">
                     <rect x="2" y="4" width="20" height="16" rx="2" />
                     <line x1="6" y1="8" x2="6.01" y2="8" />
                     <line x1="10" y1="8" x2="10.01" y2="8" />
@@ -456,11 +462,11 @@ function App() {
                     <line x1="18" y1="12" x2="18.01" y2="12" />
                     <line x1="7" y1="16" x2="17" y2="16" />
                   </svg>
-                  <span>Keyboard Shortcuts &amp; Monorepo Quick Commands</span>
+                  <span>Keyboard Shortcuts &amp; Quick Commands</span>
                 </div>
                 <button
                   type="button"
-                  className="shortcuts-close-btn"
+                  className="p-1 rounded-lg text-neutral-400 hover:text-white hover:bg-[#1a1a1a] transition-colors text-xs"
                   onClick={() => setShowShortcuts(false)}
                   aria-label="Close shortcuts dialog"
                 >
@@ -468,40 +474,44 @@ function App() {
                 </button>
               </div>
 
-              <div className="shortcuts-modal-body">
-                <div className="shortcuts-group">
-                  <div className="shortcuts-group-label">Navigation &amp; Controls</div>
-                  <div className="shortcut-row">
+              <div className="flex flex-col gap-4 text-xs">
+                <div className="flex flex-col gap-2">
+                  <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">Navigation &amp; Controls</div>
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
                     <span>Toggle / Pin Sidebar</span>
-                    <kbd>Ctrl + B</kbd>
+                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">Ctrl + B</kbd>
                   </div>
-                  <div className="shortcut-row">
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
                     <span>Omni Search Palette</span>
-                    <div className="kbd-row"><kbd>/</kbd> <kbd>Ctrl + K</kbd></div>
+                    <div className="flex items-center gap-1.5">
+                      <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">/</kbd>
+                      <span className="text-neutral-500 text-[10px]">or</span>
+                      <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">Ctrl + K</kbd>
+                    </div>
                   </div>
-                  <div className="shortcut-row">
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
                     <span>Dismiss Search / Modals</span>
-                    <kbd>Esc</kbd>
+                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">Esc</kbd>
                   </div>
-                  <div className="shortcut-row">
+                  <div className="flex items-center justify-between py-1.5 text-neutral-300">
                     <span>Toggle Shortcuts Dialog</span>
-                    <kbd>?</kbd>
+                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">?</kbd>
                   </div>
                 </div>
 
-                <div className="shortcuts-group">
-                  <div className="shortcuts-group-label">Monorepo Ports &amp; CLI</div>
-                  <div className="shortcut-row">
+                <div className="flex flex-col gap-2 pt-2 border-t border-[#1f1f1f]">
+                  <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">Monorepo Ports &amp; CLI</div>
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
                     <span>Monorepo Runner</span>
-                    <code>npx @workspace/runner</code>
+                    <code className="text-sky-400 font-mono text-[11px]">npx @workspace/runner</code>
                   </div>
-                  <div className="shortcut-row">
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
                     <span>Client Dev Servers</span>
-                    <code>Ports 5173 - 5181</code>
+                    <code className="text-emerald-400 font-mono text-[11px]">Ports 5173 - 5181</code>
                   </div>
-                  <div className="shortcut-row">
+                  <div className="flex items-center justify-between py-1.5 text-neutral-300">
                     <span>FastAPI Server APIs</span>
-                    <code>Ports 8000 - 8008</code>
+                    <code className="text-indigo-400 font-mono text-[11px]">Ports 8000 - 8008</code>
                   </div>
                 </div>
               </div>

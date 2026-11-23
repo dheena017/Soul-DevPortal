@@ -40,24 +40,30 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
   }, [projects, query, filterFramework]);
 
   return (
-    <article className="workspace-projects-view">
-      <header className="detail-header projects-hero">
-        <div className="breadcrumb">
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12">
+      <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-5">
+        <div className="flex items-center gap-3 text-xs">
           {onBack && (
-            <button type="button" className="back-link-btn" onClick={onBack}>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+              onClick={onBack}
+            >
               ← Back to Overview
             </button>
           )}
-          <span>Soul Workspace / Monorepo Applications</span>
+          <span className="text-neutral-400 font-medium">Soul Workspace / Monorepo Applications</span>
         </div>
-        <h1>Workspace <em>Applications &amp; Ports</em></h1>
-        <p className="detail-description">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+          Workspace <span className="text-sky-400 font-mono">Applications &amp; Ports</span>
+        </h1>
+        <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">
           Catalog of all 8 applications consuming the shared packages, their assigned development ports, backend servers, databases, and AI engines.
         </p>
 
-        <div className="projects-toolbar">
-          <div className="projects-search-input-wrap">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
+          <div className="relative flex-1 max-w-md flex items-center">
+            <svg className="absolute left-3 w-4 h-4 text-neutral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
@@ -67,20 +73,29 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter applications by name, port, framework, AI engine..."
               aria-label="Filter applications"
+              className="w-full bg-[#161616] border border-[#262626] rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-sky-500/50"
             />
             {query && (
-              <button type="button" className="search-clear-inline" onClick={() => setQuery('')}>
+              <button
+                type="button"
+                className="absolute right-2.5 text-neutral-400 hover:text-white text-xs"
+                onClick={() => setQuery('')}
+              >
                 ✕
               </button>
             )}
           </div>
 
-          <div className="framework-filter-pills">
+          <div className="flex flex-wrap items-center gap-1.5">
             {frameworksList.map((fw) => (
               <button
-                type="button"
                 key={fw}
-                className={`framework-pill ${filterFramework === fw ? 'active' : ''}`}
+                type="button"
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  filterFramework === fw
+                    ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
+                    : 'bg-[#161616] border border-[#262626] text-neutral-400 hover:text-white'
+                }`}
                 onClick={() => setFilterFramework(fw)}
               >
                 {fw === 'all' ? 'All Frameworks' : fw}
@@ -90,75 +105,25 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
         </div>
       </header>
 
-      <section className="projects-grid" aria-label="Monorepo projects">
-        {filteredProjects.map((project) => {
-          const runCmd = `npx @workspace/runner project ${project.id}`;
-          return (
-            <article className="project-card" key={project.id}>
-              <div className="project-card-header">
-                <div>
-                  <h3 className="project-title">{project.title}</h3>
-                  <code className="project-id">{project.id}</code>
-                </div>
-                <div className="port-badge-group">
-                  {project.frontendPort && (
-                    <span className="port-pill frontend-port" title="Frontend Dev Port">
-                      FE :{project.frontendPort}
-                    </span>
-                  )}
-                  {project.backendPort && (
-                    <span className="port-pill backend-port" title="Backend Server Port">
-                      BE :{project.backendPort}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="project-specs">
-                <div className="spec-row">
-                  <span className="spec-label">Framework</span>
-                  <span className="spec-val">{project.framework || 'N/A'}</span>
-                </div>
-                <div className="spec-row">
-                  <span className="spec-label">Database</span>
-                  <span className="spec-val">{project.dbInfo || 'None'}</span>
-                </div>
-                {project.aiEngine && project.aiEngine !== 'N/A' && (
-                  <div className="spec-row ai-row">
-                    <span className="spec-label">AI Engine</span>
-                    <span className="spec-val ai-val">✨ {project.aiEngine}</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="project-card-footer">
-                {project.frontendPort && (
-                  <a
-                    href={`http://localhost:${project.frontendPort}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="card-launch-btn"
-                    title={`Launch on http://localhost:${project.frontendPort}`}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <span>Launch</span>
-                    <span className="btn-arrow-icon">↗</span>
-                  </a>
-                )}
-              </div>
-            </article>
-          );
-        })}
-      </section>
-
-      {filteredProjects.length === 0 && (
-        <div className="empty-state-card">
-          <p>No projects match your filter criteria.</p>
-          <button type="button" className="empty-state-btn" onClick={() => { setQuery(''); setFilterFramework('all'); }}>
-            Reset Filters
-          </button>
-        </div>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {filteredProjects.map((p) => (
+          <div key={p.id} className="p-5 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-white">{p.title}</h3>
+              <CopyButton text={`http://localhost:${p.frontendPort || 5173}`} label="Copy URL" variant="compact" />
+            </div>
+            <p className="text-xs text-neutral-400 line-clamp-2">{p.description}</p>
+            <div className="flex items-center gap-2 pt-2 border-t border-[#1f1f1f] text-xs">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                Port :{p.frontendPort}
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-neutral-800 text-neutral-300">
+                {p.framework || 'Vite React'}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
     </article>
   );
 }

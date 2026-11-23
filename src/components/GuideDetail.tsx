@@ -68,19 +68,25 @@ export default function GuideDetail({
   const headings = (activeBlocks || []).filter((block) => block.type === 'h2' || block.type === 'h3');
 
   return (
-    <article className="guide-detail-view">
-      <header className="detail-header">
-        <div className="breadcrumb">{guideMeta.breadcrumb}</div>
-        <h1>{guideMeta.title}</h1>
-        <p className="detail-description">{guideMeta.description}</p>
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12">
+      <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-5">
+        <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <span>{guideMeta.breadcrumb}</span>
+        </div>
+        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">{guideMeta.title}</h1>
+        <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">{guideMeta.description}</p>
 
         {/* Guides Switcher Bar */}
-        <div className="guides-switcher-row" role="tablist" aria-label="Monorepo documentation guides">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl" role="tablist" aria-label="Monorepo documentation guides">
           <button
             type="button"
             role="tab"
             aria-selected={selectedGuide === 'design'}
-            className={`guide-tab-btn ${selectedGuide === 'design' ? 'active' : ''}`}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              selectedGuide === 'design'
+                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+            }`}
             onClick={() => handleSelect('design')}
           >
             <span>📘 Shared Packages Guide</span>
@@ -90,7 +96,11 @@ export default function GuideDetail({
               type="button"
               role="tab"
               aria-selected={selectedGuide === 'ports'}
-              className={`guide-tab-btn ${selectedGuide === 'ports' ? 'active' : ''}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                selectedGuide === 'ports'
+                  ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+              }`}
               onClick={() => handleSelect('ports')}
             >
               <span>🌐 Port &amp; Architecture Guide</span>
@@ -101,7 +111,11 @@ export default function GuideDetail({
               type="button"
               role="tab"
               aria-selected={selectedGuide === 'techstack'}
-              className={`guide-tab-btn ${selectedGuide === 'techstack' ? 'active' : ''}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                selectedGuide === 'techstack'
+                  ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+              }`}
               onClick={() => handleSelect('techstack')}
             >
               <span>⚙️ Tech Stack Standards</span>
@@ -110,12 +124,10 @@ export default function GuideDetail({
         </div>
       </header>
 
-      <div className="package-document-layout">
+      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] items-start gap-6">
         <TableOfContents headings={headings} title="On this page" />
-        <section className="detail-section readme-section">
-          <div className="markdown-content">
-            <Markdown blocks={activeBlocks} skipFirstHeading />
-          </div>
+        <section className="p-5 md:p-8 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl overflow-hidden min-w-0">
+          <Markdown blocks={activeBlocks} skipFirstHeading />
         </section>
       </div>
     </article>

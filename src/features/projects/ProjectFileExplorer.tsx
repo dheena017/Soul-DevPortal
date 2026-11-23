@@ -513,9 +513,9 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
   };
 
   return (
-    <div className="w-full bg-[#111111] border border-[#222222] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden flex flex-col transition-all duration-200">
+    <div className="w-full bg-[#0e1118] border border-[#283044] rounded-xl shadow-xl overflow-hidden flex flex-col transition-all duration-200">
       {/* Top Banner Toolbar */}
-      <div className="p-4 md:px-5 md:py-4 border-b border-[#222222] bg-[#141414] flex flex-wrap items-center justify-between gap-4">
+      <div className="p-4 md:px-5 md:py-3.5 border-b border-[#232838] bg-[#141722] flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0d0d0d] border border-[#282828] text-xs font-mono text-neutral-300">
             <svg className="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

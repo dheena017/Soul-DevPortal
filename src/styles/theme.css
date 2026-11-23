@@ -1,8 +1,6 @@
 /* ==========================================================================
-   SONIKOMA DARK MODE SYSTEM & UNIVERSAL HOVER DYNAMICS
-   🌑 Base Palette: Rich Black (#0A0A0A), Charcoal (#121212), Dark Gray (#1E1E1E), Gunmetal (#2A2A2A)
-   🎨 Borders: Subtle Gray (#2F2F2F) | Accent: Electric Blue (#3B82F6)
-   ✨ Typography: Primary (#E5E5E5), Secondary (#9CA3AF), Dim (#6B7280)
+   SOUL DEVELOPER PORTAL - THEME & TAILWIND CSS ENGINE
+   🌑 Sonikoma Dark Palette System & Universal Design Tokens
    ========================================================================== */
 
 @import "tailwindcss" source(none);
@@ -10,287 +8,109 @@
 @source "../**/*.{js,ts,jsx,tsx}";
 
 :root {
-  /* ========================================================================
-     ORIGINAL WEBSITE DARK PALETTE (PRESERVED & RESTORED)
-     ======================================================================== */
+  /* ── Core Dark Palette ── */
   --page-bg: #0a0a0a;
-  --sidebar-bg: #121212;
-  --surface: #1e1e1e;
-  --surface-raised: #242424;
-  --surface-inset: #0a0a0a;
-  --surface-hover: #222222;
-  
-  --border: #2f2f2f;
-  --border-subtle: #242424;
-  --border-muted: #1f1f1f;
-  --border-active: #3b82f6;
+  --surface: #111111;
+  --surface-raised: #161616;
+  --surface-hover: #1f1f1f;
+  --surface-active: #242424;
 
-  --text-primary: #e5e5e5;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+  /* ── Borders ── */
+  --border: #222222;
+  --border-subtle: #1c1c1c;
+  --border-muted: #181818;
+  --border-active: #38bdf8;
 
-  --accent: #3b82f6;
-  --accent-emphasis: #2563eb;
-  --accent-bg: rgba(59, 130, 246, 0.15);
-  --accent-border: rgba(59, 130, 246, 0.35);
+  /* ── Typography Colors ── */
+  --text-primary: #f5f5f5;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
 
-  --success: #22c55e;
-  --success-fg: #4ade80;
-  --success-bg: rgba(34, 197, 94, 0.15);
+  /* ── Accent & Pillar Colors ── */
+  --accent-sky: #38bdf8;
+  --accent-blue: #3b82f6;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
 
-  --warning: #f59e0b;
-  --warning-fg: #fbbf24;
-  --warning-bg: rgba(245, 158, 11, 0.15);
-
-  --danger: #ef4444;
-  --danger-fg: #f87171;
-  --danger-bg: rgba(239, 68, 68, 0.15);
-
-  --purple: #8b5cf6;
-  --purple-fg: #a78bfa;
-  --purple-bg: rgba(139, 92, 246, 0.15);
-
-  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color-scheme: dark !important;
-  background-color: var(--page-bg) !important;
-  color: var(--text-primary) !important;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  /* ── Radii ── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
 }
 
-* {
+/* ── Universal Reset & Base Styles ── */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: smooth;
   color-scheme: dark;
-  height: 100%;
-  overflow: hidden;
+  background-color: var(--page-bg);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  min-width: 320px;
-  height: 100%;
-  overflow: hidden;
-  background-color: var(--page-bg) !important;
-  color: var(--text-primary) !important;
+  padding: 0;
+  background-color: var(--page-bg);
+  color: var(--text-primary);
+  overflow-x: hidden;
 }
 
-@media (max-width: 1023px) {
-  html.sidebar-open,
-  body.sidebar-open {
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
+/* ── Selection & Focus ── */
+::selection {
+  background-color: rgba(56, 189, 248, 0.25);
+  color: #ffffff;
 }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
+:focus-visible {
+  outline: 2px solid var(--accent-sky);
+  outline-offset: 2px;
 }
 
-button {
-  cursor: pointer;
-}
-
-/* ── Surface Utility Classes ─────────────────────────────── */
-.bg-neutral-955 { background-color: #0a0a0a !important; }
-.bg-neutral-950, .bg-neutral-925 { background-color: #121212 !important; }
-.bg-neutral-900 { background-color: #1e1e1e !important; }
-.bg-neutral-850 { background-color: #242424 !important; }
-.bg-neutral-800 { background-color: #2a2a2a !important; }
-
-/* ── Universal Inputs / Selects / Textareas Hover & Focus ──── */
-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.seamless-input):not(.bg-transparent),
-select:not(.seamless-select):not(.bg-transparent),
-textarea:not(.seamless-textarea):not(.bg-transparent) {
-  background-color: #1e1e1e !important;
-  color: #e5e5e5 !important;
-  border: 1px solid #2f2f2f !important;
-  border-radius: 8px;
-  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.seamless-input):not(.bg-transparent):hover,
-select:not(.seamless-select):not(.bg-transparent):hover,
-textarea:not(.seamless-textarea):not(.bg-transparent):hover {
-  background-color: #242424 !important;
-  border-color: #4a4a4a !important;
-}
-
-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not(.seamless-input):not(.bg-transparent):focus,
-select:not(.seamless-select):not(.bg-transparent):focus,
-textarea:not(.seamless-textarea):not(.bg-transparent):focus {
-  background-color: #262626 !important;
-  border-color: #3b82f6 !important;
-  outline: none !important;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #6b7280 !important;
-}
-
-/* ── Universal Hover State for Nav Links & Interactive Buttons ── */
-nav a:hover,
-nav button:hover,
-aside nav a:hover,
-aside nav button:hover {
-  background-color: #242424 !important;
-  color: #ffffff !important;
-  border-color: #4a4a4a !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-  transition: all 0.15s ease-in-out;
-}
-
-/* ── Universal Table Row Hover ───────────────────────────── */
-tr:hover,
-[role="row"]:hover {
-  background-color: #252525 !important;
-  transition: background-color 0.15s ease;
-}
-
-/* ── Smooth Studio Scrollbars (6px Slim) ─────────────────── */
+/* ── Universal WebKit Scrollbar ── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #0d0d0d;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2f2f2f;
+  background: #262626;
   border-radius: 9999px;
-  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #525252 !important;
+  background: #3b82f6;
 }
 
-/* Firefox standard scrollbars */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #2f2f2f #0a0a0a;
+/* ── Custom Scrollbar Utility ── */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
 }
 
-/* ── Code & Pre Elements ─────────────────────────────────── */
-pre {
-  background-color: #0a0a0a !important;
-  color: #e5e5e5 !important;
-  border: 1px solid #282828 !important;
-  border-radius: 8px;
-}
-
-code:not(pre code) {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  color: #7dd3fc !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  border-radius: 4px;
-  padding: 1.5px 5px;
-  font-size: 0.86em;
-  font-weight: 500;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  margin: 0 1px;
-}
-
-pre code {
-  border: none !important;
-  padding: 0 !important;
-  background: transparent !important;
-  color: inherit !important;
-  margin: 0 !important;
-}
-
-/* ── GitHub Primer Language Dots ─────────────────────────── */
-.lang-dot {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  vertical-align: middle;
-}
-
-.lang-dot.typescript, .lang-dot-typescript { background-color: #3178c6 !important; }
-.lang-dot.python, .lang-dot-python { background-color: #3572A5 !important; }
-.lang-dot.javascript, .lang-dot-javascript { background-color: #f1e05a !important; }
-.lang-dot.react, .lang-dot-react { background-color: #61dafb !important; }
-.lang-dot.fastapi, .lang-dot-fastapi { background-color: #009688 !important; }
-.lang-dot.tailwind, .lang-dot-tailwind { background-color: #38bdf8 !important; }
-.lang-dot.vite, .lang-dot-vite { background-color: #bd34fe !important; }
-.lang-dot.nextjs, .lang-dot-nextjs { background-color: #ffffff !important; }
-.lang-dot.sqlite, .lang-dot-sqlite { background-color: #003b57 !important; }
-.lang-dot.supabase, .lang-dot-supabase { background-color: #3ecf8e !important; }
-.lang-dot.gemini, .lang-dot-gemini { background-color: #4285f4 !important; }
-.lang-dot.pwa, .lang-dot-pwa { background-color: #5a0fc8 !important; }
-
-/* ── GitHub Repo Card Helpers ────────────────────────────── */
-.gh-repo-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.gh-repo-icon {
-  color: #848d97;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-}
-
-.gh-repo-title {
-  color: #58a6ff;
-  font-weight: 700;
-  font-size: 15px;
-  text-decoration: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.gh-repo-title:hover {
-  text-decoration: underline;
-}
-
-.gh-visibility-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 1px 7px;
-  border-radius: 20px;
-  border: 1px solid #30363d;
+.custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
-  color: #848d97;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 18px;
 }
 
-.gh-branch-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 1px 7px;
-  border-radius: 6px;
-  background: #161b22;
-  border: 1px solid #30363d;
-  color: #c9d1d9;
-  font-size: 11px;
-  font-family: ui-monospace, monospace;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #222222;
+  border-radius: 9999px;
 }
 
-.gh-lang-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: #848d97;
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8;
 }

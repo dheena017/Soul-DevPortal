@@ -24,37 +24,41 @@ export default function DocDetailHeader({
   onBack,
 }: DocDetailHeaderProps) {
   return (
-    <header className="detail-header pillar-hero-header doc-hero-header">
+    <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
-      <div className="breadcrumb-nav-row">
-        <div className="breadcrumb">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#1f1f1f]">
+        <div className="flex flex-wrap items-center gap-3 text-xs">
           {onBack ? (
             <button
               type="button"
-              className="project-back-pill-btn"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
               onClick={onBack}
               title="Return to docs dashboard"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
               <span>Back</span>
             </button>
           ) : (
-            <a href="#docs" className="project-back-pill-btn" title="Return to docs dashboard">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <a
+              href="#docs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+              title="Return to docs dashboard"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
               <span>Back</span>
             </a>
           )}
-          <span className="crumb-workspace">Soul Workspace</span>
-          <span className="crumb-sep">/</span>
+          <span className="text-neutral-400 font-medium">Soul Workspace</span>
+          <span className="text-neutral-600 font-bold">/</span>
           <a
             href="#docs"
-            className="crumb-link"
+            className="hover:text-white transition-colors text-neutral-400"
             onClick={(e) => {
               if (onBack) {
                 e.preventDefault();
@@ -64,13 +68,13 @@ export default function DocDetailHeader({
           >
             Pillar 3: Docs Dashboard
           </a>
-          <span className="crumb-sep">/</span>
-          <strong className="crumb-active">{guideMeta.title}</strong>
+          <span className="text-neutral-600 font-bold">/</span>
+          <strong className="text-white font-bold">{guideMeta.title}</strong>
         </div>
 
-        <div className="detail-top-actions">
-          <div className="header-status-pill">
-            <span className="status-live-dot" aria-hidden="true" />
+        <div className="flex items-center gap-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
             <span>100% Monorepo Compliant (8/8 Apps)</span>
           </div>
           <CopyButton
@@ -83,140 +87,150 @@ export default function DocDetailHeader({
       </div>
 
       {/* ── Title & Meta Row ── */}
-      <div className="detail-title-row">
-        <div className="doc-hero-icon-wrap" aria-hidden="true">
-          <span className="doc-hero-icon">📜</span>
+      <div className="flex items-start gap-4">
+        <div className="w-14 h-14 rounded-2xl bg-[#161616] border border-[#262626] flex items-center justify-center shrink-0 text-2xl shadow-inner">
+          📜
         </div>
 
-        <div className="package-title-copy">
-          <div className="title-with-badge">
-            <span className="spec-badge">OFFICIAL SPEC V1.0</span>
-            <span className="version-pill">v1.0.0</span>
+        <div className="flex flex-col gap-2 min-w-0">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
+              OFFICIAL SPEC V1.0
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
+              v1.0.0
+            </span>
           </div>
 
-          <h1>{guideMeta.title}</h1>
-          <p className="detail-description">{guideMeta.description}</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">{guideMeta.title}</h1>
+          <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">{guideMeta.description}</p>
         </div>
       </div>
 
       {/* ── 5 Balanced Metadata Cards ── */}
-      <div className="doc-meta-summary-grid">
-        <div className="metadata-card">
-          <div className="meta-card-header">
-            <span aria-hidden="true">📑</span>
-            <span className="meta-label">SECTIONS</span>
-          </div>
-          <strong className="meta-val meta-cyan">{headingsCount} headings</strong>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
+            <span>📑</span>
+            <span>SECTIONS</span>
+          </span>
+          <strong className="text-sm font-bold text-sky-400 font-mono mt-1">{headingsCount} headings</strong>
         </div>
 
-        <div className="metadata-card">
-          <div className="meta-card-header">
-            <span aria-hidden="true">⏱️</span>
-            <span className="meta-label">EST. READ TIME</span>
-          </div>
-          <strong className="meta-val meta-emerald">{guideMeta.readTime} read</strong>
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
+            <span>⏱️</span>
+            <span>EST. READ TIME</span>
+          </span>
+          <strong className="text-sm font-bold text-emerald-400 font-mono mt-1">{guideMeta.readTime} read</strong>
         </div>
 
-        <div className="metadata-card">
-          <div className="meta-card-header">
-            <span aria-hidden="true">💻</span>
-            <span className="meta-label">CODE EXAMPLES</span>
-          </div>
-          <strong className="meta-val meta-violet">{codeBlocksCount} snippets</strong>
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
+            <span>💻</span>
+            <span>CODE EXAMPLES</span>
+          </span>
+          <strong className="text-sm font-bold text-purple-400 font-mono mt-1">{codeBlocksCount} snippets</strong>
         </div>
 
-        <div className="metadata-card">
-          <div className="meta-card-header">
-            <span aria-hidden="true">📊</span>
-            <span className="meta-label">TABLES &amp; MATRICES</span>
-          </div>
-          <strong className="meta-val meta-emerald">{tablesCount} tables</strong>
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
+            <span>📊</span>
+            <span>TABLES &amp; MATRICES</span>
+          </span>
+          <strong className="text-sm font-bold text-emerald-400 font-mono mt-1">{tablesCount} tables</strong>
         </div>
 
-        <div className="metadata-card">
-          <div className="meta-card-header">
-            <span aria-hidden="true">🎯</span>
-            <span className="meta-label">SCOPE</span>
-          </div>
-          <strong className="meta-val meta-amber">All 3 Pkgs &amp; 8 Apps</strong>
+        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+          <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
+            <span>🎯</span>
+            <span>SCOPE</span>
+          </span>
+          <strong className="text-sm font-bold text-amber-400 font-mono mt-1 truncate">All 3 Pkgs &amp; 8 Apps</strong>
         </div>
       </div>
 
-      {/* ── Header Tabs Separator ── */}
-      <div className="header-tabs-separator" />
-
       {/* ── Integrated Header Navigation Tabs ── */}
-      <div className="package-detail-tabs doc-tabs-bar" role="tablist" aria-label="Documentation guide sections">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'spec'}
-          className={`tab-btn ${activeTab === 'spec' ? 'active' : ''}`}
-          onClick={() => onTabChange('spec')}
-        >
-          <span className="tab-svg-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <div className="pt-2 border-t border-[#1f1f1f]">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl" role="tablist" aria-label="Documentation guide sections">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'spec'}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+              activeTab === 'spec'
+                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+            }`}
+            onClick={() => onTabChange('spec')}
+          >
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
-          </span>
-          <span>Full Specification</span>
-          <span className="tab-count-pill">{headingsCount}</span>
-        </button>
+            <span>Full Specification</span>
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-neutral-800 text-neutral-300">{headingsCount}</span>
+          </button>
 
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'highlights'}
-          className={`tab-btn ${activeTab === 'highlights' ? 'active' : ''}`}
-          onClick={() => onTabChange('highlights')}
-        >
-          <span className="tab-svg-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'highlights'}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+              activeTab === 'highlights'
+                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+            }`}
+            onClick={() => onTabChange('highlights')}
+          >
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
-          </span>
-          <span>Key Rules &amp; Highlights</span>
-          <span className="tab-count-pill">{guideMeta.keyHighlights.length}</span>
-        </button>
+            <span>Key Rules &amp; Highlights</span>
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-neutral-800 text-neutral-300">{guideMeta.keyHighlights.length}</span>
+          </button>
 
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'snippets'}
-          className={`tab-btn ${activeTab === 'snippets' ? 'active' : ''}`}
-          onClick={() => onTabChange('snippets')}
-        >
-          <span className="tab-svg-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'snippets'}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+              activeTab === 'snippets'
+                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+            }`}
+            onClick={() => onTabChange('snippets')}
+          >
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6" />
               <polyline points="8 6 2 12 8 18" />
             </svg>
-          </span>
-          <span>Code Snippets</span>
-          <span className="tab-count-pill">{codeBlocksCount}</span>
-        </button>
+            <span>Code Snippets</span>
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-neutral-800 text-neutral-300">{codeBlocksCount}</span>
+          </button>
 
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'tables'}
-          className={`tab-btn ${activeTab === 'tables' ? 'active' : ''}`}
-          onClick={() => onTabChange('tables')}
-        >
-          <span className="tab-svg-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'tables'}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+              activeTab === 'tables'
+                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+            }`}
+            onClick={() => onTabChange('tables')}
+          >
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
               <line x1="3" y1="9" x2="21" y2="9" />
               <line x1="3" y1="15" x2="21" y2="15" />
               <line x1="12" y1="3" x2="12" y2="21" />
             </svg>
-          </span>
-          <span>Tables &amp; Matrices</span>
-          <span className="tab-count-pill">{tablesCount}</span>
-        </button>
+            <span>Tables &amp; Matrices</span>
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-neutral-800 text-neutral-300">{tablesCount}</span>
+          </button>
+        </div>
       </div>
     </header>
   );
 }
-

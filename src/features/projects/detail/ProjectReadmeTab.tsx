@@ -19,19 +19,21 @@ export default function ProjectReadmeTab({ project }: ProjectReadmeTabProps) {
   }
 
   return (
-    <div className="package-document-layout doc-document-layout">
+    <div className="w-full flex flex-col lg:flex-row gap-6 items-start">
       {headings.length > 0 && (
         <TableOfContents headings={headings} title="On this page" />
       )}
-      <section className="detail-section readme-section">
-        <div className="section-heading readme-heading">
-          <div>
-            <span className="section-kicker">REFERENCE</span>
-            <h2>Project README.md</h2>
+      <section className="flex-1 w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#1f1f1f]">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">REFERENCE</span>
+            <h2 className="text-lg font-bold text-white">Project README.md</h2>
           </div>
-          <span className="readme-source">Soul-DevPortal-Projects/{project.id}/README.md</span>
+          <span className="text-xs font-mono text-neutral-500 truncate">
+            Soul-DevPortal-Projects/{project.id}/README.md
+          </span>
         </div>
-        <div className="markdown-content">
+        <div className="prose prose-invert max-w-none text-xs leading-relaxed text-neutral-300">
           <Markdown blocks={blocks} skipFirstHeading />
         </div>
       </section>

@@ -44,12 +44,12 @@ export const Header: React.FC<HeaderProps> = ({
     ['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
 
   return (
-    <header className="topbar" role="banner">
+    <header className="w-full h-14 bg-[#111111]/90 backdrop-blur-md border-b border-[#222222] px-4 flex items-center justify-between gap-4 sticky top-0 z-40 shrink-0" role="banner">
       {/* ── Left: Sidebar Toggle & Breadcrumbs ── */}
-      <div className="topbar-left">
+      <div className="flex items-center gap-3 min-w-0">
         <button
           type="button"
-          className={`header-sidebar-toggle ${menuOpen ? 'open' : ''}`}
+          className="p-1.5 rounded-lg bg-[#181818] border border-[#2a2a2a] text-neutral-300 hover:text-white hover:border-[#383838] transition-all shrink-0"
           onClick={() => {
             consoleLogger.action('UI', menuOpen ? 'Closing sidebar navigation' : 'Opening sidebar navigation');
             onToggleSidebar();
@@ -57,58 +57,47 @@ export const Header: React.FC<HeaderProps> = ({
           aria-expanded={menuOpen}
           aria-label={menuOpen ? 'Close sidebar navigation (Ctrl+B)' : 'Open sidebar navigation (Ctrl+B)'}
         >
-          <span className="toggle-icon-wrap" aria-hidden="true">
-            {menuOpen ? (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            ) : (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            )}
-          </span>
-          <span className="toggle-hover-tooltip" aria-hidden="true">
-            {menuOpen ? 'Close sidebar' : 'Open sidebar'} <kbd>Ctrl+B</kbd>
-          </span>
+          {menuOpen ? (
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          )}
         </button>
 
-        <nav className="topbar-breadcrumb-wrap" aria-label="Breadcrumb navigation">
+        <nav className="flex items-center gap-2 text-xs min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
           <button
             type="button"
-            className="topbar-brand-link"
+            className="flex items-center gap-1.5 font-mono text-neutral-300 hover:text-white transition-colors shrink-0"
             onClick={() => onNavigate('overview')}
             title="Go to Overview Dashboard"
           >
-            <span className="topbar-logo-icon" aria-hidden="true">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                <polyline points="2 17 12 22 22 17" />
-                <polyline points="2 12 12 17 22 12" />
-              </svg>
-            </span>
-            <span className="topbar-brand-name">soul</span>
-            <span className="topbar-crumb-slash">/</span>
-            <strong className="topbar-brand-repo">dev-portal</strong>
+            <span className="text-sky-400" aria-hidden="true">⚡</span>
+            <span className="font-semibold">soul</span>
+            <span className="text-neutral-600 font-bold">/</span>
+            <strong className="text-white font-bold">dev-portal</strong>
           </button>
 
           {breadcrumbs.slice(1).map((crumb, idx) => (
-            <div key={idx} className="topbar-crumb-segment">
-              <span className="topbar-crumb-slash">/</span>
+            <div key={idx} className="flex items-center gap-2 min-w-0">
+              <span className="text-neutral-600 font-bold">/</span>
               {crumb.id ? (
                 <button
                   type="button"
-                  className="topbar-crumb-link"
+                  className="text-neutral-400 hover:text-white transition-colors truncate font-medium"
                   onClick={() => onNavigate(crumb.id!)}
                   title={`Go to ${crumb.label}`}
                 >
                   {crumb.label}
                 </button>
               ) : (
-                <span className="topbar-crumb-current" title={crumb.label}>
+                <span className="text-neutral-200 font-semibold truncate" title={crumb.label}>
                   {crumb.label}
                 </span>
               )}
@@ -118,8 +107,8 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* ── Center: Omni Command Search ── */}
-      <div className="search-wrap gh-command-search" role="search">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <div className="relative flex-1 max-w-sm hidden md:flex items-center" role="search">
+        <svg className="absolute left-3 w-3.5 h-3.5 text-neutral-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
@@ -129,96 +118,106 @@ export const Header: React.FC<HeaderProps> = ({
           onChange={onSearchChange}
           placeholder="Search apps, packages, docs..."
           aria-label="Search package and application documentation"
+          className="w-full h-8 pl-9 pr-8 rounded-lg bg-[#161616] border border-[#282828] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 font-mono transition-all"
         />
         {query ? (
           <button
             type="button"
-            className="search-clear-btn"
+            className="absolute right-2.5 text-xs text-neutral-400 hover:text-white p-1"
             onClick={onClearSearch}
             aria-label="Clear search input"
           >
             ✕
           </button>
         ) : (
-          <kbd aria-hidden="true">/</kbd>
+          <kbd className="absolute right-2.5 px-1 py-0.2 rounded bg-[#202020] border border-[#333] text-[10px] text-neutral-500 font-mono">
+            /
+          </kbd>
         )}
       </div>
 
       {/* ── Right: Navigation Tabs, GitHub Link & Shortcuts ── */}
-      <div className="topbar-right">
-        <nav className="topbar-nav-pills" aria-label="Portal Dashboards">
+      <div className="flex items-center gap-2 shrink-0">
+        <nav className="flex items-center gap-1 p-0.5 bg-[#141414] border border-[#242424] rounded-lg hidden sm:flex" aria-label="Portal Dashboards">
           <button
             type="button"
-            className={`topbar-pill-btn ${active === 'overview' ? 'active' : ''}`}
+            className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+              active === 'overview'
+                ? 'bg-[#222222] text-white shadow-sm'
+                : 'text-neutral-400 hover:text-white'
+            }`}
             onClick={() => onNavigate('overview')}
             title="Overview Dashboard"
           >
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-              <path d="m8 1.636 5.5 4.318v6.796H9.75v-3.75h-3.5v3.75H2.5V5.954L8 1.636Z" />
-            </svg>
-            <span>Overview</span>
+            Overview
           </button>
 
           <button
             type="button"
-            className={`topbar-pill-btn ${isProjectsActive ? 'active' : ''}`}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+              isProjectsActive
+                ? 'bg-sky-600 text-white shadow-sm'
+                : 'text-neutral-400 hover:text-white'
+            }`}
             onClick={() => onNavigate('projects')}
             title={`Pillar 1: Applications (${projectsCount})`}
           >
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-              <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h6.5a.25.25 0 0 1 .25.25v1.5a.25.25 0 0 1-.25.25h-6.5a.25.25 0 0 1-.25-.25Z" />
-            </svg>
             <span>Projects</span>
-            <span className="topbar-pill-count">{projectsCount}</span>
+            <span className={`px-1 py-0.2 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-sky-800 text-white' : 'bg-[#202020] text-neutral-400'}`}>
+              {projectsCount}
+            </span>
           </button>
 
           <button
             type="button"
-            className={`topbar-pill-btn ${isPackagesActive ? 'active' : ''}`}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+              isPackagesActive
+                ? 'bg-sky-600 text-white shadow-sm'
+                : 'text-neutral-400 hover:text-white'
+            }`}
             onClick={() => onNavigate('packages')}
             title={`Pillar 2: Shared Libraries (${packagesCount})`}
           >
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-              <path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0Z" />
-            </svg>
             <span>Packages</span>
-            <span className="topbar-pill-count">{packagesCount}</span>
+            <span className={`px-1 py-0.2 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-sky-800 text-white' : 'bg-[#202020] text-neutral-400'}`}>
+              {packagesCount}
+            </span>
           </button>
 
           <button
             type="button"
-            className={`topbar-pill-btn ${isDocsActive ? 'active' : ''}`}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+              isDocsActive
+                ? 'bg-sky-600 text-white shadow-sm'
+                : 'text-neutral-400 hover:text-white'
+            }`}
             onClick={() => onNavigate('docs')}
-            title={`Pillar 3: Documentation Hub (${docsCount} Guides)`
-            }
+            title={`Pillar 3: Documentation Hub (${docsCount} Guides)`}
           >
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-              <path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.244a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.244a2.25 2.25 0 0 0-1.756.843l-.5.667a.75.75 0 0 1-1.206 0l-.5-.667A2.25 2.25 0 0 0 5.003 13H.75a.75.75 0 0 1-.75-.75Zm1.5.75v9h3.503c.72 0 1.393.307 1.862.834L7.5 13.064V3.5a2.25 2.25 0 0 0-2.497-2.247L1.5 2.5Zm13 9V2.5l-3.503-.247A2.25 2.25 0 0 0 8.5 3.5v9.564l.635-.73c.47-.527 1.142-.834 1.862-.834H14.5Z" />
-            </svg>
             <span>Docs</span>
-            <span className="topbar-pill-count">{docsCount}</span>
+            <span className={`px-1 py-0.2 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-sky-800 text-white' : 'bg-[#202020] text-neutral-400'}`}>
+              {docsCount}
+            </span>
           </button>
         </nav>
-
-        <div className="topbar-divider" aria-hidden="true" />
 
         <a
           href="https://github.com/dheena017/Soul-DevPortal"
           target="_blank"
           rel="noopener noreferrer"
-          className="topbar-github-btn"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[#181818] border border-[#282828] text-neutral-300 hover:text-white hover:border-neutral-500 transition-all"
           title="Open GitHub Repository: dheena017/Soul-DevPortal"
         >
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
             <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z" />
           </svg>
-          <span>GitHub</span>
-          <span className="topbar-ext-icon">↗</span>
+          <span className="hidden sm:inline">GitHub</span>
+          <span className="text-[10px] text-neutral-500">↗</span>
         </a>
 
         <button
           type="button"
-          className="topbar-icon-btn"
+          className="w-8 h-8 rounded-lg bg-[#181818] border border-[#282828] flex items-center justify-center text-xs font-mono font-bold text-neutral-400 hover:text-white hover:border-neutral-500 transition-all"
           onClick={() => {
             consoleLogger.action('SHORTCUT', 'Clicked help button: opening keyboard shortcuts modal');
             onOpenShortcuts();
@@ -226,7 +225,7 @@ export const Header: React.FC<HeaderProps> = ({
           title="Keyboard Shortcuts (?)"
           aria-label="View keyboard shortcuts"
         >
-          <span className="topbar-help-icon">?</span>
+          ?
         </button>
       </div>
     </header>

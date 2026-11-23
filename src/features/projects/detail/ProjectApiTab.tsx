@@ -18,15 +18,15 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
   }, [endpoints, filter]);
 
   return (
-    <section className="detail-section project-reference-card">
-      <div className="section-heading-with-search">
-        <div>
-          <span className="section-kicker">PROJECT API</span>
-          <h2>Registered API Endpoints</h2>
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PROJECT API</span>
+          <h2 className="text-lg font-bold text-white">Registered API Endpoints</h2>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          <div className="api-search-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="relative flex items-center min-w-[220px]">
+            <svg className="absolute left-3 w-3.5 h-3.5 text-neutral-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
@@ -36,32 +36,43 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter endpoint routes..."
               aria-label="Filter endpoint routes"
+              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0e0e0e] border border-[#262626] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
             />
             {filter && (
-              <button type="button" className="clear-api-search" onClick={() => setFilter('')} title="Clear filter">
+              <button
+                type="button"
+                className="absolute right-2.5 text-xs text-neutral-400 hover:text-white p-1"
+                onClick={() => setFilter('')}
+                title="Clear filter"
+              >
                 ✕
               </button>
             )}
           </div>
           {beUrl && (
-            <a href={`${beUrl}/api/docs`} target="_blank" rel="noopener noreferrer" className="api-docs-link">
-              Swagger OpenAPI ↗
+            <a
+              href={`${beUrl}/api/docs`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181818] border border-[#2c2c2c] text-sky-400 hover:text-white hover:border-sky-500/40 transition-all"
+            >
+              <span>Swagger OpenAPI</span>
+              <span>↗</span>
             </a>
           )}
         </div>
       </div>
 
       {filteredEndpoints.length > 0 ? (
-        <div className="reference-group" style={{ margin: 0 }}>
-          <div className="reference-group-header">
-            <div className="group-header-title">
-              <span className="group-header-icon npm">API</span>
-              <h3>HTTP REST Endpoints</h3>
-            </div>
-            <span className="group-badge">{filteredEndpoints.length} routes</span>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between pb-2">
+            <span className="text-xs font-bold text-white">HTTP REST Endpoints</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+              {filteredEndpoints.length} routes
+            </span>
           </div>
 
-          <div className="api-endpoints-catalog">
+          <div className="flex flex-col gap-2">
             {filteredEndpoints.map((ep, idx) => {
               const [method, ...pathParts] = ep.split(' ');
               const pathStr = pathParts.join(' ');
@@ -70,16 +81,31 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
               const isDelete = method === 'DELETE';
               const isPut = method === 'PUT';
 
+              const methodStyle = isGet
+                ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+                : isPost
+                ? 'bg-sky-500/15 border-sky-500/30 text-sky-400'
+                : isDelete
+                ? 'bg-rose-500/15 border-rose-500/30 text-rose-400'
+                : isPut
+                ? 'bg-amber-500/15 border-amber-500/30 text-amber-400'
+                : 'bg-neutral-800 border-neutral-700 text-neutral-300';
+
               const fullUrl = beUrl ? `${beUrl}${pathStr || method}` : pathStr || method;
               const curlCmd = `curl -X ${method} "${fullUrl}" -H "Content-Type: application/json"`;
 
               return (
-                <div className="endpoint-row" key={idx}>
-                  <span className={`method-chip ${isGet ? 'get' : isPost ? 'post' : isDelete ? 'delete' : isPut ? 'put' : ''}`}>
-                    {method}
-                  </span>
-                  <code className="endpoint-path">{pathStr || method}</code>
-                  <div className="endpoint-actions">
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#0e0e0e] border border-[#202020] hover:border-[#333333] transition-all gap-3"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-extrabold uppercase border ${methodStyle}`}>
+                      {method}
+                    </span>
+                    <code className="text-xs font-mono text-neutral-200 truncate">{pathStr || method}</code>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
                     <CopyButton text={fullUrl} variant="compact" label="URL" />
                     <CopyButton text={curlCmd} variant="compact" label="cURL" />
                   </div>
@@ -89,14 +115,18 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
           </div>
         </div>
       ) : (
-        <div className="empty-tab-box">
-          <p>
+        <div className="p-8 rounded-xl bg-[#0e0e0e] border border-[#202020] text-center flex flex-col items-center gap-3">
+          <p className="text-xs text-neutral-400 max-w-md">
             {filter ? 'No endpoints match your search filter.' : 'No endpoints explicitly declared in metadata.json. Standard healthcheck route available below:'}
           </p>
           {project.backendPort && (
-            <div className="endpoint-row" style={{ marginTop: '12px' }}>
-              <span className="method-chip get">GET</span>
-              <code className="endpoint-path">/api/health</code>
+            <div className="flex items-center justify-between w-full max-w-md p-3 rounded-xl bg-[#141414] border border-[#242424]">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                  GET
+                </span>
+                <code className="text-xs font-mono text-neutral-200">/api/health</code>
+              </div>
               <CopyButton text={`http://localhost:${project.backendPort}/api/health`} variant="compact" />
             </div>
           )}

@@ -81,7 +81,7 @@ export default function DocDetailView({
   const tables = (finalBlocks || []).filter((b) => b.type === 'table');
 
   return (
-    <article className="guide-detail-view doc-detail-view">
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       {/* ── Main Hero Header & Tabs Bar ── */}
       <DocDetailHeader
         guideMeta={guideMeta}

@@ -113,7 +113,7 @@ export default function ProjectsDashboard({
   }, [projects, query, filterFramework]);
 
   return (
-    <article className="workspace-projects-view">
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       {/* 1. Projects Header Component */}
       <ProjectHeader
         totalCount={totalCount}
@@ -132,7 +132,7 @@ export default function ProjectsDashboard({
       />
 
       {/* 2. Projects Grid with ProjectCard Components */}
-      <section className="projects-grid" aria-label="Monorepo projects">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" aria-label="Monorepo projects">
         {filteredProjects.map((project) => (
           <ProjectCard
             key={project.id}
@@ -144,11 +144,12 @@ export default function ProjectsDashboard({
 
       {/* 3. Empty State Fallback */}
       {filteredProjects.length === 0 && (
-        <div className="empty-state-card">
-          <p>No projects match your filter criteria.</p>
+        <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111111] border border-[#222222] text-center gap-4 shadow-xl">
+          <span className="text-4xl">🔍</span>
+          <p className="text-sm text-neutral-400 font-medium">No projects match your filter criteria.</p>
           <button
             type="button"
-            className="empty-state-btn"
+            className="px-4 py-2 rounded-xl text-xs font-semibold bg-sky-600 text-white hover:bg-sky-500 transition-all shadow-md shadow-sky-600/20"
             onClick={() => {
               setQuery('');
               setFilterFramework('all');

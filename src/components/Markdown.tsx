@@ -25,27 +25,46 @@ function InlineText({ text = '' }: InlineTextProps) {
       {parts.map((part, index) => {
         if (!part) return null;
         if (part.startsWith('`') && part.endsWith('`')) {
-          return <code key={index}>{part.slice(1, -1)}</code>;
+          return (
+            <code
+              key={index}
+              className="px-1.5 py-0.5 rounded bg-[#1c1c1c] border border-[#2a2a2a] text-[11px] font-mono text-sky-300"
+            >
+              {part.slice(1, -1)}
+            </code>
+          );
         }
         if (part.startsWith('**') && part.endsWith('**')) {
-          return <strong key={index}>{part.slice(2, -2)}</strong>;
+          return (
+            <strong key={index} className="font-bold text-white">
+              {part.slice(2, -2)}
+            </strong>
+          );
         }
         if (part.startsWith('~~') && part.endsWith('~~')) {
-          return <del key={index}>{part.slice(2, -2)}</del>;
+          return (
+            <del key={index} className="text-neutral-500 line-through">
+              {part.slice(2, -2)}
+            </del>
+          );
         }
         if ((part.startsWith('*') && part.endsWith('*')) || (part.startsWith('_') && part.endsWith('_'))) {
-          return <em key={index}>{part.slice(1, -1)}</em>;
+          return (
+            <em key={index} className="italic text-neutral-300">
+              {part.slice(1, -1)}
+            </em>
+          );
         }
 
         const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
         if (link) {
           return (
             <a
-              className="document-link"
+              key={index}
               href={link[2]}
               target={link[2].startsWith('http') ? '_blank' : undefined}
               rel={link[2].startsWith('http') ? 'noreferrer' : undefined}
-              key={index}
+              className="text-sky-400 hover:text-sky-300 underline underline-offset-2 transition-colors font-medium"
             >
               {link[1]}
             </a>
@@ -69,25 +88,38 @@ function CodeBlock({ code, language }: CodeBlockProps) {
   const lineCount = lines.length;
 
   return (
-    <div className={`code-block ${wrap ? 'wrapped' : ''}`}>
-      <div className="code-toolbar">
-        <div className="code-lang-group">
-          <span className="code-lang-badge">{language || 'text'}</span>
-          <span className="code-lines-badge">{lineCount} {lineCount === 1 ? 'line' : 'lines'}</span>
+    <div className="my-4 rounded-xl bg-[#0c0c0c] border border-[#222222] overflow-hidden shadow-lg group">
+      {/* Code Toolbar */}
+      <div className="flex items-center justify-between px-3.5 py-2 bg-[#121212] border-b border-[#1f1f1f] text-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#1a1a1a] text-sky-400 border border-[#2a2a2a]">
+            {language || 'text'}
+          </span>
+          <span className="text-[11px] font-mono text-neutral-500">
+            {lineCount} {lineCount === 1 ? 'line' : 'lines'}
+          </span>
         </div>
-        <div className="code-actions">
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            className={`code-wrap-btn ${wrap ? 'active' : ''}`}
+            className={`px-2 py-0.5 rounded text-[10px] font-mono transition-colors ${
+              wrap
+                ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
+                : 'text-neutral-500 hover:text-neutral-300 hover:bg-[#1a1a1a]'
+            }`}
             onClick={() => setWrap(!wrap)}
             title={wrap ? 'Disable line wrap' : 'Enable line wrap'}
           >
             wrap
           </button>
-          <CopyButton text={code} label="Copy" copiedLabel="Copied" />
+          <CopyButton text={code} label="Copy" copiedLabel="Copied" variant="compact" />
         </div>
       </div>
-      <pre>
+      <pre
+        className={`p-4 text-xs font-mono text-neutral-300 leading-relaxed overflow-x-auto ${
+          wrap ? 'whitespace-pre-wrap break-all' : 'whitespace-pre'
+        }`}
+      >
         <code>{code}</code>
       </pre>
     </div>
@@ -117,24 +149,29 @@ function HeadingWithAnchor({ level, text = '' }: HeadingWithAnchorProps) {
   };
 
   const Tag = (`h${level}` as 'h1' | 'h2' | 'h3' | 'h4');
-  const classNameMap: Record<number, string> = {
-    1: 'document-title',
-    2: 'document-heading',
-    3: 'document-subheading',
-    4: 'document-mini-heading',
+
+  const levelStyles: Record<number, string> = {
+    1: 'text-2xl md:text-3xl font-extrabold text-white mt-8 mb-4 tracking-tight pb-2 border-b border-[#222222]',
+    2: 'text-xl md:text-2xl font-bold text-white mt-8 mb-3 tracking-tight pb-1.5 border-b border-[#1c1c1c]',
+    3: 'text-base md:text-lg font-semibold text-neutral-100 mt-6 mb-2',
+    4: 'text-sm font-semibold text-neutral-200 mt-4 mb-2',
   };
 
   return (
-    <Tag id={id} className={`heading-with-anchor ${classNameMap[level] || ''}`}>
-      <InlineText text={text} />
+    <Tag id={id} className={`group flex items-center gap-2 ${levelStyles[level] || ''}`}>
+      <span>
+        <InlineText text={text} />
+      </span>
       <button
         type="button"
-        className={`heading-anchor-link ${copiedAnchor ? 'copied' : ''}`}
+        className={`opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono px-1.5 py-0.5 rounded text-neutral-500 hover:text-sky-400 hover:bg-[#1a1a1a] ${
+          copiedAnchor ? '!opacity-100 !text-emerald-400' : ''
+        }`}
         onClick={copyAnchorLink}
         title={copiedAnchor ? 'Anchor link copied!' : 'Copy link to this section'}
         aria-label={`Copy link to section ${text}`}
       >
-        #
+        {copiedAnchor ? 'copied!' : '#'}
       </button>
     </Tag>
   );
@@ -179,7 +216,7 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
   }
 
   return (
-    <>
+    <div className="w-full flex flex-col text-neutral-300 leading-relaxed text-xs md:text-sm">
       {groupedBlocks.map((block, index) => {
         if (block.type === 'h1') {
           if (skipFirstHeading && !skippedHeading) {
@@ -200,7 +237,11 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
             const body = lastLine === '```' ? lines.slice(1, -1) : lines.slice(1);
             return <CodeBlock code={body.join('\n')} language={lang || 'text'} key={index} />;
           }
-          return <p className="document-paragraph" key={index}><InlineText text={block.text} /></p>;
+          return (
+            <p className="my-2 text-neutral-300 leading-relaxed" key={index}>
+              <InlineText text={block.text} />
+            </p>
+          );
         }
 
         if (block.type === 'callout') {
@@ -218,21 +259,30 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
           const isTaskList = !block.ordered && taskItems.length > 0 && taskItems.every(Boolean);
 
           return (
-            <List className={`document-list${block.ordered ? ' ordered' : ''}${isTaskList ? ' task-list' : ''}`} start={block.ordered ? firstNumber : undefined} key={index}>
+            <List
+              className={`my-2 space-y-1 pl-5 ${
+                block.ordered ? 'list-decimal' : isTaskList ? 'list-none !pl-0 space-y-2' : 'list-disc'
+              }`}
+              start={block.ordered ? firstNumber : undefined}
+              key={index}
+            >
               {block.items.map((item: MarkdownBlock, itemIndex: number) => {
                 const task = taskItems[itemIndex];
                 return (
-                  <li className={task ? 'task-list-item' : undefined} key={itemIndex}>
+                  <li className={`text-neutral-300 leading-relaxed ${task ? 'flex items-center gap-2.5' : ''}`} key={itemIndex}>
                     {task && (
                       <input
                         type="checkbox"
                         checked={task[1].toLowerCase() === 'x'}
                         disabled
+                        className="rounded border-[#333333] bg-[#1a1a1a] text-sky-500 focus:ring-0 w-3.5 h-3.5"
                         aria-label={task[1].toLowerCase() === 'x' ? 'Completed task' : 'Pending task'}
                       />
                     )}
                     {task ? (
-                      <span><InlineText text={task[2]} /></span>
+                      <span className={task[1].toLowerCase() === 'x' ? 'line-through text-neutral-500' : ''}>
+                        <InlineText text={task[2]} />
+                      </span>
                     ) : (
                       <InlineText text={item.text} />
                     )}
@@ -245,7 +295,10 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
 
         if (block.type === 'quote') {
           return (
-            <blockquote className="document-quote" key={index}>
+            <blockquote
+              key={index}
+              className="my-3 pl-4 border-l-2 border-sky-500/50 bg-[#161616]/50 py-2 pr-3 rounded-r-lg italic text-neutral-400"
+            >
               <InlineText text={block.text} />
             </blockquote>
           );
@@ -257,33 +310,35 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
 
         if (block.type === 'table') {
           return (
-            <div className="markdown-table-wrapper" key={index}>
-              <div className="markdown-table">
-                <table>
-                  <thead>
-                    <tr>
-                      {(block.headers || []).map((header: string, headerIndex: number) => (
-                        <th key={headerIndex}><InlineText text={header} /></th>
+            <div key={index} className="my-4 w-full overflow-x-auto rounded-xl border border-[#222222] bg-[#0e0e0e]">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-[#222222] bg-[#141414]">
+                    {(block.headers || []).map((header: string, headerIndex: number) => (
+                      <th key={headerIndex} className="p-3 font-semibold text-neutral-200">
+                        <InlineText text={header} />
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#1c1c1c]">
+                  {(block.rows || []).map((row: string[], rowIndex: number) => (
+                    <tr key={rowIndex} className="hover:bg-[#121212] transition-colors">
+                      {row.map((cell: string, cellIndex: number) => (
+                        <td key={cellIndex} className="p-3 text-neutral-400">
+                          <InlineText text={cell} />
+                        </td>
                       ))}
                     </tr>
-                  </thead>
-                  <tbody>
-                    {(block.rows || []).map((row: string[], rowIndex: number) => (
-                      <tr key={rowIndex}>
-                        {row.map((cell: string, cellIndex: number) => (
-                          <td key={cellIndex}><InlineText text={cell} /></td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           );
         }
 
         return null;
       })}
-    </>
+    </div>
   );
 }

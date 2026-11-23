@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
-import { DOCUMENTATION_GUIDES_REGISTRY, GuideMeta } from '../docsConstants';
-import CopyButton from 'src/components/CopyButton';
+import { DOCUMENTATION_GUIDES_REGISTRY } from '../docsConstants';
 
 export interface DocsDashboardProps {
   onSelectGuide: (guideId: string) => void;
@@ -62,132 +61,127 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
   }, [query, selectedCategory]);
 
   return (
-    <article className="docs-hub-view" aria-label="Documentation Hub & Architecture Specifications">
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300" aria-label="Documentation Hub & Architecture Specifications">
       {/* Hero Header with Merged Toolbar */}
-      <header className="detail-header pillar-hero-header docs-dashboard-header">
-        <div className="breadcrumb-nav-row">
-          <div className="breadcrumb">
+      <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+          <div className="flex items-center gap-2.5 text-xs">
             {onBackToOverview ? (
               <button
                 type="button"
-                className="project-back-pill-btn"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
                 onClick={onBackToOverview}
                 title="Return to Soul Workspace"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 <span>Back</span>
               </button>
             ) : (
-              <a href="#overview" className="project-back-pill-btn" title="Return to Soul Workspace">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <a
+                href="#overview"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+                title="Return to Soul Workspace"
+              >
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 <span>Back</span>
               </a>
             )}
-            <span className="crumb-workspace">Soul Workspace</span>
-            <span className="crumb-sep" aria-hidden="true">›</span>
-            <strong className="crumb-active">Pillar 3: Docs Dashboard</strong>
+            <span className="text-neutral-400 font-medium">Soul Workspace</span>
+            <span className="text-neutral-600 font-bold" aria-hidden="true">›</span>
+            <strong className="text-white font-bold">Pillar 3: Docs Dashboard</strong>
           </div>
 
-          <div className="header-status-pill">
-            <span className="status-live-dot" aria-hidden="true" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
             <span>{DOCUMENTATION_GUIDES_REGISTRY.length} Architecture Guides Live</span>
           </div>
         </div>
 
-        <div className="docs-hero-title-row">
-          <div className="docs-hero-icon" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <div className="flex items-start sm:items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0 shadow-lg shadow-sky-500/5">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
           </div>
-          <div className="project-hero-copy">
-            <div className="title-with-badge">
-              <h1 className="project-dashboard-h1">Docs Dashboard &amp; Specifications</h1>
-              <span className="monorepo-tag-pill">Pillar 3: Architecture Specs</span>
+          <div className="flex flex-col gap-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <h1 className="text-2xl font-extrabold tracking-tight text-white">Docs Dashboard &amp; Specifications</h1>
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
+                Pillar 3: Architecture Specs
+              </span>
             </div>
-            <p className="detail-description">
+            <p className="text-xs text-neutral-400 leading-relaxed max-w-3xl">
               Authoritative architectural guidelines, monorepo specifications, strict port allocations, and library blueprints governing all 8 workspace applications and 3 shared packages.
             </p>
           </div>
         </div>
 
         {/* 5-Metric Quick Stats Strip */}
-        <div className="project-metrics-strip docs-metrics-strip" role="region" aria-label="Documentation metrics">
-          <div className="project-metric-card metric-total">
-            <div className="metric-card-header">
-              <span className="metric-icon">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                </svg>
-              </span>
-              <span className="metric-label">Official Guides</span>
-            </div>
-            <strong className="metric-val">5 Guides</strong>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" role="region" aria-label="Documentation metrics">
+          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+              <span>Official Guides</span>
+            </span>
+            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">5 Guides</strong>
           </div>
 
-          <div className="project-metric-card metric-fullstack">
-            <div className="metric-card-header">
-              <span className="metric-icon">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-              </span>
-              <span className="metric-label">Coverage</span>
-            </div>
-            <strong className="metric-val">100% Monorepo</strong>
+          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span>Coverage</span>
+            </span>
+            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">100% Monorepo</strong>
           </div>
 
-          <div className="project-metric-card metric-standalone">
-            <div className="metric-card-header">
-              <span className="metric-icon">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                  <line x1="8" y1="21" x2="16" y2="21" />
-                  <line x1="12" y1="17" x2="12" y2="21" />
-                </svg>
-              </span>
-              <span className="metric-label">Applications</span>
-            </div>
-            <strong className="metric-val">8 Integrated</strong>
+          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+              <span>Applications</span>
+            </span>
+            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">8 Integrated</strong>
           </div>
 
-          <div className="project-metric-card metric-collisions">
-            <div className="metric-card-header">
-              <span className="metric-icon">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                </svg>
-              </span>
-              <span className="metric-label">Shared Packages</span>
-            </div>
-            <strong className="metric-val">3 Core</strong>
+          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              </svg>
+              <span>Shared Packages</span>
+            </span>
+            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">3 Core</strong>
           </div>
 
-          <div className="project-metric-card metric-isolation">
-            <div className="metric-card-header">
-              <span className="metric-icon">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                </svg>
-              </span>
-              <span className="metric-label">Port Collisions</span>
-            </div>
-            <strong className="metric-val">0 Collisions</strong>
+          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+              <span>Port Collisions</span>
+            </span>
+            <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">0 Collisions</strong>
           </div>
         </div>
 
         {/* Merged Search & Category Filter Toolbar */}
-        <div className="docs-hub-toolbar">
-          <div className="projects-search-input-wrap docs-hub-search-wrap">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
+          <div className="relative flex-1 min-w-[260px] flex items-center">
             <svg
-              width="15"
-              height="15"
+              className="absolute left-3 w-4 h-4 text-neutral-500 pointer-events-none"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -206,11 +200,12 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search guides, rules, port assignments, and topics... (Press '/' to focus)"
               aria-label="Filter documentation guides"
+              className="w-full h-10 pl-9 pr-9 rounded-xl bg-[#141414] border border-[#282828] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
             />
             {query ? (
               <button
                 type="button"
-                className="search-clear-inline"
+                className="absolute right-3 text-xs text-neutral-400 hover:text-white p-1"
                 onClick={() => {
                   setQuery('');
                   searchInputRef.current?.focus();
@@ -221,78 +216,104 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                 ✕
               </button>
             ) : (
-              <kbd className="search-kbd-hint">/</kbd>
+              <kbd className="absolute right-3 px-1.5 py-0.5 rounded bg-[#1f1f1f] border border-[#2e2e2e] text-[10px] text-neutral-500 font-mono">
+                /
+              </kbd>
             )}
           </div>
 
-          <div className="framework-filter-pills filter-pills" role="tablist" aria-label="Filter documentation guides by category">
+          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#101010] border border-[#242424] rounded-xl" role="tablist" aria-label="Filter documentation guides by category">
             <button
               type="button"
-              className={`framework-pill ${selectedCategory === 'all' ? 'active' : ''}`}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                selectedCategory === 'all'
+                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+              }`}
               onClick={() => setSelectedCategory('all')}
             >
-              <span className="pill-text">All Guides</span>
-              <span className="pill-count">{DOCUMENTATION_GUIDES_REGISTRY.length}</span>
+              <span>All Guides</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${selectedCategory === 'all' ? 'bg-sky-800 text-white' : 'bg-[#1e1e1e] text-neutral-400'}`}>
+                {DOCUMENTATION_GUIDES_REGISTRY.length}
+              </span>
             </button>
             <button
               type="button"
-              className={`framework-pill ${selectedCategory === 'rules' ? 'active' : ''}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                selectedCategory === 'rules'
+                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+              }`}
               onClick={() => setSelectedCategory('rules')}
             >
-              <span className="pill-text">📜 Projects Rules</span>
+              📜 Projects Rules
             </button>
             <button
               type="button"
-              className={`framework-pill ${selectedCategory === 'design' ? 'active' : ''}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                selectedCategory === 'design'
+                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+              }`}
               onClick={() => setSelectedCategory('design')}
             >
-              <span className="pill-text">📘 Packages Design</span>
+              📘 Packages Design
             </button>
             <button
               type="button"
-              className={`framework-pill ${selectedCategory === 'ports' ? 'active' : ''}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                selectedCategory === 'ports'
+                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+              }`}
               onClick={() => setSelectedCategory('ports')}
             >
-              <span className="pill-text">🌐 Port Topology</span>
+              🌐 Port Topology
             </button>
             <button
               type="button"
-              className={`framework-pill ${selectedCategory === 'techstack' ? 'active' : ''}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                selectedCategory === 'techstack'
+                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+              }`}
               onClick={() => setSelectedCategory('techstack')}
             >
-              <span className="pill-text">⚙️ Tech Stack</span>
+              ⚙️ Tech Stack
             </button>
             <button
               type="button"
-              className={`framework-pill ${selectedCategory === 'cheatsheet' ? 'active' : ''}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                selectedCategory === 'cheatsheet'
+                  ? 'bg-sky-600 text-white shadow-sm border border-sky-500'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+              }`}
               onClick={() => setSelectedCategory('cheatsheet')}
             >
-              <span className="pill-text">📋 Cheatsheet</span>
+              📋 Cheatsheet
             </button>
           </div>
         </div>
       </header>
 
-          {/* Guides Grid */}
-          <section className="docs-hub-grid-section" aria-label="Available Architecture Guides">
-            <div className="section-header-row">
-              <div>
-                <span className="section-kicker">MONOREPO SPECIFICATIONS</span>
-                <h2>Architectural Standards &amp; Guides</h2>
-                <p className="section-subtext">
-                  Showing {filteredGuides.length} of {DOCUMENTATION_GUIDES_REGISTRY.length} official documents
-                </p>
-              </div>
-            </div>
+      {/* Guides Grid */}
+      <section className="w-full flex flex-col gap-4" aria-label="Available Architecture Guides">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500">MONOREPO SPECIFICATIONS</span>
+          <h2 className="text-lg font-bold text-white">Architectural Standards &amp; Guides</h2>
+          <p className="text-xs text-neutral-400">
+            Showing {filteredGuides.length} of {DOCUMENTATION_GUIDES_REGISTRY.length} official documents
+          </p>
+        </div>
 
         {filteredGuides.length === 0 ? (
-          <div className="docs-hub-empty-state">
-            <span className="empty-icon">🔍</span>
-            <h3>No documentation guides matched &ldquo;{query}&rdquo;</h3>
-            <p>Try searching for topics like &ldquo;ports&rdquo;, &ldquo;rules&rdquo;, &ldquo;sqlite&rdquo;, &ldquo;logger&rdquo;, or &ldquo;react 19&rdquo;.</p>
+          <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111111] border border-[#222222] text-center gap-4 shadow-xl">
+            <span className="text-4xl">🔍</span>
+            <h3 className="text-sm font-bold text-white">No documentation guides matched &ldquo;{query}&rdquo;</h3>
+            <p className="text-xs text-neutral-400 max-w-sm">Try searching for topics like &ldquo;ports&rdquo;, &ldquo;rules&rdquo;, &ldquo;sqlite&rdquo;, &ldquo;logger&rdquo;, or &ldquo;react 19&rdquo;.</p>
             <button
               type="button"
-              className="reset-filters-btn"
+              className="px-4 py-2 rounded-xl text-xs font-semibold bg-sky-600 text-white hover:bg-sky-500 transition-all shadow-md shadow-sky-600/20"
               onClick={() => {
                 setQuery('');
                 setSelectedCategory('all');
@@ -303,55 +324,63 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
             </button>
           </div>
         ) : (
-          <div className="docs-hub-cards-grid">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredGuides.map((guide) => (
-              <article key={guide.id} className="doc-hub-card">
-                <div className="doc-hub-card-header">
-                  <div className="doc-hub-icon-row">
-                    <span className="doc-card-icon" aria-hidden="true">{guide.icon}</span>
-                    <span className={`doc-category-badge ${guide.category}`}>{guide.badge}</span>
+              <article
+                key={guide.id}
+                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-sky-500/40 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4 cursor-pointer"
+                onClick={() => {
+                  consoleLogger.action('DOCS', `Selected guide: ${guide.title}`, { guideId: guide.id, slug: guide.slug });
+                  onSelectGuide(guide.id);
+                }}
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl" aria-hidden="true">{guide.icon}</span>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
+                        {guide.badge}
+                      </span>
+                    </div>
+                    <span className="text-[11px] font-mono text-neutral-500">{guide.readTime}</span>
                   </div>
-                  <span className="doc-read-time">{guide.readTime}</span>
-                </div>
 
-                <div className="doc-hub-card-body">
-                  <h3 className="doc-card-title">{guide.title}</h3>
-                  <code className="doc-card-filename">{guide.filename}</code>
-                  <p className="doc-card-description">{guide.description}</p>
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-base font-bold text-white group-hover:text-sky-400 transition-colors">
+                      {guide.title}
+                    </h3>
+                    <code className="text-[11px] font-mono text-neutral-500">{guide.filename}</code>
+                    <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]">
+                      {guide.description}
+                    </p>
+                  </div>
 
-                  <div className="doc-card-highlights">
-                    <strong>KEY STANDARDS:</strong>
-                    <ul>
-                      {guide.keyHighlights.map((hl, i) => (
-                        <li key={i}>{hl}</li>
+                  <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-[#0d0d0d] border border-[#202020] text-xs">
+                    <strong className="text-[10px] font-mono font-bold text-neutral-500 uppercase tracking-wider">KEY STANDARDS:</strong>
+                    <ul className="flex flex-col gap-1 text-[11px] text-neutral-300 pl-3 list-disc">
+                      {guide.keyHighlights.slice(0, 3).map((hl, i) => (
+                        <li key={i} className="line-clamp-1">{hl}</li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="doc-card-tags">
-                    {guide.topics.map((topic) => (
-                      <span key={topic} className="doc-topic-pill">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {guide.topics.slice(0, 4).map((topic) => (
+                      <span key={topic} className="px-2 py-0.5 rounded-md bg-[#161616] border border-[#242424] text-[10px] font-mono text-neutral-400">
                         {topic}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="doc-hub-card-footer">
-                  <div className="doc-footer-meta">
-                    <span className="meta-item">📑 {guide.sectionsCount} Sections</span>
-                    <span className="meta-item-sep">·</span>
-                    <span className="meta-item status-text">{guide.complianceStatus}</span>
-                  </div>
+                <div className="flex items-center justify-between pt-3 border-t border-[#1e1e1e] text-xs font-mono">
+                  <span className="text-neutral-500">📑 {guide.sectionsCount} Sections</span>
                   <button
                     type="button"
-                    className="doc-open-btn"
-                    onClick={() => {
-                      consoleLogger.action('DOCS', `Selected guide: ${guide.title}`, { guideId: guide.id, slug: guide.slug });
-                      onSelectGuide(guide.id);
-                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white group-hover:bg-sky-500 transition-all shadow-md shadow-sky-600/20"
                   >
-                    Read Guide <span>→</span>
+                    <span>Read Guide</span>
+                    <span>→</span>
                   </button>
                 </div>
               </article>
