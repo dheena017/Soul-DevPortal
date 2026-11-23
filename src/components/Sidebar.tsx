@@ -333,6 +333,25 @@ export default function Sidebar({
 
             <button
               type="button"
+              aria-current={(isActive('portal') || isActive('dev-portal') || isActive('developer-portal')) ? 'page' : undefined}
+              className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
+                (isActive('portal') || isActive('dev-portal') || isActive('developer-portal'))
+                  ? 'bg-[#202020] text-white font-semibold border border-[#303030] shadow-sm'
+                  : 'text-neutral-300 hover:text-white hover:bg-[#161616]'
+              }`}
+              onClick={() => onNavigate('portal')}
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-sm" aria-hidden="true">🌐</span>
+                <span className="truncate">Developer Portal</span>
+              </div>
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/10 text-sky-400 border border-sky-500/25">
+                Dev
+              </span>
+            </button>
+
+            <button
+              type="button"
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))

@@ -3,6 +3,8 @@ import { consoleLogger } from '@workspace/logger';
 import CopyButton from './CopyButton';
 import StatsCards from './StatsCards';
 import EmptyState from './EmptyState';
+import Hero3DCanvas from './Hero3DCanvas';
+import TiltCard3D from './TiltCard3D';
 import { PackageData, ProjectData, StatsData } from '../types';
 import { PACKAGE_METADATA_MAP } from '../features/packages/packagesConstants';
 import { DOCUMENTATION_GUIDES_REGISTRY } from '../features/docs/docsConstants';
@@ -70,147 +72,179 @@ export default function Overview({
 
   return (
     <article className="w-full flex flex-col gap-8 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
-      {/* ── Standardized Hero Header matching Pillar Dashboards ── */}
-      <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-neutral-400 font-medium">Soul Workspace</span>
-            <span className="text-neutral-600 font-bold">/</span>
-            <strong className="text-white font-bold">Overview Dashboard</strong>
+      {/* ── Standardized Hero Header matching Pillar Dashboards with 3D Ambient Canvas ── */}
+      <header className="relative overflow-hidden w-full bg-[#111116] border border-[#282838] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
+        {/* 3D Ambient Cyber Matrix Canvas */}
+        <Hero3DCanvas className="rounded-2xl" />
+
+        <div className="relative z-10 flex flex-col gap-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
+            <div className="flex items-center gap-2 text-xs">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#14141c] border border-[#262636] text-neutral-400 font-medium">Soul Workspace</span>
+              <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
+              <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e2c] border border-[#36364a] text-white font-semibold shadow-sm">Overview Dashboard</strong>
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+              <span>Live Ecosystem · 3 Pillars · {projects.length || 8} Apps · {packages.length || 3} Packages</span>
+            </div>
           </div>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
-            <span>Live Ecosystem · 3 Pillars · {projects.length || 8} Apps · {packages.length || 3} Packages</span>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Soul Workspace Developer Portal</h1>
+                <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-blue-500/15 border border-blue-500/30 text-blue-400">
+                  Enterprise Monorepo
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => onNavigate('portal')}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#161622] border border-[#282838] text-blue-400 hover:text-white hover:border-[#3b82f6] transition-all shrink-0"
+                title="Open full Developer Portal Hub with GitHub links & live endpoints"
+              >
+                <span>Developer Hub &amp; GitHub Links</span>
+                <span>→</span>
+              </button>
+            </div>
+            <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">
+              Unified command center, runtime telemetry, live port topology, and SDK catalog for all applications and shared libraries in the monorepo.
+            </p>
           </div>
-        </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Soul Workspace Developer Portal</h1>
-            <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
-              Enterprise Monorepo
-            </span>
-          </div>
-          <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">
-            Unified command center, runtime telemetry, live port topology, and SDK catalog for all applications and shared libraries in the monorepo.
-          </p>
-        </div>
-
-        {/* Dashboard Key Metrics Banner */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1">
-          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-            <span className="text-lg font-extrabold text-sky-400 font-mono">3</span>
-            <span className="text-xs font-semibold text-neutral-300 mt-0.5">Core Pillars</span>
-          </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-            <span className="text-lg font-extrabold text-emerald-400 font-mono">{projects.length || 8}</span>
-            <span className="text-xs font-semibold text-neutral-300 mt-0.5">Integrated Apps</span>
-          </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-            <span className="text-lg font-extrabold text-purple-400 font-mono">{packages.length || 3}</span>
-            <span className="text-xs font-semibold text-neutral-300 mt-0.5">Shared Packages</span>
-          </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-            <span className="text-lg font-extrabold text-amber-400 font-mono">5</span>
-            <span className="text-xs font-semibold text-neutral-300 mt-0.5">Architecture Specs</span>
-          </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
-            <span className="text-lg font-extrabold text-emerald-400 font-mono">0</span>
-            <span className="text-xs font-semibold text-neutral-300 mt-0.5">Port Collisions</span>
+          {/* Dashboard Key Metrics Banner with 3D Tilt */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1">
+            <TiltCard3D maxTilt={4} glare={false} className="h-full">
+              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-blue-500/40 transition-all h-full">
+                <span className="text-lg font-extrabold text-blue-400 font-mono">3</span>
+                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Core Pillars</span>
+              </div>
+            </TiltCard3D>
+            <TiltCard3D maxTilt={4} glare={false} className="h-full">
+              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-emerald-500/40 transition-all h-full">
+                <span className="text-lg font-extrabold text-emerald-400 font-mono">{projects.length || 8}</span>
+                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Integrated Apps</span>
+              </div>
+            </TiltCard3D>
+            <TiltCard3D maxTilt={4} glare={false} className="h-full">
+              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-purple-500/40 transition-all h-full">
+                <span className="text-lg font-extrabold text-purple-400 font-mono">{packages.length || 3}</span>
+                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Shared Packages</span>
+              </div>
+            </TiltCard3D>
+            <TiltCard3D maxTilt={4} glare={false} className="h-full">
+              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-amber-500/40 transition-all h-full">
+                <span className="text-lg font-extrabold text-amber-400 font-mono">5</span>
+                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Architecture Specs</span>
+              </div>
+            </TiltCard3D>
+            <TiltCard3D maxTilt={4} glare={false} className="h-full">
+              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-emerald-500/40 transition-all h-full">
+                <span className="text-lg font-extrabold text-emerald-400 font-mono">0</span>
+                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Port Collisions</span>
+              </div>
+            </TiltCard3D>
           </div>
         </div>
       </header>
 
-      {/* ── 3 Pillars Interactive Gateway Navigation ── */}
+      {/* ── 3 Pillars Interactive 3D Gateway Navigation ── */}
       <section className="w-full flex flex-col gap-4" aria-label="Monorepo 3 Pillars Navigation">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111111] border border-[#222222] hover:border-sky-500/50 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4"
-            onClick={() => onNavigate('projects')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('projects'); }}
-          >
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/25 flex items-center justify-center text-2xl">
-                  💻
-                </span>
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-sky-500/15 border border-sky-500/30 text-sky-400">
-                  Pillar 1
-                </span>
+          <TiltCard3D maxTilt={6} className="h-full">
+            <div
+              className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/50 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4 h-full"
+              onClick={() => onNavigate('projects')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('projects'); }}
+            >
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                  <span className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-2xl">
+                    💻
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-blue-500/15 border border-blue-500/30 text-blue-400">
+                    Pillar 1
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">
+                  Projects &amp; Applications
+                </h3>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  {projects.length || 8} fullstack applications, strict client &amp; server port allocations (:5173-:5180 / :8000-:8008), and SQLite datastores.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-sky-400 transition-colors">
-                Projects &amp; Applications
-              </h3>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                {projects.length || 8} fullstack applications, strict client &amp; server port allocations (:5173-:5180 / :8000-:8008), and SQLite datastores.
-              </p>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-blue-400 pt-2 border-t border-[#22222e]">
+                <span>Explore {projects.length || 8} Apps</span>
+                <span>→</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-sky-400 pt-2 border-t border-[#1e1e1e]">
-              <span>Explore {projects.length || 8} Apps</span>
-              <span>→</span>
-            </div>
-          </div>
+          </TiltCard3D>
 
-          <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111111] border border-[#222222] hover:border-emerald-500/50 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4"
-            onClick={() => onNavigate('packages')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('packages'); }}
-          >
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-2xl">
-                  📦
-                </span>
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
-                  Pillar 2
-                </span>
+          <TiltCard3D maxTilt={6} className="h-full">
+            <div
+              className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-emerald-500/50 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4 h-full"
+              onClick={() => onNavigate('packages')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('packages'); }}
+            >
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                  <span className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-2xl">
+                    📦
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                    Pillar 2
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+                  Shared Packages
+                </h3>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  Core reusable libraries: @workspace/logger (universal logging), @workspace/runner (CLI supervisor), and @workspace/config (design tokens).
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
-                Shared Packages
-              </h3>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                Core reusable libraries: @workspace/logger (universal logging), @workspace/runner (CLI supervisor), and @workspace/config (design tokens).
-              </p>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 pt-2 border-t border-[#22222e]">
+                <span>Inspect {packages.length || 3} Packages</span>
+                <span>→</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 pt-2 border-t border-[#1e1e1e]">
-              <span>Inspect {packages.length || 3} Packages</span>
-              <span>→</span>
-            </div>
-          </div>
+          </TiltCard3D>
 
-          <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111111] border border-[#222222] hover:border-amber-500/50 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4"
-            onClick={() => onNavigate('docs')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('docs'); }}
-          >
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-2xl">
-                  📚
-                </span>
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 border border-amber-500/30 text-amber-400">
-                  Pillar 3
-                </span>
+          <TiltCard3D maxTilt={6} className="h-full">
+            <div
+              className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-amber-500/50 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4 h-full"
+              onClick={() => onNavigate('docs')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('docs'); }}
+            >
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                  <span className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-2xl">
+                    📚
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 border border-amber-500/30 text-amber-400">
+                    Pillar 3
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
+                  Docs &amp; Specifications
+                </h3>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  5 authoritative architecture guides: mandatory golden rules, port matrices, tech stack standards, and compliance cheatsheets.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
-                Docs &amp; Specifications
-              </h3>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                5 authoritative architecture guides: mandatory golden rules, port matrices, tech stack standards, and compliance cheatsheets.
-              </p>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 pt-2 border-t border-[#22222e]">
+                <span>Read 5 Guides</span>
+                <span>→</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 pt-2 border-t border-[#1e1e1e]">
-              <span>Read 5 Guides</span>
-              <span>→</span>
-            </div>
-          </div>
+          </TiltCard3D>
         </div>
       </section>
 
@@ -218,63 +252,63 @@ export default function Overview({
       <StatsCards stats={stats} packagesCount={packages.length || 3} projectsCount={projects?.length || 8} />
 
       {/* ── Ecosystem Tabs Navigation ── */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#101010] border border-[#242424] rounded-xl self-start" role="tablist" aria-label="Ecosystem overview sections">
+      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)] self-start" role="tablist" aria-label="Ecosystem overview sections">
         <button
           type="button"
           role="tab"
           aria-selected={activeTab === 'apps'}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'apps'
-              ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-              : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+              ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+              : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('apps')}
         >
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'apps' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
             <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
           <span>Consumer Applications</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-neutral-800 text-neutral-300">{projects.length || 8}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'apps' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>{projects.length || 8}</span>
         </button>
 
         <button
           type="button"
           role="tab"
           aria-selected={activeTab === 'packages'}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'packages'
-              ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-              : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+              ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+              : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('packages')}
         >
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'packages' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="16.5" y1="9.4" x2="7.55" y2="4.24" />
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
           </svg>
           <span>Shared Packages</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-neutral-800 text-neutral-300">{packages.length || 3}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'packages' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>{packages.length || 3}</span>
         </button>
 
         <button
           type="button"
           role="tab"
           aria-selected={activeTab === 'docs'}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'docs'
-              ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-              : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+              ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+              : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('docs')}
         >
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
           </svg>
           <span>Architecture Specifications</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-neutral-800 text-neutral-300">5</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'docs' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>5</span>
         </button>
       </div>
 

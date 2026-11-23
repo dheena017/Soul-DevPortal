@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import TiltCard3D from './TiltCard3D';
 import { StatsData } from '../types';
 
 export interface StatsCardsProps {
@@ -85,9 +86,10 @@ export default function StatsCards({ stats, packagesCount = 3, projectsCount = 8
   return (
     <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Monorepo metrics">
       {displayStats.map((item, index) => (
-        <div
+        <TiltCard3D
           key={index}
-          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-[#383838] hover:bg-[#141414] transition-all shadow-xl shadow-black/40 group"
+          maxTilt={5}
+          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-[#333333] hover:bg-[#141414] transition-all shadow-xl shadow-black/40 group cursor-default"
         >
           <div
             className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border"
@@ -101,12 +103,12 @@ export default function StatsCards({ stats, packagesCount = 3, projectsCount = 8
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-xs text-neutral-400 font-medium truncate">{item.label}</span>
-            <strong className="text-xl md:text-2xl font-extrabold text-white font-mono mt-0.5 tracking-tight group-hover:text-sky-400 transition-colors">
+            <strong className="text-xl md:text-2xl font-extrabold text-white font-mono mt-0.5 tracking-tight group-hover:text-blue-400 transition-colors">
               {item.value}
             </strong>
             <span className="text-[11px] text-neutral-500 font-mono truncate">{item.sub}</span>
           </div>
-        </div>
+        </TiltCard3D>
       ))}
     </section>
   );

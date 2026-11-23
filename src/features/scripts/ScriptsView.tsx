@@ -88,10 +88,10 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
       <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-5">
         {/* Breadcrumb & Top Actions Row */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
-          <div className="flex items-center gap-2.5 text-xs">
+          <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1c1c1c] transition-all font-semibold shadow-sm"
               onClick={() => onNavigate('overview')}
               title="Return to Overview"
             >
@@ -100,9 +100,9 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
               </svg>
               <span>Back</span>
             </button>
-            <span className="text-neutral-400 font-medium">Soul Workspace</span>
-            <span className="text-neutral-600 font-bold" aria-hidden="true">/</span>
-            <strong className="text-white font-bold">Scripts &amp; Automation Runners</strong>
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#141414] border border-[#282828] text-neutral-400 font-medium">Soul Workspace</span>
+            <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
+            <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e1e] border border-[#333333] text-white font-semibold shadow-sm">Scripts &amp; Automation Runners</strong>
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -238,7 +238,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
       {/* ── Category Filter Pills & Runtime Selector Row ── */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#101010] border border-[#242424] rounded-xl" role="tablist" aria-label="Filter scripts by category">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]" role="tablist" aria-label="Filter scripts by category">
           {categories.map((cat) => {
             const isActive = filterCategory === cat.id;
             return (
@@ -247,15 +247,15 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 type="button"
                 role="tab"
                 aria-selected={isActive}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all ${
                   isActive
-                    ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
-                    : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
+                    ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                    : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
                 }`}
                 onClick={() => setFilterCategory(cat.id)}
               >
                 <span>{cat.label}</span>
-                <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isActive ? 'bg-[#161616] text-neutral-200 border border-[#2a2a2a]' : 'bg-[#1e1e1e] text-neutral-400'}`}>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>
                   {cat.count}
                 </span>
               </button>

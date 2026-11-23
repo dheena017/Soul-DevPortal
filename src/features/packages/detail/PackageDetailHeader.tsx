@@ -73,11 +73,11 @@ export default function PackageDetailHeader({
     <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-6">
       {/* ── Navigation Breadcrumb Row ── */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#1f1f1f]">
-        <div className="flex flex-wrap items-center gap-3 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1c1c1c] transition-all font-semibold shadow-sm"
               onClick={onBack}
               title="Return to packages dashboard"
             >
@@ -90,7 +90,7 @@ export default function PackageDetailHeader({
           ) : (
             <a
               href="#packages"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1c1c1c] transition-all font-semibold shadow-sm"
               title="Return to packages dashboard"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -100,11 +100,11 @@ export default function PackageDetailHeader({
               <span>Back</span>
             </a>
           )}
-          <span className="text-neutral-400 font-medium">Soul Workspace</span>
-          <span className="text-neutral-600 font-bold">/</span>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#141414] border border-[#282828] text-neutral-400 font-medium">Soul Workspace</span>
+          <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
           <a
             href="#packages"
-            className="hover:text-white transition-colors text-neutral-400"
+            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#161616] border border-[#282828] hover:border-[#383838] hover:bg-[#1c1c1c] hover:text-white transition-all text-neutral-300 font-medium"
             onClick={(e) => {
               if (onBack) {
                 e.preventDefault();
@@ -114,8 +114,8 @@ export default function PackageDetailHeader({
           >
             Pillar 2: Packages Dashboard
           </a>
-          <span className="text-neutral-600 font-bold">/</span>
-          <strong className="text-white font-bold">{pkg.name || `@workspace/${pkg.id}`}</strong>
+          <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
+          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e1e] border border-[#333333] text-white font-semibold shadow-sm truncate max-w-sm">{pkg.name || `@workspace/${pkg.id}`}</strong>
         </div>
 
         <div className="flex items-center gap-2">
@@ -193,19 +193,19 @@ export default function PackageDetailHeader({
 
       {/* Modern Navigation Tabs inside Header */}
       <div className="pt-2 border-t border-[#1f1f1f]">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl" role="tablist" aria-label="Package sections">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]" role="tablist" aria-label="Package sections">
           <button
             type="button"
             role="tab"
             aria-selected={activeTab === 'docs'}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'docs'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('docs')}
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
@@ -216,33 +216,35 @@ export default function PackageDetailHeader({
             type="button"
             role="tab"
             aria-selected={activeTab === 'api'}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'api'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('api')}
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'api' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6" />
               <polyline points="8 6 2 12 8 18" />
             </svg>
             <span>API &amp; Exports</span>
-            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-neutral-800 text-neutral-300">{totalExports}</span>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'api' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>
+              {totalExports}
+            </span>
           </button>
 
           <button
             type="button"
             role="tab"
             aria-selected={activeTab === 'playground'}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'playground'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('playground')}
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'playground' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
             <span>Code Generator</span>
@@ -252,14 +254,14 @@ export default function PackageDetailHeader({
             type="button"
             role="tab"
             aria-selected={activeTab === 'manifest'}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'manifest'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('manifest')}
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'manifest' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
               <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
               <line x1="12" y1="22.08" x2="12" y2="12" />

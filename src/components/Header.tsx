@@ -49,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-3 min-w-0">
         <button
           type="button"
-          className="p-1.5 rounded-lg bg-[#181818] border border-[#2a2a2a] text-neutral-300 hover:text-white hover:border-[#383838] transition-all shrink-0"
+          className="p-2 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1e1e1e] transition-all shrink-0 shadow-sm"
           onClick={() => {
             consoleLogger.action('UI', menuOpen ? 'Closing sidebar navigation' : 'Opening sidebar navigation');
             onToggleSidebar();
@@ -74,9 +74,9 @@ export const Header: React.FC<HeaderProps> = ({
         <nav className="flex items-center gap-2 text-xs min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
           <button
             type="button"
-            className="flex items-center gap-1.5 font-mono text-neutral-300 hover:text-white transition-colors shrink-0"
-            onClick={() => onNavigate('overview')}
-            title="Go to Overview Dashboard"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#161616] border border-[#282828] hover:border-[#383838] hover:bg-[#1a1a1a] font-mono text-neutral-300 hover:text-white transition-all shrink-0"
+            onClick={() => onNavigate('portal')}
+            title="Go to Developer Portal Hub"
           >
             <span className="text-sky-400" aria-hidden="true">⚡</span>
             <span className="font-semibold">soul</span>
@@ -86,18 +86,21 @@ export const Header: React.FC<HeaderProps> = ({
 
           {breadcrumbs.slice(1).map((crumb, idx) => (
             <div key={idx} className="flex items-center gap-2 min-w-0">
-              <span className="text-neutral-600 font-bold">/</span>
+              <span className="text-neutral-600 font-bold px-0.5">/</span>
               {crumb.id ? (
                 <button
                   type="button"
-                  className="text-neutral-400 hover:text-white transition-colors truncate font-medium"
+                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#161616] border border-[#282828] hover:border-[#383838] hover:bg-[#1a1a1a] text-neutral-300 hover:text-white transition-all truncate font-medium max-w-[200px]"
                   onClick={() => onNavigate(crumb.id!)}
                   title={`Go to ${crumb.label}`}
                 >
                   {crumb.label}
                 </button>
               ) : (
-                <span className="text-neutral-200 font-semibold truncate" title={crumb.label}>
+                <span
+                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e1e] border border-[#333333] text-white font-semibold shadow-sm truncate max-w-[200px]"
+                  title={crumb.label}
+                >
                   {crumb.label}
                 </span>
               )}
@@ -118,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
           onChange={onSearchChange}
           placeholder="Search apps, packages, docs..."
           aria-label="Search package and application documentation"
-          className="w-full h-8 pl-9 pr-8 rounded-lg bg-[#161616] border border-[#282828] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 font-mono transition-all"
+          className="w-full h-8 pl-9 pr-8 rounded-full bg-[#161616] border border-[#282828] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-[#444444] font-mono transition-all"
         />
         {query ? (
           <button
@@ -150,6 +153,19 @@ export const Header: React.FC<HeaderProps> = ({
             title="Overview Dashboard"
           >
             Overview
+          </button>
+
+          <button
+            type="button"
+            className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+              active === 'portal' || active === 'dev-portal'
+                ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
+                : 'text-neutral-400 hover:text-white border border-transparent'
+            }`}
+            onClick={() => onNavigate('portal')}
+            title="Developer Portal Hub"
+          >
+            Dev Portal
           </button>
 
           <button
@@ -205,7 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
           href="https://github.com/dheena017/Soul-DevPortal"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[#181818] border border-[#282828] text-neutral-300 hover:text-white hover:border-neutral-500 transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#161616] border border-[#282828] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1f1f1f] transition-all"
           title="Open GitHub Repository: dheena017/Soul-DevPortal"
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -217,7 +233,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           type="button"
-          className="w-8 h-8 rounded-lg bg-[#181818] border border-[#282828] flex items-center justify-center text-xs font-mono font-bold text-neutral-400 hover:text-white hover:border-neutral-500 transition-all"
+          className="w-8 h-8 rounded-full bg-[#161616] border border-[#282828] flex items-center justify-center text-xs font-mono font-bold text-neutral-400 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1f1f1f] transition-all"
           onClick={() => {
             consoleLogger.action('SHORTCUT', 'Clicked help button: opening keyboard shortcuts modal');
             onOpenShortcuts();

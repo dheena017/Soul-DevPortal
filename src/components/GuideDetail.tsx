@@ -77,15 +77,15 @@ export default function GuideDetail({
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">{guideMeta.description}</p>
 
         {/* Guides Switcher Bar */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl" role="tablist" aria-label="Monorepo documentation guides">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]" role="tablist" aria-label="Monorepo documentation guides">
           <button
             type="button"
             role="tab"
             aria-selected={selectedGuide === 'design'}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               selectedGuide === 'design'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => handleSelect('design')}
           >
@@ -96,10 +96,10 @@ export default function GuideDetail({
               type="button"
               role="tab"
               aria-selected={selectedGuide === 'ports'}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'ports'
-                  ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                  ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('ports')}
             >
@@ -111,10 +111,10 @@ export default function GuideDetail({
               type="button"
               role="tab"
               aria-selected={selectedGuide === 'techstack'}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'techstack'
-                  ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                  ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('techstack')}
             >

@@ -65,11 +65,11 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
       {/* Hero Header with Merged Toolbar */}
       <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-5">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
-          <div className="flex items-center gap-2.5 text-xs">
+          <div className="flex items-center gap-2 text-xs">
             {onBackToOverview ? (
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1c1c1c] transition-all font-semibold shadow-sm"
                 onClick={onBackToOverview}
                 title="Return to Soul Workspace"
               >
@@ -81,7 +81,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
             ) : (
               <a
                 href="#overview"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1c1c1c] transition-all font-semibold shadow-sm"
                 title="Return to Soul Workspace"
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -90,9 +90,9 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                 <span>Back</span>
               </a>
             )}
-            <span className="text-neutral-400 font-medium">Soul Workspace</span>
-            <span className="text-neutral-600 font-bold" aria-hidden="true">›</span>
-            <strong className="text-white font-bold">Pillar 3: Docs Dashboard</strong>
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#141414] border border-[#282828] text-neutral-400 font-medium">Soul Workspace</span>
+            <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
+            <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e1e] border border-[#333333] text-white font-semibold shadow-sm">Pillar 3: Docs Dashboard</strong>
           </div>
 
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">

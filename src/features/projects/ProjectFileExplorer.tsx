@@ -428,8 +428,8 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
     return (
       <div className="w-full flex flex-col" key={node.id}>
         <div
-          className={`group flex items-center justify-between py-1.5 px-2.5 rounded-lg border border-transparent hover:border-[#28283a] hover:bg-[#161622] transition-all cursor-pointer select-none text-xs ${
-            open ? 'bg-[#151520]/60' : ''
+          className={`group flex items-center justify-between py-1.5 px-2.5 rounded-lg border border-transparent hover:border-[#262626] hover:bg-[#161616] transition-all cursor-pointer select-none text-xs ${
+            open ? 'bg-[#141414]' : ''
           }`}
           style={{ paddingLeft: `${Math.max(10, depth * 18 + 10)}px` }}
           onClick={() => (node.isDir ? toggleFolder(node.id) : null)}
@@ -449,7 +449,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             <span className="w-4 h-4 flex items-center justify-center shrink-0">
               {node.isDir ? (
                 <svg
-                  className={`w-3.5 h-3.5 text-neutral-500 transition-transform duration-150 ${open ? 'rotate-90 text-blue-400' : ''}`}
+                  className={`w-3.5 h-3.5 text-neutral-500 transition-transform duration-150 ${open ? 'rotate-90 text-sky-400' : ''}`}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -477,7 +477,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
           {/* Right Side: Badges & Actions */}
           <div className="flex items-center gap-2 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
             {node.isDir ? (
-              <span className="px-2 py-0.5 rounded text-[10.5px] font-mono text-neutral-400 bg-[#161622] border border-[#282838]">
+              <span className="px-2 py-0.5 rounded text-[10.5px] font-mono text-neutral-400 bg-[#161616] border border-[#262626]">
                 {node.children.length} {node.children.length === 1 ? 'item' : 'items'}
               </span>
             ) : (
@@ -495,7 +495,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
 
             <button
               type="button"
-              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-[#161622] border border-[#282838] text-neutral-400 hover:text-white hover:border-[#3b82f6] transition-all ${
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-[#161616] border border-[#262626] text-neutral-400 hover:text-white hover:border-[#383838] transition-all ${
                 isCopied ? 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10' : ''
               }`}
               onClick={(e) => handleCopyPath(node.path, e)}

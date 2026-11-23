@@ -199,11 +199,11 @@ export default function TableOfContents({
               data-toc-id={id}
               aria-current={isActive ? 'location' : undefined}
               className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150 text-left ${
-                isH3 ? 'pl-5 text-neutral-400' : 'text-neutral-300'
+                isH3 ? 'pl-5' : ''
               } ${
                 isActive
-                  ? 'bg-[#222222] text-white font-semibold border border-[#333333] shadow-sm'
-                  : 'hover:text-white hover:bg-[#161616] border border-transparent'
+                  ? 'bg-[#222222] text-white font-semibold border border-[#383838] shadow-sm'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161616] border border-transparent hover:border-[#282828]'
               }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
             >

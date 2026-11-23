@@ -39,11 +39,11 @@ export default function ProjectDetailHeader({
     <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#1f1f1f]">
-        <div className="flex flex-wrap items-center gap-3 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1c1c1c] transition-all font-semibold shadow-sm"
               onClick={onBack}
               title="Back to all projects"
             >
@@ -56,7 +56,7 @@ export default function ProjectDetailHeader({
           ) : (
             <a
               href="#projects"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1c1c1c] transition-all font-semibold shadow-sm"
               title="Back to all projects"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -66,23 +66,20 @@ export default function ProjectDetailHeader({
               <span>Back</span>
             </a>
           )}
-          <div className="w-[1px] h-4 bg-neutral-800" aria-hidden="true" />
-          <nav className="flex items-center gap-2 text-neutral-400" aria-label="Breadcrumb navigation">
-            <span className="font-medium text-neutral-400">Soul Workspace</span>
-            <span className="text-neutral-600 font-bold">/</span>
-            <a
-              href="#projects"
-              className="hover:text-white transition-colors"
-              onClick={(e) => {
-                e.preventDefault();
-                onBack?.();
-              }}
-            >
-              Pillar 1: Projects
-            </a>
-            <span className="text-neutral-600 font-bold">/</span>
-            <strong className="text-white font-bold">{project.title}</strong>
-          </nav>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#141414] border border-[#282828] text-neutral-400 font-medium">Soul Workspace</span>
+          <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
+          <a
+            href="#projects"
+            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#161616] border border-[#282828] hover:border-[#383838] hover:bg-[#1c1c1c] hover:text-white transition-all text-neutral-300 font-medium"
+            onClick={(e) => {
+              e.preventDefault();
+              onBack?.();
+            }}
+          >
+            Pillar 1: Projects
+          </a>
+          <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
+          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e1e] border border-[#333333] text-white font-semibold shadow-sm truncate max-w-sm">{project.title}</strong>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -212,19 +209,19 @@ export default function ProjectDetailHeader({
 
       {/* ── Modern Navigation Tabs Bar ── */}
       <div className="pt-2 border-t border-[#1f1f1f]">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl" role="tablist" aria-label="Project sections">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]" role="tablist" aria-label="Project sections">
           <button
             type="button"
             role="tab"
             aria-selected={activeTab === 'overview'}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'overview'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('overview')}
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'overview' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="7" height="9" />
               <rect x="14" y="3" width="7" height="5" />
               <rect x="14" y="12" width="7" height="9" />
@@ -238,18 +235,18 @@ export default function ProjectDetailHeader({
               type="button"
               role="tab"
               aria-selected={activeTab === 'files'}
-              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
                 activeTab === 'files'
-                  ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                  ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
               }`}
               onClick={() => onTabChange('files')}
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className={`w-3.5 h-3.5 ${activeTab === 'files' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
               </svg>
               <span>Files &amp; Structure</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${activeTab === 'files' ? 'bg-[#333333] text-white' : 'bg-[#181818] text-neutral-400 border border-[#2c2c2c]'}`}>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'files' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>
                 {fileTreeCount}
               </span>
             </button>
@@ -259,18 +256,18 @@ export default function ProjectDetailHeader({
             type="button"
             role="tab"
             aria-selected={activeTab === 'api'}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'api'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('api')}
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'api' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
             <span>API &amp; Routes</span>
-            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${activeTab === 'api' ? 'bg-[#333333] text-white' : 'bg-[#181818] text-neutral-400 border border-[#2c2c2c]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'api' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>
               {project.apiEndpoints?.length || (project.backendPort ? 1 : 0)}
             </span>
           </button>
@@ -279,20 +276,20 @@ export default function ProjectDetailHeader({
             type="button"
             role="tab"
             aria-selected={activeTab === 'database'}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'database'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('database')}
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'database' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <ellipse cx="12" cy="5" rx="9" ry="3" />
               <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
               <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
             </svg>
             <span>Database &amp; Models</span>
-            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${activeTab === 'database' ? 'bg-[#333333] text-white' : 'bg-[#181818] text-neutral-400 border border-[#2c2c2c]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'database' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>
               {tablesCount || 1}
             </span>
           </button>
@@ -301,19 +298,19 @@ export default function ProjectDetailHeader({
             type="button"
             role="tab"
             aria-selected={activeTab === 'scripts'}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'scripts'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('scripts')}
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'scripts' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="4 17 10 11 4 5" />
               <line x1="12" y1="19" x2="20" y2="19" />
             </svg>
             <span>Scripts</span>
-            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${activeTab === 'scripts' ? 'bg-[#333333] text-white' : 'bg-[#181818] text-neutral-400 border border-[#2c2c2c]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'scripts' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>
               {scriptsCount}
             </span>
           </button>
@@ -322,14 +319,14 @@ export default function ProjectDetailHeader({
             type="button"
             role="tab"
             aria-selected={activeTab === 'env'}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'env'
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('env')}
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'env' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="4" y1="21" x2="4" y2="14" />
               <line x1="4" y1="10" x2="4" y2="3" />
               <line x1="12" y1="21" x2="12" y2="12" />
@@ -341,7 +338,7 @@ export default function ProjectDetailHeader({
               <line x1="17" y1="16" x2="23" y2="16" />
             </svg>
             <span>Environment</span>
-            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${activeTab === 'env' ? 'bg-[#333333] text-white' : 'bg-[#181818] text-neutral-400 border border-[#2c2c2c]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'env' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>
               {envCount}
             </span>
           </button>
@@ -351,14 +348,14 @@ export default function ProjectDetailHeader({
               type="button"
               role="tab"
               aria-selected={activeTab === 'readme'}
-              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
                 activeTab === 'readme'
-                  ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                  ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
               }`}
               onClick={() => onTabChange('readme')}
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className={`w-3.5 h-3.5 ${activeTab === 'readme' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
               </svg>
