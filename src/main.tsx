@@ -20,7 +20,6 @@ import ProjectDetailView from './features/projects/ProjectDetailView';
 import PackagesView from './features/packages/PackagesView';
 import PackageDetailView from './features/packages/PackageDetailView';
 import DocsView from './features/docs/DocsView';
-import ExploreView from './features/explore/ExploreView';
 import ScriptsView from './features/scripts/ScriptsView';
 
 import { DOCUMENTATION_GUIDES_REGISTRY } from './features/docs/docsConstants';
@@ -165,7 +164,7 @@ function App() {
     const val = event.target.value;
     setQuery(val);
     if (val.trim()) {
-      if (active !== 'overview' && active !== 'packages' && active !== 'explore') {
+      if (active !== 'overview' && active !== 'packages') {
         setActive('overview');
         window.location.hash = 'overview';
       }
@@ -222,7 +221,6 @@ function App() {
     if (active === 'ports' || active === 'port-architecture' || active === 'ports-guide') return 'Port Architecture Guide';
     if (active === 'techstack' || active === 'tech-stack') return 'Tech Stack Standards';
     if (active === 'cheatsheet' || active === 'compliance-cheatsheet') return 'Compliance Cheatsheet';
-    if (active === 'explore' || active.startsWith('explore/')) return 'Explore & Prober';
     return active;
   }, [active, projectsList, packagesList]);
 
@@ -266,8 +264,6 @@ function App() {
     } else if (['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active)) {
       crumbs.push({ label: 'docs', id: 'docs' });
       crumbs.push({ label: activeTitle || active });
-    } else if (active === 'explore' || active.startsWith('explore/')) {
-      crumbs.push({ label: 'explorer & prober' });
     } else if (active === 'scripts' || active === 'commands' || active === 'runners') {
       crumbs.push({ label: 'scripts & runners' });
     } else {
@@ -355,6 +351,7 @@ function App() {
             <PackagesView
               packages={filteredPackages}
               onSelectPackage={(id) => navigate(`packages/${id}`)}
+              onBack={() => navigate('overview')}
             />
           )}
 
@@ -433,15 +430,6 @@ function App() {
               />
             );
           })()}
-
-          {/* Pillar 4: Explore & Introspection Engine */}
-          {(active === 'explore' || active.startsWith('explore/')) && (
-            <ExploreView
-              packages={packagesList}
-              projects={projectsList}
-              onNavigate={navigate}
-            />
-          )}
 
           {/* Dedicated Feature View: Scripts & Automation Command Runners */}
           {(active === 'scripts' || active === 'commands' || active === 'runners') && (

@@ -436,6 +436,51 @@ nav.package-contents {
   font-family: ui-monospace, monospace;
 }
 
+/* ── Unified Header Integrated Tabs & Separator ───────────── */
+.header-tabs-separator {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  margin: 20px 0 16px 0;
+}
+
+.detail-header .package-detail-tabs,
+.detail-header .project-detail-tabs-bar,
+.detail-header .doc-tabs-bar {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-bottom: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.detail-header .package-detail-tabs .tab-btn,
+.detail-header .project-detail-tabs-bar .project-tab-btn,
+.detail-header .doc-tabs-bar .tab-btn {
+  background: #18181c;
+  border: 1px solid #282832;
+  color: #94a3b8;
+}
+
+.detail-header .package-detail-tabs .tab-btn:hover,
+.detail-header .project-detail-tabs-bar .project-tab-btn:hover,
+.detail-header .doc-tabs-bar .tab-btn:hover {
+  background: #22222a;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.detail-header .package-detail-tabs .tab-btn.active,
+.detail-header .project-detail-tabs-bar .project-tab-btn.active,
+.detail-header .doc-tabs-bar .tab-btn.active {
+  background: rgba(59, 130, 246, 0.16) !important;
+  border: 1px solid rgba(59, 130, 246, 0.5) !important;
+  color: #60a5fa !important;
+  box-shadow: 0 0 14px rgba(59, 130, 246, 0.22) !important;
+}
+
 /* ── Navigation Tabs Universal Component ─────────────────── */
 .package-detail-tabs,
 .doc-tabs-bar,

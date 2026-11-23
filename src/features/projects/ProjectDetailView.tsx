@@ -318,116 +318,123 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
           </div>
         </div>
 
-        {/* Quick Launch Commands Banner */}
-        <div className="project-quick-commands-banner">
-          <div className="quick-cmd-item">
-            <div className="quick-cmd-header">
-              <span className="quick-cmd-icon" aria-hidden="true">⚡</span>
-              <span className="quick-cmd-label">MONOREPO RUNNER</span>
-              <span className="quick-cmd-tag">CLI</span>
-            </div>
-            <div className="quick-cmd-box">
-              <span className="cmd-prompt-sym" aria-hidden="true">$</span>
-              <code>{runnerCmd}</code>
-              <CopyButton text={runnerCmd} variant="compact" />
-            </div>
-          </div>
-          {project.frontendCmd && (
-            <div className="quick-cmd-item">
-              <div className="quick-cmd-header">
-                <span className="quick-cmd-icon" aria-hidden="true">💻</span>
-                <span className="quick-cmd-label">CLIENT START</span>
-                <span className="quick-cmd-tag">NPM</span>
-              </div>
-              <div className="quick-cmd-box">
-                <span className="cmd-prompt-sym" aria-hidden="true">$</span>
-                <code>{project.frontendCmd}</code>
-                <CopyButton text={project.frontendCmd} variant="compact" />
-              </div>
-            </div>
-          )}
-          {project.backendCmd && (
-            <div className="quick-cmd-item">
-              <div className="quick-cmd-header">
-                <span className="quick-cmd-icon" aria-hidden="true">🔌</span>
-                <span className="quick-cmd-label">SERVER START</span>
-                <span className="quick-cmd-tag">NPM</span>
-              </div>
-              <div className="quick-cmd-box">
-                <span className="cmd-prompt-sym" aria-hidden="true">$</span>
-                <code>{project.backendCmd}</code>
-                <CopyButton text={project.backendCmd} variant="compact" />
-              </div>
-            </div>
-          )}
-        </div>
-      </header>
+        {/* Header Tabs Separator */}
+        <div className="header-tabs-separator" />
 
-      {/* Navigation Tabs */}
-      <div className="package-detail-tabs project-tabs-bar" role="tablist" aria-label="Project sections">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'overview'}
-          className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
-          onClick={() => setActiveTab('overview')}
-        >
-          <span className="tab-icon">📊</span>
-          <span>Overview</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'api'}
-          className={`tab-btn ${activeTab === 'api' ? 'active' : ''}`}
-          onClick={() => setActiveTab('api')}
-        >
-          <span className="tab-icon">⚡</span>
-          <span>API &amp; Routes ({project.apiEndpoints?.length || (project.backendPort ? 1 : 0)})</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'database'}
-          className={`tab-btn ${activeTab === 'database' ? 'active' : ''}`}
-          onClick={() => setActiveTab('database')}
-        >
-          <span className="tab-icon">🗄️</span>
-          <span>Database &amp; Models ({tables.length || 1})</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'scripts'}
-          className={`tab-btn ${activeTab === 'scripts' ? 'active' : ''}`}
-          onClick={() => setActiveTab('scripts')}
-        >
-          <span className="tab-icon">💻</span>
-          <span>Scripts ({scriptsEntries.length})</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'env'}
-          className={`tab-btn ${activeTab === 'env' ? 'active' : ''}`}
-          onClick={() => setActiveTab('env')}
-        >
-          <span className="tab-icon">⚙️</span>
-          <span>Environment ({envKeys.length})</span>
-        </button>
-        {project.readmeBlocks && project.readmeBlocks.length > 0 && (
+        {/* Modern Developer-Grade Project Navigation Tabs inside Header */}
+        <div className="project-detail-tabs-bar" role="tablist" aria-label="Project sections">
           <button
             type="button"
             role="tab"
-            aria-selected={activeTab === 'readme'}
-            className={`tab-btn ${activeTab === 'readme' ? 'active' : ''}`}
-            onClick={() => setActiveTab('readme')}
+            aria-selected={activeTab === 'overview'}
+            className={`project-tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
+            onClick={() => setActiveTab('overview')}
           >
-            <span className="tab-icon">📖</span>
-            <span>Documentation</span>
+            <span className="tab-svg-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="7" height="9" />
+                <rect x="14" y="3" width="7" height="5" />
+                <rect x="14" y="12" width="7" height="9" />
+                <rect x="3" y="16" width="7" height="5" />
+              </svg>
+            </span>
+            <span className="tab-label">Overview</span>
           </button>
-        )}
-      </div>
+
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'api'}
+            className={`project-tab-btn ${activeTab === 'api' ? 'active' : ''}`}
+            onClick={() => setActiveTab('api')}
+          >
+            <span className="tab-svg-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+            </span>
+            <span className="tab-label">API &amp; Routes</span>
+            <span className="tab-count-badge">{project.apiEndpoints?.length || (project.backendPort ? 1 : 0)}</span>
+          </button>
+
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'database'}
+            className={`project-tab-btn ${activeTab === 'database' ? 'active' : ''}`}
+            onClick={() => setActiveTab('database')}
+          >
+            <span className="tab-svg-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3" />
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+              </svg>
+            </span>
+            <span className="tab-label">Database &amp; Models</span>
+            <span className="tab-count-badge">{tables.length || 1}</span>
+          </button>
+
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'scripts'}
+            className={`project-tab-btn ${activeTab === 'scripts' ? 'active' : ''}`}
+            onClick={() => setActiveTab('scripts')}
+          >
+            <span className="tab-svg-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="4 17 10 11 4 5" />
+                <line x1="12" y1="19" x2="20" y2="19" />
+              </svg>
+            </span>
+            <span className="tab-label">Scripts</span>
+            <span className="tab-count-badge">{scriptsEntries.length}</span>
+          </button>
+
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'env'}
+            className={`project-tab-btn ${activeTab === 'env' ? 'active' : ''}`}
+            onClick={() => setActiveTab('env')}
+          >
+            <span className="tab-svg-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="4" y1="21" x2="4" y2="14" />
+                <line x1="4" y1="10" x2="4" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12" y2="3" />
+                <line x1="20" y1="21" x2="20" y2="16" />
+                <line x1="20" y1="12" x2="20" y2="3" />
+                <line x1="1" y1="14" x2="7" y2="14" />
+                <line x1="9" y1="8" x2="15" y2="8" />
+                <line x1="17" y1="16" x2="23" y2="16" />
+              </svg>
+            </span>
+            <span className="tab-label">Environment</span>
+            <span className="tab-count-badge">{envKeys.length}</span>
+          </button>
+
+          {project.readmeBlocks && project.readmeBlocks.length > 0 && (
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'readme'}
+              className={`project-tab-btn ${activeTab === 'readme' ? 'active' : ''}`}
+              onClick={() => setActiveTab('readme')}
+            >
+              <span className="tab-svg-icon" aria-hidden="true">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+              </span>
+              <span className="tab-label">Documentation</span>
+            </button>
+          )}
+        </div>
+      </header>
 
       {/* Tab 1: Overview & Architecture */}
       {activeTab === 'overview' && (

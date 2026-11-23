@@ -388,8 +388,6 @@ export interface PackageDetailViewProps {
 export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProps) {
   const [activeTab, setActiveTab] = useState<'docs' | 'api' | 'playground' | 'manifest'>('docs');
   const headings = (pkg.readmeBlocks || []).filter((block) => block.type === 'h2' || block.type === 'h3');
-  const npmInstall = `npm install ${pkg.name || ''}`;
-  const pythonInstall = `pip install -e Soul-DevPortal-Packages/${pkg.id}`;
   const totalExports = (pkg.exports || []).length + (pkg.pythonExports || []).length + (pkg.typeScriptExports || []).length;
 
   return (
@@ -419,10 +417,16 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
               Pillar 2: Packages Dashboard
             </a>
             <span className="crumb-sep" aria-hidden="true">›</span>
-            <strong className="crumb-active">{pkg.displayName || pkg.name}</strong>
+            <strong className="crumb-active">{pkg.name || pkg.displayName}</strong>
           </div>
 
           <div className="detail-top-actions">
+            <CopyButton
+              text={pkg.name || pkg.id}
+              label="Copy Name"
+              copiedLabel="Name copied!"
+              variant="compact"
+            />
             <CopyButton
               text={window.location.href}
               label="Share link"
@@ -432,193 +436,148 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
           </div>
         </div>
 
-        {/* Title & Brand Row */}
-        <div className="detail-title-row">
-          <PackageIconSvg pkg={pkg} />
-          <div className="package-title-copy">
-            <div className="title-with-badge">
-              <h1>{pkg.displayName || pkg.name}</h1>
-              <span className="package-version-pill">
-                <span className="pulse-dot" aria-hidden="true" />
-                v{pkg.version || '1.0.0'}
-              </span>
-            </div>
-            <div className="package-tags-row">
-              <span className="pkg-chip pkg-chip-slug">{pkg.pythonName || pkg.name}</span>
-              <span className="pkg-chip pkg-chip-scope">external</span>
-              {pkg.pythonModule && (
-                <span className="pkg-chip pkg-chip-python">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="10" />
-                  </svg>
-                  python: {pkg.pythonModule}
+        {/* Hero Body: Left Identity/Description/Tags + Right 2x2 Metadata Grid */}
+        <div className="package-hero-body">
+          <div className="package-hero-main">
+            <PackageIconSvg pkg={pkg} />
+            <div className="package-title-copy">
+              <div className="title-with-badge">
+                <h1>{pkg.name || pkg.displayName}</h1>
+                <span className="package-version-pill">
+                  <span className="pulse-dot" aria-hidden="true" />
+                  v{pkg.version || '1.0.0'}
                 </span>
-              )}
-              {pkg.hasNpmManifest && (
-                <span className="pkg-chip pkg-chip-npm">npm workspace</span>
-              )}
+              </div>
+              {pkg.description && <p className="detail-description">{pkg.description}</p>}
+            </div>
+          </div>
+
+          {/* 4-Card Metadata Grid (2x2) */}
+          <div className="package-metadata">
+            <div className="pkg-meta-card version-card">
+              <div className="meta-card-top">
+                <span className="meta-icon version-icon">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                    <line x1="7" y1="7" x2="7.01" y2="7" />
+                  </svg>
+                </span>
+                <span className="meta-label">VERSION</span>
+              </div>
+              <strong className="meta-val meta-emerald">v{pkg.version || '1.0.0'}</strong>
+            </div>
+
+            <div className="pkg-meta-card license-card">
+              <div className="meta-card-top">
+                <span className="meta-icon license-icon">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                </span>
+                <span className="meta-label">LICENSE</span>
+              </div>
+              <strong className="meta-val meta-amber">{pkg.license || 'MIT'}</strong>
+            </div>
+
+            <div className="pkg-meta-card eco-card">
+              <div className="meta-card-top">
+                <span className="meta-icon eco-icon">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                    <polyline points="2 17 12 22 22 17" />
+                    <polyline points="2 12 12 17 22 12" />
+                  </svg>
+                </span>
+                <span className="meta-label">ECOSYSTEMS</span>
+              </div>
+              <strong className="meta-val meta-cyan">
+                {[pkg.hasNpmManifest && 'npm', (pkg.hasPythonManifest || pkg.pythonModule) && 'Python'].filter(Boolean).join(' · ') || 'Universal'}
+              </strong>
+            </div>
+
+            <div className="pkg-meta-card exports-card">
+              <div className="meta-card-top">
+                <span className="meta-icon exports-icon">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
+                  </svg>
+                </span>
+                <span className="meta-label">TOTAL EXPORTS</span>
+              </div>
+              <strong className="meta-val meta-violet">{totalExports} symbols</strong>
             </div>
           </div>
         </div>
 
-        {pkg.description && <p className="detail-description">{pkg.description}</p>}
+        {/* Header Tabs Separator */}
+        <div className="header-tabs-separator" />
 
-        {/* 4-Card Metadata Grid */}
-        <div className="package-metadata">
-          <div className="pkg-meta-card version-card">
-            <div className="meta-card-top">
-              <span className="meta-icon version-icon">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                  <line x1="7" y1="7" x2="7.01" y2="7" />
-                </svg>
-              </span>
-              <span className="meta-label">VERSION</span>
-            </div>
-            <strong className="meta-val meta-emerald">v{pkg.version || '1.0.0'}</strong>
-          </div>
-
-          <div className="pkg-meta-card license-card">
-            <div className="meta-card-top">
-              <span className="meta-icon license-icon">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-              </span>
-              <span className="meta-label">LICENSE</span>
-            </div>
-            <strong className="meta-val meta-amber">{pkg.license || 'MIT'}</strong>
-          </div>
-
-          <div className="pkg-meta-card eco-card">
-            <div className="meta-card-top">
-              <span className="meta-icon eco-icon">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                  <polyline points="2 17 12 22 22 17" />
-                  <polyline points="2 12 12 17 22 12" />
-                </svg>
-              </span>
-              <span className="meta-label">ECOSYSTEMS</span>
-            </div>
-            <strong className="meta-val meta-cyan">
-              {[pkg.hasNpmManifest && 'npm', pkg.hasPythonManifest && 'Python'].filter(Boolean).join(' · ') || 'Universal'}
-            </strong>
-          </div>
-
-          <div className="pkg-meta-card exports-card">
-            <div className="meta-card-top">
-              <span className="meta-icon exports-icon">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="16 18 22 12 16 6" />
-                  <polyline points="8 6 2 12 8 18" />
-                </svg>
-              </span>
-              <span className="meta-label">TOTAL EXPORTS</span>
-            </div>
-            <strong className="meta-val meta-violet">{totalExports} symbols</strong>
-          </div>
+        {/* Modern Navigation Tabs inside Header */}
+        <div className="package-detail-tabs" role="tablist" aria-label="Package sections">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'docs'}
+            className={`tab-btn ${activeTab === 'docs' ? 'active' : ''}`}
+            onClick={() => setActiveTab('docs')}
+          >
+            <span className="tab-svg-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+            </span>
+            <span>Documentation</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'api'}
+            className={`tab-btn ${activeTab === 'api' ? 'active' : ''}`}
+            onClick={() => setActiveTab('api')}
+          >
+            <span className="tab-svg-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg>
+            </span>
+            <span>API &amp; Exports</span>
+            <span className="tab-count-pill">{totalExports}</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'playground'}
+            className={`tab-btn ${activeTab === 'playground' ? 'active' : ''}`}
+            onClick={() => setActiveTab('playground')}
+          >
+            <span className="tab-svg-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+            </span>
+            <span>Code Generator</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'manifest'}
+            className={`tab-btn ${activeTab === 'manifest' ? 'active' : ''}`}
+            onClick={() => setActiveTab('manifest')}
+          >
+            <span className="tab-svg-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                <line x1="12" y1="22.08" x2="12" y2="12" />
+              </svg>
+            </span>
+            <span>Manifest &amp; Metadata</span>
+          </button>
         </div>
       </header>
-
-      {/* Quick Install Section */}
-      <section className="detail-section install-section">
-        <div className="section-heading">
-          <div className="section-heading-inner">
-            <span className="section-kicker">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-              </svg>
-              GET STARTED
-            </span>
-            <h2>Installation &amp; Setup</h2>
-            <p className="section-subtext">Run these commands in your workspace or virtual environment to consume this package.</p>
-          </div>
-        </div>
-        <div className={`install-grid ${pkg.hasPythonManifest && pkg.hasNpmManifest ? 'dual' : 'single'}`}>
-          {pkg.hasNpmManifest && (
-            <CodePanel
-              title="npm workspace"
-              language="Run from monorepo root"
-              value={npmInstall}
-              iconType="npm"
-            />
-          )}
-          {pkg.hasPythonManifest && (
-            <CodePanel
-              title="Python editable install"
-              language="Python 3.11+"
-              value={pythonInstall}
-              iconType="python"
-            />
-          )}
-        </div>
-      </section>
-
-      {/* Modern Navigation Tabs */}
-      <div className="package-detail-tabs" role="tablist" aria-label="Package sections">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'docs'}
-          className={`tab-btn ${activeTab === 'docs' ? 'active' : ''}`}
-          onClick={() => setActiveTab('docs')}
-        >
-          <span className="tab-svg-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-            </svg>
-          </span>
-          <span>Documentation</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'api'}
-          className={`tab-btn ${activeTab === 'api' ? 'active' : ''}`}
-          onClick={() => setActiveTab('api')}
-        >
-          <span className="tab-svg-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="16 18 22 12 16 6" />
-              <polyline points="8 6 2 12 8 18" />
-            </svg>
-          </span>
-          <span>API &amp; Exports</span>
-          <span className="tab-count-pill">{totalExports}</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'playground'}
-          className={`tab-btn ${activeTab === 'playground' ? 'active' : ''}`}
-          onClick={() => setActiveTab('playground')}
-        >
-          <span className="tab-svg-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-          </span>
-          <span>Code Generator</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === 'manifest'}
-          className={`tab-btn ${activeTab === 'manifest' ? 'active' : ''}`}
-          onClick={() => setActiveTab('manifest')}
-        >
-          <span className="tab-svg-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-              <line x1="12" y1="22.08" x2="12" y2="12" />
-            </svg>
-          </span>
-          <span>Manifest &amp; Metadata</span>
-        </button>
-      </div>
 
       {/* Tab Panels */}
       {activeTab === 'docs' && (

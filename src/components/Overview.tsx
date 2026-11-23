@@ -81,7 +81,7 @@ export default function Overview({
 
           <div className="header-status-pill">
             <span className="status-live-dot" aria-hidden="true" />
-            <span>Live Ecosystem · 4 Pillars · {projects.length || 8} Apps · {packages.length || 3} Packages</span>
+            <span>Live Ecosystem · 3 Pillars · {projects.length || 8} Apps · {packages.length || 3} Packages</span>
           </div>
         </div>
 
@@ -100,7 +100,7 @@ export default function Overview({
         {/* Dashboard Key Metrics Banner */}
         <div className="docs-hub-metrics-banner">
           <div className="docs-metric-pill">
-            <span className="docs-metric-val">4</span>
+            <span className="docs-metric-val">3</span>
             <span className="docs-metric-label">Core Pillars</span>
           </div>
           <div className="docs-metric-pill">
@@ -178,25 +178,6 @@ export default function Overview({
             <p>5 authoritative architecture guides: mandatory golden rules, port matrices, tech stack standards, and compliance cheatsheets.</p>
             <div className="gateway-card-action">
               <span>Read 5 Guides</span>
-              <span className="arrow-icon">→</span>
-            </div>
-          </div>
-
-          <div
-            className="gateway-pillar-card p-violet"
-            onClick={() => onNavigate('explore')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('explore'); }}
-          >
-            <div className="gateway-card-top">
-              <span className="gateway-icon-badge violet">🔍</span>
-              <span className="gateway-pillar-tag">Pillar 4</span>
-            </div>
-            <h3>Explore &amp; Prober</h3>
-            <p>Live socket port prober, cross-cutting AST exported symbols catalog, and interactive TypeScript &amp; Python code snippet generator.</p>
-            <div className="gateway-card-action">
-              <span>Open Introspection</span>
               <span className="arrow-icon">→</span>
             </div>
           </div>

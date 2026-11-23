@@ -132,10 +132,19 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
               </div>
 
               <div className="project-card-footer">
-                <div className="cmd-snippet">
-                  <code>{runCmd}</code>
-                </div>
-                <CopyButton text={runCmd} label="Copy Run" />
+                {project.frontendPort && (
+                  <a
+                    href={`http://localhost:${project.frontendPort}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="card-launch-btn"
+                    title={`Launch on http://localhost:${project.frontendPort}`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <span>Launch</span>
+                    <span className="btn-arrow-icon">↗</span>
+                  </a>
+                )}
               </div>
             </article>
           );

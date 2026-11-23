@@ -320,17 +320,6 @@ export default function Sidebar({
               <span className="nav-text">Scripts &amp; Runners</span>
               <span className="nav-badge-count">15</span>
             </button>
-
-            <button
-              type="button"
-              aria-current={isActive('explore') ? 'page' : undefined}
-              className={isActive('explore') ? 'nav-item active' : 'nav-item'}
-              onClick={() => onNavigate('explore')}
-            >
-              <span className="nav-icon overview-icon" aria-hidden="true">🔍</span>
-              <span className="nav-text">Explore &amp; Prober</span>
-              <span className="nav-badge-count">Tool</span>
-            </button>
           </div>
 
           {/* If searching and matching scripts exist, show them right under top tools */}

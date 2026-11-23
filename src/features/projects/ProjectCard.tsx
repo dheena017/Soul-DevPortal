@@ -1,5 +1,4 @@
 import React from 'react';
-import CopyButton from '../../components/CopyButton';
 import { ProjectData } from '../../types';
 import { PROJECT_LOGOS, PROJECT_BRAND_MAP, formatProjectTitle } from './projectsConstants';
 
@@ -22,6 +21,7 @@ function getTagColor(tag: string): string {
 }
 
 export interface ProjectCardProps {
+  key?: React.Key;
   project: ProjectData;
   onSelectProject?: (projectId: string) => void;
 }
@@ -40,7 +40,6 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
   };
   const description = project.description || `${formattedTitle} monorepo application.`;
   const tags = project.tags && project.tags.length > 0 ? project.tags : ['React 19', 'FastAPI', 'Tailwind v4', 'SQLite'];
-  const runCmd = `npx @workspace/runner project ${project.id}`;
 
   const handleCardClick = () => {
     if (onSelectProject) {
@@ -175,13 +174,8 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
         })}
       </div>
 
-      {/* Card Footer: Command & Actions */}
+      {/* Card Footer: Action Buttons (Launch & Details) */}
       <div className="project-card-footer">
-        <div className="cmd-snippet">
-          <span className="cmd-prompt-sym">$</span>
-          <code>{runCmd}</code>
-          <CopyButton text={runCmd} variant="compact" label="Copy" copiedLabel="Copied!" title={`Copy '${runCmd}'`} />
-        </div>
         <div className="project-card-action-btns">
           {project.frontendPort && (
             <a

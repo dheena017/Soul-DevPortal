@@ -42,7 +42,6 @@ export const Header: React.FC<HeaderProps> = ({
   const isDocsActive =
     active.startsWith('doc') ||
     ['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
-  const isExploreActive = active.startsWith('explore');
 
   return (
     <header className="topbar" role="banner">
@@ -198,18 +197,6 @@ export const Header: React.FC<HeaderProps> = ({
             </svg>
             <span>Docs</span>
             <span className="topbar-pill-count">{docsCount}</span>
-          </button>
-
-          <button
-            type="button"
-            className={`topbar-pill-btn ${isExploreActive ? 'active' : ''}`}
-            onClick={() => onNavigate('explore')}
-            title="Pillar 4: Explorer & Socket Prober"
-          >
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-              <path d="M1.5 3a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2Zm2-1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Zm2.75 4.75a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Zm0 3a.75.75 0 0 1 .75-.75h2a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1-.75-.75Z" />
-            </svg>
-            <span>Prober</span>
           </button>
         </nav>
 
