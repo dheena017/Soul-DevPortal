@@ -1,7 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react';
 
 export interface TiltCard3DProps extends React.HTMLAttributes<HTMLDivElement> {
-  key?: React.Key;
   children: React.ReactNode;
   className?: string;
   maxTilt?: number; // max tilt in degrees (default 6 for subtle, clean feel)
@@ -93,3 +92,4 @@ export default function TiltCard3D({
     </div>
   );
 }
+

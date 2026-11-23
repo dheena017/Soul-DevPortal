@@ -90,52 +90,55 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         onBack={onBack}
       />
 
-      {activeTab === 'overview' && (
-        <ProjectOverviewTab
-          project={project}
-          featuresList={featuresList}
-          scriptsCount={scriptsEntries.length}
-          totalDepsCount={depsEntries.length + devDepsEntries.length}
-          envCount={envKeys.length}
-          runnerCmd={runnerCmd}
-          feUrl={feUrl}
-          beUrl={beUrl}
-          fileTree={fileTree}
-          onNavigateToFiles={() => setActiveTab('files')}
-        />
-      )}
+      {/* ── Separate Tab Panels with Smooth Motion ── */}
+      <div key={activeTab} className="w-full tab-content-animate">
+        {activeTab === 'overview' && (
+          <ProjectOverviewTab
+            project={project}
+            featuresList={featuresList}
+            scriptsCount={scriptsEntries.length}
+            totalDepsCount={depsEntries.length + devDepsEntries.length}
+            envCount={envKeys.length}
+            runnerCmd={runnerCmd}
+            feUrl={feUrl}
+            beUrl={beUrl}
+            fileTree={fileTree}
+            onNavigateToFiles={() => setActiveTab('files')}
+          />
+        )}
 
-      {activeTab === 'files' && (
-        <ProjectFilesTab project={project} fileTree={fileTree} />
-      )}
+        {activeTab === 'files' && (
+          <ProjectFilesTab project={project} fileTree={fileTree} />
+        )}
 
-      {activeTab === 'api' && (
-        <ProjectApiTab project={project} beUrl={beUrl} />
-      )}
+        {activeTab === 'api' && (
+          <ProjectApiTab project={project} beUrl={beUrl} />
+        )}
 
-      {activeTab === 'database' && (
-        <ProjectDatabaseTab project={project} tables={tables} />
-      )}
+        {activeTab === 'database' && (
+          <ProjectDatabaseTab project={project} tables={tables} />
+        )}
 
-      {activeTab === 'scripts' && (
-        <ProjectScriptsTab scriptsEntries={scriptsEntries} />
-      )}
+        {activeTab === 'scripts' && (
+          <ProjectScriptsTab scriptsEntries={scriptsEntries} />
+        )}
 
-      {activeTab === 'env' && (
-        <ProjectEnvTab
-          project={project}
-          envKeys={envKeys}
-          sampleEnvFile={sampleEnvFile}
-          showSecretPlaceholders={showSecretPlaceholders}
-          onToggleSecretPlaceholders={() => setShowSecretPlaceholders(!showSecretPlaceholders)}
-          depsEntries={depsEntries}
-          devDepsEntries={devDepsEntries}
-        />
-      )}
+        {activeTab === 'env' && (
+          <ProjectEnvTab
+            project={project}
+            envKeys={envKeys}
+            sampleEnvFile={sampleEnvFile}
+            showSecretPlaceholders={showSecretPlaceholders}
+            onToggleSecretPlaceholders={() => setShowSecretPlaceholders(!showSecretPlaceholders)}
+            depsEntries={depsEntries}
+            devDepsEntries={devDepsEntries}
+          />
+        )}
 
-      {activeTab === 'readme' && (
-        <ProjectReadmeTab project={project} />
-      )}
+        {activeTab === 'readme' && (
+          <ProjectReadmeTab project={project} />
+        )}
+      </div>
     </article>
   );
 }

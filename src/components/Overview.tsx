@@ -339,85 +339,86 @@ export default function Overview({
               const aiSummary = hasAi ? p.aiEngine!.split('+')[0].trim() : null;
 
               return (
-                <div
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-sky-500/40 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4 cursor-pointer"
-                  key={p.id}
-                  onClick={() => onNavigate(`projects/${p.id}`)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(`projects/${p.id}`); }}
-                >
-                  <div className="flex flex-col gap-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div
-                          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden"
-                          style={{
-                            borderColor: brand ? `${brand.themeColor}33` : undefined,
-                            background: brand ? brand.accentBg : undefined,
-                          }}
-                        >
-                          {logoSrc ? (
-                            <img
-                              src={logoSrc}
-                              alt={`${displayTitle} logo`}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                (e.currentTarget as HTMLElement).style.display = 'none';
-                              }}
-                            />
-                          ) : (
-                            <span className="text-base">{brand?.icon || '⚡'}</span>
-                          )}
-                        </div>
-                        <div className="flex flex-col min-w-0">
-                          <strong className="text-sm font-bold text-white group-hover:text-sky-400 transition-colors truncate">
-                            {displayTitle}
-                          </strong>
-                          <div className="flex items-center gap-1.5">
-                            <code className="text-[11px] font-mono text-neutral-400">{p.id}</code>
-                            {brand?.tag && <span className="text-[10px] font-mono text-neutral-500">· {brand.tag}</span>}
+                <TiltCard3D key={p.id} maxTilt={4} className="h-full">
+                  <div
+                    className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4 cursor-pointer h-full"
+                    onClick={() => onNavigate(`projects/${p.id}`)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(`projects/${p.id}`); }}
+                  >
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden"
+                            style={{
+                              borderColor: brand ? `${brand.themeColor}33` : undefined,
+                              background: brand ? brand.accentBg : undefined,
+                            }}
+                          >
+                            {logoSrc ? (
+                              <img
+                                src={logoSrc}
+                                alt={`${displayTitle} logo`}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  (e.currentTarget as HTMLElement).style.display = 'none';
+                                }}
+                              />
+                            ) : (
+                              <span className="text-base">{brand?.icon || '⚡'}</span>
+                            )}
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <strong className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                              {displayTitle}
+                            </strong>
+                            <div className="flex items-center gap-1.5">
+                              <code className="text-[11px] font-mono text-neutral-400">{p.id}</code>
+                              {brand?.tag && <span className="text-[10px] font-mono text-neutral-500">· {brand.tag}</span>}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-[11px]">
-                        {p.frontendPort && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-sky-500/10 border border-sky-500/25 text-sky-400 font-bold">
-                            FE :{p.frontendPort}
-                          </span>
-                        )}
-                        {p.backendPort && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 font-bold">
-                            BE :{p.backendPort}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-[#0d0d0d] border border-[#202020] text-xs">
-                      <div className="flex items-center gap-2 text-neutral-400">
-                        <span>⚡</span>
-                        <span className="truncate">{p.framework || 'React 19 + Vite 8 + Tailwind v4'}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-neutral-400">
-                        <span>🗄️</span>
-                        <span className="truncate">{p.dbInfo || 'SQLite datastore'}</span>
-                      </div>
-                      {hasAi && (
-                        <div className="flex items-center gap-2 text-sky-400 font-medium">
-                          <span>✨</span>
-                          <span className="truncate">{aiSummary}</span>
+                        <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-[11px]">
+                          {p.frontendPort && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/25 text-blue-400 font-bold">
+                              FE :{p.frontendPort}
+                            </span>
+                          )}
+                          {p.backendPort && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 font-bold">
+                              BE :{p.backendPort}
+                            </span>
+                          )}
                         </div>
-                      )}
+                      </div>
+
+                      <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-[#0e0e12] border border-[#22222e] text-xs">
+                        <div className="flex items-center gap-2 text-neutral-400">
+                          <span>⚡</span>
+                          <span className="truncate">{p.framework || 'React 19 + Vite 8 + Tailwind v4'}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-neutral-400">
+                          <span>🗄️</span>
+                          <span className="truncate">{p.dbInfo || 'SQLite datastore'}</span>
+                        </div>
+                        {hasAi && (
+                          <div className="flex items-center gap-2 text-blue-400 font-medium">
+                            <span>✨</span>
+                            <span className="truncate">{aiSummary}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-[#22222e] text-xs font-semibold text-neutral-400 group-hover:text-blue-400 transition-colors">
+                      <span>Inspect Application</span>
+                      <span>→</span>
                     </div>
                   </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-[#1e1e1e] text-xs font-semibold text-neutral-400 group-hover:text-sky-400 transition-colors">
-                    <span>Inspect Application</span>
-                    <span>→</span>
-                  </div>
-                </div>
+                </TiltCard3D>
               );
             })}
           </div>

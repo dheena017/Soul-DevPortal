@@ -30,22 +30,24 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
         onBack={onBack}
       />
 
-      {/* ── Separate Tab Panels ── */}
-      {activeTab === 'docs' && (
-        <PackageDocsTab pkg={pkg} headings={headings} />
-      )}
+      {/* ── Separate Tab Panels with Smooth Motion ── */}
+      <div key={activeTab} className="w-full tab-content-animate">
+        {activeTab === 'docs' && (
+          <PackageDocsTab pkg={pkg} headings={headings} />
+        )}
 
-      {activeTab === 'api' && (
-        <PackageApiTab pkg={pkg} />
-      )}
+        {activeTab === 'api' && (
+          <PackageApiTab pkg={pkg} />
+        )}
 
-      {activeTab === 'playground' && (
-        <PackagePlaygroundTab pkgId={pkg.id} />
-      )}
+        {activeTab === 'playground' && (
+          <PackagePlaygroundTab pkgId={pkg.id} />
+        )}
 
-      {activeTab === 'manifest' && (
-        <PackageManifestTab pkg={pkg} />
-      )}
+        {activeTab === 'manifest' && (
+          <PackageManifestTab pkg={pkg} />
+        )}
+      </div>
     </article>
   );
 }

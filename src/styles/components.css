@@ -19,6 +19,114 @@
   animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* ── Tab & Panel Motion Animations (3D Spatial Perspective) ── */
+@keyframes tabEnter3D {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) rotateX(2deg) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1000px) rotateX(0deg) translateY(0);
+  }
+}
+
+.tab-content-animate {
+  transform-origin: top center;
+  animation: tabEnter3D 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── 3D Card Depth & Elevation ── */
+.card-3d {
+  transform: perspective(1000px) translateZ(0);
+  transform-style: preserve-3d;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease,
+              background-color 0.28s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.06);
+}
+
+.card-3d:hover {
+  transform: perspective(1000px) translateY(-3px) translateZ(8px);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.8),
+              0 6px 16px -4px rgba(0, 0, 0, 0.6),
+              inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+/* ── 3D Floating Icon Animation ── */
+@keyframes float3D {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotateX(3deg) rotateY(-3deg);
+  }
+}
+
+.icon-3d-float {
+  animation: float3D 3.5s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+/* ── 3D Interactive Buttons ── */
+.btn-3d {
+  position: relative;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.15s ease,
+              background-color 0.15s ease,
+              border-color 0.15s ease;
+  box-shadow: 0 2px 0 #1c1c1c, 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.btn-3d:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 #1c1c1c, 0 6px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.btn-3d:active {
+  transform: translateY(1.5px);
+  box-shadow: 0 0.5px 0 #1c1c1c, 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ── 3D Tab Active Specular Depth ── */
+.tab-3d-active {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6),
+              inset 0 1px 1px rgba(255, 255, 255, 0.14),
+              inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Interactive Button & Card Transitions ── */
+button,
+[role="button"],
+[role="tab"] {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.15s ease,
+              border-color 0.15s ease,
+              color 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+button:active:not(:disabled),
+[role="button"]:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
 /* ── Terminal Monospace Font Override ── */
 .font-mono-code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;

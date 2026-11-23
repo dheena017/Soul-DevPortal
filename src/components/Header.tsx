@@ -1,5 +1,6 @@
 import React from 'react';
 import { consoleLogger } from '@workspace/logger';
+import { SoulLogoIcon } from './SoulLogo';
 
 export interface BreadcrumbItem {
   label: string;
@@ -74,14 +75,14 @@ export const Header: React.FC<HeaderProps> = ({
         <nav className="flex items-center gap-2 text-xs min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#161616] border border-[#282828] hover:border-[#383838] hover:bg-[#1a1a1a] font-mono text-neutral-300 hover:text-white transition-all shrink-0"
-            onClick={() => onNavigate('portal')}
-            title="Go to Developer Portal Hub"
+            className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#161616] border border-[#282828] hover:border-[#383838] hover:bg-[#1a1a1a] font-mono text-neutral-300 hover:text-white transition-all shrink-0 shadow-sm"
+            onClick={() => onNavigate('overview')}
+            title="Go to Overview Dashboard"
           >
-            <span className="text-sky-400" aria-hidden="true">⚡</span>
-            <span className="font-semibold">soul</span>
+            <SoulLogoIcon size={18} />
+            <span className="font-semibold text-white">soul</span>
             <span className="text-neutral-600 font-bold">/</span>
-            <strong className="text-white font-bold">dev-portal</strong>
+            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 font-bold">dev-portal</strong>
           </button>
 
           {breadcrumbs.slice(1).map((crumb, idx) => (
@@ -153,19 +154,6 @@ export const Header: React.FC<HeaderProps> = ({
             title="Overview Dashboard"
           >
             Overview
-          </button>
-
-          <button
-            type="button"
-            className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
-              active === 'portal' || active === 'dev-portal'
-                ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
-                : 'text-neutral-400 hover:text-white border border-transparent'
-            }`}
-            onClick={() => onNavigate('portal')}
-            title="Developer Portal Hub"
-          >
-            Dev Portal
           </button>
 
           <button

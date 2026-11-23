@@ -21,7 +21,6 @@ import PackagesView from './features/packages/PackagesView';
 import PackageDetailView from './features/packages/PackageDetailView';
 import DocsView from './features/docs/DocsView';
 import ScriptsView from './features/scripts/ScriptsView';
-import DeveloperPortalView from './features/portal/DeveloperPortalView';
 
 import { DOCUMENTATION_GUIDES_REGISTRY } from './features/docs/docsConstants';
 
@@ -267,8 +266,6 @@ function App() {
       crumbs.push({ label: activeTitle || active });
     } else if (active === 'scripts' || active === 'commands' || active === 'runners') {
       crumbs.push({ label: 'scripts & runners' });
-    } else if (active === 'portal' || active === 'dev-portal' || active === 'developer-portal') {
-      crumbs.push({ label: 'developer portal' });
     } else {
       crumbs.push({ label: activeTitle || active });
     }
@@ -439,16 +436,6 @@ function App() {
             <ScriptsView
               rootScripts={liveWorkspace?.rootScripts || {}}
               onNavigate={navigate}
-            />
-          )}
-
-          {/* Dedicated Feature View: Developer Portal Hub */}
-          {(active === 'portal' || active === 'dev-portal' || active === 'developer-portal') && (
-            <DeveloperPortalView
-              projects={projectsList}
-              packages={packagesList}
-              onNavigate={navigate}
-              onBack={() => navigate('overview')}
             />
           )}
         </div>

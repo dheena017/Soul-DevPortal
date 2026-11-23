@@ -93,22 +93,24 @@ export default function DocDetailView({
         onBack={onBack}
       />
 
-      {/* ── Separate Tab Panels ── */}
-      {activeTab === 'spec' && (
-        <DocSpecTab headings={headings} finalBlocks={finalBlocks} guideMeta={guideMeta} />
-      )}
+      {/* ── Separate Tab Panels with Smooth Motion ── */}
+      <div key={activeTab} className="w-full tab-content-animate">
+        {activeTab === 'spec' && (
+          <DocSpecTab headings={headings} finalBlocks={finalBlocks} guideMeta={guideMeta} />
+        )}
 
-      {activeTab === 'highlights' && (
-        <DocHighlightsTab guideMeta={guideMeta} />
-      )}
+        {activeTab === 'highlights' && (
+          <DocHighlightsTab guideMeta={guideMeta} />
+        )}
 
-      {activeTab === 'snippets' && (
-        <DocSnippetsTab codeBlocks={codeBlocks} />
-      )}
+        {activeTab === 'snippets' && (
+          <DocSnippetsTab codeBlocks={codeBlocks} />
+        )}
 
-      {activeTab === 'tables' && (
-        <DocTablesTab tables={tables} />
-      )}
+        {activeTab === 'tables' && (
+          <DocTablesTab tables={tables} />
+        )}
+      </div>
     </article>
   );
 }

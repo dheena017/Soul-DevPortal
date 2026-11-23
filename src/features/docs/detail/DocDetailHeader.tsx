@@ -89,7 +89,7 @@ export default function DocDetailHeader({
       {/* ── Hero Title & 2x2 Balanced Cards Row ── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="flex items-start gap-4 min-w-0">
-          <div className="w-14 h-14 rounded-2xl bg-[#161616] border border-[#262626] flex items-center justify-center shrink-0 text-2xl shadow-inner">
+          <div className="w-14 h-14 rounded-2xl bg-[#161616] border border-[#262626] flex items-center justify-center shrink-0 text-2xl shadow-inner icon-3d-float">
             {guideMeta.icon || '📜'}
           </div>
 
@@ -111,9 +111,9 @@ export default function DocDetailHeader({
           </div>
         </div>
 
-        {/* 4-Card Balanced Metadata Grid (Aligned to right, filling previous gap) */}
+        {/* 4-Card Balanced Metadata Grid with 3D Depth */}
         <div className="grid grid-cols-2 gap-3 min-w-[280px] lg:min-w-[340px] shrink-0">
-          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+          <div className="card-3d flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>📑</span>
               <span>SECTIONS</span>
@@ -121,7 +121,7 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-sky-400 font-mono mt-1">{headingsCount} headings</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+          <div className="card-3d flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>⏱️</span>
               <span>READ TIME</span>
@@ -129,7 +129,7 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-emerald-400 font-mono mt-1">{guideMeta.readTime}</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+          <div className="card-3d flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>💻</span>
               <span>CODE EXAMPLES</span>
@@ -137,7 +137,7 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-purple-400 font-mono mt-1">{codeBlocksCount} snippets</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
+          <div className="card-3d flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>📊</span>
               <span>TABLES &amp; MATRICES</span>

@@ -1,4 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0c0c0c"/>
-  <path d="M9 10C9 8.34315 10.3431 7 12 7H20C21.6569 7 23 8.34315 23 10V13C23 14.6569 21.6569 16 20 16H12C10.3431 16 9 17.3431 9 19V22C9 23.6569 10.3431 25 12 25H20C21.6569 25 23 23.6569 23 22" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="soul-neon-1" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="45%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="soul-glass" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#141824"/>
+      <stop offset="100%" stop-color="#0a0c12"/>
+    </linearGradient>
+    <radialGradient id="soul-ambient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.5"/>
+      <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Ambient background glow circle -->
+  <circle cx="32" cy="32" r="26" fill="url(#soul-ambient)"/>
+
+  <!-- Outer Hex-Squircle Shield -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#soul-glass)" stroke="url(#soul-neon-1)" stroke-width="1.8" stroke-opacity="0.5"/>
+
+  <!-- Top Arc & Ribbon of Soul 'S' -->
+  <path d="M20 22C20 16.4772 24.4772 12 30 12H41C43.7614 12 46 14.2386 46 17C46 19.7614 43.7614 22 41 22H29C26.7909 22 25 23.7909 25 26C25 28.2091 26.7909 30 29 30H38C44.6274 30 50 35.3726 50 42C50 48.6274 44.6274 54 38 54H25C22.2386 54 20 51.7614 20 49C20 46.2386 22.2386 44 25 44H38C40.2091 44 42 42.2091 42 40C42 37.7909 40.2091 36 38 36H29C22.3726 36 17 30.6274 17 24C17 19.5 19.5 15.5 23.5 13.5" stroke="url(#soul-neon-1)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Inner Core Sparks -->
+  <circle cx="41" cy="17" r="2.5" fill="#38bdf8"/>
+  <circle cx="25" cy="49" r="2.5" fill="#c084fc"/>
+  
+  <!-- Central Nexus Anchor Node -->
+  <circle cx="33.5" cy="33" r="3.2" fill="#ffffff"/>
+  <circle cx="33.5" cy="33" r="5" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
 </svg>

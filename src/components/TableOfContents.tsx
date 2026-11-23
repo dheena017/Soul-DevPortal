@@ -143,13 +143,13 @@ export default function TableOfContents({
 
   return (
     <nav
-      className={`sticky top-3.5 flex flex-col gap-2.5 p-4 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl shadow-black/60 ${className}`}
+      className={`sticky top-3.5 flex flex-col gap-2.5 p-4 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl shadow-black/60 ${className}`}
       aria-label="Table of contents navigation"
     >
-      {/* Card Header using Theme Palette */}
-      <div className="flex items-center justify-between pb-2.5 border-b border-[#1f1f1f]">
+      {/* Card Header using Website Theme Palette */}
+      <div className="flex items-center justify-between pb-2.5 border-b border-[#22222e]">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-md bg-[#161616] border border-[#262626] flex items-center justify-center text-sky-400">
+          <div className="w-5 h-5 rounded-md bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-sm">
             <svg
               width="12"
               height="12"
@@ -173,12 +173,12 @@ export default function TableOfContents({
             {title}
           </span>
         </div>
-        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#161616] border border-[#262626] text-neutral-300">
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#161622] border border-[#282838] text-neutral-300">
           {headings.length}
         </span>
       </div>
 
-      {/* Navigation List using Theme Palette */}
+      {/* Navigation List using Website Theme Palette */}
       <div className="flex flex-col gap-1 max-h-[calc(100vh-140px)] overflow-y-auto pr-1">
         {headings.map((heading, index) => {
           const rawText = heading.text || '';
@@ -198,31 +198,40 @@ export default function TableOfContents({
               href={`#${id}`}
               data-toc-id={id}
               aria-current={isActive ? 'location' : undefined}
-              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150 text-left ${
-                isH3 ? 'pl-5' : ''
+              className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-150 text-left ${
+                isH3 && !numberPart ? 'pl-5' : ''
               } ${
                 isActive
-                  ? 'bg-[#222222] text-white font-semibold border border-[#383838] shadow-sm'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161616] border border-transparent hover:border-[#282828]'
+                  ? 'bg-blue-500/10 text-white font-semibold border border-blue-500/35 shadow-[0_2px_10px_rgba(59,130,246,0.12)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#161620] border border-transparent hover:border-[#282838]'
               }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
             >
-              {isH3 && (
+              {isH3 && !numberPart && (
                 <span
                   className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
                     isActive
-                      ? 'bg-neutral-200'
+                      ? 'bg-blue-400 shadow-[0_0_6px_rgba(96,165,250,0.6)]'
                       : 'bg-neutral-600'
                   }`}
                   aria-hidden="true"
                 />
               )}
               {numberPart && (
-                <span className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-[#161616] border border-[#262626] text-neutral-400 shrink-0">
+                <span
+                  className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
+                    isActive
+                      ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold'
+                      : 'bg-[#161620] border border-[#282838] text-neutral-400'
+                  }`}
+                >
                   {numberPart}
                 </span>
               )}
-              <span className="truncate leading-tight">{titlePart}</span>
+              <span className="truncate leading-tight flex-1">{titlePart}</span>
+              {isActive && (
+                <span className="w-1 h-3 rounded-full bg-blue-500 shrink-0" aria-hidden="true" />
+              )}
             </a>
           );
         })}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { consoleLogger } from '@workspace/logger';
 import CopyButton from '../../../components/CopyButton';
+import TiltCard3D from '../../../components/TiltCard3D';
 import { PackageData } from '../../../types';
 import { PACKAGE_METADATA_MAP, PackageMetaInfo } from '../packagesConstants';
 
@@ -47,105 +48,108 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-sky-500/40 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4">
-      {/* ── Top Row: Icon, Version, Ecosystem Pills ── */}
-      <div className="flex flex-col gap-3.5" onClick={handleCardClick} style={{ cursor: onSelectPackage ? 'pointer' : 'default' }}>
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-sky-500/25 bg-sky-500/10 text-xl shadow-inner">
-              {meta.icon}
+    <TiltCard3D maxTilt={4} className="h-full">
+      <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4 h-full">
+        {/* ── Top Row: Icon, Version, Ecosystem Pills ── */}
+        <div className="flex flex-col gap-3.5" onClick={handleCardClick} style={{ cursor: onSelectPackage ? 'pointer' : 'default' }}>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-blue-500/25 bg-blue-500/10 text-xl shadow-inner">
+                {meta.icon}
+              </div>
+
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-mono font-bold text-neutral-300">v{pkg.version || '1.0.0'}</span>
+                <span className="text-[10px] font-mono text-neutral-500 truncate">packages/{pkg.id}</span>
+              </div>
             </div>
 
-            <div className="flex flex-col min-w-0">
-              <span className="text-xs font-mono font-bold text-neutral-300">v{pkg.version || '1.0.0'}</span>
-              <span className="text-[10px] font-mono text-neutral-500 truncate">packages/{pkg.id}</span>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/25 text-amber-400 text-[10px] font-mono font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" aria-hidden="true" />
+                <span>NPM</span>
+              </span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/25 text-blue-400 text-[10px] font-mono font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400" aria-hidden="true" />
+                <span>PYTHON</span>
+              </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 shrink-0">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/25 text-amber-400 text-[10px] font-mono font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" aria-hidden="true" />
-              <span>NPM</span>
+          {/* ── Title & Subtitle ── */}
+          <div className="flex flex-col gap-1">
+            <h3 className="text-lg font-bold font-mono text-white group-hover:text-blue-400 transition-colors truncate">
+              @workspace/{pkg.id}
+            </h3>
+            <span className="text-xs font-semibold text-blue-400 truncate">
+              {meta.role}
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/25 text-sky-400 text-[10px] font-mono font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-sky-400" aria-hidden="true" />
-              <span>PYTHON</span>
-            </span>
+            <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]">
+              {pkg.description || `High-performance shared library @workspace/${pkg.id} for the Soul workspace.`}
+            </p>
           </div>
         </div>
 
-        {/* ── Title & Subtitle ── */}
-        <div className="flex flex-col gap-1">
-          <h3 className="text-lg font-bold font-mono text-white group-hover:text-sky-400 transition-colors truncate">
-            @workspace/{pkg.id}
-          </h3>
-          <span className="text-xs font-semibold text-sky-400 truncate">
-            {meta.role}
-          </span>
-          <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]">
-            {pkg.description || `High-performance shared library @workspace/${pkg.id} for the Soul workspace.`}
-          </p>
+        {/* ── Tags Row ── */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          {meta.tags.map((tag) => (
+            <span key={tag} className="px-2 py-0.5 rounded-md bg-[#161622] border border-[#282838] text-[10px] font-mono font-medium text-neutral-400">
+              {tag}
+            </span>
+          ))}
         </div>
-      </div>
 
-      {/* ── Tags Row ── */}
-      <div className="flex flex-wrap items-center gap-1.5">
-        {meta.tags.map((tag) => (
-          <span key={tag} className="px-2 py-0.5 rounded-md bg-[#161616] border border-[#242424] text-[10px] font-mono font-medium text-neutral-400">
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* ── 3-Metric Specs Row ── */}
-      <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-[#0d0d0d] border border-[#202020] text-center font-mono text-xs">
-        <div className="flex flex-col items-center">
-          <span className="text-[10px] text-neutral-500 uppercase tracking-wider">TOTAL EXPORTS</span>
-          <strong className="text-xs font-bold text-sky-400 mt-0.5">{exportsCount} APIs</strong>
-        </div>
-        <div className="flex flex-col items-center border-x border-[#1e1e1e]">
-          <span className="text-[10px] text-neutral-500 uppercase tracking-wider">LICENSE</span>
-          <strong className="text-xs font-bold text-white mt-0.5">{pkg.license || 'MIT'}</strong>
-        </div>
-        <div className="flex flex-col items-center">
-          <span className="text-[10px] text-neutral-500 uppercase tracking-wider">PYTHON MODULE</span>
-          <strong className="text-xs font-bold text-neutral-300 mt-0.5 truncate max-w-[80px]">external</strong>
-        </div>
-      </div>
-
-      {/* ── Terminal Commands Strip (Zero Truncation) ── */}
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#0c0c0c] border border-[#222222] font-mono text-xs text-neutral-300">
-          <div className="flex items-center gap-2 min-w-0 flex-1">
-            <span className="text-neutral-500 select-none font-bold">$</span>
-            <code className="text-[11px] text-sky-300 truncate select-all">{installCmd}</code>
+        {/* ── 3-Metric Specs Row ── */}
+        <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-[#0e0e14] border border-[#222230] text-center font-mono text-xs">
+          <div className="flex flex-col items-center">
+            <span className="text-[10px] text-neutral-500 uppercase tracking-wider">TOTAL EXPORTS</span>
+            <strong className="text-xs font-bold text-blue-400 mt-0.5">{exportsCount} APIs</strong>
           </div>
-          <CopyButton text={installCmd} variant="compact" label="" copiedLabel="Copied!" />
+          <div className="flex flex-col items-center border-x border-[#222230]">
+            <span className="text-[10px] text-neutral-500 uppercase tracking-wider">LICENSE</span>
+            <strong className="text-xs font-bold text-white mt-0.5">{pkg.license || 'MIT'}</strong>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-[10px] text-neutral-500 uppercase tracking-wider">PYTHON MODULE</span>
+            <strong className="text-xs font-bold text-neutral-300 mt-0.5 truncate max-w-[80px]">external</strong>
+          </div>
         </div>
 
-        {pyInstallCmd && (
-          <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#0c0c0c] border border-[#222222] font-mono text-xs text-neutral-300">
+        {/* ── Terminal Commands Strip (Zero Truncation) ── */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#0c0c12] border border-[#242434] font-mono text-xs text-neutral-300">
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <span className="text-neutral-500 select-none font-bold">$</span>
-              <code className="text-[11px] text-emerald-300 truncate select-all">{pyInstallCmd}</code>
+              <code className="text-[11px] text-blue-300 truncate select-all">{installCmd}</code>
             </div>
-            <CopyButton text={pyInstallCmd} variant="compact" label="" copiedLabel="Copied!" />
+            <CopyButton text={installCmd} variant="compact" label="" copiedLabel="Copied!" />
           </div>
-        )}
-      </div>
 
-      {/* ── Card Action Footer ── */}
-      <div className="pt-2 border-t border-[#1e1e1e]">
-        <button
-          type="button"
-          className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-500 transition-all shadow-md shadow-sky-600/20 flex items-center justify-center gap-2"
-          onClick={handleCardClick}
-          title={`Inspect @workspace/${pkg.id}`}
-        >
-          <span>Inspect Package API</span>
-          <span>→</span>
-        </button>
-      </div>
-    </article>
+          {pyInstallCmd && (
+            <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#0c0c12] border border-[#242434] font-mono text-xs text-neutral-300">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <span className="text-neutral-500 select-none font-bold">$</span>
+                <code className="text-[11px] text-emerald-300 truncate select-all">{pyInstallCmd}</code>
+              </div>
+              <CopyButton text={pyInstallCmd} variant="compact" label="" copiedLabel="Copied!" />
+            </div>
+          )}
+        </div>
+
+        {/* ── Card Action Footer ── */}
+        <div className="pt-2 border-t border-[#222230]">
+          <button
+            type="button"
+            className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2"
+            onClick={handleCardClick}
+            title={`Inspect @workspace/${pkg.id}`}
+          >
+            <span>Inspect Package API</span>
+            <span>→</span>
+          </button>
+        </div>
+      </article>
+    </TiltCard3D>
+  );
   );
 }

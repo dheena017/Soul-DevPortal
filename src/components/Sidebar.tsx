@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
+import { SoulLogo } from './SoulLogo';
 import { PackageData, ProjectData } from '../types';
 import { DOCUMENTATION_GUIDES_REGISTRY, GuideMeta } from '../features/docs/docsConstants';
 import { WORKSPACE_SCRIPTS_REGISTRY } from '../features/scripts/scriptsConstants';
@@ -227,7 +228,7 @@ export default function Sidebar({
         {/* ── Brand Header ── */}
         <div className="h-14 px-4 flex items-center justify-between border-b border-[#1f1f1f] shrink-0">
           <a
-            className="flex items-center gap-2.5 group"
+            className="flex items-center gap-2 group"
             href="#overview"
             onClick={(e) => {
               e.preventDefault();
@@ -235,18 +236,7 @@ export default function Sidebar({
             }}
             aria-label="Soul Workspace packages overview"
           >
-            <span
-              className="w-8 h-8 rounded-lg bg-sky-500/15 border border-sky-500/30 text-sky-400 font-extrabold flex items-center justify-center text-sm font-mono shadow-inner group-hover:scale-105 transition-transform"
-              aria-hidden="true"
-            >
-              <span>S</span>
-            </span>
-            <span className="flex flex-col">
-              <b className="text-xs font-bold text-white tracking-tight leading-tight">Soul Workspace</b>
-              <small className="text-[9px] font-mono font-bold tracking-widest text-neutral-500 uppercase leading-tight">
-                DEVELOPER PORTAL
-              </small>
-            </span>
+            <SoulLogo size="md" variant="full" />
           </a>
 
           <button
@@ -328,25 +318,6 @@ export default function Sidebar({
               </div>
               <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#1a1a1a] text-neutral-400 border border-[#2a2a2a]">
                 Hub
-              </span>
-            </button>
-
-            <button
-              type="button"
-              aria-current={(isActive('portal') || isActive('dev-portal') || isActive('developer-portal')) ? 'page' : undefined}
-              className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
-                (isActive('portal') || isActive('dev-portal') || isActive('developer-portal'))
-                  ? 'bg-[#202020] text-white font-semibold border border-[#303030] shadow-sm'
-                  : 'text-neutral-300 hover:text-white hover:bg-[#161616]'
-              }`}
-              onClick={() => onNavigate('portal')}
-            >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <span className="text-sm" aria-hidden="true">🌐</span>
-                <span className="truncate">Developer Portal</span>
-              </div>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/10 text-sky-400 border border-sky-500/25">
-                Dev
               </span>
             </button>
 
