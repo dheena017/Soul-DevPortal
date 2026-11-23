@@ -58,6 +58,7 @@ function InlineText({ text = '' }: InlineTextProps) {
 }
 
 interface CodeBlockProps {
+  key?: React.Key;
   code: string;
   language?: string;
 }
@@ -94,6 +95,7 @@ function CodeBlock({ code, language }: CodeBlockProps) {
 }
 
 interface HeadingWithAnchorProps {
+  key?: React.Key;
   level: 1 | 2 | 3 | 4;
   text?: string;
 }
@@ -114,7 +116,7 @@ function HeadingWithAnchor({ level, text = '' }: HeadingWithAnchorProps) {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const Tag = `h${level}` as keyof JSX.IntrinsicElements;
+  const Tag = (`h${level}` as 'h1' | 'h2' | 'h3' | 'h4');
   const classNameMap: Record<number, string> = {
     1: 'document-title',
     2: 'document-heading',

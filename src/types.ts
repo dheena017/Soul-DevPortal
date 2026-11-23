@@ -10,6 +10,14 @@ export interface MarkdownBlock {
   ordered?: boolean;
 }
 
+export interface AstSymbol {
+  name: string;
+  kind?: string;
+  language?: string;
+  signature?: string;
+  docstring?: string;
+}
+
 export interface PackageData {
   id: string;
   name: string;
@@ -30,6 +38,7 @@ export interface PackageData {
   pythonName?: string | null;
   pythonModule?: string | null;
   pythonDependencies?: string[];
+  symbols?: AstSymbol[];
 }
 
 export interface ProjectData {
@@ -58,6 +67,7 @@ export interface ProjectData {
   fileTree?: string[];
   envKeys?: string[];
   tables?: string[];
+  tags?: string[];
 }
 
 export interface StatsData {

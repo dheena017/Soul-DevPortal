@@ -884,6 +884,106 @@
   flex-direction: column;
 }
 
+/* Executive Summary & Intro Card */
+.project-intro-card {
+  background: #141414;
+  border: 1px solid #262626;
+  border-radius: 10px;
+  padding: 22px;
+}
+
+.intro-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.intro-fw-badge,
+.intro-db-badge,
+.intro-ai-badge {
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.intro-fw-badge {
+  background: rgba(59, 130, 246, 0.14);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #60a5fa;
+}
+
+.intro-db-badge {
+  background: rgba(34, 197, 94, 0.14);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #4ade80;
+}
+
+.intro-ai-badge {
+  background: rgba(168, 85, 247, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+}
+
+.project-full-desc {
+  margin: 12px 0 20px 0;
+  font-size: 14px;
+  color: #d1d5db;
+  line-height: 1.6;
+}
+
+.project-quick-stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid #222222;
+}
+
+@media (max-width: 900px) {
+  .project-quick-stat-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.quick-stat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #181818;
+  border: 1px solid #282828;
+}
+
+.quick-stat-label {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #6b7280;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.quick-stat-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quick-stat-val.text-amber {
+  color: #f59e0b;
+}
+
+.feature-subdesc {
+  margin: 4px 0 0 0;
+  font-size: 11.5px;
+  color: #9ca3af;
+}
+
 /* Architecture Cards List */
 .architecture-cards-list {
   display: grid;

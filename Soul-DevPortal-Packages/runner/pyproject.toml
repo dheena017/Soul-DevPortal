@@ -25,11 +25,18 @@ dependencies = [
 ]
 
 [project.scripts]
-workspace-dev = "workspace_runner.bin.run_dev:main"
-workspace-frontend = "workspace_runner.bin.run_frontend:main"
-workspace-backend = "workspace_runner.bin.run_backend:main"
-workspace-install = "workspace_runner.bin.run_install:main"
+workspace-all = "external.run_all:main"
+workspace-dev = "external.run_dev:main"
+workspace-client = "external.run_client:main"
+workspace-server = "external.run_server:main"
+workspace-install = "external.run_install:main"
+workspace-typecheck = "external.run_typecheck:main"
+workspace-lint = "external.run_lint:main"
+workspace-build = "external.run_build:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["workspace_runner*"]
+include = ["internal*", "external*"]
+
+[tool.setuptools.package-data]
+"*" = ["py.typed", "*.pyi"]

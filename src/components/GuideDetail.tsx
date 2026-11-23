@@ -27,7 +27,7 @@ const GUIDES: GuideMeta[] = [
     id: 'techstack',
     title: 'Tech Stack & Ecosystem Standards',
     breadcrumb: 'Soul Workspace / Tech Stack',
-    description: 'Standardized technologies: Vite, Next.js, FastAPI, TypeScript, SQLite, Tailwind CSS, and testing specifications.',
+    description: 'Standardized technologies: Vite 8, React 19, FastAPI, TypeScript, SQLite, Tailwind CSS v4, and testing specifications.',
   },
 ];
 

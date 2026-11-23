@@ -65,6 +65,7 @@ const CALLOUT_CONFIGS: Record<CalloutType, CalloutConfig> = {
 };
 
 export interface CalloutProps {
+  key?: React.Key;
   type?: CalloutType | string;
   title?: string;
   children: ReactNode;

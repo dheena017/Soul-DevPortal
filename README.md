@@ -127,8 +127,8 @@ The root `package.json` provides 5 canonical command contracts governing fullsta
 | **`npm run dev`** | Starts interactive DevPortal development server | `vite` | DevPortal Frontend (:5173) |
 | **`npm run build`** | Builds production distribution assets with minification | `vite build` | Production Assets (`dist/`) |
 | **`npm run typecheck`** | Validates TypeScript static types across codebase | `tsc --noEmit` | Static Type Analysis Engine |
-| **`npm run dev:client`** | Concurrently boots client frontends with port-conflict guards | `python runner/bin/run-frontend.py` | Client Ecosystem (:5173–:5181) |
-| **`npm run dev:server`** | Concurrently boots backend APIs with port-conflict guards | `python runner/bin/run-backend.py` | Server Ecosystem (:8000–:8008) |
+| **`npm run dev:client`** | Concurrently boots client frontends with port-conflict guards | `python runner/bin/run-client.py` | Client Ecosystem (:5173–:5181) |
+| **`npm run dev:server`** | Concurrently boots backend APIs with port-conflict guards | `python runner/bin/run-server.py` | Server Ecosystem (:8000–:8008) |
 
 ### Additional Platform Scripts
 - **`npm run dev:all`**: Concurrently boots all 8 applications (clients + servers) via `@workspace/runner`.
@@ -171,12 +171,13 @@ When launching services with `@workspace/runner`, the terminal supervisor listen
 
 Comprehensive documentation files included in this repository:
 
-- 📜 **[Monorepo Projects Rules & Standards Guide](./Soul-DevPortal-Docs/PROJECTS_RULES_AND_STANDARDS_GUIDE.md)**: Authoritative golden rulebook governing all 8 micro-apps, directory conventions, and security.
-- 📋 **[Monorepo Compliance Cheatsheet](./Soul-DevPortal-Docs/MONOREPO_COMPLIANCE_CHEATSHEET.md)**: Quick-reference operational checklists, top 10 rules, and supervisor CLI commands.
-- 📘 **[Shared Packages Design & Creation Guide](./Soul-DevPortal-Docs/PACKAGES_DESIGN_GUIDE.md)**: Rules, schemas, and best practices for creating and maintaining shared libraries.
-- 🌐 **[Port & Framework Architecture Guide](./Soul-DevPortal-Docs/PROJECTS_PORT_AND_FRAMEWORK_GUIDE.md)**: Network architecture, proxy routing, database engines, and dedicated ports.
-- 📐 **[Tech Stack & Languages Architecture Guide](./Soul-DevPortal-Docs/TECH_STACK.md)**: Polyglot monorepo standards, compiler configurations, and ecosystem specifications.
-- ⚡ **[Backend API Server & AST Parser Engine](./backend/README.md)**: FastAPI implementation, AST extractors, and live socket probes.
+- 📜 **[Monorepo Architecture & Standards](./Soul-DevPortal-Docs/01-architecture/README.md)**: Authoritative golden rulebook governing all micro-apps, directory conventions, and security.
+- 📋 **[Monorepo Compliance Cheatsheet](./Soul-DevPortal-Docs/06-cheatsheets/README.md)**: Quick-reference operational checklists, compliance audits, and CLI commands.
+- 📘 **[Shared Packages Design Guide](./Soul-DevPortal-Docs/03-packages/README.md)**: Rules, schemas, and best practices for creating and maintaining shared libraries.
+- 🌐 **[Port & Networking Architecture Guide](./Soul-DevPortal-Docs/04-networking-and-ports/README.md)**: Network architecture, proxy routing, database engines, and dedicated ports.
+- 📐 **[Tech Stack & Languages Guide](./Soul-DevPortal-Docs/02-tech-stack/README.md)**: Polyglot monorepo standards, compiler configurations, and ecosystem specifications.
+- 🔐 **[Environment & Security Guide](./Soul-DevPortal-Docs/05-environment-and-security/README.md)**: Environment variable hygiene, secret masking, and baseline templates.
+- ⚡ **[Backend API Server & AST Parser Engine](./server/README.md)**: FastAPI implementation, AST extractors, and live socket probes.
 - ⚙️ **[Config Presets Specification](./Soul-DevPortal-Packages/config/README.md)**: TypeScript, Tailwind, Prettier, ESLint, and Ruff presets.
 - 🪵 **[Logger Package Reference](./Soul-DevPortal-Packages/logger/README.md)**: Universal logging, request tracing, and terminal presentation.
 - 🏃 **[Runner Supervisor Manual](./Soul-DevPortal-Packages/runner/README.md)**: Process management, cascading environments, and port resolution.
@@ -219,7 +220,7 @@ Soul-DevPortal/
 │   └── postcraft-ai/                          # Next.js 14 Fullstack (5180)
 ├── projects.json                              # Central project registry & ports
 │
-├── backend/                                   # FastAPI Telemetry & AST Server (8008)
+├── server/                                    # FastAPI Telemetry & AST Server (8008)
 │   ├── main.py                                # Backend entrypoint & CLI launcher
 │   ├── server.py                              # FastAPI app, CORS & middlewares
 │   ├── api/                                   # Modular REST controllers

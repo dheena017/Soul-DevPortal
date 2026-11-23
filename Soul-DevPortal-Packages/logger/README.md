@@ -32,15 +32,31 @@ logger/
 ├── pyproject.toml
 ├── setup.py
 ├── README.md
-├── src/
+├── client/                            # TypeScript & Vite browser logging
 │   ├── index.ts
 │   ├── client.ts
+│   ├── server.ts
 │   └── vite-plugin.ts
-└── workspace_logger/
-    ├── __init__.py
-    ├── banners.py
-    ├── server_logger.py
-    └── supervisor.py
+├── internal/                          # Core internal engines & implementation
+│   ├── __init__.py
+│   ├── colors.py                      # ANSI styling & Windows VT initialization
+│   ├── sanitizer.py                   # Sensitive credential & token redactor
+│   ├── formatter.py                   # 5-column ANSI formatter & Uvicorn filter
+│   ├── network.py                     # LAN IP discovery & TCP port probing
+│   ├── box_renderer.py                # Unicode double-line box rendering
+│   └── supervisor.py                  # Windows Job Object & port supervisor
+├── external/                          # Public interfaces for external projects
+│   ├── __init__.py                    # Public API interface
+│   ├── server_logger.py               # 5-column ANSI server logging & Uvicorn config
+│   ├── middleware.py                  # FastAPI RequestLoggingMiddleware & init_app_logger
+│   ├── banners.py                     # Unicode dev startup banners (Fullstack, Frontend, Backend)
+│   ├── ai_logger.py                   # AI inference telemetry
+│   ├── db_logger.py                   # Database query telemetry & slow query warnings
+│   ├── json_logger.py                 # Structured cloud JSON logging
+│   └── supervisor.py                  # Port conflict resolution & process supervisor
+└── tests/                             # Unit & integration tests
+    ├── test_internal.py               # Tests for internal engine machinery
+    └── test_external.py               # Tests for external consumer interfaces
 ```
 
 ## Installation

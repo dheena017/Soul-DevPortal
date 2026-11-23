@@ -284,6 +284,7 @@ function ManifestTab({ pkg }: ManifestTabProps) {
 }
 
 export interface PackageDetailViewProps {
+  key?: React.Key;
   pkg: PackageData;
   onBack?: () => void;
 }

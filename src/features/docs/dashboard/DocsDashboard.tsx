@@ -659,17 +659,17 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               </div>
               <div className="impl-item">
                 <strong>COLLEGE MANAGEMENT SYSTEM</strong>
-                <span>React 19 · Vite 6 · Ports FE:5178 / BE:8005</span>
+                <span>React 19 · Vite 8 · Ports FE:5178 / BE:8005</span>
                 <a href="#projects/college-management-system" className="impl-link">View Project →</a>
               </div>
               <div className="impl-item">
                 <strong>GLOBALPULSE AI</strong>
-                <span>Next.js 14 · Ports FE:5179 / BE:8003</span>
+                <span>React 19 · Vite 8 · Ports FE:5179 / BE:8003</span>
                 <a href="#projects/globalpulse-ai" className="impl-link">View Project →</a>
               </div>
               <div className="impl-item">
                 <strong>POSTCRAFT AI</strong>
-                <span>Next.js 14 Fullstack · Port: 5180</span>
+                <span>React 19 · Vite 8 · Ports FE:5180 / BE:8004</span>
                 <a href="#projects/postcraft-ai" className="impl-link">View Project →</a>
               </div>
             </div>

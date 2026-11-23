@@ -26,8 +26,8 @@ export const WORKSPACE_SCRIPTS_REGISTRY: ScriptDefinition[] = [
   {
     id: 'dev:client',
     name: 'npm run dev:client',
-    command: 'python Soul-DevPortal-Packages/runner/bin/run-frontend.py --kill-port',
-    description: 'Boots all 8 client frontends across reserved ports (:5173 - :5181) concurrently.',
+    command: 'python Soul-DevPortal-Packages/runner/bin/run-client.py --kill-port',
+    description: 'Boots client frontends across reserved ports (:5173 - :5181) concurrently.',
     category: 'orchestration',
     badge: 'CLIENT ECOSYSTEM',
     badgeClass: 'badge-client',
@@ -37,8 +37,8 @@ export const WORKSPACE_SCRIPTS_REGISTRY: ScriptDefinition[] = [
   {
     id: 'dev:server',
     name: 'npm run dev:server',
-    command: 'python Soul-DevPortal-Packages/runner/bin/run-backend.py --kill-port',
-    description: 'Boots all FastAPI server APIs across reserved ports (:8000 - :8008) concurrently.',
+    command: 'python Soul-DevPortal-Packages/runner/bin/run-server.py --kill-port',
+    description: 'Boots FastAPI server APIs across reserved ports (:8000 - :8008) concurrently.',
     category: 'orchestration',
     badge: 'SERVER APIS',
     badgeClass: 'badge-server',
@@ -161,7 +161,7 @@ export const WORKSPACE_SCRIPTS_REGISTRY: ScriptDefinition[] = [
   {
     id: 'dev:portal:server',
     name: 'npm run dev:portal:server',
-    command: 'python backend/main.py --port 8008 --reload',
+    command: 'python server/main.py --port 8008 --reload',
     description: 'Runs the DevPortal FastAPI metadata extraction server with hot reloading on port :8008.',
     category: 'portal',
     badge: 'PORTAL API',
@@ -184,7 +184,7 @@ export const WORKSPACE_SCRIPTS_REGISTRY: ScriptDefinition[] = [
   {
     id: 'extract',
     name: 'npm run extract',
-    command: 'python backend/main.py --extract-only',
+    command: 'python server/main.py --extract-only',
     description: 'Extracts manifest metadata, AST exports, and port allocations across all projects without launching server.',
     category: 'pipeline',
     badge: 'AST EXTRACTOR',

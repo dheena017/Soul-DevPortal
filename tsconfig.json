@@ -17,9 +17,12 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@workspace/logger": ["Soul-DevPortal-Packages/logger/src/index.ts"],
-      "@workspace/logger/*": ["Soul-DevPortal-Packages/logger/src/*"],
-      "@workspace/config/*": ["Soul-DevPortal-Packages/config/*"],
+      "@workspace/logger": ["Soul-DevPortal-Packages/logger/external/client/index.ts"],
+      "@workspace/logger/*": ["Soul-DevPortal-Packages/logger/external/client/*"],
+      "@workspace/config/tailwind/tokens": ["Soul-DevPortal-Packages/config/external/presets/tailwind/tokens.js"],
+      "@workspace/config/tailwind/preset": ["Soul-DevPortal-Packages/config/external/presets/tailwind/preset.js"],
+      "@workspace/config/*": ["Soul-DevPortal-Packages/config/external/presets/*"],
+      "@workspace/config": ["Soul-DevPortal-Packages/config/external/presets/tailwind/tokens.js"],
       "@workspace/runner/*": ["Soul-DevPortal-Packages/runner/*"]
     }
   },

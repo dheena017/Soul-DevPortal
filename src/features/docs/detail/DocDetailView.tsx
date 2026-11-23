@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Markdown from '../../../components/Markdown';
 import TableOfContents from '../../../components/TableOfContents';
 import { MarkdownBlock } from '../../../types';
 import { DOCUMENTATION_GUIDES_REGISTRY, GuideMeta } from '../docsConstants';
+import { fetchGuideContent } from '../../../services/api';
 
 export interface DocDetailViewProps {
   guideId: string;
@@ -56,9 +57,27 @@ export default function DocDetailView({
     else activeBlocks = blocks || [];
   }
 
-  const headings = (activeBlocks || []).filter((b) => b.type === 'h2' || b.type === 'h3');
-  const codeBlocks = (activeBlocks || []).filter((b) => b.type === 'code');
-  const tables = (activeBlocks || []).filter((b) => b.type === 'table');
+  const [apiBlocks, setApiBlocks] = useState<MarkdownBlock[] | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadGuide() {
+      const guideData = await fetchGuideContent(resolvedId);
+      if (guideData && guideData.blocks && guideData.blocks.length > 0 && isMounted) {
+        setApiBlocks(guideData.blocks);
+      }
+    }
+    loadGuide();
+    return () => {
+      isMounted = false;
+    };
+  }, [resolvedId]);
+
+  const finalBlocks = apiBlocks && apiBlocks.length > 0 ? apiBlocks : activeBlocks;
+
+  const headings = (finalBlocks || []).filter((b) => b.type === 'h2' || b.type === 'h3');
+  const codeBlocks = (finalBlocks || []).filter((b) => b.type === 'code');
+  const tables = (finalBlocks || []).filter((b) => b.type === 'table');
 
   return (
     <article className="guide-detail-view doc-detail-view">
@@ -167,7 +186,7 @@ export default function DocDetailView({
             <span className="readme-source">Soul-DevPortal-Docs/{guideMeta.filename}</span>
           </div>
           <div className="markdown-content">
-            <Markdown blocks={activeBlocks || []} skipFirstHeading />
+            <Markdown blocks={finalBlocks || []} skipFirstHeading />
           </div>
         </section>
       </div>

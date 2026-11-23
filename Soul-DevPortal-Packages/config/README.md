@@ -1,30 +1,93 @@
-# @workspace/config
+# @workspace/config (workspace-config)
 
-> **Enterprise Shared Configuration Presets**  
-> Unified, zero-duplication presets for TypeScript, Tailwind CSS, Prettier, ESLint, and Python across the entire monorepo.
+> **Enterprise Shared Configuration Presets, Network Port Topology & Design Tokens**  
+> Unified, zero-duplication presets for TypeScript, Tailwind CSS, Prettier, ESLint, Python, and micro-service network topology across the entire monorepo.
 
 ---
 
-## 📦 What is `@workspace/config`?
+## 📦 Architecture & Directory Layout
 
-In a high-scale polyglot monorepo, having each project maintain its own 40-line `tsconfig.json`, copy-pasted Tailwind themes, and diverging Prettier configs creates maintenance drift, subtle bugs, and broken builds.
+```text
+Soul-DevPortal-Packages/config/
+├── package.json               # NPM package manifest with subpath exports & scripts
+├── pyproject.toml             # Python package definition (workspace-config)
+├── setup.py                   # Standard setuptools configuration
+├── README.md                  # Comprehensive architecture & usage documentation
+├── index.js                   # JavaScript/TypeScript entrypoint (tokens & Tailwind preset)
+│
+├── internal/                  # 1. Core Internal Python Implementation
+│   ├── __init__.py            # Internal exports
+│   ├── ports.py               # Canonical port registry & network socket probing
+│   ├── tokens.py              # Python design tokens (brand, surface, accent)
+│   └── env.py                 # Monorepo root detection & project env parser
+│
+├── external/                  # 2. Public Facades, Presets & CLI Launchers
+│   ├── __init__.py            # Public unified Python facade
+│   ├── run_ports.py           # Network Port Topology & Conflict Scanner CLI
+│   │
+│   └── presets/               # Polyglot Configuration Presets
+│       ├── tsconfig/          # TypeScript Compiler Presets (base, react, next, node, library, test)
+│       ├── tailwind/          # Tailwind CSS Design System (preset.js, tokens.js)
+│       ├── prettier/          # Prettier Code Formatter (index.json, .prettierignore)
+│       ├── eslint/            # ESLint Code Quality Rules (base.js, react.js, next.js)
+│       └── python/            # Python Tooling Standards (ruff.toml, pytest.ini)
+│
+└── tests/                     # Test Suite
+    ├── test_ports_integrity.py# Port uniqueness & range validation tests
+    ├── test_internal.py       # Internal module unit tests
+    └── test_external.py       # External facade tests
+```
 
-`@workspace/config` centralizes all configuration into a single, versioned package:
-* **TypeScript Presets**: Strict, battle-tested compiler configs for React, Next.js, Node.js, Libraries, and Testing.
-* **Tailwind CSS Design System**: Unified design tokens (colors, surface hierarchy, glowing highlights, glassmorphism) and keyframe animations.
-* **Prettier Presets**: Standardized code formatting with automatic Tailwind class sorting and clean import ordering.
-* **ESLint Presets**: Modern linting for pure TypeScript, React, and Next.js.
-* **Python Tooling**: High-speed Ruff linter rules and Pytest testing configurations.
+---
+
+## 🌐 Canonical Network Port Topology
+
+Every application in the monorepo has deterministic, non-overlapping client and server ports:
+
+| Project | Client Port | Server Port | Stack |
+| :--- | :---: | :---: | :--- |
+| **ApexMind Studio AI** (`apexmind-ai`) | `5173` | `8000` | React 19 + Vite 8 / Python FastAPI |
+| **Outpass System** (`outpass-system`) | `5174` | `8001` | React 19 + Vite 8 / Python FastAPI |
+| **Free API Hub** (`free-api-hub`) | `5175` | `8002` | React 19 + Vite 8 / Python FastAPI |
+| **Sonikoma AI Studio** (`sonikoma`) | `5176` | `8006` | React 19 + Vite 8 / Python FastAPI |
+| **Spatial Dimensions** (`spatial-dimensions`) | `5177` | `8007` | React 19 + Vite 8 / Python FastAPI |
+| **College Management** (`college-management-system`) | `5178` | `8005` | React 19 + Vite 8 / Python FastAPI |
+| **GlobalPulse AI** (`globalpulse-ai`) | `5179` | `8003` | React 19 + Vite 8 / Python FastAPI |
+| **PostCraft AI** (`postcraft-ai`) | `5180` | `8004` | React 19 + Vite 8 / Python FastAPI |
+| **Soul DevPortal** (`devportal`) | `5181` | `8008` | React 19 + Vite 8 / Python FastAPI |
+
+### Port Audit & Conflict Scanner CLI
+
+```bash
+# Scan all registered micro-app ports and detect live collisions
+python external/run_ports.py
+
+# Terminate any rogue processes locking assigned ports
+python external/run_ports.py --kill-conflicts
+
+# Output machine-readable JSON
+python external/run_ports.py --json
+```
 
 ---
 
 ## 🚀 Quick Usage Guide
 
-### 1. TypeScript (`tsconfig.json`)
+### 1. Python Usage
 
-Instead of 40 lines of compiler options, each project needs only a 3-line `tsconfig.json`:
+```python
+# Direct import from external facade:
+from external import PORT_REGISTRY, get_project_ports, DESIGN_TOKENS
 
-#### For React (Vite) Applications
+# Or from internal core modules:
+from internal.ports import PORT_REGISTRY, get_project_ports
+
+client_port, server_port = get_project_ports("apexmind-ai")
+print(f"Client: {client_port}, Server: {server_port}")
+```
+
+### 2. TypeScript (`tsconfig.json`)
+
 ```json
 {
   "extends": "@workspace/config/tsconfig/react.json",
@@ -32,35 +95,15 @@ Instead of 40 lines of compiler options, each project needs only a 3-line `tscon
 }
 ```
 
-#### For Next.js Applications
-```json
-{
-  "extends": "@workspace/config/tsconfig/next.json",
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
-}
-```
+Available presets:
+* `@workspace/config/tsconfig/base.json`
+* `@workspace/config/tsconfig/react.json`
+* `@workspace/config/tsconfig/next.json`
+* `@workspace/config/tsconfig/node.json`
+* `@workspace/config/tsconfig/library.json`
+* `@workspace/config/tsconfig/test.json`
 
-#### For Node.js / Express Backends
-```json
-{
-  "extends": "@workspace/config/tsconfig/node.json",
-  "include": ["src"]
-}
-```
-
-#### For Monorepo Packages (`packages/*`)
-```json
-{
-  "extends": "@workspace/config/tsconfig/library.json",
-  "include": ["src"]
-}
-```
-
----
-
-### 2. Tailwind CSS (`tailwind.config.js`)
-
-Inherit the monorepo design system, colors, elevation shadows, and animations:
+### 3. Tailwind CSS (`tailwind.config.js`)
 
 ```javascript
 import preset from '@workspace/config/tailwind/preset';
@@ -68,110 +111,24 @@ import preset from '@workspace/config/tailwind/preset';
 /** @type {import('tailwindcss').Config} */
 export default {
   presets: [preset],
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
-  theme: {
-    extend: {
-      // Add project-specific custom overrides here if needed
-    },
-  },
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 };
 ```
 
-#### Included Design Tokens
-* **Surface Hierarchy**: `surface-50` through `surface-950`
-* **Brand Colors**: `brand-50` through `brand-950` (Primary: `brand-600` / `#2563EB`)
-* **Interactive Accent**: `accent-50` through `accent-950` (Primary: `accent-600` / `#7C3AED`)
-* **Luminous Shadows**: `shadow-glow-brand`, `shadow-glow-accent`, `shadow-glow-success`
-* **Animations**: `animate-fade-in`, `animate-slide-up`, `animate-shimmer`, `animate-pulse-glow`
+### 4. JavaScript/TypeScript Programmatic Imports
 
----
-
-### 3. Prettier (`.prettierrc`)
-
-In the monorepo root or individual projects:
-
-```json
-"@workspace/config/prettier"
-```
-
-To use a JSON configuration file:
-```json
-{
-  "$schema": "https://json.schemastore.org/prettierrc",
-  "printWidth": 100,
-  "tabWidth": 2,
-  "semi": true,
-  "singleQuote": true
-}
-```
-
----
-
-### 4. ESLint (`.eslintrc.cjs` or `eslint.config.js`)
-
-#### React Projects
 ```javascript
-export default [
-  ...require('@workspace/config/eslint/react')
-];
-```
-
-#### Next.js Projects
-```javascript
-export default [
-  ...require('@workspace/config/eslint/next')
-];
+import { tokens, preset } from '@workspace/config';
 ```
 
 ---
 
-### 5. Python Tooling (`ruff.toml` & `pytest.ini`)
+## 🧪 Testing
 
-Copy or link the centralized Python configuration:
-* **Linter & Formatter**: [`packages/config/python/ruff.toml`](./python/ruff.toml)
-* **Test Runner**: [`packages/config/python/pytest.ini`](./python/pytest.ini)
+Run the test suite across all configuration and port integrity checks:
 
----
-
-## 📁 Package Directory Structure
-
-```text
-packages/config/
-├── package.json               # NPM package manifest with subpath exports
-├── README.md                  # This documentation file
-│
-├── tsconfig/                  # TypeScript Compiler Presets
-│   ├── base.json              # Strict baseline compiler options
-│   ├── react.json             # React 18/19 & Vite JSX runtime
-│   ├── next.json              # Next.js App Router & Web Workers
-│   ├── node.json              # Node.js LTS ESModule backend
-│   ├── library.json           # Monorepo packages & type distribution
-│   └── test.json              # Vitest & testing globals
-│
-├── tailwind/                  # Tailwind CSS Design System
-│   ├── tokens.js              # Canonical color, surface, and status tokens
-│   └── preset.js              # Master preset (fonts, shadows, glows, animations)
-│
-├── prettier/                  # Prettier Code Formatter
-│   ├── index.json             # Rules, plugin sorting, and file overrides
-│   └── .prettierignore        # Standard workspace exclusions
-│
-├── eslint/                    # ESLint Code Quality Rules
-│   ├── base.js                # Core TypeScript linting
-│   ├── react.js               # React & Hooks linting
-│   └── next.js                # Next.js Core Web Vitals
-│
-└── python/                    # Python Tooling Standards
-    ├── ruff.toml              # 10x-speed Ruff linter & formatter
-    └── pytest.ini             # Pytest configuration
+```bash
+python tests/test_ports_integrity.py
+python tests/test_internal.py
+python tests/test_external.py
 ```
-
----
-
-## 🔒 Enterprise Standards Compliance
-* **Zero Personal Information**: Contains no developer names, emails, or personal usernames.
-* **Modern Subpath Exports**: Uses Node.js `exports` map for direct, clean tree-shaking and resolution.
-* **Self-Contained**: Can be safely extended by any workspace project without circular dependencies.

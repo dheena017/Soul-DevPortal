@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { workspaceLoggerPlugin } from './Soul-DevPortal-Packages/logger/src/vite-plugin.ts';
+import { workspaceLoggerPlugin } from './Soul-DevPortal-Packages/logger/external/client/vite-plugin.ts';
 
 const virtualModuleId = 'virtual:workspace-packages';
 const resolvedVirtualModuleId = `\0${virtualModuleId}`;
@@ -226,20 +226,18 @@ function getWorkspaceData() {
     : [];
 
   const rootPackage = readJson(path.join(workspaceRoot, 'package.json')) || {};
-  const guidePath = path.join(docsRoot, 'PACKAGES_DESIGN_GUIDE.md');
-  const guide = fs.existsSync(guidePath) ? fs.readFileSync(guidePath, 'utf8') : '';
+  const resolveDoc = (newRel, legacyRel) => {
+    const pNew = path.join(docsRoot, newRel);
+    if (fs.existsSync(pNew)) return fs.readFileSync(pNew, 'utf8');
+    const pLeg = path.join(docsRoot, legacyRel);
+    return fs.existsSync(pLeg) ? fs.readFileSync(pLeg, 'utf8') : '';
+  };
 
-  const portGuidePath = path.join(docsRoot, 'PROJECTS_PORT_AND_FRAMEWORK_GUIDE.md');
-  const portGuide = fs.existsSync(portGuidePath) ? fs.readFileSync(portGuidePath, 'utf8') : '';
-
-  const techStackPath = path.join(docsRoot, 'TECH_STACK.md');
-  const techStack = fs.existsSync(techStackPath) ? fs.readFileSync(techStackPath, 'utf8') : '';
-
-  const projectRulesPath = path.join(docsRoot, 'PROJECTS_RULES_AND_STANDARDS_GUIDE.md');
-  const projectRules = fs.existsSync(projectRulesPath) ? fs.readFileSync(projectRulesPath, 'utf8') : '';
-
-  const cheatsheetPath = path.join(docsRoot, 'MONOREPO_COMPLIANCE_CHEATSHEET.md');
-  const cheatsheet = fs.existsSync(cheatsheetPath) ? fs.readFileSync(cheatsheetPath, 'utf8') : '';
+  const guide = resolveDoc('03-packages/package-authoring-guide.md', 'PACKAGES_DESIGN_GUIDE.md');
+  const portGuide = resolveDoc('04-networking-and-ports/port-allocation-matrix.md', 'PROJECTS_PORT_AND_FRAMEWORK_GUIDE.md');
+  const techStack = resolveDoc('02-tech-stack/programming-languages.md', 'TECH_STACK.md');
+  const projectRules = resolveDoc('01-architecture/project-layout-rules.md', 'PROJECTS_RULES_AND_STANDARDS_GUIDE.md');
+  const cheatsheet = resolveDoc('06-cheatsheets/compliance-checklist.md', 'MONOREPO_COMPLIANCE_CHEATSHEET.md');
 
   const projectsRaw = readJson(path.join(workspaceRoot, 'projects.json')) || {};
   const projectsList = Object.entries(projectsRaw).map(([pid, spec]) => {
@@ -357,17 +355,43 @@ function getWorkspaceData() {
   };
 }
 
+function cleanReactPlugin() {
+  const plugins = react({ disableOxcRecommendation: true });
+  return plugins.map((p) => {
+    if (p.name === 'vite:react-babel') {
+      return {
+        ...p,
+        config() {
+          return {
+            oxc: {
+              jsx: {
+                runtime: 'automatic',
+              },
+            },
+            optimizeDeps: {
+              rolldownOptions: {},
+            },
+          };
+        },
+      };
+    }
+    return p;
+  });
+}
+
 export default defineConfig({
   resolve: {
     alias: {
-      '@workspace/logger': path.resolve(packagesRoot, 'logger', 'src', 'index.ts'),
-      '@workspace/config': path.resolve(packagesRoot, 'config'),
+      '@workspace/logger': path.resolve(packagesRoot, 'logger', 'external', 'client', 'index.ts'),
+      '@workspace/config/tailwind/tokens': path.resolve(packagesRoot, 'config', 'external', 'presets', 'tailwind', 'tokens.js'),
+      '@workspace/config/tailwind/preset': path.resolve(packagesRoot, 'config', 'external', 'presets', 'tailwind', 'preset.js'),
+      '@workspace/config': path.resolve(packagesRoot, 'config', 'external', 'presets', 'tailwind', 'tokens.js'),
       '@workspace/runner': path.resolve(packagesRoot, 'runner'),
     },
   },
   plugins: [
     tailwindcss(),
-    react(),
+    cleanReactPlugin(),
     workspaceLoggerPlugin(),
     {
       name: 'workspace-package-data',
@@ -386,7 +410,7 @@ export default defineConfig({
           this.addWatchFile(path.join(workspaceRoot, 'projects.json'));
           this.addWatchFile(path.join(workspaceRoot, 'package.json'));
 
-          const generatedPath = path.resolve(__dirname, 'backend', 'exporters', 'data', 'workspace.json');
+          const generatedPath = path.resolve(__dirname, 'server', 'exporters', 'data', 'workspace.json');
           if (fs.existsSync(generatedPath)) {
             return `export default ${fs.readFileSync(generatedPath, 'utf8')};`;
           }
@@ -413,6 +437,7 @@ export default defineConfig({
     },
   ],
   server: {
+    host: true,
     port: 5181,
     proxy: {
       '/api': {

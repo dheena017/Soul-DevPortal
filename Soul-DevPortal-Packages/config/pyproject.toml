@@ -23,9 +23,12 @@ classifiers = [
 ]
 dependencies = []
 
+[project.scripts]
+workspace-ports = "external.run_ports:main"
+
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["workspace_config*"]
+include = ["internal*", "external*"]
 
 [tool.setuptools.package-data]
 "*" = ["py.typed", "*.pyi"]

@@ -89,8 +89,8 @@ serverLogger.success('INIT', 'All microservices healthy');`,
       id: 'python-backend',
       title: 'Python FastAPI / Backend Logging',
       language: 'python',
-      filename: 'backend/main.py',
-      code: `from workspace_logger import get_logger
+      filename: 'server/main.py',
+      code: `from logger.external import get_logger
 
 logger = get_logger("API")
 
@@ -137,7 +137,7 @@ npx @workspace/runner ports`,
       title: 'Python Programmatic Runner',
       language: 'python',
       filename: 'scripts/run_cluster.py',
-      code: `from workspace_runner import run_project, get_all_projects
+      code: `from runner.external import run_single_process
 
 projects = get_all_projects()
 print(f"Total projects managed: {len(projects)}")

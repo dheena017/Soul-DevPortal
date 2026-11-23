@@ -2,7 +2,6 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
 import CopyButton from '../../components/CopyButton';
 import { ProjectData } from '../../types';
-import { PROJECT_DESCRIPTIONS, PROJECT_TAGS } from './projectsConstants';
 
 function getTagColor(tag: string): string {
   const lower = tag.toLowerCase();
@@ -34,14 +33,14 @@ export default function ProjectsView({
   onSelectProject,
 }: ProjectsViewProps) {
   const [query, setQuery] = useState<string>('');
-  const [filterFramework, setFilterFramework] = useState<string>('all');
-  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const handleSelect = (projectId: string) => {
     const proj = projects.find((p) => p.id === projectId);
     consoleLogger.action('PROJECTS', `Selected project: ${proj ? proj.title : projectId}`, { projectId });
     onSelectProject?.(projectId);
   };
+  const [filterFramework, setFilterFramework] = useState<string>('all');
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -77,8 +76,8 @@ export default function ProjectsView({
 
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
-      const desc = p.description || PROJECT_DESCRIPTIONS[p.id] || '';
-      const tags = (PROJECT_TAGS[p.id] || []).join(' ');
+      const desc = p.description || '';
+      const tags = (p.tags || []).join(' ');
       const matchesQuery = !query.trim() || [
         p.title,
         p.id,
@@ -202,8 +201,8 @@ export default function ProjectsView({
       <section className="projects-grid" aria-label="Monorepo projects">
         {filteredProjects.map((project) => {
           const runCmd = `npx @workspace/runner project ${project.id}`;
-          const description = project.description || PROJECT_DESCRIPTIONS[project.id] || `${project.title} monorepo application.`;
-          const tags = PROJECT_TAGS[project.id] || [];
+          const description = project.description || `${project.title} monorepo application.`;
+          const tags = project.tags || [];
 
           return (
             <article className="project-card enhanced-project-card gh-project-card" key={project.id}>

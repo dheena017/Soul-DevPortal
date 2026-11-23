@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState, useRef, ChangeEvent } from 'react';
 import { createRoot } from 'react-dom/client';
 import workspaceData from 'virtual:workspace-packages';
+import { fetchWorkspaceData, fetchProjectsLive, WorkspaceApiResponse } from './services/api';
 
 // 1. Consume @workspace/logger (Universal DevTools & Terminal logging)
 import { consoleLogger } from '@workspace/logger';
@@ -33,9 +34,40 @@ function App() {
   const [showShortcuts, setShowShortcuts] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const packagesList = workspaceData?.packages || [];
-  const projectsList = workspaceData?.projects || [];
-  const stats = workspaceData?.stats;
+  const [liveWorkspace, setLiveWorkspace] = useState<WorkspaceApiResponse>(workspaceData);
+  const packagesList = liveWorkspace?.packages || [];
+  const projectsList = liveWorkspace?.projects || [];
+  const stats = liveWorkspace?.stats;
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadWorkspaceFromApi() {
+      const data = await fetchWorkspaceData();
+      if (data && isMounted) {
+        setLiveWorkspace(data);
+        consoleLogger.success('API', 'Dynamic workspace payload received from FastAPI flow', {
+          packagesCount: data.packages?.length || 0,
+          projectsCount: data.projects?.length || 0,
+        });
+      }
+    }
+    loadWorkspaceFromApi();
+
+    const intervalId = setInterval(async () => {
+      const liveProjects = await fetchProjectsLive();
+      if (liveProjects && liveProjects.length > 0 && isMounted) {
+        setLiveWorkspace((prev) => ({
+          ...prev,
+          projects: liveProjects,
+        }));
+      }
+    }, 5000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const handleSidebarToggle = () => {
     setMenuOpen((prev) => !prev);
@@ -278,8 +310,8 @@ function App() {
             <Overview
               packages={filteredPackages}
               projects={projectsList}
-              rootWorkspaces={workspaceData?.rootWorkspaces || []}
-              rootScripts={workspaceData?.rootScripts || {}}
+              rootWorkspaces={liveWorkspace?.rootWorkspaces || []}
+              rootScripts={liveWorkspace?.rootScripts || {}}
               stats={stats}
               onNavigate={navigate}
               onClearSearch={() => setQuery('')}
@@ -349,11 +381,11 @@ function App() {
           {/* Pillar 3: Docs Dashboard Hub */}
           {(active === 'docs' || active === 'docs-dashboard' || active === 'doc/dashboard') && (
             <DocsView
-              blocks={workspaceData?.guideBlocks || []}
-              portGuideBlocks={workspaceData?.portGuideBlocks || []}
-              techStackBlocks={workspaceData?.techStackBlocks || []}
-              projectRulesBlocks={workspaceData?.projectRulesBlocks || []}
-              cheatsheetBlocks={workspaceData?.cheatsheetBlocks || []}
+              blocks={liveWorkspace?.guideBlocks || []}
+              portGuideBlocks={liveWorkspace?.portGuideBlocks || []}
+              techStackBlocks={liveWorkspace?.techStackBlocks || []}
+              projectRulesBlocks={liveWorkspace?.projectRulesBlocks || []}
+              cheatsheetBlocks={liveWorkspace?.cheatsheetBlocks || []}
               activeGuideId="hub"
               onBack={() => navigate('overview')}
               onSelectGuide={(guideId) => {
@@ -387,11 +419,11 @@ function App() {
 
             return (
               <DocsView
-                blocks={workspaceData?.guideBlocks || []}
-                portGuideBlocks={workspaceData?.portGuideBlocks || []}
-                techStackBlocks={workspaceData?.techStackBlocks || []}
-                projectRulesBlocks={workspaceData?.projectRulesBlocks || []}
-                cheatsheetBlocks={workspaceData?.cheatsheetBlocks || []}
+                blocks={liveWorkspace?.guideBlocks || []}
+                portGuideBlocks={liveWorkspace?.portGuideBlocks || []}
+                techStackBlocks={liveWorkspace?.techStackBlocks || []}
+                projectRulesBlocks={liveWorkspace?.projectRulesBlocks || []}
+                cheatsheetBlocks={liveWorkspace?.cheatsheetBlocks || []}
                 activeGuideId={guideId}
                 onBack={() => navigate('docs')}
                 onSelectGuide={(id) => {
@@ -414,7 +446,7 @@ function App() {
           {/* Dedicated Feature View: Scripts & Automation Command Runners */}
           {(active === 'scripts' || active === 'commands' || active === 'runners') && (
             <ScriptsView
-              rootScripts={workspaceData?.rootScripts || {}}
+              rootScripts={liveWorkspace?.rootScripts || {}}
               onNavigate={navigate}
             />
           )}
