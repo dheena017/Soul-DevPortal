@@ -358,11 +358,10 @@ function getWorkspaceData() {
   }
 
   const guide = resolveDocFiles([
-    '02-packages-architecture/package-authoring-guide.md',
-    '02-packages-architecture/packages-layout.md',
+    '02-packages-architecture/main.md',
   ]);
   const portGuide = resolveDocFiles([
-    '03-networking-and-ports/port-allocation-matrix.md',
+    '03-networking-and-ports/main.md',
   ]);
   const techStack = resolveDocFiles([
     '01-project-architecture/main.md',
@@ -371,8 +370,7 @@ function getWorkspaceData() {
     '01-project-architecture/golden-rules.md',
   ]);
   const cheatsheet = resolveDocFiles([
-    '04-cheatsheets/compliance-checklist.md',
-    '04-cheatsheets/direct-cli-commands.md',
+    '04-cheatsheets/main.md',
   ]);
 
   const projectsRaw = readJson(path.join(workspaceRoot, 'projects.json')) || {};

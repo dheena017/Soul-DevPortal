@@ -22,6 +22,7 @@ export interface HeaderProps {
   packagesCount: number;
   docsCount: number;
   onOpenShortcuts: () => void;
+  onTriggerReload?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -38,6 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
   packagesCount,
   docsCount,
   onOpenShortcuts,
+  onTriggerReload,
 }) => {
   const isProjectsActive = active.startsWith('project');
   const isPackagesActive = active.startsWith('package') || ['logger', 'runner', 'config'].includes(active);
@@ -226,6 +228,26 @@ export const Header: React.FC<HeaderProps> = ({
             {isBackendLive ? ':8008 Live' : ':8008 Standby'}
           </span>
         </div>
+
+        {onTriggerReload && (
+          <button
+            type="button"
+            className="hidden sm:inline-flex items-center gap-1.5 p-2 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer shadow-sm"
+            onClick={() => {
+              consoleLogger.action('UI', 'Triggered full workspace reload & sync');
+              onTriggerReload();
+            }}
+            title="Reload Workspace & Re-sync AST Engine"
+            aria-label="Reload workspace"
+          >
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 2v6h-6" />
+              <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+              <path d="M3 22v-6h6" />
+              <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+            </svg>
+          </button>
+        )}
 
         <a
           href="https://github.com/dheena017/Soul-DevPortal"

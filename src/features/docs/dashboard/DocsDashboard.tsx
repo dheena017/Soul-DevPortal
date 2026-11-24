@@ -134,7 +134,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               </svg>
               <span>Official Guides</span>
             </span>
-            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">5 Guides</strong>
+            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{DOCUMENTATION_GUIDES_REGISTRY.length} Guides</strong>
           </div>
 
           <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
@@ -249,7 +249,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               }`}
               onClick={() => setSelectedCategory((prev) => (prev === 'rules' ? 'all' : 'rules'))}
             >
-              📜 Projects Rules
+              🏛️ Project Architecture
             </button>
             <button
               type="button"
@@ -260,7 +260,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               }`}
               onClick={() => setSelectedCategory((prev) => (prev === 'design' ? 'all' : 'design'))}
             >
-              📘 Packages Design
+              📦 Packages Architecture
             </button>
             <button
               type="button"
@@ -271,18 +271,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               }`}
               onClick={() => setSelectedCategory((prev) => (prev === 'ports' ? 'all' : 'ports'))}
             >
-              🌐 Port Topology
-            </button>
-            <button
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                selectedCategory === 'techstack'
-                  ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
-              }`}
-              onClick={() => setSelectedCategory((prev) => (prev === 'techstack' ? 'all' : 'techstack'))}
-            >
-              ⚙️ Tech Stack
+              🌐 Port Architecture
             </button>
             <button
               type="button"
@@ -293,7 +282,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
               }`}
               onClick={() => setSelectedCategory((prev) => (prev === 'cheatsheet' ? 'all' : 'cheatsheet'))}
             >
-              📋 Cheatsheet
+              ⚡ Compliance Cheatsheet
             </button>
           </div>
         </div>

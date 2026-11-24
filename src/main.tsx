@@ -13,6 +13,7 @@ import { tokens } from '@workspace/config/tailwind/tokens';
 import Sidebar from './components/Sidebar';
 import Overview from './components/Overview';
 import { Header } from './components/Header';
+import LoadingScreen from './components/LoadingScreen';
 
 // 4 Pillar Feature Views
 import ProjectsView from './features/projects/ProjectsView';
@@ -22,7 +23,7 @@ import PackageDetailView from './features/packages/PackageDetailView';
 import DocsView from './features/docs/DocsView';
 import ScriptsView from './features/scripts/ScriptsView';
 
-import { DOCUMENTATION_GUIDES_REGISTRY } from './features/docs/docsConstants';
+import { DOCUMENTATION_GUIDES_REGISTRY, findGuideMeta } from './features/docs/docsConstants';
 
 import './styles.css';
 
@@ -31,6 +32,7 @@ function App() {
   const [query, setQuery] = useState<string>('');
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [isBootLoading, setIsBootLoading] = useState<boolean>(true);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const [liveWorkspace, setLiveWorkspace] = useState<WorkspaceApiResponse>(workspaceData);
@@ -234,15 +236,14 @@ function App() {
     if (active === 'docs' || active === 'docs-dashboard') return 'Documentation Hub';
     if (active.startsWith('docs/') || active.startsWith('doc/')) {
       const dId = active.replace(/^docs?\//, '');
-      const guide = DOCUMENTATION_GUIDES_REGISTRY.find((g) => g.id === dId || g.slug === dId);
+      const guide = findGuideMeta(dId);
       if (guide) return guide.title;
       return dId.replace(/-/g, ' ');
     }
-    if (active === 'rules' || active === 'projects-rules') return 'Projects Rules & Standards';
-    if (active === 'design' || active === 'packages-design' || active === 'guide') return 'Shared Packages Design Guide';
-    if (active === 'ports' || active === 'port-architecture' || active === 'ports-guide') return 'Port Architecture Guide';
-    if (active === 'techstack' || active === 'tech-stack') return 'Tech Stack Standards';
-    if (active === 'cheatsheet' || active === 'compliance-cheatsheet') return 'Compliance Cheatsheet';
+    const legacyGuide = findGuideMeta(active);
+    if (legacyGuide && (legacyGuide.id === active || (legacyGuide.aliases && legacyGuide.aliases.includes(active)))) {
+      return legacyGuide.title;
+    }
     return active;
   }, [active, projectsList, packagesList]);
 
@@ -296,6 +297,13 @@ function App() {
 
   return (
     <div className="h-screen h-[100dvh] bg-[#070708] text-neutral-200 flex flex-col overflow-hidden font-sans">
+      {isBootLoading && (
+        <LoadingScreen
+          minDurationMs={850}
+          onComplete={() => setIsBootLoading(false)}
+        />
+      )}
+
       <Sidebar
         active={active}
         packages={packagesList}
@@ -318,8 +326,9 @@ function App() {
         searchInputRef={searchInputRef}
         projectsCount={projectsList.length}
         packagesCount={packagesList.length}
-        docsCount={5}
+        docsCount={DOCUMENTATION_GUIDES_REGISTRY.length}
         onOpenShortcuts={() => setShowShortcuts(true)}
+        onTriggerReload={() => setIsBootLoading(true)}
       />
 
       <main ref={mainRef} className="main w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden flex flex-col bg-[#070708]">
@@ -418,6 +427,14 @@ function App() {
 
           {/* Pillar 3: Docs Detail Guides */}
           {(() => {
+            const isDocRoute =
+              active.startsWith('docs/') ||
+              active.startsWith('doc/') ||
+              ['rules', 'projects-rules', 'design', 'packages-design', 'ports', 'port-architecture', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active) ||
+              DOCUMENTATION_GUIDES_REGISTRY.some((g) => g.id === active || g.slug === active || (g.aliases && g.aliases.includes(active)));
+
+            if (!isDocRoute) return null;
+
             const rawPath = active.startsWith('docs/')
               ? active.replace('docs/', '')
               : active.startsWith('doc/')
@@ -428,19 +445,10 @@ function App() {
             const primaryPath = pathParts[0];
             const subModuleParam = pathParts.slice(1).join('/');
 
-            const matchedGuide = DOCUMENTATION_GUIDES_REGISTRY.find(
-              (g) => g.id === primaryPath || g.slug === primaryPath || g.category === primaryPath
-            );
+            if (!primaryPath || primaryPath === 'hub' || primaryPath === 'dashboard') return null;
 
-            const guideId = matchedGuide ? matchedGuide.id : (
-              primaryPath === 'rules' || primaryPath === 'projects-rules' ? 'rules' :
-              primaryPath === 'design' || primaryPath === 'packages-design' || primaryPath === 'guide' ? 'design' :
-              primaryPath === 'ports' || primaryPath === 'port-architecture' || primaryPath === 'ports-guide' ? 'ports' :
-              primaryPath === 'techstack' || primaryPath === 'tech-stack' ? 'techstack' :
-              primaryPath === 'cheatsheet' || primaryPath === 'compliance-cheatsheet' ? 'cheatsheet' : ''
-            );
-
-            if (!guideId || guideId === 'hub' || guideId === 'dashboard') return null;
+            const matchedGuide = findGuideMeta(primaryPath);
+            const guideId = matchedGuide ? matchedGuide.id : primaryPath;
 
             return (
               <DocsView

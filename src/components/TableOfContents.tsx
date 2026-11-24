@@ -59,10 +59,10 @@ export default function TableOfContents({
       const containerScrollTop = container.scrollTop;
       const containerHeight = container.clientHeight;
 
-      if (elTop < containerScrollTop) {
-        container.scrollTo({ top: elTop, behavior: 'smooth' });
-      } else if (elTop + elHeight > containerScrollTop + containerHeight) {
-        container.scrollTo({ top: elTop + elHeight - containerHeight, behavior: 'smooth' });
+      if (elTop < containerScrollTop + 20) {
+        container.scrollTo({ top: Math.max(0, elTop - 20), behavior: 'smooth' });
+      } else if (elTop + elHeight > containerScrollTop + containerHeight - 20) {
+        container.scrollTo({ top: elTop + elHeight - containerHeight + 20, behavior: 'smooth' });
       }
     }
   }, [activeHeading]);
@@ -87,7 +87,6 @@ export default function TableOfContents({
 
       const scroller = getScrollContainer(navRef.current);
 
-      // Check if user scrolled to bottom of scroll container
       if (scroller) {
         const isScrollable = scroller.scrollHeight > scroller.clientHeight + 80;
         const isBottom =
@@ -99,7 +98,6 @@ export default function TableOfContents({
           return;
         }
 
-        // If user is at the very top of container
         if (scroller.scrollTop < 50) {
           setActiveHeading(targets[0].id);
           return;
@@ -119,20 +117,33 @@ export default function TableOfContents({
         }
       }
 
-      const containerTop = scroller ? scroller.getBoundingClientRect().top : 0;
-      const threshold = containerTop + 140;
-      let currentId = targets[0]?.id || '';
+      const viewportOffset = 140;
+      let closest: HTMLElement | null = null;
+      let minDistance = Infinity;
+
       for (const target of targets) {
         const rect = target.getBoundingClientRect();
-        if (rect.top <= threshold) {
-          currentId = target.id;
-        } else {
-          break;
+        const dist = Math.abs(rect.top - viewportOffset);
+
+        if (rect.top <= viewportOffset + 120) {
+          if (rect.top >= -250 && dist < minDistance) {
+            minDistance = dist;
+            closest = target;
+          }
         }
       }
 
-      if (currentId) {
-        setActiveHeading((prev) => (prev === currentId ? prev : currentId));
+      if (!closest && targets.length > 0) {
+        const aboveTargets = targets.filter((t) => t.getBoundingClientRect().top < viewportOffset);
+        if (aboveTargets.length > 0) {
+          closest = aboveTargets[aboveTargets.length - 1];
+        } else {
+          closest = targets[0];
+        }
+      }
+
+      if (closest && closest.id && closest.id !== activeHeading) {
+        setActiveHeading(closest.id);
       }
     };
 
@@ -141,25 +152,25 @@ export default function TableOfContents({
       scroller.addEventListener('scroll', updateActiveOnScroll, { passive: true });
     }
     window.addEventListener('scroll', updateActiveOnScroll, { passive: true });
-    window.addEventListener('resize', updateActiveOnScroll, { passive: true });
 
     updateActiveOnScroll();
-    const timer1 = setTimeout(updateActiveOnScroll, 100);
-    const timer2 = setTimeout(updateActiveOnScroll, 350);
 
     return () => {
       if (scroller) {
         scroller.removeEventListener('scroll', updateActiveOnScroll);
       }
       window.removeEventListener('scroll', updateActiveOnScroll);
-      window.removeEventListener('resize', updateActiveOnScroll);
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
     };
-  }, [headings]);
+  }, [headings, activeHeading]);
 
-  const handleItemClick = (event: React.MouseEvent<HTMLAnchorElement>, id: string, titlePart: string) => {
+  const handleItemClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    id: string,
+    cleanText: string
+  ) => {
     event.preventDefault();
     setActiveHeading(id);
     isClickingRef.current = true;
@@ -169,12 +180,11 @@ export default function TableOfContents({
       isClickingRef.current = false;
     }, 900);
 
-    // Locate target element by ID or content fallback
     let target = document.getElementById(id);
     if (!target) {
       const candidates = document.querySelectorAll('.heading-with-anchor, h1, h2, h3, h4');
       for (const el of candidates) {
-        if (el.textContent?.toLowerCase().includes(titlePart.trim().toLowerCase())) {
+        if (el.textContent?.toLowerCase().includes(cleanText.trim().toLowerCase())) {
           target = el as HTMLElement;
           break;
         }
@@ -182,7 +192,7 @@ export default function TableOfContents({
     }
 
     if (target) {
-      consoleLogger.action('TOC', `Jumped to section: #${id} (${titlePart.slice(0, 50)})`);
+      consoleLogger.action('TOC', `Jumped to section: #${id} (${cleanText.slice(0, 50)})`);
 
       const scroller = getScrollContainer(navRef.current);
       if (scroller) {
@@ -190,17 +200,16 @@ export default function TableOfContents({
         const containerRect = scroller.getBoundingClientRect();
         const targetTopRelativeToContainer = targetRect.top - containerRect.top + scroller.scrollTop;
         scroller.scrollTo({
-          top: Math.max(0, targetTopRelativeToContainer - 20),
+          top: Math.max(0, targetTopRelativeToContainer - 24),
           behavior: 'smooth',
         });
       } else {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
-      // Highlight target temporarily
-      target.classList.add('ring-2', 'ring-emerald-400/50', 'rounded-lg', 'transition-all');
+      target.classList.add('ring-2', 'ring-sky-400/50', 'rounded-lg', 'transition-all');
       setTimeout(() => {
-        target?.classList.remove('ring-2', 'ring-emerald-400/50', 'rounded-lg', 'transition-all');
+        target?.classList.remove('ring-2', 'ring-sky-400/50', 'rounded-lg', 'transition-all');
       }, 1500);
     }
   };
@@ -211,18 +220,24 @@ export default function TableOfContents({
     return headings.filter((h) => (h.text || '').toLowerCase().includes(q));
   }, [headings, filterText]);
 
+  const stats = useMemo(() => {
+    const h2Count = headings.filter((h) => h.type === 'h2').length;
+    const h3Count = headings.filter((h) => h.type === 'h3').length;
+    return { h2Count, h3Count, total: headings.length };
+  }, [headings]);
+
   if (!headings.length) return null;
 
   return (
     <nav
       ref={navRef}
-      className={`sticky top-4 flex flex-col gap-3 p-4 rounded-2xl bg-[#141418] border border-[#22222a] shadow-2xl shadow-black/50 backdrop-blur-md transition-all ${className}`}
+      className={`sticky top-4 flex flex-col gap-3 p-4 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl shadow-black/60 backdrop-blur-md transition-all ${className}`}
       aria-label="Table of contents navigation"
     >
-      {/* ── Modern Sleek Header ── */}
-      <div className="flex items-center justify-between pb-3 border-b border-[#212128]">
+      {/* ── Modern Header: Topic & Subtopic Count ── */}
+      <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-400 shadow-sm">
+          <div className="w-6 h-6 rounded-lg bg-sky-500/10 border border-sky-500/25 flex items-center justify-center text-sky-400 shadow-sm">
             <svg
               className="w-3.5 h-3.5"
               viewBox="0 0 24 24"
@@ -241,20 +256,33 @@ export default function TableOfContents({
               <line x1="3" y1="18" x2="3.01" y2="18" />
             </svg>
           </div>
-          <span className="text-xs font-semibold text-neutral-200 tracking-wide font-mono uppercase">
+          <span className="text-xs font-bold text-white tracking-wider font-mono uppercase">
             {title}
           </span>
         </div>
-        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#1a1a20] border border-[#262630] text-neutral-400">
-          {headings.length}
-        </span>
+        <div className="flex items-center gap-1.5">
+          <span
+            className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-sky-500/15 border border-sky-500/30 text-sky-300"
+            title={`${stats.h2Count} Header Topics`}
+          >
+            {stats.h2Count} Topics
+          </span>
+          {stats.h3Count > 0 && (
+            <span
+              className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-white/[0.04] border border-white/[0.08] text-zinc-400"
+              title={`${stats.h3Count} Subtopics`}
+            >
+              {stats.h3Count} Sub
+            </span>
+          )}
+        </div>
       </div>
 
-      {/* ── Optional Filter Search (for long docs) ── */}
+      {/* ── Filter Search (for long docs) ── */}
       {headings.length > 7 && (
         <div className="relative flex items-center">
           <svg
-            className="absolute left-2.5 w-3 h-3 text-neutral-500 pointer-events-none"
+            className="absolute left-2.5 w-3 h-3 text-zinc-500 pointer-events-none"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -267,14 +295,14 @@ export default function TableOfContents({
             type="text"
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
-            placeholder="Filter sections..."
-            className="w-full h-7 pl-7 pr-6 rounded-lg bg-[#0c0c0e] border border-[#22222a] text-[11px] text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-emerald-500/50 transition-all font-mono"
+            placeholder="Filter topics & subtopics..."
+            className="w-full h-7 pl-7 pr-6 rounded-lg bg-[#09090c] border border-white/[0.08] text-[11px] text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-sky-500/50 transition-all font-mono"
           />
           {filterText && (
             <button
               type="button"
               onClick={() => setFilterText('')}
-              className="absolute right-2 text-neutral-500 hover:text-neutral-300 text-xs"
+              className="absolute right-2 text-zinc-500 hover:text-zinc-300 text-xs cursor-pointer"
               title="Clear filter"
             >
               ✕
@@ -283,20 +311,81 @@ export default function TableOfContents({
         </div>
       )}
 
-      {/* ── Modern Tree Guide Rail with Elegant Active Indicator ── */}
-      <div ref={listRef} className="relative border-l border-[#22222a] ml-1.5 pl-2 flex flex-col gap-0.5 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+      {/* ── Clean Developer Documentation Guide Rail ── */}
+      <div
+        ref={listRef}
+        className="relative border-l border-white/[0.08] ml-2 pl-2 flex flex-col gap-0.5 max-h-[calc(100vh-220px)] overflow-y-auto pr-1 select-none py-1"
+      >
         {filteredHeadings.map((heading, index) => {
           const rawText = heading.text || '';
           const cleanText = rawText.replace(/`/g, '');
           const id = headingId(rawText);
           const isActive = activeHeading === id;
+
+          const isH2 = heading.type === 'h2';
           const isH3 = heading.type === 'h3';
 
-          // Extract number prefix if present (e.g. "1.", "2.1", "3. ")
-          const numberMatch = cleanText.match(/^(\d+(?:\.\d+)?\.?)\s*(.+)$/);
-          const numberPart = numberMatch ? numberMatch[1] : null;
-          const titlePart = numberMatch ? numberMatch[2] : cleanText;
+          // ── H2: Header Topic ──
+          if (isH2) {
+            return (
+              <a
+                key={`${heading.type}-${index}-${rawText}`}
+                href={`#${id}`}
+                data-toc-id={id}
+                aria-current={isActive ? 'location' : undefined}
+                title={cleanText}
+                className={`group relative flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150 text-left ${
+                  index > 0 ? 'mt-2' : 'mt-0'
+                } ${
+                  isActive
+                    ? 'bg-sky-500/15 text-white font-bold shadow-sm before:absolute before:-left-[9px] before:top-1.5 before:bottom-1.5 before:w-[2px] before:rounded-full before:bg-sky-400 before:shadow-[0_0_8px_rgba(56,189,248,0.8)]'
+                    : 'text-zinc-200 hover:text-white hover:bg-white/[0.04]'
+                }`}
+                onClick={(event) => handleItemClick(event, id, cleanText)}
+              >
+                <span className="truncate leading-tight font-semibold tracking-tight">
+                  {cleanText}
+                </span>
+                {isActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0 ml-2 shadow-[0_0_6px_rgba(56,189,248,0.8)]" />
+                )}
+              </a>
+            );
+          }
 
+          // ── H3: Sub Topic ──
+          if (isH3) {
+            return (
+              <a
+                key={`${heading.type}-${index}-${rawText}`}
+                href={`#${id}`}
+                data-toc-id={id}
+                aria-current={isActive ? 'location' : undefined}
+                title={cleanText}
+                className={`group relative flex items-center justify-between pl-4 pr-2 py-1 rounded-md text-[11px] transition-all duration-150 text-left ${
+                  isActive
+                    ? 'bg-emerald-500/15 text-emerald-300 font-semibold before:absolute before:-left-[9px] before:top-1 before:bottom-1 before:w-[2px] before:rounded-full before:bg-emerald-400 before:shadow-[0_0_6px_rgba(52,211,153,0.8)]'
+                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03]'
+                }`}
+                onClick={(event) => handleItemClick(event, id, cleanText)}
+              >
+                <div className="flex items-center gap-1.5 truncate">
+                  <span
+                    className={`w-1 h-1 rounded-full shrink-0 transition-all ${
+                      isActive
+                        ? 'bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)]'
+                        : 'bg-zinc-600 group-hover:bg-zinc-400'
+                    }`}
+                  />
+                  <span className="truncate leading-tight font-normal">
+                    {cleanText}
+                  </span>
+                </div>
+              </a>
+            );
+          }
+
+          // ── H4: Sub-Sub Topic / Details ──
           return (
             <a
               key={`${heading.type}-${index}-${rawText}`}
@@ -304,37 +393,17 @@ export default function TableOfContents({
               data-toc-id={id}
               aria-current={isActive ? 'location' : undefined}
               title={cleanText}
-              className={`group relative flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all duration-150 text-left ${
-                isH3 ? 'pl-5 text-[11px]' : ''
-              } ${
+              className={`group relative flex items-center pl-7 pr-2 py-0.5 rounded text-[10.5px] font-mono transition-all duration-150 text-left ${
                 isActive
-                  ? 'bg-emerald-500/10 text-emerald-300 font-semibold shadow-sm before:absolute before:-left-[9px] before:top-1.5 before:bottom-1.5 before:w-[2px] before:rounded-full before:bg-emerald-400 before:shadow-[0_0_8px_rgba(52,211,153,0.8)]'
-                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/40'
+                  ? 'text-amber-300 font-medium bg-amber-500/10 before:absolute before:-left-[9px] before:top-1 before:bottom-1 before:w-[2px] before:rounded-full before:bg-amber-400'
+                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.02]'
               }`}
-              onClick={(event) => handleItemClick(event, id, titlePart)}
+              onClick={(event) => handleItemClick(event, id, cleanText)}
             >
-              <span
-                className={`rounded-full shrink-0 transition-all ${
-                  isActive
-                    ? 'w-1.5 h-1.5 bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]'
-                    : isH3
-                    ? 'w-1 h-1 bg-neutral-700 group-hover:bg-neutral-500'
-                    : 'w-1.5 h-1.5 bg-neutral-600 group-hover:bg-neutral-400'
-                }`}
-                aria-hidden="true"
-              />
-              {numberPart && (
-                <span
-                  className={`px-1.5 py-0.2 rounded text-[10px] font-mono shrink-0 transition-colors ${
-                    isActive
-                      ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30'
-                      : 'bg-[#18181e] text-neutral-400 border border-[#24242e]'
-                  }`}
-                >
-                  {numberPart}
-                </span>
-              )}
-              <span className="truncate leading-tight flex-1">{titlePart}</span>
+              <span className="text-zinc-600 text-[9px] mr-1.5 shrink-0">▸</span>
+              <span className="truncate leading-tight">
+                {cleanText}
+              </span>
             </a>
           );
         })}
@@ -348,7 +417,7 @@ export default function TableOfContents({
           if (scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
           else window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
-        className="pt-2.5 border-t border-[#1f1f26] flex items-center justify-between text-[11px] font-mono text-neutral-500 hover:text-emerald-400 transition-colors mt-0.5 group"
+        className="pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-zinc-500 hover:text-sky-400 transition-colors mt-0.5 group cursor-pointer"
       >
         <span className="group-hover:translate-x-0.5 transition-transform">Top of document</span>
         <svg

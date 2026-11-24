@@ -12,31 +12,46 @@ export interface DocSpecTabProps {
   activeFilename?: string;
 }
 
-export default function DocSpecTab({ headings, finalBlocks, guideMeta, activeTitle, activeFilename }: DocSpecTabProps) {
+export default function DocSpecTab({
+  headings,
+  finalBlocks,
+  guideMeta,
+  activeTitle,
+  activeFilename,
+}: DocSpecTabProps) {
   const hasHeadings = headings && headings.length > 0;
-  const displayTitle = activeTitle || guideMeta.title;
-  const displayFilename = activeFilename || guideMeta.filename;
+  const displayTitle = activeTitle || `${guideMeta.title} — Full Specification`;
+  const displayFilename = activeFilename || guideMeta.mainFile || `${guideMeta.folder}/main.md`;
 
   return (
-    <div className={`w-full ${hasHeadings ? 'grid grid-cols-1 lg:grid-cols-[280px_1fr]' : 'flex flex-col'} gap-5 items-start`}>
+    <div
+      className={`w-full ${
+        hasHeadings ? 'grid grid-cols-1 lg:grid-cols-[290px_1fr]' : 'flex flex-col'
+      } gap-6 items-start`}
+    >
       {hasHeadings && (
         <TableOfContents headings={headings} title="On this page" className="w-full" />
       )}
-      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-4 min-w-0">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#19191d]">
-          <div className="flex flex-col gap-0.5">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">DOCUMENTATION SPECIFICATION</span>
-            <h2 className="text-lg font-bold text-neutral-200">{displayTitle}</h2>
+      <section className="w-full p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6 min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-sky-400"></span>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400">
+                MASTER SPECIFICATION BLUEPRINT
+              </span>
+            </div>
+            <h2 className="text-xl font-extrabold text-white tracking-tight">{displayTitle}</h2>
           </div>
-          <span className="text-xs font-mono text-neutral-400 truncate">
+          <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-white/[0.04] border border-white/[0.08] text-zinc-400 truncate">
             Soul-DevPortal-Docs/{displayFilename}
           </span>
         </div>
-        <div className="prose prose-invert max-w-none text-xs leading-relaxed text-neutral-300">
+        <div className="w-full">
           {finalBlocks && finalBlocks.length > 0 ? (
             <Markdown blocks={finalBlocks} skipFirstHeading />
           ) : (
-            <div className="p-8 text-center text-neutral-500 font-mono text-xs">
+            <div className="p-12 text-center text-zinc-500 font-mono text-xs">
               No content found for this specification.
             </div>
           )}

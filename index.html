@@ -14,8 +14,32 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
-  <body>
-    <div id="root"></div>
+  <body style="margin: 0; background-color: #070708; color: #e4e4e7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+    <div id="root">
+      <div style="position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #070708; z-index: 9999;">
+        <div style="position: relative; width: 64px; height: 64px; margin-bottom: 24px;">
+          <div style="position: absolute; inset: -8px; border-radius: 50%; border: 1px solid rgba(56, 189, 248, 0.25); animation: spin 4s linear infinite;"></div>
+          <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #111116; border: 1px solid rgba(255, 255, 255, 0.12); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 24px rgba(56, 189, 248, 0.2);">
+            <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+              <path d="M48 20C48 13.37 42.63 8 36 8H20C13.37 8 8 13.37 8 20V26C8 32.63 13.37 38 20 38H44C50.63 38 56 43.37 56 50V56C56 62.63 50.63 68 44 68H28C21.37 68 16 62.63 16 56" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div style="font-size: 16px; font-weight: 800; letter-spacing: 0.05em; color: #ffffff; margin-bottom: 6px;">
+          SOUL WORKSPACE
+        </div>
+        <div style="font-size: 11px; font-family: monospace; color: #71717a; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 20px;">
+          Developer Portal &bull; Booting Engine...
+        </div>
+        <div style="width: 180px; height: 4px; background-color: #18181b; border-radius: 9999px; overflow: hidden;">
+          <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #38bdf8, #6366f1, #34d399); animation: pulse-bar 1.5s ease-in-out infinite;"></div>
+        </div>
+        <style>
+          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+          @keyframes pulse-bar { 0% { transform: translateX(-100%); } 50% { transform: translateX(0%); } 100% { transform: translateX(100%); } }
+        </style>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

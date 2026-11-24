@@ -37,11 +37,10 @@ function projectSidebarIcon(proj: ProjectData): string {
 
 function docGuideBadge(guide: GuideMeta, isActive: boolean = false): { text: string; color: string } {
   let text = 'DOC';
-  if (guide.category === 'rules') text = 'SPEC';
-  else if (guide.category === 'cheatsheet') text = 'OPS';
-  else if (guide.category === 'design') text = 'PKG';
-  else if (guide.category === 'ports') text = 'PORTS';
-  else if (guide.category === 'techstack') text = 'STACK';
+  if (guide.id === 'project-architecture' || guide.category === 'rules') text = 'SPEC';
+  else if (guide.id === 'cheatsheets' || guide.category === 'cheatsheet') text = 'OPS';
+  else if (guide.id === 'packages-architecture' || guide.category === 'design') text = 'PKG';
+  else if (guide.id === 'networking-and-ports' || guide.category === 'ports') text = 'PORTS';
   else text = guide.badge?.split(' ')[0] || 'DOC';
 
   if (isActive) {
@@ -51,11 +50,10 @@ function docGuideBadge(guide: GuideMeta, isActive: boolean = false): { text: str
 }
 
 function formatDocGuideTitle(guide: GuideMeta): string {
-  if (guide.id === 'rules') return 'Projects Rules';
-  if (guide.id === 'cheatsheet') return 'Compliance Cheatsheet';
-  if (guide.id === 'design') return 'Packages Design';
-  if (guide.id === 'ports') return 'Port Architecture';
-  if (guide.id === 'techstack') return 'Tech Stack';
+  if (guide.id === 'project-architecture' || guide.id === 'rules') return 'Project Architecture';
+  if (guide.id === 'packages-architecture' || guide.id === 'design') return 'Packages Architecture';
+  if (guide.id === 'networking-and-ports' || guide.id === 'ports') return 'Port Architecture';
+  if (guide.id === 'cheatsheets' || guide.id === 'cheatsheet') return 'Compliance Cheatsheet';
   return guide.title;
 }
 
@@ -75,11 +73,9 @@ function isDocGuideActive(active: string, guide: GuideMeta): boolean {
   ) {
     return true;
   }
-  if (guide.id === 'rules' && (active === 'projects-rules' || active === 'rules')) return true;
-  if (guide.id === 'design' && (active === 'packages-design' || active === 'guide' || active === 'design')) return true;
-  if (guide.id === 'ports' && (active === 'port-architecture' || active === 'ports-guide' || active === 'ports')) return true;
-  if (guide.id === 'techstack' && (active === 'tech-stack' || active === 'techstack')) return true;
-  if (guide.id === 'cheatsheet' && (active === 'compliance-cheatsheet' || active === 'cheatsheet')) return true;
+  if (guide.aliases && guide.aliases.some((alias) => active === `docs/${alias}` || active === `doc/${alias}` || active === alias)) {
+    return true;
+  }
   return false;
 }
 
@@ -648,7 +644,7 @@ export default function Sidebar({
           {/* Pillar 3: Documentation */}
           {(() => {
             const isDocsMainActive = isActive('docs') || isActive('docs-dashboard');
-            const isDocsChildActive = active.startsWith('docs/') || active.startsWith('doc/') || ['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
+            const isDocsChildActive = active.startsWith('docs/') || active.startsWith('doc/') || ['project-architecture', 'rules', 'projects-rules', 'packages-architecture', 'design', 'packages-design', 'guide', 'networking-and-ports', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheets', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
 
             return (
               <div className="flex flex-col gap-1 pt-1">
