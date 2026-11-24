@@ -167,6 +167,7 @@ All projects have **guaranteed unique, non-overlapping ports**.
 | **`college-management-system`** | **`5178`** | React 19 + Vite 8 + Tailwind v4 | **`8005`** | Python FastAPI + Uvicorn | `server/data/college_management.db` |
 | **`globalpulse-ai`** | **`5179`** | React 19 + Vite 8 + Tailwind v4 | **`8003`** | Python FastAPI + Uvicorn | `server/data/globalpulse.db` |
 | **`postcraft-ai`** | **`5180`** | React 19 + Vite 8 + Tailwind v4 | **`8004`** | Python FastAPI + Uvicorn | `server/data/postcraft.db` |
+| **`home-management`** | **`5182`** | React 19 + Vite 8 + Tailwind v4 | **`8009`** | Python FastAPI + Uvicorn | `server/data/paperless.db` |
 | **`devportal`** (Hub) | **`5181`** | React 19 + Vite 8 + Tailwind v4 | **`8008`** | Python FastAPI + Uvicorn | `backend/data/workspace.db` |
 
 ---
@@ -211,6 +212,7 @@ Developers running processes directly without npm wrappers must follow the singl
 | **`college-management-system`** | `npx vite . --port 5178` | `python -m uvicorn backend.main:app --port 8005 --reload` | `npm run build` (`vite build`) | `npm run typecheck` (`tsc --noEmit`) | `npm run test` (database tests) | `npm run preview` (`:5178`) |
 | **`globalpulse-ai`** | `npx vite frontend --port 5179` | `python -m uvicorn backend.main:app --port 8003 --reload` | `npm run build` (`vite build frontend`) | `npm run typecheck` (`tsc --noEmit`) | `npm run test` (news feed suite) | `npm run preview` (`:5179`) |
 | **`postcraft-ai`** | `npx vite . --port 5180` | `python -m uvicorn backend.main:app --port 8004 --reload` | `npm run build` (`vite build`) | `npm run typecheck` (`tsc --noEmit`) | `npm run test` (scheduler tests) | `npm run preview` (`:5180`) |
+| **`home-management`** | `npx vite client --port 5182` | `python server/main.py --port 8009 --reload` | `npm run build` (`vite build client`) | `npm run typecheck` (`tsc --noEmit`) | `npm run test` (endpoints verify) | `npm run preview` (`:5182`) |
 | **`devportal`** (Hub) | `npx vite . --port 5181` | `python backend/main.py --port 8008` | `npm run build` (`vite build`) | `npm run typecheck` (`tsc --noEmit`) | `npm run test` (portal verify) | `npm run preview` (`:5181`) |
 
 ### D. Monorepo Master Multi-App Commands (Root: `c:\Users\dheen\Soul-DevPortal`)

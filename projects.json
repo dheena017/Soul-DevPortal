@@ -87,6 +87,17 @@
     "db_info": "SQLite (server/data/postcraft.db)",
     "ai_engine": "Integrated GenAI"
   },
+  "home-management": {
+    "title": "HOME MANAGEMENT SYSTEM",
+    "frontend_port": 5182,
+    "backend_port": 8009,
+    "frontend_cmd": ["npm", "run", "dev", "--prefix", "client"],
+    "backend_cmd": ["python", "server/main.py", "--port", "8009", "--reload"],
+    "framework": "React 19 + Vite 8 + Tailwind CSS v4",
+    "server_stack": "Python FastAPI + Uvicorn",
+    "db_info": "SQLite (server/data/paperless.db)",
+    "ai_engine": "Household & Inventory Engine"
+  },
   "devportal": {
     "title": "Soul Developer Portal",
     "frontend_port": 5181,

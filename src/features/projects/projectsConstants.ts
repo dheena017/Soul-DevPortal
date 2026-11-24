@@ -18,6 +18,7 @@ export const PROJECT_LOGOS: Record<string, string> = {
   'college-management-system': '/project-logos/college-management-system.svg',
   'globalpulse-ai': '/project-logos/globalpulse-ai.svg',
   'postcraft-ai': '/project-logos/postcraft-ai.svg',
+  'home-management': '/project-logos/college-management-system.svg',
   'devportal': '/favicon.svg',
 };
 
@@ -103,6 +104,15 @@ export const PROJECT_BRAND_MAP: Record<string, ProjectBrandInfo> = {
     accentBg: 'rgba(249, 115, 22, 0.12)',
     tag: 'Social Copy GenAI',
     primaryCapability: 'Integrated Multi-Platform GenAI',
+  },
+  'home-management': {
+    name: 'Home Management System',
+    shortName: 'HomeManager',
+    icon: '🏡',
+    themeColor: '#10b981',
+    accentBg: 'rgba(16, 185, 129, 0.12)',
+    tag: 'Household & Belongings ERP',
+    primaryCapability: 'Home Inventory, Warranties, Groceries & Tasks',
   },
   'devportal': {
     name: 'Soul Developer Portal',

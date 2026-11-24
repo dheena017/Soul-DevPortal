@@ -86,6 +86,15 @@ PORT_REGISTRY: Dict[str, Dict[str, Any]] = {
         "db": "SQLite (server/data/postcraft.db)",
         "ai": "Integrated GenAI",
     },
+    "home-management": {
+        "client": 5182,
+        "server": 8009,
+        "name": "Home Management System",
+        "framework": "React 19 + Vite 8 + Tailwind CSS v4",
+        "server_stack": "Python FastAPI + Uvicorn",
+        "db": "SQLite (server/data/paperless.db)",
+        "ai": "Household & Inventory Engine",
+    },
     "devportal": {
         "client": 5181,
         "server": 8008,
