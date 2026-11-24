@@ -69,7 +69,7 @@ export default function GuideDetail({
 
   return (
     <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12">
-      <header className="w-full bg-[#17171c] border border-[#282832] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5">
+      <header className="w-full bg-[#151519] border border-[#212126] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5">
         <div className="flex items-center gap-2 text-xs text-neutral-400">
           <span>{guideMeta.breadcrumb}</span>
         </div>
@@ -77,15 +77,15 @@ export default function GuideDetail({
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">{guideMeta.description}</p>
 
         {/* Guides Switcher Bar */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0e0e11] border border-[#282832] rounded-xl" role="tablist" aria-label="Monorepo documentation guides">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#070708] border border-[#212126] rounded-xl" role="tablist" aria-label="Monorepo documentation guides">
           <button
             type="button"
             role="tab"
             aria-selected={selectedGuide === 'design'}
             className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               selectedGuide === 'design'
-                ? 'bg-[#17171c] text-neutral-200 font-bold border border-[#282832] shadow-sm'
-                : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#17171c] hover:border-[#282832] border border-transparent font-medium'
+                ? 'bg-[#151519] text-neutral-200 font-bold border border-[#212126] shadow-sm'
+                : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-[#212126] border border-transparent font-medium'
             }`}
             onClick={() => handleSelect('design')}
           >
@@ -98,8 +98,8 @@ export default function GuideDetail({
               aria-selected={selectedGuide === 'ports'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'ports'
-                  ? 'bg-[#17171c] text-neutral-200 font-bold border border-[#282832] shadow-sm'
-                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#17171c] hover:border-[#282832] border border-transparent font-medium'
+                  ? 'bg-[#151519] text-neutral-200 font-bold border border-[#212126] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-[#212126] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('ports')}
             >
@@ -113,8 +113,8 @@ export default function GuideDetail({
               aria-selected={selectedGuide === 'techstack'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'techstack'
-                  ? 'bg-[#17171c] text-neutral-200 font-bold border border-[#282832] shadow-sm'
-                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#17171c] hover:border-[#282832] border border-transparent font-medium'
+                  ? 'bg-[#151519] text-neutral-200 font-bold border border-[#212126] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-[#212126] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('techstack')}
             >
@@ -126,7 +126,7 @@ export default function GuideDetail({
 
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] items-start gap-6">
         <TableOfContents headings={headings} title="On this page" />
-        <section className="p-5 md:p-8 rounded-2xl bg-[#17171c] border border-[#282832] shadow-2xl overflow-hidden min-w-0">
+        <section className="p-5 md:p-8 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl overflow-hidden min-w-0">
           <Markdown blocks={activeBlocks} skipFirstHeading />
         </section>
       </div>

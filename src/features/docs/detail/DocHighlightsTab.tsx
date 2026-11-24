@@ -7,20 +7,20 @@ export interface DocHighlightsTabProps {
 
 export default function DocHighlightsTab({ guideMeta }: DocHighlightsTabProps) {
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#17171c] border border-[#282832] shadow-2xl flex flex-col gap-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f26]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">KEY RULES &amp; HIGHLIGHTS</span>
           <h2 className="text-lg font-bold text-neutral-200">Mandatory Standards Checklist</h2>
         </div>
-        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#17171c] border border-[#282832] text-neutral-300">
+        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
           {guideMeta.keyHighlights.length} rules active
         </span>
       </div>
 
       {/* Top Audience & Compliance Card */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="flex flex-col p-4 rounded-xl bg-[#17171c] border border-[#282832] hover:border-neutral-500 transition-all gap-2">
+        <div className="flex flex-col p-4 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all gap-2">
           <div className="flex items-center gap-2">
             <span className="text-base">🎯</span>
             <h3 className="text-xs font-bold text-neutral-200">Target Audience</h3>
@@ -30,13 +30,13 @@ export default function DocHighlightsTab({ guideMeta }: DocHighlightsTabProps) {
           </p>
         </div>
 
-        <div className="flex flex-col p-4 rounded-xl bg-[#17171c] border border-[#282832] hover:border-neutral-500 transition-all gap-2">
+        <div className="flex flex-col p-4 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all gap-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-base">🛡️</span>
               <h3 className="text-xs font-bold text-neutral-200">Compliance Mandate</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#17171c] border border-[#282832] text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
               Enforced
             </span>
           </div>
@@ -53,8 +53,8 @@ export default function DocHighlightsTab({ guideMeta }: DocHighlightsTabProps) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {guideMeta.keyHighlights.map((hl, idx) => (
-            <div key={idx} className="flex items-start gap-3 p-3.5 rounded-xl bg-[#17171c] border border-[#282832] hover:border-neutral-500 transition-all">
-              <span className="w-5 h-5 rounded-full bg-[#17171c] border border-[#282832] text-neutral-300 flex items-center justify-center text-xs shrink-0 mt-0.5">
+            <div key={idx} className="flex items-start gap-3 p-3.5 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
+              <span className="w-5 h-5 rounded-full bg-[#151519] border border-[#212126] text-neutral-300 flex items-center justify-center text-xs shrink-0 mt-0.5">
                 ✓
               </span>
               <div className="flex flex-col gap-0.5">

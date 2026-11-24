@@ -48,7 +48,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#17171c] border border-[#282832] hover:border-neutral-500 hover:bg-[#17171c] hover:shadow-xl transition-all duration-200 gap-4 h-full">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] hover:shadow-xl transition-all duration-200 gap-4 h-full">
       {/* Card Header: Brand, Meta, Ports */}
         <div
           className="flex flex-col gap-3.5"
@@ -97,13 +97,13 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
 
             <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-xs">
               {project.frontendPort && (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#17171c] border border-[#282832] text-neutral-300 text-[11px] font-bold" title={`Client Port :${project.frontendPort}`}>
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-neutral-300 text-[11px] font-bold" title={`Client Port :${project.frontendPort}`}>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
                   <span>:{project.frontendPort}</span>
                 </span>
               )}
               {project.backendPort && (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#17171c] border border-[#282832] text-neutral-300 text-[11px] font-bold" title={`Server Port :${project.backendPort}`}>
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-neutral-300 text-[11px] font-bold" title={`Server Port :${project.backendPort}`}>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
                   <span>:{project.backendPort}</span>
                 </span>
@@ -115,7 +115,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
             <h3 className="text-base font-bold text-neutral-200 group-hover:text-neutral-200 transition-colors truncate">
               {formattedTitle}
             </h3>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider bg-[#17171c] text-neutral-400 border border-[#282832] shrink-0">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider bg-[#151519] text-neutral-400 border border-[#212126] shrink-0">
               Public
             </span>
           </div>
@@ -131,7 +131,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
 
         {/* Card Specs Matrix */}
         <div
-          className="flex flex-col gap-2 p-2.5 rounded-xl bg-[#0e0e11] border border-[#282832] text-xs"
+          className="flex flex-col gap-2 p-2.5 rounded-xl bg-[#070708] border border-[#212126] text-xs"
           onClick={handleCardClick}
           style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
         >
@@ -175,7 +175,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
             return (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#17171c] border border-[#282832] text-[11px] font-mono text-neutral-400"
+                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-[11px] font-mono text-neutral-400"
               >
                 <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: dotColor }} aria-hidden="true" />
                 <span>{tag}</span>
@@ -185,13 +185,13 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
         </div>
 
         {/* Card Footer: Action Buttons (Launch & Details) */}
-        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#282832]">
+        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#212126]">
           {project.frontendPort && (
             <a
               href={`http://localhost:${project.frontendPort}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#17171c] border border-[#282832] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 transition-all"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 transition-all"
               title={`Launch on http://localhost:${project.frontendPort}`}
               onClick={(e) => e.stopPropagation()}
             >
@@ -202,7 +202,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
           {onSelectProject && (
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#17171c] border border-[#282832] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm"
+              className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#151519] border border-[#212126] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm"
               onClick={handleCardClick}
               title={`Open deep detail view for ${formattedTitle}`}
             >

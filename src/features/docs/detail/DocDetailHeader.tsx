@@ -24,14 +24,14 @@ export default function DocDetailHeader({
   onBack,
 }: DocDetailHeaderProps) {
   return (
-    <header className="w-full bg-[#17171c] border border-[#282832] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
+    <header className="w-full bg-[#151519] border border-[#212126] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#1f1f26]">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#19191d]">
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#17171c] border border-[#282832] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#17171c] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#151519] transition-all font-semibold shadow-sm"
               onClick={onBack}
               title="Return to docs dashboard"
             >
@@ -44,7 +44,7 @@ export default function DocDetailHeader({
           ) : (
             <a
               href="#docs"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#17171c] border border-[#282832] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#17171c] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#151519] transition-all font-semibold shadow-sm"
               title="Return to docs dashboard"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -54,11 +54,11 @@ export default function DocDetailHeader({
               <span>Back</span>
             </a>
           )}
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#17171c] border border-[#282832] text-neutral-400 font-medium">Soul Workspace</span>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#151519] border border-[#212126] text-neutral-400 font-medium">Soul Workspace</span>
           <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
           <a
             href="#docs"
-            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#17171c] border border-[#282832] hover:border-neutral-500 hover:bg-[#17171c] hover:text-neutral-200 transition-all text-neutral-300 font-medium"
+            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] hover:text-neutral-200 transition-all text-neutral-300 font-medium"
             onClick={(e) => {
               if (onBack) {
                 e.preventDefault();
@@ -69,11 +69,11 @@ export default function DocDetailHeader({
             Pillar 3: Docs Dashboard
           </a>
           <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
-          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#17171c] border border-[#282832] text-neutral-200 font-semibold shadow-sm truncate max-w-sm">{guideMeta.title}</strong>
+          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#151519] border border-[#212126] text-neutral-200 font-semibold shadow-sm truncate max-w-sm">{guideMeta.title}</strong>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#17171c] border border-[#282832] text-xs font-semibold text-neutral-300 select-none shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#151519] border border-[#212126] text-xs font-semibold text-neutral-300 select-none shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
             <span>Official Specification · 100% Compliant (9/9 Apps)</span>
           </div>
@@ -89,19 +89,19 @@ export default function DocDetailHeader({
       {/* ── Hero Title & 2x2 Balanced Cards Row ── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="flex items-start gap-4 min-w-0">
-          <div className="w-14 h-14 rounded-2xl bg-[#17171c] border border-[#282832] flex items-center justify-center shrink-0 text-2xl shadow-inner">
+          <div className="w-14 h-14 rounded-2xl bg-[#151519] border border-[#212126] flex items-center justify-center shrink-0 text-2xl shadow-inner">
             {guideMeta.icon || '📜'}
           </div>
 
           <div className="flex flex-col gap-2 min-w-0">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#17171c] border border-[#282832] text-neutral-300">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#151519] border border-[#212126] text-neutral-300">
                 OFFICIAL SPEC V1.0
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#17171c] border border-[#282832] text-neutral-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
                 v1.0.0
               </span>
-              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#17171c] border border-[#282832] text-neutral-300">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#151519] border border-[#212126] text-neutral-300">
                 {guideMeta.category.toUpperCase()}
               </span>
             </div>
@@ -113,7 +113,7 @@ export default function DocDetailHeader({
 
         {/* 4-Card Balanced Metadata Grid */}
         <div className="grid grid-cols-2 gap-3 min-w-[280px] lg:min-w-[340px] shrink-0">
-          <div className="flex flex-col p-3 rounded-xl bg-[#17171c] border border-[#282832] hover:border-neutral-500 transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>📑</span>
               <span>SECTIONS</span>
@@ -121,7 +121,7 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-neutral-200 font-mono mt-1">{headingsCount} headings</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#17171c] border border-[#282832] hover:border-neutral-500 transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>⏱️</span>
               <span>READ TIME</span>
@@ -129,7 +129,7 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-neutral-200 font-mono mt-1">{guideMeta.readTime}</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#17171c] border border-[#282832] hover:border-[#282832] transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-[#212126] transition-all">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>💻</span>
               <span>CODE EXAMPLES</span>
@@ -137,7 +137,7 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-neutral-200 font-mono mt-1">{codeBlocksCount} snippets</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#17171c] border border-[#282832] hover:border-[#282832] transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-[#212126] transition-all">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>📊</span>
               <span>TABLES &amp; MATRICES</span>
@@ -148,15 +148,15 @@ export default function DocDetailHeader({
       </div>
 
       {/* ── Integrated Header Navigation Tabs ── */}
-      <div className="pt-2 border-t border-[#1f1f26]">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0e0e11] border border-[#282832] rounded-xl" role="tablist" aria-label="Documentation guide sections">
+      <div className="pt-2 border-t border-[#19191d]">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#070708] border border-[#212126] rounded-xl" role="tablist" aria-label="Documentation guide sections">
           <button
             type="button"
             role="tab"
             aria-selected={activeTab === 'spec'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'spec'
-                ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
+                ? 'bg-[#212126] text-white font-bold border border-neutral-400 shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('spec')}
@@ -166,7 +166,7 @@ export default function DocDetailHeader({
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
             <span>Full Specification</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'spec' ? 'bg-[#282832] text-white border border-neutral-400 font-bold' : 'bg-[#17171c] text-neutral-400 border border-[#282832]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'spec' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
               {headingsCount}
             </span>
           </button>
@@ -177,7 +177,7 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'highlights'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'highlights'
-                ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
+                ? 'bg-[#212126] text-white font-bold border border-neutral-400 shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('highlights')}
@@ -186,7 +186,7 @@ export default function DocDetailHeader({
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
             <span>Key Rules &amp; Highlights</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'highlights' ? 'bg-[#282832] text-white border border-neutral-400 font-bold' : 'bg-[#17171c] text-neutral-400 border border-[#282832]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'highlights' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
               {guideMeta.keyHighlights.length}
             </span>
           </button>
@@ -197,7 +197,7 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'snippets'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'snippets'
-                ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
+                ? 'bg-[#212126] text-white font-bold border border-neutral-400 shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('snippets')}
@@ -207,7 +207,7 @@ export default function DocDetailHeader({
               <polyline points="8 6 2 12 8 18" />
             </svg>
             <span>Code Snippets</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'snippets' ? 'bg-[#282832] text-white border border-neutral-400 font-bold' : 'bg-[#17171c] text-neutral-400 border border-[#282832]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'snippets' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
               {codeBlocksCount}
             </span>
           </button>
@@ -218,7 +218,7 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'tables'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'tables'
-                ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
+                ? 'bg-[#212126] text-white font-bold border border-neutral-400 shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('tables')}
@@ -230,7 +230,7 @@ export default function DocDetailHeader({
               <line x1="12" y1="3" x2="12" y2="21" />
             </svg>
             <span>Tables &amp; Matrices</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'tables' ? 'bg-[#282832] text-white border border-neutral-400 font-bold' : 'bg-[#17171c] text-neutral-400 border border-[#282832]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'tables' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
               {tablesCount}
             </span>
           </button>

@@ -143,13 +143,13 @@ export default function TableOfContents({
 
   return (
     <nav
-      className={`sticky top-3.5 flex flex-col gap-2.5 p-4 rounded-2xl bg-[#17171c] border border-[#282832] shadow-2xl shadow-black/60 ${className}`}
+      className={`sticky top-3.5 flex flex-col gap-2.5 p-4 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl shadow-black/60 ${className}`}
       aria-label="Table of contents navigation"
     >
       {/* Card Header using Website Theme Palette */}
-      <div className="flex items-center justify-between pb-2.5 border-b border-[#1f1f26]">
+      <div className="flex items-center justify-between pb-2.5 border-b border-[#19191d]">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-md bg-[#17171c] border border-[#282832] flex items-center justify-center text-neutral-300 shadow-sm">
+          <div className="w-5 h-5 rounded-md bg-[#151519] border border-[#212126] flex items-center justify-center text-neutral-300 shadow-sm">
             <svg
               width="12"
               height="12"
@@ -173,7 +173,7 @@ export default function TableOfContents({
             {title}
           </span>
         </div>
-        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#17171c] border border-[#282832] text-neutral-300">
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
           {headings.length}
         </span>
       </div>
@@ -202,8 +202,8 @@ export default function TableOfContents({
                 isH3 ? 'pl-4' : ''
               } ${
                 isActive
-                  ? 'bg-[#17171c] text-neutral-300 font-semibold border border-[#282832] shadow-sm'
-                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#17171c] border border-transparent hover:border-[#282832]'
+                  ? 'bg-[#151519] text-neutral-300 font-semibold border border-[#212126] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] border border-transparent hover:border-[#212126]'
               }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
             >
@@ -219,8 +219,8 @@ export default function TableOfContents({
                 <span
                   className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
                     isActive
-                      ? 'bg-[#17171c] text-neutral-300 border border-[#282832] font-bold'
-                      : 'bg-[#17171c] border border-[#282832] text-neutral-400'
+                      ? 'bg-[#151519] text-neutral-300 border border-[#212126] font-bold'
+                      : 'bg-[#151519] border border-[#212126] text-neutral-400'
                   }`}
                 >
                   {numberPart}
