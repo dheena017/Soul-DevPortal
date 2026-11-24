@@ -42,7 +42,7 @@ graph TD
 > [!IMPORTANT]
 > The 10 Architectural Pillars are absolute workspace invariants. Every PR, new micro-app, and refactoring must satisfy all 10 invariants before merging into `main`.
 
-### 1. Unified Three-Pillar Standard
+### Pillar 1: Unified Three-Pillar Standard
 
 Every micro-application must strictly implement the canonical triad:
 
@@ -55,7 +55,7 @@ Every micro-application must strictly implement the canonical triad:
 
 ---
 
-### 2. Strict Feature-Slice Co-Location (FSD)
+### Pillar 2: Strict Feature-Slice Co-Location (FSD)
 
 All domain-specific UI components, custom React hooks, API fetchers, TypeScript types, and server endpoints must be co-located within dedicated feature slices under:
 
@@ -66,7 +66,7 @@ Horizontal catch-all dumping grounds (e.g. `src/components/`, `src/hooks/`) are 
 
 ---
 
-### 3. The Public Facade Barrier (`index.ts`)
+### Pillar 3: The Public Facade Barrier (`index.ts`)
 
 Each client feature directory must maintain a single `index.ts` barrier file. Outside modules (such as `src/app/` or another feature) may **only** import from the feature's root `@/features/<feature-name>`, never from internal sub-paths.
 
@@ -80,7 +80,7 @@ import { UserProfileCard } from '@/features/profile/components/UserProfileCard';
 
 ---
 
-### 4. Decoupled Application Shell (`src/app/`)
+### Pillar 4: Decoupled Application Shell (`src/app/`)
 
 The `src/app/` directory serves exclusively as the application bootstrap factory, router, layout frame, and global provider tree.
 
@@ -89,7 +89,7 @@ The `src/app/` directory serves exclusively as the application bootstrap factory
 
 ---
 
-### 5. Mandatory Reverse Proxying via Vite
+### Pillar 5: Mandatory Reverse Proxying via Vite
 
 Client applications must **never** hardcode backend origins or ports (e.g., `http://localhost:8000/api`) in source code.
 
@@ -112,7 +112,7 @@ export default defineConfig({
 
 ---
 
-### 6. Standardized JSON Response Envelopes
+### Pillar 6: Standardized JSON Response Envelopes
 
 All API endpoints must return a predictable, typed envelope structure:
 
@@ -134,7 +134,7 @@ All API endpoints must return a predictable, typed envelope structure:
 
 ---
 
-### 7. Isolated SQLite Persistence (`server/data/`)
+### Pillar 7: Isolated SQLite Persistence (`server/data/`)
 
 All SQLite database files (`.db`, `.db-wal`, `.db-shm`) must reside strictly in `server/data/<app>.db` and be permanently excluded from version control via `.gitignore`.
 
@@ -143,7 +143,7 @@ All SQLite database files (`.db`, `.db-wal`, `.db-shm`) must reside strictly in 
 
 ---
 
-### 8. Canonical Manifest Parity (`metadata.json`)
+### Pillar 8: Canonical Manifest Parity (`metadata.json`)
 
 Every project root must maintain an authoritative `metadata.json` declaring its title, ports, framework, server stack, database, and commands, exactly matching `projects.json`.
 
@@ -151,7 +151,7 @@ Every project root must maintain an authoritative `metadata.json` declaring its 
 
 ---
 
-### 9. Zero-Secret-in-Git & Prefix Scoping
+### Pillar 9: Zero-Secret-in-Git & Prefix Scoping
 
 No `.env` or credential files may ever be committed to version control.
 
@@ -165,7 +165,7 @@ No `.env` or credential files may ever be committed to version control.
 
 ---
 
-### 10. Fail-Fast Boot Validation & Sanitized Logging
+### Pillar 10: Fail-Fast Boot Validation & Sanitized Logging
 
 Backends must validate all required environment configurations on startup and terminate immediately if invalid.
 
@@ -176,16 +176,14 @@ Backends must validate all required environment configurations on startup and te
 
 ## Part II: Inviolable Domain Architectural Rules
 
-### Section 1: Monorepo Directory & Layout Rules
-
+### Domain 1: Directory Layout & Monorepo Topology Rules
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: All project directories in `Soul-DevPortal-Projects/`
 
 ---
 
-## The 8 Inviolable Directory Layout Rules
 
-### 1. Dual-Pillar Root Structure
+#### Rule 1.1: Dual-Pillar Root Structure
 
 Every project in `Soul-DevPortal-Projects/<app>/` must contain strictly:
 
@@ -199,32 +197,32 @@ Every project in `Soul-DevPortal-Projects/<app>/` must contain strictly:
 > [!CAUTION]
 > Loose root-level files (such as `test.js`, `temp.py`, `data.db`, `server.py`) outside their respective directories are strictly forbidden.
 
-### 2. Path Aliasing Standard (`@/*`)
+#### Rule 1.2: Path Aliasing Standard (`@/*`)
 
 - Client code must map `@/*` directly to `src/*` in both `tsconfig.json` and `vite.config.ts`.
 - Upward relative imports traversing more than two levels (e.g. `../../../components`) are strictly prohibited. Use `@/features/...` or `@/shared/...`.
 
-### 3. Absolute Cross-Project Boundary Isolation
+#### Rule 1.3: Absolute Cross-Project Boundary Isolation
 
 - A project in `Soul-DevPortal-Projects/<app-a>` may **never** import files from `Soul-DevPortal-Projects/<app-b>` via relative paths (`../../app-b/src`).
 - Code sharing across microservices is allowed strictly through versioned packages in `Soul-DevPortal-Packages/` (e.g. `@workspace/logger`, `@workspace/config`, `@workspace/runner`).
 
-### 4. Client Feature-Slice Co-location
+#### Rule 1.4: Client Feature-Slice Co-location
 
 - Domain code must be co-located in `client/src/features/<feature-name>/`.
 - Each feature must contain its own `components/`, `api/`, `hooks/`, `types.ts`, and `index.ts`.
 
-### 5. Decoupled Application Shell (`src/app/`)
+#### Rule 1.5: Decoupled Application Shell (`src/app/`)
 
 - `client/src/app/` functions purely as the application factory, router, layout frame, and global provider tree.
 - Zero domain business logic, data mutations, or direct fetch calls may exist in `src/app/`.
 
-### 6. Public Static Asset Boundaries (`client/public/`)
+#### Rule 1.6: Public Static Asset Boundaries (`client/public/`)
 
 - Uncompiled assets (SVGs, PNGs, favicons, fonts) must reside in `client/public/`.
 - Every project must supply `client/public/logos/logo.svg` for DevPortal catalog rendering.
 
-### 7. Server Feature Slice Standard
+#### Rule 1.7: Server Feature Slice Standard
 
 - Server features must reside in `server/features/<feature-name>/`, containing:
   - `router.py`: FastAPI endpoint declarations.
@@ -232,22 +230,20 @@ Every project in `Soul-DevPortal-Projects/<app>/` must contain strictly:
   - `schemas.py`: Pydantic request and response models.
   - `__init__.py`: Public feature interface.
 
-### 8. Persistence Isolation (`server/data/`)
+#### Rule 1.8: Persistence Isolation (`server/data/`)
 
 - All runtime database files, caches, and uploaded assets must live strictly in `server/data/`.
 
 ---
 
-### Section 2: Tech Stack & Framework Rules
-
+### Domain 2: Tech Stack & Framework Governance Rules
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: Framework selection, compiler versions, and runtime technologies across all projects
 
 ---
 
-## The 8 Inviolable Framework & Tech Stack Rules
 
-### 1. Mandatory Three-Pillar Standard
+#### Rule 2.1: Mandatory Three-Pillar Standard
 
 Every project in `Soul-DevPortal-Projects/` must strictly adopt the three canonical pillars:
 
@@ -255,24 +251,24 @@ Every project in `Soul-DevPortal-Projects/` must strictly adopt the three canoni
 2. **Backend Server**: Python 3.12+ + FastAPI + Uvicorn.
 3. **Persistence Layer**: Embedded SQLite with Write-Ahead Logging (WAL).
 
-### 2. React 19 Frontend Invariants
+#### Rule 2.2: React 19 Frontend Invariants
 
 - Consume React 19 features natively (`useActionState`, `useOptimistic`, `use`, `<Suspense>`).
 - Code must be strictly compatible with the React Compiler (pure render functions, zero mutable side effects during render).
 - Legacy React patterns (`componentWillMount`, class components, unsafe lifecycles) are forbidden.
 
-### 3. Vite 8 Bundler Standard
+#### Rule 2.3: Vite 8 Bundler Standard
 
 - All frontend clients must use Vite 8 bundled with `@vitejs/plugin-react` and `@tailwindcss/vite`.
 - `server.strictPort` must be set to `true` to ensure port predictability.
 
-### 4. Pure CSS-First Tailwind CSS v4
+#### Rule 2.4: Pure CSS-First Tailwind CSS v4
 
 - Styling must be powered natively by `@tailwindcss/vite`.
 - Legacy `tailwind.config.js`, `tailwind.config.ts`, and `postcss.config.js` are prohibited.
 - Import Tailwind via `@import "tailwindcss";` in `src/index.css`. Theme variables must be declared in `@theme`.
 
-### 5. Python 3.12+ Backend Standard
+#### Rule 2.5: Python 3.12+ Backend Standard
 
 - Backends must run on Python 3.12 or newer.
 - Standards:
@@ -281,42 +277,40 @@ Every project in `Soul-DevPortal-Projects/` must strictly adopt the three canoni
   - Data Validation: **Pydantic v2** (`BaseModel`, `Field`).
   - Configuration: `pydantic-settings` (`BaseSettings`).
 
-### 6. TypeScript Strict Mode
+#### Rule 2.6: TypeScript Strict Mode
 
 - `tsconfig.json` must enforce `"strict": true`, `"noImplicitAny": true`, `"strictNullChecks": true`, and `"skipLibCheck": true`.
 - Explicit or implicit `any` is forbidden in production code. Use `unknown` with narrowing or Zod parsing.
 
-### 7. AI Engine Integrations (Gemini Standard)
+#### Rule 2.7: AI Engine Integrations (Gemini Standard)
 
 - Microservices featuring AI generative capabilities must use Google Gemini (`google-genai` Python SDK or `@google/genai` TypeScript SDK).
 - Model Standard: Default to `gemini-2.5-flash` for high-speed streaming and JSON structuring.
 
-### 8. Tooling & Formatting Uniformity
+#### Rule 2.8: Tooling & Formatting Uniformity
 
 - Linting and formatting must follow ESLint / Prettier standards on the frontend, and Ruff / Black / Pyright on Python backends.
 
 ---
 
-### Section 3: Client Application Rules
-
+### Domain 3: Client Application Standards & Rules
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: All React 19 + Vite 8 + Tailwind CSS v4 frontend applications
 
 ---
 
-## The 8 Inviolable Client Rules
 
-### 1. Unified Tech Stack: React 19 + Vite 8 + Tailwind v4
+#### Rule 3.1: Unified Tech Stack: React 19 + Vite 8 + Tailwind v4
 
 - All frontend clients must run on React 19, bundled using Vite 8, and styled with Tailwind CSS v4.
 - Client ports are strictly reserved between `5173` and `5181` (per `projects.json`).
 
-### 2. Mandatory Reverse Proxying via Vite
+#### Rule 3.2: Mandatory Reverse Proxying via Vite
 
 - Client code must **never** hardcode backend origins or ports (e.g. `http://localhost:8000/api`).
 - All network requests must use relative paths (`/api/...`). The client Vite dev server must proxy `/api` and `/ws` to the corresponding backend port with `strictPort: true`.
 
-### 3. Pure CSS-First Tailwind v4
+#### Rule 3.3: Pure CSS-First Tailwind v4
 
 - Do not create legacy JavaScript configuration files (`tailwind.config.js`).
 - Declare theme tokens using CSS custom properties under `@theme`:
@@ -333,46 +327,44 @@ Every project in `Soul-DevPortal-Projects/` must strictly adopt the three canoni
 }
 ```
 
-### 4. Modern React 19 Primitives
+#### Rule 3.4: Modern React 19 Primitives
 
 - Use modern React 19 asynchronous primitives (`useActionState`, `useOptimistic`, `use`, `<Suspense>`).
 - Deprecated React lifecycle methods and unsafe side-effects during render are strictly forbidden. Components must be pure functions.
 
-### 5. Path Aliasing Enforcement (`@/*`)
+#### Rule 3.5: Path Aliasing Enforcement (`@/*`)
 
 - All project imports must consume the `@/*` alias mapped to `./src/*`.
 - Never use upward traversing relative paths beyond 1 level (`../../..`).
 
-### 6. Decoupled Application Factory (`src/app/`)
+#### Rule 3.6: Decoupled Application Factory (`src/app/`)
 
 - `src/app/` serves as the router, provider tree, and layout shell.
 - No business logic, raw API fetches, or feature-specific state management may be declared in `src/app/`.
 
-### 7. Next.js Migration Shims
+#### Rule 3.7: Next.js Migration Shims
 
 - When porting components originally written for Next.js, route through the standard shims (`next-link.tsx`, `next-navigation.ts`, `next-image.tsx`) located in `src/shared/lib/` or `@workspace/config` to guarantee zero build failures.
 
-### 8. Zero Unhandled Promise Rejections & Console Errors
+#### Rule 3.8: Zero Unhandled Promise Rejections & Console Errors
 
 - Client builds must pass with zero TypeScript errors (`tsc --noEmit`). Runtime executions must be free of unhandled Promise rejections and uncaught React exceptions in the browser console.
 
 ---
 
-### Section 4: Server & Runtime Rules
-
+### Domain 4: Server Application & Runtime Standards
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: All Python FastAPI + Uvicorn server implementations in `Soul-DevPortal-Projects/`
 
 ---
 
-## The 8 Inviolable Server Rules
 
-### 1. Mandatory Python FastAPI + Uvicorn Runtime
+#### Rule 4.1: Mandatory Python FastAPI + Uvicorn Runtime
 
 - All backend microservices must be built with Python 3.12+ using FastAPI and served via Uvicorn.
 - Server ports are strictly pinned between `8000` and `8008` (matching `projects.json`).
 
-### 2. Lifespan Handler over Deprecated Startup Events
+#### Rule 4.2: Lifespan Handler over Deprecated Startup Events
 
 - Application lifecycle events must be managed using the ASGI `@asynccontextmanager` `lifespan` handler.
 - Deprecated `@app.on_event("startup")` and `@app.on_event("shutdown")` are strictly forbidden.
@@ -394,52 +386,50 @@ async def lifespan(app: FastAPI):
         conn.execute("PRAGMA wal_checkpoint(TRUNCATE);")
 ```
 
-### 3. Strict CORS Whitelisting
+#### Rule 4.3: Strict CORS Whitelisting
 
 - CORS middleware must explicitly whitelist only authorized local client origins (e.g. `http://localhost:5173`, `http://127.0.0.1:5173`).
 - `allow_origins=["*"]` is strictly forbidden when `allow_credentials=True`.
 
-### 4. Zero Blocking Calls on the Event Loop
+#### Rule 4.4: Zero Blocking Calls on the Event Loop
 
 - The main async event loop must never be blocked by CPU-intensive calculations, synchronous file I/O, or blocking network calls.
 - Wrap synchronous operations using `await asyncio.to_thread(blocking_function, *args)`.
 
-### 5. Dependency Injection for Shared Resources
+#### Rule 4.5: Dependency Injection for Shared Resources
 
 - Database connections, AI client instances (Gemini), and configuration objects must be supplied to route handlers using FastAPI's `Depends()` dependency injection mechanism.
 
-### 6. Centralized Exception Handling Middleware
+#### Rule 4.6: Centralized Exception Handling Middleware
 
 - The server must register global exception handlers for `RequestValidationError`, `HTTPException`, and uncaught `Exception`.
 - Uncaught exceptions must return a standardized JSON error envelope with HTTP status 500 without leaking Python tracebacks to the client.
 
-### 7. Structured Logging with `@workspace/logger`
+#### Rule 4.7: Structured Logging with `@workspace/logger`
 
 - All request access logs and system diagnostic events must be formatted using `@workspace/logger` or standardized 5-column formats:
   `[TIMESTAMP] [LEVEL] [SERVICE] [TRACE_ID] MESSAGE`
 - Sensitive tokens, passwords, and PII must be automatically masked before output.
 
-### 8. Graceful Shutdown & Process Cleanup
+#### Rule 4.8: Graceful Shutdown & Process Cleanup
 
 - Servers must intercept `SIGINT` and `SIGTERM` signals, drain in-flight requests within a 5-second grace period, close SQLite WAL handles, and exit cleanly with code `0`.
 
 ---
 
-### Section 5: API & Routing Rules
-
+### Domain 5: REST API & Routing Contracts
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: All FastAPI backend services in `Soul-DevPortal-Projects/`
 
 ---
 
-## The 8 Inviolable API Rules
 
-### 1. Mandatory Prefixing (`/api` or `/api/v1`)
+#### Rule 5.1: Mandatory Prefixing (`/api` or `/api/v1`)
 
 - Every HTTP endpoint must be served under `/api` or `/api/v1`. Root-level endpoints like `/users` or `/items` are strictly prohibited.
 - Enables transparent reverse proxying in Vite without conflicting with SPA client-side routes.
 
-### 2. Standardized JSON Response Envelope
+#### Rule 5.2: Standardized JSON Response Envelope
 
 All successful and erroneous responses must adhere to the standard envelope format:
 
@@ -456,7 +446,7 @@ All successful and erroneous responses must adhere to the standard envelope form
 }
 ```
 
-### 3. Strict HTTP Status Code Semantics
+#### Rule 5.3: Strict HTTP Status Code Semantics
 
 - Never return HTTP 200 OK with an error payload.
 - Standard semantics:
@@ -470,7 +460,7 @@ All successful and erroneous responses must adhere to the standard envelope form
   - `422 Unprocessable Entity`: Schema validation failure (Pydantic / Zod).
   - `500 Internal Server Error`: Unhandled server exception.
 
-### 4. Mandatory Health & Readiness Probes
+#### Rule 5.4: Mandatory Health & Readiness Probes
 
 - Every backend must implement `GET /api/health` and `GET /api/ready`.
 - Health Contract:
@@ -485,38 +475,36 @@ All successful and erroneous responses must adhere to the standard envelope form
 }
 ```
 
-### 5. No Logic in `main.py`
+#### Rule 5.5: No Logic in `main.py`
 
 - `main.py` is reserved exclusively for the application factory, lifespan management, middleware registration, and router aggregation.
 - Zero endpoint route handlers (`@app.get()`, `@app.post()`) may be written inside `main.py`. All handlers must reside in feature routers under `features/<feature>/router.py`.
 
-### 6. Pydantic v2 Request/Response Validation
+#### Rule 5.6: Pydantic v2 Request/Response Validation
 
 - Every mutating endpoint (`POST`, `PUT`, `PATCH`) must validate incoming bodies with strict Pydantic v2 models. Every endpoint must declare a typed `response_model`.
 - Untyped `dict` parameters (`data: dict = Body(...)`) are forbidden.
 
-### 7. Explicit Async Handlers
+#### Rule 5.7: Explicit Async Handlers
 
 - Every FastAPI route handler must be declared as `async def`.
 - If performing synchronous blocking I/O, wrap it in `await asyncio.to_thread(...)`.
 
-### 8. Structured Error Handling & Global Interceptor
+#### Rule 5.8: Structured Error Handling & Global Interceptor
 
 - Application code must raise standard `HTTPException` or custom domain exceptions.
 - The global exception interceptor must catch uncaught exceptions, log the stack trace using `@workspace/logger` with sensitive data masked, and return a clean 500 JSON envelope without leaking internal stack traces to the client.
 
 ---
 
-### Section 6: Database & Persistence Rules
-
+### Domain 6: Embedded Database & SQLite WAL Standards
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: All persistence engines, SQLite databases, and repositories across the monorepo
 
 ---
 
-## The 8 Inviolable Database Rules
 
-### 1. SQLite WAL Mode is Mandatory
+#### Rule 6.1: SQLite WAL Mode is Mandatory
 
 Every SQLite connection must execute the following PRAGMAs immediately upon opening:
 
@@ -530,13 +518,13 @@ PRAGMA busy_timeout = 5000;
 > [!TIP]
 > Write-Ahead Logging allows unlimited concurrent readers while write transactions execute, completely eliminating `database is locked` concurrency errors.
 
-### 2. Isolated Storage in `server/data/`
+#### Rule 6.2: Isolated Storage in `server/data/`
 
 - Database binary files must reside strictly inside `server/data/<project-name>.db`.
 - Never place database files in `client/`, `src/`, or repository roots.
 - Never share a single SQLite file across multiple project boundaries (each microservice has its own isolated file).
 
-### 3. Strict Git Exclusion
+#### Rule 6.3: Strict Git Exclusion
 
 - Database binary and journal files must be completely ignored in `.gitignore`:
 
@@ -549,20 +537,20 @@ server/data/*.sqlite
 
 - The `server/data/` directory must be preserved in version control using a `.gitkeep` file.
 
-### 4. Declarative Schemas in Source Control
+#### Rule 6.4: Declarative Schemas in Source Control
 
 - Every database table, index, and trigger must be declaratively defined in a versioned SQL file:
   `server/database/schema.sql`.
 
-### 5. Foreign Key Integrity Enforced
+#### Rule 6.5: Foreign Key Integrity Enforced
 
 - SQLite disables foreign key enforcement by default. Every connection factory must explicitly run `PRAGMA foreign_keys = ON;`. Deleting a parent row must adhere to defined `ON DELETE CASCADE` or `ON DELETE RESTRICT` constraints.
 
-### 6. Busy Timeout & Connection Resilience
+#### Rule 6.6: Busy Timeout & Connection Resilience
 
 - All connection strings must set `busy_timeout = 5000` (5 seconds). If a write lock is held, callers automatically wait up to 5000ms instead of immediately throwing an operational error.
 
-### 7. Explicit Transactions & Safe Rollbacks
+#### Rule 6.7: Explicit Transactions & Safe Rollbacks
 
 - Mutating multiple records must always occur inside a managed transaction context (`BEGIN ... COMMIT`).
 - In Python, use context managers:
@@ -575,88 +563,84 @@ with conn:
 
 Any unhandled exception automatically triggers a complete `ROLLBACK`.
 
-### 8. Atomic Backup Protocols
+#### Rule 6.8: Atomic Backup Protocols
 
 - Never copy a live SQLite file using raw file copy (`cp` or `copy`) while the server is running, as it risks corrupting WAL frames. Use SQLite's online backup API:
   `sqlite3 server/data/<app>.db ".backup server/data/<app>_backup.db"`
 
 ---
 
-### Section 7: Schema & Manifest Invariants
-
+### Domain 7: Schema & Manifest Contracts
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: `metadata.json`, Pydantic models, Zod schemas, and TypeScript interfaces
 
 ---
 
-## The 8 Inviolable Schema Rules
 
-### 1. Authoritative `metadata.json` Parity
+#### Rule 7.1: Authoritative `metadata.json` Parity
 
 - Every project root in `Soul-DevPortal-Projects/<app>/` must contain a schema-compliant `metadata.json`.
 - The project `title`, `ports`, `techStack`, `commands`, and `apiEndpoints` in `metadata.json` must exactly match the implementation in `vite.config.ts`, `main.py`, and `projects.json`.
 
-### 2. Strict Pydantic v2 Contract on Server
+#### Rule 7.2: Strict Pydantic v2 Contract on Server
 
 - Every FastAPI endpoint accepting an HTTP request payload or returning response data must declare a Pydantic v2 `BaseModel`.
 - Generic dictionaries (`dict[str, Any]`), raw strings, or untyped tuples are strictly forbidden as route inputs or outputs.
 
-### 3. Zod Schema Mirroring on Client
+#### Rule 7.3: Zod Schema Mirroring on Client
 
 - Client-side forms, user inputs, and external API integrations must be validated using Zod schemas that mirror backend Pydantic models.
 - Infer TypeScript types directly from Zod using `z.infer<typeof Schema>` to eliminate dual-definition drift.
 
-### 4. Zero Implicit `any` Policy
+#### Rule 7.4: Zero Implicit `any` Policy
 
 - TypeScript files must be compiled under strict mode (`"strict": true` in `tsconfig.json`).
 - Use of `any` is prohibited. If a type is dynamically structured, use `unknown` combined with type narrowing or Zod parsing.
 
-### 5. Standardized Date & Time Representation
+#### Rule 7.5: Standardized Date & Time Representation
 
 - All timestamps in schemas and database columns must use ISO-8601 UTC strings (`YYYY-MM-DDTHH:MM:SS.sssZ`).
 - In Pydantic, use `Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())`.
 
-### 6. Unique Identifier Conventions
+#### Rule 7.6: Unique Identifier Conventions
 
 - Primary key IDs across schemas must use prefixed entity strings (e.g. `usr_12345`, `sess_67890`, `msg_abcde`) or standard UUIDv4 strings.
 
-### 7. Non-Empty String Constraints
+#### Rule 7.7: Non-Empty String Constraints
 
 - String fields representing required entity attributes (e.g. `title`, `name`, `email`) must enforce `min_length=1` and `strip_whitespace=True` in Pydantic.
 
-### 8. Schema Deprecation Protocol
+#### Rule 7.8: Schema Deprecation Protocol
 
 - When changing schema fields, preserve backward compatibility. Mark deprecated fields with `deprecated: bool = True` or Pydantic `Field(..., deprecated=True)` before removal in a subsequent minor version.
 
 ---
 
-### Section 8: Feature-Sliced Design (FSD) Rules
-
+### Domain 8: Feature-Sliced Design (FSD) Modularity
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: Feature-Sliced Design (FSD) implementation across Client and Server
 
 ---
 
-## The 8 Inviolable Feature-Slice Rules
 
-### 1. Strict Feature Domain Co-location
+#### Rule 8.1: Strict Feature Domain Co-location
 
 - All UI components, custom hooks, API calls, state stores, and TypeScript types specific to a single business capability must be grouped together under:
   - `client/src/features/<feature-name>/` (Frontend)
   - `server/features/<feature-name>/` (Backend)
 - Creating horizontal catch-all directories is strictly forbidden.
 
-### 2. The Public Facade Barrier (`index.ts`)
+#### Rule 8.2: The Public Facade Barrier (`index.ts`)
 
 - Every client feature slice must expose a single `index.ts` entry point that exports only its approved public interface.
 - Outside modules may **only** import from `@/features/<feature-name>`, never from internal private files.
 
-### 3. Absolute Prohibition of Lateral Dependencies
+#### Rule 8.3: Absolute Prohibition of Lateral Dependencies
 
 - Feature A may never directly import private files or state from Feature B.
 - If logic or UI must be shared between two features, extract the common capability to `src/shared/` or pass data through URL query parameters or application shell state.
 
-### 4. Single-Responsibility Subdirectories
+#### Rule 8.4: Single-Responsibility Subdirectories
 
 Each client feature folder must adhere to standard subdirectories:
 
@@ -666,7 +650,7 @@ Each client feature folder must adhere to standard subdirectories:
 - `types.ts`: TypeScript interfaces and schemas.
 - `index.ts`: The public export barrier.
 
-### 5. Server Router-Service Separation
+#### Rule 8.5: Server Router-Service Separation
 
 Server features (`server/features/<feature-name>/`) must strictly separate routing from business logic:
 
@@ -677,41 +661,39 @@ Server features (`server/features/<feature-name>/`) must strictly separate routi
 > [!WARNING]
 > Writing raw database queries or external API logic directly inside route handlers in `router.py` is forbidden.
 
-### 6. Local State Containment
+#### Rule 8.6: Local State Containment
 
 - State required only by a feature must remain local to that feature slice (via React `useState`, `useReducer`, or feature-scoped context).
 - Global state is reserved strictly for cross-cutting session, authentication, and theme primitives.
 
-### 7. Feature Documentation Parity
+#### Rule 8.7: Feature Documentation Parity
 
 - Every feature directory must include a `README.md` documenting its capabilities, required API endpoints, and exported components.
 
-### 8. Self-Contained Mocking & Testing
+#### Rule 8.8: Self-Contained Mocking & Testing
 
 - Any mock data, test fixtures, or unit tests for a feature must live directly within that feature's directory (e.g. `features/<feature>/__tests__/`).
 
 ---
 
-### Section 9: Environment & Security Invariants
-
+### Domain 9: Dual-Environment Management & Security
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: All environment variables, secret management, and configuration across the monorepo
 
 ---
 
-## The 8 Inviolable Environment & Security Rules
 
-### 1. Absolute Zero-Secret-in-Git Policy
+#### Rule 9.1: Absolute Zero-Secret-in-Git Policy
 
 - Actual `.env`, `.env.local`, `.env.production`, and secret files must **never** be committed to version control.
 - Verify `.gitignore` contains `.env*` with exception for `.env.example`.
 
-### 2. Mandatory `.env.example` Baseline
+#### Rule 9.2: Mandatory `.env.example` Baseline
 
 - Every project root must provide a `.env.example` documenting every single environment variable required by both client and server.
 - Placeholder values must be safe dummies (e.g. `your_gemini_api_key_here`, `secret_jwt_placeholder`).
 
-### 3. Strict Prefix Scoping Matrix
+#### Rule 9.3: Strict Prefix Scoping Matrix
 
 | Prefix | Domain Scope | Security Rule |
 | --- | --- | --- |
@@ -721,7 +703,7 @@ Server features (`server/features/<feature-name>/`) must strictly separate routi
 | `AI_` | GenAI Integrations | Gemini API keys, model parameters, temperature |
 | `AUTH_` | Security & Sessions | JWT secrets, password salts, OAuth client secrets |
 
-### 4. Fail-Fast Startup Validation
+#### Rule 9.4: Fail-Fast Startup Validation
 
 Backends must validate environment variables on boot (via Pydantic `BaseSettings`). If a required variable is missing or invalid, the process terminates immediately with exit code `1`:
 
@@ -739,40 +721,38 @@ class AppSettings(BaseSettings):
         env_file = ".env"
 ```
 
-### 5. Sensitive Data Masking in Logs
+#### Rule 9.5: Sensitive Data Masking in Logs
 
 - Passwords, API tokens, bearer keys, and database secrets must **never** appear in plain text in terminal output or log files.
 - Mask secrets using `@workspace/logger` or the standard obfuscation pattern: show first 3 and last 4 characters (`sk-...xxxx`).
 
-### 6. Zero Hardcoded Credentials in Source Code
+#### Rule 9.6: Zero Hardcoded Credentials in Source Code
 
 - API keys, database paths, and secrets must never be hardcoded into `.py`, `.ts`, or `.tsx` files. Always read from environment variables.
 
-### 7. Universal Default Fallbacks for Local Dev
+#### Rule 9.7: Universal Default Fallbacks for Local Dev
 
 - Non-secret configurations (e.g. `PORT=8000`, `LOG_LEVEL=INFO`, `SQLITE_DB_PATH=server/data/app.db`) must supply safe defaults in code so that applications can start out-of-the-box for local testing.
 
-### 8. Master Baseline & Schema Parity
+#### Rule 9.8: Master Baseline & Schema Parity
 
 - Whenever an application introduces a new environment dependency, its corresponding entry in the project's root `.env.example` and the Master Configuration Matrix in `project-env/main.md` must be updated immediately.
 
 ---
 
-### Section 10: Monorepo Scripts, Tooling & Orchestration Standards
-
+### Domain 10: Process Orchestration & Runner Invariants
 > **Status**: `MANDATORY INVARIANT`  
 > **Applies To**: Workspace CLI tools, package runner, and supervisor commands
 
 ---
 
-## The 8 Inviolable Monorepo Tooling Rules
 
-### 1. Orchestration via `@workspace/runner`
+#### Rule 10.1: Orchestration via `@workspace/runner`
 
 - Monorepo processes must be started and supervised via `@workspace/runner` or standardized `npm run dev:*` scripts.
 - Launching ad-hoc commands without port checks is prohibited.
 
-### 2. Strict Port Matrix (9 Micro-Apps + DevPortal)
+#### Rule 10.2: Strict Port Matrix (9 Micro-Apps + DevPortal)
 
 | Project ID | Title | Frontend Port | Backend Port | Database File |
 | --- | --- | --- | --- | --- |
@@ -786,28 +766,46 @@ class AppSettings(BaseSettings):
 | `spatial-dimensions` | Spatial Dimensions | `:5177` | `:8007` | `spatial_dimensions.db` |
 | `devportal` | Soul Developer Portal | `:5181` | `:8008` | `workspace.db` |
 
-### 3. Port Conflict Pre-Flight Verification
+#### Rule 10.3: Port Conflict Pre-Flight Verification
 
 - The CLI runner must probe target TCP sockets prior to spawning child processes.
 - If a port is occupied by a stale zombie process, the runner warns the user and offers automatic process cleanup.
 
-### 4. Concurrent Client-Server Startup
+#### Rule 10.4: Concurrent Client-Server Startup
 
 - Each project's `npm run dev` script must launch both client and server concurrently using `@workspace/runner`:
   `npx @workspace/runner project <app-id>`
 
-### 5. Uniform Exit Code Propagation
+#### Rule 10.5: Uniform Exit Code Propagation
 
 - Child processes terminating with an error must propagate non-zero exit codes to the supervisor to prevent silent background crashes.
 
-### 6. Clean Cross-Platform Path Handling
+#### Rule 10.6: Clean Cross-Platform Path Handling
 
 - All scripts and configuration files must use `path.join()`, `path.resolve()`, or `Path` from Python's `pathlib` to guarantee 100% interoperability across Windows, macOS, and Linux.
 
-### 7. Shared Package Consumption Standard
+#### Rule 10.7: Shared Package Consumption Standard
 
 - Every micro-application must consume `@workspace/logger` for structured logging, `@workspace/config` for baseline configurations, and `@workspace/runner` for process execution.
 
-### 8. Continuous Compliance Gate
+#### Rule 10.8: Continuous Compliance Gate
 
 - PRs must pass `npm run build` across the DevPortal and all affected micro-applications before landing on `main`. Zero build warnings or type errors are tolerated.
+
+
+---
+
+## Part III: Invariant Violation Catalog & Rapid Remediation
+
+| Code | Severity | Violation | Immediate Remediation Action |
+| --- | --- | --- | --- |
+| ERR_INV_01 | **CRITICAL** | Sub-app missing metadata.json | Run 
+pm run docs:validate or copy standard template with all required keys. |
+| ERR_INV_02 | **CRITICAL** | Port conflict (EADDRINUSE) | Run 
+pm run clean:ports to kill zombie PID holding the allocated port block. |
+| ERR_INV_03 | **CRITICAL** | Cross-app relative import | Refactor import to @workspace/<pkg> or invoke remote API through reverse proxy. |
+| ERR_INV_04 | **HIGH** | Direct cross-slice internal access | Import solely from the feature slice public facade: eatures/<slice>/index.ts. |
+| ERR_INV_05 | **HIGH** | Plaintext secret committed in .env | Remove from git cache, add to .gitignore, and use .env.example placeholder. |
+| ERR_INV_06 | **HIGH** | SQLite DB outside server/data/ | Migrate database file to server/data/app.db with WAL mode pragmas enabled. |
+| ERR_INV_07 | **MEDIUM** | Missing /api route prefix | Add /api prefix to all FastAPI router mounts in server/app/factory.py. |
+| ERR_INV_08 | **MEDIUM** | Non-standard response payload | Wrap endpoint response in standard { success: true, data: ... } envelope. |

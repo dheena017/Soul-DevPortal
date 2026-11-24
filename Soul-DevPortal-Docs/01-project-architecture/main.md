@@ -14,7 +14,7 @@
 
 ---
 
-## 1. Monorepo Structural Blueprint
+### 1.1 Monorepo Top-Level Topology & Domains
 
 The Soul Monorepo organizes all assets into three clear top-level domains:
 
@@ -50,7 +50,7 @@ The Soul Monorepo organizes all assets into three clear top-level domains:
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Workspace Dependency & Consumption Graph
+### 1.2 Workspace Dependency & Consumption Graph
 
 ```mermaid
 graph TD
@@ -79,7 +79,7 @@ graph TD
 
 ---
 
-## 2. Canonical Project Directory Tree
+### 1.3 Canonical Project Directory Tree
 
 Every individual project inside `Soul-DevPortal-Projects/<app>/` adheres strictly to this layout:
 
@@ -144,7 +144,7 @@ Soul-DevPortal-Projects/<app>/
 
 ---
 
-## 3. Directory Responsibilities Matrix
+### 1.4 Directory Responsibilities Matrix
 
 | Directory | Mandatory Contents | Strict Boundaries & Prohibitions |
 | --- | --- | --- |
@@ -164,7 +164,7 @@ Soul-DevPortal-Projects/<app>/
 
 ---
 
-## 1. Executive Summary: What Framework & Tech Stack to Use
+### 2.1 Framework Selection Principles & Philosophy
 
 To eliminate tooling fragmentation, maximize developer velocity, and ensure instant startup across the monorepo, all applications must strictly implement the **Unified Three-Pillar Standard**:
 
@@ -186,9 +186,9 @@ To eliminate tooling fragmentation, maximize developer velocity, and ensure inst
 
 ---
 
-## 2. Pillar 1: Client Application Framework
+### 2.2 Pillar 1: Client Application Framework (React 19, Vite 8, Tailwind v4)
 
-### A. React 19
+#### A. React 19 Frontend Engine
 
 - **Core Primitives**:
   - `useActionState`: For form submission states, pending indicators, and action rollbacks.
@@ -197,14 +197,14 @@ To eliminate tooling fragmentation, maximize developer velocity, and ensure inst
   - `<Suspense>`: Async boundary wrapping for streaming data.
 - **Compiler Readiness**: Render functions must be strictly idempotent and pure.
 
-### B. Vite 8 Bundler Engine
+#### B. Vite 8 Bundler Engine
 
 - **Plugins**: `@vitejs/plugin-react`, `@tailwindcss/vite`.
 - **Path Aliasing**: Enforce `@/*` -> `./src/*`.
 - **Port Strategy**: Strict port binding (`strictPort: true`) matching the matrix in `projects.json`.
 - **Proxy**: Forward `/api` and `/ws` to the corresponding FastAPI backend.
 
-### C. Tailwind CSS v4
+#### C. Tailwind CSS v4 Modern Styling
 
 - **Engine**: Zero-config, Rust-based engine compiled via `@tailwindcss/vite`.
 - **Syntax**:
@@ -222,22 +222,22 @@ To eliminate tooling fragmentation, maximize developer velocity, and ensure inst
 
 ---
 
-## 3. Pillar 2: Server Application Framework
+### 2.3 Pillar 2: Server Application Framework (Python 3.12+, FastAPI, Uvicorn)
 
-### A. Python 3.12+ & FastAPI
+#### A. Python 3.12+ & FastAPI Application Framework
 
 - **Asynchronous Architecture**: Non-blocking I/O using `async def` route handlers.
 - **Pydantic v2**: High-performance schema validation, serialization, and OpenAPI document generation (`/api/docs`).
 - **Application Factory**: Modular app creation with ASGI `@asynccontextmanager` `lifespan`.
 
-### B. Uvicorn ASGI Server
+#### B. Uvicorn ASGI Production Server
 
 - **Run Command**: `uvicorn main:app --host 127.0.0.1 --port <PORT> --reload`.
 - **Graceful Lifecycle**: 5-second shutdown window to drain active connections and close database handles cleanly.
 
 ---
 
-## 4. Pillar 3: Persistence Layer (SQLite WAL)
+### 2.4 Pillar 3: Persistence Layer (SQLite WAL Mode)
 
 - **Engine**: SQLite with Write-Ahead Logging (`PRAGMA journal_mode = WAL;`).
 - **Location**: `server/data/<project-name>.db` (strictly git-ignored).
@@ -246,7 +246,7 @@ To eliminate tooling fragmentation, maximize developer velocity, and ensure inst
 
 ---
 
-## 5. Technology Matrix across Micro-Applications
+### 2.5 Technology Matrix across Micro-Applications
 
 | Application | Client Framework | Server Framework | Persistence | AI Capabilities |
 | --- | --- | --- | --- | --- |
@@ -269,7 +269,7 @@ To eliminate tooling fragmentation, maximize developer velocity, and ensure inst
 
 ---
 
-## 1. Architectural Blueprint: The Modern Client Stack
+### 3.1 Modern Client Architectural Blueprint
 
 Every frontend client in the Soul Monorepo is designed as a high-speed Single Page Application (SPA) running on React 19 and compiled with Vite 8.
 
@@ -321,7 +321,7 @@ sequenceDiagram
 
 ---
 
-## 2. Canonical `vite.config.ts` Configuration
+### 3.2 Canonical ite.config.ts Configuration & Reverse Proxy
 
 ```typescript
 import { defineConfig } from 'vite';
@@ -370,7 +370,7 @@ export default defineConfig({
 
 ---
 
-## 3. Tailwind CSS v4 CSS-First Architecture
+### 3.3 Tailwind CSS v4 CSS-First Architecture
 
 Tailwind CSS v4 replaces JavaScript configuration files with native CSS directives.
 
@@ -403,7 +403,7 @@ Tailwind CSS v4 replaces JavaScript configuration files with native CSS directiv
 
 ---
 
-## 4. Next.js Migration Shims
+### 3.4 Next.js Migration Shims
 
 For components authored with Next.js APIs, the monorepo provides zero-dependency compatibility shims in `src/shared/lib/next-shims.tsx`:
 
@@ -429,7 +429,7 @@ export const useRouter = () => {
 
 ---
 
-## 5. Unified HTTP Client Fetcher
+### 3.5 Unified HTTP Client Fetcher
 
 ```typescript
 // client/src/shared/lib/api-client.ts
@@ -472,7 +472,7 @@ export async function apiClient<T>(endpoint: string, options: RequestInit = {}):
 
 ---
 
-## 1. FastAPI Application Pipeline Blueprint
+### 4.1 FastAPI Application Pipeline Blueprint
 
 Every backend service is initialized via an Application Factory pattern (`create_app()`), guaranteeing modularity, isolated test execution, and clean lifecycle management.
 
@@ -515,7 +515,7 @@ Every backend service is initialized via an Application Factory pattern (`create
 
 ---
 
-## 2. Complete Server Factory Implementation (`server/app/factory.py`)
+### 4.2 Complete Server Factory Implementation (server/app/factory.py)
 
 ```python
 import time
@@ -613,7 +613,7 @@ def create_application() -> FastAPI:
 
 ---
 
-## 3. Server Bootstrap Entry Point (`server/main.py`)
+### 4.3 Server Bootstrap Entry Point (server/main.py)
 
 ```python
 import argparse
@@ -640,7 +640,7 @@ if __name__ == "__main__":
 
 ---
 
-## 4. Production Checklist
+### 4.4 Production Deployment Checklist
 
 - [ ] Fast startup (< 500ms).
 - [ ] Explicit port assignment from `projects.json`.
@@ -657,7 +657,7 @@ if __name__ == "__main__":
 
 ---
 
-## 1. Architectural Overview
+### 5.1 Architectural Overview & URL Design
 
 In the Soul Monorepo, the API layer is designed to achieve zero client-server coupling, uniform error telemetry, and predictable developer ergonomics. The client never communicates directly with backend hostnames; instead, all requests pass through Vite's development reverse proxy or production load balancers.
 
@@ -695,7 +695,7 @@ In the Soul Monorepo, the API layer is designed to achieve zero client-server co
 
 ---
 
-## 2. Standard JSON Response Envelope
+### 5.2 Standard JSON Response Envelope
 
 Every endpoint in the monorepo returns data wrapped in a deterministic envelope.
 
@@ -740,7 +740,7 @@ class ApiResponse(BaseModel, Generic[T]):
 
 ---
 
-## 3. Router Composition & Lifespan Architecture
+### 5.3 Router Composition & Lifespan Architecture
 
 Routes must be organized into feature-level routers and mounted cleanly in the application factory.
 
@@ -810,7 +810,7 @@ def create_app() -> FastAPI:
 
 ---
 
-## 4. Health Check Specification
+### 5.4 Health Check & Readiness Specification
 
 Every service exposes `GET /api/health`:
 
@@ -832,7 +832,7 @@ async def health_check():
 
 ---
 
-## 5. Streaming & WebSocket Architecture
+### 5.5 Streaming & WebSocket Architecture
 
 For AI streaming (e.g. Gemini narrative synthesis in `apexmind-ai` and `globalpulse-ai`), use Server-Sent Events (SSE) or WebSockets under `/api/ws/`:
 
@@ -859,7 +859,7 @@ async def stream_data():
 
 ---
 
-## 1. Architectural Blueprint: The Embedded WAL Engine
+### 6.1 Embedded WAL Engine Architectural Blueprint
 
 Every micro-application in the Soul Monorepo utilizes an autonomous, embedded SQLite database running with **Write-Ahead Logging (WAL)**. This architecture eliminates external database container dependencies while providing high-performance local persistence.
 
@@ -888,7 +888,7 @@ Every micro-application in the Soul Monorepo utilizes an autonomous, embedded SQ
 
 ---
 
-## 2. Dynamic Database Path Resolution
+### 6.2 Dynamic Database Path Resolution
 
 To guarantee portability across Windows, Linux, and macOS environments without hardcoded system paths, projects must resolve the database directory dynamically relative to the module file.
 
@@ -935,7 +935,7 @@ def get_db() -> Generator[sqlite3.Connection, None, None]:
 
 ---
 
-## 3. Asynchronous SQLite with `aiosqlite`
+### 6.3 Asynchronous SQLite with iosqlite Engine
 
 For high-throughput async endpoints, `aiosqlite` provides non-blocking access:
 
@@ -953,7 +953,7 @@ async def get_async_db():
 
 ---
 
-## 4. Canonical DDL Schema Definition (`server/database/schema.sql`)
+### 6.4 Canonical DDL Schema Definition (server/database/schema.sql)
 
 Every project maintains a canonical `schema.sql`:
 
@@ -984,7 +984,7 @@ CREATE INDEX IF NOT EXISTS idx_messages_session ON messages(session_id);
 
 ---
 
-## 5. Automated Bootstrap & Migration Logic
+### 6.5 Automated Bootstrap & Migration Logic
 
 On application startup, the lifespan handler verifies and bootstraps tables:
 
@@ -999,7 +999,7 @@ def bootstrap_database(conn: sqlite3.Connection) -> None:
 
 ---
 
-## 6. Monorepo Database Distribution Matrix
+### 6.6 Monorepo Database Distribution Matrix
 
 | Project Name | Database File Path | Primary Entities |
 | --- | --- | --- |
@@ -1022,7 +1022,7 @@ def bootstrap_database(conn: sqlite3.Connection) -> None:
 
 ---
 
-## 1. Canonical `metadata.json` Schema Specification
+### 7.1 Canonical metadata.json Schema Specification
 
 Every project maintains a root `metadata.json` that powers the DevPortal runner, catalog cards, health monitors, and automated port verifiers.
 
@@ -1102,7 +1102,7 @@ Every project maintains a root `metadata.json` that powers the DevPortal runner,
 
 ---
 
-## 2. Pydantic v2 Server Implementation Patterns
+### 7.2 Pydantic v2 Server Implementation Patterns
 
 FastAPI routes leverage Pydantic v2 for data contracts, type coercion, and auto-generated Swagger documentation.
 
@@ -1136,7 +1136,7 @@ class CreateUserRequest(BaseEntitySchema):
 
 ---
 
-## 3. Zod Client Schema Mirroring
+### 7.3 Zod Client Schema Mirroring
 
 On the React 19 client, Zod mirrors the server models to provide instant client-side feedback.
 
@@ -1175,7 +1175,7 @@ export interface UserResponse {
 
 ---
 
-## 1. Feature-Sliced Design (FSD) Philosophy
+### 8.1 Feature-Sliced Design (FSD) Philosophy
 
 Instead of organizing code by technical file type (putting all components together, all hooks together, all routers together), the Soul Monorepo organizes code into **vertical domain slices**. Each slice encapsulates all the technical components required to deliver a single business capability.
 
@@ -1207,9 +1207,9 @@ Instead of organizing code by technical file type (putting all components togeth
 
 ---
 
-## 2. Anatomy of a Client Feature Slice
+### 8.2 Anatomy of a Client Feature Slice
 
-### A. The Public Barrier (`index.ts`)
+#### A. The Public Barrier (index.ts)
 
 ```typescript
 // client/src/features/chat-assistant/index.ts
@@ -1219,7 +1219,7 @@ export { useChatSession } from './hooks/useChatSession';
 export type { ChatMessage, ChatSession } from './types';
 ```
 
-### B. Typed API Caller (`api/chatApi.ts`)
+#### B. Typed API Caller (pi/chatApi.ts)
 
 ```typescript
 // client/src/features/chat-assistant/api/chatApi.ts
@@ -1241,7 +1241,7 @@ export async function sendMessage(payload: SendMessagePayload): Promise<ChatMess
 }
 ```
 
-### C. Custom Hook with React 19 Primitives (`hooks/useChatSession.ts`)
+#### C. Custom Hook with React 19 Primitives (hooks/useChatSession.ts)
 
 ```typescript
 // client/src/features/chat-assistant/hooks/useChatSession.ts
@@ -1266,7 +1266,7 @@ export function useChatSession(sessionId: string) {
 
 ---
 
-## 3. Server Feature Slice Architecture
+### 8.3 Server Feature Slice Architecture
 
 On the FastAPI backend, the structure mirrors the frontend domain slice:
 
@@ -1348,7 +1348,7 @@ async def send_message(payload: SendMessageRequest, db: sqlite3.Connection = Dep
 
 ---
 
-## 4. Feature Directory Standards Summary
+### 8.4 Feature Directory Standards Summary
 
 | Slice Layer | Primary Objective | Permitted Dependencies | Forbidden Patterns |
 | --- | --- | --- | --- |
@@ -1367,7 +1367,7 @@ async def send_message(payload: SendMessageRequest, db: sqlite3.Connection = Dep
 
 ---
 
-## 1. Environment Architecture & Scoping
+### 9.1 Environment Architecture & Scoping
 
 The Soul Monorepo enforces a strict boundary between public frontend variables and private backend secrets.
 
@@ -1388,7 +1388,7 @@ The Soul Monorepo enforces a strict boundary between public frontend variables a
 
 ---
 
-## 2. Universal `.env.example` Baseline
+### 9.2 Universal .env.example Baseline
 
 Every micro-application root provides this baseline:
 
@@ -1422,7 +1422,7 @@ AUTH_TOKEN_EXPIRY_MINUTES=1440
 
 ---
 
-## 3. Server-Side Pydantic `BaseSettings` Validation
+### 9.3 Server-Side Pydantic BaseSettings Validation
 
 In FastAPI services, environment variables are loaded and validated strictly via `pydantic-settings`:
 
@@ -1454,7 +1454,7 @@ settings = AppSettings()
 
 ---
 
-## 4. Sensitive Data Masking Protocol
+### 9.4 Sensitive Data Masking Protocol
 
 When logging requests, errors, or configuration objects, all sensitive attributes must be obfuscated.
 
@@ -1486,7 +1486,7 @@ def mask_sensitive_string(raw: str) -> str:
 
 ---
 
-## 5. Master Micro-Application Configuration Matrix
+### 9.5 Master Micro-Application Configuration Matrix
 
 Rather than maintaining fragmented template files, all project-specific environment requirements are consolidated into this master reference matrix:
 
@@ -1511,7 +1511,7 @@ Rather than maintaining fragmented template files, all project-specific environm
 
 ---
 
-### Runbook 1: Bootstrapping a New Micro-Application in 3 Minutes
+### 10.1 Bootstrapping a New Micro-Application in 3 Minutes
 
 Follow this 7-step playbook to initialize a fully compliant micro-application:
 
@@ -1580,7 +1580,7 @@ npx @workspace/runner project my-app
 
 ---
 
-### Runbook 2: Diagnosing Port Collisions & Stale Socket Cleanup
+### 10.2 Diagnosing Port Collisions & Stale Socket Cleanup
 
 > [!WARNING]
 > If a developer abruptly terminates the CLI with `Ctrl+C` or a background task crashes, the port may remain locked in `TIME_WAIT` or bound by an orphaned child process.
@@ -1614,7 +1614,7 @@ npx @workspace/runner project my-app
 
 ---
 
-### Runbook 3: Safe SQLite WAL Migrations
+### 10.3 Safe SQLite WAL Migrations
 
 > [!CAUTION]
 > Never attempt file copies of `.db` while active write transactions are in progress. Always perform online checkpoints before schema alterations.
@@ -1640,7 +1640,7 @@ npx @workspace/runner project my-app
 
 ---
 
-### Runbook 4: React 19 Concurrent Rendering & Compiler Best Practices
+### 10.4 React 19 Concurrent Rendering & Compiler Best Practices
 
 1. **Keep Render Functions Pure**: Never mutate objects or trigger side effects during render.
 2. **Use Server Actions / `useActionState`**:
