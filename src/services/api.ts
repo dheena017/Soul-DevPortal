@@ -171,3 +171,150 @@ export async function triggerWorkspaceRefresh(): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Fetches the master dashboard overview contract (Projects, Packages, Docs, Commands, Telemetry).
+ */
+export async function fetchDashboardOverview(): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE}/dashboard/overview`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetches all lifecycle runner commands from root package.json.
+ */
+export async function fetchPortalCommands(): Promise<{ commands: any[]; rawScripts: Record<string, string> } | null> {
+  try {
+    const res = await fetch(`${API_BASE}/soul-dev-portal/commands`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetches dynamic navigation tree for projects and their available tabs.
+ */
+export async function fetchProjectsNavigation(): Promise<any[]> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/navigation`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Probes real-time socket reachability for a specific project.
+ */
+export async function fetchProjectHealth(projectName: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${encodeURIComponent(projectName)}/health`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetches granular tab content for a project (overview, api, database, env, scripts, files, readme).
+ */
+export async function fetchProjectTab(projectName: string, tab: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/details/${encodeURIComponent(projectName)}/${encodeURIComponent(tab)}`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetches dynamic navigation tree for packages.
+ */
+export async function fetchPackagesNavigation(): Promise<any[]> {
+  try {
+    const res = await fetch(`${API_BASE}/packages/navigation`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Fetches granular tab content for a package (docs, api, manifest, playground).
+ */
+export async function fetchPackageTab(packageName: string, tab: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE}/packages/details/${encodeURIComponent(packageName)}/${encodeURIComponent(tab)}`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetches dynamic navigation tree for docs across the 4 main categories.
+ */
+export async function fetchDocsNavigation(): Promise<any[]> {
+  try {
+    const res = await fetch(`${API_BASE}/docs/navigation`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Fetches structured GFM AST blocks for a doc tab under a subfolder topic.
+ */
+export async function fetchDocTab(category: string, topic: string, tab: string): Promise<any | null> {
+  try {
+    const res = await fetch(
+      `${API_BASE}/docs/details/${encodeURIComponent(category)}/${encodeURIComponent(topic)}/${encodeURIComponent(tab)}`,
+      {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+      }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}

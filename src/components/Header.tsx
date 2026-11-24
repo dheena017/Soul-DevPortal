@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
 import { SoulLogoIcon } from './SoulLogo';
+import { checkBackendHealth } from '../services/api';
 
 export interface BreadcrumbItem {
   label: string;
@@ -44,6 +45,22 @@ export const Header: React.FC<HeaderProps> = ({
     active.startsWith('doc') ||
     ['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
 
+  const [isBackendLive, setIsBackendLive] = useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function probe() {
+      const live = await checkBackendHealth();
+      if (isMounted) setIsBackendLive(live);
+    }
+    probe();
+    const timer = setInterval(probe, 6000);
+    return () => {
+      isMounted = false;
+      clearInterval(timer);
+    };
+  }, []);
+
   return (
     <header className="w-full h-14 bg-[#111114]/95 backdrop-blur-md border-b border-[#1f1f24] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
       {/* ── Left: Sidebar Toggle & Breadcrumbs ── */}
@@ -75,23 +92,23 @@ export const Header: React.FC<HeaderProps> = ({
         <nav className="flex items-center gap-2 text-xs min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#111114] border border-[#1f1f24] hover:border-neutral-500 hover:bg-[#111114] font-mono text-neutral-300 hover:text-neutral-200 transition-all shrink-0 shadow-sm"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] font-mono text-zinc-200 hover:text-white transition-all shrink-0 shadow-sm"
             onClick={() => onNavigate('overview')}
             title="Go to Overview Dashboard"
           >
             <SoulLogoIcon size={18} />
-            <span className="font-semibold text-neutral-300">soul</span>
-            <span className="text-neutral-600 font-bold">/</span>
-            <strong className="text-neutral-200 font-bold">dev-portal</strong>
+            <span className="font-semibold text-zinc-300">soul</span>
+            <span className="text-zinc-600 font-bold">/</span>
+            <strong className="text-zinc-100 font-bold">dev-portal</strong>
           </button>
 
           {breadcrumbs.slice(1).map((crumb, idx) => (
             <div key={idx} className="flex items-center gap-2 min-w-0">
-              <span className="text-neutral-600 font-bold px-0.5">/</span>
+              <span className="text-zinc-600 font-bold px-0.5">/</span>
               {crumb.id ? (
                 <button
                   type="button"
-                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111114] border border-[#1f1f24] hover:border-neutral-500 hover:bg-[#111114] text-neutral-300 hover:text-neutral-200 transition-all truncate font-medium max-w-[200px]"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] text-zinc-200 hover:text-white transition-all truncate font-medium max-w-[200px]"
                   onClick={() => onNavigate(crumb.id!)}
                   title={`Go to ${crumb.label}`}
                 >
@@ -99,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               ) : (
                 <span
-                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111114] border border-[#1f1f24] text-neutral-300 font-semibold shadow-sm truncate max-w-[200px]"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-[200px]"
                   title={crumb.label}
                 >
                   {crumb.label}
@@ -112,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* ── Center: Omni Command Search ── */}
       <div className="relative flex-1 max-w-sm hidden md:flex items-center" role="search">
-        <svg className="absolute left-3 w-3.5 h-3.5 text-neutral-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg className="absolute left-3.5 w-3.5 h-3.5 text-zinc-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
@@ -122,19 +139,19 @@ export const Header: React.FC<HeaderProps> = ({
           onChange={onSearchChange}
           placeholder="Search apps, packages, docs..."
           aria-label="Search package and application documentation"
-          className="w-full h-8 pl-9 pr-8 rounded-full bg-[#070708] border border-[#1f1f24] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 font-mono transition-all"
+          className="w-full h-8 pl-9 pr-8 rounded-full bg-[#09090c] border border-white/[0.08] text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-zinc-400 font-mono transition-all"
         />
         {query ? (
           <button
             type="button"
-            className="absolute right-2.5 text-xs text-neutral-400 hover:text-neutral-200 p-1"
+            className="absolute right-2.5 text-xs text-zinc-400 hover:text-white p-1"
             onClick={onClearSearch}
             aria-label="Clear search input"
           >
             ✕
           </button>
         ) : (
-          <kbd className="absolute right-2.5 px-1 py-0.2 rounded bg-[#111114] border border-[#1f1f24] text-[10px] text-neutral-500 font-mono">
+          <kbd className="absolute right-2.5 px-1.5 py-0.5 rounded bg-[#16161c] border border-white/[0.08] text-[10px] text-zinc-400 font-mono">
             /
           </kbd>
         )}
@@ -142,11 +159,11 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* ── Right: Navigation Tabs, GitHub Link & Shortcuts ── */}
       <div className="flex items-center gap-2 shrink-0">
-        <nav className="flex items-center gap-1 p-0.5 bg-[#070708] border border-[#1f1f24] rounded-lg hidden sm:flex" aria-label="Portal Dashboards">
+        <nav className="flex items-center gap-1 p-1 bg-[#09090c] border border-white/[0.08] rounded-xl hidden sm:flex" aria-label="Portal Dashboards">
           <button
             type="button"
-            className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
-              active === 'overview' ? 'bg-[#212126] text-white font-bold shadow-sm border border-neutral-400' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent'
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              active === 'overview' ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => onNavigate('overview')}
             title="Overview Dashboard"
@@ -156,46 +173,56 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             type="button"
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
-              isProjectsActive ? 'bg-[#212126] text-white font-bold shadow-sm border border-neutral-400' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent'
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              isProjectsActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => onNavigate('projects')}
             title={`Pillar 1: Applications (${projectsCount})`}
           >
             <span>Projects</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/35 font-bold' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 font-bold' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'}`}>
               {projectsCount}
             </span>
           </button>
 
           <button
             type="button"
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
-              isPackagesActive ? 'bg-[#212126] text-white font-bold shadow-sm border border-neutral-400' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent'
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              isPackagesActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => onNavigate('packages')}
             title={`Pillar 2: Shared Libraries (${packagesCount})`}
           >
             <span>Packages</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-purple-500/20 text-purple-400 border border-purple-500/35 font-bold' : 'bg-purple-500/15 text-purple-400 border border-purple-500/25'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-purple-500/20 text-purple-300 border border-purple-500/35 font-bold' : 'bg-purple-500/15 text-purple-400 border border-purple-500/25'}`}>
               {packagesCount}
             </span>
           </button>
 
           <button
             type="button"
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
-              isDocsActive ? 'bg-[#212126] text-white font-bold shadow-sm border border-neutral-400' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent'
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              isDocsActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => onNavigate('docs')}
             title={`Pillar 3: Documentation Hub (${docsCount} Guides)`}
           >
             <span>Docs</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-sky-500/20 text-sky-400 border border-sky-500/35 font-bold' : 'bg-sky-500/15 text-sky-400 border border-sky-500/25'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-sky-500/20 text-sky-300 border border-sky-500/35 font-bold' : 'bg-sky-500/15 text-sky-400 border border-sky-500/25'}`}>
               {docsCount}
             </span>
           </button>
         </nav>
+
+        <div
+          className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border bg-[#111114] border-[#1f1f24]"
+          title={isBackendLive ? "FastAPI Backend is online on port 8008" : "FastAPI Backend is on standby"}
+        >
+          <span className={`w-2 h-2 rounded-full ${isBackendLive ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bg-neutral-600'}`} />
+          <span className={isBackendLive ? 'text-emerald-400 font-semibold' : 'text-neutral-500'}>
+            {isBackendLive ? ':8008 Live' : ':8008 Standby'}
+          </span>
+        </div>
 
         <a
           href="https://github.com/dheena017/Soul-DevPortal"

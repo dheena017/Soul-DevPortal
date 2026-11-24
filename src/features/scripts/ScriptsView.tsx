@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
 import CopyButton from '../../components/CopyButton';
+import { fetchPortalCommands } from '../../services/api';
 import { WORKSPACE_SCRIPTS_REGISTRY, ScriptDefinition } from './scriptsConstants';
 
 export interface ScriptsViewProps {
@@ -14,7 +15,45 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [activeRuntime, setActiveRuntime] = useState<string>('npm');
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+  const [liveCommands, setLiveCommands] = useState<ScriptDefinition[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadCommands() {
+      try {
+        const res = await fetchPortalCommands();
+        if (res && res.commands && res.commands.length > 0 && isMounted) {
+          const mapped: ScriptDefinition[] = res.commands.map((c: any) => ({
+            id: c.name,
+            name: `npm run ${c.name}`,
+            command: c.command,
+            description: c.description || `Executes root command "${c.name}"`,
+            category: (c.category as any) || 'orchestration',
+            badge: (c.category || 'COMMAND').toUpperCase(),
+            badgeClass: 'badge-orch',
+            isCanonical: true,
+          }));
+          setLiveCommands(mapped);
+        }
+      } catch {
+        // Fallback to static registry
+      }
+    }
+    loadCommands();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const allScripts = useMemo(() => {
+    if (liveCommands.length > 0) {
+      const liveIds = new Set(liveCommands.map((c) => c.id));
+      const additional = WORKSPACE_SCRIPTS_REGISTRY.filter((s) => !liveIds.has(s.id));
+      return [...liveCommands, ...additional];
+    }
+    return WORKSPACE_SCRIPTS_REGISTRY;
+  }, [liveCommands]);
 
   // Keyboard shortcut: '/' focuses search, 'Escape' clears
   useEffect(() => {
@@ -48,16 +87,16 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
   };
 
   const categories = [
-    { id: 'all', label: 'All Commands', count: WORKSPACE_SCRIPTS_REGISTRY.length },
-    { id: 'orchestration', label: 'Orchestration', count: WORKSPACE_SCRIPTS_REGISTRY.filter((s) => s.category === 'orchestration').length },
-    { id: 'apps', label: 'Applications (8)', count: WORKSPACE_SCRIPTS_REGISTRY.filter((s) => s.category === 'apps').length },
-    { id: 'portal', label: 'Developer Portal', count: WORKSPACE_SCRIPTS_REGISTRY.filter((s) => s.category === 'portal').length },
-    { id: 'pipeline', label: 'Build & Quality', count: WORKSPACE_SCRIPTS_REGISTRY.filter((s) => s.category === 'pipeline').length },
-    { id: 'setup', label: 'Dependencies', count: WORKSPACE_SCRIPTS_REGISTRY.filter((s) => s.category === 'setup').length },
+    { id: 'all', label: 'All Commands', count: allScripts.length },
+    { id: 'orchestration', label: 'Orchestration', count: allScripts.filter((s) => s.category === 'orchestration').length },
+    { id: 'apps', label: 'Applications (8)', count: allScripts.filter((s) => s.category === 'apps').length },
+    { id: 'portal', label: 'Developer Portal', count: allScripts.filter((s) => s.category === 'portal').length },
+    { id: 'pipeline', label: 'Build & Quality', count: allScripts.filter((s) => s.category === 'pipeline').length },
+    { id: 'setup', label: 'Dependencies', count: allScripts.filter((s) => s.category === 'setup').length },
   ];
 
   const filteredScripts = useMemo(() => {
-    return WORKSPACE_SCRIPTS_REGISTRY.filter((s) => {
+    return allScripts.filter((s) => {
       const matchesCategory = filterCategory === 'all' || s.category === filterCategory;
       const query = searchQuery.trim().toLowerCase();
       const matchesQuery =
@@ -69,7 +108,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
         (s.ports && s.ports.toLowerCase().includes(query));
       return matchesCategory && matchesQuery;
     });
-  }, [filterCategory, searchQuery]);
+  }, [allScripts, filterCategory, searchQuery]);
 
   const formatCommand = (script: ScriptDefinition) => {
     if (activeRuntime === 'pnpm') {

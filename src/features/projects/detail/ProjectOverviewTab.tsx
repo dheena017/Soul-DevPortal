@@ -31,52 +31,52 @@ export default function ProjectOverviewTab({
   return (
     <div className="w-full flex flex-col gap-6">
       {/* ── Project Executive Summary ── */}
-      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
+      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
           <div className="flex flex-col gap-0.5">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">APPLICATION OVERVIEW</span>
-            <h2 className="text-xl font-extrabold text-white">{project.title}</h2>
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-400">APPLICATION OVERVIEW</span>
+            <h2 className="text-xl md:text-2xl font-extrabold text-white uppercase">{project.title}</h2>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-sky-500/15 border border-sky-500/30 text-sky-300">
-              {project.framework || 'Web Application'}
+            <span className="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-sky-500/15 border border-sky-500/35 text-sky-200">
+              {project.framework || 'React 19 + Vite 8 + Tailwind CSS v4'}
             </span>
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300">
-              <svg className="w-3.5 h-3.5 text-purple-400 shrink-0 inline-block mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span>{project.dbInfo || 'SQLite'}</span>
+            <span className="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-purple-500/15 border border-purple-500/35 text-purple-200 inline-flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-purple-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              <span>{project.dbInfo || `SQLite (server/data/${project.id}.db)`}</span>
             </span>
-            {project.aiEngine && project.aiEngine !== 'N/A' && (
-              <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300">
-                ✨ {project.aiEngine.split('+')[0].trim()}
-              </span>
-            )}
+            <span className="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-amber-500/15 border border-amber-500/35 text-amber-200 inline-flex items-center gap-1.5">
+              <span>✨</span>
+              <span>{project.aiEngine && project.aiEngine !== 'N/A' ? project.aiEngine.split('+')[0].trim() : 'Google Gemini 2.5 Flash'}</span>
+            </span>
           </div>
         </div>
 
-        <p className="text-xs md:text-sm text-neutral-300 leading-relaxed max-w-4xl">
+        <p className="text-xs md:text-sm text-zinc-300 leading-relaxed max-w-4xl">
           {project.description || PROJECT_DESCRIPTIONS[project.id] || 'Monorepo application fully integrated with shared tooling.'}
         </p>
 
         {/* Quickstart CLI Terminal Strip */}
         <div className="flex flex-col gap-2 pt-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-neutral-300 flex items-center gap-1.5">
-              <svg className="w-3.5 h-3.5 text-neutral-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg><span>Quickstart CLI Commands</span>
+            <span className="text-xs font-bold text-zinc-200 flex items-center gap-2">
+              <svg className="w-3.5 h-3.5 text-zinc-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg><span>Quickstart CLI Commands</span>
             </span>
-            <span className="text-[10px] font-mono text-neutral-500">Run from workspace root</span>
+            <span className="text-[10px] font-mono text-zinc-500">Run from workspace root</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div className="flex items-center justify-between gap-2 p-2.5 px-3 rounded-xl bg-[#070708] border border-[#212126] font-mono text-xs">
-              <div className="flex items-center gap-2 min-w-0 flex-1">
-                <span className="text-neutral-500 select-none font-bold">$</span>
-                <code className="text-neutral-100 text-[11px] truncate select-all font-mono font-medium">{runnerCmd}</code>
+            <div className="flex items-center justify-between gap-2 p-3 px-3.5 rounded-xl bg-[#09090c] border border-white/[0.08] font-mono text-xs">
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-zinc-500 select-none font-bold">$</span>
+                <code className="text-zinc-100 text-[11px] truncate select-all font-mono font-semibold">{runnerCmd}</code>
               </div>
               <CopyButton text={runnerCmd} variant="compact" label="Copy" />
             </div>
 
-            <div className="flex items-center justify-between gap-2 p-2.5 px-3 rounded-xl bg-[#070708] border border-[#212126] font-mono text-xs">
-              <div className="flex items-center gap-2 min-w-0 flex-1">
-                <span className="text-neutral-500 select-none font-bold">$</span>
-                <code className="text-neutral-300 text-[11px] truncate select-all">cd Soul-DevPortal-Projects/{project.id} &amp;&amp; npm run dev</code>
+            <div className="flex items-center justify-between gap-2 p-3 px-3.5 rounded-xl bg-[#09090c] border border-white/[0.08] font-mono text-xs">
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="text-zinc-500 select-none font-bold">$</span>
+                <code className="text-zinc-100 text-[11px] truncate select-all font-mono">cd Soul-DevPortal-Projects/{project.id} &amp;&amp; npm run dev</code>
               </div>
               <CopyButton text={`cd Soul-DevPortal-Projects/${project.id} && npm run dev`} variant="compact" label="Copy" />
             </div>
@@ -85,23 +85,27 @@ export default function ProjectOverviewTab({
 
         {/* 4-Stat Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
-            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">RUNTIME PORTS</span>
-            <strong className="text-xs md:text-sm font-bold text-emerald-400 font-mono mt-1">
-              Client :{project.frontendPort || 'N/A'} {project.backendPort ? `· Server :${project.backendPort}` : ''}
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">RUNTIME PORTS</span>
+            <strong className="text-xs md:text-sm font-bold text-emerald-400 font-mono mt-1 inline-flex items-center gap-1.5">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+              </span>
+              <span>Client :{project.frontendPort || 'N/A'} {project.backendPort ? `· Server :${project.backendPort}` : ''}</span>
             </strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
-            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">NPM SCRIPTS</span>
-            <strong className="text-xs md:text-sm font-bold text-amber-400 font-mono mt-1">{scriptsCount} commands</strong>
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">NPM SCRIPTS</span>
+            <strong className="text-xs md:text-sm font-bold text-amber-300 font-mono mt-1">{scriptsCount} commands</strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
-            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">DEPENDENCIES</span>
-            <strong className="text-xs md:text-sm font-bold text-sky-400 font-mono mt-1">{totalDepsCount} packages</strong>
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">DEPENDENCIES</span>
+            <strong className="text-xs md:text-sm font-bold text-sky-300 font-mono mt-1">{totalDepsCount} packages</strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
-            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">ENV VARIABLES</span>
-            <strong className="text-xs md:text-sm font-bold text-purple-400 font-mono mt-1">{envCount} configured</strong>
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">ENV VARIABLES</span>
+            <strong className="text-xs md:text-sm font-bold text-purple-300 font-mono mt-1">{envCount} configured</strong>
           </div>
         </div>
       </section>

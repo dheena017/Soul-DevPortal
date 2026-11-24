@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ProjectData } from '../../../types';
-import { PROJECT_FEATURES_MAP } from '../projectsConstants';
+import { PROJECT_FEATURES_MAP, PROJECT_LOGOS } from '../projectsConstants';
+import { fetchProjectHealth, fetchProjectTab } from '../../../services/api';
 import ProjectDetailHeader, { ProjectDetailTab } from './ProjectDetailHeader';
 import ProjectOverviewTab from './ProjectOverviewTab';
 import ProjectFilesTab from './ProjectFilesTab';
@@ -20,17 +21,94 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
   const [portTesting, setPortTesting] = useState<boolean>(false);
   const [portStatus, setPortStatus] = useState<{ fe: string; be: string; latency: number } | null>(null);
   const [showSecretPlaceholders, setShowSecretPlaceholders] = useState<boolean>(false);
+  const [tabData, setTabData] = useState<Record<string, any>>({});
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadTabData() {
+      try {
+        const data = await fetchProjectTab(project.id, activeTab);
+        if (data && isMounted) {
+          setTabData((prev) => ({ ...prev, [activeTab]: data }));
+        }
+      } catch {
+        // Fallback to static props
+      }
+    }
+    loadTabData();
+    return () => {
+      isMounted = false;
+    };
+  }, [project.id, activeTab]);
+
+  const enhancedProject = useMemo(() => {
+    return {
+      ...project,
+      title: project.title ? project.title.toUpperCase() : project.id.toUpperCase(),
+      version: project.version || '0.0.0',
+      logo: project.logo || PROJECT_LOGOS[project.id],
+      framework: project.framework || 'React 19 + Vite 8 + Tailwind CSS v4',
+      dbInfo: project.dbInfo || `SQLite (server/data/${project.id.replace(/-ai$/, '')}.db)`,
+      aiEngine: project.aiEngine && project.aiEngine !== 'N/A' ? project.aiEngine : 'Google Gemini 2.5 Flash',
+    };
+  }, [project]);
 
   const runnerCmd = `npx @workspace/runner project ${project.id}`;
   const feUrl = project.frontendPort ? `http://localhost:${project.frontendPort}` : null;
   const beUrl = project.backendPort ? `http://localhost:${project.backendPort}` : null;
 
-  const scriptsEntries = useMemo(() => Object.entries(project.scripts || {}), [project.scripts]);
+  const scriptsEntries = useMemo(() => {
+    if (tabData.scripts?.scripts && Object.keys(tabData.scripts.scripts).length > 0) {
+      return Object.entries(tabData.scripts.scripts);
+    }
+    return Object.entries(project.scripts || {});
+  }, [tabData.scripts, project.scripts]);
+
   const depsEntries = useMemo(() => Object.entries(project.dependencies || {}), [project.dependencies]);
   const devDepsEntries = useMemo(() => Object.entries(project.devDependencies || {}), [project.devDependencies]);
-  const envKeys = useMemo(() => project.envKeys || project.configuration || [], [project.envKeys, project.configuration]);
-  const fileTree = useMemo(() => project.fileTree || [], [project.fileTree]);
-  const tables = useMemo(() => project.tables || [], [project.tables]);
+
+  const envKeys = useMemo(() => {
+    if (tabData.env?.templateKeys && tabData.env.templateKeys.length > 0) {
+      return tabData.env.templateKeys;
+    }
+    return project.envKeys || project.configuration || [];
+  }, [tabData.env, project.envKeys, project.configuration]);
+
+  const fileTree = useMemo(() => {
+    if (tabData.files?.tree && tabData.files.tree.length > 0) {
+      return tabData.files.tree;
+    }
+    return project.fileTree || [];
+  }, [tabData.files, project.fileTree]);
+
+  const tables = useMemo(() => {
+    if (tabData.database?.tables && tabData.database.tables.length > 0) {
+      return tabData.database.tables.map((t: any) => (typeof t === 'string' ? t : t.name));
+    }
+    return project.tables || [];
+  }, [tabData.database, project.tables]);
+
+  const apiProject = useMemo(() => {
+    if (tabData.api?.endpoints && tabData.api.endpoints.length > 0) {
+      return {
+        ...project,
+        apiEndpoints: tabData.api.endpoints.map((ep: any) =>
+          typeof ep === 'string' ? ep : `${ep.method} ${ep.path}`
+        ),
+      };
+    }
+    return project;
+  }, [tabData.api, project]);
+
+  const readmeProject = useMemo(() => {
+    if (tabData.readme?.blocks && tabData.readme.blocks.length > 0) {
+      return {
+        ...project,
+        readmeBlocks: tabData.readme.blocks,
+      };
+    }
+    return project;
+  }, [tabData.readme, project]);
 
   const featuresList = useMemo(() => {
     if (project.features && project.features.length > 0) {
@@ -48,16 +126,34 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
     return defaultFeatures.map((f) => ({ title: f, desc: '' }));
   }, [project.features, project.id]);
 
-  const handleTestPorts = () => {
+  const handleTestPorts = async () => {
     setPortTesting(true);
-    setTimeout(() => {
-      setPortTesting(false);
+    const start = performance.now();
+    try {
+      const health = await fetchProjectHealth(project.id);
+      const latency = Math.max(1, Math.round(performance.now() - start));
+      if (health && (health.frontend || health.backend)) {
+        setPortStatus({
+          fe: health.frontend?.isLive ? 'ONLINE / LISTENING' : (project.frontendPort ? 'STANDBY / OFFLINE' : 'UNASSIGNED'),
+          be: health.backend?.isLive ? 'ONLINE / LISTENING' : (project.backendPort ? 'STANDBY / OFFLINE' : 'UNASSIGNED'),
+          latency,
+        });
+      } else {
+        setPortStatus({
+          fe: project.frontendPort ? 'STANDBY' : 'UNASSIGNED',
+          be: project.backendPort ? 'STANDBY' : 'UNASSIGNED',
+          latency,
+        });
+      }
+    } catch {
       setPortStatus({
-        fe: project.frontendPort ? 'STANDBY / READY' : 'UNASSIGNED',
-        be: project.backendPort ? 'STANDBY / READY' : 'UNASSIGNED',
-        latency: Math.floor(Math.random() * 8) + 2,
+        fe: project.frontendPort ? 'STANDBY' : 'UNASSIGNED',
+        be: project.backendPort ? 'STANDBY' : 'UNASSIGNED',
+        latency: Math.max(1, Math.round(performance.now() - start)),
       });
-    }, 700);
+    } finally {
+      setPortTesting(false);
+    }
   };
 
   const sampleEnvFile = useMemo(() => {
@@ -75,7 +171,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
   return (
     <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       <ProjectDetailHeader
-        project={project}
+        project={enhancedProject}
         activeTab={activeTab}
         onTabChange={setActiveTab}
         portTesting={portTesting}
@@ -94,7 +190,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
       <div key={activeTab} className="w-full tab-content-animate">
         {activeTab === 'overview' && (
           <ProjectOverviewTab
-            project={project}
+            project={enhancedProject}
             featuresList={featuresList}
             scriptsCount={scriptsEntries.length}
             totalDepsCount={depsEntries.length + devDepsEntries.length}
@@ -112,7 +208,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         )}
 
         {activeTab === 'api' && (
-          <ProjectApiTab project={project} beUrl={beUrl} />
+          <ProjectApiTab project={apiProject} beUrl={beUrl} />
         )}
 
         {activeTab === 'database' && (
@@ -136,7 +232,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         )}
 
         {activeTab === 'readme' && (
-          <ProjectReadmeTab project={project} />
+          <ProjectReadmeTab project={readmeProject} />
         )}
       </div>
     </article>
