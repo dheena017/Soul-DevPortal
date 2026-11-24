@@ -21,7 +21,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">DATA PERSISTENCE TIER</span>
-          <h2 className="text-lg font-bold text-neutral-200">Database Architecture &amp; Entities</h2>
+          <h2 className="text-lg font-bold text-white">Database Architecture &amp; Entities</h2>
         </div>
         {tables.length > 0 && (
           <div className="relative flex items-center min-w-[220px]">

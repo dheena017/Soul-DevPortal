@@ -74,7 +74,7 @@ export default function PackagesHeader({
         </div>
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2.5">
-            <h1 className="text-2xl font-extrabold tracking-tight text-neutral-200">Shared Packages Dashboard</h1>
+            <h1 className="text-2xl font-extrabold tracking-tight text-white">Shared Packages Dashboard</h1>
             <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#111111] border border-[#222222] text-neutral-300">
               Pillar 2: Shared Libraries
             </span>

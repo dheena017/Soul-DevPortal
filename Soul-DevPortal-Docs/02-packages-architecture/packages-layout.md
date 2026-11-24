@@ -1,6 +1,6 @@
-# Strict 2-Tier Package Architecture
+# Packages Layout & Directory Architecture Standards
 
-All packages in `Soul-DevPortal-Packages` strictly adhere to the **2-Tier Architecture Pattern**:
+All shared packages in `Soul-DevPortal-Packages` strictly adhere to the standardized **Packages Layout Architecture**:
 
 ```text
 Soul-DevPortal-Packages/

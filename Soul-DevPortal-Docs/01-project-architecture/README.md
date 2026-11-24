@@ -49,10 +49,9 @@ React 19 Single Page Applications, Vite 8 bundler, Tailwind CSS v4, and Next.js 
 - [Client Technical Specification](project-client/main.md)
 
 ### 9. 🔐 [Environment & Security](project-env/main.md)
-Environment hygiene, prefix scoping matrix, fail-fast validation, sensitive data masking, and templates:
+Environment hygiene, prefix scoping matrix, fail-fast validation, sensitive data masking, and master config matrix:
 - [Environment Rules](project-env/rules.md)
 - [Environment Technical Specification](project-env/main.md)
-- [Per-Project .env Templates](project-env/templates/)
 
 ---
 

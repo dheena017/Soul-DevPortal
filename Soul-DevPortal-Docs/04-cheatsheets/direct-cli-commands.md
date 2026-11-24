@@ -1,6 +1,7 @@
 # Direct CLI Commands & Single-Template Reference
 
 ## Unified Single-Template Command Standard
+
 All micro-applications implement the identical canonical lifecycle script names in their root `package.json` and follow a single, standardized direct CLI template.
 
 ### A. Canonical NPM Lifecycle Template
@@ -39,6 +40,7 @@ npm run clean         # Cleanup: Removes dist/ and temporary cache artifacts
 | **`devportal`** (Hub) | `npx vite . --port 5181` | `python backend/main.py --port 8008` | `npm run build` | `npm run typecheck` | `npm run test` | `npm run preview` |
 
 ## Master Direct CLI Command Reference
+
 | Project | Client Direct CLI Command | Server Direct CLI Command | Build Command | Typecheck Command | Test Command | Preview Command |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **`apexmind-ai`** | `npx vite client --port 5173` | `python -m uvicorn server.app.factory:create_app --factory --port 8000 --reload` | `npm run build` | `npm run typecheck` | `npm run test` | `npm run preview` |

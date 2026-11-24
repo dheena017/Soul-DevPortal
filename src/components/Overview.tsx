@@ -89,7 +89,7 @@ export default function Overview({
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-neutral-200">Soul Workspace Developer Portal</h1>
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Soul Workspace Developer Portal</h1>
                 <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#111111] border border-[#222222] text-neutral-300">
                   Enterprise Monorepo
                 </span>
@@ -238,18 +238,18 @@ export default function Overview({
           aria-selected={activeTab === 'apps'}
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'apps'
-              ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
-              : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+              ? 'bg-[#1a1a1a] text-white font-bold border border-neutral-600 shadow-sm'
+              : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('apps')}
         >
-          <svg className={`w-3.5 h-3.5 ${activeTab === 'apps' ? 'text-neutral-200 ' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'apps' ? 'text-white ' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
             <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
           <span>Consumer Applications</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'apps' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{projects.length || 8}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'apps' ? 'bg-neutral-800 text-white border border-neutral-600 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{projects.length || 8}</span>
         </button>
 
         <button
@@ -258,17 +258,17 @@ export default function Overview({
           aria-selected={activeTab === 'packages'}
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'packages'
-              ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
-              : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+              ? 'bg-[#1a1a1a] text-white font-bold border border-neutral-600 shadow-sm'
+              : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('packages')}
         >
-          <svg className={`w-3.5 h-3.5 ${activeTab === 'packages' ? 'text-neutral-200 ' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'packages' ? 'text-white ' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="16.5" y1="9.4" x2="7.55" y2="4.24" />
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
           </svg>
           <span>Shared Packages</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'packages' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{packages.length || 3}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'packages' ? 'bg-neutral-800 text-white border border-neutral-600 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{packages.length || 3}</span>
         </button>
 
         <button
@@ -277,17 +277,17 @@ export default function Overview({
           aria-selected={activeTab === 'docs'}
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'docs'
-              ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
-              : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+              ? 'bg-[#1a1a1a] text-white font-bold border border-neutral-600 shadow-sm'
+              : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('docs')}
         >
-          <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-neutral-200 ' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-white ' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
           </svg>
           <span>Architecture Specifications</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'docs' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>5</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'docs' ? 'bg-neutral-800 text-white border border-neutral-600 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>5</span>
         </button>
       </div>
 
@@ -297,7 +297,7 @@ export default function Overview({
           <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 1: APPLICATIONS</span>
-              <h2 className="text-lg font-bold text-neutral-200">Integrated Consumer Applications</h2>
+              <h2 className="text-lg font-bold text-white">Integrated Consumer Applications</h2>
             </div>
             <button
               type="button"
@@ -409,7 +409,7 @@ export default function Overview({
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 2: SHARED LIBRARIES</span>
-              <h2 className="text-lg font-bold text-neutral-200">Core Monorepo Packages</h2>
+              <h2 className="text-lg font-bold text-white">Core Monorepo Packages</h2>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -542,7 +542,7 @@ export default function Overview({
           <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 3: SPECIFICATIONS</span>
-              <h2 className="text-lg font-bold text-neutral-200">Official Architecture Documentation</h2>
+              <h2 className="text-lg font-bold text-white">Official Architecture Documentation</h2>
             </div>
             <button
               type="button"
@@ -594,7 +594,7 @@ export default function Overview({
           </div>
           <div className="flex flex-col gap-1.5">
             <div className="flex flex-wrap items-center gap-2.5">
-              <h3 className="text-lg font-bold text-neutral-200">15 Monorepo Automation Scripts &amp; Command Runners</h3>
+              <h3 className="text-lg font-bold text-white">15 Monorepo Automation Scripts &amp; Command Runners</h3>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#111111] border border-[#222222] text-neutral-300">
                 Python FastAPI · Vite · TS Gates
               </span>

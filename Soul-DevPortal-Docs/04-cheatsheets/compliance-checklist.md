@@ -1,6 +1,7 @@
 # Compliance Checklist & Standards Matrix
 
 ## Master Standards Matrix
+
 | # | Standard | Category | Severity | Canonical Rule |
 | :---: | :--- | :---: | :---: | :--- |
 | **01** | **Package Scoping** | Packages | `MANDATORY` | npm packages use `@workspace/<name>`; Python modules use `workspace_<name>`. |
@@ -17,6 +18,7 @@
 ---
 
 ## Developer Compliance Checklist
+
 Before committing any code or submitting a PR, verify compliance:
 
 - [ ] **`.gitignore` Verified**: Run `git status` to ensure `.env` is ignored and not tracked.

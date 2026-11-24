@@ -438,9 +438,7 @@ export default function Sidebar({
                       key={proj.id}
                       aria-current={isProjActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
-                        isProjActive
-                          ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
-                          : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] border border-transparent'
+                        isProjActive ? 'bg-[#1a1a1a] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
                       }`}
                       onClick={() => onNavigate(`projects/${proj.id}`)}
                       title={proj.title}
@@ -532,9 +530,7 @@ export default function Sidebar({
                       key={pkg.id}
                       aria-current={isPkgActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
-                        isPkgActive
-                          ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
-                          : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] border border-transparent'
+                        isPkgActive ? 'bg-[#1a1a1a] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
                       }`}
                       onClick={() => onNavigate(`packages/${pkg.id}`)}
                       title={pkg.displayName || pkg.name}
@@ -572,9 +568,7 @@ export default function Sidebar({
                 type="button"
                 aria-current={(isActive('docs') || isActive('docs-dashboard')) ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
-                  (isActive('docs') || isActive('docs-dashboard'))
-                    ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
-                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                  (isActive('docs') || isActive('docs-dashboard')) ? 'bg-[#1a1a1a] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('docs');

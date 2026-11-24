@@ -124,14 +124,18 @@ def mask_sensitive_string(raw: str) -> str:
 
 ---
 
-## 5. Per-Project Environment Templates
+## 5. Master Micro-Application Configuration Matrix
 
-Complete `.env.example` specifications for all micro-apps are archived and accessible in the [`templates/`](templates/) folder:
-- [ApexMind AI Template](templates/apexmind-ai.env.md)
-- [Outpass System Template](templates/outpass-system.env.md)
-- [Free API Hub Template](templates/free-api-hub.env.md)
-- [Sonikoma AI Studio Template](templates/sonikoma.env.md)
-- [Spatial Dimensions Template](templates/spatial-dimensions.env.md)
-- [College Management System Template](templates/college-management-system.env.md)
-- [GlobalPulse AI Template](templates/globalpulse-ai.env.md)
-- [PostCraft AI Template](templates/postcraft-ai.env.md)
+Rather than maintaining fragmented template files, all project-specific environment requirements are consolidated into this master reference matrix:
+
+| Project Name | Required Environment Variables | Default / Fallback Values | Description |
+|---|---|---|---|
+| **apexmind-ai** | `AI_GEMINI_API_KEY`<br>`AI_MODEL_NAME`<br>`TTS_ENGINE` | `AI_MODEL_NAME=gemini-2.5-flash`<br>`TTS_ENGINE=edge-tts` | Audio speech generation and Google Gemini API keys |
+| **outpass-system** | `AUTH_JWT_SECRET`<br>`AUTH_EXPIRE_MINUTES` | `AUTH_EXPIRE_MINUTES=1440` | Student outpass approval token signing secret |
+| **free-api-hub** | `MAX_MOCK_ROUTES`<br>`MOCK_DELAY_MS` | `MAX_MOCK_ROUTES=500`<br>`MOCK_DELAY_MS=0` | Dynamic API prototyping and mock latency throttling |
+| **sonikoma** | `AI_GEMINI_API_KEY`<br>`VIDEO_TEMP_DIR` | `VIDEO_TEMP_DIR=server/data/media` | Video synthesis and script generation models |
+| **spatial-dimensions** | `SCENE_ASSETS_PATH`<br>`EXPORT_FORMAT` | `SCENE_ASSETS_PATH=server/data/scenes`<br>`EXPORT_FORMAT=gltf` | 3D coordinate mapping and asset storage cache |
+| **college-management** | `SESSION_SECRET`<br>`ATTENDANCE_WINDOW_MINS` | `ATTENDANCE_WINDOW_MINS=60` | Campus faculty and student portal session security |
+| **globalpulse-ai** | `AI_GEMINI_API_KEY`<br>`NEWS_REFRESH_INTERVAL` | `NEWS_REFRESH_INTERVAL=300` | Automated news crawler and LLM summarization pipeline |
+| **postcraft-ai** | `AI_GEMINI_API_KEY`<br>`MAX_TOKENS_PER_POST` | `MAX_TOKENS_PER_POST=1024` | Social media multi-platform copy generation engine |
+| **devportal** | `SERVER_PORT`<br>`WORKSPACE_MONITOR_MS` | `SERVER_PORT=8008`<br>`WORKSPACE_MONITOR_MS=2000` | Monorepo process manager and port auditing telemetry |

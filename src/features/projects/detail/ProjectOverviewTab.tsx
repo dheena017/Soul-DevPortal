@@ -35,14 +35,14 @@ export default function ProjectOverviewTab({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
           <div className="flex flex-col gap-0.5">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">APPLICATION OVERVIEW</span>
-            <h2 className="text-xl font-extrabold text-neutral-200">{project.title}</h2>
+            <h2 className="text-xl font-extrabold text-white">{project.title}</h2>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-200">
+            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#161616] border border-neutral-700 text-neutral-200">
               {project.framework || 'Web Application'}
             </span>
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-200">
-              🗄️ {project.dbInfo || 'SQLite'}
+            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#161616] border border-neutral-700 text-neutral-200">
+              <svg className="w-3.5 h-3.5 text-neutral-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span>{project.dbInfo || 'SQLite'}</span>
             </span>
             {project.aiEngine && project.aiEngine !== 'N/A' && (
               <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
@@ -52,7 +52,7 @@ export default function ProjectOverviewTab({
           </div>
         </div>
 
-        <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">
+        <p className="text-xs md:text-sm text-neutral-300 leading-relaxed max-w-4xl">
           {project.description || PROJECT_DESCRIPTIONS[project.id] || 'Monorepo application fully integrated with shared tooling.'}
         </p>
 
@@ -60,8 +60,7 @@ export default function ProjectOverviewTab({
         <div className="flex flex-col gap-2 pt-1">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-neutral-300 flex items-center gap-1.5">
-              <span>⚡</span>
-              <span>Quickstart CLI Commands</span>
+              <svg className="w-3.5 h-3.5 text-neutral-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg><span>Quickstart CLI Commands</span>
             </span>
             <span className="text-[10px] font-mono text-neutral-500">Run from workspace root</span>
           </div>
@@ -69,7 +68,7 @@ export default function ProjectOverviewTab({
             <div className="flex items-center justify-between gap-2 p-2.5 px-3 rounded-xl bg-[#0a0a0a] border border-[#222222] font-mono text-xs">
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <span className="text-neutral-500 select-none font-bold">$</span>
-                <code className="text-neutral-200 text-[11px] truncate select-all">{runnerCmd}</code>
+                <code className="text-neutral-100 text-[11px] truncate select-all font-mono font-medium">{runnerCmd}</code>
               </div>
               <CopyButton text={runnerCmd} variant="compact" label="Copy" />
             </div>

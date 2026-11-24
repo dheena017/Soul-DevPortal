@@ -78,7 +78,7 @@ export default function ProjectEnvTab({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">CONFIGURATION REGISTRY</span>
-          <h2 className="text-lg font-bold text-neutral-200">Environment Variables &amp; Secret Keys</h2>
+          <h2 className="text-lg font-bold text-white">Environment Variables &amp; Secret Keys</h2>
         </div>
         <div className="flex items-center gap-2.5 flex-wrap">
           {envKeys.length > 0 && (

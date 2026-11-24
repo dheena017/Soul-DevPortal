@@ -19,12 +19,12 @@
   --border: #222222;
   --border-subtle: #1a1a1a;
   --border-muted: #1a1a1a;
-  --border-active: #555555;
+  --border-active: #737373;
 
   /* ── Typography Colors ── */
-  --text-primary: #a3a3a3;
-  --text-secondary: #8c8c8c;
-  --text-muted: #666666;
+  --text-primary: #ededed;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
 
   /* ── Accent & Pillar Colors ── */
   --accent-sky: #ffffff;

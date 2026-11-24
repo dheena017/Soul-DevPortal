@@ -22,7 +22,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">PROJECT API</span>
-          <h2 className="text-lg font-bold text-neutral-200">Registered API Endpoints</h2>
+          <h2 className="text-lg font-bold text-white">Registered API Endpoints</h2>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <div className="relative flex items-center min-w-[220px]">

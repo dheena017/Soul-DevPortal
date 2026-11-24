@@ -106,7 +106,7 @@ export default function DocDetailHeader({
               </span>
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-neutral-200">{guideMeta.title}</h1>
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">{guideMeta.title}</h1>
             <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-2xl">{guideMeta.description}</p>
           </div>
         </div>
@@ -156,17 +156,17 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'spec'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'spec'
-                ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
-                : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                ? 'bg-[#1a1a1a] text-white font-bold border border-neutral-600 shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('spec')}
           >
-            <svg className={`w-3.5 h-3.5 ${activeTab === 'spec' ? 'text-neutral-200' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'spec' ? 'text-white' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
             <span>Full Specification</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'spec' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'spec' ? 'bg-neutral-800 text-white border border-neutral-600 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
               {headingsCount}
             </span>
           </button>
@@ -177,16 +177,16 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'highlights'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'highlights'
-                ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
-                : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                ? 'bg-[#1a1a1a] text-white font-bold border border-neutral-600 shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('highlights')}
           >
-            <svg className={`w-3.5 h-3.5 ${activeTab === 'highlights' ? 'text-neutral-200' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'highlights' ? 'text-white' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
             <span>Key Rules &amp; Highlights</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'highlights' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'highlights' ? 'bg-neutral-800 text-white border border-neutral-600 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
               {guideMeta.keyHighlights.length}
             </span>
           </button>
@@ -197,17 +197,17 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'snippets'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'snippets'
-                ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
-                : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                ? 'bg-[#1a1a1a] text-white font-bold border border-neutral-600 shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('snippets')}
           >
-            <svg className={`w-3.5 h-3.5 ${activeTab === 'snippets' ? 'text-neutral-200' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'snippets' ? 'text-white' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6" />
               <polyline points="8 6 2 12 8 18" />
             </svg>
             <span>Code Snippets</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'snippets' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'snippets' ? 'bg-neutral-800 text-white border border-neutral-600 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
               {codeBlocksCount}
             </span>
           </button>
@@ -218,19 +218,19 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'tables'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'tables'
-                ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
-                : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                ? 'bg-[#1a1a1a] text-white font-bold border border-neutral-600 shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('tables')}
           >
-            <svg className={`w-3.5 h-3.5 ${activeTab === 'tables' ? 'text-neutral-200' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'tables' ? 'text-white' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
               <line x1="3" y1="9" x2="21" y2="9" />
               <line x1="3" y1="15" x2="21" y2="15" />
               <line x1="12" y1="3" x2="12" y2="21" />
             </svg>
             <span>Tables &amp; Matrices</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'tables' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'tables' ? 'bg-neutral-800 text-white border border-neutral-600 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
               {tablesCount}
             </span>
           </button>

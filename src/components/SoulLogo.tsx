@@ -37,22 +37,22 @@ export const SoulLogoIcon: React.FC<{ size?: number; className?: string }> = ({
       <defs>
         {/* Primary Radiant Neon Gradient: Cyan -> Electric Indigo -> Violet */}
         <linearGradient id="soul-neon-1" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#38bdf8" />
-          <stop offset="45%" stopColor="#6366f1" />
-          <stop offset="100%" stopColor="#a855f7" />
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="50%" stopColor="#d4d4d4" />
+          <stop offset="100%" stopColor="#737373" />
         </linearGradient>
 
         {/* Secondary Ribbon Gradient: Azure -> Teal */}
         <linearGradient id="soul-neon-2" x1="56" y1="12" x2="8" y2="52" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#2dd4bf" />
-          <stop offset="50%" stopColor="#38bdf8" />
-          <stop offset="100%" stopColor="#818cf8" />
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="50%" stopColor="#a3a3a3" />
+          <stop offset="100%" stopColor="#525252" />
         </linearGradient>
 
         {/* Ambient Glow Gradient */}
         <radialGradient id="soul-ambient" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.4" />
-          <stop offset="70%" stopColor="#38bdf8" stopOpacity="0.15" />
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.15" />
+          <stop offset="70%" stopColor="#ffffff" stopOpacity="0.05" />
           <stop offset="100%" stopColor="#0a0a0a" stopOpacity="0" />
         </radialGradient>
 
@@ -96,8 +96,8 @@ export const SoulLogoIcon: React.FC<{ size?: number; className?: string }> = ({
       />
 
       {/* Accent Inner Core Sparks */}
-      <circle cx="41" cy="17" r="2.5" fill="#38bdf8" />
-      <circle cx="25" cy="49" r="2.5" fill="#c084fc" />
+      <circle cx="41" cy="17" r="2.5" fill="#ffffff" />
+      <circle cx="25" cy="49" r="2.5" fill="#a3a3a3" />
       
       {/* Central Nexus Anchor Node */}
       <circle cx="33.5" cy="33" r="3" fill="#ffffff" opacity="0.9" />

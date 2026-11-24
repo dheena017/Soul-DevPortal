@@ -21,7 +21,7 @@ export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabP
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">AUTOMATION &amp; LIFECYCLE</span>
-          <h2 className="text-lg font-bold text-neutral-200">Project Package Scripts</h2>
+          <h2 className="text-lg font-bold text-white">Project Package Scripts</h2>
         </div>
         <div className="relative flex items-center min-w-[220px]">
           <svg className="absolute left-3 w-3.5 h-3.5 text-neutral-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

@@ -37,5 +37,5 @@
 ### 7. Universal Default Fallbacks for Local Dev
 - **Rule**: Non-secret configurations (e.g. `PORT=8000`, `LOG_LEVEL=INFO`, `SQLITE_DB_PATH=server/data/app.db`) must supply safe defaults in code so that applications can start out-of-the-box for local testing.
 
-### 8. Project Template Parity
-- **Rule**: Whenever an application introduces a new environment dependency, its corresponding template in `project-architecture/project-env/templates/<app>.env.md` must be updated immediately.
+### 8. Master Baseline & Schema Parity
+- **Rule**: Whenever an application introduces a new environment dependency, its corresponding entry in the project's root `.env.example` and the Master Configuration Matrix in `project-env/main.md` must be updated immediately.
