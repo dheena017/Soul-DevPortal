@@ -46,7 +46,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
           {onBack && (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold"
               onClick={onBack}
             >
               ← Back to Overview
@@ -54,8 +54,8 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
           )}
           <span className="text-neutral-400 font-medium">Soul Workspace / Monorepo Applications</span>
         </div>
-        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-          Workspace <span className="text-white font-mono">Applications &amp; Ports</span>
+        <h1 className="text-2xl md:text-3xl font-extrabold text-neutral-200 tracking-tight">
+          Workspace <span className="text-neutral-300 font-mono">Applications &amp; Ports</span>
         </h1>
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">
           Catalog of all 9 applications consuming the shared packages, their assigned development ports, backend servers, databases, and AI engines.
@@ -73,12 +73,12 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter applications by name, port, framework, AI engine..."
               aria-label="Filter applications"
-              className="w-full bg-[#111111] border border-[#222222] rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500/50"
+              className="w-full bg-[#111111] border border-[#222222] rounded-xl pl-9 pr-8 py-2 text-xs text-neutral-300 placeholder-neutral-500 focus:outline-none focus:border-neutral-500"
             />
             {query && (
               <button
                 type="button"
-                className="absolute right-2.5 text-neutral-400 hover:text-white text-xs"
+                className="absolute right-2.5 text-neutral-400 hover:text-neutral-200 text-xs"
                 onClick={() => setQuery('')}
               >
                 ✕
@@ -93,8 +93,8 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
                 type="button"
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   filterFramework === fw
-                    ? 'bg-blue-600 text-white shadow-sm border border-blue-500'
-                    : 'bg-[#111111] border border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111]'
+                    ? 'bg-[#111111] text-neutral-200 font-bold shadow-sm border border-[#222222]'
+                    : 'bg-[#111111] border border-[#222222] text-neutral-400 hover:text-neutral-200 hover:bg-[#111111]'
                 }`}
                 onClick={() => setFilterFramework(fw)}
               >
@@ -109,12 +109,12 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
         {filteredProjects.map((p) => (
           <div key={p.id} className="p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] shadow-2xl transition-all duration-200 flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-white">{p.title}</h3>
+              <h3 className="text-base font-bold text-neutral-200">{p.title}</h3>
               <CopyButton text={`http://localhost:${p.frontendPort || 5173}`} label="Copy URL" variant="compact" />
             </div>
             <p className="text-xs text-neutral-400 line-clamp-2">{p.description}</p>
             <div className="flex items-center gap-2 pt-2 border-t border-[#1a1a1a] text-xs">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-white border border-blue-500/30">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#111111] text-neutral-300 border border-[#222222]">
                 Port :{p.frontendPort}
               </span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#111111] border border-[#222222] text-neutral-300">

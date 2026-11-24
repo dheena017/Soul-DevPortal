@@ -149,7 +149,7 @@ export default function ProjectsDashboard({
           <p className="text-sm text-neutral-400 font-medium">No projects match your filter criteria.</p>
           <button
             type="button"
-            className="px-4 py-2 rounded-xl text-xs font-semibold bg-white text-black font-bold hover:bg-neutral-200 transition-all shadow-md shadow-blue-600/20"
+            className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm"
             onClick={() => {
               setQuery('');
               setFilterFramework('all');

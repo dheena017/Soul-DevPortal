@@ -165,7 +165,7 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
         <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">
           QUICK INTEGRATION
         </span>
-        <h3 className="text-lg font-bold text-white">Integration Code Generator</h3>
+        <h3 className="text-lg font-bold text-neutral-200">Integration Code Generator</h3>
         <p className="text-xs text-neutral-400">
           Select your framework or target environment to copy ready-to-run setup code.
         </p>
@@ -180,8 +180,8 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
             aria-selected={snippet.id === activeSnippet.id}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               snippet.id === activeSnippet.id
-                ? 'bg-[#111111] text-white font-bold border border-[#222222] shadow-sm'
-                : 'text-neutral-400 hover:text-white hover:bg-[#111111]'
+                ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+                : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111]'
             }`}
             onClick={() => setSelectedId(snippet.id)}
           >
@@ -193,7 +193,7 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
       <div className="rounded-xl bg-[#0a0a0a] border border-[#222222] overflow-hidden shadow-lg">
         <div className="flex items-center justify-between px-3.5 py-2 bg-[#111111] border-b border-[#1a1a1a] text-xs">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-blue-500/10 text-white border border-blue-500/25">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#111111] text-neutral-300 border border-[#222222]">
               {activeSnippet.language}
             </span>
             <code className="text-[11px] font-mono text-neutral-300">{activeSnippet.filename}</code>

@@ -35,7 +35,7 @@ export default function ProjectOverviewTab({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
           <div className="flex flex-col gap-0.5">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">APPLICATION OVERVIEW</span>
-            <h2 className="text-xl font-extrabold text-white">{project.title}</h2>
+            <h2 className="text-xl font-extrabold text-neutral-200">{project.title}</h2>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-200">
@@ -59,7 +59,7 @@ export default function ProjectOverviewTab({
         {/* Quickstart CLI Terminal Strip */}
         <div className="flex flex-col gap-2 pt-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-white flex items-center gap-1.5">
+            <span className="text-xs font-bold text-neutral-300 flex items-center gap-1.5">
               <span>⚡</span>
               <span>Quickstart CLI Commands</span>
             </span>
@@ -88,17 +88,17 @@ export default function ProjectOverviewTab({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">RUNTIME PORTS</span>
-            <strong className="text-xs md:text-sm font-bold text-white font-mono mt-1">
+            <strong className="text-xs md:text-sm font-bold text-neutral-200 font-mono mt-1">
               Client :{project.frontendPort || 'N/A'} {project.backendPort ? `· Server :${project.backendPort}` : ''}
             </strong>
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">NPM SCRIPTS</span>
-            <strong className="text-xs md:text-sm font-bold text-white font-mono mt-1">{scriptsCount} commands</strong>
+            <strong className="text-xs md:text-sm font-bold text-neutral-200 font-mono mt-1">{scriptsCount} commands</strong>
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">DEPENDENCIES</span>
-            <strong className="text-xs md:text-sm font-bold text-white font-mono mt-1">{totalDepsCount} packages</strong>
+            <strong className="text-xs md:text-sm font-bold text-neutral-200 font-mono mt-1">{totalDepsCount} packages</strong>
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">ENV VARIABLES</span>
@@ -111,13 +111,13 @@ export default function ProjectOverviewTab({
       <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-4">
         <div className="flex flex-col gap-0.5 pb-2 border-b border-[#1a1a1a]">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">SYSTEM DESIGN</span>
-          <h2 className="text-lg font-bold text-white">Runtime Architecture &amp; Port Binding</h2>
+          <h2 className="text-lg font-bold text-neutral-200">Runtime Architecture &amp; Port Binding</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
-              <span className="text-xs font-bold text-white">Client Tier</span>
+              <span className="text-xs font-bold text-neutral-300">Client Tier</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Port {project.frontendPort || 'N/A'}
               </span>
@@ -125,13 +125,13 @@ export default function ProjectOverviewTab({
             <div className="flex flex-col gap-1.5 text-xs text-neutral-400">
               <p><strong className="text-neutral-300">Framework:</strong> {project.framework || 'Vite React'}</p>
               <p><strong className="text-neutral-300">Dev Command:</strong> <code className="text-[11px] text-neutral-200 font-mono">{project.frontendCmd || 'npm run dev'}</code></p>
-              <p><strong className="text-neutral-300">Local URL:</strong> <a href={feUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">{feUrl || 'Not configured'}</a></p>
+              <p><strong className="text-neutral-300">Local URL:</strong> <a href={feUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-neutral-300 hover:underline">{feUrl || 'Not configured'}</a></p>
             </div>
           </div>
 
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
-              <span className="text-xs font-bold text-white">Server Tier</span>
+              <span className="text-xs font-bold text-neutral-300">Server Tier</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Port {project.backendPort || 'N/A'}
               </span>
@@ -139,14 +139,14 @@ export default function ProjectOverviewTab({
             <div className="flex flex-col gap-1.5 text-xs text-neutral-400">
               <p><strong className="text-neutral-300">Runtime:</strong> {project.backendCmd?.includes('python') ? 'Python (FastAPI / Uvicorn)' : 'Node.js Express / TS'}</p>
               <p><strong className="text-neutral-300">Command:</strong> <code className="text-[11px] text-neutral-200 font-mono">{project.backendCmd || 'Standalone fullstack'}</code></p>
-              <p><strong className="text-neutral-300">Local URL:</strong> <a href={beUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">{beUrl || 'Not configured'}</a></p>
+              <p><strong className="text-neutral-300">Local URL:</strong> <a href={beUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-neutral-300 hover:underline">{beUrl || 'Not configured'}</a></p>
             </div>
           </div>
 
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
-              <span className="text-xs font-bold text-white">Persistence</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-[#222222] text-white">
+              <span className="text-xs font-bold text-neutral-300">Persistence</span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Database
               </span>
             </div>
@@ -158,7 +158,7 @@ export default function ProjectOverviewTab({
 
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
-              <span className="text-xs font-bold text-white">AI Intelligence</span>
+              <span className="text-xs font-bold text-neutral-300">AI Intelligence</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Engine
               </span>
@@ -177,7 +177,7 @@ export default function ProjectOverviewTab({
           <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">CAPABILITIES</span>
-              <h2 className="text-lg font-bold text-white">Application Features &amp; Core Workflows</h2>
+              <h2 className="text-lg font-bold text-neutral-200">Application Features &amp; Core Workflows</h2>
             </div>
             <span className="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
               {featuresList.length} features active
@@ -191,7 +191,7 @@ export default function ProjectOverviewTab({
                   ✓
                 </span>
                 <div className="flex flex-col gap-0.5">
-                  <strong className="text-xs font-bold text-white">{feat.title}</strong>
+                  <strong className="text-xs font-bold text-neutral-200">{feat.title}</strong>
                   {feat.desc ? <p className="text-xs text-neutral-400">{feat.desc}</p> : null}
                 </div>
               </div>
@@ -204,13 +204,13 @@ export default function ProjectOverviewTab({
       <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-4">
         <div className="flex flex-col gap-0.5 pb-2 border-b border-[#1a1a1a]">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">ECOSYSTEM</span>
-          <h2 className="text-lg font-bold text-white">Shared Monorepo Packages Integration</h2>
+          <h2 className="text-lg font-bold text-neutral-200">Shared Monorepo Packages Integration</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
-              <span className="text-xs font-mono font-bold text-white">@workspace/logger</span>
+              <span className="text-xs font-mono font-bold text-neutral-300">@workspace/logger</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Telemetry
               </span>
@@ -223,7 +223,7 @@ export default function ProjectOverviewTab({
 
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
-              <span className="text-xs font-mono font-bold text-white">@workspace/config</span>
+              <span className="text-xs font-mono font-bold text-neutral-300">@workspace/config</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Foundations
               </span>
@@ -236,7 +236,7 @@ export default function ProjectOverviewTab({
 
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
-              <span className="text-xs font-mono font-bold text-white">@workspace/runner</span>
+              <span className="text-xs font-mono font-bold text-neutral-300">@workspace/runner</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Orchestration
               </span>
@@ -253,7 +253,7 @@ export default function ProjectOverviewTab({
       {fileTree.length > 0 && (
         <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-neutral-400 shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-[#111111] border border-[#222222] flex items-center justify-center text-neutral-400 shrink-0">
               <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
               </svg>
@@ -265,7 +265,7 @@ export default function ProjectOverviewTab({
                   {fileTree.length} indexed items
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white">Project Directory &amp; Source Files</h3>
+              <h3 className="text-base font-bold text-neutral-200">Project Directory &amp; Source Files</h3>
               <p className="text-xs text-neutral-400">
                 Explore the complete source tree, client/server split, config assets, and copy relative paths.
               </p>
@@ -276,7 +276,7 @@ export default function ProjectOverviewTab({
             <button
               type="button"
               onClick={onNavigateToFiles}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white text-black font-bold hover:bg-neutral-200 shadow-sm border border-blue-500 transition-all shrink-0 self-start sm:self-center"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 shadow-sm border border-[#222222] transition-all shrink-0 self-start sm:self-center"
             >
               <span>Explore File Tree</span>
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -292,14 +292,14 @@ export default function ProjectOverviewTab({
         <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-4">
           <div className="flex flex-col gap-0.5 pb-2 border-b border-[#1a1a1a]">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">LOCAL ENDPOINTS</span>
-            <h2 className="text-lg font-bold text-white">Network Services</h2>
+            <h2 className="text-lg font-bold text-neutral-200">Network Services</h2>
           </div>
           <div className="flex flex-col gap-2">
             {Object.entries(project.localServices).map(([serviceName, url]) => (
               <div key={serviceName} className="flex items-center justify-between p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all text-xs">
-                <span className="font-semibold text-white">{serviceName}</span>
+                <span className="font-semibold text-neutral-300">{serviceName}</span>
                 <div className="flex items-center gap-2">
-                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-white hover:underline font-mono">
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-neutral-300 hover:underline font-mono">
                     {url}
                   </a>
                   <CopyButton text={url} variant="compact" />

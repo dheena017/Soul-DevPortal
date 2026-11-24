@@ -127,10 +127,10 @@ export const SoulLogo: React.FC<SoulLogoProps> = ({
       {variant === 'full' && (
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-1.5 leading-none">
-            <span className={`font-extrabold tracking-tight text-white ${config.text}`}>
+            <span className={`font-extrabold tracking-tight text-neutral-300 ${config.text}`}>
               Soul
             </span>
-            <span className={`font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 ${config.text}`}>
+            <span className={`font-semibold text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400 ${config.text}`}>
               DevPortal
             </span>
           </div>

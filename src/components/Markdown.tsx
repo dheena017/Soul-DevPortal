@@ -36,7 +36,7 @@ function InlineText({ text = '' }: InlineTextProps) {
         }
         if (part.startsWith('**') && part.endsWith('**')) {
           return (
-            <strong key={index} className="font-bold text-white">
+            <strong key={index} className="font-bold text-neutral-200">
               {part.slice(2, -2)}
             </strong>
           );
@@ -64,7 +64,7 @@ function InlineText({ text = '' }: InlineTextProps) {
               href={link[2]}
               target={link[2].startsWith('http') ? '_blank' : undefined}
               rel={link[2].startsWith('http') ? 'noreferrer' : undefined}
-              className="text-white hover:text-white underline underline-offset-2 transition-colors font-medium"
+              className="text-neutral-300 hover:text-neutral-200 underline underline-offset-2 transition-colors font-medium"
             >
               {link[1]}
             </a>
@@ -92,7 +92,7 @@ function CodeBlock({ code, language }: CodeBlockProps) {
       {/* Code Toolbar */}
       <div className="flex items-center justify-between px-3.5 py-2 bg-[#111111] border-b border-[#1a1a1a] text-xs">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#111111] text-white border border-[#222222]">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#111111] text-neutral-300 border border-[#222222]">
             {language || 'text'}
           </span>
           <span className="text-[11px] font-mono text-neutral-500">
@@ -104,7 +104,7 @@ function CodeBlock({ code, language }: CodeBlockProps) {
             type="button"
             className={`px-2 py-0.5 rounded text-[10px] font-mono transition-colors ${
               wrap
-                ? 'bg-[#111111] text-white border border-[#222222]'
+                ? 'bg-[#111111] text-neutral-200 border border-[#222222]'
                 : 'text-neutral-500 hover:text-neutral-300 hover:bg-[#111111]'
             }`}
             onClick={() => setWrap(!wrap)}
@@ -151,8 +151,8 @@ function HeadingWithAnchor({ level, text = '' }: HeadingWithAnchorProps) {
   const Tag = (`h${level}` as 'h1' | 'h2' | 'h3' | 'h4');
 
   const levelStyles: Record<number, string> = {
-    1: 'text-2xl md:text-3xl font-extrabold text-white mt-8 mb-4 tracking-tight pb-2 border-b border-[#1a1a1a]',
-    2: 'text-xl md:text-2xl font-bold text-white mt-8 mb-3 tracking-tight pb-1.5 border-b border-[#1a1a1a]',
+    1: 'text-2xl md:text-3xl font-extrabold text-neutral-300 mt-8 mb-4 tracking-tight pb-2 border-b border-[#1a1a1a]',
+    2: 'text-xl md:text-2xl font-bold text-neutral-300 mt-8 mb-3 tracking-tight pb-1.5 border-b border-[#1a1a1a]',
     3: 'text-base md:text-lg font-semibold text-neutral-100 mt-6 mb-2',
     4: 'text-sm font-semibold text-neutral-200 mt-4 mb-2',
   };
@@ -164,8 +164,8 @@ function HeadingWithAnchor({ level, text = '' }: HeadingWithAnchorProps) {
       </span>
       <button
         type="button"
-        className={`opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono px-1.5 py-0.5 rounded text-neutral-500 hover:text-white hover:bg-[#111111] ${
-          copiedAnchor ? '!opacity-100 !text-white' : ''
+        className={`opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono px-1.5 py-0.5 rounded text-neutral-500 hover:text-neutral-200 hover:bg-[#111111] ${
+          copiedAnchor ? '!opacity-100 !text-neutral-200' : ''
         }`}
         onClick={copyAnchorLink}
         title={copiedAnchor ? 'Anchor link copied!' : 'Copy link to this section'}

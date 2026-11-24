@@ -22,7 +22,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">PROJECT API</span>
-          <h2 className="text-lg font-bold text-white">Registered API Endpoints</h2>
+          <h2 className="text-lg font-bold text-neutral-200">Registered API Endpoints</h2>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <div className="relative flex items-center min-w-[220px]">
@@ -36,12 +36,12 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter endpoint routes..."
               aria-label="Filter endpoint routes"
-              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0a0a0a] border border-[#222222] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
+              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0a0a0a] border border-[#222222] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-all font-mono"
             />
             {filter && (
               <button
                 type="button"
-                className="absolute right-2.5 text-xs text-neutral-400 hover:text-white p-1"
+                className="absolute right-2.5 text-xs text-neutral-400 hover:text-neutral-200 p-1"
                 onClick={() => setFilter('')}
                 title="Clear filter"
               >
@@ -54,7 +54,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
               href={`${beUrl}/api/docs`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-white hover:text-white hover:border-neutral-500 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 transition-all"
             >
               <span>Swagger OpenAPI</span>
               <span>↗</span>
@@ -66,7 +66,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
       {filteredEndpoints.length > 0 ? (
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-2">
-            <span className="text-xs font-bold text-white">HTTP REST Endpoints</span>
+            <span className="text-xs font-bold text-neutral-300">HTTP REST Endpoints</span>
             <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
               {filteredEndpoints.length} routes
             </span>

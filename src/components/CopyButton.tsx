@@ -41,16 +41,16 @@ export default function CopyButton({
   const variantStyles = {
     default: copied
       ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
-      : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-neutral-500',
+      : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-neutral-500',
     compact: copied
       ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
-      : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-neutral-500',
+      : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-neutral-500',
     'icon-only': copied
       ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
-      : 'bg-[#111111] border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-neutral-500',
+      : 'bg-[#111111] border-[#222222] text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-neutral-500',
     ghost: copied
       ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
-      : 'bg-transparent text-neutral-400 hover:text-white hover:bg-[#111111] border-transparent',
+      : 'bg-transparent text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] border-transparent',
   };
 
   const sizeStyles = {

@@ -15,19 +15,19 @@ export default function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111111] border border-[#222222] text-center gap-4 shadow-2xl" role="status">
-      <div className="w-12 h-12 rounded-xl bg-[#111111] border border-[#222222] flex items-center justify-center text-white" aria-hidden="true">
+      <div className="w-12 h-12 rounded-xl bg-[#111111] border border-[#222222] flex items-center justify-center text-neutral-300" aria-hidden="true">
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
           <line x1="8" y1="11" x2="14" y2="11" />
         </svg>
       </div>
-      <h3 className="text-sm font-bold text-white">{title}</h3>
+      <h3 className="text-sm font-bold text-neutral-200">{title}</h3>
       <p className="text-xs text-neutral-400 max-w-sm">{description}</p>
       {onAction && (
         <button
           type="button"
-          className="px-4 py-2 rounded-xl text-xs font-semibold bg-white text-black font-bold hover:bg-neutral-200 transition-all shadow-md shadow-blue-600/20"
+          className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm"
           onClick={onAction}
         >
           {actionLabel}

@@ -15,7 +15,7 @@ export const PACKAGE_DEFAULT_TAB = 'docs';
 
 export interface PackageMetaInfo {
   icon: string;
-  theme: 'violet' | 'emerald' | 'blue';
+  theme: 'violet' | 'emerald' | 'neutral';
   role: string;
   tags: string[];
   scope: string;
@@ -38,7 +38,7 @@ export const PACKAGE_METADATA_MAP: Record<string, PackageMetaInfo> = {
   },
   config: {
     icon: '⚙️',
-    theme: 'blue',
+    theme: 'neutral',
     role: 'Centralized Design Tokens, Port Topology & Tooling Presets',
     tags: ['Design Tokens', 'Port Registry', 'Tailwind Presets', 'TypeScript Presets', 'Python Tooling', 'Dual Runtime'],
     scope: 'Dual Runtime (Node.js + Python)',

@@ -10,9 +10,9 @@ function packageBadge(pkg: PackageData): { text: string; color: string } {
     return { text: 'PY', color: 'bg-[#111111] text-neutral-300 border-[#222222]' };
   }
   if (pkg.name?.includes('config')) {
-    return { text: 'CFG', color: 'bg-blue-500/10 text-white border-[#222222]' };
+    return { text: 'CFG', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
   }
-  return { text: 'TS', color: 'bg-blue-500/10 text-white border-blue-500/30' };
+  return { text: 'TS', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
 }
 
 function packageSidebarIcon(pkg: PackageData): string {
@@ -37,12 +37,12 @@ function projectSidebarIcon(proj: ProjectData): string {
 }
 
 function docGuideBadge(guide: GuideMeta): { text: string; color: string } {
-  if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-blue-500/10 text-white border-blue-500/25' };
-  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-[#111111] text-neutral-300 border-[#222222]' };
-  if (guide.category === 'design') return { text: 'PKG', color: 'bg-blue-500/10 text-white border-[#222222]' };
-  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-blue-500/10 text-white border-blue-500/30' };
-  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-blue-500/10 text-white border-blue-500/30' };
-  return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-[#111111] text-neutral-300 border-[#222222]' };
+  if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
+  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
+  if (guide.category === 'design') return { text: 'PKG', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
+  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
+  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
+  return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
 }
 
 function formatDocGuideTitle(guide: GuideMeta): string {
@@ -241,7 +241,7 @@ export default function Sidebar({
 
           <button
             type="button"
-            className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-[#111111] transition-colors"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] transition-colors"
             aria-label="Close sidebar (Esc or Ctrl+B)"
             title="Close sidebar (Esc or Ctrl+B)"
             onClick={onClose}
@@ -275,12 +275,12 @@ export default function Sidebar({
               onChange={(e) => setCommonFilter(e.target.value)}
               placeholder="Search apps, packages, docs..."
               aria-label="Filter monorepo items"
-              className="w-full bg-[#0a0a0a] border border-[#222222] rounded-lg pl-8 pr-7 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500/50 transition-colors"
+              className="w-full bg-[#0a0a0a] border border-[#222222] rounded-lg pl-8 pr-7 py-1.5 text-xs text-neutral-300 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-colors"
             />
             {commonFilter ? (
               <button
                 type="button"
-                className="absolute right-2 text-neutral-400 hover:text-white text-xs p-0.5"
+                className="absolute right-2 text-neutral-400 hover:text-neutral-200 text-xs p-0.5"
                 onClick={() => {
                   setCommonFilter('');
                   searchInputRef.current?.focus();
@@ -307,8 +307,8 @@ export default function Sidebar({
               aria-current={isActive('overview') ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
                 isActive('overview')
-                  ? 'bg-[#111111] text-white font-semibold border border-[#222222] shadow-sm'
-                  : 'text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                  ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222] shadow-sm'
+                  : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
               }`}
               onClick={() => onNavigate('overview')}
             >
@@ -326,8 +326,8 @@ export default function Sidebar({
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))
-                  ? 'bg-[#111111] text-white font-semibold border border-[#222222] shadow-sm'
-                  : 'text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                  ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222] shadow-sm'
+                  : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
               }`}
               onClick={() => onNavigate('scripts')}
             >
@@ -346,14 +346,14 @@ export default function Sidebar({
             <div className="flex flex-col gap-1 pt-1">
               <button
                 type="button"
-                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-white font-semibold bg-[#111111]"
+                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-neutral-200 font-semibold bg-[#111111]"
                 onClick={() => onNavigate('scripts')}
               >
                 <div className="flex items-center gap-2">
                   <span>⚡</span>
                   <span>Matching Scripts</span>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#111111] text-white border border-[#222222]">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#111111] text-neutral-300 border border-[#222222]">
                   {filteredScripts.length}
                 </span>
               </button>
@@ -362,7 +362,7 @@ export default function Sidebar({
                   <button
                     type="button"
                     key={s.id}
-                    className="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-[#111111] transition-colors text-left"
+                    className="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] transition-colors text-left"
                     onClick={() => onNavigate('scripts')}
                     title={`${s.name} - ${s.description}`}
                   >
@@ -390,8 +390,8 @@ export default function Sidebar({
                 aria-current={isActive('projects') ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   isActive('projects')
-                    ? 'bg-[#111111] text-white font-semibold border border-[#222222]'
-                    : 'text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                    ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
+                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('projects');
@@ -439,8 +439,8 @@ export default function Sidebar({
                       aria-current={isProjActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
                         isProjActive
-                          ? 'bg-[#111111] text-white font-semibold border border-[#222222]'
-                          : 'text-neutral-400 hover:text-white hover:bg-[#111111] border border-transparent'
+                          ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
+                          : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] border border-transparent'
                       }`}
                       onClick={() => onNavigate(`projects/${proj.id}`)}
                       title={proj.title}
@@ -452,7 +452,7 @@ export default function Sidebar({
                         <span className="truncate">{formatProjectTitle(proj.title)}</span>
                       </div>
                       {proj.frontendPort && (
-                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 bg-blue-500/10 text-white border border-blue-500/30">
+                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 bg-[#111111] text-neutral-400 border border-[#222222]">
                           :{proj.frontendPort}
                         </span>
                       )}
@@ -463,7 +463,7 @@ export default function Sidebar({
                 {filteredProjects.length > 50 && (
                   <button
                     type="button"
-                    className="text-left px-2 py-1 text-[11px] text-white hover:underline"
+                    className="text-left px-2 py-1 text-[11px] text-neutral-200 hover:underline"
                     onClick={() => onNavigate('projects')}
                   >
                     + View all {totalProjects.toLocaleString()} apps in dashboard →
@@ -481,8 +481,8 @@ export default function Sidebar({
                 aria-current={(isActive('packages') || isActive('packages-dashboard')) ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   (isActive('packages') || isActive('packages-dashboard'))
-                    ? 'bg-[#111111] text-white font-semibold border border-[#222222]'
-                    : 'text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                    ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
+                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('packages');
@@ -533,8 +533,8 @@ export default function Sidebar({
                       aria-current={isPkgActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
                         isPkgActive
-                          ? 'bg-[#111111] text-white font-semibold border border-[#222222]'
-                          : 'text-neutral-400 hover:text-white hover:bg-[#111111] border border-transparent'
+                          ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
+                          : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] border border-transparent'
                       }`}
                       onClick={() => onNavigate(`packages/${pkg.id}`)}
                       title={pkg.displayName || pkg.name}
@@ -555,7 +555,7 @@ export default function Sidebar({
                 {filteredPackages.length > 50 && (
                   <button
                     type="button"
-                    className="text-left px-2 py-1 text-[11px] text-white hover:underline"
+                    className="text-left px-2 py-1 text-[11px] text-neutral-200 hover:underline"
                     onClick={() => onNavigate('packages')}
                   >
                     + View all {packages.length.toLocaleString()} packages in dashboard →
@@ -573,8 +573,8 @@ export default function Sidebar({
                 aria-current={(isActive('docs') || isActive('docs-dashboard')) ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   (isActive('docs') || isActive('docs-dashboard'))
-                    ? 'bg-[#111111] text-white font-semibold border border-[#222222]'
-                    : 'text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                    ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
+                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('docs');
@@ -621,8 +621,8 @@ export default function Sidebar({
                       aria-current={isGuideActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
                         isGuideActive
-                          ? 'bg-[#111111] text-white font-semibold border border-[#222222]'
-                          : 'text-neutral-400 hover:text-white hover:bg-[#111111] border border-transparent'
+                          ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
+                          : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] border border-transparent'
                       }`}
                       onClick={() => onNavigate(targetRoute)}
                       title={guide.title}
@@ -643,7 +643,7 @@ export default function Sidebar({
                 {filteredGuides.length > 50 && (
                   <button
                     type="button"
-                    className="text-left px-2 py-1 text-[11px] text-white hover:underline"
+                    className="text-left px-2 py-1 text-[11px] text-neutral-200 hover:underline"
                     onClick={() => onNavigate('docs')}
                   >
                     + View all {DOCUMENTATION_GUIDES_REGISTRY.length.toLocaleString()} guides in hub →
@@ -660,7 +660,7 @@ export default function Sidebar({
               <p className="text-xs text-neutral-400">No matches found for &ldquo;{commonFilter}&rdquo;</p>
               <button
                 type="button"
-                className="mt-1 px-3 py-1 rounded-md text-xs font-semibold bg-[#111111] hover:bg-[#111111] text-white border border-[#222222] transition-colors"
+                className="mt-1 px-3 py-1 rounded-md text-xs font-semibold bg-[#111111] hover:bg-[#111111] text-neutral-200 border border-[#222222] transition-colors"
                 onClick={() => {
                   setCommonFilter('');
                   searchInputRef.current?.focus();

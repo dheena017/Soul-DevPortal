@@ -14,7 +14,7 @@ export default function ProjectFilesTab({ project, fileTree }: ProjectFilesTabPr
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl">
         <div className="flex flex-col gap-1">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">REPOSITORY STRUCTURE</span>
-          <h2 className="text-xl font-bold text-white tracking-tight">Project Directory &amp; Source Files</h2>
+          <h2 className="text-xl font-bold text-neutral-200 tracking-tight">Project Directory &amp; Source Files</h2>
           <p className="text-xs text-neutral-400">
             Interactive source code tree, categorized directories, file metadata tags, and quick-copy paths.
           </p>

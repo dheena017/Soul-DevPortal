@@ -112,7 +112,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <h3 className="text-base font-bold text-white group-hover:text-white transition-colors truncate">
+            <h3 className="text-base font-bold text-neutral-200 group-hover:text-neutral-200 transition-colors truncate">
               {formattedTitle}
             </h3>
             <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider bg-[#111111] text-neutral-400 border border-[#222222] shrink-0">
@@ -160,7 +160,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
               <span>{project.aiEngine && project.aiEngine !== 'N/A' ? '✨' : '🚀'}</span>
               <span>{project.aiEngine && project.aiEngine !== 'N/A' ? 'AI Engine' : 'Capability'}</span>
             </span>
-            <span className="text-white font-mono text-[11px] font-medium truncate">
+            <span className="text-neutral-300 font-mono text-[11px] font-medium truncate">
               {project.aiEngine && project.aiEngine !== 'N/A'
                 ? project.aiEngine.split('+')[0].trim()
                 : brand.primaryCapability}
@@ -191,7 +191,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
               href={`http://localhost:${project.frontendPort}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 transition-all"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 transition-all"
               title={`Launch on http://localhost:${project.frontendPort}`}
               onClick={(e) => e.stopPropagation()}
             >
@@ -202,7 +202,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
           {onSelectProject && (
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-semibold bg-white text-black font-bold hover:bg-neutral-200 transition-all shadow-md shadow-blue-600/20"
+              className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm"
               onClick={handleCardClick}
               title={`Open deep detail view for ${formattedTitle}`}
             >

@@ -73,7 +73,7 @@ export default function GuideDetail({
         <div className="flex items-center gap-2 text-xs text-neutral-400">
           <span>{guideMeta.breadcrumb}</span>
         </div>
-        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">{guideMeta.title}</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold text-neutral-200 tracking-tight">{guideMeta.title}</h1>
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">{guideMeta.description}</p>
 
         {/* Guides Switcher Bar */}
@@ -84,8 +84,8 @@ export default function GuideDetail({
             aria-selected={selectedGuide === 'design'}
             className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               selectedGuide === 'design'
-                ? 'bg-blue-500/15 text-white font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+                : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
             }`}
             onClick={() => handleSelect('design')}
           >
@@ -98,8 +98,8 @@ export default function GuideDetail({
               aria-selected={selectedGuide === 'ports'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'ports'
-                  ? 'bg-blue-500/15 text-white font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                  ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('ports')}
             >
@@ -113,8 +113,8 @@ export default function GuideDetail({
               aria-selected={selectedGuide === 'techstack'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'techstack'
-                  ? 'bg-blue-500/15 text-white font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                  ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('techstack')}
             >

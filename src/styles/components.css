@@ -59,7 +59,7 @@
 }
 
 .card-flat:hover {
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: #555555;
 }
 
 /* ── Interactive Button & Card Transitions ── */

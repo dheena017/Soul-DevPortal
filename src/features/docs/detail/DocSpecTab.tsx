@@ -18,7 +18,7 @@ export default function DocSpecTab({ headings, finalBlocks, guideMeta }: DocSpec
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#1a1a1a]">
           <div className="flex flex-col gap-0.5">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">DOCUMENTATION SPECIFICATION</span>
-            <h2 className="text-lg font-bold text-white">{guideMeta.title}</h2>
+            <h2 className="text-lg font-bold text-neutral-200">{guideMeta.title}</h2>
           </div>
           <span className="text-xs font-mono text-neutral-400 truncate">
             Soul-DevPortal-Docs/{guideMeta.filename}

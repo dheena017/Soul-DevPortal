@@ -26,7 +26,7 @@ export function getPythonInstallCommand(pkg: PackageData): string {
 export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) {
   const meta: PackageMetaInfo = PACKAGE_METADATA_MAP[pkg.id] || {
     icon: '📦',
-    theme: 'blue',
+    theme: 'neutral',
     role: 'Workspace Shared Library',
     tags: ['Shared Library', 'TypeScript'],
     scope: 'Monorepo Core',
@@ -52,7 +52,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
         <div className="flex flex-col gap-3.5" onClick={handleCardClick} style={{ cursor: onSelectPackage ? 'pointer' : 'default' }}>
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-blue-500/25 bg-blue-500/10 text-xl shadow-inner">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-[#222222] bg-[#111111] text-xl shadow-inner">
                 {meta.icon}
               </div>
 
@@ -76,10 +76,10 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
 
           {/* ── Title & Subtitle ── */}
           <div className="flex flex-col gap-1">
-            <h3 className="text-lg font-bold font-mono text-white group-hover:text-white transition-colors truncate">
+            <h3 className="text-lg font-bold font-mono text-neutral-200 group-hover:text-neutral-200 transition-colors truncate">
               @workspace/{pkg.id}
             </h3>
-            <span className="text-xs font-semibold text-white truncate">
+            <span className="text-xs font-semibold text-neutral-300 truncate">
               {meta.role}
             </span>
             <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]">
@@ -101,11 +101,11 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
         <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-[#0a0a0a] border border-[#222222] text-center font-mono text-xs">
           <div className="flex flex-col items-center">
             <span className="text-[10px] text-neutral-500 uppercase tracking-wider">TOTAL EXPORTS</span>
-            <strong className="text-xs font-bold text-white mt-0.5">{exportsCount} APIs</strong>
+            <strong className="text-xs font-bold text-neutral-200 mt-0.5">{exportsCount} APIs</strong>
           </div>
           <div className="flex flex-col items-center border-x border-[#222222]">
             <span className="text-[10px] text-neutral-500 uppercase tracking-wider">LICENSE</span>
-            <strong className="text-xs font-bold text-white mt-0.5">{pkg.license || 'MIT'}</strong>
+            <strong className="text-xs font-bold text-neutral-200 mt-0.5">{pkg.license || 'MIT'}</strong>
           </div>
           <div className="flex flex-col items-center">
             <span className="text-[10px] text-neutral-500 uppercase tracking-wider">PYTHON MODULE</span>
@@ -138,7 +138,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
         <div className="pt-2 border-t border-[#222222]">
           <button
             type="button"
-            className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-white text-black font-bold hover:bg-neutral-200 transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2"
+            className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-[#111111] border border-[#222222] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm flex items-center justify-center gap-2"
             onClick={handleCardClick}
             title={`Inspect @workspace/${pkg.id}`}
           >

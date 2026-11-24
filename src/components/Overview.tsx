@@ -77,10 +77,10 @@ export default function Overview({
             <div className="flex items-center gap-2 text-xs">
               <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-neutral-400 font-medium">Soul Workspace</span>
               <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
-              <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-white font-semibold shadow-sm">Overview Dashboard</strong>
+              <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-neutral-200 font-semibold shadow-sm">Overview Dashboard</strong>
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-xs font-semibold text-white select-none shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-xs font-semibold text-neutral-300 select-none shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
               <span>Live Ecosystem · 3 Pillars · {projects.length || 9} Apps · {packages.length || 3} Packages</span>
             </div>
@@ -89,7 +89,7 @@ export default function Overview({
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Soul Workspace Developer Portal</h1>
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-neutral-200">Soul Workspace Developer Portal</h1>
                 <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#111111] border border-[#222222] text-neutral-300">
                   Enterprise Monorepo
                 </span>
@@ -97,7 +97,7 @@ export default function Overview({
               <button
                 type="button"
                 onClick={() => onNavigate('portal')}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-white hover:text-white hover:border-[#3b82f6] transition-all shrink-0"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 transition-all shrink-0"
                 title="Open full Developer Portal Hub with GitHub links & live endpoints"
               >
                 <span>Developer Hub &amp; GitHub Links</span>
@@ -112,15 +112,15 @@ export default function Overview({
           {/* Dashboard Key Metrics Banner */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1">
             <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
-              <span className="text-lg font-extrabold text-white font-mono">3</span>
+              <span className="text-lg font-extrabold text-neutral-300 font-mono">3</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Core Pillars</span>
             </div>
             <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
-              <span className="text-lg font-extrabold text-white font-mono">{projects.length || 8}</span>
+              <span className="text-lg font-extrabold text-neutral-300 font-mono">{projects.length || 8}</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Integrated Apps</span>
             </div>
             <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-[#222222] transition-all">
-              <span className="text-lg font-extrabold text-white font-mono">{packages.length || 3}</span>
+              <span className="text-lg font-extrabold text-neutral-300 font-mono">{packages.length || 3}</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Shared Packages</span>
             </div>
             <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-[#222222] transition-all">
@@ -128,7 +128,7 @@ export default function Overview({
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Architecture Specs</span>
             </div>
             <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
-              <span className="text-lg font-extrabold text-white font-mono">0</span>
+              <span className="text-lg font-extrabold text-neutral-300 font-mono">0</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Port Collisions</span>
             </div>
           </div>
@@ -154,14 +154,14 @@ export default function Overview({
                   Pillar 1
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-white transition-colors">
+              <h3 className="text-lg font-bold text-neutral-200 group-hover:text-neutral-200 transition-colors">
                 Projects &amp; Applications
               </h3>
               <p className="text-xs text-neutral-400 leading-relaxed">
                 {projects.length || 8} fullstack applications, strict client &amp; server port allocations (:5173-:5180 / :8000-:8008), and SQLite datastores.
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-white pt-2 border-t border-[#1a1a1a]">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-300 pt-2 border-t border-[#1a1a1a]">
               <span>Explore {projects.length || 8} Apps</span>
               <span>→</span>
             </div>
@@ -183,14 +183,14 @@ export default function Overview({
                   Pillar 2
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-white transition-colors">
+              <h3 className="text-lg font-bold text-neutral-200 group-hover:text-neutral-200 transition-colors">
                 Shared Packages
               </h3>
               <p className="text-xs text-neutral-400 leading-relaxed">
                 Core reusable libraries: @workspace/logger (universal logging), @workspace/runner (CLI supervisor), and @workspace/config (design tokens).
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-white pt-2 border-t border-[#1a1a1a]">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-300 pt-2 border-t border-[#1a1a1a]">
               <span>Inspect {packages.length || 3} Packages</span>
               <span>→</span>
             </div>
@@ -212,7 +212,7 @@ export default function Overview({
                   Pillar 3
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-neutral-300 transition-colors">
+              <h3 className="text-lg font-bold text-neutral-200 group-hover:text-neutral-300 transition-colors">
                 Docs &amp; Specifications
               </h3>
               <p className="text-xs text-neutral-400 leading-relaxed">
@@ -238,18 +238,18 @@ export default function Overview({
           aria-selected={activeTab === 'apps'}
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'apps'
-              ? 'bg-[#111111] text-white font-bold border border-[#222222] shadow-sm'
-              : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+              ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+              : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('apps')}
         >
-          <svg className={`w-3.5 h-3.5 ${activeTab === 'apps' ? 'text-white drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'apps' ? 'text-neutral-200 ' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
             <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
           <span>Consumer Applications</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'apps' ? 'bg-blue-500/25 text-neutral-200 border border-blue-500/40 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{projects.length || 8}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'apps' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{projects.length || 8}</span>
         </button>
 
         <button
@@ -258,17 +258,17 @@ export default function Overview({
           aria-selected={activeTab === 'packages'}
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'packages'
-              ? 'bg-[#111111] text-white font-bold border border-[#222222] shadow-sm'
-              : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+              ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+              : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('packages')}
         >
-          <svg className={`w-3.5 h-3.5 ${activeTab === 'packages' ? 'text-white drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'packages' ? 'text-neutral-200 ' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="16.5" y1="9.4" x2="7.55" y2="4.24" />
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
           </svg>
           <span>Shared Packages</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'packages' ? 'bg-blue-500/25 text-neutral-200 border border-blue-500/40 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{packages.length || 3}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'packages' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{packages.length || 3}</span>
         </button>
 
         <button
@@ -277,17 +277,17 @@ export default function Overview({
           aria-selected={activeTab === 'docs'}
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'docs'
-              ? 'bg-[#111111] text-white font-bold border border-[#222222] shadow-sm'
-              : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+              ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+              : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('docs')}
         >
-          <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-white drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-neutral-200 ' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
           </svg>
           <span>Architecture Specifications</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'docs' ? 'bg-blue-500/25 text-neutral-200 border border-blue-500/40 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>5</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'docs' ? 'bg-[#111111] text-neutral-200 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>5</span>
         </button>
       </div>
 
@@ -297,11 +297,11 @@ export default function Overview({
           <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 1: APPLICATIONS</span>
-              <h2 className="text-lg font-bold text-white">Integrated Consumer Applications</h2>
+              <h2 className="text-lg font-bold text-neutral-200">Integrated Consumer Applications</h2>
             </div>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 transition-all"
               onClick={() => onNavigate('projects')}
             >
               <span>View all {projects.length} apps &amp; ports</span>
@@ -350,7 +350,7 @@ export default function Overview({
                           )}
                         </div>
                         <div className="flex flex-col min-w-0">
-                          <strong className="text-sm font-bold text-white group-hover:text-white transition-colors truncate">
+                          <strong className="text-sm font-bold text-neutral-200 group-hover:text-neutral-200 transition-colors truncate">
                             {displayTitle}
                           </strong>
                           <div className="flex items-center gap-1.5">
@@ -362,12 +362,12 @@ export default function Overview({
 
                       <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-[11px]">
                         {p.frontendPort && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/25 text-white font-bold">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#111111] border border-[#222222] text-neutral-300 font-bold">
                             FE :{p.frontendPort}
                           </span>
                         )}
                         {p.backendPort && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-white font-bold">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#111111] border border-[#222222] text-neutral-300 font-bold">
                             BE :{p.backendPort}
                           </span>
                         )}
@@ -384,7 +384,7 @@ export default function Overview({
                         <span className="truncate">{p.dbInfo || 'SQLite datastore'}</span>
                       </div>
                       {hasAi && (
-                        <div className="flex items-center gap-2 text-white font-medium">
+                        <div className="flex items-center gap-2 text-neutral-300 font-medium">
                           <span>✨</span>
                           <span className="truncate">{aiSummary}</span>
                         </div>
@@ -392,7 +392,7 @@ export default function Overview({
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-[#1a1a1a] text-xs font-semibold text-neutral-400 group-hover:text-white transition-colors">
+                  <div className="flex items-center justify-between pt-2 border-t border-[#1a1a1a] text-xs font-semibold text-neutral-400 group-hover:text-neutral-200 transition-colors">
                     <span>Inspect Application</span>
                     <span>→</span>
                   </div>
@@ -409,7 +409,7 @@ export default function Overview({
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 2: SHARED LIBRARIES</span>
-              <h2 className="text-lg font-bold text-white">Core Monorepo Packages</h2>
+              <h2 className="text-lg font-bold text-neutral-200">Core Monorepo Packages</h2>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -422,7 +422,7 @@ export default function Overview({
                       key={eco}
                       type="button"
                       className={`px-3 py-1 rounded-lg font-semibold transition-all ${
-                        isActive ? 'bg-[#111111] text-white shadow-sm border border-[#222222]' : 'text-neutral-400 hover:text-white border border-transparent'
+                        isActive ? 'bg-[#111111] text-neutral-200 shadow-sm border border-[#222222]' : 'text-neutral-400 hover:text-neutral-200 border border-transparent'
                       }`}
                       onClick={() => setEcosystemFilter(eco)}
                     >
@@ -448,7 +448,7 @@ export default function Overview({
             {filteredPackages.map((pkg) => {
               const meta = PACKAGE_METADATA_MAP[pkg.id] || {
                 icon: '📦',
-                theme: 'blue' as const,
+                theme: 'neutral' as const,
                 role: 'Workspace Shared Library',
                 tags: ['Shared Library', 'TypeScript'],
                 scope: 'Monorepo Core',
@@ -465,11 +465,11 @@ export default function Overview({
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-blue-500/25 bg-blue-500/10 text-xl">
+                        <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-[#222222] bg-[#111111] text-xl">
                           {meta.icon}
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-xs font-mono font-bold text-white">v{pkg.version}</span>
+                          <span className="text-xs font-mono font-bold text-neutral-300">v{pkg.version}</span>
                           <span className="text-[10px] font-mono text-neutral-500">packages/{pkg.id}</span>
                         </div>
                       </div>
@@ -489,10 +489,10 @@ export default function Overview({
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <h3 className="text-base font-bold font-mono text-white group-hover:text-white transition-colors">
+                      <h3 className="text-base font-bold font-mono text-neutral-200 group-hover:text-neutral-200 transition-colors">
                         {pkg.displayName || pkg.name}
                       </h3>
-                      <span className="text-xs text-white font-semibold">{meta.role}</span>
+                      <span className="text-xs text-neutral-300 font-semibold">{meta.role}</span>
                       {pkg.description && (
                         <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]">{pkg.description}</p>
                       )}
@@ -501,11 +501,11 @@ export default function Overview({
                     <div className="grid grid-cols-3 gap-2 p-2 rounded-xl bg-[#0a0a0a] border border-[#222222] text-center font-mono text-xs">
                       <div>
                         <span className="text-[10px] text-neutral-500 uppercase">EXPORTS</span>
-                        <strong className="block text-xs font-bold text-white mt-0.5">{exportsCount} APIs</strong>
+                        <strong className="block text-xs font-bold text-neutral-200 mt-0.5">{exportsCount} APIs</strong>
                       </div>
                       <div className="border-x border-[#1a1a1a]">
                         <span className="text-[10px] text-neutral-500 uppercase">LICENSE</span>
-                        <strong className="block text-xs font-bold text-white mt-0.5">{pkg.license || 'MIT'}</strong>
+                        <strong className="block text-xs font-bold text-neutral-200 mt-0.5">{pkg.license || 'MIT'}</strong>
                       </div>
                       <div>
                         <span className="text-[10px] text-neutral-500 uppercase">PYTHON</span>
@@ -522,7 +522,7 @@ export default function Overview({
                   <div className="pt-2 border-t border-[#1a1a1a]">
                     <button
                       type="button"
-                      className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-white text-black font-bold hover:bg-neutral-200 transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2"
+                      className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-[#111111] border border-[#222222] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm flex items-center justify-center gap-2"
                       onClick={() => onNavigate(`packages/${pkg.id}`)}
                     >
                       <span>Inspect Package API</span>
@@ -542,11 +542,11 @@ export default function Overview({
           <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 3: SPECIFICATIONS</span>
-              <h2 className="text-lg font-bold text-white">Official Architecture Documentation</h2>
+              <h2 className="text-lg font-bold text-neutral-200">Official Architecture Documentation</h2>
             </div>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 transition-all"
               onClick={() => onNavigate('docs')}
             >
               <span>Open Docs Dashboard</span>
@@ -571,12 +571,12 @@ export default function Overview({
                       {guide.badge}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-white group-hover:text-white transition-colors">
+                  <h3 className="text-base font-bold text-neutral-200 group-hover:text-neutral-200 transition-colors">
                     {guide.title}
                   </h3>
                   <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed">{guide.description}</p>
                 </div>
-                <div className="flex items-center gap-1 text-xs font-bold text-white pt-2 border-t border-[#1a1a1a]">
+                <div className="flex items-center gap-1 text-xs font-bold text-neutral-300 pt-2 border-t border-[#1a1a1a]">
                   <span>Read Specification</span>
                   <span>→</span>
                 </div>
@@ -589,13 +589,13 @@ export default function Overview({
       {/* ── Monorepo Command Runners Quick Banner ── */}
       <section className="w-full p-6 rounded-2xl bg-gradient-to-r bg-[#111111] border border-[#222222] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-[#222222] flex items-center justify-center text-2xl shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-[#111111] border border-[#222222] flex items-center justify-center text-2xl shrink-0">
             ⚡
           </div>
           <div className="flex flex-col gap-1.5">
             <div className="flex flex-wrap items-center gap-2.5">
-              <h3 className="text-lg font-bold text-white">15 Monorepo Automation Scripts &amp; Command Runners</h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-500/15 border border-[#222222] text-white">
+              <h3 className="text-lg font-bold text-neutral-200">15 Monorepo Automation Scripts &amp; Command Runners</h3>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#111111] border border-[#222222] text-neutral-300">
                 Python FastAPI · Vite · TS Gates
               </span>
             </div>
@@ -608,7 +608,7 @@ export default function Overview({
 
         <button
           type="button"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-white text-black font-bold hover:bg-neutral-200 transition-all shadow-lg shadow-blue-600/25 shrink-0"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#111111] border border-[#222222] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm shrink-0"
           onClick={() => onNavigate('scripts')}
         >
           <span>Open Scripts &amp; Runners Center</span>

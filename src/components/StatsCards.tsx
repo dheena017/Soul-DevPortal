@@ -101,7 +101,7 @@ export default function StatsCards({ stats, packagesCount = 3, projectsCount = 8
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-xs text-neutral-400 font-medium truncate">{item.label}</span>
-            <strong className="text-xl md:text-2xl font-extrabold text-white font-mono mt-0.5 tracking-tight group-hover:text-white transition-colors">
+            <strong className="text-xl md:text-2xl font-extrabold text-neutral-200 font-mono mt-0.5 tracking-tight group-hover:text-neutral-200 transition-colors">
               {item.value}
             </strong>
             <span className="text-[11px] text-neutral-500 font-mono truncate">{item.sub}</span>

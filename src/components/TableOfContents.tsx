@@ -149,7 +149,7 @@ export default function TableOfContents({
       {/* Card Header using Website Theme Palette */}
       <div className="flex items-center justify-between pb-2.5 border-b border-[#1a1a1a]">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-md bg-[#111111] border border-[#222222] flex items-center justify-center text-white shadow-sm">
+          <div className="w-5 h-5 rounded-md bg-[#111111] border border-[#222222] flex items-center justify-center text-neutral-300 shadow-sm">
             <svg
               width="12"
               height="12"
@@ -202,15 +202,15 @@ export default function TableOfContents({
                 isH3 ? 'pl-4' : ''
               } ${
                 isActive
-                  ? 'bg-[#111111] text-white font-semibold border border-blue-500/40 shadow-[0_2px_10px_rgba(59,130,246,0.15)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#111111] border border-transparent hover:border-[#222222]'
+                  ? 'bg-[#111111] text-neutral-300 font-semibold border border-[#222222] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] border border-transparent hover:border-[#222222]'
               }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
             >
               <span
                 className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
                   isActive
-                    ? 'bg-blue-400 shadow-[0_0_6px_rgba(96,165,250,0.8)]'
+                    ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]'
                     : 'bg-neutral-600'
                 }`}
                 aria-hidden="true"
@@ -219,7 +219,7 @@ export default function TableOfContents({
                 <span
                   className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
                     isActive
-                      ? 'bg-blue-500/20 text-neutral-200 border border-blue-500/40 font-bold'
+                      ? 'bg-[#111111] text-neutral-300 border border-[#222222] font-bold'
                       : 'bg-[#111111] border border-[#222222] text-neutral-400'
                   }`}
                 >

@@ -40,7 +40,7 @@ export default function ProjectHeader({
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
               onClick={onBack}
               title="Back to Soul Workspace"
             >
@@ -52,7 +52,7 @@ export default function ProjectHeader({
           ) : (
             <a
               href="#overview"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
               title="Back to Soul Workspace"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -63,10 +63,10 @@ export default function ProjectHeader({
           )}
           <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-neutral-400 font-medium">Soul Workspace</span>
           <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
-          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-white font-semibold shadow-sm">Pillar 1: Projects</strong>
+          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-neutral-200 font-semibold shadow-sm">Pillar 1: Projects</strong>
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-xs font-semibold text-white select-none shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-xs font-semibold text-neutral-300 select-none shadow-sm">
           <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
           <span>{totalCount} Applications Active</span>
         </div>
@@ -74,7 +74,7 @@ export default function ProjectHeader({
 
       {/* Hero Title & Identity Row */}
       <div className="flex items-start sm:items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-[var(--site-primary)] border border-blue-500/30 flex items-center justify-center text-neutral-400 shrink-0 shadow-lg shadow-blue-500/5">
+        <div className="w-12 h-12 rounded-xl bg-[var(--site-primary)] border border-[#222222] flex items-center justify-center text-neutral-400 shrink-0 shadow-lg shadow-sm">
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
@@ -83,7 +83,7 @@ export default function ProjectHeader({
         </div>
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2.5">
-            <h1 className="text-2xl font-extrabold tracking-tight text-white">Projects &amp; Applications Dashboard</h1>
+            <h1 className="text-2xl font-extrabold tracking-tight text-neutral-200">Projects &amp; Applications Dashboard</h1>
             <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#111111] border border-[#222222] text-neutral-300">
               Pillar 1: Monorepo Apps
             </span>
@@ -106,7 +106,7 @@ export default function ProjectHeader({
             </svg>
             <span>Total Apps</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{totalCount} Active</strong>
+          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{totalCount} Active</strong>
         </div>
 
         <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
@@ -119,7 +119,7 @@ export default function ProjectHeader({
             </svg>
             <span>Client-Server</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{fullstackCount} Fullstack</strong>
+          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{fullstackCount} Fullstack</strong>
         </div>
 
         <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
@@ -131,7 +131,7 @@ export default function ProjectHeader({
             </svg>
             <span>Standalone Web</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{standaloneCount} Apps</strong>
+          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{standaloneCount} Apps</strong>
         </div>
 
         <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
@@ -141,7 +141,7 @@ export default function ProjectHeader({
             </svg>
             <span>Port Conflicts</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{collisionsCount} Conflicts</strong>
+          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{collisionsCount} Conflicts</strong>
         </div>
 
         <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
@@ -153,7 +153,7 @@ export default function ProjectHeader({
             </svg>
             <span>SQLite Isolation</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{sqliteIsolationPercent}</strong>
+          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{sqliteIsolationPercent}</strong>
         </div>
       </div>
 
@@ -171,12 +171,12 @@ export default function ProjectHeader({
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder={`Search ${totalCount} applications by name, port, framework, AI engine... (Press '/' to focus)`}
             aria-label="Filter applications"
-            className="w-full h-10 pl-9 pr-9 rounded-xl bg-[#111111] border border-[#222222] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono"
+            className="w-full h-10 pl-9 pr-9 rounded-xl bg-[#111111] border border-[#222222] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500/30 transition-all font-mono"
           />
           {query ? (
             <button
               type="button"
-              className="absolute right-3 text-xs text-neutral-400 hover:text-white p-1"
+              className="absolute right-3 text-xs text-neutral-400 hover:text-neutral-200 p-1"
               onClick={() => onQueryChange('')}
               aria-label="Clear search"
               title="Clear search"
@@ -204,13 +204,13 @@ export default function ProjectHeader({
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all ${
                   isActive
-                    ? 'bg-[#111111] text-white font-bold border border-[#222222] shadow-sm'
-                    : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                    ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+                    : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
                 }`}
                 onClick={() => onFilterFrameworkChange(fw)}
               >
                 <span>{fw === 'all' ? 'All Frameworks' : fw}</span>
-                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-[#111111] text-white border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-[#111111] text-neutral-300 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
                   {count}
                 </span>
               </button>

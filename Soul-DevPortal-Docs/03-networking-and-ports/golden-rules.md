@@ -28,7 +28,7 @@ The Soul Monorepo operates a distributed constellation of micro-applications run
 - No application may bind to arbitrary, random, or undocumented ports outside its assigned block.
 
 ### 2. Immutable Project Port Mapping
-- Every project has an assigned, immutable client and server port pair declared in `04-networking-and-ports/port-allocation-matrix.md` and `metadata.json`.
+- Every project has an assigned, immutable client and server port pair declared in [port-allocation-matrix.md](port-allocation-matrix.md) and `metadata.json`.
 - Developers must never alter project ports on a local whim. If port reconfiguration is required, it must be officially updated in the central matrix and `.env.example` templates.
 
 ### 3. Standard Reverse Proxy Contract (`/api`)

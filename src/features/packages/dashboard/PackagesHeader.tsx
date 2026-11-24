@@ -31,7 +31,7 @@ export default function PackagesHeader({
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
               onClick={onBack}
               title="Back to Soul Workspace"
             >
@@ -43,7 +43,7 @@ export default function PackagesHeader({
           ) : (
             <a
               href="#overview"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
               title="Back to Soul Workspace"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -54,10 +54,10 @@ export default function PackagesHeader({
           )}
           <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-neutral-400 font-medium">Soul Workspace</span>
           <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
-          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-white font-semibold shadow-sm">Pillar 2: Packages Dashboard</strong>
+          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-neutral-200 font-semibold shadow-sm">Pillar 2: Packages Dashboard</strong>
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-xs font-semibold text-white select-none shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-xs font-semibold text-neutral-300 select-none shadow-sm">
           <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
           <span>{packagesCount} Shared Libraries Active</span>
         </div>
@@ -65,7 +65,7 @@ export default function PackagesHeader({
 
       {/* ── Hero Title & Identity Row ── */}
       <div className="flex items-start sm:items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-neutral-400 shrink-0 shadow-lg shadow-blue-500/5">
+        <div className="w-12 h-12 rounded-xl bg-[#111111] border border-[#222222] flex items-center justify-center text-neutral-400 shrink-0 shadow-lg shadow-sm">
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
             <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
@@ -74,7 +74,7 @@ export default function PackagesHeader({
         </div>
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2.5">
-            <h1 className="text-2xl font-extrabold tracking-tight text-white">Shared Packages Dashboard</h1>
+            <h1 className="text-2xl font-extrabold tracking-tight text-neutral-200">Shared Packages Dashboard</h1>
             <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#111111] border border-[#222222] text-neutral-300">
               Pillar 2: Shared Libraries
             </span>
@@ -94,7 +94,7 @@ export default function PackagesHeader({
             </svg>
             <span>Shared Libraries</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{packagesCount} Active</strong>
+          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{packagesCount} Active</strong>
         </div>
 
         <div className="flex flex-col p-3.5 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
@@ -104,7 +104,7 @@ export default function PackagesHeader({
             </svg>
             <span>Runtimes</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">Dual (TS + Python)</strong>
+          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">Dual (TS + Python)</strong>
         </div>
 
         <div className="flex flex-col p-3.5 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
@@ -115,7 +115,7 @@ export default function PackagesHeader({
             </svg>
             <span>Exported APIs</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">59+ Symbols</strong>
+          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">59+ Symbols</strong>
         </div>
 
         <div className="flex flex-col p-3.5 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
@@ -125,7 +125,7 @@ export default function PackagesHeader({
             </svg>
             <span>Monorepo Adoption</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">100% Core</strong>
+          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">100% Core</strong>
         </div>
       </div>
 
@@ -143,12 +143,12 @@ export default function PackagesHeader({
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder="Search packages by API, symbol, module, or tags... (Press '/' to focus)"
             aria-label="Filter packages"
-            className="w-full h-10 pl-9 pr-9 rounded-xl bg-[#111111] border border-[#222222] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono"
+            className="w-full h-10 pl-9 pr-9 rounded-xl bg-[#111111] border border-[#222222] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500/30 transition-all font-mono"
           />
           {query ? (
             <button
               type="button"
-              className="absolute right-3 text-xs text-neutral-400 hover:text-white p-1"
+              className="absolute right-3 text-xs text-neutral-400 hover:text-neutral-200 p-1"
               onClick={() => onQueryChange('')}
               aria-label="Clear search"
               title="Clear search"
@@ -170,13 +170,13 @@ export default function PackagesHeader({
               aria-selected={ecosystemFilter === 'all'}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all ${
                 ecosystemFilter === 'all'
-                  ? 'bg-[#111111] text-white font-bold border border-[#222222] shadow-sm'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                  ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
               }`}
               onClick={() => onEcosystemFilterChange('all')}
             >
               <span>All</span>
-              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${ecosystemFilter === 'all' ? 'bg-[#111111] text-white border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${ecosystemFilter === 'all' ? 'bg-[#111111] text-neutral-300 border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>
                 {packagesCount}
               </span>
             </button>
@@ -186,8 +186,8 @@ export default function PackagesHeader({
               aria-selected={ecosystemFilter === 'npm'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 ecosystemFilter === 'npm'
-                  ? 'bg-[#111111] text-white font-bold border border-[#222222] shadow-sm'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                  ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
               }`}
               onClick={() => onEcosystemFilterChange('npm')}
             >
@@ -199,8 +199,8 @@ export default function PackagesHeader({
               aria-selected={ecosystemFilter === 'python'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 ecosystemFilter === 'python'
-                  ? 'bg-[#111111] text-white font-bold border border-[#222222] shadow-sm'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                  ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
               }`}
               onClick={() => onEcosystemFilterChange('python')}
             >
@@ -212,8 +212,8 @@ export default function PackagesHeader({
               aria-selected={ecosystemFilter === 'config'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 ecosystemFilter === 'config'
-                  ? 'bg-[#111111] text-white font-bold border border-[#222222] shadow-sm'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
+                  ? 'bg-[#111111] text-neutral-200 font-bold border border-[#222222] shadow-sm'
+                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
               }`}
               onClick={() => onEcosystemFilterChange('config')}
             >
@@ -227,7 +227,7 @@ export default function PackagesHeader({
               id="package-sort-select"
               value={sortBy}
               onChange={(e) => onSortByChange(e.target.value as any)}
-              className="h-9 px-3 rounded-xl bg-[#111111] border border-[#222222] text-xs text-neutral-200 focus:outline-none focus:border-blue-500 font-medium"
+              className="h-9 px-3 rounded-xl bg-[#111111] border border-[#222222] text-xs text-neutral-200 focus:outline-none focus:border-neutral-500 font-medium"
             >
               <option value="name">Name (A-Z)</option>
               <option value="exports">Total Exports</option>
