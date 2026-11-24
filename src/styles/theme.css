@@ -9,22 +9,22 @@
 
 :root {
   /* ── Core Dark Palette ── */
-  --page-bg: #0a0a0a;
-  --surface: #111111;
-  --surface-raised: #111111;
-  --surface-hover: #111111;
-  --surface-active: #111111;
+  --page-bg: #0d1117;
+  --surface: #161b22;
+  --surface-raised: #21262d;
+  --surface-hover: #30363d;
+  --surface-active: #21262d;
 
   /* ── Borders ── */
-  --border: #222222;
-  --border-subtle: #1a1a1a;
-  --border-muted: #1a1a1a;
-  --border-active: #737373;
+  --border: #30363d;
+  --border-subtle: #21262d;
+  --border-muted: #21262d;
+  --border-active: #f0f6fc;
 
   /* ── Typography Colors ── */
-  --text-primary: #ededed;
-  --text-secondary: #a3a3a3;
-  --text-muted: #737373;
+  --text-primary: #f0f6fc;
+  --text-secondary: #c9d1d9;
+  --text-muted: #8b949e;
 
   /* ── Accent & Pillar Colors ── */
   --accent-sky: #ffffff;
@@ -85,16 +85,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #0d1117;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #222222;
+  background: #30363d;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555555;
+  background: #8b949e;
 }
 
 /* ── Custom Scrollbar Utility ── */
@@ -107,10 +107,10 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #222222;
+  background: #30363d;
   border-radius: 9999px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555555;
+  background: #8b949e;
 }

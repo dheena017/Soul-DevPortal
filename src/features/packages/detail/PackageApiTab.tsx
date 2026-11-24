@@ -43,8 +43,8 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
   }, [scripts, needle]);
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#161b22] border border-[#30363d] shadow-2xl flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#21262d]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">PACKAGE API</span>
           <h2 className="text-lg font-bold text-neutral-200">Exports &amp; Symbols Catalog</h2>
@@ -60,7 +60,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Filter export paths or symbol names..."
             aria-label="Filter export symbols"
-            className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#111111] border border-[#222222] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-all font-mono"
+            className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#161b22] border border-[#30363d] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-all font-mono"
           />
           {filter && (
             <button
@@ -79,12 +79,12 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] border border-[#30363d] text-neutral-300">
                 NPM
               </span>
               <h3 className="text-xs font-bold text-neutral-200">npm import paths</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#161b22] border border-[#30363d] text-neutral-300">
               {filteredNpm.length} paths
             </span>
           </div>
@@ -93,10 +93,10 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             {filteredNpm.map(({ exportPath, importPath }) => (
               <div
                 key={exportPath}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] transition-all gap-3"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-neutral-500 hover:bg-[#161b22] transition-all gap-3"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-400">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] border border-[#30363d] text-neutral-400">
                     import
                   </span>
                   <code className="text-xs font-mono text-neutral-300 font-bold truncate">{importPath}</code>
@@ -115,12 +115,12 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] border border-[#30363d] text-neutral-300">
                 TS
               </span>
               <h3 className="text-xs font-bold text-neutral-200">TypeScript Exported Symbols</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#161b22] border border-[#30363d] text-neutral-300">
               {filteredTs.length} symbols
             </span>
           </div>
@@ -129,7 +129,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             {filteredTs.map((name) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-2.5 rounded-lg bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] transition-all gap-2"
+                className="flex items-center justify-between p-2.5 rounded-lg bg-[#161b22] border border-[#30363d] hover:border-neutral-500 hover:bg-[#161b22] transition-all gap-2"
                 title={`TypeScript symbol: ${name}`}
               >
                 <code className="text-xs font-mono text-neutral-200 truncate">{name}</code>
@@ -144,12 +144,12 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] border border-[#30363d] text-neutral-300">
                 PY
               </span>
               <h3 className="text-xs font-bold text-neutral-200">Python Public API Symbols</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#161b22] border border-[#30363d] text-neutral-300">
               {filteredPy.length} symbols
             </span>
           </div>
@@ -158,7 +158,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             {filteredPy.map((name) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-2.5 rounded-lg bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] transition-all gap-2"
+                className="flex items-center justify-between p-2.5 rounded-lg bg-[#161b22] border border-[#30363d] hover:border-neutral-500 hover:bg-[#161b22] transition-all gap-2"
                 title={`from ${pkg.pythonModule || pkg.pythonName} import ${name}`}
               >
                 <div className="flex items-center gap-1.5 min-w-0">
@@ -180,12 +180,12 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] border border-[#30363d] text-neutral-300">
                 RUN
               </span>
               <h3 className="text-xs font-bold text-neutral-200">Package Scripts</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#161b22] border border-[#30363d] text-neutral-300">
               {filteredScripts.length} scripts
             </span>
           </div>
@@ -194,7 +194,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             {filteredScripts.map(([name, command]) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] transition-all gap-3"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-neutral-500 hover:bg-[#161b22] transition-all gap-3"
               >
                 <div className="flex flex-col min-w-0">
                   <code className="text-xs font-mono font-bold text-neutral-300 truncate">{name}</code>

@@ -7,12 +7,12 @@ import { WORKSPACE_SCRIPTS_REGISTRY } from '../features/scripts/scriptsConstants
 
 function packageBadge(pkg: PackageData): { text: string; color: string } {
   if (pkg.pythonModule) {
-    return { text: 'PY', color: 'bg-[#111111] text-neutral-300 border-[#222222]' };
+    return { text: 'PY', color: 'bg-[#161b22] text-neutral-300 border-[#30363d]' };
   }
   if (pkg.name?.includes('config')) {
-    return { text: 'CFG', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
+    return { text: 'CFG', color: 'bg-[#161b22] text-neutral-400 border border-[#30363d]' };
   }
-  return { text: 'TS', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
+  return { text: 'TS', color: 'bg-[#161b22] text-neutral-400 border border-[#30363d]' };
 }
 
 function packageSidebarIcon(pkg: PackageData): string {
@@ -37,12 +37,12 @@ function projectSidebarIcon(proj: ProjectData): string {
 }
 
 function docGuideBadge(guide: GuideMeta): { text: string; color: string } {
-  if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
-  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
-  if (guide.category === 'design') return { text: 'PKG', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
-  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
-  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
-  return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-[#111111] text-neutral-400 border border-[#222222]' };
+  if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-[#161b22] text-neutral-400 border border-[#30363d]' };
+  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-[#161b22] text-neutral-400 border border-[#30363d]' };
+  if (guide.category === 'design') return { text: 'PKG', color: 'bg-[#161b22] text-neutral-400 border border-[#30363d]' };
+  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-[#161b22] text-neutral-400 border border-[#30363d]' };
+  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-[#161b22] text-neutral-400 border border-[#30363d]' };
+  return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-[#161b22] text-neutral-400 border border-[#30363d]' };
 }
 
 function formatDocGuideTitle(guide: GuideMeta): string {
@@ -220,13 +220,13 @@ export default function Sidebar({
   return (
     <>
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 sm:w-80 h-screen h-[100dvh] bg-[#111111] border-r border-[#222222] flex flex-col justify-between shadow-2xl shadow-black/80 transition-transform duration-300 ease-out ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 sm:w-80 h-screen h-[100dvh] bg-[#161b22] border-r border-[#30363d] flex flex-col justify-between shadow-2xl shadow-black/80 transition-transform duration-300 ease-out ${
           menuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-label="Monorepo navigation sidebar"
       >
         {/* ── Brand Header ── */}
-        <div className="h-14 px-4 flex items-center justify-between border-b border-[#1a1a1a] shrink-0">
+        <div className="h-14 px-4 flex items-center justify-between border-b border-[#21262d] shrink-0">
           <a
             className="flex items-center gap-2 group"
             href="#overview"
@@ -241,7 +241,7 @@ export default function Sidebar({
 
           <button
             type="button"
-            className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] transition-colors"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-200 hover:bg-[#161b22] transition-colors"
             aria-label="Close sidebar (Esc or Ctrl+B)"
             title="Close sidebar (Esc or Ctrl+B)"
             onClick={onClose}
@@ -253,7 +253,7 @@ export default function Sidebar({
         </div>
 
         {/* ── Unified Workspace Search ── */}
-        <div className="px-3 py-2.5 border-b border-[#1a1a1a] shrink-0">
+        <div className="px-3 py-2.5 border-b border-[#21262d] shrink-0">
           <div className="relative flex items-center">
             <svg
               className="absolute left-2.5 w-3.5 h-3.5 text-neutral-500 pointer-events-none"
@@ -275,7 +275,7 @@ export default function Sidebar({
               onChange={(e) => setCommonFilter(e.target.value)}
               placeholder="Search apps, packages, docs..."
               aria-label="Filter monorepo items"
-              className="w-full bg-[#0a0a0a] border border-[#222222] rounded-lg pl-8 pr-7 py-1.5 text-xs text-neutral-300 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-colors"
+              className="w-full bg-[#0d1117] border border-[#30363d] rounded-lg pl-8 pr-7 py-1.5 text-xs text-neutral-300 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-colors"
             />
             {commonFilter ? (
               <button
@@ -291,7 +291,7 @@ export default function Sidebar({
                 ✕
               </button>
             ) : (
-              <kbd className="absolute right-2 px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#111111] border border-[#222222] text-neutral-500 pointer-events-none" title="Press / to search">
+              <kbd className="absolute right-2 px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#161b22] border border-[#30363d] text-neutral-500 pointer-events-none" title="Press / to search">
                 /
               </kbd>
             )}
@@ -307,8 +307,8 @@ export default function Sidebar({
               aria-current={isActive('overview') ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
                 isActive('overview')
-                  ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222] shadow-sm'
-                  : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                  ? 'bg-[#161b22] text-neutral-200 font-semibold border border-[#30363d] shadow-sm'
+                  : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#161b22] hover:border-[#30363d] border border-transparent'
               }`}
               onClick={() => onNavigate('overview')}
             >
@@ -316,7 +316,7 @@ export default function Sidebar({
                 <span className="text-sm" aria-hidden="true">🏠</span>
                 <span className="truncate">Workspace Overview</span>
               </div>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] text-neutral-400 border border-[#222222]">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] text-neutral-400 border border-[#30363d]">
                 Hub
               </span>
             </button>
@@ -326,8 +326,8 @@ export default function Sidebar({
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))
-                  ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222] shadow-sm'
-                  : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                  ? 'bg-[#161b22] text-neutral-200 font-semibold border border-[#30363d] shadow-sm'
+                  : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#161b22] hover:border-[#30363d] border border-transparent'
               }`}
               onClick={() => onNavigate('scripts')}
             >
@@ -335,7 +335,7 @@ export default function Sidebar({
                 <span className="text-sm" aria-hidden="true">⚡</span>
                 <span className="truncate">Scripts &amp; Runners</span>
               </div>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] text-neutral-400 border border-[#222222]">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] text-neutral-400 border border-[#30363d]">
                 15
               </span>
             </button>
@@ -346,14 +346,14 @@ export default function Sidebar({
             <div className="flex flex-col gap-1 pt-1">
               <button
                 type="button"
-                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-neutral-200 font-semibold bg-[#111111]"
+                className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-neutral-200 font-semibold bg-[#161b22]"
                 onClick={() => onNavigate('scripts')}
               >
                 <div className="flex items-center gap-2">
                   <span>⚡</span>
                   <span>Matching Scripts</span>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#111111] text-neutral-300 border border-[#222222]">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#161b22] text-neutral-300 border border-[#30363d]">
                   {filteredScripts.length}
                 </span>
               </button>
@@ -362,7 +362,7 @@ export default function Sidebar({
                   <button
                     type="button"
                     key={s.id}
-                    className="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] transition-colors text-left"
+                    className="w-full flex items-center justify-between px-2 py-1.5 rounded-md text-neutral-400 hover:text-neutral-200 hover:bg-[#161b22] transition-colors text-left"
                     onClick={() => onNavigate('scripts')}
                     title={`${s.name} - ${s.description}`}
                   >
@@ -376,7 +376,7 @@ export default function Sidebar({
             </div>
           )}
 
-          <div className="pt-2 pb-1 border-t border-[#1a1a1a]">
+          <div className="pt-2 pb-1 border-t border-[#21262d]">
             <span className="text-[10px] font-mono font-bold text-neutral-500 uppercase tracking-wider px-2 block">
               Core Monorepo Pillars
             </span>
@@ -390,8 +390,8 @@ export default function Sidebar({
                 aria-current={isActive('projects') ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   isActive('projects')
-                    ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
-                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                    ? 'bg-[#161b22] text-neutral-200 font-semibold border border-[#30363d]'
+                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#161b22] hover:border-[#30363d] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('projects');
@@ -409,14 +409,14 @@ export default function Sidebar({
                   </svg>
                   <span>Projects &amp; Apps</span>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] text-neutral-400 border border-[#222222]">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] text-neutral-400 border border-[#30363d]">
                   {formatCount(isFiltering ? filteredProjects.length : totalProjects)}
                 </span>
               </button>
 
               <button
                 type="button"
-                className="p-1 rounded text-neutral-500 hover:text-neutral-300 hover:bg-[#111111] transition-all"
+                className="p-1 rounded text-neutral-500 hover:text-neutral-300 hover:bg-[#161b22] transition-all"
                 onClick={() => toggleSection('projects')}
                 aria-expanded={isProjectsOpen}
                 title={isProjectsOpen ? 'Collapse applications list' : 'Expand applications list'}
@@ -438,7 +438,7 @@ export default function Sidebar({
                       key={proj.id}
                       aria-current={isProjActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
-                        isProjActive ? 'bg-[#1a1a1a] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
+                        isProjActive ? 'bg-[#21262d] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
                       }`}
                       onClick={() => onNavigate(`projects/${proj.id}`)}
                       title={proj.title}
@@ -450,7 +450,7 @@ export default function Sidebar({
                         <span className="truncate">{formatProjectTitle(proj.title)}</span>
                       </div>
                       {proj.frontendPort && (
-                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 bg-[#111111] text-neutral-400 border border-[#222222]">
+                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 bg-[#161b22] text-neutral-400 border border-[#30363d]">
                           :{proj.frontendPort}
                         </span>
                       )}
@@ -479,8 +479,8 @@ export default function Sidebar({
                 aria-current={(isActive('packages') || isActive('packages-dashboard')) ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   (isActive('packages') || isActive('packages-dashboard'))
-                    ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
-                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111111] hover:border-[#222222] border border-transparent'
+                    ? 'bg-[#161b22] text-neutral-200 font-semibold border border-[#30363d]'
+                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#161b22] hover:border-[#30363d] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('packages');
@@ -498,14 +498,14 @@ export default function Sidebar({
                   </svg>
                   <span>Shared Packages</span>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] text-neutral-400 border border-[#222222]">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] text-neutral-400 border border-[#30363d]">
                   {formatCount(isFiltering ? filteredPackages.length : packages.length)}
                 </span>
               </button>
 
               <button
                 type="button"
-                className="p-1 rounded text-neutral-500 hover:text-neutral-300 hover:bg-[#111111] transition-all"
+                className="p-1 rounded text-neutral-500 hover:text-neutral-300 hover:bg-[#161b22] transition-all"
                 onClick={() => toggleSection('packages')}
                 aria-expanded={isPackagesOpen}
                 title={isPackagesOpen ? 'Collapse packages list' : 'Expand packages list'}
@@ -530,7 +530,7 @@ export default function Sidebar({
                       key={pkg.id}
                       aria-current={isPkgActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
-                        isPkgActive ? 'bg-[#1a1a1a] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
+                        isPkgActive ? 'bg-[#21262d] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
                       }`}
                       onClick={() => onNavigate(`packages/${pkg.id}`)}
                       title={pkg.displayName || pkg.name}
@@ -568,7 +568,7 @@ export default function Sidebar({
                 type="button"
                 aria-current={(isActive('docs') || isActive('docs-dashboard')) ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
-                  (isActive('docs') || isActive('docs-dashboard')) ? 'bg-[#1a1a1a] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
+                  (isActive('docs') || isActive('docs-dashboard')) ? 'bg-[#21262d] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('docs');
@@ -582,14 +582,14 @@ export default function Sidebar({
                   <span>📚</span>
                   <span>Documentation</span>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] text-neutral-400 border border-[#222222]">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161b22] text-neutral-400 border border-[#30363d]">
                   {formatCount(isFiltering ? filteredGuides.length : DOCUMENTATION_GUIDES_REGISTRY.length)}
                 </span>
               </button>
 
               <button
                 type="button"
-                className="p-1 rounded text-neutral-500 hover:text-neutral-300 hover:bg-[#111111] transition-all"
+                className="p-1 rounded text-neutral-500 hover:text-neutral-300 hover:bg-[#161b22] transition-all"
                 onClick={() => toggleSection('docs')}
                 aria-expanded={isDocsOpen}
                 title={isDocsOpen ? 'Collapse documentation guides' : 'Expand documentation guides'}
@@ -615,8 +615,8 @@ export default function Sidebar({
                       aria-current={isGuideActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
                         isGuideActive
-                          ? 'bg-[#111111] text-neutral-200 font-semibold border border-[#222222]'
-                          : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111111] border border-transparent'
+                          ? 'bg-[#161b22] text-neutral-200 font-semibold border border-[#30363d]'
+                          : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#161b22] border border-transparent'
                       }`}
                       onClick={() => onNavigate(targetRoute)}
                       title={guide.title}
@@ -649,12 +649,12 @@ export default function Sidebar({
 
           {/* Empty Search Feedback */}
           {isFiltering && totalMatches === 0 && (
-            <div className="flex flex-col items-center justify-center p-6 text-center rounded-xl bg-[#111111] border border-[#1a1a1a] gap-2 mt-2">
+            <div className="flex flex-col items-center justify-center p-6 text-center rounded-xl bg-[#161b22] border border-[#21262d] gap-2 mt-2">
               <span className="text-xl" aria-hidden="true">🔍</span>
               <p className="text-xs text-neutral-400">No matches found for &ldquo;{commonFilter}&rdquo;</p>
               <button
                 type="button"
-                className="mt-1 px-3 py-1 rounded-md text-xs font-semibold bg-[#111111] hover:bg-[#111111] text-neutral-200 border border-[#222222] transition-colors"
+                className="mt-1 px-3 py-1 rounded-md text-xs font-semibold bg-[#161b22] hover:bg-[#161b22] text-neutral-200 border border-[#30363d] transition-colors"
                 onClick={() => {
                   setCommonFilter('');
                   searchInputRef.current?.focus();
@@ -667,7 +667,7 @@ export default function Sidebar({
         </nav>
 
         {/* ── Footer ── */}
-        <div className="p-3 border-t border-[#1a1a1a] bg-[#0a0a0a] flex items-center justify-between text-xs shrink-0">
+        <div className="p-3 border-t border-[#21262d] bg-[#0d1117] flex items-center justify-between text-xs shrink-0">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
             <div className="flex flex-col">
@@ -677,7 +677,7 @@ export default function Sidebar({
               </small>
             </div>
           </div>
-          <span className="w-5 h-5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 flex items-center justify-center text-xs font-bold" aria-label="Ready">
+          <span className="w-5 h-5 rounded-full bg-[#161b22] border border-[#30363d] text-neutral-300 flex items-center justify-center text-xs font-bold" aria-label="Ready">
             ✓
           </span>
         </div>

@@ -59,7 +59,7 @@
 }
 
 .card-flat:hover {
-  border-color: #555555;
+  border-color: #8b949e;
 }
 
 /* ── Interactive Button & Card Transitions ── */
@@ -85,7 +85,7 @@ button:active:not(:disabled),
 
 /* ── Glassmorphism Surface ── */
 .glass-surface {
-  background: rgba(17, 17, 17, 0.85);
+  background: rgba(22, 27, 34, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
