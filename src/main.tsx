@@ -70,8 +70,8 @@ function App() {
             prevProjects.every(
               (p, i) =>
                 p.id === liveProjects[i].id &&
-                p.status === liveProjects[i].status &&
-                p.isOnline === liveProjects[i].isOnline
+                (p.frontendActive === liveProjects[i].frontendActive || p.frontend?.isLive === liveProjects[i].frontend?.isLive) &&
+                (p.backendActive === liveProjects[i].backendActive || p.backend?.isLive === liveProjects[i].backend?.isLive)
             )
           ) {
             return prev;
@@ -405,6 +405,8 @@ function App() {
               techStackBlocks={liveWorkspace?.techStackBlocks || []}
               projectRulesBlocks={liveWorkspace?.projectRulesBlocks || []}
               cheatsheetBlocks={liveWorkspace?.cheatsheetBlocks || []}
+              docsHierarchy={liveWorkspace?.docsHierarchy || []}
+              docsBlocksMap={liveWorkspace?.docsBlocksMap || {}}
               activeGuideId="hub"
               onBack={() => navigate('overview')}
               onSelectGuide={(guideId) => {
@@ -416,22 +418,26 @@ function App() {
 
           {/* Pillar 3: Docs Detail Guides */}
           {(() => {
-            const path = active.startsWith('docs/')
+            const rawPath = active.startsWith('docs/')
               ? active.replace('docs/', '')
               : active.startsWith('doc/')
               ? active.replace('doc/', '')
               : active;
 
+            const pathParts = rawPath.split('/');
+            const primaryPath = pathParts[0];
+            const subModuleParam = pathParts.slice(1).join('/');
+
             const matchedGuide = DOCUMENTATION_GUIDES_REGISTRY.find(
-              (g) => g.id === path || g.slug === path || g.category === path
+              (g) => g.id === primaryPath || g.slug === primaryPath || g.category === primaryPath
             );
 
             const guideId = matchedGuide ? matchedGuide.id : (
-              path === 'rules' || path === 'projects-rules' ? 'rules' :
-              path === 'design' || path === 'packages-design' || path === 'guide' ? 'design' :
-              path === 'ports' || path === 'port-architecture' || path === 'ports-guide' ? 'ports' :
-              path === 'techstack' || path === 'tech-stack' ? 'techstack' :
-              path === 'cheatsheet' || path === 'compliance-cheatsheet' ? 'cheatsheet' : ''
+              primaryPath === 'rules' || primaryPath === 'projects-rules' ? 'rules' :
+              primaryPath === 'design' || primaryPath === 'packages-design' || primaryPath === 'guide' ? 'design' :
+              primaryPath === 'ports' || primaryPath === 'port-architecture' || primaryPath === 'ports-guide' ? 'ports' :
+              primaryPath === 'techstack' || primaryPath === 'tech-stack' ? 'techstack' :
+              primaryPath === 'cheatsheet' || primaryPath === 'compliance-cheatsheet' ? 'cheatsheet' : ''
             );
 
             if (!guideId || guideId === 'hub' || guideId === 'dashboard') return null;
@@ -443,7 +449,10 @@ function App() {
                 techStackBlocks={liveWorkspace?.techStackBlocks || []}
                 projectRulesBlocks={liveWorkspace?.projectRulesBlocks || []}
                 cheatsheetBlocks={liveWorkspace?.cheatsheetBlocks || []}
+                docsHierarchy={liveWorkspace?.docsHierarchy || []}
+                docsBlocksMap={liveWorkspace?.docsBlocksMap || {}}
                 activeGuideId={guideId}
+                initialSubModule={subModuleParam}
                 onBack={() => navigate('docs')}
                 onSelectGuide={(id) => {
                   const targetGuide = DOCUMENTATION_GUIDES_REGISTRY.find((g) => g.id === id);

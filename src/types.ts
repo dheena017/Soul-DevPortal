@@ -39,6 +39,9 @@ export interface PackageData {
   pythonModule?: string | null;
   pythonDependencies?: string[];
   symbols?: AstSymbol[];
+  updatedAt?: string;
+  relativeTime?: string;
+  commitHash?: string;
 }
 
 export interface ProjectData {
@@ -49,6 +52,8 @@ export interface ProjectData {
   backendPort?: number | null;
   frontendActive?: boolean;
   backendActive?: boolean;
+  frontend?: { port?: number | null; isLive?: boolean };
+  backend?: { port?: number | null; isLive?: boolean };
   frontendCmd?: string;
   backendCmd?: string | null;
   framework?: string;
@@ -68,6 +73,9 @@ export interface ProjectData {
   envKeys?: string[];
   tables?: string[];
   tags?: string[];
+  updatedAt?: string;
+  relativeTime?: string;
+  commitHash?: string;
 }
 
 export interface StatsData {
@@ -89,5 +97,7 @@ export interface WorkspaceData {
   techStackBlocks?: MarkdownBlock[];
   projectRulesBlocks?: MarkdownBlock[];
   cheatsheetBlocks?: MarkdownBlock[];
+  docsHierarchy?: any[];
+  docsBlocksMap?: Record<string, MarkdownBlock[]>;
   stats?: StatsData;
 }

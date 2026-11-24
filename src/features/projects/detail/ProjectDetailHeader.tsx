@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
 import { ProjectData } from '../../../types';
 import { PROJECT_LOGOS } from '../projectsConstants';
@@ -177,22 +177,48 @@ export default function ProjectDetailHeader({
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-400">
               v{project.version || '0.0.0'}
             </span>
+            {project.relativeTime && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-mono font-medium bg-[#16161c] border border-white/[0.08] text-zinc-300" title={`Last modified: ${project.updatedAt || project.relativeTime}`}>
+                <svg className="w-3 h-3 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span>Updated {project.relativeTime}</span>
+              </span>
+            )}
           </div>
           <p className="text-xs md:text-sm text-zinc-300 leading-relaxed max-w-4xl">
             {project.description || `${project.title} monorepo application powered by ${project.framework || 'standard frontend'}.`}
           </p>
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-            <span className="text-[11px] font-mono font-bold tracking-wider text-zinc-400 uppercase">CONSUMES:</span>
-            <a href="#packages/logger" className="inline-flex items-center px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/35 text-amber-300 hover:bg-amber-500/25 transition-all font-mono text-xs font-medium">
-              @workspace/logger
-            </a>
-            <a href="#packages/config" className="inline-flex items-center px-2.5 py-1 rounded-lg bg-purple-500/15 border border-purple-500/35 text-purple-300 hover:bg-purple-500/25 transition-all font-mono text-xs font-medium">
-              @workspace/config
-            </a>
-            <a href="#packages/runner" className="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/35 text-emerald-300 hover:bg-emerald-500/25 transition-all font-mono text-xs font-medium">
-              @workspace/runner
-            </a>
-          </div>
+          {/* ── Dynamically Rendered Consumed Workspace Packages ── */}
+          {(() => {
+            const deps = { ...(project.dependencies || {}), ...(project.devDependencies || {}) };
+            const consumed = Object.keys(deps).filter((k) => k.startsWith('@workspace/'));
+            if (consumed.length === 0) return null;
+            return (
+              <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+                <span className="text-[11px] font-mono font-bold tracking-wider text-zinc-400 uppercase">CONSUMES:</span>
+                {consumed.map((pkg) => {
+                  const pkgId = pkg.replace('@workspace/', '');
+                  const colorMap: Record<string, string> = {
+                    logger: 'bg-amber-500/15 border-amber-500/35 text-amber-300 hover:bg-amber-500/25',
+                    config: 'bg-purple-500/15 border-purple-500/35 text-purple-300 hover:bg-purple-500/25',
+                    runner: 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300 hover:bg-emerald-500/25',
+                  };
+                  const style = colorMap[pkgId] || 'bg-blue-500/15 border-blue-500/35 text-blue-300 hover:bg-blue-500/25';
+                  return (
+                    <a
+                      key={pkg}
+                      href={`#packages/${pkgId}`}
+                      className={`inline-flex items-center px-2.5 py-1 rounded-lg border transition-all font-mono text-xs font-medium ${style}`}
+                    >
+                      {pkg}
+                    </a>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
       </div>
 

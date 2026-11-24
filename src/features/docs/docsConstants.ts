@@ -15,6 +15,9 @@ export interface GuideMeta {
   topics: string[];
   keyHighlights: string[];
   complianceStatus: string;
+  updatedAt?: string;
+  relativeTime?: string;
+  commitHash?: string;
 }
 
 export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
@@ -46,6 +49,9 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
       'Standardized folder layout: client/, server/, metadata.json, README.md, and .env.example',
     ],
     complianceStatus: '100% Monorepo Compliant (9/9 Apps)',
+    relativeTime: '3h',
+    updatedAt: '2026-11-24T11:37:07+05:30',
+    commitHash: '43a2bc4',
   },
   {
     id: 'cheatsheet',
@@ -54,7 +60,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
     breadcrumb: 'Soul Workspace / Compliance Cheatsheet',
     description: 'Quick-reference operational checklists, top 10 rules, directory anatomy, strict port matrix (:5173-:5181 / :8000-:8008), SQLite WAL pragmas, and supervisor CLI commands.',
     icon: '📋',
-    filename: '04-cheatsheets/compliance-checklist.md',
+    filename: '04-cheatsheets/main.md',
     category: 'cheatsheet',
     badge: 'QUICK REFERENCE',
     version: '1.0.0',
@@ -75,6 +81,9 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
       'Standardized supervisor commands with automatic port cleanup',
     ],
     complianceStatus: '100% Monorepo Compliant',
+    relativeTime: '21h',
+    updatedAt: '2026-11-23T17:42:16+05:30',
+    commitHash: '7e68c48',
   },
   {
     id: 'design',
@@ -83,7 +92,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
     breadcrumb: 'Soul Workspace / Packages Design',
     description: 'Comprehensive architectural blueprint for designing, structuring, publishing, and consuming shared libraries (@workspace/logger, @workspace/runner, @workspace/config) across TypeScript and Python runtimes.',
     icon: '📘',
-    filename: '02-packages-architecture/package-authoring-guide.md',
+    filename: '02-packages-architecture/main.md',
     category: 'design',
     badge: 'PACKAGE BLUEPRINT',
     version: '2.1.0',
@@ -104,6 +113,9 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
       'Shared Tailwind tokens and design variables distribution without bundling bottlenecks',
     ],
     complianceStatus: 'Production Ready (3 Core Packages)',
+    relativeTime: '21h',
+    updatedAt: '2026-11-23T17:42:16+05:30',
+    commitHash: '7e68c48',
   },
   {
     id: 'ports',
@@ -112,7 +124,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
     breadcrumb: 'Soul Workspace / Port Topology',
     description: 'Complete network architecture and port allocation guide: Vite dev servers (:5173-:5181), FastAPI backends (:8000-:8008), reverse proxy rules, and socket healthcheck probing.',
     icon: '🌐',
-    filename: '03-networking-and-ports/port-allocation-matrix.md',
+    filename: '03-networking-and-ports/main.md',
     category: 'ports',
     badge: 'RUNTIME TOPOLOGY',
     version: '1.4.0',
@@ -133,6 +145,9 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
       'Standardized proxy routing: /api/ -> localhost:800x with zero CORS issues in local development',
     ],
     complianceStatus: 'Fully Orchestrated',
+    relativeTime: '1d',
+    updatedAt: '2026-11-23T10:15:00+05:30',
+    commitHash: '7e68c48',
   },
   {
     id: 'techstack',
@@ -141,7 +156,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
     breadcrumb: 'Soul Workspace / Tech Stack',
     description: 'Certified dependencies matrix, framework alignments, polyglot runtime baselines (Node.js 20+, Python 3.11+), unified Tailwind CSS v4 design tokens, and shared ESLint / TypeScript configs.',
     icon: '⚙️',
-    filename: '01-project-architecture/project-framework/main.md',
+    filename: '01-project-architecture/main.md',
     category: 'techstack',
     badge: 'ECOSYSTEM MATRIX',
     version: '1.2.0',
@@ -161,5 +176,180 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
       'Monorepo script orchestration via @workspace/runner CLI with unified exit codes',
     ],
     complianceStatus: 'Active Standard',
+    relativeTime: '1d',
+    updatedAt: '2026-11-23T10:15:00+05:30',
+    commitHash: '7e68c48',
   },
 ];
+
+export interface SubModuleDoc {
+  id: string;
+  title: string;
+  shortTitle: string;
+  icon: string;
+  tag: string;
+  description: string;
+  isTopic: boolean;
+  topicDir?: string;
+  relativePath?: string;
+  mainRelativePath?: string;
+  rulesRelativePath?: string;
+}
+
+export const DOCS_SUBMODULES_MAP: Record<string, SubModuleDoc[]> = {
+  rules: [
+    {
+      id: 'main',
+      title: 'Master Technical Blueprint',
+      shortTitle: 'Master Blueprint',
+      icon: '🏛️',
+      tag: 'MASTER SPEC',
+      description: 'Comprehensive architectural specification covering monorepo layout, frameworks, client, server, APIs, SQLite WAL, schemas, and security.',
+      isTopic: false,
+      relativePath: '01-project-architecture/main.md',
+    },
+    {
+      id: 'golden-rules',
+      title: 'Golden Architectural Invariants',
+      shortTitle: 'Golden Rules',
+      icon: '📜',
+      tag: 'INVARIANTS',
+      description: 'The 10 fundamental pillars and inviolable domain engineering rules governing all applications.',
+      isTopic: false,
+      relativePath: '01-project-architecture/golden-rules.md',
+    },
+    {
+      id: 'all',
+      title: 'Complete Architecture Suite',
+      shortTitle: 'All Documents',
+      icon: '📚',
+      tag: 'FULL SPEC',
+      description: 'Master architecture blueprint and golden invariants in continuous view.',
+      isTopic: false,
+    },
+  ],
+  design: [
+    {
+      id: 'main',
+      title: 'Shared Packages Master Blueprint',
+      shortTitle: 'Master Blueprint',
+      icon: '📘',
+      tag: 'BLUEPRINT',
+      description: 'Core guides for @workspace/config, @workspace/logger, @workspace/runner, layout hierarchy, authoring walkthrough, and test suites.',
+      isTopic: false,
+      relativePath: '02-packages-architecture/main.md',
+    },
+    {
+      id: 'golden-rules',
+      title: 'Package Golden Invariants & Standards',
+      shortTitle: 'Golden Rules',
+      icon: '📜',
+      tag: 'INVARIANTS',
+      description: 'The 5 golden rules, 2-tier internal/external separation, snake_case internals, and manifest parity standards.',
+      isTopic: false,
+      relativePath: '02-packages-architecture/golden-rules.md',
+    },
+    {
+      id: 'all',
+      title: 'Complete Packages Specification',
+      shortTitle: 'All Documents',
+      icon: '📚',
+      tag: 'FULL SPEC',
+      description: 'Complete compilation of all package blueprints and standards.',
+      isTopic: false,
+    },
+  ],
+  ports: [
+    {
+      id: 'main',
+      title: 'Port Allocation Matrix & Topology Blueprint',
+      shortTitle: 'Port Matrix & Topology',
+      icon: '🌐',
+      tag: 'TOPOLOGY',
+      description: 'Strict port assignments (:5173-:5181 / :8000-:8008), reverse proxying, and socket cleanup runbooks.',
+      isTopic: false,
+      relativePath: '03-networking-and-ports/main.md',
+    },
+    {
+      id: 'golden-rules',
+      title: 'Networking Golden Rules',
+      shortTitle: 'Golden Rules',
+      icon: '📜',
+      tag: 'INVARIANTS',
+      description: 'The golden rules for zero port collisions, process isolation, and loopback binding.',
+      isTopic: false,
+      relativePath: '03-networking-and-ports/golden-rules.md',
+    },
+    {
+      id: 'all',
+      title: 'Complete Network Specification',
+      shortTitle: 'All Documents',
+      icon: '📚',
+      tag: 'FULL SPEC',
+      description: 'Complete compiled network specifications.',
+      isTopic: false,
+    },
+  ],
+  techstack: [
+    {
+      id: 'main',
+      title: 'Framework Technical Specification',
+      shortTitle: 'Specification',
+      icon: '⚙️',
+      tag: 'TECH STACK',
+      description: 'Comprehensive technical specification for React 19, Vite 8, Python 3.11+, and FastAPI.',
+      isTopic: false,
+      relativePath: '01-project-architecture/main.md',
+    },
+    {
+      id: 'rules',
+      title: 'Framework Rules & Invariants',
+      shortTitle: 'Rules & Constraints',
+      icon: '⚠️',
+      tag: 'CONSTRAINTS',
+      description: 'Mandatory constraints and non-negotiables for dependencies and tooling.',
+      isTopic: false,
+      relativePath: '01-project-architecture/golden-rules.md',
+    },
+    {
+      id: 'all',
+      title: 'Complete Tech Stack Standards',
+      shortTitle: 'Both Docs',
+      icon: '📚',
+      tag: 'FULL SPEC',
+      description: 'Complete specification and rules for the workspace tech stack.',
+      isTopic: false,
+    },
+  ],
+  cheatsheet: [
+    {
+      id: 'main',
+      title: 'Developer Cheatsheets & Commands Blueprint',
+      shortTitle: 'Cheatsheets & Commands',
+      icon: '⚡',
+      tag: 'RUNBOOKS',
+      description: 'Master table of root scripts, single-template direct CLI commands, and pre-commit compliance checklists.',
+      isTopic: false,
+      relativePath: '04-cheatsheets/main.md',
+    },
+    {
+      id: 'golden-rules',
+      title: 'Workflow Golden Rules',
+      shortTitle: 'Golden Rules',
+      icon: '📜',
+      tag: 'INVARIANTS',
+      description: 'The 5 golden rules of developer commands, port safety, and pre-commit audit gates.',
+      isTopic: false,
+      relativePath: '04-cheatsheets/golden-rules.md',
+    },
+    {
+      id: 'all',
+      title: 'Complete Cheatsheets Suite',
+      shortTitle: 'All Documents',
+      icon: '📚',
+      tag: 'FULL SPEC',
+      description: 'Complete compilation of all cheatsheets and runbooks.',
+      isTopic: false,
+    },
+  ],
+};

@@ -11,6 +11,12 @@ export interface DocDetailHeaderProps {
   headingsCount: number;
   codeBlocksCount: number;
   tablesCount: number;
+  activeTitle?: string;
+  activeDescription?: string;
+  activeIcon?: string;
+  activeBadge?: string;
+  activeFilename?: string;
+  activeTag?: string;
   onBack?: () => void;
 }
 
@@ -21,8 +27,20 @@ export default function DocDetailHeader({
   headingsCount,
   codeBlocksCount,
   tablesCount,
+  activeTitle,
+  activeDescription,
+  activeIcon,
+  activeBadge,
+  activeFilename,
+  activeTag,
   onBack,
 }: DocDetailHeaderProps) {
+  const displayTitle = activeTitle || guideMeta.title;
+  const displayDescription = activeDescription || guideMeta.description;
+  const displayIcon = activeIcon || guideMeta.icon || '📜';
+  const displayBadge = activeBadge || guideMeta.badge || 'OFFICIAL SPEC V1.0';
+  const displayFilename = activeFilename || guideMeta.filename;
+
   return (
     <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
@@ -69,10 +87,16 @@ export default function DocDetailHeader({
             Pillar 3: Docs Dashboard
           </a>
           <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
-          <strong className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-sm">{guideMeta.title}</strong>
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#16161c] border border-white/10 text-zinc-300 font-medium truncate max-w-xs">{guideMeta.title}</span>
+          {activeTitle && activeTitle !== guideMeta.title && (
+            <>
+              <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
+              <strong className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1e1e28] border border-white/20 text-white font-semibold shadow-sm truncate max-w-sm">{displayTitle}</strong>
+            </>
+          )}
           <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/10 border border-sky-500/25 text-sky-400 shadow-sm inline-flex items-center gap-1.5 ml-1">
             <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
-            <span>SUB-PAGE: SPECIFICATION INSPECTOR</span>
+            <span>SPECIFICATION INSPECTOR</span>
           </span>
         </div>
 
@@ -94,13 +118,13 @@ export default function DocDetailHeader({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="flex items-start gap-4 min-w-0">
           <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 text-2xl shadow-inner">
-            {guideMeta.icon || '📜'}
+            {displayIcon}
           </div>
 
           <div className="flex flex-col gap-2 min-w-0">
             <div className="flex flex-wrap items-center gap-2.5">
               <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
-                OFFICIAL SPEC V1.0
+                {displayBadge}
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400">
                 v1.0.0
@@ -108,10 +132,28 @@ export default function DocDetailHeader({
               <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-purple-500/15 border border-purple-500/30 text-purple-400">
                 {guideMeta.category.toUpperCase()}
               </span>
+              {activeTag && (
+                <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                  {activeTag}
+                </span>
+              )}
+              {guideMeta.relativeTime && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-mono font-medium bg-[#16161c] border border-white/[0.08] text-zinc-300" title={`Last revised: ${guideMeta.updatedAt || guideMeta.relativeTime}`}>
+                  <svg className="w-3 h-3 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <span>Updated {guideMeta.relativeTime}</span>
+                </span>
+              )}
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">{guideMeta.title}</h1>
-            <p className="text-xs md:text-sm text-zinc-300 leading-relaxed max-w-2xl">{guideMeta.description}</p>
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">{displayTitle}</h1>
+            <p className="text-xs md:text-sm text-zinc-300 leading-relaxed max-w-2xl">{displayDescription}</p>
+            <div className="text-[11px] font-mono text-zinc-500 flex items-center gap-1.5 mt-0.5">
+              <span>📄</span>
+              <span className="text-zinc-400">Soul-DevPortal-Docs/{displayFilename}</span>
+            </div>
           </div>
         </div>
 

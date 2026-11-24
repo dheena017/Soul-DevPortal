@@ -226,18 +226,106 @@ function getWorkspaceData() {
     : [];
 
   const rootPackage = readJson(path.join(workspaceRoot, 'package.json')) || {};
-  const resolveDoc = (newRel, legacyRel) => {
-    const pNew = path.join(docsRoot, newRel);
-    if (fs.existsSync(pNew)) return fs.readFileSync(pNew, 'utf8');
-    const pLeg = path.join(docsRoot, legacyRel);
-    return fs.existsSync(pLeg) ? fs.readFileSync(pLeg, 'utf8') : '';
+  const resolveDocFiles = (relPaths) => {
+    const parts = [];
+    for (const rel of relPaths) {
+      const p = path.join(docsRoot, rel);
+      if (fs.existsSync(p)) {
+        parts.push(fs.readFileSync(p, 'utf8'));
+      }
+    }
+    return parts.join('\n\n---\n\n');
   };
 
-  const guide = resolveDoc('03-packages/package-authoring-guide.md', 'PACKAGES_DESIGN_GUIDE.md');
-  const portGuide = resolveDoc('04-networking-and-ports/port-allocation-matrix.md', 'PROJECTS_PORT_AND_FRAMEWORK_GUIDE.md');
-  const techStack = resolveDoc('02-tech-stack/programming-languages.md', 'TECH_STACK.md');
-  const projectRules = resolveDoc('01-architecture/project-layout-rules.md', 'PROJECTS_RULES_AND_STANDARDS_GUIDE.md');
-  const cheatsheet = resolveDoc('06-cheatsheets/compliance-checklist.md', 'MONOREPO_COMPLIANCE_CHEATSHEET.md');
+  // Crawl all markdown files in Soul-DevPortal-Docs into docsBlocksMap and docsHierarchy
+  const docsBlocksMap = {};
+  const docsHierarchy = [];
+
+  if (fs.existsSync(docsRoot)) {
+    try {
+      const catDirs = fs.readdirSync(docsRoot, { withFileTypes: true })
+        .filter((d) => d.isDirectory() && !d.name.startsWith('.'));
+
+      for (const catDir of catDirs) {
+        const catId = catDir.name;
+        const catPath = path.join(docsRoot, catId);
+        const categoryEntry = {
+          id: catId,
+          title: catId.split('-').slice(1).join(' ').replace(/\b\w/g, (c) => c.toUpperCase()) || catId,
+          topics: [],
+          rootTabs: [],
+        };
+
+        const items = fs.readdirSync(catPath, { withFileTypes: true });
+        for (const item of items) {
+          if (item.isDirectory() && !item.name.startsWith('.')) {
+            const topicId = item.name;
+            const topicPath = path.join(catPath, topicId);
+            const topicEntry = {
+              id: topicId,
+              title: topicId.replace(/^project-/, '').replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+              tabs: [],
+            };
+            const topicFiles = fs.readdirSync(topicPath, { withFileTypes: true })
+              .filter((f) => f.isFile() && f.name.endsWith('.md'));
+
+            for (const tf of topicFiles) {
+              const relPath = `${catId}/${topicId}/${tf.name}`;
+              const fullPath = path.join(topicPath, tf.name);
+              try {
+                const content = fs.readFileSync(fullPath, 'utf8');
+                const blocks = markdownBlocks(content);
+                docsBlocksMap[relPath] = blocks;
+                topicEntry.tabs.push({
+                  id: tf.name.replace('.md', ''),
+                  label: tf.name === 'main.md' ? 'Specification' : tf.name === 'rules.md' ? 'Rules & Invariants' : tf.name.replace('.md', ''),
+                  filename: tf.name,
+                  relativePath: relPath,
+                  headings: blocks.filter((b) => b.type === 'h2' || b.type === 'h3'),
+                });
+              } catch (e) {}
+            }
+            categoryEntry.topics.push(topicEntry);
+          } else if (item.isFile() && item.name.endsWith('.md')) {
+            const relPath = `${catId}/${item.name}`;
+            const fullPath = path.join(catPath, item.name);
+            try {
+              const content = fs.readFileSync(fullPath, 'utf8');
+              const blocks = markdownBlocks(content);
+              docsBlocksMap[relPath] = blocks;
+              categoryEntry.rootTabs.push({
+                id: item.name.replace('.md', ''),
+                label: item.name.replace('.md', '').replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+                filename: item.name,
+                relativePath: relPath,
+                headings: blocks.filter((b) => b.type === 'h2' || b.type === 'h3'),
+              });
+            } catch (e) {}
+          }
+        }
+        docsHierarchy.push(categoryEntry);
+      }
+    } catch (e) {}
+  }
+
+  const guide = resolveDocFiles([
+    '02-packages-architecture/package-authoring-guide.md',
+    '02-packages-architecture/packages-layout.md',
+  ]);
+  const portGuide = resolveDocFiles([
+    '03-networking-and-ports/port-allocation-matrix.md',
+  ]);
+  const techStack = resolveDocFiles([
+    '01-project-architecture/project-framework/main.md',
+  ]);
+  const projectRules = resolveDocFiles([
+    '01-project-architecture/golden-rules.md',
+    '01-project-architecture/project-layout/main.md',
+  ]);
+  const cheatsheet = resolveDocFiles([
+    '04-cheatsheets/compliance-checklist.md',
+    '04-cheatsheets/direct-cli-commands.md',
+  ]);
 
   const projectsRaw = readJson(path.join(workspaceRoot, 'projects.json')) || {};
   const projectsList = Object.entries(projectsRaw).map(([pid, spec]) => {
@@ -251,16 +339,35 @@ function getWorkspaceData() {
     const readmeFile = path.join(projDir, 'README.md');
     const readmeContent = fs.existsSync(readmeFile) ? fs.readFileSync(readmeFile, 'utf8') : '';
 
-    // Extract directory file tree
+    // Extract real recursive directory file tree
     let fileTree = [];
     if (fs.existsSync(projDir)) {
       try {
-        fileTree = fs.readdirSync(projDir)
-          .filter((f) => !f.startsWith('.') && f !== 'node_modules' && f !== '__pycache__' && f !== '.git' && f !== '.vscode' && f !== '.vite')
-          .map((f) => {
-            const isDir = fs.statSync(path.join(projDir, f)).isDirectory();
-            return isDir ? `${f}/` : f;
-          });
+        const walk = (dir, prefix = '') => {
+          const entries = fs.readdirSync(dir, { withFileTypes: true });
+          for (const entry of entries) {
+            const name = entry.name;
+            if (
+              name.startsWith('.git') ||
+              name === 'node_modules' ||
+              name === '__pycache__' ||
+              name === '.venv' ||
+              name === 'dist' ||
+              name === '.vscode' ||
+              name === '.vite'
+            ) {
+              continue;
+            }
+            const relPath = prefix ? `${prefix}/${name}` : name;
+            if (entry.isDirectory()) {
+              fileTree.push(`${relPath}/`);
+              walk(path.join(dir, name), relPath);
+            } else {
+              fileTree.push(relPath);
+            }
+          }
+        };
+        walk(projDir);
       } catch (e) {}
     }
 
@@ -296,6 +403,9 @@ function getWorkspaceData() {
     if (fs.existsSync(logoSvgPath)) logo = `/project-logos/${pid}.svg`;
     else if (fs.existsSync(logoPngPath)) logo = `/project-logos/${pid}.png`;
 
+    // API endpoints defined in metadata (authoritative routing provided by FastAPI server)
+    const apiEndpoints = metaJson.apiEndpoints || [];
+
     return {
       id: pid,
       title: spec.title || metaJson.name || pid,
@@ -312,7 +422,7 @@ function getWorkspaceData() {
       description: metaJson.description || pkgJson.description || '',
       version: pkgJson.version || '1.0.0',
       features: metaJson.features || [],
-      apiEndpoints: metaJson.apiEndpoints || [],
+      apiEndpoints,
       localServices: metaJson.localServices || {
         frontend: spec.frontend_port ? `http://localhost:${spec.frontend_port}` : undefined,
         backend: spec.backend_port ? `http://localhost:${spec.backend_port}` : undefined,
@@ -344,6 +454,8 @@ function getWorkspaceData() {
     techStackBlocks: markdownBlocks(techStack),
     projectRulesBlocks: markdownBlocks(projectRules),
     cheatsheetBlocks: markdownBlocks(cheatsheet),
+    docsHierarchy,
+    docsBlocksMap,
     stats: {
       packagesCount: packageDirectories.length,
       projectsCount: projectsList.length,
@@ -418,12 +530,29 @@ export default defineConfig({
         }
       },
       handleHotUpdate({ file, server }) {
+        // Ignore database, WAL, logs, pycache, and binary files
         if (
-          file.includes('Soul-DevPortal-Docs') ||
-          file.endsWith('projects.json') ||
-          file.includes('Soul-DevPortal-Packages') ||
-          file.includes('Soul-DevPortal-Projects')
+          file.endsWith('.db') ||
+          file.endsWith('.db-shm') ||
+          file.endsWith('.db-wal') ||
+          file.endsWith('.sqlite') ||
+          file.endsWith('.sqlite3') ||
+          file.endsWith('.log') ||
+          file.includes('__pycache__') ||
+          file.includes(path.join('server', 'data')) ||
+          file.includes('.vite')
         ) {
+          return [];
+        }
+
+        // Only reload virtual module if documentation, manifest, or package metadata changed
+        const isDoc = file.includes('Soul-DevPortal-Docs') && file.endsWith('.md');
+        const isManifest = file.endsWith('projects.json') || file.endsWith('package.json');
+        const isPkgMeta =
+          (file.includes('Soul-DevPortal-Packages') || file.includes('Soul-DevPortal-Projects')) &&
+          (file.endsWith('package.json') || file.endsWith('metadata.json') || file.endsWith('README.md') || file.endsWith('pyproject.toml'));
+
+        if (isDoc || isManifest || isPkgMeta) {
           const mod = server.moduleGraph.getModuleById(resolvedVirtualModuleId);
           if (mod) {
             server.moduleGraph.invalidateModule(mod);
@@ -439,6 +568,20 @@ export default defineConfig({
   server: {
     host: true,
     port: 5181,
+    watch: {
+      ignored: [
+        '**/*.db',
+        '**/*.db-wal',
+        '**/*.db-shm',
+        '**/*.sqlite',
+        '**/*.sqlite3',
+        '**/*.log',
+        '**/__pycache__/**',
+        '**/server/data/**',
+        '**/node_modules/**',
+        '**/.git/**',
+      ],
+    },
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:8008',

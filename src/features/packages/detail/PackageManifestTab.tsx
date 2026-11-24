@@ -12,62 +12,79 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
   const pyDeps = pkg.pythonDependencies || [];
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">PACKAGE MANIFEST</span>
-          <h2 className="text-lg font-bold text-neutral-200">Metadata &amp; Dependency Manifests</h2>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400">PACKAGE MANIFEST</span>
+          <h2 className="text-lg font-bold text-white">Metadata &amp; Dependency Manifests</h2>
         </div>
-        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
-          {pkg.name || `@workspace/${pkg.id}`}
-        </span>
+        <div className="flex items-center gap-2">
+          {pkg.relativeTime && (
+            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-300">
+              Updated {pkg.relativeTime}
+            </span>
+          )}
+          <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#16161c] border border-white/[0.08] text-white">
+            {pkg.name || `@workspace/${pkg.id}`}
+          </span>
+        </div>
       </div>
 
       <div className="flex flex-col gap-6">
         {/* 2-Card Summary Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col p-4 rounded-xl bg-[#151519] border border-[#212126] gap-3">
-            <h4 className="text-xs font-bold text-neutral-200 uppercase tracking-wider text-neutral-400">Package Information</h4>
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Package Information</h4>
             <div className="flex flex-col gap-2 text-xs">
-              <div className="flex justify-between py-1 border-b border-[#19191d]">
-                <span className="text-neutral-500">Package ID</span>
-                <code className="text-neutral-300 font-mono font-bold">{pkg.id}</code>
+              <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                <span className="text-zinc-400">Package ID</span>
+                <code className="text-zinc-200 font-mono font-bold">{pkg.id}</code>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#19191d]">
-                <span className="text-neutral-500">Full Name</span>
-                <code className="text-neutral-200 font-mono">{pkg.name}</code>
+              <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                <span className="text-zinc-400">Full Name</span>
+                <code className="text-zinc-200 font-mono">{pkg.name}</code>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#19191d]">
-                <span className="text-neutral-500">Version</span>
-                <span className="text-neutral-300 font-mono font-bold">v{pkg.version}</span>
+              <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                <span className="text-zinc-400">Version</span>
+                <span className="text-zinc-200 font-mono font-bold">v{pkg.version}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#19191d]">
-                <span className="text-neutral-500">License</span>
-                <span className="text-neutral-300 font-medium">{pkg.license || 'MIT'}</span>
+              <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                <span className="text-zinc-400">License</span>
+                <span className="text-zinc-300 font-medium">{pkg.license || 'MIT'}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                <span className="text-zinc-400">Last Modified</span>
+                <span className="text-white font-mono font-medium" title={pkg.updatedAt || ''}>
+                  {pkg.relativeTime ? `${pkg.relativeTime} ago` : 'Recently'}
+                </span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                <span className="text-zinc-400">Git Commit</span>
+                <code className="text-purple-400 font-mono">{pkg.commitHash || 'main-head'}</code>
               </div>
               {pkg.pythonModule && (
                 <div className="flex justify-between py-1">
-                  <span className="text-neutral-500">Python Module</span>
-                  <code className="text-neutral-300 font-mono">{pkg.pythonModule}</code>
+                  <span className="text-zinc-400">Python Module</span>
+                  <code className="text-zinc-300 font-mono">{pkg.pythonModule}</code>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#151519] border border-[#212126] gap-3">
-            <h4 className="text-xs font-bold text-neutral-200 uppercase tracking-wider text-neutral-400">Ecosystem Status</h4>
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Ecosystem Status</h4>
             <div className="flex flex-col gap-2 text-xs">
-              <div className="flex justify-between py-1 border-b border-[#19191d]">
-                <span className="text-neutral-500">npm Workspace</span>
-                <span className="text-neutral-200">{pkg.hasNpmManifest ? '✅ Yes (package.json)' : '❌ No'}</span>
+              <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                <span className="text-zinc-400">npm Workspace</span>
+                <span className="text-emerald-400 font-medium">{pkg.hasNpmManifest ? '✅ Yes (package.json)' : '❌ No'}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#19191d]">
-                <span className="text-neutral-500">Python Package</span>
-                <span className="text-neutral-200">{pkg.hasPythonManifest ? '✅ Yes (pyproject.toml)' : '❌ No'}</span>
+              <div className="flex justify-between py-1 border-b border-white/[0.06]">
+                <span className="text-zinc-400">Python Package</span>
+                <span className="text-emerald-400 font-medium">{pkg.hasPythonManifest ? '✅ Yes (pyproject.toml)' : '❌ No'}</span>
               </div>
               <div className="flex justify-between py-1">
-                <span className="text-neutral-500">TypeScript Typings</span>
-                <span className="text-neutral-200">
+                <span className="text-zinc-400">TypeScript Typings</span>
+                <span className="text-zinc-200">
                   {(pkg.typeScriptExports || []).length > 0 ? '✅ Included' : 'Included via presets'}
                 </span>
               </div>
@@ -78,12 +95,12 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
         {/* Runtime Dependencies */}
         {deps.length > 0 && (
           <div className="flex flex-col gap-2.5">
-            <h3 className="text-xs font-bold text-neutral-300">Runtime Dependencies ({deps.length})</h3>
+            <h3 className="text-xs font-bold text-zinc-300">Runtime Dependencies ({deps.length})</h3>
             <div className="flex flex-wrap items-center gap-2">
               {deps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#151519] border border-[#212126] text-xs font-mono">
-                  <strong className="text-neutral-200">{dep}</strong>
-                  <code className="text-neutral-300 text-[11px]">{ver}</code>
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-xs font-mono">
+                  <strong className="text-white">{dep}</strong>
+                  <code className="text-zinc-400 text-[11px]">{ver}</code>
                 </span>
               ))}
             </div>
@@ -93,12 +110,12 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
         {/* Dev Dependencies */}
         {devDeps.length > 0 && (
           <div className="flex flex-col gap-2.5">
-            <h3 className="text-xs font-bold text-neutral-300">Development Dependencies ({devDeps.length})</h3>
+            <h3 className="text-xs font-bold text-zinc-300">Development Dependencies ({devDeps.length})</h3>
             <div className="flex flex-wrap items-center gap-2">
               {devDeps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#151519] border border-[#212126] text-xs font-mono">
-                  <strong className="text-neutral-200">{dep}</strong>
-                  <code className="text-neutral-300 text-[11px]">{ver}</code>
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-xs font-mono">
+                  <strong className="text-white">{dep}</strong>
+                  <code className="text-zinc-400 text-[11px]">{ver}</code>
                 </span>
               ))}
             </div>
@@ -108,12 +125,12 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
         {/* Peer Dependencies */}
         {peerDeps.length > 0 && (
           <div className="flex flex-col gap-2.5">
-            <h3 className="text-xs font-bold text-neutral-300">Peer Dependencies ({peerDeps.length})</h3>
+            <h3 className="text-xs font-bold text-zinc-300">Peer Dependencies ({peerDeps.length})</h3>
             <div className="flex flex-wrap items-center gap-2">
               {peerDeps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#151519] border border-[#212126] text-xs font-mono">
-                  <strong className="text-neutral-200">{dep}</strong>
-                  <code className="text-neutral-300 text-[11px]">{ver}</code>
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-xs font-mono">
+                  <strong className="text-white">{dep}</strong>
+                  <code className="text-zinc-400 text-[11px]">{ver}</code>
                 </span>
               ))}
             </div>
@@ -123,11 +140,11 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
         {/* Python Dependencies */}
         {pyDeps.length > 0 && (
           <div className="flex flex-col gap-2.5">
-            <h3 className="text-xs font-bold text-neutral-300">Python Dependencies ({pyDeps.length})</h3>
+            <h3 className="text-xs font-bold text-zinc-300">Python Dependencies ({pyDeps.length})</h3>
             <div className="flex flex-wrap items-center gap-2">
               {pyDeps.map((dep) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#151519] border border-[#212126] text-xs font-mono">
-                  <strong className="text-neutral-200">{dep}</strong>
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-xs font-mono">
+                  <strong className="text-white">{dep}</strong>
                 </span>
               ))}
             </div>

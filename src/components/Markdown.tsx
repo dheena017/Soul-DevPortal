@@ -18,12 +18,47 @@ interface InlineTextProps {
 function InlineText({ text = '' }: InlineTextProps) {
   if (!text) return null;
 
-  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*|~~[^~]+~~|\[[^\]]+\]\([^)]+\)|\*[^*]+\*|_[^_]+_)/g);
+  const parts = text.split(/(!\[[^\]]*\]\([^)]+\)|<img\s+[^>]+>|`[^`]+`|\*\*[^*]+\*\*|~~[^~]+~~|\[[^\]]+\]\([^)]+\)|\*[^*]+\*|_[^_]+_)/g);
 
   return (
     <>
       {parts.map((part, index) => {
         if (!part) return null;
+
+        // Markdown Image: ![alt](url)
+        const imgMatch = part.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+        if (imgMatch) {
+          return (
+            <span key={index} className="inline-block my-2 max-w-full">
+              <img
+                src={imgMatch[2]}
+                alt={imgMatch[1] || 'Preview'}
+                className="max-h-96 rounded-xl border border-[#212126] shadow-md object-contain"
+                onError={(e) => {
+                  (e.currentTarget as HTMLElement).style.display = 'none';
+                }}
+              />
+            </span>
+          );
+        }
+
+        // HTML Image: <img src="..." />
+        const htmlImgMatch = part.match(/<img\s+[^>]*src=["']([^"']+)["'][^>]*\/?>/i);
+        if (htmlImgMatch) {
+          return (
+            <span key={index} className="inline-block my-2 max-w-full">
+              <img
+                src={htmlImgMatch[1]}
+                alt="Image preview"
+                className="max-h-96 rounded-xl border border-[#212126] shadow-md object-contain"
+                onError={(e) => {
+                  (e.currentTarget as HTMLElement).style.display = 'none';
+                }}
+              />
+            </span>
+          );
+        }
+
         if (part.startsWith('`') && part.endsWith('`')) {
           return (
             <code
@@ -228,7 +263,7 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
         if (block.type === 'h2') return <HeadingWithAnchor level={2} text={block.text} key={index} />;
         if (block.type === 'h3') return <HeadingWithAnchor level={3} text={block.text} key={index} />;
         if (block.type === 'h4') return <HeadingWithAnchor level={4} text={block.text} key={index} />;
-        if (block.type === 'p') {
+        if (block.type === 'p' || block.type === 'paragraph') {
           const trimmed = (block.text || '').trim();
           if (trimmed.startsWith('```')) {
             const lines = trimmed.split('\n');

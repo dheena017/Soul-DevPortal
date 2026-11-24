@@ -86,7 +86,7 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
         )}
 
         {activeTab === 'playground' && (
-          <PackagePlaygroundTab pkgId={livePkg.id} />
+          <PackagePlaygroundTab pkgId={livePkg.id} pkg={livePkg} />
         )}
 
         {activeTab === 'manifest' && (

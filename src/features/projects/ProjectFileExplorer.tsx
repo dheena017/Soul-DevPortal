@@ -30,11 +30,17 @@ function getFileMeta(fileName: string, isDir: boolean) {
   }
 
   const lowerName = fileName.toLowerCase();
-  if (lowerName === 'license') {
+  if (lowerName === 'license' || lowerName === 'licence') {
     return { type: 'md', label: 'LIC', color: '#a855f7', bgColor: 'rgba(168, 85, 247, 0.12)', borderColor: 'rgba(168, 85, 247, 0.3)' };
   }
   if (lowerName === 'dockerfile') {
     return { type: 'cfg', label: 'DOCK', color: '#38bdf8', bgColor: 'rgba(56, 189, 248, 0.12)', borderColor: 'rgba(56, 189, 248, 0.3)' };
+  }
+  if (lowerName.startsWith('.env') || lowerName.endsWith('.env')) {
+    return { type: 'cfg', label: 'ENV', color: '#fb923c', bgColor: 'rgba(251, 146, 60, 0.12)', borderColor: 'rgba(251, 146, 60, 0.3)' };
+  }
+  if (lowerName.startsWith('.git') || lowerName.includes('ignore')) {
+    return { type: 'cfg', label: 'GIT', color: '#f43f5e', bgColor: 'rgba(244, 63, 94, 0.12)', borderColor: 'rgba(244, 63, 94, 0.3)' };
   }
 
   const ext = fileName.includes('.') ? fileName.split('.').pop()?.toLowerCase() || '' : '';
@@ -174,14 +180,26 @@ function FileOrFolderIcon({ isDir, isOpen, meta }: { isDir: boolean; isOpen?: bo
 const KNOWN_EXTENSIONLESS_FILES = new Set(['license', 'licence', 'dockerfile', 'makefile', 'procfile', 'cname']);
 
 function isPathDirectDirectory(name: string, rawPath: string): boolean {
+  // 1. Explicit trailing slash from backend is authoritative
   if (rawPath.endsWith('/')) return true;
+
   const lower = name.toLowerCase();
+
+  // 2. Known extensionless files are NOT directories
   if (KNOWN_EXTENSIONLESS_FILES.has(lower)) return false;
-  // Dotfiles like .gitignore, .env, .npmrc
-  if (name.startsWith('.') && !name.slice(1).includes('.')) return false;
-  // Files with an extension (e.g. App.tsx, index.css, package.json)
-  if (name.includes('.') && !name.startsWith('.')) return false;
-  // Names without extension (e.g. components, pages, data, sections, logs, src) are directories
+
+  // 3. Dotfiles with single or double extensions (.env, .env.example, .gitignore, .npmrc, .prettierrc)
+  if (name.startsWith('.')) {
+    return false;
+  }
+
+  // 4. Any file containing an extension (App.tsx, package.json, schema.sql, index.html)
+  const lastDotIndex = name.lastIndexOf('.');
+  if (lastDotIndex > 0 && lastDotIndex < name.length - 1) {
+    return false;
+  }
+
+  // 5. Bare words without dots (src, components, client, server, scripts, data) are directories
   return true;
 }
 
@@ -198,13 +216,14 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
     const dirSet = new Set<string>();
 
     fileTree.forEach((path) => {
+      const isExplicitDir = path.endsWith('/');
       const clean = path.replace(/\/$/, '');
       const parts = clean.split('/');
       for (let i = 1; i < parts.length; i++) {
         dirSet.add(parts.slice(0, i).join('/'));
       }
       const lastPart = parts[parts.length - 1];
-      if (path.endsWith('/') || isPathDirectDirectory(lastPart, path)) {
+      if (isExplicitDir || isPathDirectDirectory(lastPart, path)) {
         dirSet.add(clean);
       }
     });
@@ -222,6 +241,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
     const flatItems: Array<{ path: string; name: string; isDir: boolean; meta: ReturnType<typeof getFileMeta>; group: string }> = [];
 
     for (const rawPath of fileTree) {
+      const isExplicitDir = rawPath.endsWith('/');
       const clean = rawPath.replace(/\/$/, '');
       const parts = clean.split('/');
       let current = root;
@@ -231,7 +251,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
         const part = parts[i];
         accumulated = accumulated ? `${accumulated}/${part}` : part;
         const isLast = i === parts.length - 1;
-        const isDir = !isLast || dirSet.has(accumulated);
+        const isDir = !isLast || isExplicitDir || dirSet.has(accumulated);
 
         let existing = current.children.find((c) => c.name === part);
         if (!existing) {
@@ -254,7 +274,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
       }
 
       // Add leaf files to flat items
-      if (!dirSet.has(clean) && !rawPath.endsWith('/')) {
+      if (!dirSet.has(clean) && !isExplicitDir) {
         const rootSegment = clean.split('/')[0];
         const group = rootSegment === 'client' ? 'client' : rootSegment === 'server' ? 'server' : rootSegment === 'public' ? 'public' : 'root';
         const meta = getFileMeta(parts[parts.length - 1], false);

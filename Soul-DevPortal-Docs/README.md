@@ -1,52 +1,33 @@
-# Soul-DevPortal Documentation Portal
+# Soul-DevPortal Documentation Hub
 
-Welcome to the central engineering documentation portal for **Soul-DevPortal**. This repository houses all technical guides, architectural standards, environment rules, shared package specifications, and developer runbooks governing the monorepo workspace.
-
----
-
-## 📚 Documentation Categories
-
-### 🏛️ [01. Project Architecture & Standards](project-architecture/README.md)
-The central architecture and engineering hub governing all micro-applications, frameworks, and system boundaries.
-- **[The 10 Golden Architectural Invariants](project-architecture/golden-rules.md)**
-- **[Framework & Tech Stack ("What to Use")](project-architecture/project-framework/main.md)** — Canonical 3-Pillar Stack (React 19, FastAPI, SQLite WAL, Vite 8, Tailwind v4).
-- **[API Design Standards](project-architecture/project-api/main.md)** — Uniform JSON envelopes, REST/WebSocket contracts, and error schemes.
-- **[Database Persistence](project-architecture/project-database/main.md)** — SQLite WAL concurrency model, connection management, and migrations.
-- **[Project Layout Rules](project-architecture/project-layout/main.md)** — Monorepo topology, directory hierarchy, and `@/*` path aliasing.
-- **[Project Schema Contracts](project-architecture/project-schema/main.md)** — Canonical `metadata.json` schema, Pydantic v2, and Zod models.
-- **[Server Architecture](project-architecture/project-server/main.md)** — FastAPI application factory, ASGI lifespan, and middleware pipeline.
-- **[Feature-Sliced Design (FSD)](project-architecture/project-features/main.md)** — Domain slice co-location, public facade barriers, and state isolation.
-- **[Client Architecture](project-architecture/project-client/main.md)** — React 19 SPA standards, Vite 8 reverse proxy, and Tailwind v4.
-- **[Environment & Security](project-architecture/project-env/main.md)** — Prefix scoping, sensitive data masking, validation, and master configuration matrix.
+Welcome to the unified engineering documentation portal for **Soul-DevPortal**. The documentation is organized into 4 core architectural domains, each structured with an authoritative master specification (`main.md`) and inviolable invariants (`golden-rules.md`).
 
 ---
 
-### 📦 [02. Shared Packages](02-packages/README.md)
-Architectural standards for reusable workspace packages, packages layout hierarchy, and core package guides.
-- **[The 5 Golden Rules of Shared Packages](02-packages/golden-rules.md)**
-- [Packages Layout Architecture](02-packages/packages-layout.md)
-- [Package Authoring Guide](02-packages/package-authoring-guide.md)
-- [Package Verification](02-packages/package-verification.md)
-- [Core Packages Guide (`@workspace/config`, `@workspace/logger`, `@workspace/runner`)](02-packages/README.md#core-workspace-packages-overview)
+## 📚 Master Documentation Hub
+
+### 🏛️ 01. Project Architecture & Standards
+The master architecture specification governing all 8 micro-applications, frameworks, and system boundaries.
+- **[Master Technical Blueprint](01-project-architecture/main.md)** — Layout, 3-pillar framework, client (React 19), server (FastAPI), REST API, SQLite WAL, schemas, FSD, and environment security.
+- **[The Golden Architectural Invariants](01-project-architecture/golden-rules.md)** — The 10 fundamental pillars and inviolable domain engineering rules.
 
 ---
 
-### 🌐 [03. Networking & Ports](03-networking-and-ports/README.md)
-Port reservation matrices, reverse proxy configurations, socket lifecycle, and detailed micro-application specifications.
-- **[The 5 Golden Rules of Networking & Ports](03-networking-and-ports/golden-rules.md)**
-- [Port Allocation Matrix](03-networking-and-ports/port-allocation-matrix.md)
-- [Socket Cleanup Protocol](03-networking-and-ports/socket-cleanup-protocol.md)
+### 📦 02. Shared Packages Architecture
+Architectural standards for reusable workspace libraries (`@workspace/*`), 2-tier internal/external isolation, and authoring guides.
+- **[Shared Packages Master Blueprint](02-packages-architecture/main.md)** — Core guides for `@workspace/config`, `@workspace/logger`, `@workspace/runner`, layout hierarchy, and step-by-step authoring walkthrough.
+- **[The Golden Rules of Shared Packages](02-packages-architecture/golden-rules.md)** — The 5 golden rules, 2-tier separation, snake_case internals, and manifest parity invariants.
 
 ---
 
-### ⚡ [04. Developer Cheatsheets](04-cheatsheets/README.md)
-Quick-reference runbooks, CLI commands, and pre-commit audit checklists.
-- **[The 5 Golden Rules of Developer Commands](04-cheatsheets/golden-rules.md)**
-- [Monorepo Scripts](04-cheatsheets/monorepo-scripts.md)
-- [Direct CLI Commands](04-cheatsheets/direct-cli-commands.md)
-- [Compliance Checklist](04-cheatsheets/compliance-checklist.md)
+### 🌐 03. Networking & Ports Architecture
+Port reservation matrices, reverse proxy configurations, socket lifecycle, and micro-application network topology.
+- **[Networking & Ports Master Blueprint](03-networking-and-ports/main.md)** — Master port allocation matrix (`5173–5181` client, `8000–8008` server), Vite reverse proxying, and socket cleanup runbooks.
+- **[The Golden Rules of Networking & Ports](03-networking-and-ports/golden-rules.md)** — Deterministic port blocks, immutable mapping, reverse proxy contracts, and loopback binding.
 
 ---
 
-## 🗄️ Legacy Documentation
-Original monolithic guides are safely archived in [`_legacy/`](_legacy/).
+### ⚡ 04. Developer Cheatsheets & Commands
+Quick-reference runbooks, CLI command guides, and pre-commit compliance checklists for the Soul Monorepo.
+- **[Developer Cheatsheets & Commands Master Blueprint](04-cheatsheets/main.md)** — Multi-project launchers (`npm run dev:all`), single-template direct CLI commands for all 8 apps, and master compliance standards.
+- **[The Golden Rules of Developer Commands](04-cheatsheets/golden-rules.md)** — Monorepo execution discipline, port isolation, and pre-commit verification gates.

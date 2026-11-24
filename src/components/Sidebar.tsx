@@ -486,15 +486,22 @@ export default function Sidebar({
                             </span>
                             <span className="truncate font-medium group-hover:text-white transition-colors">{formatProjectTitle(proj)}</span>
                           </div>
-                          {proj.frontendPort && (
-                            <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
-                              isProjActive
-                                ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold'
-                                : 'bg-white/[0.04] text-zinc-400 border border-white/[0.06] group-hover:text-zinc-300 group-hover:border-white/10'
-                            }`}>
-                              :{proj.frontendPort}
-                            </span>
-                          )}
+                          <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                            {proj.relativeTime && (
+                              <span className="text-[11px] font-mono text-zinc-300 transition-colors" title={`Last modified: ${proj.updatedAt || proj.relativeTime}`}>
+                                {proj.relativeTime}
+                              </span>
+                            )}
+                            {proj.frontendPort && (
+                              <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
+                                isProjActive
+                                  ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold'
+                                  : 'bg-white/[0.04] text-zinc-400 border border-white/[0.06] group-hover:text-zinc-300 group-hover:border-white/10'
+                              }`}>
+                                :{proj.frontendPort}
+                              </span>
+                            )}
+                          </div>
                         </button>
                       );
                     })}
@@ -609,9 +616,16 @@ export default function Sidebar({
                             </span>
                             <span className="truncate font-mono font-medium group-hover:text-white transition-colors">{pkg.displayName || pkg.name}</span>
                           </div>
-                          <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 border transition-colors ${badge.color}`}>
-                            {badge.text}
-                          </span>
+                          <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                            {pkg.relativeTime && (
+                              <span className="text-[11px] font-mono text-zinc-300 transition-colors" title={`Last commit: ${pkg.updatedAt || pkg.relativeTime}`}>
+                                {pkg.relativeTime}
+                              </span>
+                            )}
+                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 border transition-colors ${badge.color}`}>
+                              {badge.text}
+                            </span>
+                          </div>
                         </button>
                       );
                     })}
@@ -722,9 +736,16 @@ export default function Sidebar({
                             </span>
                             <span className="truncate font-medium group-hover:text-white transition-colors">{formatDocGuideTitle(guide)}</span>
                           </div>
-                          <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 border transition-colors ${badge.color}`}>
-                            {badge.text}
-                          </span>
+                          <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                            {guide.relativeTime && (
+                              <span className="text-[11px] font-mono text-zinc-300 transition-colors" title={`Last updated: ${guide.updatedAt || guide.relativeTime}`}>
+                                {guide.relativeTime}
+                              </span>
+                            )}
+                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 border transition-colors ${badge.color}`}>
+                              {badge.text}
+                            </span>
+                          </div>
                         </button>
                       );
                     })}

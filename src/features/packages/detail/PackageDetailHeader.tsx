@@ -123,9 +123,15 @@ export default function PackageDetailHeader({
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-300 select-none shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-300 select-none shadow-sm" title={`Last updated: ${pkg.updatedAt || pkg.relativeTime || 'recently'}`}>
             <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
             <span>Active Package · {totalExports} Symbols</span>
+            {pkg.relativeTime && (
+              <>
+                <span className="text-zinc-600">·</span>
+                <span className="text-zinc-400 font-mono font-medium">Updated {pkg.relativeTime}</span>
+              </>
+            )}
           </div>
           <CopyButton text={pkg.name || ''} label="Copy Name" copiedLabel="Copied!" variant="compact" />
           <CopyButton
@@ -179,16 +185,17 @@ export default function PackageDetailHeader({
             <strong className="text-base font-bold text-white font-mono mt-1">v{pkg.version || '1.0.0'}</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
-            <span className="text-[10px] text-zinc-400 font-mono font-bold uppercase tracking-wider">LICENSE</span>
-            <strong className="text-base font-bold text-zinc-300 font-mono mt-1">{pkg.license || 'MIT'}</strong>
+          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all" title={pkg.updatedAt || ''}>
+            <span className="text-[10px] text-zinc-400 font-mono font-bold uppercase tracking-wider flex items-center justify-between">
+              <span>LAST UPDATED</span>
+              <span className="text-emerald-400 text-[10px]">● LIVE</span>
+            </span>
+            <strong className="text-base font-bold text-white font-mono mt-1">{pkg.relativeTime || 'Recently'}</strong>
           </div>
 
           <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
-            <span className="text-[10px] text-zinc-400 font-mono font-bold uppercase tracking-wider">ECOSYSTEMS</span>
-            <strong className="text-base font-bold text-white font-mono mt-1 truncate">
-              {[pkg.hasNpmManifest && 'npm', (pkg.hasPythonManifest || pkg.pythonModule) && 'Python'].filter(Boolean).join(' · ') || 'Universal'}
-            </strong>
+            <span className="text-[10px] text-zinc-400 font-mono font-bold uppercase tracking-wider">LICENSE</span>
+            <strong className="text-base font-bold text-zinc-300 font-mono mt-1">{pkg.license || 'MIT'}</strong>
           </div>
 
           <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">

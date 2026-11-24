@@ -22,6 +22,8 @@ export interface WorkspaceApiResponse {
   techStackBlocks: MarkdownBlock[];
   projectRulesBlocks: MarkdownBlock[];
   cheatsheetBlocks: MarkdownBlock[];
+  docsHierarchy?: any[];
+  docsBlocksMap?: Record<string, MarkdownBlock[]>;
   stats: StatsData;
 }
 
@@ -158,6 +160,54 @@ export async function fetchGuideContent(id: string): Promise<ApiGuideMeta | null
 }
 
 /**
+ * Fetches the 4-category hierarchical docs navigation tree with topics and tabs.
+ */
+export async function fetchDocsNavigation(): Promise<any[]> {
+  try {
+    const res = await fetch(`${API_BASE}/docs/navigation`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Fetches structured markdown blocks for a subfolder topic tab (e.g. project-api/main).
+ */
+export async function fetchDocTabContent(category: string, topic: string, tab: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE}/docs/details/${encodeURIComponent(category)}/${encodeURIComponent(topic)}/${encodeURIComponent(tab)}`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetches structured markdown blocks for a category root file (e.g. golden-rules).
+ */
+export async function fetchDocFileContent(category: string, docName: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE}/docs/details/${encodeURIComponent(category)}/${encodeURIComponent(docName)}`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Triggers an on-demand AST re-scan on the FastAPI backend.
  */
 export async function triggerWorkspaceRefresh(): Promise<boolean> {
@@ -281,22 +331,6 @@ export async function fetchPackageTab(packageName: string, tab: string): Promise
     return await res.json();
   } catch {
     return null;
-  }
-}
-
-/**
- * Fetches dynamic navigation tree for docs across the 4 main categories.
- */
-export async function fetchDocsNavigation(): Promise<any[]> {
-  try {
-    const res = await fetch(`${API_BASE}/docs/navigation`, {
-      method: 'GET',
-      headers: { Accept: 'application/json' },
-    });
-    if (!res.ok) return [];
-    return await res.json();
-  } catch {
-    return [];
   }
 }
 

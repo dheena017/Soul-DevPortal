@@ -1,6 +1,7 @@
-# Networking & Ports Philosophy & The 5 Golden Rules
+# Networking & Ports Architecture — The Golden Architectural Invariants & Rules
 
-The Soul Monorepo operates a distributed constellation of micro-applications running simultaneously. To eliminate port conflicts, cross-service collisions, and socket leakages, networking is strictly partitioned and deterministically governed.
+> **Scope**: Monorepo Workspace Architectural Rules & Engineering Invariants  
+> **Applies to**: All client applications, backend services, dev proxies, and process supervisors
 
 ```
                     DETERMINISTIC PORT ALLOCATION MAP
@@ -12,9 +13,9 @@ The Soul Monorepo operates a distributed constellation of micro-applications run
  │ 5175: free-api-hub                     │ 8002: free-api-hub (FastAPI)       │
  │ 5176: sonikoma                         │ 8006: sonikoma (FastAPI)           │
  │ 5177: spatial-dimensions               │ 8007: spatial-dimensions (FastAPI) │
- │ 5178: college-management-system        │ 8003: college-management-system    │
- │ 5179: globalpulse-ai                   │ 8004: globalpulse-ai (FastAPI)     │
- │ 5180: postcraft-ai                     │ 8005: postcraft-ai (Express)       │
+ │ 5178: college-management-system        │ 8005: college-management-system    │
+ │ 5179: globalpulse-ai                   │ 8003: globalpulse-ai (FastAPI)     │
+ │ 5180: postcraft-ai                     │ 8004: postcraft-ai (FastAPI)       │
  └────────────────────────────────────────┴────────────────────────────────────┘
 ```
 
@@ -28,7 +29,7 @@ The Soul Monorepo operates a distributed constellation of micro-applications run
 - No application may bind to arbitrary, random, or undocumented ports outside its assigned block.
 
 ### 2. Immutable Project Port Mapping
-- Every project has an assigned, immutable client and server port pair declared in [port-allocation-matrix.md](port-allocation-matrix.md) and `metadata.json`.
+- Every project has an assigned, immutable client and server port pair declared in `metadata.json` and `projects.json`.
 - Developers must never alter project ports on a local whim. If port reconfiguration is required, it must be officially updated in the central matrix and `.env.example` templates.
 
 ### 3. Standard Reverse Proxy Contract (`/api`)

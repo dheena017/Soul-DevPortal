@@ -217,7 +217,11 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         )}
 
         {activeTab === 'api' && (
-          <ProjectApiTab project={apiProject} beUrl={beUrl} rawEndpoints={tabData.api?.endpoints} />
+          <ProjectApiTab
+            project={apiProject}
+            beUrl={beUrl}
+            rawEndpoints={tabData.api?.endpoints || (project as any).rawEndpoints}
+          />
         )}
 
         {activeTab === 'database' && (

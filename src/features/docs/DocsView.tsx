@@ -9,7 +9,10 @@ export interface DocsViewProps {
   techStackBlocks?: MarkdownBlock[];
   projectRulesBlocks?: MarkdownBlock[];
   cheatsheetBlocks?: MarkdownBlock[];
+  docsHierarchy?: any[];
+  docsBlocksMap?: Record<string, MarkdownBlock[]>;
   activeGuideId?: string;
+  initialSubModule?: string;
   onSelectGuide?: (id: string) => void;
   onBack?: () => void;
 }
@@ -20,7 +23,10 @@ export default function DocsView({
   techStackBlocks = [],
   projectRulesBlocks = [],
   cheatsheetBlocks = [],
+  docsHierarchy,
+  docsBlocksMap,
   activeGuideId = 'hub',
+  initialSubModule,
   onSelectGuide,
   onBack,
 }: DocsViewProps) {
@@ -45,6 +51,9 @@ export default function DocsView({
       techStackBlocks={techStackBlocks}
       projectRulesBlocks={projectRulesBlocks}
       cheatsheetBlocks={cheatsheetBlocks}
+      docsHierarchy={docsHierarchy}
+      docsBlocksMap={docsBlocksMap}
+      initialSubModule={initialSubModule}
       onSelectGuide={onSelectGuide}
       onBack={() => {
         if (onBack) onBack();
