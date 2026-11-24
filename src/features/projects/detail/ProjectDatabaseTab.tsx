@@ -64,7 +64,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Schema Mode</span>
-            <strong className="text-xs font-bold text-emerald-400 font-mono mt-1">
+            <strong className="text-xs font-bold text-blue-400 font-mono mt-1">
               {tables.length > 0 ? `${tables.length} Tables Registered` : 'Single Database File'}
             </strong>
           </div>

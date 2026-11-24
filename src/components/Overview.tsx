@@ -80,8 +80,8 @@ export default function Overview({
               <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-white font-semibold shadow-sm">Overview Dashboard</strong>
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-semibold text-blue-400">
+              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" aria-hidden="true" />
               <span>Live Ecosystem · 3 Pillars · {projects.length || 8} Apps · {packages.length || 3} Packages</span>
             </div>
           </div>
@@ -115,20 +115,20 @@ export default function Overview({
               <span className="text-lg font-extrabold text-blue-400 font-mono">3</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Core Pillars</span>
             </div>
-            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-emerald-500/40 transition-all">
-              <span className="text-lg font-extrabold text-emerald-400 font-mono">{projects.length || 8}</span>
+            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
+              <span className="text-lg font-extrabold text-blue-400 font-mono">{projects.length || 8}</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Integrated Apps</span>
             </div>
-            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-purple-500/40 transition-all">
-              <span className="text-lg font-extrabold text-purple-400 font-mono">{packages.length || 3}</span>
+            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-[#282838] transition-all">
+              <span className="text-lg font-extrabold text-blue-400 font-mono">{packages.length || 3}</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Shared Packages</span>
             </div>
-            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-amber-500/40 transition-all">
-              <span className="text-lg font-extrabold text-amber-400 font-mono">5</span>
+            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-[#282838] transition-all">
+              <span className="text-lg font-extrabold text-neutral-300 font-mono">5</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Architecture Specs</span>
             </div>
-            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-emerald-500/40 transition-all">
-              <span className="text-lg font-extrabold text-emerald-400 font-mono">0</span>
+            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
+              <span className="text-lg font-extrabold text-blue-400 font-mono">0</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Port Collisions</span>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function Overview({
           </div>
 
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-emerald-500/50 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
             onClick={() => onNavigate('packages')}
             role="button"
             tabIndex={0}
@@ -176,28 +176,28 @@ export default function Overview({
           >
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-2xl">
+                <span className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-2xl">
                   📦
                 </span>
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-blue-500/15 border border-blue-500/30 text-blue-400">
                   Pillar 2
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+              <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">
                 Shared Packages
               </h3>
               <p className="text-xs text-neutral-400 leading-relaxed">
                 Core reusable libraries: @workspace/logger (universal logging), @workspace/runner (CLI supervisor), and @workspace/config (design tokens).
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 pt-2 border-t border-[#22222e]">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-blue-400 pt-2 border-t border-[#22222e]">
               <span>Inspect {packages.length || 3} Packages</span>
               <span>→</span>
             </div>
           </div>
 
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-amber-500/50 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
             onClick={() => onNavigate('docs')}
             role="button"
             tabIndex={0}
@@ -205,21 +205,21 @@ export default function Overview({
           >
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-2xl">
+                <span className="w-12 h-12 rounded-xl bg-[#111116] border border-[#282838] flex items-center justify-center text-2xl">
                   📚
                 </span>
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 border border-amber-500/30 text-amber-400">
+                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-[#111116] border border-[#282838] text-neutral-300">
                   Pillar 3
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
+              <h3 className="text-lg font-bold text-white group-hover:text-neutral-300 transition-colors">
                 Docs &amp; Specifications
               </h3>
               <p className="text-xs text-neutral-400 leading-relaxed">
                 5 authoritative architecture guides: mandatory golden rules, port matrices, tech stack standards, and compliance cheatsheets.
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 pt-2 border-t border-[#22222e]">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-300 pt-2 border-t border-[#22222e]">
               <span>Read 5 Guides</span>
               <span>→</span>
             </div>
@@ -367,7 +367,7 @@ export default function Overview({
                           </span>
                         )}
                         {p.backendPort && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 font-bold">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-400 font-bold">
                             BE :{p.backendPort}
                           </span>
                         )}
@@ -476,7 +476,7 @@ export default function Overview({
 
                       <div className="flex items-center gap-1.5">
                         {pkg.hasNpmManifest && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/10 border border-amber-500/25 text-amber-400">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111116] border border-[#282838] text-neutral-300">
                             npm
                           </span>
                         )}
@@ -589,13 +589,13 @@ export default function Overview({
       {/* ── Monorepo Command Runners Quick Banner ── */}
       <section className="w-full p-6 rounded-2xl bg-gradient-to-r from-[#111118] to-[#141422] border border-[#282838] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-2xl shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-[#282838] flex items-center justify-center text-2xl shrink-0">
             ⚡
           </div>
           <div className="flex flex-col gap-1.5">
             <div className="flex flex-wrap items-center gap-2.5">
               <h3 className="text-lg font-bold text-white">15 Monorepo Automation Scripts &amp; Command Runners</h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-purple-500/15 border border-purple-500/30 text-purple-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-500/15 border border-[#282838] text-blue-400">
                 Python FastAPI · Vite · TS Gates
               </span>
             </div>
@@ -608,7 +608,7 @@ export default function Overview({
 
         <button
           type="button"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-purple-600 text-white hover:bg-purple-500 transition-all shadow-lg shadow-purple-600/25 shrink-0"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/25 shrink-0"
           onClick={() => onNavigate('scripts')}
         >
           <span>Open Scripts &amp; Runners Center</span>

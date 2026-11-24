@@ -29,11 +29,11 @@
   /* ── Accent & Pillar Colors ── */
   --accent-sky: #3b82f6;
   --accent-blue: #3b82f6;
-  --accent-emerald: #10b981;
-  --accent-amber: #f59e0b;
-  --accent-purple: #a855f7;
-  --accent-rose: #f43f5e;
-  --accent-indigo: #6366f1;
+  --accent-emerald: #3b82f6;
+  --accent-amber: #3b82f6;
+  --accent-purple: #3b82f6;
+  --accent-rose: #ef4444;
+  --accent-indigo: #3b82f6;
 
   /* ── Radii ── */
   --radius-sm: 6px;

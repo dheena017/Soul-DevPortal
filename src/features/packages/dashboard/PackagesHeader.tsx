@@ -57,8 +57,8 @@ export default function PackagesHeader({
           <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-white font-semibold shadow-sm">Pillar 2: Packages Dashboard</strong>
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-semibold text-blue-400">
+          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" aria-hidden="true" />
           <span>{packagesCount} Shared Libraries Active</span>
         </div>
       </div>
@@ -99,7 +99,7 @@ export default function PackagesHeader({
 
         <div className="flex flex-col p-3.5 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-            <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
             <span>Runtimes</span>
@@ -109,7 +109,7 @@ export default function PackagesHeader({
 
         <div className="flex flex-col p-3.5 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-            <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6" />
               <polyline points="8 6 2 12 8 18" />
             </svg>
@@ -120,12 +120,12 @@ export default function PackagesHeader({
 
         <div className="flex flex-col p-3.5 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-            <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
             <span>Monorepo Adoption</span>
           </div>
-          <strong className="text-xl font-extrabold text-purple-300 font-mono mt-1.5">100% Core</strong>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">100% Core</strong>
         </div>
       </div>
 

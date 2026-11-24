@@ -82,7 +82,7 @@ export const Header: React.FC<HeaderProps> = ({
             <SoulLogoIcon size={18} />
             <span className="font-semibold text-white">soul</span>
             <span className="text-neutral-600 font-bold">/</span>
-            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 font-bold">dev-portal</strong>
+            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 font-bold">dev-portal</strong>
           </button>
 
           {breadcrumbs.slice(1).map((crumb, idx) => (

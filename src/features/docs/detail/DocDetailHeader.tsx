@@ -73,8 +73,8 @@ export default function DocDetailHeader({
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-semibold text-blue-400">
+            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" aria-hidden="true" />
             <span>100% Monorepo Compliant (8/8 Apps)</span>
           </div>
           <CopyButton
@@ -98,10 +98,10 @@ export default function DocDetailHeader({
               <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-blue-500/15 border border-blue-500/30 text-blue-400">
                 OFFICIAL SPEC V1.0
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400">
                 v1.0.0
               </span>
-              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-purple-500/15 border border-purple-500/30 text-purple-400">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-blue-500/15 border border-[#282838] text-blue-400">
                 {guideMeta.category.toUpperCase()}
               </span>
             </div>
@@ -121,28 +121,28 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-blue-400 font-mono mt-1">{headingsCount} headings</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-emerald-500/40 transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>⏱️</span>
               <span>READ TIME</span>
             </span>
-            <strong className="text-base font-bold text-emerald-400 font-mono mt-1">{guideMeta.readTime}</strong>
+            <strong className="text-base font-bold text-blue-400 font-mono mt-1">{guideMeta.readTime}</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-purple-500/40 transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-[#282838] transition-all">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>💻</span>
               <span>CODE EXAMPLES</span>
             </span>
-            <strong className="text-base font-bold text-purple-400 font-mono mt-1">{codeBlocksCount} snippets</strong>
+            <strong className="text-base font-bold text-blue-400 font-mono mt-1">{codeBlocksCount} snippets</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-amber-500/40 transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-[#282838] transition-all">
             <span className="text-[10px] font-mono text-neutral-500 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>📊</span>
               <span>TABLES &amp; MATRICES</span>
             </span>
-            <strong className="text-base font-bold text-amber-400 font-mono mt-1">{tablesCount} tables</strong>
+            <strong className="text-base font-bold text-neutral-300 font-mono mt-1">{tablesCount} tables</strong>
           </div>
         </div>
       </div>

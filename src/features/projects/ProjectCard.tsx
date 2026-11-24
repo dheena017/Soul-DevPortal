@@ -103,8 +103,8 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
                 </span>
               )}
               {project.backendPort && (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 text-[11px] font-bold" title={`Server Port :${project.backendPort}`}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" aria-hidden="true" />
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[11px] font-bold" title={`Server Port :${project.backendPort}`}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400" aria-hidden="true" />
                   <span>:{project.backendPort}</span>
                 </span>
               )}

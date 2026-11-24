@@ -130,7 +130,7 @@ export const SoulLogo: React.FC<SoulLogoProps> = ({
             <span className={`font-extrabold tracking-tight text-white ${config.text}`}>
               Soul
             </span>
-            <span className={`font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-400 ${config.text}`}>
+            <span className={`font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 ${config.text}`}>
               DevPortal
             </span>
           </div>

@@ -63,8 +63,8 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
             </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/25 text-amber-400 text-[10px] font-mono font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" aria-hidden="true" />
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#111116] border border-[#282838] text-neutral-300 text-[10px] font-mono font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-neutral-400" aria-hidden="true" />
                 <span>NPM</span>
               </span>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/25 text-blue-400 text-[10px] font-mono font-bold">
@@ -127,7 +127,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
             <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#0a0a0a] border border-[#282838] font-mono text-xs text-neutral-300">
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <span className="text-neutral-500 select-none font-bold">$</span>
-                <code className="text-[11px] text-emerald-300 truncate select-all">{pyInstallCmd}</code>
+                <code className="text-[11px] text-blue-300 truncate select-all">{pyInstallCmd}</code>
               </div>
               <CopyButton text={pyInstallCmd} variant="compact" label="" copiedLabel="Copied!" />
             </div>

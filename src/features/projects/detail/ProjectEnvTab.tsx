@@ -180,7 +180,7 @@ export default function ProjectEnvTab({
                       {item.key}
                     </code>
                     {item.isSecret && (
-                      <span className="px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold uppercase bg-amber-500/10 border border-amber-500/25 text-amber-400 shrink-0">
+                      <span className="px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold uppercase bg-[#111116] border border-[#282838] text-neutral-300 shrink-0">
                         Secret
                       </span>
                     )}
@@ -188,7 +188,7 @@ export default function ProjectEnvTab({
                   <div className="flex items-center gap-2 shrink-0">
                     <code
                       className={`text-xs font-mono truncate max-w-[140px] sm:max-w-[170px] ${
-                        item.isSet ? 'text-emerald-400' : 'text-neutral-500 italic'
+                        item.isSet ? 'text-blue-400' : 'text-neutral-500 italic'
                       }`}
                       title={item.displayVal}
                     >
@@ -254,7 +254,7 @@ export default function ProjectEnvTab({
               <span>🛠️</span>
               <span>Dev Dependencies</span>
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-purple-500/10 border border-purple-500/30 text-purple-400">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-blue-500/10 border border-[#282838] text-blue-400">
               {devDepsEntries.length}
             </span>
           </div>
@@ -262,7 +262,7 @@ export default function ProjectEnvTab({
             {devDepsEntries.length > 0 ? (
               devDepsEntries.map(([dep, ver]) => (
                 <div key={dep} className="flex items-center justify-between text-xs py-1 border-b border-[#22222e] last:border-0">
-                  <code className="text-purple-300 font-mono truncate">{dep}</code>
+                  <code className="text-white font-mono truncate">{dep}</code>
                   <span className="text-neutral-500 font-mono text-[11px] shrink-0">{ver}</span>
                 </div>
               ))

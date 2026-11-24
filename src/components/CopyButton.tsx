@@ -40,16 +40,16 @@ export default function CopyButton({
 
   const variantStyles = {
     default: copied
-      ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-400'
+      ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
       : 'bg-[#111116] border-[#282838] text-neutral-300 hover:text-white hover:bg-[#111116] hover:border-blue-500/40',
     compact: copied
-      ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-400'
+      ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
       : 'bg-[#111116] border-[#282838] text-neutral-300 hover:text-white hover:bg-[#111116] hover:border-blue-500/40',
     'icon-only': copied
-      ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-400'
+      ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
       : 'bg-[#111116] border-[#282838] text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-blue-500/40',
     ghost: copied
-      ? 'bg-emerald-500/10 text-emerald-400 border-transparent'
+      ? 'bg-blue-500/10 text-blue-400 border-transparent'
       : 'bg-transparent text-neutral-400 hover:text-white hover:bg-[#111116] border-transparent',
   };
 
@@ -72,7 +72,7 @@ export default function CopyButton({
     >
       <span className="shrink-0 flex items-center justify-center" aria-hidden="true">
         {copied ? (
-          <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         ) : (

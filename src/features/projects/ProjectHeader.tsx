@@ -66,8 +66,8 @@ export default function ProjectHeader({
           <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-white font-semibold shadow-sm">Pillar 1: Projects</strong>
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-semibold text-blue-400">
+          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" aria-hidden="true" />
           <span>{totalCount} Applications Indexed</span>
         </div>
       </div>
@@ -111,7 +111,7 @@ export default function ProjectHeader({
 
         <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-            <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
               <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
               <line x1="6" y1="6" x2="6.01" y2="6" />
@@ -124,7 +124,7 @@ export default function ProjectHeader({
 
         <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-            <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <line x1="2" y1="12" x2="22" y2="12" />
               <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
@@ -136,24 +136,24 @@ export default function ProjectHeader({
 
         <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-            <svg className="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
             <span>Port Conflicts</span>
           </div>
-          <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{collisionsCount} Conflicts</strong>
+          <strong className="text-xl font-extrabold text-blue-400 font-mono mt-1.5">{collisionsCount} Conflicts</strong>
         </div>
 
         <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-            <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <ellipse cx="12" cy="5" rx="9" ry="3" />
               <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
               <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
             </svg>
             <span>SQLite Isolation</span>
           </div>
-          <strong className="text-xl font-extrabold text-purple-300 font-mono mt-1.5">{sqliteIsolationPercent}</strong>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{sqliteIsolationPercent}</strong>
         </div>
       </div>
 

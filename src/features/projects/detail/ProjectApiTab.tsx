@@ -82,13 +82,13 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
               const isPut = method === 'PUT';
 
               const methodStyle = isGet
-                ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+                ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
                 : isPost
                 ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
                 : isDelete
                 ? 'bg-rose-500/15 border-rose-500/30 text-rose-400'
                 : isPut
-                ? 'bg-amber-500/15 border-amber-500/30 text-amber-400'
+                ? 'bg-[#111116] border-[#282838] text-neutral-300'
                 : 'bg-[#111116] border-[#282838] text-neutral-300';
 
               const fullUrl = beUrl ? `${beUrl}${pathStr || method}` : pathStr || method;
@@ -122,7 +122,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
           {project.backendPort && (
             <div className="flex items-center justify-between w-full max-w-md p-3 rounded-xl bg-[#111116] border border-[#282838]">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
                   GET
                 </span>
                 <code className="text-xs font-mono text-neutral-200">/api/health</code>

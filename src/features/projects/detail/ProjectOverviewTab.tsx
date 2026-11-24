@@ -60,7 +60,7 @@ export default function ProjectOverviewTab({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
           <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">RUNTIME PORTS</span>
-            <strong className="text-xs md:text-sm font-bold text-emerald-400 font-mono mt-1">
+            <strong className="text-xs md:text-sm font-bold text-blue-400 font-mono mt-1">
               Client :{project.frontendPort || 'N/A'} {project.backendPort ? `· Server :${project.backendPort}` : ''}
             </strong>
           </div>
@@ -74,7 +74,7 @@ export default function ProjectOverviewTab({
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">ENV VARIABLES</span>
-            <strong className="text-xs md:text-sm font-bold text-amber-400 font-mono mt-1">{envCount} configured</strong>
+            <strong className="text-xs md:text-sm font-bold text-neutral-300 font-mono mt-1">{envCount} configured</strong>
           </div>
         </div>
       </section>
@@ -104,21 +104,21 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-bold text-white">Server Tier</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
                 Port {project.backendPort || 'N/A'}
               </span>
             </div>
             <div className="flex flex-col gap-1.5 text-xs text-neutral-400">
               <p><strong className="text-neutral-300">Runtime:</strong> {project.backendCmd?.includes('python') ? 'Python (FastAPI / Uvicorn)' : 'Node.js Express / TS'}</p>
-              <p><strong className="text-neutral-300">Command:</strong> <code className="text-[11px] text-indigo-300 font-mono">{project.backendCmd || 'Standalone fullstack'}</code></p>
-              <p><strong className="text-neutral-300">Local URL:</strong> <a href={beUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">{beUrl || 'Not configured'}</a></p>
+              <p><strong className="text-neutral-300">Command:</strong> <code className="text-[11px] text-blue-300 font-mono">{project.backendCmd || 'Standalone fullstack'}</code></p>
+              <p><strong className="text-neutral-300">Local URL:</strong> <a href={beUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{beUrl || 'Not configured'}</a></p>
             </div>
           </div>
 
           <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-bold text-white">Persistence</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/15 border border-purple-500/30 text-purple-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-[#282838] text-blue-400">
                 Database
               </span>
             </div>
@@ -131,7 +131,7 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-bold text-white">AI Intelligence</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111116] border border-[#282838] text-neutral-300">
                 Engine
               </span>
             </div>
@@ -159,7 +159,7 @@ export default function ProjectOverviewTab({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {featuresList.map((feat, idx) => (
               <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-[#111116] border border-[#282838]">
-                <span className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5">
+                <span className="w-5 h-5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center justify-center text-xs shrink-0 mt-0.5">
                   ✓
                 </span>
                 <div className="flex flex-col gap-0.5">
@@ -209,13 +209,13 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-mono font-bold text-white">@workspace/runner</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
                 Orchestration
               </span>
             </div>
             <div className="flex flex-col gap-1 text-xs text-neutral-400">
               <p><strong className="text-neutral-300">Role:</strong> CLI dev runner with automatic port conflict guard</p>
-              <p><strong className="text-neutral-300">Command:</strong> <code className="text-[11px] text-emerald-300 font-mono">{runnerCmd}</code></p>
+              <p><strong className="text-neutral-300">Command:</strong> <code className="text-[11px] text-blue-300 font-mono">{runnerCmd}</code></p>
             </div>
           </div>
         </div>

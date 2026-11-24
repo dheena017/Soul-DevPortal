@@ -39,16 +39,16 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
               </div>
               <div className="flex justify-between py-1 border-b border-[#22222e]">
                 <span className="text-neutral-500">Version</span>
-                <span className="text-emerald-400 font-mono font-bold">v{pkg.version}</span>
+                <span className="text-blue-400 font-mono font-bold">v{pkg.version}</span>
               </div>
               <div className="flex justify-between py-1 border-b border-[#22222e]">
                 <span className="text-neutral-500">License</span>
-                <span className="text-amber-400 font-medium">{pkg.license || 'MIT'}</span>
+                <span className="text-neutral-300 font-medium">{pkg.license || 'MIT'}</span>
               </div>
               {pkg.pythonModule && (
                 <div className="flex justify-between py-1">
                   <span className="text-neutral-500">Python Module</span>
-                  <code className="text-emerald-400 font-mono">{pkg.pythonModule}</code>
+                  <code className="text-blue-400 font-mono">{pkg.pythonModule}</code>
                 </div>
               )}
             </div>
@@ -98,7 +98,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
               {devDeps.map(([dep, ver]) => (
                 <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#111116] border border-[#282838] text-xs font-mono">
                   <strong className="text-white">{dep}</strong>
-                  <code className="text-purple-400 text-[11px]">{ver}</code>
+                  <code className="text-blue-400 text-[11px]">{ver}</code>
                 </span>
               ))}
             </div>
@@ -113,7 +113,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
               {peerDeps.map(([dep, ver]) => (
                 <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#111116] border border-[#282838] text-xs font-mono">
                   <strong className="text-white">{dep}</strong>
-                  <code className="text-emerald-400 text-[11px]">{ver}</code>
+                  <code className="text-blue-400 text-[11px]">{ver}</code>
                 </span>
               ))}
             </div>

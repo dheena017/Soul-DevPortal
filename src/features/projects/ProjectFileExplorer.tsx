@@ -419,7 +419,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
       return (
         <>
           {name.slice(0, idx)}
-          <mark className="bg-amber-500/30 text-amber-200 px-0.5 rounded">{name.slice(idx, idx + query.length)}</mark>
+          <mark className="bg-blue-500/30 text-white px-0.5 rounded">{name.slice(idx, idx + query.length)}</mark>
           {name.slice(idx + query.length)}
         </>
       );
@@ -496,7 +496,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             <button
               type="button"
               className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-[#111116] border border-[#282838] text-neutral-400 hover:text-white hover:border-blue-500/40 transition-all ${
-                isCopied ? 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10' : ''
+                isCopied ? 'text-blue-400 border-blue-500/50 bg-blue-500/10' : ''
               }`}
               onClick={(e) => handleCopyPath(node.path, e)}
               title={`Copy relative path: ${node.path}`}
@@ -504,7 +504,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             >
               {isCopied ? (
                 <>
-                  <svg className="w-2.5 h-2.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <svg className="w-2.5 h-2.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                   <span>Copied!</span>
@@ -761,7 +761,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
                         <button
                           type="button"
                           className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-[#111116] border border-[#282838] text-neutral-400 hover:text-white hover:border-blue-500/40 transition-all ${
-                            isCopied ? 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10' : ''
+                            isCopied ? 'text-blue-400 border-blue-500/50 bg-blue-500/10' : ''
                           }`}
                           onClick={(e) => handleCopyPath(item.path, e)}
                           title={`Copy path: ${item.path}`}
@@ -787,7 +787,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
       {/* Explorer Footer Status Bar */}
       <div className="px-4 py-2.5 bg-[#0a0a0a] border-t border-[#22222e] flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-500 font-mono">
         <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" aria-hidden="true" />
           <span>
             Showing {viewMode === 'tree' ? matchCount : filteredFlatList.length} of {fileTree.length} items
           </span>

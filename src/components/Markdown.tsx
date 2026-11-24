@@ -28,7 +28,7 @@ function InlineText({ text = '' }: InlineTextProps) {
           return (
             <code
               key={index}
-              className="px-1.5 py-0.5 rounded bg-[#111116] border border-[#282838] text-[11px] font-mono text-sky-300"
+              className="px-1.5 py-0.5 rounded bg-[#111116] border border-[#282838] text-[11px] font-mono text-blue-300"
             >
               {part.slice(1, -1)}
             </code>
@@ -64,7 +64,7 @@ function InlineText({ text = '' }: InlineTextProps) {
               href={link[2]}
               target={link[2].startsWith('http') ? '_blank' : undefined}
               rel={link[2].startsWith('http') ? 'noreferrer' : undefined}
-              className="text-sky-400 hover:text-sky-300 underline underline-offset-2 transition-colors font-medium"
+              className="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors font-medium"
             >
               {link[1]}
             </a>
@@ -92,7 +92,7 @@ function CodeBlock({ code, language }: CodeBlockProps) {
       {/* Code Toolbar */}
       <div className="flex items-center justify-between px-3.5 py-2 bg-[#111116] border-b border-[#22222e] text-xs">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#111116] text-sky-400 border border-[#282838]">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#111116] text-blue-400 border border-[#282838]">
             {language || 'text'}
           </span>
           <span className="text-[11px] font-mono text-neutral-500">
@@ -104,7 +104,7 @@ function CodeBlock({ code, language }: CodeBlockProps) {
             type="button"
             className={`px-2 py-0.5 rounded text-[10px] font-mono transition-colors ${
               wrap
-                ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
+                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
                 : 'text-neutral-500 hover:text-neutral-300 hover:bg-[#111116]'
             }`}
             onClick={() => setWrap(!wrap)}
@@ -164,8 +164,8 @@ function HeadingWithAnchor({ level, text = '' }: HeadingWithAnchorProps) {
       </span>
       <button
         type="button"
-        className={`opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono px-1.5 py-0.5 rounded text-neutral-500 hover:text-sky-400 hover:bg-[#111116] ${
-          copiedAnchor ? '!opacity-100 !text-emerald-400' : ''
+        className={`opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono px-1.5 py-0.5 rounded text-neutral-500 hover:text-blue-400 hover:bg-[#111116] ${
+          copiedAnchor ? '!opacity-100 !text-blue-400' : ''
         }`}
         onClick={copyAnchorLink}
         title={copiedAnchor ? 'Anchor link copied!' : 'Copy link to this section'}
@@ -275,7 +275,7 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
                         type="checkbox"
                         checked={task[1].toLowerCase() === 'x'}
                         disabled
-                        className="rounded border-[#282838] bg-[#111116] text-sky-500 focus:ring-0 w-3.5 h-3.5"
+                        className="rounded border-[#282838] bg-[#111116] text-blue-500 focus:ring-0 w-3.5 h-3.5"
                         aria-label={task[1].toLowerCase() === 'x' ? 'Completed task' : 'Pending task'}
                       />
                     )}
@@ -297,7 +297,7 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
           return (
             <blockquote
               key={index}
-              className="my-3 pl-4 border-l-2 border-sky-500/50 bg-[#111116]/50 py-2 pr-3 rounded-r-lg italic text-neutral-400"
+              className="my-3 pl-4 border-l-2 border-blue-500/40 bg-[#111116]/50 py-2 pr-3 rounded-r-lg italic text-neutral-400"
             >
               <InlineText text={block.text} />
             </blockquote>

@@ -7,12 +7,12 @@ import { WORKSPACE_SCRIPTS_REGISTRY } from '../features/scripts/scriptsConstants
 
 function packageBadge(pkg: PackageData): { text: string; color: string } {
   if (pkg.pythonModule) {
-    return { text: 'PY', color: 'bg-amber-500/10 text-amber-400 border-amber-500/25' };
+    return { text: 'PY', color: 'bg-[#111116] text-neutral-300 border-[#282838]' };
   }
   if (pkg.name?.includes('config')) {
-    return { text: 'CFG', color: 'bg-purple-500/10 text-purple-400 border-purple-500/25' };
+    return { text: 'CFG', color: 'bg-blue-500/10 text-blue-400 border-[#282838]' };
   }
-  return { text: 'TS', color: 'bg-sky-500/10 text-sky-400 border-sky-500/25' };
+  return { text: 'TS', color: 'bg-blue-500/10 text-blue-400 border-blue-500/30' };
 }
 
 function packageSidebarIcon(pkg: PackageData): string {
@@ -38,10 +38,10 @@ function projectSidebarIcon(proj: ProjectData): string {
 
 function docGuideBadge(guide: GuideMeta): { text: string; color: string } {
   if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-blue-500/10 text-blue-400 border-blue-500/25' };
-  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-amber-500/10 text-amber-400 border-amber-500/25' };
-  if (guide.category === 'design') return { text: 'PKG', color: 'bg-purple-500/10 text-purple-400 border-purple-500/25' };
-  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25' };
-  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/25' };
+  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-[#111116] text-neutral-300 border-[#282838]' };
+  if (guide.category === 'design') return { text: 'PKG', color: 'bg-blue-500/10 text-blue-400 border-[#282838]' };
+  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-blue-500/10 text-blue-400 border-blue-500/30' };
+  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-blue-500/10 text-blue-400 border-blue-500/30' };
   return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-[#111116] text-neutral-300 border-[#282838]' };
 }
 
@@ -353,7 +353,7 @@ export default function Sidebar({
                   <span>⚡</span>
                   <span>Matching Scripts</span>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-blue-500/20 text-blue-400 border border-blue-500/30">
                   {filteredScripts.length}
                 </span>
               </button>
@@ -452,7 +452,7 @@ export default function Sidebar({
                         <span className="truncate">{formatProjectTitle(proj.title)}</span>
                       </div>
                       {proj.frontendPort && (
-                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 bg-blue-500/10 text-blue-400 border border-blue-500/30">
                           :{proj.frontendPort}
                         </span>
                       )}
@@ -463,7 +463,7 @@ export default function Sidebar({
                 {filteredProjects.length > 50 && (
                   <button
                     type="button"
-                    className="text-left px-2 py-1 text-[11px] text-sky-400 hover:underline"
+                    className="text-left px-2 py-1 text-[11px] text-blue-400 hover:underline"
                     onClick={() => onNavigate('projects')}
                   >
                     + View all {totalProjects.toLocaleString()} apps in dashboard →
@@ -555,7 +555,7 @@ export default function Sidebar({
                 {filteredPackages.length > 50 && (
                   <button
                     type="button"
-                    className="text-left px-2 py-1 text-[11px] text-sky-400 hover:underline"
+                    className="text-left px-2 py-1 text-[11px] text-blue-400 hover:underline"
                     onClick={() => onNavigate('packages')}
                   >
                     + View all {packages.length.toLocaleString()} packages in dashboard →
@@ -643,7 +643,7 @@ export default function Sidebar({
                 {filteredGuides.length > 50 && (
                   <button
                     type="button"
-                    className="text-left px-2 py-1 text-[11px] text-sky-400 hover:underline"
+                    className="text-left px-2 py-1 text-[11px] text-blue-400 hover:underline"
                     onClick={() => onNavigate('docs')}
                   >
                     + View all {DOCUMENTATION_GUIDES_REGISTRY.length.toLocaleString()} guides in hub →
@@ -675,7 +675,7 @@ export default function Sidebar({
         {/* ── Footer ── */}
         <div className="p-3 border-t border-[#22222e] bg-[#0a0a0a] flex items-center justify-between text-xs shrink-0">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" aria-hidden="true" />
             <div className="flex flex-col">
               <strong className="text-[11px] font-semibold text-neutral-200 leading-tight">4 Pillars Synced</strong>
               <small className="text-[10px] text-neutral-500 font-mono leading-tight">
@@ -683,7 +683,7 @@ export default function Sidebar({
               </small>
             </div>
           </div>
-          <span className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold" aria-label="Ready">
+          <span className="w-5 h-5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center justify-center text-xs font-bold" aria-label="Ready">
             ✓
           </span>
         </div>

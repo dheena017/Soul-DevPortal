@@ -79,7 +79,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111116] border border-[#282838] text-neutral-300">
                 NPM
               </span>
               <h3 className="text-xs font-bold text-white">npm import paths</h3>
@@ -144,7 +144,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
                 PY
               </span>
               <h3 className="text-xs font-bold text-white">Python Public API Symbols</h3>
@@ -158,12 +158,12 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             {filteredPy.map((name) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-2.5 rounded-lg bg-[#111116] border border-[#282838] hover:border-emerald-500/40 hover:bg-[#111116] transition-all gap-2"
+                className="flex items-center justify-between p-2.5 rounded-lg bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] transition-all gap-2"
                 title={`from ${pkg.pythonModule || pkg.pythonName} import ${name}`}
               >
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="text-[10px] font-mono text-emerald-400">def</span>
-                  <code className="text-xs font-mono text-emerald-300 truncate">{name}</code>
+                  <span className="text-[10px] font-mono text-blue-400">def</span>
+                  <code className="text-xs font-mono text-blue-300 truncate">{name}</code>
                 </div>
                 <CopyButton
                   text={`from ${pkg.pythonModule || pkg.pythonName} import ${name}`}
@@ -180,7 +180,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/15 border border-purple-500/30 text-purple-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-[#282838] text-blue-400">
                 RUN
               </span>
               <h3 className="text-xs font-bold text-white">Package Scripts</h3>

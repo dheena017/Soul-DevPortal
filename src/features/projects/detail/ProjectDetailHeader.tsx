@@ -87,7 +87,7 @@ export default function ProjectDetailHeader({
             type="button"
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
               portTesting
-                ? 'bg-amber-500/15 border-amber-500/40 text-amber-400 animate-pulse'
+                ? 'bg-[#111116] border-[#282838] text-neutral-300 animate-pulse'
                 : 'bg-[#111116] border-[#282838] text-neutral-300 hover:text-white hover:border-blue-500/40'
             }`}
             onClick={onTestPorts}
@@ -105,10 +105,10 @@ export default function ProjectDetailHeader({
               href={feUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm"
               title="Open Client in Browser"
             >
-              <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
+              <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                 <polyline points="15 3 21 3 21 9" />
@@ -122,10 +122,10 @@ export default function ProjectDetailHeader({
               href={beUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/20 transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm"
               title="Open Server API"
             >
-              <span className="w-2 h-2 rounded-full bg-indigo-400" aria-hidden="true" />
+              <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
                 <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
@@ -162,8 +162,8 @@ export default function ProjectDetailHeader({
               {project.id}
             </code>
             {project.version && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400" aria-hidden="true" />
                 v{project.version}
               </span>
             )}
@@ -182,7 +182,7 @@ export default function ProjectDetailHeader({
               <span>@workspace/config</span>
             </a>
             <a href="#packages/runner" className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#111116] border border-[#282838] text-neutral-400 hover:text-blue-400 hover:border-blue-500/40 transition-all font-mono text-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" aria-hidden="true" />
               <span>@workspace/runner</span>
             </a>
           </div>
@@ -191,14 +191,14 @@ export default function ProjectDetailHeader({
 
       {/* ── Port Prober Status Banner (if tested) ── */}
       {portStatus && (
-        <div className="flex flex-wrap items-center gap-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-xs text-emerald-300 font-mono">
+        <div className="flex flex-wrap items-center gap-4 p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs text-blue-300 font-mono">
           <div className="flex items-center gap-2">
             <span className="text-neutral-400">Client :{project.frontendPort}</span>
-            <span className="font-bold text-emerald-400">● {portStatus.fe}</span>
+            <span className="font-bold text-blue-400">● {portStatus.fe}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-neutral-400">Server :{project.backendPort}</span>
-            <span className="font-bold text-emerald-400">● {portStatus.be}</span>
+            <span className="font-bold text-blue-400">● {portStatus.be}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-neutral-400">Latency:</span>

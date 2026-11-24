@@ -30,17 +30,17 @@ export default function DocHighlightsTab({ guideMeta }: DocHighlightsTabProps) {
           </p>
         </div>
 
-        <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] hover:border-emerald-500/40 transition-all gap-2">
+        <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all gap-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-base">🛡️</span>
               <h3 className="text-xs font-bold text-white">Compliance Mandate</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
               Enforced
             </span>
           </div>
-          <p className="text-xs text-emerald-400 leading-relaxed font-medium">
+          <p className="text-xs text-blue-400 leading-relaxed font-medium">
             {guideMeta.complianceStatus}
           </p>
         </div>

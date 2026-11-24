@@ -114,7 +114,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
             </div>
             <p className="text-xs text-neutral-400 line-clamp-2">{p.description}</p>
             <div className="flex items-center gap-2 pt-2 border-t border-[#22222e] text-xs">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/30">
                 Port :{p.frontendPort}
               </span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#111116] border border-[#282838] text-neutral-300">
