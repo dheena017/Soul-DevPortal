@@ -25,21 +25,24 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
   useEffect(() => {
     let isMounted = true;
-    async function loadTabData() {
+    const tabNames: ProjectDetailTab[] = ['overview', 'files', 'api', 'database', 'scripts', 'env', 'readme'];
+
+    // Preload all tabs concurrently so badges and tab explorer immediately have live data
+    tabNames.forEach(async (tab) => {
       try {
-        const data = await fetchProjectTab(project.id, activeTab);
+        const data = await fetchProjectTab(project.id, tab);
         if (data && isMounted) {
-          setTabData((prev) => ({ ...prev, [activeTab]: data }));
+          setTabData((prev) => ({ ...prev, [tab]: data }));
         }
       } catch {
         // Fallback to static props
       }
-    }
-    loadTabData();
+    });
+
     return () => {
       isMounted = false;
     };
-  }, [project.id, activeTab]);
+  }, [project.id]);
 
   const enhancedProject = useMemo(() => {
     return {
@@ -71,28 +74,34 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
     if (tabData.env?.templateKeys && tabData.env.templateKeys.length > 0) {
       return tabData.env.templateKeys;
     }
+    if (tabData.env?.envKeys && tabData.env.envKeys.length > 0) {
+      return tabData.env.envKeys;
+    }
     return project.envKeys || project.configuration || [];
   }, [tabData.env, project.envKeys, project.configuration]);
 
   const fileTree = useMemo(() => {
-    if (tabData.files?.tree && tabData.files.tree.length > 0) {
-      return tabData.files.tree;
+    const list = tabData.files?.fileTree || tabData.files?.tree;
+    if (list && list.length > 0) {
+      return list;
     }
-    return project.fileTree || [];
-  }, [tabData.files, project.fileTree]);
+    return project.fileTree || (project as any).tree || [];
+  }, [tabData.files, project.fileTree, (project as any).tree]);
 
   const tables = useMemo(() => {
-    if (tabData.database?.tables && tabData.database.tables.length > 0) {
-      return tabData.database.tables.map((t: any) => (typeof t === 'string' ? t : t.name));
+    const rawTables = tabData.database?.tables || tabData.database?.tableSchemas || project.tables || [];
+    if (rawTables && rawTables.length > 0) {
+      return rawTables.map((t: any) => (typeof t === 'string' ? t : t.name || t.tableName || ''));
     }
-    return project.tables || [];
+    return [];
   }, [tabData.database, project.tables]);
 
   const apiProject = useMemo(() => {
-    if (tabData.api?.endpoints && tabData.api.endpoints.length > 0) {
+    const endpoints = tabData.api?.endpoints || tabData.api?.apiEndpoints;
+    if (endpoints && endpoints.length > 0) {
       return {
         ...project,
-        apiEndpoints: tabData.api.endpoints.map((ep: any) =>
+        apiEndpoints: endpoints.map((ep: any) =>
           typeof ep === 'string' ? ep : `${ep.method} ${ep.path}`
         ),
       };
@@ -208,7 +217,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         )}
 
         {activeTab === 'api' && (
-          <ProjectApiTab project={apiProject} beUrl={beUrl} />
+          <ProjectApiTab project={apiProject} beUrl={beUrl} rawEndpoints={tabData.api?.endpoints} />
         )}
 
         {activeTab === 'database' && (

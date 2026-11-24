@@ -158,7 +158,7 @@ function HeadingWithAnchor({ level, text = '' }: HeadingWithAnchorProps) {
   };
 
   return (
-    <Tag id={id} className={`group flex items-center gap-2 ${levelStyles[level] || ''}`}>
+    <Tag id={id} className={`group flex items-center gap-2 scroll-mt-6 ${levelStyles[level] || ''}`}>
       <span>
         <InlineText text={text} />
       </span>

@@ -177,6 +177,18 @@ export default function ProjectDetailHeader({
           <p className="text-xs md:text-sm text-zinc-300 leading-relaxed max-w-4xl">
             {project.description || `${project.title} monorepo application powered by ${project.framework || 'standard frontend'}.`}
           </p>
+          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+            <span className="text-[11px] font-mono font-bold tracking-wider text-zinc-400 uppercase">CONSUMES:</span>
+            <a href="#packages/logger" className="inline-flex items-center px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/35 text-amber-300 hover:bg-amber-500/25 transition-all font-mono text-xs font-medium">
+              @workspace/logger
+            </a>
+            <a href="#packages/config" className="inline-flex items-center px-2.5 py-1 rounded-lg bg-purple-500/15 border border-purple-500/35 text-purple-300 hover:bg-purple-500/25 transition-all font-mono text-xs font-medium">
+              @workspace/config
+            </a>
+            <a href="#packages/runner" className="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/35 text-emerald-300 hover:bg-emerald-500/25 transition-all font-mono text-xs font-medium">
+              @workspace/runner
+            </a>
+          </div>
         </div>
       </div>
 

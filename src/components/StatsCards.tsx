@@ -87,7 +87,7 @@ export default function StatsCards({ stats, packagesCount = 3, projectsCount = 8
       {displayStats.map((item, index) => (
         <div
           key={index}
-          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all duration-200 shadow-xl shadow-black/40 group cursor-default"
+          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] transition-all duration-200 shadow-xl shadow-black/40 group cursor-default"
         >
           <div
             className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border"
@@ -100,11 +100,11 @@ export default function StatsCards({ stats, packagesCount = 3, projectsCount = 8
             {item.icon}
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="text-xs text-neutral-400 font-medium truncate">{item.label}</span>
-            <strong className="text-xl md:text-2xl font-extrabold text-neutral-200 font-mono mt-0.5 tracking-tight group-hover:text-neutral-200 transition-colors">
+            <span className="text-xs text-zinc-400 font-medium truncate">{item.label}</span>
+            <strong className="text-xl md:text-2xl font-extrabold text-white font-mono mt-0.5 tracking-tight group-hover:text-white transition-colors">
               {item.value}
             </strong>
-            <span className="text-[11px] text-neutral-500 font-mono truncate">{item.sub}</span>
+            <span className="text-[11px] text-zinc-400 font-mono truncate">{item.sub}</span>
           </div>
         </div>
       ))}

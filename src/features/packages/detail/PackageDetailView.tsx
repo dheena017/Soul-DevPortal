@@ -21,21 +21,24 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
 
   useEffect(() => {
     let isMounted = true;
-    async function loadTabData() {
+    const tabNames: PackageDetailTab[] = ['docs', 'api', 'manifest', 'playground'];
+
+    // Preload all tabs concurrently so exports and manifest tabs have live data
+    tabNames.forEach(async (tab) => {
       try {
-        const data = await fetchPackageTab(pkg.id, activeTab);
+        const data = await fetchPackageTab(pkg.id, tab);
         if (data && isMounted) {
-          setTabData((prev) => ({ ...prev, [activeTab]: data }));
+          setTabData((prev) => ({ ...prev, [tab]: data }));
         }
       } catch {
         // Fallback to static props
       }
-    }
-    loadTabData();
+    });
+
     return () => {
       isMounted = false;
     };
-  }, [pkg.id, activeTab]);
+  }, [pkg.id]);
 
   const livePkg = useMemo(() => {
     const updated = { ...pkg };

@@ -62,12 +62,12 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   return (
-    <header className="w-full h-14 bg-[#111114]/95 backdrop-blur-md border-b border-[#1f1f24] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
+    <header className="w-full h-14 bg-[#0d0d10]/95 backdrop-blur-md border-b border-white/[0.08] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
       {/* ── Left: Sidebar Toggle & Breadcrumbs ── */}
       <div className="flex items-center gap-3 min-w-0">
         <button
           type="button"
-          className="p-2 rounded-full bg-[#111114] border border-[#1f1f24] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#111114] transition-all shrink-0 shadow-sm"
+          className="p-2 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all shrink-0 shadow-sm cursor-pointer"
           onClick={() => {
             consoleLogger.action('UI', menuOpen ? 'Closing sidebar navigation' : 'Opening sidebar navigation');
             onToggleSidebar();
@@ -215,11 +215,11 @@ export const Header: React.FC<HeaderProps> = ({
         </nav>
 
         <div
-          className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border bg-[#111114] border-[#1f1f24]"
+          className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border bg-[#16161c] border-white/[0.08]"
           title={isBackendLive ? "FastAPI Backend is online on port 8008" : "FastAPI Backend is on standby"}
         >
           <span className={`w-2 h-2 rounded-full ${isBackendLive ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bg-neutral-600'}`} />
-          <span className={isBackendLive ? 'text-emerald-400 font-semibold' : 'text-neutral-500'}>
+          <span className={isBackendLive ? 'text-emerald-400 font-semibold' : 'text-zinc-500'}>
             {isBackendLive ? ':8008 Live' : ':8008 Standby'}
           </span>
         </div>
@@ -228,19 +228,19 @@ export const Header: React.FC<HeaderProps> = ({
           href="https://github.com/dheena017/Soul-DevPortal"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#111114] border border-[#1f1f24] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#111114] transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
           title="Open GitHub Repository: dheena017/Soul-DevPortal"
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
             <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z" />
           </svg>
           <span className="hidden sm:inline">GitHub</span>
-          <svg className="w-3 h-3 text-neutral-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
+          <svg className="w-3 h-3 text-zinc-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
         </a>
 
         <button
           type="button"
-          className="w-8 h-8 rounded-full bg-[#111114] border border-[#1f1f24] flex items-center justify-center text-xs font-mono font-bold text-neutral-400 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#111114] transition-all"
+          className="w-8 h-8 rounded-full bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-xs font-mono font-bold text-zinc-400 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
           onClick={() => {
             consoleLogger.action('SHORTCUT', 'Clicked help button: opening keyboard shortcuts modal');
             onOpenShortcuts();

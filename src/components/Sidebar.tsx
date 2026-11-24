@@ -8,12 +8,12 @@ import { PROJECT_BRAND_MAP } from '../features/projects/projectsConstants';
 
 function packageBadge(pkg: PackageData): { text: string; color: string } {
   if (pkg.pythonModule) {
-    return { text: 'PY', color: 'bg-amber-500/15 text-amber-400 border-amber-500/30' };
+    return { text: 'PY', color: 'bg-[#09090c] text-amber-400 border-amber-500/30' };
   }
   if (pkg.name?.includes('config')) {
-    return { text: 'CFG', color: 'bg-purple-500/15 text-purple-400 border-purple-500/30' };
+    return { text: 'CFG', color: 'bg-[#09090c] text-purple-400 border-purple-500/30' };
   }
-  return { text: 'TS', color: 'bg-sky-500/15 text-sky-400 border-sky-500/30' };
+  return { text: 'TS', color: 'bg-[#09090c] text-sky-400 border-sky-500/30' };
 }
 
 function packageSidebarIcon(pkg: PackageData): string {
@@ -38,12 +38,12 @@ function projectSidebarIcon(proj: ProjectData): string {
 }
 
 function docGuideBadge(guide: GuideMeta): { text: string; color: string } {
-  if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-sky-500/15 text-sky-400 border-sky-500/30' };
-  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-amber-500/15 text-amber-400 border-amber-500/30' };
-  if (guide.category === 'design') return { text: 'PKG', color: 'bg-purple-500/15 text-purple-400 border-purple-500/30' };
-  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' };
-  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30' };
-  return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-sky-500/15 text-sky-400 border-sky-500/30' };
+  if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-[#09090c] text-sky-400 border-sky-500/30' };
+  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-[#09090c] text-amber-400 border-amber-500/30' };
+  if (guide.category === 'design') return { text: 'PKG', color: 'bg-[#09090c] text-purple-400 border-purple-500/30' };
+  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-[#09090c] text-emerald-400 border-emerald-500/30' };
+  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-[#09090c] text-indigo-400 border-indigo-500/30' };
+  return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-[#09090c] text-sky-400 border-sky-500/30' };
 }
 
 function formatDocGuideTitle(guide: GuideMeta): string {
@@ -219,13 +219,13 @@ export default function Sidebar({
   return (
     <>
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-80 sm:w-[336px] h-screen h-[100dvh] bg-[#111114] border-r border-[#1f1f24] flex flex-col justify-between shadow-2xl shadow-black/80 transition-transform duration-300 ease-out ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-80 sm:w-[336px] h-screen h-[100dvh] bg-[#0d0d10] border-r border-white/[0.08] flex flex-col justify-between shadow-2xl shadow-black/80 transition-transform duration-300 ease-out ${
           menuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-label="Monorepo navigation sidebar"
       >
         {/* ── Brand Header ── */}
-        <div className="h-14 px-4 flex items-center justify-between border-b border-[#19191d] shrink-0 bg-[#0d0d10]">
+        <div className="h-14 px-4 flex items-center justify-between border-b border-white/[0.08] shrink-0 bg-[#09090c]">
           <a
             className="flex items-center gap-2 group"
             href="#overview"
@@ -240,7 +240,7 @@ export default function Sidebar({
 
           <button
             type="button"
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
             aria-label="Close sidebar (Esc or Ctrl+B)"
             title="Close sidebar (Esc or Ctrl+B)"
             onClick={onClose}
@@ -252,7 +252,7 @@ export default function Sidebar({
         </div>
 
         {/* ── Unified Workspace Search ── */}
-        <div className="px-3.5 py-3 border-b border-[#19191d] shrink-0 bg-[#0d0d10]">
+        <div className="px-3.5 py-3 border-b border-white/[0.08] shrink-0 bg-[#09090c]">
           <div className="relative flex items-center">
             <svg
               className="absolute left-3.5 w-3.5 h-3.5 text-zinc-500 pointer-events-none"
@@ -274,7 +274,7 @@ export default function Sidebar({
               onChange={(e) => setCommonFilter(e.target.value)}
               placeholder="Search apps, packages, docs..."
               aria-label="Filter monorepo items"
-              className="w-full bg-[#070708] border border-[#1f1f24] rounded-xl pl-9 pr-8 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400/20 transition-all font-mono"
+              className="w-full bg-[#070708] border border-white/[0.08] rounded-xl pl-9 pr-8 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400/20 transition-all font-mono"
             />
             {commonFilter ? (
               <button
@@ -315,8 +315,12 @@ export default function Sidebar({
                 <span className="text-base" aria-hidden="true">🏠</span>
                 <span className="truncate font-semibold text-zinc-100">Workspace Overview</span>
               </div>
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 shadow-[0_0_8px_rgba(99,102,241,0.15)]">
-                Hub
+              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-indigo-400 border border-indigo-500/30 shadow-[0_0_8px_rgba(99,102,241,0.15)] inline-flex items-center gap-1.5">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-400"></span>
+                </span>
+                <span>Hub</span>
               </span>
             </button>
 
@@ -334,8 +338,12 @@ export default function Sidebar({
                 <span className="text-base" aria-hidden="true">⚡</span>
                 <span className="truncate font-semibold text-zinc-100">Scripts &amp; Runners</span>
               </div>
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-[0_0_8px_rgba(245,158,11,0.15)]">
-                15
+              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-amber-400 border border-amber-500/30 shadow-[0_0_8px_rgba(245,158,11,0.15)] inline-flex items-center gap-1.5">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-400"></span>
+                </span>
+                <span>15</span>
               </span>
             </button>
           </div>
@@ -409,8 +417,12 @@ export default function Sidebar({
                   </svg>
                   <span className="font-semibold text-zinc-100">Projects &amp; Apps</span>
                 </div>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)]">
-                  {formatCount(isFiltering ? filteredProjects.length : totalProjects)}
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)] inline-flex items-center gap-1.5">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+                  </span>
+                  <span>{formatCount(isFiltering ? filteredProjects.length : totalProjects)}</span>
                 </span>
               </button>
 
@@ -513,8 +525,12 @@ export default function Sidebar({
                   </svg>
                   <span className="font-semibold text-zinc-100">Shared Packages</span>
                 </div>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30 shadow-[0_0_8px_rgba(168,85,247,0.15)]">
-                  {formatCount(isFiltering ? filteredPackages.length : packages.length)}
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-purple-400 border border-purple-500/30 shadow-[0_0_8px_rgba(168,85,247,0.15)] inline-flex items-center gap-1.5">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-purple-400"></span>
+                  </span>
+                  <span>{formatCount(isFiltering ? filteredPackages.length : packages.length)}</span>
                 </span>
               </button>
 
@@ -612,8 +628,12 @@ export default function Sidebar({
                   <span className="text-base shrink-0" aria-hidden="true">📚</span>
                   <span className="font-semibold text-zinc-100">Documentation</span>
                 </div>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30 shadow-[0_0_8px_rgba(56,189,248,0.15)]">
-                  {formatCount(isFiltering ? filteredGuides.length : DOCUMENTATION_GUIDES_REGISTRY.length)}
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-sky-400 border border-sky-500/30 shadow-[0_0_8px_rgba(56,189,248,0.15)] inline-flex items-center gap-1.5">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-sky-400"></span>
+                  </span>
+                  <span>{formatCount(isFiltering ? filteredGuides.length : DOCUMENTATION_GUIDES_REGISTRY.length)}</span>
                 </span>
               </button>
 
@@ -666,8 +686,12 @@ export default function Sidebar({
                         </span>
                         <span className="truncate font-medium text-zinc-100 group-hover:text-white transition-colors">{formatDocGuideTitle(guide)}</span>
                       </div>
-                      <span className={`ml-2 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shrink-0 border ${badge.color}`}>
-                        {badge.text}
+                      <span className={`ml-2 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shrink-0 border ${badge.color} inline-flex items-center gap-1.5`}>
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${guide.category === 'ports' ? 'bg-emerald-400' : guide.category === 'cheatsheet' ? 'bg-amber-400' : guide.category === 'design' ? 'bg-purple-400' : 'bg-sky-400'} opacity-75`}></span>
+                          <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${guide.category === 'ports' ? 'bg-emerald-400' : guide.category === 'cheatsheet' ? 'bg-amber-400' : guide.category === 'design' ? 'bg-purple-400' : 'bg-sky-400'}`}></span>
+                        </span>
+                        <span>{badge.text}</span>
                       </span>
                     </button>
                   );
@@ -676,7 +700,7 @@ export default function Sidebar({
                 {filteredGuides.length > 50 && (
                   <button
                     type="button"
-                    className="text-left px-3 py-1.5 text-xs text-zinc-300 hover:text-white hover:underline"
+                    className="text-left px-3 py-1.5 text-xs text-zinc-300 hover:text-white hover:underline cursor-pointer"
                     onClick={() => onNavigate('docs')}
                   >
                     + View all {DOCUMENTATION_GUIDES_REGISTRY.length.toLocaleString()} guides in hub →
@@ -688,12 +712,12 @@ export default function Sidebar({
 
           {/* Empty Search Feedback */}
           {isFiltering && totalMatches === 0 && (
-            <div className="flex flex-col items-center justify-center p-6 text-center rounded-xl bg-[#151519] border border-[#1f1f24] gap-2 mt-2">
+            <div className="flex flex-col items-center justify-center p-6 text-center rounded-xl bg-[#0d0d10] border border-white/[0.08] gap-2 mt-2">
               <span className="text-xl" aria-hidden="true">🔍</span>
               <p className="text-xs text-zinc-300">No matches found for &ldquo;{commonFilter}&rdquo;</p>
               <button
                 type="button"
-                className="mt-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-[#111114] hover:bg-[#151519] text-zinc-100 border border-[#1f1f24] transition-colors"
+                className="mt-1 px-3 py-1.5 rounded-md text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-colors cursor-pointer"
                 onClick={() => {
                   setCommonFilter('');
                   searchInputRef.current?.focus();
@@ -706,14 +730,14 @@ export default function Sidebar({
         </nav>
 
         {/* ── Footer ── */}
-        <div className="p-4 border-t border-[#19191d] bg-[#09090b] flex items-center justify-between text-xs shrink-0">
+        <div className="p-4 border-t border-white/[0.08] bg-[#070708] flex items-center justify-between text-xs shrink-0">
           <div className="flex items-center gap-3">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]"></span>
             </span>
             <div className="flex flex-col">
-              <strong className="text-xs font-semibold text-zinc-100 leading-tight">4 Pillars Synced</strong>
+              <strong className="text-xs font-semibold text-white leading-tight">4 Pillars Synced</strong>
               <small className="text-[11px] text-zinc-400 font-mono leading-tight mt-0.5">
                 {packages.length} packages · {totalProjects} apps indexed
               </small>

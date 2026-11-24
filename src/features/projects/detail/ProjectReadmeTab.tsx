@@ -19,11 +19,11 @@ export default function ProjectReadmeTab({ project }: ProjectReadmeTabProps) {
   }
 
   return (
-    <div className="w-full flex flex-col lg:flex-row gap-6 items-start">
+    <div className="w-full grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 items-start">
       {headings.length > 0 && (
-        <TableOfContents headings={headings} title="On this page" />
+        <TableOfContents headings={headings} title="On this page" className="w-full" />
       )}
-      <section className="flex-1 w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-4">
+      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-4 min-w-0">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#19191d]">
           <div className="flex flex-col gap-0.5">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">REFERENCE</span>

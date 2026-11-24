@@ -48,7 +48,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] hover:shadow-xl transition-all duration-200 gap-4 h-full">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-200 gap-4 h-full">
       {/* Card Header: Brand, Meta, Ports */}
         <div
           className="flex flex-col gap-3.5"
@@ -85,9 +85,9 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
               </div>
 
               <div className="flex flex-col min-w-0 gap-0.5">
-                <code className="text-xs font-mono font-bold text-neutral-200 truncate">{project.id}</code>
-                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-neutral-500" title="Git Branch">
-                  <svg className="w-2.5 h-2.5 text-neutral-400" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <code className="text-xs font-mono font-bold text-zinc-100 truncate">{project.id}</code>
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-zinc-400" title="Git Branch">
+                  <svg className="w-2.5 h-2.5 text-zinc-400" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                     <path d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.493 2.493 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25Z" />
                   </svg>
                   main
@@ -97,14 +97,20 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
 
             <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-xs">
               {project.frontendPort && (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold shadow-[0_0_8px_rgba(16,185,129,0.12)]" title={`Client Port :${project.frontendPort}`}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 text-[11px] font-bold shadow-[0_0_8px_rgba(16,185,129,0.15)]" title={`Client Port :${project.frontendPort}`}>
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+                  </span>
                   <span>:{project.frontendPort}</span>
                 </span>
               )}
               {project.backendPort && (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold shadow-[0_0_8px_rgba(99,102,241,0.12)]" title={`Server Port :${project.backendPort}`}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" aria-hidden="true" />
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-indigo-500/15 border border-indigo-500/35 text-indigo-300 text-[11px] font-bold shadow-[0_0_8px_rgba(99,102,241,0.15)]" title={`Server Port :${project.backendPort}`}>
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-400"></span>
+                  </span>
                   <span>:{project.backendPort}</span>
                 </span>
               )}
@@ -112,17 +118,17 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <h3 className="text-base font-bold text-neutral-200 group-hover:text-neutral-200 transition-colors truncate">
+            <h3 className="text-base font-bold text-white group-hover:text-white transition-colors truncate">
               {formattedTitle}
             </h3>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider bg-[#151519] text-neutral-400 border border-[#212126] shrink-0">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider bg-[#181820] text-zinc-300 border border-white/[0.08] shrink-0">
               Public
             </span>
           </div>
 
           {/* Description */}
           <p
-            className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]"
+            className="text-xs text-zinc-300 line-clamp-2 leading-relaxed min-h-[36px]"
             title={description}
           >
             {description}
@@ -131,36 +137,36 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
 
         {/* Card Specs Matrix */}
         <div
-          className="flex flex-col gap-2 p-2.5 rounded-xl bg-[#070708] border border-[#212126] text-xs"
+          className="flex flex-col gap-2 p-3 rounded-xl bg-[#09090c] border border-white/[0.08] text-xs"
           onClick={handleCardClick}
           style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
         >
           <div className="flex items-center justify-between gap-2">
-            <span className="text-neutral-500 flex items-center gap-1.5 shrink-0">
+            <span className="text-zinc-500 flex items-center gap-1.5 shrink-0">
               <span>⚡</span>
               <span>Stack</span>
             </span>
-            <span className="text-neutral-300 font-mono text-[11px] truncate">
+            <span className="text-zinc-200 font-mono text-[11px] truncate">
               {project.framework ? project.framework.split('+').slice(0, 2).join(' + ') : 'React 19 + Vite 8'}
             </span>
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <span className="text-neutral-500 flex items-center gap-1.5 shrink-0">
+            <span className="text-zinc-500 flex items-center gap-1.5 shrink-0">
               <span>🗄️</span>
               <span>Database</span>
             </span>
-            <span className="text-neutral-300 font-mono text-[11px] truncate">
+            <span className="text-zinc-200 font-mono text-[11px] truncate">
               {project.dbInfo || 'SQLite (WAL Mode)'}
             </span>
           </div>
 
           <div className="flex items-center justify-between gap-2">
-            <span className="text-neutral-500 flex items-center gap-1.5 shrink-0">
+            <span className="text-zinc-500 flex items-center gap-1.5 shrink-0">
               <span>{project.aiEngine && project.aiEngine !== 'N/A' ? '✨' : '🚀'}</span>
               <span>{project.aiEngine && project.aiEngine !== 'N/A' ? 'AI Engine' : 'Capability'}</span>
             </span>
-            <span className="text-neutral-300 font-mono text-[11px] font-medium truncate">
+            <span className="text-zinc-200 font-mono text-[11px] font-medium truncate">
               {project.aiEngine && project.aiEngine !== 'N/A'
                 ? project.aiEngine.split('+')[0].trim()
                 : brand.primaryCapability}
@@ -175,7 +181,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
             return (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-[11px] font-mono text-neutral-400"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-[11px] font-mono text-zinc-300"
               >
                 <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: dotColor }} aria-hidden="true" />
                 <span>{tag}</span>
@@ -185,13 +191,13 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
         </div>
 
         {/* Card Footer: Action Buttons (Launch & Details) */}
-        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#212126]">
+        <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/[0.06]">
           {project.frontendPort && (
             <a
               href={`http://localhost:${project.frontendPort}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/25 transition-all"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 hover:bg-emerald-500/25 transition-all shadow-[0_0_10px_rgba(16,185,129,0.12)]"
               title={`Launch on http://localhost:${project.frontendPort}`}
               onClick={(e) => e.stopPropagation()}
             >
@@ -202,7 +208,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
           {onSelectProject && (
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-semibold bg-white/[0.08] border border-white/20 text-white font-bold hover:bg-white/[0.14] transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all shadow-md shadow-white/10"
               onClick={handleCardClick}
               title={`Open deep detail view for ${formattedTitle}`}
             >

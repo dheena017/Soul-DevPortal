@@ -47,28 +47,28 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] hover:shadow-xl transition-all duration-200 gap-4 h-full">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-200 gap-4 h-full">
       {/* ── Top Row: Icon, Version, Ecosystem Pills ── */}
         <div className="flex flex-col gap-3.5" onClick={handleCardClick} style={{ cursor: onSelectPackage ? 'pointer' : 'default' }}>
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-[#212126] bg-[#151519] text-xl shadow-inner">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.1] bg-[#16161c] text-xl shadow-inner">
                 {meta.icon}
               </div>
 
               <div className="flex flex-col min-w-0">
-                <span className="text-xs font-mono font-bold text-neutral-300">v{pkg.version || '1.0.0'}</span>
-                <span className="text-[10px] font-mono text-neutral-500 truncate">packages/{pkg.id}</span>
+                <span className="text-xs font-mono font-bold text-zinc-100">v{pkg.version || '1.0.0'}</span>
+                <span className="text-[10px] font-mono text-zinc-400 truncate">packages/{pkg.id}</span>
               </div>
             </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[10px] font-mono font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-400" aria-hidden="true" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-rose-500/15 border border-rose-500/35 text-rose-300 text-[10px] font-mono font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" aria-hidden="true" />
                 <span>NPM</span>
               </span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[10px] font-mono font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" aria-hidden="true" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/35 text-amber-300 text-[10px] font-mono font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" aria-hidden="true" />
                 <span>PYTHON</span>
               </span>
             </div>
@@ -76,13 +76,13 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
 
           {/* ── Title & Subtitle ── */}
           <div className="flex flex-col gap-1">
-            <h3 className="text-lg font-bold font-mono text-neutral-200 group-hover:text-neutral-200 transition-colors truncate">
+            <h3 className="text-lg font-bold font-mono text-white group-hover:text-white transition-colors truncate">
               @workspace/{pkg.id}
             </h3>
-            <span className="text-xs font-semibold text-neutral-300 truncate">
+            <span className="text-xs font-semibold text-zinc-200 truncate">
               {meta.role}
             </span>
-            <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]">
+            <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed min-h-[36px]">
               {pkg.description || `High-performance shared library @workspace/${pkg.id} for the Soul workspace.`}
             </p>
           </div>
@@ -91,43 +91,43 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
         {/* ── Tags Row ── */}
         <div className="flex flex-wrap items-center gap-1.5">
           {meta.tags.map((tag) => (
-            <span key={tag} className="px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-[10px] font-mono font-medium text-neutral-400">
+            <span key={tag} className="px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-[10px] font-mono font-medium text-zinc-300">
               {tag}
             </span>
           ))}
         </div>
 
         {/* ── 3-Metric Specs Row ── */}
-        <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-[#070708] border border-[#212126] text-center font-mono text-xs">
+        <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-[#09090c] border border-white/[0.08] text-center font-mono text-xs">
           <div className="flex flex-col items-center">
-            <span className="text-[10px] text-neutral-500 uppercase tracking-wider">TOTAL EXPORTS</span>
-            <strong className="text-xs font-bold text-neutral-200 mt-0.5">{exportsCount} APIs</strong>
+            <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">TOTAL EXPORTS</span>
+            <strong className="text-xs font-bold text-white mt-0.5">{exportsCount} APIs</strong>
           </div>
-          <div className="flex flex-col items-center border-x border-[#212126]">
-            <span className="text-[10px] text-neutral-500 uppercase tracking-wider">LICENSE</span>
-            <strong className="text-xs font-bold text-neutral-200 mt-0.5">{pkg.license || 'MIT'}</strong>
+          <div className="flex flex-col items-center border-x border-white/[0.08]">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">LICENSE</span>
+            <strong className="text-xs font-bold text-white mt-0.5">{pkg.license || 'MIT'}</strong>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-[10px] text-neutral-500 uppercase tracking-wider">PYTHON MODULE</span>
-            <strong className="text-xs font-bold text-neutral-300 mt-0.5 truncate max-w-[80px]">external</strong>
+            <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">PYTHON MODULE</span>
+            <strong className="text-xs font-bold text-amber-300 mt-0.5 truncate max-w-[80px]">external</strong>
           </div>
         </div>
 
         {/* ── Terminal Commands Strip (Zero Truncation) ── */}
         <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#070708] border border-[#212126] font-mono text-xs text-neutral-300">
+          <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-[#09090c] border border-white/[0.08] font-mono text-xs text-zinc-300">
             <div className="flex items-center gap-2 min-w-0 flex-1">
-              <span className="text-neutral-500 select-none font-bold">$</span>
-              <code className="text-[11px] text-neutral-200 truncate select-all">{installCmd}</code>
+              <span className="text-zinc-500 select-none font-bold">$</span>
+              <code className="text-[11px] text-zinc-100 truncate select-all font-semibold">{installCmd}</code>
             </div>
             <CopyButton text={installCmd} variant="compact" label="" copiedLabel="Copied!" />
           </div>
 
           {pyInstallCmd && (
-            <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#070708] border border-[#212126] font-mono text-xs text-neutral-300">
+            <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-[#09090c] border border-white/[0.08] font-mono text-xs text-zinc-300">
               <div className="flex items-center gap-2 min-w-0 flex-1">
-                <span className="text-neutral-500 select-none font-bold">$</span>
-                <code className="text-[11px] text-neutral-200 truncate select-all">{pyInstallCmd}</code>
+                <span className="text-zinc-500 select-none font-bold">$</span>
+                <code className="text-[11px] text-zinc-100 truncate select-all font-semibold">{pyInstallCmd}</code>
               </div>
               <CopyButton text={pyInstallCmd} variant="compact" label="" copiedLabel="Copied!" />
             </div>
@@ -135,10 +135,10 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
         </div>
 
         {/* ── Card Action Footer ── */}
-        <div className="pt-2 border-t border-[#212126]">
+        <div className="pt-3 border-t border-white/[0.06]">
           <button
             type="button"
-            className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-[#151519] border border-[#212126] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm flex items-center justify-center gap-2"
+            className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all shadow-md shadow-white/10 flex items-center justify-center gap-2"
             onClick={handleCardClick}
             title={`Inspect @workspace/${pkg.id}`}
           >
