@@ -106,7 +106,7 @@ export default function ProjectHeader({
             </svg>
             <span>Total Apps</span>
           </div>
-          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{totalCount} Active</strong>
+          <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{totalCount} Active</strong>
         </div>
 
         <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
@@ -119,7 +119,7 @@ export default function ProjectHeader({
             </svg>
             <span>Client-Server</span>
           </div>
-          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{fullstackCount} Fullstack</strong>
+          <strong className="text-xl font-extrabold text-indigo-400 font-mono mt-1.5">{fullstackCount} Fullstack</strong>
         </div>
 
         <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
@@ -131,7 +131,7 @@ export default function ProjectHeader({
             </svg>
             <span>Standalone Web</span>
           </div>
-          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{standaloneCount} Apps</strong>
+          <strong className="text-xl font-extrabold text-sky-400 font-mono mt-1.5">{standaloneCount} Apps</strong>
         </div>
 
         <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
@@ -141,7 +141,7 @@ export default function ProjectHeader({
             </svg>
             <span>Port Conflicts</span>
           </div>
-          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{collisionsCount} Conflicts</strong>
+          <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{collisionsCount} Conflicts</strong>
         </div>
 
         <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
@@ -153,7 +153,7 @@ export default function ProjectHeader({
             </svg>
             <span>SQLite Isolation</span>
           </div>
-          <strong className="text-xl font-extrabold text-neutral-200 font-mono mt-1.5">{sqliteIsolationPercent}</strong>
+          <strong className="text-xl font-extrabold text-purple-400 font-mono mt-1.5">{sqliteIsolationPercent}</strong>
         </div>
       </div>
 
@@ -204,13 +204,13 @@ export default function ProjectHeader({
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all ${
                   isActive
-                    ? 'bg-[#151519] text-neutral-200 font-bold border border-[#212126] shadow-sm'
-                    : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-[#212126] border border-transparent font-medium'
+                    ? 'bg-white/[0.1] text-white font-bold border border-white/20 shadow-sm'
+                    : 'text-neutral-400 hover:text-white hover:bg-white/[0.04] border border-transparent font-medium'
                 }`}
                 onClick={() => onFilterFrameworkChange(fw)}
               >
                 <span>{fw === 'all' ? 'All Frameworks' : fw}</span>
-                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-[#151519] text-neutral-300 border border-[#212126] font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/35 font-bold' : 'bg-white/[0.06] text-neutral-400 border border-white/10'}`}>
                   {count}
                 </span>
               </button>

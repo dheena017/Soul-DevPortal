@@ -105,10 +105,10 @@ export default function ProjectDetailHeader({
               href={feUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#19191d] border border-[#212126] text-white hover:border-neutral-400 hover:bg-[#212126] transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 hover:bg-emerald-500/25 transition-all shadow-sm"
               title="Open Client in Browser"
             >
-              <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                 <polyline points="15 3 21 3 21 9" />
                 <line x1="10" y1="14" x2="21" y2="3" />
@@ -121,10 +121,10 @@ export default function ProjectDetailHeader({
               href={beUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#19191d] border border-[#212126] text-white hover:border-neutral-400 hover:bg-[#212126] transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-500/15 border border-indigo-500/35 text-indigo-300 hover:bg-indigo-500/25 transition-all shadow-sm"
               title="Open Server API"
             >
-              <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
                 <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
                 <line x1="6" y1="6" x2="6.01" y2="6" />
@@ -144,7 +144,7 @@ export default function ProjectDetailHeader({
             <img
               src={project.logo}
               alt={`${project.title} logo`}
-              className="w-full h-full object-cover grayscale brightness-110"
+              className="w-full h-full object-cover"
               onError={(e) => {
                 (e.currentTarget as HTMLElement).style.display = 'none';
               }}
@@ -160,7 +160,7 @@ export default function ProjectDetailHeader({
               {project.id}
             </code>
             {project.version && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-[#19191d] border border-neutral-700 text-neutral-200">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-400">
                 v{project.version}
               </span>
             )}
@@ -170,13 +170,13 @@ export default function ProjectDetailHeader({
           </p>
           <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
             <span className="text-[11px] font-mono font-bold tracking-wider text-neutral-500 uppercase">CONSUMES:</span>
-            <a href="#packages/logger" className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-[#212126] transition-all font-mono text-xs">
+            <a href="#packages/logger" className="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 hover:bg-amber-500/25 transition-all font-mono text-xs">
               @workspace/logger
             </a>
-            <a href="#packages/config" className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-[#212126] transition-all font-mono text-xs">
+            <a href="#packages/config" className="inline-flex items-center px-2 py-0.5 rounded-md bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 transition-all font-mono text-xs">
               @workspace/config
             </a>
-            <a href="#packages/runner" className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-[#212126] transition-all font-mono text-xs">
+            <a href="#packages/runner" className="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/25 transition-all font-mono text-xs">
               @workspace/runner
             </a>
           </div>
@@ -240,7 +240,7 @@ export default function ProjectDetailHeader({
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
               </svg>
               <span>Files &amp; Structure</span>
-              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'files' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'files' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-sky-500/15 text-sky-400 border border-sky-500/30'}`}>
                 {fileTreeCount}
               </span>
             </button>
@@ -261,7 +261,7 @@ export default function ProjectDetailHeader({
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
             <span>API &amp; Routes</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'api' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'api' ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 font-bold' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'}`}>
               {project.apiEndpoints?.length || (project.backendPort ? 1 : 0)}
             </span>
           </button>
@@ -283,7 +283,7 @@ export default function ProjectDetailHeader({
               <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
             </svg>
             <span>Database &amp; Models</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'database' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'database' ? 'bg-purple-500/25 text-purple-300 border border-purple-500/40 font-bold' : 'bg-purple-500/15 text-purple-400 border border-purple-500/30'}`}>
               {tablesCount || 1}
             </span>
           </button>
@@ -304,7 +304,7 @@ export default function ProjectDetailHeader({
               <line x1="12" y1="19" x2="20" y2="19" />
             </svg>
             <span>Scripts</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'scripts' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'scripts' ? 'bg-amber-500/25 text-amber-300 border border-amber-500/40 font-bold' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
               {scriptsCount}
             </span>
           </button>
@@ -332,7 +332,7 @@ export default function ProjectDetailHeader({
               <line x1="17" y1="16" x2="23" y2="16" />
             </svg>
             <span>Environment</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'env' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'env' ? 'bg-indigo-500/25 text-indigo-300 border border-indigo-500/40 font-bold' : 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30'}`}>
               {envCount}
             </span>
           </button>

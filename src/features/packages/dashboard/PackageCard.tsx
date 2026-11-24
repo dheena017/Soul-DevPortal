@@ -63,12 +63,12 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
             </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-neutral-300 text-[10px] font-mono font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-neutral-400" aria-hidden="true" />
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[10px] font-mono font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-400" aria-hidden="true" />
                 <span>NPM</span>
               </span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-neutral-300 text-[10px] font-mono font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[10px] font-mono font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" aria-hidden="true" />
                 <span>PYTHON</span>
               </span>
             </div>

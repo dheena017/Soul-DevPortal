@@ -144,25 +144,25 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
         {/* ── KPI Metric Cards Ribbon ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
-            <span className="text-xl font-extrabold text-neutral-300 font-mono">19</span>
+            <span className="text-xl font-extrabold text-amber-400 font-mono">19</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Canonical Commands</span>
             <span className="text-[11px] text-neutral-500">0 redundant aliases</span>
           </div>
 
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
-            <span className="text-xl font-extrabold text-neutral-300 font-mono">8</span>
+            <span className="text-xl font-extrabold text-emerald-400 font-mono">8</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Target Applications</span>
             <span className="text-[11px] text-neutral-500">Dual frontend &amp; backend</span>
           </div>
 
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-[#212126] transition-all">
-            <span className="text-xl font-extrabold text-neutral-300 font-mono">4</span>
+            <span className="text-xl font-extrabold text-indigo-400 font-mono">4</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Core Orchestrators</span>
             <span className="text-[11px] text-neutral-500">All / Client / Server / Project</span>
           </div>
 
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-[#212126] transition-all">
-            <span className="text-xl font-extrabold text-neutral-300 font-mono">100%</span>
+            <span className="text-xl font-extrabold text-sky-400 font-mono">100%</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Port Protected</span>
             <span className="text-[11px] text-neutral-500">Automated --kill-port</span>
           </div>
@@ -249,13 +249,13 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all ${
                   isActive
-                    ? 'bg-[#151519] text-neutral-200 font-bold border border-[#212126] shadow-sm'
-                    : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-[#212126] border border-transparent font-medium'
+                    ? 'bg-white/[0.1] text-white font-bold border border-white/20 shadow-sm'
+                    : 'text-neutral-400 hover:text-white hover:bg-white/[0.04] border border-transparent font-medium'
                 }`}
                 onClick={() => setFilterCategory(cat.id)}
               >
                 <span>{cat.label}</span>
-                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-[#151519] text-neutral-300 border border-[#212126] font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-amber-500/20 text-amber-400 border border-amber-500/35 font-bold' : 'bg-white/[0.06] text-neutral-400 border border-white/10'}`}>
                   {cat.count}
                 </span>
               </button>

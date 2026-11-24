@@ -38,14 +38,14 @@ export default function ProjectOverviewTab({
             <h2 className="text-xl font-extrabold text-white">{project.title}</h2>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#19191d] border border-neutral-700 text-neutral-200">
+            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-sky-500/15 border border-sky-500/30 text-sky-300">
               {project.framework || 'Web Application'}
             </span>
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#19191d] border border-neutral-700 text-neutral-200">
-              <svg className="w-3.5 h-3.5 text-neutral-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span>{project.dbInfo || 'SQLite'}</span>
+            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300">
+              <svg className="w-3.5 h-3.5 text-purple-400 shrink-0 inline-block mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span>{project.dbInfo || 'SQLite'}</span>
             </span>
             {project.aiEngine && project.aiEngine !== 'N/A' && (
-              <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300">
                 ✨ {project.aiEngine.split('+')[0].trim()}
               </span>
             )}
@@ -87,21 +87,21 @@ export default function ProjectOverviewTab({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">RUNTIME PORTS</span>
-            <strong className="text-xs md:text-sm font-bold text-neutral-200 font-mono mt-1">
+            <strong className="text-xs md:text-sm font-bold text-emerald-400 font-mono mt-1">
               Client :{project.frontendPort || 'N/A'} {project.backendPort ? `· Server :${project.backendPort}` : ''}
             </strong>
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">NPM SCRIPTS</span>
-            <strong className="text-xs md:text-sm font-bold text-neutral-200 font-mono mt-1">{scriptsCount} commands</strong>
+            <strong className="text-xs md:text-sm font-bold text-amber-400 font-mono mt-1">{scriptsCount} commands</strong>
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">DEPENDENCIES</span>
-            <strong className="text-xs md:text-sm font-bold text-neutral-200 font-mono mt-1">{totalDepsCount} packages</strong>
+            <strong className="text-xs md:text-sm font-bold text-sky-400 font-mono mt-1">{totalDepsCount} packages</strong>
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">ENV VARIABLES</span>
-            <strong className="text-xs md:text-sm font-bold text-neutral-300 font-mono mt-1">{envCount} configured</strong>
+            <strong className="text-xs md:text-sm font-bold text-purple-400 font-mono mt-1">{envCount} configured</strong>
           </div>
         </div>
       </section>
@@ -117,7 +117,7 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#151519] border border-[#212126] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#19191d]">
               <span className="text-xs font-bold text-neutral-300">Client Tier</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
                 Port {project.frontendPort || 'N/A'}
               </span>
             </div>
@@ -131,7 +131,7 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#151519] border border-[#212126] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#19191d]">
               <span className="text-xs font-bold text-neutral-300">Server Tier</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/15 border border-indigo-500/30 text-indigo-300">
                 Port {project.backendPort || 'N/A'}
               </span>
             </div>
@@ -145,7 +145,7 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#151519] border border-[#212126] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#19191d]">
               <span className="text-xs font-bold text-neutral-300">Persistence</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/15 border border-purple-500/30 text-purple-300">
                 Database
               </span>
             </div>

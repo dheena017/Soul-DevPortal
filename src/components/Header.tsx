@@ -163,7 +163,7 @@ export const Header: React.FC<HeaderProps> = ({
             title={`Pillar 1: Applications (${projectsCount})`}
           >
             <span>Projects</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-[#111114] text-neutral-300 border border-[#1f1f24] font-bold' : 'bg-[#111114] text-neutral-400 border border-[#19191d]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/35 font-bold' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'}`}>
               {projectsCount}
             </span>
           </button>
@@ -177,7 +177,7 @@ export const Header: React.FC<HeaderProps> = ({
             title={`Pillar 2: Shared Libraries (${packagesCount})`}
           >
             <span>Packages</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-[#111114] text-neutral-300 border border-[#1f1f24] font-bold' : 'bg-[#111114] text-neutral-400 border border-[#19191d]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-purple-500/20 text-purple-400 border border-purple-500/35 font-bold' : 'bg-purple-500/15 text-purple-400 border border-purple-500/25'}`}>
               {packagesCount}
             </span>
           </button>
@@ -191,7 +191,7 @@ export const Header: React.FC<HeaderProps> = ({
             title={`Pillar 3: Documentation Hub (${docsCount} Guides)`}
           >
             <span>Docs</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-[#111114] text-neutral-300 border border-[#1f1f24] font-bold' : 'bg-[#111114] text-neutral-400 border border-[#19191d]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-sky-500/20 text-sky-400 border border-sky-500/35 font-bold' : 'bg-sky-500/15 text-sky-400 border border-sky-500/25'}`}>
               {docsCount}
             </span>
           </button>

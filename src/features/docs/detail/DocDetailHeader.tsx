@@ -95,13 +95,13 @@ export default function DocDetailHeader({
 
           <div className="flex flex-col gap-2 min-w-0">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
                 OFFICIAL SPEC V1.0
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400">
                 v1.0.0
               </span>
-              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-purple-500/15 border border-purple-500/30 text-purple-400">
                 {guideMeta.category.toUpperCase()}
               </span>
             </div>
@@ -118,7 +118,7 @@ export default function DocDetailHeader({
               <span>📑</span>
               <span>SECTIONS</span>
             </span>
-            <strong className="text-base font-bold text-neutral-200 font-mono mt-1">{headingsCount} headings</strong>
+            <strong className="text-base font-bold text-sky-400 font-mono mt-1">{headingsCount} headings</strong>
           </div>
 
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all">
@@ -126,7 +126,7 @@ export default function DocDetailHeader({
               <span>⏱️</span>
               <span>READ TIME</span>
             </span>
-            <strong className="text-base font-bold text-neutral-200 font-mono mt-1">{guideMeta.readTime}</strong>
+            <strong className="text-base font-bold text-amber-400 font-mono mt-1">{guideMeta.readTime}</strong>
           </div>
 
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-[#212126] transition-all">
@@ -134,7 +134,7 @@ export default function DocDetailHeader({
               <span>💻</span>
               <span>CODE EXAMPLES</span>
             </span>
-            <strong className="text-base font-bold text-neutral-200 font-mono mt-1">{codeBlocksCount} snippets</strong>
+            <strong className="text-base font-bold text-emerald-400 font-mono mt-1">{codeBlocksCount} snippets</strong>
           </div>
 
           <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-[#212126] transition-all">
@@ -142,7 +142,7 @@ export default function DocDetailHeader({
               <span>📊</span>
               <span>TABLES &amp; MATRICES</span>
             </span>
-            <strong className="text-base font-bold text-neutral-300 font-mono mt-1">{tablesCount} tables</strong>
+            <strong className="text-base font-bold text-purple-400 font-mono mt-1">{tablesCount} tables</strong>
           </div>
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function DocDetailHeader({
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
             <span>Full Specification</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'spec' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'spec' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-sky-500/15 text-sky-400 border border-sky-500/30'}`}>
               {headingsCount}
             </span>
           </button>
@@ -186,7 +186,7 @@ export default function DocDetailHeader({
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
             <span>Key Rules &amp; Highlights</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'highlights' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'highlights' ? 'bg-amber-500/25 text-amber-300 border border-amber-500/40 font-bold' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'}`}>
               {guideMeta.keyHighlights.length}
             </span>
           </button>
@@ -207,7 +207,7 @@ export default function DocDetailHeader({
               <polyline points="8 6 2 12 8 18" />
             </svg>
             <span>Code Snippets</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'snippets' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'snippets' ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 font-bold' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'}`}>
               {codeBlocksCount}
             </span>
           </button>
@@ -230,7 +230,7 @@ export default function DocDetailHeader({
               <line x1="12" y1="3" x2="12" y2="21" />
             </svg>
             <span>Tables &amp; Matrices</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'tables' ? 'bg-[#212126] text-white border border-neutral-400 font-bold' : 'bg-[#151519] text-neutral-400 border border-[#212126]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'tables' ? 'bg-purple-500/25 text-purple-300 border border-purple-500/40 font-bold' : 'bg-purple-500/15 text-purple-400 border border-purple-500/30'}`}>
               {tablesCount}
             </span>
           </button>

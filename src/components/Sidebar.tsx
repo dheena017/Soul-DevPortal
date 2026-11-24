@@ -7,12 +7,12 @@ import { WORKSPACE_SCRIPTS_REGISTRY } from '../features/scripts/scriptsConstants
 
 function packageBadge(pkg: PackageData): { text: string; color: string } {
   if (pkg.pythonModule) {
-    return { text: 'PY', color: 'bg-[#111114] text-neutral-300 border-[#1f1f24]' };
+    return { text: 'PY', color: 'bg-amber-500/15 text-amber-400 border-amber-500/30' };
   }
   if (pkg.name?.includes('config')) {
-    return { text: 'CFG', color: 'bg-[#111114] text-neutral-400 border border-[#1f1f24]' };
+    return { text: 'CFG', color: 'bg-purple-500/15 text-purple-400 border-purple-500/30' };
   }
-  return { text: 'TS', color: 'bg-[#111114] text-neutral-400 border border-[#1f1f24]' };
+  return { text: 'TS', color: 'bg-sky-500/15 text-sky-400 border-sky-500/30' };
 }
 
 function packageSidebarIcon(pkg: PackageData): string {
@@ -37,12 +37,12 @@ function projectSidebarIcon(proj: ProjectData): string {
 }
 
 function docGuideBadge(guide: GuideMeta): { text: string; color: string } {
-  if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-[#111114] text-neutral-400 border border-[#1f1f24]' };
-  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-[#111114] text-neutral-400 border border-[#1f1f24]' };
-  if (guide.category === 'design') return { text: 'PKG', color: 'bg-[#111114] text-neutral-400 border border-[#1f1f24]' };
-  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-[#111114] text-neutral-400 border border-[#1f1f24]' };
-  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-[#111114] text-neutral-400 border border-[#1f1f24]' };
-  return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-[#111114] text-neutral-400 border border-[#1f1f24]' };
+  if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-sky-500/15 text-sky-400 border-sky-500/30' };
+  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-amber-500/15 text-amber-400 border-amber-500/30' };
+  if (guide.category === 'design') return { text: 'PKG', color: 'bg-purple-500/15 text-purple-400 border-purple-500/30' };
+  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' };
+  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30' };
+  return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-sky-500/15 text-sky-400 border-sky-500/30' };
 }
 
 function formatDocGuideTitle(guide: GuideMeta): string {
@@ -307,8 +307,8 @@ export default function Sidebar({
               aria-current={isActive('overview') ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
                 isActive('overview')
-                  ? 'bg-[#111114] text-neutral-200 font-semibold border border-[#1f1f24] shadow-sm'
-                  : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111114] hover:border-[#1f1f24] border border-transparent'
+                  ? 'bg-white/[0.08] text-white font-semibold border-l-2 border-indigo-400 border border-white/10 shadow-sm'
+                  : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
               onClick={() => onNavigate('overview')}
             >
@@ -316,7 +316,7 @@ export default function Sidebar({
                 <span className="text-sm" aria-hidden="true">🏠</span>
                 <span className="truncate">Workspace Overview</span>
               </div>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111114] text-neutral-400 border border-[#1f1f24]">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 shadow-[0_0_8px_rgba(99,102,241,0.15)]">
                 Hub
               </span>
             </button>
@@ -326,8 +326,8 @@ export default function Sidebar({
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))
-                  ? 'bg-[#111114] text-neutral-200 font-semibold border border-[#1f1f24] shadow-sm'
-                  : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111114] hover:border-[#1f1f24] border border-transparent'
+                  ? 'bg-white/[0.08] text-white font-semibold border-l-2 border-amber-400 border border-white/10 shadow-sm'
+                  : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
               onClick={() => onNavigate('scripts')}
             >
@@ -335,7 +335,7 @@ export default function Sidebar({
                 <span className="text-sm" aria-hidden="true">⚡</span>
                 <span className="truncate">Scripts &amp; Runners</span>
               </div>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111114] text-neutral-400 border border-[#1f1f24]">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-[0_0_8px_rgba(245,158,11,0.15)]">
                 15
               </span>
             </button>
@@ -390,8 +390,8 @@ export default function Sidebar({
                 aria-current={isActive('projects') ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   isActive('projects')
-                    ? 'bg-[#111114] text-neutral-200 font-semibold border border-[#1f1f24]'
-                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111114] hover:border-[#1f1f24] border border-transparent'
+                    ? 'bg-white/[0.08] text-white font-semibold border-l-2 border-emerald-400 border border-white/10 shadow-sm'
+                    : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('projects');
@@ -409,7 +409,7 @@ export default function Sidebar({
                   </svg>
                   <span>Projects &amp; Apps</span>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111114] text-neutral-400 border border-[#1f1f24]">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)]">
                   {formatCount(isFiltering ? filteredProjects.length : totalProjects)}
                 </span>
               </button>
@@ -438,7 +438,7 @@ export default function Sidebar({
                       key={proj.id}
                       aria-current={isProjActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
-                        isProjActive ? 'bg-[#19191d] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
+                        isProjActive ? 'bg-white/[0.08] text-white font-semibold border-l-2 border-emerald-400 border border-white/10 shadow-sm' : 'text-neutral-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
                       }`}
                       onClick={() => onNavigate(`projects/${proj.id}`)}
                       title={proj.title}
@@ -450,7 +450,7 @@ export default function Sidebar({
                         <span className="truncate">{formatProjectTitle(proj.title)}</span>
                       </div>
                       {proj.frontendPort && (
-                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 bg-[#111114] text-neutral-400 border border-[#1f1f24]">
+                        <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)]">
                           :{proj.frontendPort}
                         </span>
                       )}
@@ -479,8 +479,8 @@ export default function Sidebar({
                 aria-current={(isActive('packages') || isActive('packages-dashboard')) ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   (isActive('packages') || isActive('packages-dashboard'))
-                    ? 'bg-[#111114] text-neutral-200 font-semibold border border-[#1f1f24]'
-                    : 'text-neutral-300 hover:text-neutral-200 hover:bg-[#111114] hover:border-[#1f1f24] border border-transparent'
+                    ? 'bg-white/[0.08] text-white font-semibold border-l-2 border-purple-400 border border-white/10 shadow-sm'
+                    : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('packages');
@@ -498,7 +498,7 @@ export default function Sidebar({
                   </svg>
                   <span>Shared Packages</span>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111114] text-neutral-400 border border-[#1f1f24]">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30 shadow-[0_0_8px_rgba(168,85,247,0.15)]">
                   {formatCount(isFiltering ? filteredPackages.length : packages.length)}
                 </span>
               </button>
@@ -530,7 +530,7 @@ export default function Sidebar({
                       key={pkg.id}
                       aria-current={isPkgActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
-                        isPkgActive ? 'bg-[#19191d] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
+                        isPkgActive ? 'bg-white/[0.08] text-white font-semibold border-l-2 border-purple-400 border border-white/10 shadow-sm' : 'text-neutral-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
                       }`}
                       onClick={() => onNavigate(`packages/${pkg.id}`)}
                       title={pkg.displayName || pkg.name}
@@ -568,7 +568,7 @@ export default function Sidebar({
                 type="button"
                 aria-current={(isActive('docs') || isActive('docs-dashboard')) ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
-                  (isActive('docs') || isActive('docs-dashboard')) ? 'bg-[#19191d] text-white font-semibold border border-neutral-600' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 border border-transparent'
+                  (isActive('docs') || isActive('docs-dashboard')) ? 'bg-white/[0.08] text-white font-semibold border-l-2 border-sky-400 border border-white/10 shadow-sm' : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('docs');
@@ -582,7 +582,7 @@ export default function Sidebar({
                   <span>📚</span>
                   <span>Documentation</span>
                 </div>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111114] text-neutral-400 border border-[#1f1f24]">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30 shadow-[0_0_8px_rgba(56,189,248,0.15)]">
                   {formatCount(isFiltering ? filteredGuides.length : DOCUMENTATION_GUIDES_REGISTRY.length)}
                 </span>
               </button>
@@ -615,8 +615,8 @@ export default function Sidebar({
                       aria-current={isGuideActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
                         isGuideActive
-                          ? 'bg-[#111114] text-neutral-200 font-semibold border border-[#1f1f24]'
-                          : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#111114] border border-transparent'
+                          ? 'bg-white/[0.08] text-white font-semibold border-l-2 border-sky-400 border border-white/10 shadow-sm'
+                          : 'text-neutral-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
                       }`}
                       onClick={() => onNavigate(targetRoute)}
                       title={guide.title}
@@ -669,7 +669,7 @@ export default function Sidebar({
         {/* ── Footer ── */}
         <div className="p-3 border-t border-[#19191d] bg-[#070708] flex items-center justify-between text-xs shrink-0">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse" aria-hidden="true" />
             <div className="flex flex-col">
               <strong className="text-[11px] font-semibold text-neutral-200 leading-tight">4 Pillars Synced</strong>
               <small className="text-[10px] text-neutral-500 font-mono leading-tight">
@@ -677,7 +677,7 @@ export default function Sidebar({
               </small>
             </div>
           </div>
-          <span className="w-5 h-5 rounded-full bg-[#111114] border border-[#1f1f24] text-neutral-300 flex items-center justify-center text-xs font-bold" aria-label="Ready">
+          <span className="w-5 h-5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-xs font-bold shadow-[0_0_8px_rgba(16,185,129,0.2)]" aria-label="Ready">
             ✓
           </span>
         </div>

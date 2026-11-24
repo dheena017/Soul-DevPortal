@@ -97,14 +97,14 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
 
             <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-xs">
               {project.frontendPort && (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-neutral-300 text-[11px] font-bold" title={`Client Port :${project.frontendPort}`}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold shadow-[0_0_8px_rgba(16,185,129,0.12)]" title={`Client Port :${project.frontendPort}`}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
                   <span>:{project.frontendPort}</span>
                 </span>
               )}
               {project.backendPort && (
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#151519] border border-[#212126] text-neutral-300 text-[11px] font-bold" title={`Server Port :${project.backendPort}`}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-[11px] font-bold shadow-[0_0_8px_rgba(99,102,241,0.12)]" title={`Server Port :${project.backendPort}`}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" aria-hidden="true" />
                   <span>:{project.backendPort}</span>
                 </span>
               )}
@@ -191,18 +191,18 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
               href={`http://localhost:${project.frontendPort}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 transition-all"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/25 transition-all"
               title={`Launch on http://localhost:${project.frontendPort}`}
               onClick={(e) => e.stopPropagation()}
             >
               <span>Launch</span>
-              <span className="text-neutral-500">↗</span>
+              <span className="text-emerald-400">↗</span>
             </a>
           )}
           {onSelectProject && (
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#151519] border border-[#212126] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm"
+              className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-semibold bg-white/[0.08] border border-white/20 text-white font-bold hover:bg-white/[0.14] transition-all shadow-sm"
               onClick={handleCardClick}
               title={`Open deep detail view for ${formattedTitle}`}
             >
