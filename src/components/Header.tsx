@@ -116,10 +116,13 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               ) : (
                 <span
-                  className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-[200px]"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-[200px]"
                   title={crumb.label}
                 >
-                  {crumb.label}
+                  {breadcrumbs.length > 2 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                  )}
+                  <span className="truncate">{crumb.label}</span>
                 </span>
               )}
             </div>

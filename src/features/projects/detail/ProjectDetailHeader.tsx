@@ -41,12 +41,12 @@ export default function ProjectDetailHeader({
   return (
     <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#19191d]">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#151519] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               onClick={onBack}
               title="Back to all projects"
             >
@@ -54,35 +54,39 @@ export default function ProjectDetailHeader({
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
-              <span>Back</span>
+              <span>Back to Projects</span>
             </button>
           ) : (
             <a
               href="#projects"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#151519] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               title="Back to all projects"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
-              <span>Back</span>
+              <span>Back to Projects</span>
             </a>
           )}
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#151519] border border-[#212126] text-neutral-400 font-medium">Soul Workspace</span>
-          <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 font-medium">Soul Workspace</span>
+          <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
           <a
             href="#projects"
-            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] hover:text-neutral-200 transition-all text-neutral-300 font-medium"
+            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] hover:text-white transition-all text-zinc-300 font-medium"
             onClick={(e) => {
               e.preventDefault();
               onBack?.();
             }}
           >
-            Pillar 1: Projects
+            Pillar 1: Projects Dashboard
           </a>
           <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
           <strong className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-sm uppercase">{project.title}</strong>
+          <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 shadow-sm inline-flex items-center gap-1.5 ml-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>SUB-PAGE: APPLICATION INSPECTOR</span>
+          </span>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 shrink-0">

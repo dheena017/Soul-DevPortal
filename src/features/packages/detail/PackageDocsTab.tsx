@@ -9,9 +9,13 @@ export interface PackageDocsTabProps {
 }
 
 export default function PackageDocsTab({ pkg, headings }: PackageDocsTabProps) {
+  const hasHeadings = headings && headings.length > 0;
+
   return (
-    <div className="w-full grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5 items-start">
-      <TableOfContents headings={headings} title="On this page" className="w-full" />
+    <div className={`w-full ${hasHeadings ? 'grid grid-cols-1 lg:grid-cols-[280px_1fr]' : 'flex flex-col'} gap-5 items-start`}>
+      {hasHeadings && (
+        <TableOfContents headings={headings} title="On this page" className="w-full" />
+      )}
       <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-4 min-w-0">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#19191d]">
           <div className="flex flex-col gap-0.5">

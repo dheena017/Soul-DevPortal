@@ -6,14 +6,12 @@ import { DOCUMENTATION_GUIDES_REGISTRY, GuideMeta } from '../features/docs/docsC
 import { WORKSPACE_SCRIPTS_REGISTRY } from '../features/scripts/scriptsConstants';
 import { PROJECT_BRAND_MAP } from '../features/projects/projectsConstants';
 
-function packageBadge(pkg: PackageData): { text: string; color: string } {
-  if (pkg.pythonModule) {
-    return { text: 'PY', color: 'bg-[#09090c] text-amber-400 border-amber-500/30' };
+function packageBadge(pkg: PackageData, isActive: boolean = false): { text: string; color: string } {
+  const text = pkg.pythonModule ? 'PY' : pkg.name?.includes('config') ? 'CFG' : 'TS';
+  if (isActive) {
+    return { text, color: 'bg-purple-500/15 text-purple-300 border-purple-500/30 font-bold' };
   }
-  if (pkg.name?.includes('config')) {
-    return { text: 'CFG', color: 'bg-[#09090c] text-purple-400 border-purple-500/30' };
-  }
-  return { text: 'TS', color: 'bg-[#09090c] text-sky-400 border-sky-500/30' };
+  return { text, color: 'bg-white/[0.04] text-zinc-400 border-white/[0.08]' };
 }
 
 function packageSidebarIcon(pkg: PackageData): string {
@@ -37,13 +35,19 @@ function projectSidebarIcon(proj: ProjectData): string {
   return '💻';
 }
 
-function docGuideBadge(guide: GuideMeta): { text: string; color: string } {
-  if (guide.category === 'rules') return { text: 'SPEC', color: 'bg-[#09090c] text-sky-400 border-sky-500/30' };
-  if (guide.category === 'cheatsheet') return { text: 'OPS', color: 'bg-[#09090c] text-amber-400 border-amber-500/30' };
-  if (guide.category === 'design') return { text: 'PKG', color: 'bg-[#09090c] text-purple-400 border-purple-500/30' };
-  if (guide.category === 'ports') return { text: 'PORTS', color: 'bg-[#09090c] text-emerald-400 border-emerald-500/30' };
-  if (guide.category === 'techstack') return { text: 'STACK', color: 'bg-[#09090c] text-indigo-400 border-indigo-500/30' };
-  return { text: guide.badge?.split(' ')[0] || 'DOC', color: 'bg-[#09090c] text-sky-400 border-sky-500/30' };
+function docGuideBadge(guide: GuideMeta, isActive: boolean = false): { text: string; color: string } {
+  let text = 'DOC';
+  if (guide.category === 'rules') text = 'SPEC';
+  else if (guide.category === 'cheatsheet') text = 'OPS';
+  else if (guide.category === 'design') text = 'PKG';
+  else if (guide.category === 'ports') text = 'PORTS';
+  else if (guide.category === 'techstack') text = 'STACK';
+  else text = guide.badge?.split(' ')[0] || 'DOC';
+
+  if (isActive) {
+    return { text, color: 'bg-sky-500/15 text-sky-300 border-sky-500/30 font-bold' };
+  }
+  return { text, color: 'bg-white/[0.04] text-zinc-400 border-white/[0.08]' };
 }
 
 function formatDocGuideTitle(guide: GuideMeta): string {
@@ -300,81 +304,81 @@ export default function Sidebar({
         {/* ── Scrollable Navigation ── */}
         <nav className="flex-1 overflow-y-auto sidebar-scroll px-3 py-3 flex flex-col gap-4 text-xs font-medium" aria-label="Monorepo navigation">
           {/* Top Global Hubs & Tools */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1">
             <button
               type="button"
               aria-current={isActive('overview') ? 'page' : undefined}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 isActive('overview')
-                  ? 'bg-indigo-500/15 text-white font-semibold border-l-2 border-indigo-400 border border-indigo-500/25 shadow-sm'
-                  : 'text-zinc-200 hover:text-white hover:bg-white/[0.06] hover:translate-x-1 border border-transparent'
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
               onClick={() => onNavigate('overview')}
             >
-              <div className="flex items-center gap-3 min-w-0">
+              <div className="flex items-center gap-2.5 min-w-0">
                 <span className="text-base" aria-hidden="true">🏠</span>
                 <span className="truncate font-semibold text-zinc-100">Workspace Overview</span>
               </div>
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-indigo-400 border border-indigo-500/30 shadow-[0_0_8px_rgba(99,102,241,0.15)] inline-flex items-center gap-1.5">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-400"></span>
-                </span>
-                <span>Hub</span>
+              <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                isActive('overview')
+                  ? 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30 font-bold'
+                  : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+              }`}>
+                Hub
               </span>
             </button>
 
             <button
               type="button"
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))
-                  ? 'bg-amber-500/15 text-white font-semibold border-l-2 border-amber-400 border border-amber-500/25 shadow-sm'
-                  : 'text-zinc-200 hover:text-white hover:bg-white/[0.06] hover:translate-x-1 border border-transparent'
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
               onClick={() => onNavigate('scripts')}
             >
-              <div className="flex items-center gap-3 min-w-0">
+              <div className="flex items-center gap-2.5 min-w-0">
                 <span className="text-base" aria-hidden="true">⚡</span>
                 <span className="truncate font-semibold text-zinc-100">Scripts &amp; Runners</span>
               </div>
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-amber-400 border border-amber-500/30 shadow-[0_0_8px_rgba(245,158,11,0.15)] inline-flex items-center gap-1.5">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-400"></span>
-                </span>
-                <span>15</span>
+              <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                (isActive('scripts') || isActive('commands') || isActive('runners'))
+                  ? 'bg-amber-500/15 text-amber-300 border-amber-500/30 font-bold'
+                  : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+              }`}>
+                15
               </span>
             </button>
           </div>
 
           {/* If searching and matching scripts exist */}
           {isFiltering && filteredScripts.length > 0 && (
-            <div className="flex flex-col gap-1.5 pt-1">
+            <div className="flex flex-col gap-1 pt-1">
               <button
                 type="button"
-                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-zinc-100 font-semibold bg-[#151519] border border-white/[0.06]"
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-zinc-100 font-semibold bg-[#16161c] border border-white/[0.08]"
                 onClick={() => onNavigate('scripts')}
               >
                 <div className="flex items-center gap-2.5">
                   <span>⚡</span>
                   <span className="text-zinc-100 font-medium">Matching Scripts</span>
                 </div>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-[#111114] text-zinc-200 border border-[#1f1f24]">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-white/[0.04] text-zinc-300 border border-white/[0.08]">
                   {filteredScripts.length}
                 </span>
               </button>
-              <div className="flex flex-col gap-1.5 pl-3 pr-1 py-1">
+              <div className="ml-4 pl-3.5 border-l border-white/[0.08] flex flex-col gap-1 my-1">
                 {filteredScripts.slice(0, 8).map((s) => (
                   <button
                     type="button"
                     key={s.id}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-zinc-200 hover:text-white hover:bg-white/[0.06] hover:translate-x-1 transition-all text-left"
+                    className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-all text-left"
                     onClick={() => onNavigate('scripts')}
                     title={`${s.name} - ${s.description}`}
                   >
-                    <span className="truncate text-zinc-200 font-medium">{s.name}</span>
-                    <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 bg-neutral-800 text-zinc-200 border border-neutral-700">
+                    <span className="truncate font-medium text-xs">{s.name}</span>
+                    <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 bg-white/[0.04] text-zinc-400 border border-white/[0.06]">
                       {s.badge}
                     </span>
                   </button>
@@ -383,332 +387,362 @@ export default function Sidebar({
             </div>
           )}
 
-          <div className="pt-3 pb-1 border-t border-[#1f1f24]/80 flex items-center justify-between px-1">
+          <div className="pt-2 pb-1 border-t border-white/[0.06] flex items-center justify-between px-1">
             <span className="text-[11px] font-mono font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-zinc-500" aria-hidden="true" />
               <span>Core Monorepo Pillars</span>
             </span>
           </div>
 
-          {/* Pillar 1: Projects */}
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between gap-1">
-              <button
-                type="button"
-                aria-current={isActive('projects') ? 'page' : undefined}
-                className={`flex-1 flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
-                  isActive('projects')
-                    ? 'bg-emerald-500/15 text-white font-semibold border-l-2 border-emerald-400 border border-emerald-500/25 shadow-sm'
-                    : 'text-zinc-200 hover:text-white hover:bg-white/[0.06] hover:translate-x-1 border border-transparent'
-                }`}
-                onClick={() => {
-                  onNavigate('projects');
-                  if (!isProjectsOpen) {
-                    toggleSection('projects');
-                  }
-                }}
-                title="Open Projects & Apps Dashboard"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-400 shrink-0">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                    <line x1="8" y1="21" x2="16" y2="21" />
-                    <line x1="12" y1="17" x2="12" y2="21" />
-                  </svg>
-                  <span className="font-semibold text-zinc-100">Projects &amp; Apps</span>
-                </div>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)] inline-flex items-center gap-1.5">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
-                  </span>
-                  <span>{formatCount(isFiltering ? filteredProjects.length : totalProjects)}</span>
-                </span>
-              </button>
+          {/* Pillar 1: Projects & Applications */}
+          {(() => {
+            const isProjectsMainActive = isActive('projects');
+            const isProjectsChildActive = active.startsWith('projects/') || active.startsWith('project/');
 
-              <button
-                type="button"
-                className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-all"
-                onClick={() => toggleSection('projects')}
-                aria-expanded={isProjectsOpen}
-                title={isProjectsOpen ? 'Collapse applications list' : 'Expand applications list'}
-                aria-label={isProjectsOpen ? 'Collapse applications list' : 'Expand applications list'}
-              >
-                <svg
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${!isProjectsOpen ? '-rotate-90 text-zinc-500' : 'rotate-0 text-zinc-300'}`}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-            </div>
+            return (
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between gap-1">
+                  <button
+                    type="button"
+                    aria-current={isProjectsMainActive ? 'page' : undefined}
+                    className={`flex-1 flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                      isProjectsMainActive
+                        ? 'bg-white/[0.08] text-white font-bold border border-white/15 shadow-sm'
+                        : isProjectsChildActive
+                        ? 'text-white font-semibold bg-white/[0.03] border border-white/[0.08]'
+                        : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                    }`}
+                    onClick={() => {
+                      onNavigate('projects');
+                      if (!isProjectsOpen) {
+                        toggleSection('projects');
+                      }
+                    }}
+                    title="Open Projects & Apps Dashboard"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" className="text-emerald-400 shrink-0">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                        <line x1="8" y1="21" x2="16" y2="21" />
+                        <line x1="12" y1="17" x2="12" y2="21" />
+                      </svg>
+                      <span className="font-semibold text-zinc-100">Projects &amp; Apps</span>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                      isProjectsMainActive
+                        ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30 font-bold'
+                        : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+                    }`}>
+                      {formatCount(isFiltering ? filteredProjects.length : totalProjects)}
+                    </span>
+                  </button>
 
-            {isProjectsOpen && filteredProjects.length > 0 && (
-              <div className="flex flex-col gap-1.5 pl-3 pr-1 py-1.5">
-                {filteredProjects.slice(0, 50).map((proj) => {
-                  const isProjActive = isActive(`projects/${proj.id}`) || isActive(`project/${proj.id}`);
-                  return (
-                    <button
-                      type="button"
-                      key={proj.id}
-                      aria-current={isProjActive ? 'page' : undefined}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-all text-left group ${
-                        isProjActive
-                          ? 'bg-emerald-500/15 text-white font-semibold border-l-2 border-emerald-400 border border-emerald-500/25 shadow-sm'
-                          : 'text-zinc-200 hover:text-white hover:bg-white/[0.06] hover:translate-x-1 border border-transparent'
-                      }`}
-                      onClick={() => onNavigate(`projects/${proj.id}`)}
-                      title={proj.title}
+                  <button
+                    type="button"
+                    className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-all"
+                    onClick={() => toggleSection('projects')}
+                    aria-expanded={isProjectsOpen}
+                    title={isProjectsOpen ? 'Collapse applications list' : 'Expand applications list'}
+                    aria-label={isProjectsOpen ? 'Collapse applications list' : 'Expand applications list'}
+                  >
+                    <svg
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${!isProjectsOpen ? '-rotate-90 text-zinc-500' : 'rotate-0 text-zinc-300'}`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
                     >
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <span className="text-base shrink-0 transition-transform group-hover:scale-110" aria-hidden="true">
-                          {projectSidebarIcon(proj)}
-                        </span>
-                        <span className="truncate font-medium text-zinc-100 group-hover:text-white transition-colors">{formatProjectTitle(proj)}</span>
-                      </div>
-                      {proj.frontendPort && (
-                        <span className="ml-2 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shrink-0 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)] inline-flex items-center gap-1.5">
-                          <span className="relative flex h-1.5 w-1.5">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                </div>
+
+                {isProjectsOpen && filteredProjects.length > 0 && (
+                  <div className="ml-4 pl-3.5 border-l border-white/[0.08] flex flex-col gap-1 my-1">
+                    {filteredProjects.slice(0, 50).map((proj) => {
+                      const isProjActive = isActive(`projects/${proj.id}`) || isActive(`project/${proj.id}`);
+                      return (
+                        <button
+                          type="button"
+                          key={proj.id}
+                          aria-current={isProjActive ? 'page' : undefined}
+                          className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all text-left group ${
+                            isProjActive
+                              ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                              : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent'
+                          }`}
+                          onClick={() => onNavigate(`projects/${proj.id}`)}
+                          title={proj.title}
+                        >
+                          <div className="flex items-center gap-2 min-w-0 flex-1">
+                            {isProjActive && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)] shrink-0" />
+                            )}
+                            <span className="text-sm shrink-0 transition-transform group-hover:scale-105" aria-hidden="true">
+                              {projectSidebarIcon(proj)}
+                            </span>
+                            <span className="truncate font-medium group-hover:text-white transition-colors">{formatProjectTitle(proj)}</span>
+                          </div>
+                          {proj.frontendPort && (
+                            <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
+                              isProjActive
+                                ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold'
+                                : 'bg-white/[0.04] text-zinc-400 border border-white/[0.06] group-hover:text-zinc-300 group-hover:border-white/10'
+                            }`}>
+                              :{proj.frontendPort}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+
+                    {filteredProjects.length > 50 && (
+                      <button
+                        type="button"
+                        className="text-left px-2.5 py-1 text-xs text-zinc-400 hover:text-white hover:underline cursor-pointer"
+                        onClick={() => onNavigate('projects')}
+                      >
+                        + View all {totalProjects.toLocaleString()} apps in dashboard →
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Pillar 2: Shared Packages */}
+          {(() => {
+            const isPackagesMainActive = isActive('packages') || isActive('packages-dashboard');
+            const isPackagesChildActive = active.startsWith('packages/') || active.startsWith('package/') || ['logger', 'runner', 'config'].includes(active);
+
+            return (
+              <div className="flex flex-col gap-1 pt-1">
+                <div className="flex items-center justify-between gap-1">
+                  <button
+                    type="button"
+                    aria-current={isPackagesMainActive ? 'page' : undefined}
+                    className={`flex-1 flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                      isPackagesMainActive
+                        ? 'bg-white/[0.08] text-white font-bold border border-white/15 shadow-sm'
+                        : isPackagesChildActive
+                        ? 'text-white font-semibold bg-white/[0.03] border border-white/[0.08]'
+                        : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                    }`}
+                    onClick={() => {
+                      onNavigate('packages');
+                      if (!isPackagesOpen) {
+                        toggleSection('packages');
+                      }
+                    }}
+                    title="Open Packages Dashboard"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" className="text-purple-400 shrink-0">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                        <line x1="12" y1="22.08" x2="12" y2="12" />
+                      </svg>
+                      <span className="font-semibold text-zinc-100">Shared Packages</span>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                      isPackagesMainActive
+                        ? 'bg-purple-500/15 text-purple-300 border-purple-500/30 font-bold'
+                        : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+                    }`}>
+                      {formatCount(isFiltering ? filteredPackages.length : packages.length)}
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-all"
+                    onClick={() => toggleSection('packages')}
+                    aria-expanded={isPackagesOpen}
+                    title={isPackagesOpen ? 'Collapse packages list' : 'Expand packages list'}
+                    aria-label={isPackagesOpen ? 'Collapse packages list' : 'Expand packages list'}
+                  >
+                    <svg
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${!isPackagesOpen ? '-rotate-90 text-zinc-500' : 'rotate-0 text-zinc-300'}`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                </div>
+
+                {isPackagesOpen && (
+                  <div className="ml-4 pl-3.5 border-l border-white/[0.08] flex flex-col gap-1 my-1">
+                    {filteredPackages.slice(0, 50).map((pkg) => {
+                      const isPkgActive = isActive(`packages/${pkg.id}`) || isActive(`package/${pkg.id}`) || isActive(pkg.id);
+                      const badge = packageBadge(pkg, isPkgActive);
+                      const icon = packageSidebarIcon(pkg);
+
+                      return (
+                        <button
+                          type="button"
+                          key={pkg.id}
+                          aria-current={isPkgActive ? 'page' : undefined}
+                          className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all text-left group ${
+                            isPkgActive
+                              ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                              : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent'
+                          }`}
+                          onClick={() => onNavigate(`packages/${pkg.id}`)}
+                          title={pkg.displayName || pkg.name}
+                        >
+                          <div className="flex items-center gap-2 min-w-0 flex-1">
+                            {isPkgActive && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.9)] shrink-0" />
+                            )}
+                            <span className="text-sm shrink-0 transition-transform group-hover:scale-105" aria-hidden="true">
+                              {icon}
+                            </span>
+                            <span className="truncate font-mono font-medium group-hover:text-white transition-colors">{pkg.displayName || pkg.name}</span>
+                          </div>
+                          <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 border transition-colors ${badge.color}`}>
+                            {badge.text}
                           </span>
-                          <span>:{proj.frontendPort}</span>
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
+                        </button>
+                      );
+                    })}
 
-                {filteredProjects.length > 50 && (
-                  <button
-                    type="button"
-                    className="text-left px-3 py-1.5 text-xs text-zinc-300 hover:text-white hover:underline"
-                    onClick={() => onNavigate('projects')}
-                  >
-                    + View all {totalProjects.toLocaleString()} apps in dashboard →
-                  </button>
+                    {filteredPackages.length > 50 && (
+                      <button
+                        type="button"
+                        className="text-left px-2.5 py-1 text-xs text-zinc-400 hover:text-white hover:underline cursor-pointer"
+                        onClick={() => onNavigate('packages')}
+                      >
+                        + View all {packages.length.toLocaleString()} packages in dashboard →
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
-            )}
-          </div>
-
-          {/* Pillar 2: Packages */}
-          <div className="flex flex-col gap-1.5 pt-1">
-            <div className="flex items-center justify-between gap-1">
-              <button
-                type="button"
-                aria-current={(isActive('packages') || isActive('packages-dashboard')) ? 'page' : undefined}
-                className={`flex-1 flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
-                  (isActive('packages') || isActive('packages-dashboard'))
-                    ? 'bg-purple-500/15 text-white font-semibold border-l-2 border-purple-400 border border-purple-500/25 shadow-sm'
-                    : 'text-zinc-200 hover:text-white hover:bg-white/[0.06] hover:translate-x-1 border border-transparent'
-                }`}
-                onClick={() => {
-                  onNavigate('packages');
-                  if (!isPackagesOpen) {
-                    toggleSection('packages');
-                  }
-                }}
-                title="Open Packages Dashboard"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" className="text-purple-400 shrink-0">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                    <line x1="12" y1="22.08" x2="12" y2="12" />
-                  </svg>
-                  <span className="font-semibold text-zinc-100">Shared Packages</span>
-                </div>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-purple-400 border border-purple-500/30 shadow-[0_0_8px_rgba(168,85,247,0.15)] inline-flex items-center gap-1.5">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-purple-400"></span>
-                  </span>
-                  <span>{formatCount(isFiltering ? filteredPackages.length : packages.length)}</span>
-                </span>
-              </button>
-
-              <button
-                type="button"
-                className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-all"
-                onClick={() => toggleSection('packages')}
-                aria-expanded={isPackagesOpen}
-                title={isPackagesOpen ? 'Collapse packages list' : 'Expand packages list'}
-                aria-label={isPackagesOpen ? 'Collapse packages list' : 'Expand packages list'}
-              >
-                <svg
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${!isPackagesOpen ? '-rotate-90 text-zinc-500' : 'rotate-0 text-zinc-300'}`}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-            </div>
-
-            {isPackagesOpen && (
-              <div className="flex flex-col gap-1.5 pl-3 pr-1 py-1.5">
-                {filteredPackages.slice(0, 50).map((pkg) => {
-                  const badge = packageBadge(pkg);
-                  const icon = packageSidebarIcon(pkg);
-                  const isPkgActive = isActive(`packages/${pkg.id}`) || isActive(`package/${pkg.id}`) || isActive(pkg.id);
-
-                  return (
-                    <button
-                      type="button"
-                      key={pkg.id}
-                      aria-current={isPkgActive ? 'page' : undefined}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-all text-left group ${
-                        isPkgActive
-                          ? 'bg-purple-500/15 text-white font-semibold border-l-2 border-purple-400 border border-purple-500/25 shadow-sm'
-                          : 'text-zinc-200 hover:text-white hover:bg-white/[0.06] hover:translate-x-1 border border-transparent'
-                      }`}
-                      onClick={() => onNavigate(`packages/${pkg.id}`)}
-                      title={pkg.displayName || pkg.name}
-                    >
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <span className="text-base shrink-0 transition-transform group-hover:scale-110" aria-hidden="true">
-                          {icon}
-                        </span>
-                        <span className="truncate font-mono font-medium text-zinc-100 group-hover:text-white transition-colors">{pkg.displayName || pkg.name}</span>
-                      </div>
-                      <span className={`ml-2 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shrink-0 border ${badge.color} inline-flex items-center gap-1.5`}>
-                        <span className="relative flex h-1.5 w-1.5">
-                          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${pkg.pythonModule ? 'bg-amber-400' : pkg.name?.includes('config') ? 'bg-purple-400' : 'bg-sky-400'} opacity-75`}></span>
-                          <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${pkg.pythonModule ? 'bg-amber-400' : pkg.name?.includes('config') ? 'bg-purple-400' : 'bg-sky-400'}`}></span>
-                        </span>
-                        <span>{badge.text}</span>
-                      </span>
-                    </button>
-                  );
-                })}
-
-                {filteredPackages.length > 50 && (
-                  <button
-                    type="button"
-                    className="text-left px-3 py-1.5 text-xs text-zinc-300 hover:text-white hover:underline"
-                    onClick={() => onNavigate('packages')}
-                  >
-                    + View all {packages.length.toLocaleString()} packages in dashboard →
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
+            );
+          })()}
 
           {/* Pillar 3: Documentation */}
-          <div className="flex flex-col gap-1.5 pt-1">
-            <div className="flex items-center justify-between gap-1">
-              <button
-                type="button"
-                aria-current={(isActive('docs') || isActive('docs-dashboard')) ? 'page' : undefined}
-                className={`flex-1 flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
-                  (isActive('docs') || isActive('docs-dashboard')) ? 'bg-sky-500/15 text-white font-semibold border-l-2 border-sky-400 border border-sky-500/25 shadow-sm' : 'text-zinc-200 hover:text-white hover:bg-white/[0.06] hover:translate-x-1 border border-transparent'
-                }`}
-                onClick={() => {
-                  onNavigate('docs');
-                  if (!isDocsOpen) {
-                    toggleSection('docs');
-                  }
-                }}
-                title="Open Docs Dashboard"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <span className="text-base shrink-0" aria-hidden="true">📚</span>
-                  <span className="font-semibold text-zinc-100">Documentation</span>
-                </div>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] text-sky-400 border border-sky-500/30 shadow-[0_0_8px_rgba(56,189,248,0.15)] inline-flex items-center gap-1.5">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-sky-400"></span>
-                  </span>
-                  <span>{formatCount(isFiltering ? filteredGuides.length : DOCUMENTATION_GUIDES_REGISTRY.length)}</span>
-                </span>
-              </button>
+          {(() => {
+            const isDocsMainActive = isActive('docs') || isActive('docs-dashboard');
+            const isDocsChildActive = active.startsWith('docs/') || active.startsWith('doc/') || ['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
 
-              <button
-                type="button"
-                className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-all"
-                onClick={() => toggleSection('docs')}
-                aria-expanded={isDocsOpen}
-                title={isDocsOpen ? 'Collapse documentation guides' : 'Expand documentation guides'}
-                aria-label={isDocsOpen ? 'Collapse documentation guides' : 'Expand documentation guides'}
-              >
-                <svg
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${!isDocsOpen ? '-rotate-90 text-zinc-500' : 'rotate-0 text-zinc-300'}`}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-            </div>
-
-            {isDocsOpen && (
-              <div className="flex flex-col gap-1.5 pl-3 pr-1 py-1.5">
-                {filteredGuides.slice(0, 50).map((guide) => {
-                  const isGuideActive = isDocGuideActive(active, guide);
-                  const targetRoute = docGuideRoute(guide);
-                  const badge = docGuideBadge(guide);
-
-                  return (
-                    <button
-                      type="button"
-                      key={guide.id}
-                      aria-current={isGuideActive ? 'page' : undefined}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-all text-left group ${
-                        isGuideActive
-                          ? 'bg-sky-500/15 text-white font-semibold border-l-2 border-sky-400 border border-sky-500/25 shadow-sm'
-                          : 'text-zinc-200 hover:text-white hover:bg-white/[0.06] hover:translate-x-1 border border-transparent'
-                      }`}
-                      onClick={() => onNavigate(targetRoute)}
-                      title={guide.title}
-                    >
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <span className="text-base shrink-0 transition-transform group-hover:scale-110" aria-hidden="true">
-                          {guide.icon}
-                        </span>
-                        <span className="truncate font-medium text-zinc-100 group-hover:text-white transition-colors">{formatDocGuideTitle(guide)}</span>
-                      </div>
-                      <span className={`ml-2 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shrink-0 border ${badge.color} inline-flex items-center gap-1.5`}>
-                        <span className="relative flex h-1.5 w-1.5">
-                          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${guide.category === 'ports' ? 'bg-emerald-400' : guide.category === 'cheatsheet' ? 'bg-amber-400' : guide.category === 'design' ? 'bg-purple-400' : 'bg-sky-400'} opacity-75`}></span>
-                          <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${guide.category === 'ports' ? 'bg-emerald-400' : guide.category === 'cheatsheet' ? 'bg-amber-400' : guide.category === 'design' ? 'bg-purple-400' : 'bg-sky-400'}`}></span>
-                        </span>
-                        <span>{badge.text}</span>
-                      </span>
-                    </button>
-                  );
-                })}
-
-                {filteredGuides.length > 50 && (
+            return (
+              <div className="flex flex-col gap-1 pt-1">
+                <div className="flex items-center justify-between gap-1">
                   <button
                     type="button"
-                    className="text-left px-3 py-1.5 text-xs text-zinc-300 hover:text-white hover:underline cursor-pointer"
-                    onClick={() => onNavigate('docs')}
+                    aria-current={isDocsMainActive ? 'page' : undefined}
+                    className={`flex-1 flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                      isDocsMainActive
+                        ? 'bg-white/[0.08] text-white font-bold border border-white/15 shadow-sm'
+                        : isDocsChildActive
+                        ? 'text-white font-semibold bg-white/[0.03] border border-white/[0.08]'
+                        : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                    }`}
+                    onClick={() => {
+                      onNavigate('docs');
+                      if (!isDocsOpen) {
+                        toggleSection('docs');
+                      }
+                    }}
+                    title="Open Docs Dashboard"
                   >
-                    + View all {DOCUMENTATION_GUIDES_REGISTRY.length.toLocaleString()} guides in hub →
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="text-base shrink-0" aria-hidden="true">📚</span>
+                      <span className="font-semibold text-zinc-100">Documentation</span>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                      isDocsMainActive
+                        ? 'bg-sky-500/15 text-sky-300 border-sky-500/30 font-bold'
+                        : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+                    }`}>
+                      {formatCount(isFiltering ? filteredGuides.length : DOCUMENTATION_GUIDES_REGISTRY.length)}
+                    </span>
                   </button>
+
+                  <button
+                    type="button"
+                    className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-all"
+                    onClick={() => toggleSection('docs')}
+                    aria-expanded={isDocsOpen}
+                    title={isDocsOpen ? 'Collapse documentation guides' : 'Expand documentation guides'}
+                    aria-label={isDocsOpen ? 'Collapse documentation guides' : 'Expand documentation guides'}
+                  >
+                    <svg
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${!isDocsOpen ? '-rotate-90 text-zinc-500' : 'rotate-0 text-zinc-300'}`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                </div>
+
+                {isDocsOpen && (
+                  <div className="ml-4 pl-3.5 border-l border-white/[0.08] flex flex-col gap-1 my-1">
+                    {filteredGuides.slice(0, 50).map((guide) => {
+                      const isGuideActive = isDocGuideActive(active, guide);
+                      const targetRoute = docGuideRoute(guide);
+                      const badge = docGuideBadge(guide, isGuideActive);
+
+                      return (
+                        <button
+                          type="button"
+                          key={guide.id}
+                          aria-current={isGuideActive ? 'page' : undefined}
+                          className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all text-left group ${
+                            isGuideActive
+                              ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                              : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent'
+                          }`}
+                          onClick={() => onNavigate(targetRoute)}
+                          title={guide.title}
+                        >
+                          <div className="flex items-center gap-2 min-w-0 flex-1">
+                            {isGuideActive && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.9)] shrink-0" />
+                            )}
+                            <span className="text-sm shrink-0 transition-transform group-hover:scale-105" aria-hidden="true">
+                              {guide.icon}
+                            </span>
+                            <span className="truncate font-medium group-hover:text-white transition-colors">{formatDocGuideTitle(guide)}</span>
+                          </div>
+                          <span className={`ml-2 px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 border transition-colors ${badge.color}`}>
+                            {badge.text}
+                          </span>
+                        </button>
+                      );
+                    })}
+
+                    {filteredGuides.length > 50 && (
+                      <button
+                        type="button"
+                        className="text-left px-2.5 py-1 text-xs text-zinc-400 hover:text-white hover:underline cursor-pointer"
+                        onClick={() => onNavigate('docs')}
+                      >
+                        + View all {DOCUMENTATION_GUIDES_REGISTRY.length.toLocaleString()} guides in hub →
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
-            )}
-          </div>
+            );
+          })()}
 
           {/* Empty Search Feedback */}
           {isFiltering && totalMatches === 0 && (

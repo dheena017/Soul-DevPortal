@@ -43,7 +43,15 @@ function App() {
     async function loadWorkspaceFromApi() {
       const data = await fetchWorkspaceData();
       if (data && isMounted) {
-        setLiveWorkspace(data);
+        setLiveWorkspace((prev) => ({
+          ...prev,
+          ...data,
+          guideBlocks: data.guideBlocks && data.guideBlocks.length > 0 ? data.guideBlocks : prev.guideBlocks,
+          portGuideBlocks: data.portGuideBlocks && data.portGuideBlocks.length > 0 ? data.portGuideBlocks : prev.portGuideBlocks,
+          techStackBlocks: data.techStackBlocks && data.techStackBlocks.length > 0 ? data.techStackBlocks : prev.techStackBlocks,
+          projectRulesBlocks: data.projectRulesBlocks && data.projectRulesBlocks.length > 0 ? data.projectRulesBlocks : prev.projectRulesBlocks,
+          cheatsheetBlocks: data.cheatsheetBlocks && data.cheatsheetBlocks.length > 0 ? data.cheatsheetBlocks : prev.cheatsheetBlocks,
+        }));
         consoleLogger.success('API', 'Dynamic workspace payload received from FastAPI flow', {
           packagesCount: data.packages?.length || 0,
           projectsCount: data.projects?.length || 0,
@@ -55,10 +63,24 @@ function App() {
     const intervalId = setInterval(async () => {
       const liveProjects = await fetchProjectsLive();
       if (liveProjects && liveProjects.length > 0 && isMounted) {
-        setLiveWorkspace((prev) => ({
-          ...prev,
-          projects: liveProjects,
-        }));
+        setLiveWorkspace((prev) => {
+          const prevProjects = prev.projects || [];
+          if (
+            prevProjects.length === liveProjects.length &&
+            prevProjects.every(
+              (p, i) =>
+                p.id === liveProjects[i].id &&
+                p.status === liveProjects[i].status &&
+                p.isOnline === liveProjects[i].isOnline
+            )
+          ) {
+            return prev;
+          }
+          return {
+            ...prev,
+            projects: liveProjects,
+          };
+        });
       }
     }, 5000);
 
@@ -85,14 +107,14 @@ function App() {
 
     const syncHash = () => {
       const hashView = window.location.hash.slice(1) || 'overview';
-      setActive(hashView);
+      setActive((prev) => (prev === hashView ? prev : hashView));
       consoleLogger.action('ROUTER', `Navigated to view: #${hashView}`);
     };
 
     syncHash();
     window.addEventListener('hashchange', syncHash);
     return () => window.removeEventListener('hashchange', syncHash);
-  }, [packagesList.length, projectsList.length]);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

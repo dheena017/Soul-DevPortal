@@ -41,11 +41,11 @@ export default function TableOfContents({
   const navRef = useRef<HTMLElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Reset active heading whenever headings list changes
+  // Reset active heading only if current active heading is not in headings list
   useEffect(() => {
-    if (headings.length > 0 && headings[0]?.text) {
-      setActiveHeading(headingId(headings[0].text));
-    }
+    if (!headings.length) return;
+    const ids = headings.map((h) => headingId(h.text || ''));
+    setActiveHeading((prev) => (prev && ids.includes(prev) ? prev : ids[0] || ''));
   }, [headings]);
 
   // Keep active item visible within the TOC scrollable container
@@ -132,7 +132,7 @@ export default function TableOfContents({
       }
 
       if (currentId) {
-        setActiveHeading(currentId);
+        setActiveHeading((prev) => (prev === currentId ? prev : currentId));
       }
     };
 
@@ -202,11 +202,6 @@ export default function TableOfContents({
       setTimeout(() => {
         target?.classList.remove('ring-2', 'ring-emerald-400/50', 'rounded-lg', 'transition-all');
       }, 1500);
-
-      // Update URL hash without jumping
-      if (window.history?.replaceState) {
-        window.history.replaceState(null, '', `#${id}`);
-      }
     }
   };
 

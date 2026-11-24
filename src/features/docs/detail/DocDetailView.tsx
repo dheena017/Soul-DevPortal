@@ -64,6 +64,7 @@ export default function DocDetailView({
   useEffect(() => {
     let isMounted = true;
     async function loadGuide() {
+      if (activeBlocks && activeBlocks.length > 0) return;
       const guideData = await fetchGuideContent(resolvedId);
       if (guideData && guideData.blocks && guideData.blocks.length > 0 && isMounted) {
         setApiBlocks(guideData.blocks);
@@ -73,15 +74,24 @@ export default function DocDetailView({
     return () => {
       isMounted = false;
     };
-  }, [resolvedId]);
+  }, [resolvedId, activeBlocks.length]);
 
   const finalBlocks = apiBlocks && apiBlocks.length > 0 ? apiBlocks : activeBlocks;
-  const headings = (finalBlocks || []).filter((b) => b.type === 'h2' || b.type === 'h3');
-  const codeBlocks = (finalBlocks || []).filter((b) => b.type === 'code');
-  const tables = (finalBlocks || []).filter((b) => b.type === 'table');
+  const headings = useMemo(
+    () => (finalBlocks || []).filter((b) => b.type === 'h2' || b.type === 'h3'),
+    [finalBlocks]
+  );
+  const codeBlocks = useMemo(
+    () => (finalBlocks || []).filter((b) => b.type === 'code'),
+    [finalBlocks]
+  );
+  const tables = useMemo(
+    () => (finalBlocks || []).filter((b) => b.type === 'table'),
+    [finalBlocks]
+  );
 
   return (
-    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12">
       {/* ── Main Hero Header & Tabs Bar ── */}
       <DocDetailHeader
         guideMeta={guideMeta}

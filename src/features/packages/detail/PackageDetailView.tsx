@@ -58,11 +58,14 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
     return updated;
   }, [pkg, tabData]);
 
-  const headings = (livePkg.readmeBlocks || []).filter((block) => block.type === 'h2' || block.type === 'h3');
+  const headings = useMemo(
+    () => (livePkg.readmeBlocks || []).filter((block) => block.type === 'h2' || block.type === 'h3'),
+    [livePkg.readmeBlocks]
+  );
   const totalExports = (livePkg.exports || []).length + (livePkg.pythonExports || []).length + (livePkg.typeScriptExports || []).length;
 
   return (
-    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12">
       {/* ── Main Hero Header & Tabs Bar ── */}
       <PackageDetailHeader
         pkg={livePkg}
