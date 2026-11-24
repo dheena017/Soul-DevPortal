@@ -80,9 +80,9 @@ export default function Overview({
               <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-white font-semibold shadow-sm">Overview Dashboard</strong>
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-semibold text-blue-400">
-              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" aria-hidden="true" />
-              <span>Live Ecosystem · 3 Pillars · {projects.length || 8} Apps · {packages.length || 3} Packages</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/40 text-xs font-semibold text-blue-400 select-none shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />
+              <span>Live Ecosystem · 3 Pillars · {projects.length || 9} Apps · {packages.length || 3} Packages</span>
             </div>
           </div>
 

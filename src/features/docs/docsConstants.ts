@@ -23,7 +23,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
     slug: 'projects-rules',
     title: 'Projects Rules & Standards',
     breadcrumb: 'Soul Workspace / Projects Rules',
-    description: 'The authoritative golden rulebook governing all 8 workspace applications: directory structure, strict port allocations, shared packages integration, FastAPI routing, SQLite schemas, and environment variable security.',
+    description: 'The authoritative golden rulebook governing all 9 workspace applications: directory structure, strict port allocations, shared packages integration, FastAPI routing, SQLite schemas, and environment variable security.',
     icon: '📜',
     filename: 'PROJECTS_RULES_AND_STANDARDS_GUIDE.md',
     category: 'rules',
@@ -45,7 +45,7 @@ export const DOCUMENTATION_GUIDES_REGISTRY: GuideMeta[] = [
       'Mandatory shared packages adoption: @workspace/logger, @workspace/config, @workspace/runner',
       'Standardized folder layout: client/, server/, metadata.json, README.md, and .env.example',
     ],
-    complianceStatus: '100% Monorepo Compliant (8/8 Apps)',
+    complianceStatus: '100% Monorepo Compliant (9/9 Apps)',
   },
   {
     id: 'cheatsheet',

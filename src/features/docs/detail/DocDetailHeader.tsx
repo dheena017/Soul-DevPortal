@@ -73,9 +73,9 @@ export default function DocDetailHeader({
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-semibold text-blue-400">
-            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" aria-hidden="true" />
-            <span>100% Monorepo Compliant (8/8 Apps)</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/40 text-xs font-semibold text-blue-400 select-none shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />
+            <span>Official Specification · 100% Compliant (9/9 Apps)</span>
           </div>
           <CopyButton
             text={typeof window !== 'undefined' ? window.location.href : ''}

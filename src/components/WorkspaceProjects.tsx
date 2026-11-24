@@ -58,7 +58,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
           Workspace <span className="text-blue-400 font-mono">Applications &amp; Ports</span>
         </h1>
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">
-          Catalog of all 8 applications consuming the shared packages, their assigned development ports, backend servers, databases, and AI engines.
+          Catalog of all 9 applications consuming the shared packages, their assigned development ports, backend servers, databases, and AI engines.
         </p>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">

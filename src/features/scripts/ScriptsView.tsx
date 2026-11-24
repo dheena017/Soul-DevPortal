@@ -106,8 +106,8 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
           </div>
 
           <div className="flex items-center gap-2.5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-semibold text-blue-400">
-              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" aria-hidden="true" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/40 text-xs font-semibold text-blue-400 select-none shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />
               <span>19 Canonical Commands Active</span>
             </div>
             <CopyButton

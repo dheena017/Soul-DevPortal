@@ -119,6 +119,10 @@ export default function PackageDetailHeader({
         </div>
 
         <div className="flex items-center gap-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/40 text-xs font-semibold text-blue-400 select-none shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />
+            <span>Active Package · {totalExports} Symbols</span>
+          </div>
           <CopyButton text={pkg.name || ''} label="Copy Name" copiedLabel="Copied!" variant="compact" />
           <CopyButton
             text={typeof window !== 'undefined' ? window.location.href : ''}

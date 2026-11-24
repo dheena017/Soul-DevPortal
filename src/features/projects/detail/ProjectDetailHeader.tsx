@@ -105,7 +105,7 @@ export default function ProjectDetailHeader({
               href={feUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 border border-blue-500/40 text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm"
               title="Open Client in Browser"
             >
               <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />
@@ -122,7 +122,7 @@ export default function ProjectDetailHeader({
               href={beUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 border border-blue-500/40 text-blue-400 hover:bg-blue-500/20 transition-all shadow-sm"
               title="Open Server API"
             >
               <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />

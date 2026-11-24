@@ -552,8 +552,9 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             <span className="px-2.5 py-1 rounded-md bg-[#111116] border border-[#282838] text-neutral-300">
               <strong className="text-white font-bold">{totalFiles}</strong> source files
             </span>
-            <span className="px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-400 font-semibold">
-              <strong className="font-bold">{fileTree.length}</strong> indexed items
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/40 text-blue-400 font-semibold shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" aria-hidden="true" />
+              <span><strong className="font-bold">{fileTree.length}</strong> items indexed</span>
             </span>
           </div>
         </div>

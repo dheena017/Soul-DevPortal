@@ -57,8 +57,8 @@ export default function PackagesHeader({
           <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-white font-semibold shadow-sm">Pillar 2: Packages Dashboard</strong>
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-semibold text-blue-400">
-          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" aria-hidden="true" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/40 text-xs font-semibold text-blue-400 select-none shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />
           <span>{packagesCount} Shared Libraries Active</span>
         </div>
       </div>
@@ -80,7 +80,7 @@ export default function PackagesHeader({
             </span>
           </div>
           <p className="text-xs text-neutral-400 leading-relaxed max-w-3xl">
-            Production-grade shared libraries and tools consumed across all 8 workspace applications.
+            Production-grade shared libraries and tools consumed across all 9 workspace applications.
           </p>
         </div>
       </div>
