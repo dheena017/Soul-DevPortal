@@ -2092,3 +2092,407 @@ if __name__ == "__main__":
         sys.exit(1)
 ```
 
+---
+
+## 12. Canonical Engineering Patterns & Implementation Recipes
+
+> **Domain**: Universal Coding Patterns, Resilience Recipes & Cross-Stack Idioms  
+> **Applies to**: Full Monorepo Workspace, React 19 Clients & FastAPI Python Services
+
+To maintain architectural harmony and prevent ad-hoc implementations across all 9 micro-applications, developers and AI agents must implement these canonical codebase patterns for AI generation, caching, inter-process communication, structured logging, and router decomposition.
+
+---
+
+### 12.1 Resilient Gemini API Call & Retry Pattern
+
+Guards against rate-limiting (`429 Too Many Requests`) and transient server failures (`503 Service Unavailable`) when calling Google Gemini models across Python and TypeScript services.
+
+#### 📋 Pattern Rules & Invariants
+- **Exponential Backoff**: Multiply backoff intervals by a factor of 2.0 with jitter to prevent retry storms.
+- **Terminal Fallbacks**: Catch final retry exhaustion and return structured, gracefully degraded fallbacks rather than throwing unhandled exceptions to callers.
+- **Model Standard**: Default to `gemini-2.5-flash` for high-throughput generation tasks; reserve larger reasoning models for complex synthesis.
+
+#### TypeScript Implementation (`@/shared/lib/ai-retry.ts`)
+
+```typescript
+import { GoogleGenAI } from "@google/genai";
+
+export async function callGeminiWithRetry<T>(
+  apiFn: () => Promise<T>,
+  maxRetries = 4,
+  initialDelayMs = 1500
+): Promise<T> {
+  let attempt = 0;
+  let delay = initialDelayMs;
+
+  while (attempt < maxRetries) {
+    try {
+      return await apiFn();
+    } catch (err: any) {
+      attempt++;
+      const isRateLimit = err?.status === 429 || err?.message?.includes("429");
+      const isTransient = err?.status === 503 || err?.message?.includes("503");
+
+      if ((isRateLimit || isTransient) && attempt < maxRetries) {
+        console.warn(
+          `[GeminiRetry] Transient failure (attempt ${attempt}/${maxRetries}). Retrying in ${delay}ms...`
+        );
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        delay *= 2; // Exponential backoff
+      } else {
+        console.error(
+          `[GeminiRetry] Fatal error or exhausted retries (${attempt}/${maxRetries}):`,
+          err
+        );
+        throw err;
+      }
+    }
+  }
+
+  throw new Error(`[GeminiRetry] Failed after ${maxRetries} attempts.`);
+}
+```
+
+#### Python Implementation (`server/shared/ai_client.py`)
+
+```python
+import time
+import logging
+from typing import Callable, TypeVar, Any
+from google import genai
+from google.genai import types
+
+logger = logging.getLogger("app.shared.ai_client")
+T = TypeVar("T")
+
+def call_gemini_with_retry(
+    operation: Callable[[], T],
+    max_retries: int = 4,
+    initial_delay: float = 1.5
+) -> T:
+    """Executes a Gemini SDK call with exponential backoff for 429/503 errors."""
+    delay = initial_delay
+    for attempt in range(1, max_retries + 1):
+        try:
+            return operation()
+        except Exception as exc:
+            err_str = str(exc)
+            is_transient = "429" in err_str or "503" in err_str or "ResourceExhausted" in err_str
+            if is_transient and attempt < max_retries:
+                logger.warning(
+                    f"[GeminiRetry] Transient failure on attempt {attempt}/{max_retries}. "
+                    f"Retrying in {delay:.1f}s... Error: {exc}"
+                )
+                time.sleep(delay)
+                delay *= 2.0
+            else:
+                logger.error(f"[GeminiRetry] Exhausted retries or fatal error: {exc}", exc_info=True)
+                raise
+```
+
+---
+
+### 12.2 Python Subprocess & CLI Shell Execution Pattern
+
+Safely invokes Python background engines or CLI tools from Node.js scripts or parent supervisors with strict argument sanitation, temporary file lifecycles, and exit code propagation.
+
+#### 📋 Pattern Rules & Invariants
+- **Argument Allow-Listing**: Validate and constrain options against strict enums or schemas before shell execution to prevent command injection.
+- **Cross-Platform Executable Resolution**: Use `sys.executable` in Python and resolve `python3` or `python` cleanly across platforms.
+- **Temp Buffer Cleanup**: Always wrap temporary disk file writes in `try/finally` blocks to guarantee file removal on completion or failure.
+- **Explicit Exit Protocol**: Inspect stdout for `STATUS=SUCCESS` or stderr for `STATUS=ERROR` protocol markers.
+
+```typescript
+import { execFile } from "child_process";
+import os from "os";
+import path from "path";
+import fs from "fs/promises";
+
+export interface PythonExecutionOptions {
+  scriptPath: string;
+  inputBuffer: Buffer;
+  method: "inpaint" | "blur" | "solid_white";
+  sensitivity?: number;
+}
+
+export async function executePythonTask(
+  options: PythonExecutionOptions
+): Promise<Buffer> {
+  const tempId = `task_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  const tempIn = path.join(os.tmpdir(), `${tempId}_in.png`);
+  const tempOut = path.join(os.tmpdir(), `${tempId}_out.png`);
+
+  // Write temporary input file to disk
+  await fs.writeFile(tempIn, options.inputBuffer);
+
+  const pythonBin = process.platform === "win32" ? "python" : "python3";
+  const args = [
+    options.scriptPath,
+    "--input_path",
+    tempIn,
+    "--output_path",
+    tempOut,
+    "--sensitivity",
+    String(options.sensitivity ?? 0.5),
+  ];
+
+  try {
+    return await new Promise<Buffer>((resolve, reject) => {
+      execFile(pythonBin, args, async (error, stdout, stderr) => {
+        if (error) {
+          console.error(
+            "[PythonSubprocess] Execution failed:",
+            stderr || error.message
+          );
+          return reject(
+            new Error(`Subprocess failed: ${stderr || error.message}`)
+          );
+        }
+
+        if (!stdout.includes("STATUS=SUCCESS")) {
+          return reject(
+            new Error(`Subprocess exited without success marker: ${stdout}`)
+          );
+        }
+
+        try {
+          const resultBuffer = await fs.readFile(tempOut);
+          resolve(resultBuffer);
+        } catch (readErr) {
+          reject(new Error(`Failed to read generated output file: ${readErr}`));
+        }
+      });
+    });
+  } finally {
+    // Guaranteed temporary cleanup
+    await Promise.allSettled([
+      fs.unlink(tempIn).catch(() => {}),
+      fs.unlink(tempOut).catch(() => {}),
+    ]);
+  }
+}
+```
+
+---
+
+### 12.3 Standardized Structured Logging & Context Tagging Pattern
+
+Enforces uniform log formatting, diagnostic traceability, and context tagging across frontend browser consoles and backend Python services.
+
+#### 📋 Pattern Rules & Invariants
+- **Uniform Format**: `[TIMESTAMP] [SCOPE] [LEVEL] [SOURCE] message`
+- **Frontend Context Tags**: Wrap component/hook names in brackets `[ComponentName]` at the start of log statements.
+- **Backend Namespaces**: Initialize loggers using dotted modular paths (e.g. `app.features.<feature>.<module>`).
+- **Sensitive Data Masking**: Passwords, auth tokens, and API credentials must be obfuscated automatically.
+
+#### Backend Python Logger Example
+```python
+import logging
+
+# Scoped modular namespace logger
+logger = logging.getLogger("app.features.video_engine.service")
+
+# Informational diagnostic event
+logger.info("Initializing high-concurrency database cache pool")
+
+# Warning event with context
+logger.warning("Optional HuggingFace credentials omitted; fallback models active")
+
+# Error event with full stack trace preservation
+logger.error("Media processing pipeline aborted due to corrupt asset", exc_info=True)
+```
+
+#### Frontend Console Logging Example
+```typescript
+// Standard debug/info tracing
+console.log("[useCropEditor] Opening crop editor canvas viewport");
+
+// Warning notification with degraded state
+console.warn("[useBackendHealth] Backend unreachable - retrying connection in 3s");
+
+// Error reporting with payload context
+console.error("[useVideoGeneration] Video render compilation failed:", errorPayload);
+```
+
+---
+
+### 12.4 In-Memory & Ephemeral Asset Caching Pattern
+
+Maintains high-speed in-memory caches for transient, computationally expensive artifacts (e.g., stitched comic panels, audio buffers, or generated mock responses), avoiding repetitive disk writes and database roundtrips.
+
+#### 📋 Pattern Rules & Invariants
+- **Key Determinism**: Formulate cache keys using entity prefixes, timestamps, and content hashes: `<type>_<timestamp>_<descriptor>`.
+- **History Tracking for Undo/Redo**: When caching mutated states, map new cache keys to parent keys in a transformation history map.
+- **TTL / Eviction Boundaries**: Provide cache expiration or bounded sizing to prevent out-of-memory errors on large asset processing.
+
+```typescript
+// Memory cache storage structures
+interface CachedAsset {
+  data: Buffer;
+  contentType: string;
+  createdAt: number;
+}
+
+const assetCache = new Map<string, CachedAsset>();
+const editHistory = new Map<string, string>(); // newUrl -> originalUrl
+
+export function cacheTransformedAsset(
+  descriptor: string,
+  buffer: Buffer,
+  contentType: string,
+  parentUrl?: string
+): string {
+  const uniqueId = `asset_${Date.now()}_${descriptor}`;
+  const assetUrl = `/api/v1/assets/cached/${uniqueId}`;
+
+  assetCache.set(uniqueId, {
+    data: buffer,
+    contentType,
+    createdAt: Date.now(),
+  });
+
+  if (parentUrl) {
+    editHistory.set(assetUrl, parentUrl);
+  }
+
+  return assetUrl;
+}
+
+export function getCachedAsset(uniqueId: string): CachedAsset | undefined {
+  return assetCache.get(uniqueId);
+}
+```
+
+---
+
+### 12.5 Modular Route Aggregation Pattern (FastAPI)
+
+Separates expansive API surfaces into isolated sub-routers co-located within feature directories, preventing monolithic route sprawl in the server bootstrap entry point.
+
+#### 📋 Pattern Rules & Invariants
+- **Domain Sub-routers**: Group distinct domain actions into sub-routers (`edit.py`, `merge.py`, `cleanup.py`).
+- **Feature Router Aggregator**: Aggregate child sub-routers into a primary feature `APIRouter` inside `router.py`.
+- **Top-Level Factory Inclusion**: Mount feature routers with unified `/api/v1` prefixes in `server/app/factory.py`.
+
+```python
+# server/features/media/sub_routes/edit.py
+from fastapi import APIRouter
+edit_router = APIRouter(prefix="/edit", tags=["Media Editing"])
+
+@edit_router.post("/crop")
+async def crop_image():
+    return {"success": True, "action": "crop"}
+
+# server/features/media/sub_routes/merge.py
+from fastapi import APIRouter
+merge_router = APIRouter(prefix="/merge", tags=["Media Merging"])
+
+@merge_router.post("/stitch")
+async def stitch_images():
+    return {"success": True, "action": "stitch"}
+
+# server/features/media/router.py (Aggregator)
+from fastapi import APIRouter
+from .sub_routes.edit import edit_router
+from .sub_routes.merge import merge_router
+
+media_router = APIRouter(prefix="/media")
+media_router.include_router(edit_router)
+media_router.include_router(merge_router)
+```
+
+---
+
+### 12.6 Stateful Hook Extraction & Pure Presentational Layering
+
+Separates complex React 19 business logic, asynchronous state transitions, and API mutations from purely presentational view components.
+
+#### 📋 Pattern Rules & Invariants
+- **Pure Presentational Components**: Views focus exclusively on JSX layout, accessibility markup, and visual event forwarding.
+- **Hook Encapsulation**: All `useState`, `useCallback`, `useTransition`, and API calls reside in dedicated custom hooks (`use<Feature>.ts`).
+- **Action Callbacks**: Custom hooks expose stable handler functions and state observables to keep parent views declarative.
+
+```typescript
+// client/src/features/editor/hooks/useSingleImageEdits.ts
+import { useState, useCallback } from "react";
+import { apiClient } from "@/shared/lib/api-client";
+import type { GeneratedPanel } from "../types";
+
+export function useSingleImageEdits(
+  panel: GeneratedPanel,
+  onUpdate: (updated: GeneratedPanel) => void
+) {
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
+  const handleRotate = useCallback(
+    async (angle: number) => {
+      setIsProcessing(true);
+      try {
+        const result = await apiClient<GeneratedPanel>("/api/v1/image/rotate", {
+          method: "POST",
+          body: JSON.stringify({ panelId: panel.id, angle }),
+        });
+        onUpdate(result);
+      } catch (err) {
+        console.error("[useSingleImageEdits] Rotation failed:", err);
+      } finally {
+        setIsProcessing(false);
+      }
+    },
+    [panel.id, onUpdate]
+  );
+
+  return {
+    isEditing,
+    setIsEditing,
+    isProcessing,
+    handleRotate,
+  };
+}
+```
+
+---
+
+### 12.7 URL Sanitization & Asset Path Normalization Pattern
+
+Standardizes URL parsing, cleans localized route artifacts, and resolves cross-platform paths safely.
+
+#### 📋 Pattern Rules & Invariants
+- **Locale & Prefix Stripping**: Strip localized path segments (e.g. `/en/`, `/ko/`, `/fr/`) before routing or parsing external asset identifiers.
+- **Safe Parsing Guards**: Wrap URL construction in `try/catch` and sanitize query parameters against directory traversal (`../`).
+
+```typescript
+// client/src/shared/lib/url-utils.ts
+export function stripLocaleFromUrl(rawUrl: string): string {
+  // Strips leading locale segments: /en/, /ko/, /fr/, etc.
+  return rawUrl.replace(/\/(en|ko|ja|fr|es|zh)(\/|$)/i, "/");
+}
+
+export function parseAssetResourceUrl(rawUrl: string): {
+  domain: string;
+  path: string;
+  resourceId?: string;
+} {
+  try {
+    const parsed = new URL(rawUrl);
+    const cleanPath = stripLocaleFromUrl(parsed.pathname);
+    const pathSegments = cleanPath.split("/").filter(Boolean);
+    const resourceId = pathSegments[pathSegments.length - 1];
+
+    return {
+      domain: parsed.hostname,
+      path: cleanPath,
+      resourceId,
+    };
+  } catch {
+    // Relative fallback handling
+    const clean = stripLocaleFromUrl(rawUrl);
+    return {
+      domain: "localhost",
+      path: clean,
+    };
+  }
+}
+```
+

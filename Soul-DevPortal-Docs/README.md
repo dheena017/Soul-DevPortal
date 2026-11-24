@@ -8,7 +8,7 @@ Welcome to the unified engineering documentation portal for **Soul-DevPortal**. 
 
 ### 🏛️ 01. Project Architecture & Standards
 The master architecture specification governing all 8 micro-applications, frameworks, and system boundaries.
-- **[Master Technical Blueprint](01-project-architecture/main.md)** — Layout, 3-pillar framework, client (React 19), server (FastAPI), REST API, SQLite WAL, schemas, FSD, environment security, and standard file structure templates.
+- **[Master Technical Blueprint](01-project-architecture/main.md)** — Layout, 3-pillar framework, client (React 19), server (FastAPI), REST API, SQLite WAL, schemas, FSD, environment security, standard file templates, and canonical engineering patterns.
 - **[The Golden Architectural Invariants](01-project-architecture/golden-rules.md)** — The 10 fundamental pillars and inviolable domain engineering rules.
 
 ---
