@@ -47,7 +47,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-xl transition-all duration-200 gap-4 h-full">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 gap-4 h-full">
       {/* ── Top Row: Icon, Version, Ecosystem Pills ── */}
         <div className="flex flex-col gap-3.5" onClick={handleCardClick} style={{ cursor: onSelectPackage ? 'pointer' : 'default' }}>
           <div className="flex items-center justify-between gap-3">
@@ -91,19 +91,19 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
         {/* ── Tags Row ── */}
         <div className="flex flex-wrap items-center gap-1.5">
           {meta.tags.map((tag) => (
-            <span key={tag} className="px-2 py-0.5 rounded-md bg-[#161622] border border-[#282838] text-[10px] font-mono font-medium text-neutral-400">
+            <span key={tag} className="px-2 py-0.5 rounded-md bg-[#111116] border border-[#282838] text-[10px] font-mono font-medium text-neutral-400">
               {tag}
             </span>
           ))}
         </div>
 
         {/* ── 3-Metric Specs Row ── */}
-        <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-[#0e0e14] border border-[#222230] text-center font-mono text-xs">
+        <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-[#0a0a0a] border border-[#282838] text-center font-mono text-xs">
           <div className="flex flex-col items-center">
             <span className="text-[10px] text-neutral-500 uppercase tracking-wider">TOTAL EXPORTS</span>
             <strong className="text-xs font-bold text-blue-400 mt-0.5">{exportsCount} APIs</strong>
           </div>
-          <div className="flex flex-col items-center border-x border-[#222230]">
+          <div className="flex flex-col items-center border-x border-[#282838]">
             <span className="text-[10px] text-neutral-500 uppercase tracking-wider">LICENSE</span>
             <strong className="text-xs font-bold text-white mt-0.5">{pkg.license || 'MIT'}</strong>
           </div>
@@ -115,7 +115,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
 
         {/* ── Terminal Commands Strip (Zero Truncation) ── */}
         <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#0c0c12] border border-[#242434] font-mono text-xs text-neutral-300">
+          <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#0a0a0a] border border-[#282838] font-mono text-xs text-neutral-300">
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <span className="text-neutral-500 select-none font-bold">$</span>
               <code className="text-[11px] text-blue-300 truncate select-all">{installCmd}</code>
@@ -124,7 +124,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
           </div>
 
           {pyInstallCmd && (
-            <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#0c0c12] border border-[#242434] font-mono text-xs text-neutral-300">
+            <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#0a0a0a] border border-[#282838] font-mono text-xs text-neutral-300">
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <span className="text-neutral-500 select-none font-bold">$</span>
                 <code className="text-[11px] text-emerald-300 truncate select-all">{pyInstallCmd}</code>
@@ -135,7 +135,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
         </div>
 
         {/* ── Card Action Footer ── */}
-        <div className="pt-2 border-t border-[#222230]">
+        <div className="pt-2 border-t border-[#282838]">
           <button
             type="button"
             className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2"

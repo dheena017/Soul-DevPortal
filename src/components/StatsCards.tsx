@@ -87,7 +87,7 @@ export default function StatsCards({ stats, packagesCount = 3, projectsCount = 8
       {displayStats.map((item, index) => (
         <div
           key={index}
-          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] transition-all duration-200 shadow-xl shadow-black/40 group cursor-default"
+          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] transition-all duration-200 shadow-xl shadow-black/40 group cursor-default"
         >
           <div
             className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border"

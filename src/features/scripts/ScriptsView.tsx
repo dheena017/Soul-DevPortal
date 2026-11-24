@@ -91,7 +91,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#14141c] border border-[#282838] text-neutral-300 hover:text-white hover:border-[#38384a] hover:bg-[#181824] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111116] border border-[#282838] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111116] transition-all font-semibold shadow-sm"
               onClick={() => onNavigate('overview')}
               title="Return to Overview"
             >
@@ -100,9 +100,9 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
               </svg>
               <span>Back</span>
             </button>
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#14141c] border border-[#282838] text-neutral-400 font-medium">Soul Workspace</span>
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-neutral-400 font-medium">Soul Workspace</span>
             <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
-            <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#14141c] border border-[#282838] text-white font-semibold shadow-sm">Scripts &amp; Automation Runners</strong>
+            <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-white font-semibold shadow-sm">Scripts &amp; Automation Runners</strong>
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -143,25 +143,25 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
         {/* ── KPI Metric Cards Ribbon ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
             <span className="text-xl font-extrabold text-blue-400 font-mono">19</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Canonical Commands</span>
             <span className="text-[11px] text-neutral-500">0 redundant aliases</span>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-emerald-500/40 transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-emerald-500/40 transition-all">
             <span className="text-xl font-extrabold text-emerald-400 font-mono">8</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Target Applications</span>
             <span className="text-[11px] text-neutral-500">Dual frontend &amp; backend</span>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-purple-500/40 transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-purple-500/40 transition-all">
             <span className="text-xl font-extrabold text-purple-400 font-mono">4</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Core Orchestrators</span>
             <span className="text-[11px] text-neutral-500">All / Client / Server / Project</span>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-amber-500/40 transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-amber-500/40 transition-all">
             <span className="text-xl font-extrabold text-amber-400 font-mono">100%</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Port Protected</span>
             <span className="text-[11px] text-neutral-500">Automated --kill-port</span>
@@ -184,7 +184,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search scripts, flags, ports (:5173, :8000)... (Press '/' to focus)"
             aria-label="Filter command scripts"
-            className="w-full h-10 pl-9 pr-9 rounded-lg bg-[#14141c] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
+            className="w-full h-10 pl-9 pr-9 rounded-lg bg-[#111116] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
           />
           {searchQuery ? (
             <button
@@ -197,20 +197,20 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
               ✕
             </button>
           ) : (
-            <kbd className="absolute right-3 px-1.5 py-0.5 rounded bg-[#161622] border border-[#282838] text-[10px] text-neutral-500 font-mono">
+            <kbd className="absolute right-3 px-1.5 py-0.5 rounded bg-[#111116] border border-[#282838] text-[10px] text-neutral-500 font-mono">
               /
             </kbd>
           )}
         </div>
 
         {/* View Mode Segmented Controls */}
-        <div className="inline-flex p-1 bg-[#0d0d12] border border-[#282838] rounded-lg gap-1">
+        <div className="inline-flex p-1 bg-[#0a0a0a] border border-[#282838] rounded-lg gap-1">
           <button
             type="button"
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
               viewMode === 'grid'
-                ? 'bg-[#1e1e2c] text-white shadow-sm border border-[#38384a]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#14141c]'
+                ? 'bg-[#111116] text-white shadow-sm border border-[#282838]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#111116]'
             }`}
             onClick={() => {
               consoleLogger.action('SCRIPTS', 'Switched view mode to Deck Grid');
@@ -223,8 +223,8 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
             type="button"
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
               viewMode === 'table'
-                ? 'bg-[#1e1e2c] text-white shadow-sm border border-[#38384a]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#14141c]'
+                ? 'bg-[#111116] text-white shadow-sm border border-[#282838]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#111116]'
             }`}
             onClick={() => {
               consoleLogger.action('SCRIPTS', 'Switched view mode to Dense Table');
@@ -238,7 +238,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
       {/* ── Category Filter Pills & Runtime Selector Row ── */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0d0d12] border border-[#282838] rounded-xl" role="tablist" aria-label="Filter scripts by category">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0a0a0a] border border-[#282838] rounded-xl" role="tablist" aria-label="Filter scripts by category">
           {categories.map((cat) => {
             const isActive = filterCategory === cat.id;
             return (
@@ -250,12 +250,12 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all ${
                   isActive
                     ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
-                    : 'text-neutral-400 hover:text-white hover:bg-[#14141c] hover:border-[#282838] border border-transparent font-medium'
+                    : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
                 }`}
                 onClick={() => setFilterCategory(cat.id)}
               >
                 <span>{cat.label}</span>
-                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#14141c] text-neutral-400 border border-[#282838]'}`}>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111116] text-neutral-400 border border-[#282838]'}`}>
                   {cat.count}
                 </span>
               </button>
@@ -269,7 +269,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
           <select
             value={activeRuntime}
             onChange={(e) => setActiveRuntime(e.target.value)}
-            className="h-9 px-3 rounded-xl bg-[#14141c] border border-[#282838] text-xs text-neutral-200 focus:outline-none focus:border-blue-500 font-medium"
+            className="h-9 px-3 rounded-xl bg-[#111116] border border-[#282838] text-xs text-neutral-200 focus:outline-none focus:border-blue-500 font-medium"
             aria-label="Select package manager runtime"
           >
             <option value="npm">npm</option>
@@ -290,12 +290,12 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
             return (
               <div
                 key={script.id}
-                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-2xl transition-all duration-200 gap-3.5"
+                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-2xl transition-all duration-200 gap-3.5"
               >
                 {/* Card Top: Code Pill, Category Badge, Copy Button */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-wrap min-w-0">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#14141c] border border-[#282838] min-w-0">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#111116] border border-[#282838] min-w-0">
                       <span className="text-emerald-400 font-mono font-bold text-xs select-none">$</span>
                       <code className="text-xs font-mono font-bold text-white truncate max-w-[190px]">
                         {formattedRunCmd}
@@ -316,7 +316,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 {/* Ports & Auto-Kill Status Tags */}
                 <div className="flex items-center gap-2 flex-wrap">
                   {script.ports ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#14141c] border border-[#282838] text-[11px] font-mono text-blue-400">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#111116] border border-[#282838] text-[11px] font-mono text-blue-400">
                       <svg className="w-3.5 h-3.5 text-blue-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <circle cx="12" cy="12" r="2" />
                         <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
@@ -324,7 +324,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                       <span>{script.ports}</span>
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#14141c] border border-[#282838] text-[11px] font-mono text-purple-400">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#111116] border border-[#282838] text-[11px] font-mono text-purple-400">
                       <svg className="w-3.5 h-3.5 text-purple-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                       </svg>
@@ -368,12 +368,12 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
                 {/* Drawer with full raw command and copy option */}
                 {isExpanded && (
-                  <div className="flex flex-col gap-2.5 p-3 rounded-xl bg-[#0d0d12] border border-[#282838] text-xs font-mono animate-in fade-in duration-150">
+                  <div className="flex flex-col gap-2.5 p-3 rounded-xl bg-[#0a0a0a] border border-[#282838] text-xs font-mono animate-in fade-in duration-150">
                     <div className="flex flex-col gap-1">
                       <span className="text-neutral-500 font-semibold text-[10px] uppercase tracking-wider">
                         Raw Execution String:
                       </span>
-                      <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#14141c] border border-[#282838]">
+                      <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#111116] border border-[#282838]">
                         <code className="text-blue-300 text-[11px] break-all">
                           {rootScripts[script.id] || script.command}
                         </code>
@@ -395,7 +395,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
         <div className="w-full bg-[#111116] border border-[#282838] rounded-2xl overflow-x-auto shadow-2xl">
           <table className="w-full border-collapse text-left text-xs font-sans">
             <thead>
-              <tr className="border-b border-[#22222e] bg-[#14141c] text-neutral-400">
+              <tr className="border-b border-[#22222e] bg-[#111116] text-neutral-400">
                 <th className="py-3 px-4 font-semibold">Command</th>
                 <th className="py-3 px-4 font-semibold">Category</th>
                 <th className="py-3 px-4 font-semibold">Allocated Ports</th>
@@ -406,7 +406,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
             </thead>
             <tbody>
               {filteredScripts.map((script) => (
-                <tr key={script.id} className="border-b border-[#22222e] hover:bg-[#14141c] transition-colors">
+                <tr key={script.id} className="border-b border-[#22222e] hover:bg-[#111116] transition-colors">
                   <td className="py-3 px-4">
                     <code className="font-mono text-blue-400 font-bold">{formatCommand(script)}</code>
                   </td>

@@ -173,7 +173,7 @@ export default function TableOfContents({
             {title}
           </span>
         </div>
-        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#161622] border border-[#282838] text-neutral-300">
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#111116] border border-[#282838] text-neutral-300">
           {headings.length}
         </span>
       </div>
@@ -202,8 +202,8 @@ export default function TableOfContents({
                 isH3 ? 'pl-4' : ''
               } ${
                 isActive
-                  ? 'bg-[#14141c] text-white font-semibold border border-blue-500/40 shadow-[0_2px_10px_rgba(59,130,246,0.15)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#14141c] border border-transparent hover:border-[#282838]'
+                  ? 'bg-[#111116] text-white font-semibold border border-blue-500/40 shadow-[0_2px_10px_rgba(59,130,246,0.15)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#111116] border border-transparent hover:border-[#282838]'
               }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
             >
@@ -220,7 +220,7 @@ export default function TableOfContents({
                   className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
                     isActive
                       ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold'
-                      : 'bg-[#161622] border border-[#282838] text-neutral-400'
+                      : 'bg-[#111116] border border-[#282838] text-neutral-400'
                   }`}
                 >
                   {numberPart}

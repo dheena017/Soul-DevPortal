@@ -14,7 +14,7 @@ export default function DocSnippetsTab({ codeBlocks }: DocSnippetsTabProps) {
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">CODE EXAMPLES</span>
           <h2 className="text-lg font-bold text-white">Extracted Implementation Snippets</h2>
         </div>
-        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#14141c] border border-[#282838] text-neutral-300">
+        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#111116] border border-[#282838] text-neutral-300">
           {codeBlocks.length} snippets
         </span>
       </div>
@@ -24,7 +24,7 @@ export default function DocSnippetsTab({ codeBlocks }: DocSnippetsTabProps) {
           <Markdown blocks={codeBlocks} />
         </div>
       ) : (
-        <div className="p-8 rounded-xl bg-[#14141c] border border-[#282838] text-center">
+        <div className="p-8 rounded-xl bg-[#111116] border border-[#282838] text-center">
           <p className="text-xs text-neutral-400">No dedicated code snippets found in this guide specification.</p>
         </div>
       )}

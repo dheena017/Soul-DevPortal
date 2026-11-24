@@ -447,10 +447,10 @@ function App() {
             onClick={() => setShowShortcuts(false)}
           >
             <div
-              className="w-full max-w-lg rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl p-5 md:p-6 flex flex-col gap-4"
+              className="w-full max-w-lg rounded-2xl bg-[#111116] border border-[#22222e] shadow-2xl p-5 md:p-6 flex flex-col gap-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between pb-3 border-b border-[#1f1f1f]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#22222e]">
                 <div className="flex items-center gap-2.5 text-sm font-bold text-white">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-sky-400">
                     <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -466,7 +466,7 @@ function App() {
                 </div>
                 <button
                   type="button"
-                  className="p-1 rounded-lg text-neutral-400 hover:text-white hover:bg-[#1a1a1a] transition-colors text-xs"
+                  className="p-1 rounded-lg text-neutral-400 hover:text-white hover:bg-[#111116] transition-colors text-xs"
                   onClick={() => setShowShortcuts(false)}
                   aria-label="Close shortcuts dialog"
                 >
@@ -477,35 +477,35 @@ function App() {
               <div className="flex flex-col gap-4 text-xs">
                 <div className="flex flex-col gap-2">
                   <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">Navigation &amp; Controls</div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#22222e] text-neutral-300">
                     <span>Toggle / Pin Sidebar</span>
-                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">Ctrl + B</kbd>
+                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#111116] border border-[#282838] text-neutral-300">Ctrl + B</kbd>
                   </div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#22222e] text-neutral-300">
                     <span>Omni Search Palette</span>
                     <div className="flex items-center gap-1.5">
-                      <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">/</kbd>
+                      <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#111116] border border-[#282838] text-neutral-300">/</kbd>
                       <span className="text-neutral-500 text-[10px]">or</span>
-                      <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">Ctrl + K</kbd>
+                      <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#111116] border border-[#282838] text-neutral-300">Ctrl + K</kbd>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#22222e] text-neutral-300">
                     <span>Dismiss Search / Modals</span>
-                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">Esc</kbd>
+                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#111116] border border-[#282838] text-neutral-300">Esc</kbd>
                   </div>
                   <div className="flex items-center justify-between py-1.5 text-neutral-300">
                     <span>Toggle Shortcuts Dialog</span>
-                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1c1c1c] border border-[#2c2c2c] text-neutral-300">?</kbd>
+                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#111116] border border-[#282838] text-neutral-300">?</kbd>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2 pt-2 border-t border-[#1f1f1f]">
+                <div className="flex flex-col gap-2 pt-2 border-t border-[#22222e]">
                   <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">Monorepo Ports &amp; CLI</div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#22222e] text-neutral-300">
                     <span>Monorepo Runner</span>
                     <code className="text-sky-400 font-mono text-[11px]">npx @workspace/runner</code>
                   </div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#181818] text-neutral-300">
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#22222e] text-neutral-300">
                     <span>Client Dev Servers</span>
                     <code className="text-emerald-400 font-mono text-[11px]">Ports 5173 - 5181</code>
                   </div>

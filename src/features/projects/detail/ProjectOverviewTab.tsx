@@ -38,10 +38,10 @@ export default function ProjectOverviewTab({
             <h2 className="text-xl font-extrabold text-white">{project.title}</h2>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#14141c] border border-[#282838] text-neutral-200">
+            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#111116] border border-[#282838] text-neutral-200">
               {project.framework || 'Web Application'}
             </span>
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#14141c] border border-[#282838] text-neutral-200">
+            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#111116] border border-[#282838] text-neutral-200">
               🗄️ {project.dbInfo || 'SQLite'}
             </span>
             {project.aiEngine && project.aiEngine !== 'N/A' && (
@@ -58,21 +58,21 @@ export default function ProjectOverviewTab({
 
         {/* 4-Stat Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838]">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">RUNTIME PORTS</span>
             <strong className="text-xs md:text-sm font-bold text-emerald-400 font-mono mt-1">
               Client :{project.frontendPort || 'N/A'} {project.backendPort ? `· Server :${project.backendPort}` : ''}
             </strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838]">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">NPM SCRIPTS</span>
             <strong className="text-xs md:text-sm font-bold text-blue-400 font-mono mt-1">{scriptsCount} commands</strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838]">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">DEPENDENCIES</span>
             <strong className="text-xs md:text-sm font-bold text-white font-mono mt-1">{totalDepsCount} packages</strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838]">
+          <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">ENV VARIABLES</span>
             <strong className="text-xs md:text-sm font-bold text-amber-400 font-mono mt-1">{envCount} configured</strong>
           </div>
@@ -87,7 +87,7 @@ export default function ProjectOverviewTab({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="flex flex-col p-4 rounded-xl bg-[#14141c] border border-[#282838] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-bold text-white">Client Tier</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
@@ -101,7 +101,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#14141c] border border-[#282838] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-bold text-white">Server Tier</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
@@ -115,7 +115,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#14141c] border border-[#282838] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-bold text-white">Persistence</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/15 border border-purple-500/30 text-purple-400">
@@ -128,7 +128,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#14141c] border border-[#282838] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-bold text-white">AI Intelligence</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400">
@@ -158,7 +158,7 @@ export default function ProjectOverviewTab({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {featuresList.map((feat, idx) => (
-              <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-[#14141c] border border-[#282838]">
+              <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-[#111116] border border-[#282838]">
                 <span className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5">
                   ✓
                 </span>
@@ -180,7 +180,7 @@ export default function ProjectOverviewTab({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex flex-col p-4 rounded-xl bg-[#14141c] border border-[#282838] gap-2.5">
+          <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-mono font-bold text-white">@workspace/logger</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
@@ -193,7 +193,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#14141c] border border-[#282838] gap-2.5">
+          <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-mono font-bold text-white">@workspace/config</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
@@ -206,7 +206,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#14141c] border border-[#282838] gap-2.5">
+          <div className="flex flex-col p-4 rounded-xl bg-[#111116] border border-[#282838] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
               <span className="text-xs font-mono font-bold text-white">@workspace/runner</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
@@ -268,7 +268,7 @@ export default function ProjectOverviewTab({
           </div>
           <div className="flex flex-col gap-2">
             {Object.entries(project.localServices).map(([serviceName, url]) => (
-              <div key={serviceName} className="flex items-center justify-between p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all text-xs">
+              <div key={serviceName} className="flex items-center justify-between p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all text-xs">
                 <span className="font-semibold text-white">{serviceName}</span>
                 <div className="flex items-center gap-2">
                   <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline font-mono">

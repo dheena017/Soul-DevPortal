@@ -20,7 +20,7 @@ export default function ProjectFilesTab({ project, fileTree }: ProjectFilesTabPr
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[#14141c] border border-[#282838] text-neutral-300">
+          <span className="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[#111116] border border-[#282838] text-neutral-300">
             Soul-DevPortal-Projects/{project.id}
           </span>
         </div>

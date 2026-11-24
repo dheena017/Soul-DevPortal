@@ -10,16 +10,16 @@
 :root {
   /* ── Core Dark Palette ── */
   --page-bg: #0a0a0a;
-  --surface: #111111;
-  --surface-raised: #161616;
-  --surface-hover: #1f1f1f;
-  --surface-active: #242424;
+  --surface: #111116;
+  --surface-raised: #111116;
+  --surface-hover: #16161d;
+  --surface-active: #1c1c24;
 
   /* ── Borders ── */
-  --border: #222222;
-  --border-subtle: #1c1c1c;
-  --border-muted: #181818;
-  --border-active: #38bdf8;
+  --border: #282838;
+  --border-subtle: #22222e;
+  --border-muted: #1c1c24;
+  --border-active: #3b82f6;
 
   /* ── Typography Colors ── */
   --text-primary: #f5f5f5;
@@ -27,7 +27,7 @@
   --text-muted: #737373;
 
   /* ── Accent & Pillar Colors ── */
-  --accent-sky: #38bdf8;
+  --accent-sky: #3b82f6;
   --accent-blue: #3b82f6;
   --accent-emerald: #10b981;
   --accent-amber: #f59e0b;
@@ -85,11 +85,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d0d0d;
+  background: #0a0a0a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #262626;
+  background: #282838;
   border-radius: 9999px;
 }
 
@@ -107,10 +107,10 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #222222;
+  background: #282838;
   border-radius: 9999px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #38bdf8;
+  background: #3b82f6;
 }

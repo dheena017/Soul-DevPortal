@@ -46,7 +46,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
           {onBack && (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#14141c] border border-[#282838] text-neutral-300 hover:text-white hover:border-[#38384a] hover:bg-[#181824] transition-all font-semibold"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#111116] border border-[#282838] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111116] transition-all font-semibold"
               onClick={onBack}
             >
               ← Back to Overview
@@ -73,7 +73,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter applications by name, port, framework, AI engine..."
               aria-label="Filter applications"
-              className="w-full bg-[#14141c] border border-[#282838] rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500/50"
+              className="w-full bg-[#111116] border border-[#282838] rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500/50"
             />
             {query && (
               <button
@@ -94,7 +94,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   filterFramework === fw
                     ? 'bg-blue-600 text-white shadow-sm border border-blue-500'
-                    : 'bg-[#14141c] border border-[#282838] text-neutral-400 hover:text-white hover:bg-[#181824]'
+                    : 'bg-[#111116] border border-[#282838] text-neutral-400 hover:text-white hover:bg-[#111116]'
                 }`}
                 onClick={() => setFilterFramework(fw)}
               >
@@ -107,7 +107,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredProjects.map((p) => (
-          <div key={p.id} className="p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] shadow-2xl transition-all duration-200 flex flex-col gap-4">
+          <div key={p.id} className="p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] shadow-2xl transition-all duration-200 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-white">{p.title}</h3>
               <CopyButton text={`http://localhost:${p.frontendPort || 5173}`} label="Copy URL" variant="compact" />
@@ -117,7 +117,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
                 Port :{p.frontendPort}
               </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#14141c] border border-[#282838] text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#111116] border border-[#282838] text-neutral-300">
                 {p.framework || 'Vite React'}
               </span>
             </div>

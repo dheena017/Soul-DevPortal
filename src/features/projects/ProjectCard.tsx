@@ -48,7 +48,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-xl transition-all duration-200 gap-4 h-full">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 gap-4 h-full">
       {/* Card Header: Brand, Meta, Ports */}
         <div
           className="flex flex-col gap-3.5"
@@ -115,7 +115,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
             <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors truncate">
               {formattedTitle}
             </h3>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider bg-[#181824] text-neutral-400 border border-[#282838] shrink-0">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider bg-[#111116] text-neutral-400 border border-[#282838] shrink-0">
               Public
             </span>
           </div>
@@ -131,7 +131,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
 
         {/* Card Specs Matrix */}
         <div
-          className="flex flex-col gap-2 p-2.5 rounded-xl bg-[#0e0e14] border border-[#222230] text-xs"
+          className="flex flex-col gap-2 p-2.5 rounded-xl bg-[#0a0a0a] border border-[#282838] text-xs"
           onClick={handleCardClick}
           style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
         >
@@ -175,7 +175,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
             return (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#161622] border border-[#282838] text-[11px] font-mono text-neutral-400"
+                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#111116] border border-[#282838] text-[11px] font-mono text-neutral-400"
               >
                 <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: dotColor }} aria-hidden="true" />
                 <span>{tag}</span>
@@ -185,13 +185,13 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
         </div>
 
         {/* Card Footer: Action Buttons (Launch & Details) */}
-        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#222230]">
+        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#282838]">
           {project.frontendPort && (
             <a
               href={`http://localhost:${project.frontendPort}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#161622] border border-[#282838] text-neutral-300 hover:text-white hover:border-[#383848] transition-all"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111116] border border-[#282838] text-neutral-300 hover:text-white hover:border-blue-500/40 transition-all"
               title={`Launch on http://localhost:${project.frontendPort}`}
               onClick={(e) => e.stopPropagation()}
             >

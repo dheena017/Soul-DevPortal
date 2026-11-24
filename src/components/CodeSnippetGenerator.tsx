@@ -171,7 +171,7 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0d0d12] border border-[#282838] rounded-xl" role="tablist" aria-label="Snippet frameworks">
+      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0a0a0a] border border-[#282838] rounded-xl" role="tablist" aria-label="Snippet frameworks">
         {snippets.map((snippet) => (
           <button
             type="button"
@@ -181,7 +181,7 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               snippet.id === activeSnippet.id
                 ? 'bg-blue-600 text-white shadow-md border border-blue-500'
-                : 'text-neutral-400 hover:text-white hover:bg-[#14141c]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#111116]'
             }`}
             onClick={() => setSelectedId(snippet.id)}
           >
@@ -190,8 +190,8 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
         ))}
       </div>
 
-      <div className="rounded-xl bg-[#0d0d12] border border-[#282838] overflow-hidden shadow-lg">
-        <div className="flex items-center justify-between px-3.5 py-2 bg-[#14141c] border-b border-[#22222e] text-xs">
+      <div className="rounded-xl bg-[#0a0a0a] border border-[#282838] overflow-hidden shadow-lg">
+        <div className="flex items-center justify-between px-3.5 py-2 bg-[#111116] border-b border-[#22222e] text-xs">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/25">
               {activeSnippet.language}

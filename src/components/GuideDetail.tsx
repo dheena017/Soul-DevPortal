@@ -77,7 +77,7 @@ export default function GuideDetail({
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">{guideMeta.description}</p>
 
         {/* Guides Switcher Bar */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0d0d12] border border-[#282838] rounded-xl" role="tablist" aria-label="Monorepo documentation guides">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0a0a0a] border border-[#282838] rounded-xl" role="tablist" aria-label="Monorepo documentation guides">
           <button
             type="button"
             role="tab"
@@ -85,7 +85,7 @@ export default function GuideDetail({
             className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               selectedGuide === 'design'
                 ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#14141c] hover:border-[#282838] border border-transparent font-medium'
+                : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
             }`}
             onClick={() => handleSelect('design')}
           >
@@ -99,7 +99,7 @@ export default function GuideDetail({
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'ports'
                   ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#14141c] hover:border-[#282838] border border-transparent font-medium'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('ports')}
             >
@@ -114,7 +114,7 @@ export default function GuideDetail({
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'techstack'
                   ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#14141c] hover:border-[#282838] border border-transparent font-medium'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('techstack')}
             >
