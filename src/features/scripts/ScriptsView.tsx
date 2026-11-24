@@ -255,7 +255,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 onClick={() => setFilterCategory(cat.id)}
               >
                 <span>{cat.label}</span>
-                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111116] text-neutral-400 border border-[#282838]'}`}>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-[#111116] text-white border border-[#282838] font-bold' : 'bg-[#111116] text-neutral-400 border border-[#282838]'}`}>
                   {cat.count}
                 </span>
               </button>

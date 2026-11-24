@@ -307,8 +307,8 @@ export default function Sidebar({
               aria-current={isActive('overview') ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
                 isActive('overview')
-                  ? 'bg-blue-500/10 text-white font-semibold border border-blue-500/40 shadow-sm'
-                  : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] hover:border-[#282838] border border-transparent'
+                  ? 'bg-[#111116] text-white font-semibold border border-[#282838] shadow-sm'
+                  : 'text-neutral-300 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent'
               }`}
               onClick={() => onNavigate('overview')}
             >
@@ -326,8 +326,8 @@ export default function Sidebar({
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))
-                  ? 'bg-blue-500/10 text-white font-semibold border border-blue-500/40 shadow-sm'
-                  : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] hover:border-[#282838] border border-transparent'
+                  ? 'bg-[#111116] text-white font-semibold border border-[#282838] shadow-sm'
+                  : 'text-neutral-300 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent'
               }`}
               onClick={() => onNavigate('scripts')}
             >
@@ -390,8 +390,8 @@ export default function Sidebar({
                 aria-current={isActive('projects') ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   isActive('projects')
-                    ? 'bg-blue-500/10 text-white font-semibold border border-blue-500/40'
-                    : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] hover:border-[#282838] border border-transparent'
+                    ? 'bg-[#111116] text-white font-semibold border border-[#282838]'
+                    : 'text-neutral-300 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('projects');
@@ -439,8 +439,8 @@ export default function Sidebar({
                       aria-current={isProjActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
                         isProjActive
-                          ? 'bg-blue-500/10 text-blue-400 font-semibold border border-blue-500/30'
-                          : 'text-neutral-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                          ? 'bg-[#111116] text-white font-semibold border border-[#282838]'
+                          : 'text-neutral-400 hover:text-white hover:bg-[#111116] border border-transparent'
                       }`}
                       onClick={() => onNavigate(`projects/${proj.id}`)}
                       title={proj.title}
@@ -481,8 +481,8 @@ export default function Sidebar({
                 aria-current={(isActive('packages') || isActive('packages-dashboard')) ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   (isActive('packages') || isActive('packages-dashboard'))
-                    ? 'bg-blue-500/10 text-white font-semibold border border-blue-500/40'
-                    : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] hover:border-[#282838] border border-transparent'
+                    ? 'bg-[#111116] text-white font-semibold border border-[#282838]'
+                    : 'text-neutral-300 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('packages');
@@ -533,8 +533,8 @@ export default function Sidebar({
                       aria-current={isPkgActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
                         isPkgActive
-                          ? 'bg-blue-500/10 text-blue-400 font-semibold border border-blue-500/30'
-                          : 'text-neutral-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                          ? 'bg-[#111116] text-white font-semibold border border-[#282838]'
+                          : 'text-neutral-400 hover:text-white hover:bg-[#111116] border border-transparent'
                       }`}
                       onClick={() => onNavigate(`packages/${pkg.id}`)}
                       title={pkg.displayName || pkg.name}
@@ -573,8 +573,8 @@ export default function Sidebar({
                 aria-current={(isActive('docs') || isActive('docs-dashboard')) ? 'page' : undefined}
                 className={`flex-1 flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors ${
                   (isActive('docs') || isActive('docs-dashboard'))
-                    ? 'bg-blue-500/10 text-white font-semibold border border-blue-500/40'
-                    : 'text-neutral-300 hover:text-white hover:bg-white/[0.04] hover:border-[#282838] border border-transparent'
+                    ? 'bg-[#111116] text-white font-semibold border border-[#282838]'
+                    : 'text-neutral-300 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent'
                 }`}
                 onClick={() => {
                   onNavigate('docs');
@@ -621,8 +621,8 @@ export default function Sidebar({
                       aria-current={isGuideActive ? 'page' : undefined}
                       className={`w-full flex items-center justify-between px-2 py-1.5 rounded-md text-xs transition-colors text-left ${
                         isGuideActive
-                          ? 'bg-blue-500/10 text-blue-400 font-semibold border border-blue-500/30'
-                          : 'text-neutral-400 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                          ? 'bg-[#111116] text-white font-semibold border border-[#282838]'
+                          : 'text-neutral-400 hover:text-white hover:bg-[#111116] border border-transparent'
                       }`}
                       onClick={() => onNavigate(targetRoute)}
                       title={guide.title}

@@ -143,8 +143,7 @@ export default function PackageDetailHeader({
               <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white font-mono">
                 {pkg.name || pkg.id}
               </h1>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400" aria-hidden="true" />
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-[#111116] border border-[#282838] text-neutral-300">
                 <span>v{pkg.version || '1.0.0'}</span>
               </span>
             </div>
@@ -204,12 +203,12 @@ export default function PackageDetailHeader({
             aria-selected={activeTab === 'docs'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'docs'
-                ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                ? 'bg-[#111116] text-white font-bold border border-[#282838] shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('docs')}
           >
-            <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-blue-400' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-white' : 'text-neutral-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
@@ -222,17 +221,17 @@ export default function PackageDetailHeader({
             aria-selected={activeTab === 'api'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'api'
-                ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                ? 'bg-[#111116] text-white font-bold border border-[#282838] shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('api')}
           >
-            <svg className={`w-3.5 h-3.5 ${activeTab === 'api' ? 'text-blue-400' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'api' ? 'text-white' : 'text-neutral-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6" />
               <polyline points="8 6 2 12 8 18" />
             </svg>
             <span>API &amp; Exports</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'api' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111116] text-neutral-400 border border-[#282838]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'api' ? 'bg-[#111116] text-white border border-[#282838] font-bold' : 'bg-[#111116] text-neutral-400 border border-[#22222e]'}`}>
               {totalExports}
             </span>
           </button>
@@ -243,12 +242,12 @@ export default function PackageDetailHeader({
             aria-selected={activeTab === 'playground'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'playground'
-                ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                ? 'bg-[#111116] text-white font-bold border border-[#282838] shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('playground')}
           >
-            <svg className={`w-3.5 h-3.5 ${activeTab === 'playground' ? 'text-blue-400' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'playground' ? 'text-white' : 'text-neutral-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
             <span>Code Generator</span>
@@ -260,12 +259,12 @@ export default function PackageDetailHeader({
             aria-selected={activeTab === 'manifest'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'manifest'
-                ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                ? 'bg-[#111116] text-white font-bold border border-[#282838] shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('manifest')}
           >
-            <svg className={`w-3.5 h-3.5 ${activeTab === 'manifest' ? 'text-blue-400' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'manifest' ? 'text-white' : 'text-neutral-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
               <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
               <line x1="12" y1="22.08" x2="12" y2="12" />

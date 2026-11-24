@@ -204,13 +204,13 @@ export default function ProjectHeader({
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all ${
                   isActive
-                    ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                    ? 'bg-[#111116] text-white font-bold border border-[#282838] shadow-sm'
                     : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
                 }`}
                 onClick={() => onFilterFrameworkChange(fw)}
               >
                 <span>{fw === 'all' ? 'All Frameworks' : fw}</span>
-                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111116] text-neutral-400 border border-[#282838]'}`}>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-[#111116] text-white border border-[#282838] font-bold' : 'bg-[#111116] text-neutral-400 border border-[#282838]'}`}>
                   {count}
                 </span>
               </button>

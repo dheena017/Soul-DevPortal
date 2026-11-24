@@ -34,7 +34,7 @@ export default function ProjectOverviewTab({
       <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
           <div className="flex flex-col gap-0.5">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">APPLICATION OVERVIEW</span>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">APPLICATION OVERVIEW</span>
             <h2 className="text-xl font-extrabold text-white">{project.title}</h2>
           </div>
           <div className="flex flex-wrap items-center gap-2">
