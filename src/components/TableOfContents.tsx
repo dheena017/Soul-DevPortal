@@ -143,11 +143,11 @@ export default function TableOfContents({
 
   return (
     <nav
-      className={`sticky top-3.5 flex flex-col gap-2.5 p-4 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl shadow-black/60 ${className}`}
+      className={`sticky top-3.5 flex flex-col gap-2.5 p-4 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl shadow-black/60 ${className}`}
       aria-label="Table of contents navigation"
     >
       {/* Card Header using Website Theme Palette */}
-      <div className="flex items-center justify-between pb-2.5 border-b border-[#22222e]">
+      <div className="flex items-center justify-between pb-2.5 border-b border-[#1a1a1a]">
         <div className="flex items-center gap-2">
           <div className="w-5 h-5 rounded-md bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-sm">
             <svg
@@ -173,7 +173,7 @@ export default function TableOfContents({
             {title}
           </span>
         </div>
-        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#111116] border border-[#282838] text-neutral-300">
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
           {headings.length}
         </span>
       </div>
@@ -202,8 +202,8 @@ export default function TableOfContents({
                 isH3 ? 'pl-4' : ''
               } ${
                 isActive
-                  ? 'bg-[#111116] text-white font-semibold border border-blue-500/40 shadow-[0_2px_10px_rgba(59,130,246,0.15)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#111116] border border-transparent hover:border-[#282838]'
+                  ? 'bg-[#111111] text-white font-semibold border border-blue-500/40 shadow-[0_2px_10px_rgba(59,130,246,0.15)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#111111] border border-transparent hover:border-[#222222]'
               }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
             >
@@ -220,7 +220,7 @@ export default function TableOfContents({
                   className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
                     isActive
                       ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold'
-                      : 'bg-[#111116] border border-[#282838] text-neutral-400'
+                      : 'bg-[#111111] border border-[#222222] text-neutral-400'
                   }`}
                 >
                   {numberPart}

@@ -8,13 +8,13 @@ export interface DocTablesTabProps {
 
 export default function DocTablesTab({ tables }: DocTablesTabProps) {
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">SPECIFICATION TABLES</span>
           <h2 className="text-lg font-bold text-white">Extracted Matrices &amp; Schema Tables</h2>
         </div>
-        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#111116] border border-[#282838] text-neutral-300">
+        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
           {tables.length} tables
         </span>
       </div>
@@ -24,7 +24,7 @@ export default function DocTablesTab({ tables }: DocTablesTabProps) {
           <Markdown blocks={tables} />
         </div>
       ) : (
-        <div className="p-8 rounded-xl bg-[#111116] border border-[#282838] text-center">
+        <div className="p-8 rounded-xl bg-[#111111] border border-[#222222] text-center">
           <p className="text-xs text-neutral-400">No structured tables found in this guide specification.</p>
         </div>
       )}

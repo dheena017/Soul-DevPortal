@@ -58,7 +58,7 @@ export const SoulLogoIcon: React.FC<{ size?: number; className?: string }> = ({
 
         {/* Subtle Inner Glass Surface */}
         <linearGradient id="soul-glass" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#111116" stopOpacity="0.8" />
+          <stop offset="0%" stopColor="#111111" stopOpacity="0.8" />
           <stop offset="100%" stopColor="#0a0a0a" stopOpacity="0.95" />
         </linearGradient>
 

@@ -71,13 +71,13 @@ export default function Overview({
   return (
     <article className="w-full flex flex-col gap-8 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
       {/* ── Standardized Hero Header matching Pillar Dashboards ── */}
-      <header className="w-full bg-[#111116] border border-[#282838] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
+      <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
         <div className="flex flex-col gap-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
             <div className="flex items-center gap-2 text-xs">
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-neutral-400 font-medium">Soul Workspace</span>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-neutral-400 font-medium">Soul Workspace</span>
               <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
-              <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-white font-semibold shadow-sm">Overview Dashboard</strong>
+              <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-white font-semibold shadow-sm">Overview Dashboard</strong>
             </div>
 
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/40 text-xs font-semibold text-blue-400 select-none shadow-sm">
@@ -97,7 +97,7 @@ export default function Overview({
               <button
                 type="button"
                 onClick={() => onNavigate('portal')}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#111116] border border-[#282838] text-blue-400 hover:text-white hover:border-[#3b82f6] transition-all shrink-0"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-blue-400 hover:text-white hover:border-[#3b82f6] transition-all shrink-0"
                 title="Open full Developer Portal Hub with GitHub links & live endpoints"
               >
                 <span>Developer Hub &amp; GitHub Links</span>
@@ -111,23 +111,23 @@ export default function Overview({
 
           {/* Dashboard Key Metrics Banner */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1">
-            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
+            <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 transition-all">
               <span className="text-lg font-extrabold text-blue-400 font-mono">3</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Core Pillars</span>
             </div>
-            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
+            <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 transition-all">
               <span className="text-lg font-extrabold text-blue-400 font-mono">{projects.length || 8}</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Integrated Apps</span>
             </div>
-            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-[#282838] transition-all">
+            <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-[#222222] transition-all">
               <span className="text-lg font-extrabold text-blue-400 font-mono">{packages.length || 3}</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Shared Packages</span>
             </div>
-            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-[#282838] transition-all">
+            <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-[#222222] transition-all">
               <span className="text-lg font-extrabold text-neutral-300 font-mono">5</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Architecture Specs</span>
             </div>
-            <div className="flex flex-col p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 transition-all">
+            <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 transition-all">
               <span className="text-lg font-extrabold text-blue-400 font-mono">0</span>
               <span className="text-xs font-semibold text-neutral-300 mt-0.5">Port Collisions</span>
             </div>
@@ -139,7 +139,7 @@ export default function Overview({
       <section className="w-full flex flex-col gap-4" aria-label="Monorepo 3 Pillars Navigation">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/50 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111111] border border-[#222222] hover:border-blue-500/50 hover:bg-[#111111] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
             onClick={() => onNavigate('projects')}
             role="button"
             tabIndex={0}
@@ -161,14 +161,14 @@ export default function Overview({
                 {projects.length || 8} fullstack applications, strict client &amp; server port allocations (:5173-:5180 / :8000-:8008), and SQLite datastores.
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-blue-400 pt-2 border-t border-[#22222e]">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-blue-400 pt-2 border-t border-[#1a1a1a]">
               <span>Explore {projects.length || 8} Apps</span>
               <span>→</span>
             </div>
           </div>
 
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
             onClick={() => onNavigate('packages')}
             role="button"
             tabIndex={0}
@@ -190,14 +190,14 @@ export default function Overview({
                 Core reusable libraries: @workspace/logger (universal logging), @workspace/runner (CLI supervisor), and @workspace/config (design tokens).
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-blue-400 pt-2 border-t border-[#22222e]">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-blue-400 pt-2 border-t border-[#1a1a1a]">
               <span>Inspect {packages.length || 3} Packages</span>
               <span>→</span>
             </div>
           </div>
 
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
             onClick={() => onNavigate('docs')}
             role="button"
             tabIndex={0}
@@ -205,10 +205,10 @@ export default function Overview({
           >
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-[#111116] border border-[#282838] flex items-center justify-center text-2xl">
+                <span className="w-12 h-12 rounded-xl bg-[#111111] border border-[#222222] flex items-center justify-center text-2xl">
                   📚
                 </span>
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-[#111116] border border-[#282838] text-neutral-300">
+                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-[#111111] border border-[#222222] text-neutral-300">
                   Pillar 3
                 </span>
               </div>
@@ -219,7 +219,7 @@ export default function Overview({
                 5 authoritative architecture guides: mandatory golden rules, port matrices, tech stack standards, and compliance cheatsheets.
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-300 pt-2 border-t border-[#22222e]">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-300 pt-2 border-t border-[#1a1a1a]">
               <span>Read 5 Guides</span>
               <span>→</span>
             </div>
@@ -231,7 +231,7 @@ export default function Overview({
       <StatsCards stats={stats} packagesCount={packages.length || 3} projectsCount={projects?.length || 8} />
 
       {/* ── Ecosystem Tabs Navigation ── */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0a0a0a] border border-[#22222e] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)] self-start" role="tablist" aria-label="Ecosystem overview sections">
+      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)] self-start" role="tablist" aria-label="Ecosystem overview sections">
         <button
           type="button"
           role="tab"
@@ -239,7 +239,7 @@ export default function Overview({
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'apps'
               ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-              : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
+              : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('apps')}
         >
@@ -249,7 +249,7 @@ export default function Overview({
             <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
           <span>Consumer Applications</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'apps' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111116] text-neutral-400 border border-[#282838]'}`}>{projects.length || 8}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'apps' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{projects.length || 8}</span>
         </button>
 
         <button
@@ -259,7 +259,7 @@ export default function Overview({
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'packages'
               ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-              : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
+              : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('packages')}
         >
@@ -268,7 +268,7 @@ export default function Overview({
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
           </svg>
           <span>Shared Packages</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'packages' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111116] text-neutral-400 border border-[#282838]'}`}>{packages.length || 3}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'packages' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>{packages.length || 3}</span>
         </button>
 
         <button
@@ -278,7 +278,7 @@ export default function Overview({
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'docs'
               ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-              : 'text-neutral-400 hover:text-white hover:bg-[#111116] hover:border-[#282838] border border-transparent font-medium'
+              : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('docs')}
         >
@@ -287,21 +287,21 @@ export default function Overview({
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
           </svg>
           <span>Architecture Specifications</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'docs' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111116] text-neutral-400 border border-[#282838]'}`}>5</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'docs' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#111111] text-neutral-400 border border-[#222222]'}`}>5</span>
         </button>
       </div>
 
       {/* ── Tab 1: Integrated Consumer Applications ── */}
       {activeTab === 'apps' && projects && projects.length > 0 && (
         <section className="w-full flex flex-col gap-4" aria-label="Integrated monorepo applications">
-          <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
+          <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 1: APPLICATIONS</span>
               <h2 className="text-lg font-bold text-white">Integrated Consumer Applications</h2>
             </div>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111116] border border-[#282838] text-neutral-300 hover:text-white hover:border-blue-500/40 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 transition-all"
               onClick={() => onNavigate('projects')}
             >
               <span>View all {projects.length} apps &amp; ports</span>
@@ -320,7 +320,7 @@ export default function Overview({
               return (
                 <div
                   key={p.id}
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-xl transition-all duration-200 gap-4 cursor-pointer h-full"
+                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] hover:shadow-xl transition-all duration-200 gap-4 cursor-pointer h-full"
                   onClick={() => onNavigate(`projects/${p.id}`)}
                   role="button"
                   tabIndex={0}
@@ -374,7 +374,7 @@ export default function Overview({
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-[#0a0a0a] border border-[#22222e] text-xs">
+                    <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-[#0a0a0a] border border-[#1a1a1a] text-xs">
                       <div className="flex items-center gap-2 text-neutral-400">
                         <span>⚡</span>
                         <span className="truncate">{p.framework || 'React 19 + Vite 8 + Tailwind v4'}</span>
@@ -392,7 +392,7 @@ export default function Overview({
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-[#22222e] text-xs font-semibold text-neutral-400 group-hover:text-blue-400 transition-colors">
+                  <div className="flex items-center justify-between pt-2 border-t border-[#1a1a1a] text-xs font-semibold text-neutral-400 group-hover:text-blue-400 transition-colors">
                     <span>Inspect Application</span>
                     <span>→</span>
                   </div>
@@ -406,14 +406,14 @@ export default function Overview({
       {/* ── Tab 2: Core Monorepo Packages ── */}
       {activeTab === 'packages' && (
         <section className="w-full flex flex-col gap-4" aria-label="Shared packages explorer">
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pb-2 border-b border-[#22222e]">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 2: SHARED LIBRARIES</span>
               <h2 className="text-lg font-bold text-white">Core Monorepo Packages</h2>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <div className="flex flex-wrap items-center gap-1 p-1 bg-[#111116] border border-[#282838] rounded-xl text-xs">
+              <div className="flex flex-wrap items-center gap-1 p-1 bg-[#111111] border border-[#222222] rounded-xl text-xs">
                 {(['all', 'npm', 'python', 'config'] as const).map((eco) => {
                   const label = eco === 'all' ? `All (${packages.length})` : eco === 'npm' ? 'TypeScript / Node' : eco === 'python' ? 'Python Modules' : 'Config';
                   const isActive = ecosystemFilter === eco;
@@ -422,7 +422,7 @@ export default function Overview({
                       key={eco}
                       type="button"
                       className={`px-3 py-1 rounded-lg font-semibold transition-all ${
-                        isActive ? 'bg-[#111116] text-white shadow-sm border border-[#282838]' : 'text-neutral-400 hover:text-white border border-transparent'
+                        isActive ? 'bg-[#111111] text-white shadow-sm border border-[#222222]' : 'text-neutral-400 hover:text-white border border-transparent'
                       }`}
                       onClick={() => setEcosystemFilter(eco)}
                     >
@@ -435,7 +435,7 @@ export default function Overview({
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="h-8 px-2.5 rounded-lg bg-[#111116] border border-[#282838] text-xs text-neutral-200 focus:outline-none focus:border-sky-500 font-medium"
+                className="h-8 px-2.5 rounded-lg bg-[#111111] border border-[#222222] text-xs text-neutral-200 focus:outline-none focus:border-sky-500 font-medium"
               >
                 <option value="name">Name (A-Z)</option>
                 <option value="exports">Most Exports</option>
@@ -460,7 +460,7 @@ export default function Overview({
               return (
                 <article
                   key={pkg.id}
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-2xl transition-all duration-300 gap-4"
+                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] hover:shadow-2xl transition-all duration-300 gap-4"
                 >
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center justify-between gap-3">
@@ -476,7 +476,7 @@ export default function Overview({
 
                       <div className="flex items-center gap-1.5">
                         {pkg.hasNpmManifest && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111116] border border-[#282838] text-neutral-300">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                             npm
                           </span>
                         )}
@@ -498,12 +498,12 @@ export default function Overview({
                       )}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 p-2 rounded-xl bg-[#0a0a0a] border border-[#282838] text-center font-mono text-xs">
+                    <div className="grid grid-cols-3 gap-2 p-2 rounded-xl bg-[#0a0a0a] border border-[#222222] text-center font-mono text-xs">
                       <div>
                         <span className="text-[10px] text-neutral-500 uppercase">EXPORTS</span>
                         <strong className="block text-xs font-bold text-blue-400 mt-0.5">{exportsCount} APIs</strong>
                       </div>
-                      <div className="border-x border-[#22222e]">
+                      <div className="border-x border-[#1a1a1a]">
                         <span className="text-[10px] text-neutral-500 uppercase">LICENSE</span>
                         <strong className="block text-xs font-bold text-white mt-0.5">{pkg.license || 'MIT'}</strong>
                       </div>
@@ -513,13 +513,13 @@ export default function Overview({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-[#0a0a0a] border border-[#282838] font-mono text-xs">
+                    <div className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-[#0a0a0a] border border-[#222222] font-mono text-xs">
                       <code className="text-[11px] text-blue-300 truncate">$ {installCmd}</code>
                       <CopyButton text={installCmd} variant="compact" label="" copiedLabel="Copied!" />
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-[#22222e]">
+                  <div className="pt-2 border-t border-[#1a1a1a]">
                     <button
                       type="button"
                       className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2"
@@ -539,14 +539,14 @@ export default function Overview({
       {/* ── Tab 3: Documentation Hub Overview ── */}
       {activeTab === 'docs' && (
         <section className="w-full flex flex-col gap-4" aria-label="Docs Dashboard and architectural specifications">
-          <div className="flex items-center justify-between pb-2 border-b border-[#22222e]">
+          <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 3: SPECIFICATIONS</span>
               <h2 className="text-lg font-bold text-white">Official Architecture Documentation</h2>
             </div>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111116] border border-[#282838] text-neutral-300 hover:text-white hover:border-blue-500/40 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 transition-all"
               onClick={() => onNavigate('docs')}
             >
               <span>Open Docs Dashboard</span>
@@ -557,7 +557,7 @@ export default function Overview({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {DOCUMENTATION_GUIDES_REGISTRY.map((guide) => (
               <div
-                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] hover:shadow-2xl transition-all duration-300 cursor-pointer gap-4"
+                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] hover:shadow-2xl transition-all duration-300 cursor-pointer gap-4"
                 key={guide.id}
                 onClick={() => onNavigate(`docs/${guide.slug || guide.id}`)}
                 role="button"
@@ -576,7 +576,7 @@ export default function Overview({
                   </h3>
                   <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed">{guide.description}</p>
                 </div>
-                <div className="flex items-center gap-1 text-xs font-bold text-blue-400 pt-2 border-t border-[#22222e]">
+                <div className="flex items-center gap-1 text-xs font-bold text-blue-400 pt-2 border-t border-[#1a1a1a]">
                   <span>Read Specification</span>
                   <span>→</span>
                 </div>
@@ -587,15 +587,15 @@ export default function Overview({
       )}
 
       {/* ── Monorepo Command Runners Quick Banner ── */}
-      <section className="w-full p-6 rounded-2xl bg-gradient-to-r bg-[#111116] border border-[#282838] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
+      <section className="w-full p-6 rounded-2xl bg-gradient-to-r bg-[#111111] border border-[#222222] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-[#282838] flex items-center justify-center text-2xl shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-[#222222] flex items-center justify-center text-2xl shrink-0">
             ⚡
           </div>
           <div className="flex flex-col gap-1.5">
             <div className="flex flex-wrap items-center gap-2.5">
               <h3 className="text-lg font-bold text-white">15 Monorepo Automation Scripts &amp; Command Runners</h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-500/15 border border-[#282838] text-blue-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-500/15 border border-[#222222] text-blue-400">
                 Python FastAPI · Vite · TS Gates
               </span>
             </div>

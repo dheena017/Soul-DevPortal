@@ -18,8 +18,8 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
   }, [endpoints, filter]);
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">PROJECT API</span>
           <h2 className="text-lg font-bold text-white">Registered API Endpoints</h2>
@@ -36,7 +36,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter endpoint routes..."
               aria-label="Filter endpoint routes"
-              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0a0a0a] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
+              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0a0a0a] border border-[#222222] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
             />
             {filter && (
               <button
@@ -54,7 +54,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
               href={`${beUrl}/api/docs`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111116] border border-[#282838] text-blue-400 hover:text-white hover:border-blue-500/40 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-blue-400 hover:text-white hover:border-blue-500/40 transition-all"
             >
               <span>Swagger OpenAPI</span>
               <span>↗</span>
@@ -67,7 +67,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-2">
             <span className="text-xs font-bold text-white">HTTP REST Endpoints</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#111116] border border-[#282838] text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
               {filteredEndpoints.length} routes
             </span>
           </div>
@@ -85,7 +85,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
                 ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
                 : isPost
                 ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
-                : 'bg-[#111116] border-[#282838] text-neutral-300';
+                : 'bg-[#111111] border-[#222222] text-neutral-300';
 
               const fullUrl = beUrl ? `${beUrl}${pathStr || method}` : pathStr || method;
               const curlCmd = `curl -X ${method} "${fullUrl}" -H "Content-Type: application/json"`;
@@ -93,7 +93,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
               return (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] transition-all gap-3"
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] transition-all gap-3"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-extrabold uppercase border ${methodStyle}`}>
@@ -111,12 +111,12 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
           </div>
         </div>
       ) : (
-        <div className="p-8 rounded-xl bg-[#111116] border border-[#282838] text-center flex flex-col items-center gap-3">
+        <div className="p-8 rounded-xl bg-[#111111] border border-[#222222] text-center flex flex-col items-center gap-3">
           <p className="text-xs text-neutral-400 max-w-md">
             {filter ? 'No endpoints match your search filter.' : 'No endpoints explicitly declared in metadata.json. Standard healthcheck route available below:'}
           </p>
           {project.backendPort && (
-            <div className="flex items-center justify-between w-full max-w-md p-3 rounded-xl bg-[#111116] border border-[#282838]">
+            <div className="flex items-center justify-between w-full max-w-md p-3 rounded-xl bg-[#111111] border border-[#222222]">
               <div className="flex items-center gap-2">
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
                   GET

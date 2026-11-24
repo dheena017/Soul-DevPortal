@@ -45,12 +45,12 @@ export const Header: React.FC<HeaderProps> = ({
     ['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
 
   return (
-    <header className="w-full h-14 bg-[#111116]/95 backdrop-blur-md border-b border-[#282838] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
+    <header className="w-full h-14 bg-[#111111]/95 backdrop-blur-md border-b border-[#222222] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
       {/* ── Left: Sidebar Toggle & Breadcrumbs ── */}
       <div className="flex items-center gap-3 min-w-0">
         <button
           type="button"
-          className="p-2 rounded-full bg-[#111116] border border-[#282838] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111116] transition-all shrink-0 shadow-sm"
+          className="p-2 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all shrink-0 shadow-sm"
           onClick={() => {
             consoleLogger.action('UI', menuOpen ? 'Closing sidebar navigation' : 'Opening sidebar navigation');
             onToggleSidebar();
@@ -75,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
         <nav className="flex items-center gap-2 text-xs min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] font-mono text-neutral-300 hover:text-white transition-all shrink-0 shadow-sm"
+            className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] font-mono text-neutral-300 hover:text-white transition-all shrink-0 shadow-sm"
             onClick={() => onNavigate('overview')}
             title="Go to Overview Dashboard"
           >
@@ -91,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({
               {crumb.id ? (
                 <button
                   type="button"
-                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#111116] text-neutral-300 hover:text-white transition-all truncate font-medium max-w-[200px]"
+                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] text-neutral-300 hover:text-white transition-all truncate font-medium max-w-[200px]"
                   onClick={() => onNavigate(crumb.id!)}
                   title={`Go to ${crumb.label}`}
                 >
@@ -99,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               ) : (
                 <span
-                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111116] border border-[#282838] text-white font-semibold shadow-sm truncate max-w-[200px]"
+                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] text-white font-semibold shadow-sm truncate max-w-[200px]"
                   title={crumb.label}
                 >
                   {crumb.label}
@@ -122,7 +122,7 @@ export const Header: React.FC<HeaderProps> = ({
           onChange={onSearchChange}
           placeholder="Search apps, packages, docs..."
           aria-label="Search package and application documentation"
-          className="w-full h-8 pl-9 pr-8 rounded-full bg-[#0a0a0a] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500/60 font-mono transition-all"
+          className="w-full h-8 pl-9 pr-8 rounded-full bg-[#0a0a0a] border border-[#222222] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500/60 font-mono transition-all"
         />
         {query ? (
           <button
@@ -134,7 +134,7 @@ export const Header: React.FC<HeaderProps> = ({
             ✕
           </button>
         ) : (
-          <kbd className="absolute right-2.5 px-1 py-0.2 rounded bg-[#111116] border border-[#282838] text-[10px] text-neutral-500 font-mono">
+          <kbd className="absolute right-2.5 px-1 py-0.2 rounded bg-[#111111] border border-[#222222] text-[10px] text-neutral-500 font-mono">
             /
           </kbd>
         )}
@@ -142,13 +142,13 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* ── Right: Navigation Tabs, GitHub Link & Shortcuts ── */}
       <div className="flex items-center gap-2 shrink-0">
-        <nav className="flex items-center gap-1 p-0.5 bg-[#0a0a0a] border border-[#282838] rounded-lg hidden sm:flex" aria-label="Portal Dashboards">
+        <nav className="flex items-center gap-1 p-0.5 bg-[#0a0a0a] border border-[#222222] rounded-lg hidden sm:flex" aria-label="Portal Dashboards">
           <button
             type="button"
             className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
               active === 'overview'
-                ? 'bg-[#111116] text-white font-bold shadow-sm border border-[#282838]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#111116] border border-transparent'
+                ? 'bg-[#111111] text-white font-bold shadow-sm border border-[#222222]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#111111] border border-transparent'
             }`}
             onClick={() => onNavigate('overview')}
             title="Overview Dashboard"
@@ -160,14 +160,14 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
               isProjectsActive
-                ? 'bg-[#111116] text-white font-bold shadow-sm border border-[#282838]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#111116] border border-transparent'
+                ? 'bg-[#111111] text-white font-bold shadow-sm border border-[#222222]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#111111] border border-transparent'
             }`}
             onClick={() => onNavigate('projects')}
             title={`Pillar 1: Applications (${projectsCount})`}
           >
             <span>Projects</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-[#111116] text-white border border-[#282838] font-bold' : 'bg-[#111116] text-neutral-400 border border-[#22222e]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-[#111111] text-white border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#1a1a1a]'}`}>
               {projectsCount}
             </span>
           </button>
@@ -176,14 +176,14 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
               isPackagesActive
-                ? 'bg-[#111116] text-white font-bold shadow-sm border border-[#282838]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#111116] border border-transparent'
+                ? 'bg-[#111111] text-white font-bold shadow-sm border border-[#222222]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#111111] border border-transparent'
             }`}
             onClick={() => onNavigate('packages')}
             title={`Pillar 2: Shared Libraries (${packagesCount})`}
           >
             <span>Packages</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-[#111116] text-white border border-[#282838] font-bold' : 'bg-[#111116] text-neutral-400 border border-[#22222e]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-[#111111] text-white border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#1a1a1a]'}`}>
               {packagesCount}
             </span>
           </button>
@@ -192,14 +192,14 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
               isDocsActive
-                ? 'bg-[#111116] text-white font-bold shadow-sm border border-[#282838]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#111116] border border-transparent'
+                ? 'bg-[#111111] text-white font-bold shadow-sm border border-[#222222]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#111111] border border-transparent'
             }`}
             onClick={() => onNavigate('docs')}
             title={`Pillar 3: Documentation Hub (${docsCount} Guides)`}
           >
             <span>Docs</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-[#111116] text-white border border-[#282838] font-bold' : 'bg-[#111116] text-neutral-400 border border-[#22222e]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-[#111111] text-white border border-[#222222] font-bold' : 'bg-[#111111] text-neutral-400 border border-[#1a1a1a]'}`}>
               {docsCount}
             </span>
           </button>
@@ -209,7 +209,7 @@ export const Header: React.FC<HeaderProps> = ({
           href="https://github.com/dheena017/Soul-DevPortal"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#111116] border border-[#282838] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111116] transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all"
           title="Open GitHub Repository: dheena017/Soul-DevPortal"
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -221,7 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           type="button"
-          className="w-8 h-8 rounded-full bg-[#111116] border border-[#282838] flex items-center justify-center text-xs font-mono font-bold text-neutral-400 hover:text-white hover:border-blue-500/40 hover:bg-[#111116] transition-all"
+          className="w-8 h-8 rounded-full bg-[#111111] border border-[#222222] flex items-center justify-center text-xs font-mono font-bold text-neutral-400 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all"
           onClick={() => {
             consoleLogger.action('SHORTCUT', 'Clicked help button: opening keyboard shortcuts modal');
             onOpenShortcuts();

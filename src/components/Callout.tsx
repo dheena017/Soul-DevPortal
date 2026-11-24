@@ -34,8 +34,8 @@ const CALLOUT_CONFIGS: Record<CalloutType, CalloutConfig> = {
   },
   important: {
     title: 'Important',
-    badgeClass: 'text-blue-400 bg-blue-500/10 border-[#282838]',
-    containerClass: 'bg-blue-500/5 border-[#282838] text-neutral-200',
+    badgeClass: 'text-blue-400 bg-blue-500/10 border-[#222222]',
+    containerClass: 'bg-blue-500/5 border-[#222222] text-neutral-200',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10" />
@@ -46,8 +46,8 @@ const CALLOUT_CONFIGS: Record<CalloutType, CalloutConfig> = {
   },
   warning: {
     title: 'Warning',
-    badgeClass: 'text-neutral-300 bg-[#111116] border-[#282838]',
-    containerClass: 'bg-[#111116] border-[#282838] text-neutral-200',
+    badgeClass: 'text-neutral-300 bg-[#111111] border-[#222222]',
+    containerClass: 'bg-[#111111] border-[#222222] text-neutral-200',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />

@@ -10,15 +10,15 @@
 :root {
   /* ── Core Dark Palette ── */
   --page-bg: #0a0a0a;
-  --surface: #111116;
-  --surface-raised: #111116;
-  --surface-hover: #111116;
-  --surface-active: #111116;
+  --surface: #111111;
+  --surface-raised: #111111;
+  --surface-hover: #111111;
+  --surface-active: #111111;
 
   /* ── Borders ── */
-  --border: #282838;
-  --border-subtle: #22222e;
-  --border-muted: #22222e;
+  --border: #222222;
+  --border-subtle: #1a1a1a;
+  --border-muted: #1a1a1a;
   --border-active: #3b82f6;
 
   /* ── Typography Colors ── */
@@ -89,7 +89,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #282838;
+  background: #222222;
   border-radius: 9999px;
 }
 
@@ -107,7 +107,7 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #282838;
+  background: #222222;
   border-radius: 9999px;
 }
 
