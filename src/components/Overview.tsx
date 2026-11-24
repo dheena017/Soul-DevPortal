@@ -587,7 +587,7 @@ export default function Overview({
       )}
 
       {/* ── Monorepo Command Runners Quick Banner ── */}
-      <section className="w-full p-6 rounded-2xl bg-gradient-to-r from-[#111118] to-[#141422] border border-[#282838] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
+      <section className="w-full p-6 rounded-2xl bg-gradient-to-r bg-[#111116] border border-[#282838] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-[#282838] flex items-center justify-center text-2xl shrink-0">
             ⚡

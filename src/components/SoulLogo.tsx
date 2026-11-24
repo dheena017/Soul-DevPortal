@@ -53,13 +53,13 @@ export const SoulLogoIcon: React.FC<{ size?: number; className?: string }> = ({
         <radialGradient id="soul-ambient" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#6366f1" stopOpacity="0.4" />
           <stop offset="70%" stopColor="#38bdf8" stopOpacity="0.15" />
-          <stop offset="100%" stopColor="#0f172a" stopOpacity="0" />
+          <stop offset="100%" stopColor="#0a0a0a" stopOpacity="0" />
         </radialGradient>
 
         {/* Subtle Inner Glass Surface */}
         <linearGradient id="soul-glass" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#1e2230" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#0b0d13" stopOpacity="0.95" />
+          <stop offset="0%" stopColor="#111116" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#0a0a0a" stopOpacity="0.95" />
         </linearGradient>
 
         {/* Glow Filter */}

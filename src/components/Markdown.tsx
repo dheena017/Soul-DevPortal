@@ -321,7 +321,7 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#1c1c1c]">
+                <tbody className="divide-y divide-[#22222e]">
                   {(block.rows || []).map((row: string[], rowIndex: number) => (
                     <tr key={rowIndex} className="hover:bg-[#111116] transition-colors">
                       {row.map((cell: string, cellIndex: number) => (
