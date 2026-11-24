@@ -52,8 +52,11 @@ all_endpoints = [
     ("GET", "/api/docs/details/01-project-architecture/main"),
     ("GET", "/api/docs/details/01-project-architecture/golden-rules"),
     ("GET", "/api/docs/details/02-packages-architecture/main"),
+    ("GET", "/api/docs/details/02-packages-architecture/golden-rules"),
     ("GET", "/api/docs/details/03-networking-and-ports/main"),
+    ("GET", "/api/docs/details/03-networking-and-ports/golden-rules"),
     ("GET", "/api/docs/details/04-cheatsheets/main"),
+    ("GET", "/api/docs/details/04-cheatsheets/golden-rules"),
 ]
 
 print("=== RUNNING FASTAPI ENDPOINT TESTS ===")

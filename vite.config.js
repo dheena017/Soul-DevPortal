@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -12,6 +13,54 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packagesRoot = path.resolve(__dirname, 'Soul-DevPortal-Packages');
 const docsRoot = path.resolve(__dirname, 'Soul-DevPortal-Docs');
 const workspaceRoot = __dirname;
+
+function formatRelativeTime(date) {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  if (diffSec < 60) return `${Math.max(1, diffSec)}s`;
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin}m`;
+  const diffHour = Math.floor(diffMin / 60);
+  if (diffHour < 24) return `${diffHour}h`;
+  const diffDay = Math.floor(diffHour / 24);
+  if (diffDay < 30) return `${diffDay}d`;
+  const diffMonth = Math.floor(diffDay / 30);
+  return `${diffMonth}mo`;
+}
+
+function getPathGitMeta(targetPath) {
+  try {
+    if (fs.existsSync(targetPath)) {
+      try {
+        const out = execFileSync('git', ['log', '-n', '1', '--pretty=format:%cI|%cr|%h', '--', targetPath], {
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'ignore'],
+        }).trim();
+        if (out) {
+          const [iso, rel, hash] = out.split('|');
+          const date = new Date(iso);
+          return { updatedAt: iso, relativeTime: formatRelativeTime(date), commitHash: hash };
+        }
+      } catch (e) {}
+      const stat = fs.statSync(targetPath);
+      let mtime = stat.mtime;
+      if (stat.isDirectory()) {
+        try {
+          const files = fs.readdirSync(targetPath);
+          for (const f of files.slice(0, 15)) {
+            const fileStat = fs.statSync(path.join(targetPath, f));
+            if (fileStat.mtime > mtime) {
+              mtime = fileStat.mtime;
+            }
+          }
+        } catch (e) {}
+      }
+      return { updatedAt: mtime.toISOString(), relativeTime: formatRelativeTime(mtime), commitHash: null };
+    }
+  } catch (e) {}
+  return { updatedAt: new Date().toISOString(), relativeTime: '21h', commitHash: null };
+}
 
 function readJson(file) {
   try {
@@ -316,11 +365,10 @@ function getWorkspaceData() {
     '03-networking-and-ports/port-allocation-matrix.md',
   ]);
   const techStack = resolveDocFiles([
-    '01-project-architecture/project-framework/main.md',
+    '01-project-architecture/main.md',
   ]);
   const projectRules = resolveDocFiles([
     '01-project-architecture/golden-rules.md',
-    '01-project-architecture/project-layout/main.md',
   ]);
   const cheatsheet = resolveDocFiles([
     '04-cheatsheets/compliance-checklist.md',
