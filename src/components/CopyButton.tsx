@@ -40,16 +40,16 @@ export default function CopyButton({
 
   const variantStyles = {
     default: copied
-      ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
-      : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-blue-500/40',
+      ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
+      : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-neutral-500',
     compact: copied
-      ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
-      : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-blue-500/40',
+      ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
+      : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-white hover:bg-[#111111] hover:border-neutral-500',
     'icon-only': copied
-      ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
-      : 'bg-[#111111] border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-blue-500/40',
+      ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
+      : 'bg-[#111111] border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-neutral-500',
     ghost: copied
-      ? 'bg-blue-500/10 text-blue-400 border-transparent'
+      ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
       : 'bg-transparent text-neutral-400 hover:text-white hover:bg-[#111111] border-transparent',
   };
 
@@ -72,7 +72,7 @@ export default function CopyButton({
     >
       <span className="shrink-0 flex items-center justify-center" aria-hidden="true">
         {copied ? (
-          <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         ) : (

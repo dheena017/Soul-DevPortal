@@ -15,7 +15,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
     <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">PACKAGE MANIFEST</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">PACKAGE MANIFEST</span>
           <h2 className="text-lg font-bold text-white">Metadata &amp; Dependency Manifests</h2>
         </div>
         <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
@@ -31,7 +31,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
             <div className="flex flex-col gap-2 text-xs">
               <div className="flex justify-between py-1 border-b border-[#1a1a1a]">
                 <span className="text-neutral-500">Package ID</span>
-                <code className="text-blue-400 font-mono font-bold">{pkg.id}</code>
+                <code className="text-white font-mono font-bold">{pkg.id}</code>
               </div>
               <div className="flex justify-between py-1 border-b border-[#1a1a1a]">
                 <span className="text-neutral-500">Full Name</span>
@@ -39,7 +39,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
               </div>
               <div className="flex justify-between py-1 border-b border-[#1a1a1a]">
                 <span className="text-neutral-500">Version</span>
-                <span className="text-blue-400 font-mono font-bold">v{pkg.version}</span>
+                <span className="text-white font-mono font-bold">v{pkg.version}</span>
               </div>
               <div className="flex justify-between py-1 border-b border-[#1a1a1a]">
                 <span className="text-neutral-500">License</span>
@@ -48,7 +48,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
               {pkg.pythonModule && (
                 <div className="flex justify-between py-1">
                   <span className="text-neutral-500">Python Module</span>
-                  <code className="text-blue-400 font-mono">{pkg.pythonModule}</code>
+                  <code className="text-white font-mono">{pkg.pythonModule}</code>
                 </div>
               )}
             </div>
@@ -83,7 +83,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
               {deps.map(([dep, ver]) => (
                 <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#111111] border border-[#222222] text-xs font-mono">
                   <strong className="text-white">{dep}</strong>
-                  <code className="text-blue-400 text-[11px]">{ver}</code>
+                  <code className="text-white text-[11px]">{ver}</code>
                 </span>
               ))}
             </div>
@@ -98,7 +98,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
               {devDeps.map(([dep, ver]) => (
                 <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#111111] border border-[#222222] text-xs font-mono">
                   <strong className="text-white">{dep}</strong>
-                  <code className="text-blue-400 text-[11px]">{ver}</code>
+                  <code className="text-white text-[11px]">{ver}</code>
                 </span>
               ))}
             </div>
@@ -113,7 +113,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
               {peerDeps.map(([dep, ver]) => (
                 <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#111111] border border-[#222222] text-xs font-mono">
                   <strong className="text-white">{dep}</strong>
-                  <code className="text-blue-400 text-[11px]">{ver}</code>
+                  <code className="text-white text-[11px]">{ver}</code>
                 </span>
               ))}
             </div>

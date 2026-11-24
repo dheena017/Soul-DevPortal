@@ -46,7 +46,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
           {onBack && (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all font-semibold"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold"
               onClick={onBack}
             >
               ← Back to Overview
@@ -55,7 +55,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
           <span className="text-neutral-400 font-medium">Soul Workspace / Monorepo Applications</span>
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-          Workspace <span className="text-blue-400 font-mono">Applications &amp; Ports</span>
+          Workspace <span className="text-white font-mono">Applications &amp; Ports</span>
         </h1>
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">
           Catalog of all 9 applications consuming the shared packages, their assigned development ports, backend servers, databases, and AI engines.
@@ -107,14 +107,14 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredProjects.map((p) => (
-          <div key={p.id} className="p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] shadow-2xl transition-all duration-200 flex flex-col gap-4">
+          <div key={p.id} className="p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] shadow-2xl transition-all duration-200 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-white">{p.title}</h3>
               <CopyButton text={`http://localhost:${p.frontendPort || 5173}`} label="Copy URL" variant="compact" />
             </div>
             <p className="text-xs text-neutral-400 line-clamp-2">{p.description}</p>
             <div className="flex items-center gap-2 pt-2 border-t border-[#1a1a1a] text-xs">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/30">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-white border border-blue-500/30">
                 Port :{p.frontendPort}
               </span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#111111] border border-[#222222] text-neutral-300">

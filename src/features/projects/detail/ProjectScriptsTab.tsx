@@ -20,7 +20,7 @@ export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabP
     <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">AUTOMATION &amp; LIFECYCLE</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">AUTOMATION &amp; LIFECYCLE</span>
           <h2 className="text-lg font-bold text-white">Project Package Scripts</h2>
         </div>
         <div className="relative flex items-center min-w-[220px]">
@@ -61,10 +61,10 @@ export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabP
           {filteredScripts.map(([scriptName, scriptCmd]) => (
             <div
               key={scriptName}
-              className="flex flex-col justify-between p-4 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] transition-all gap-2.5"
+              className="flex flex-col justify-between p-4 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] transition-all gap-2.5"
             >
               <div className="flex items-center justify-between gap-2">
-                <code className="text-xs font-mono font-bold text-blue-400 truncate">npm run {scriptName}</code>
+                <code className="text-xs font-mono font-bold text-white truncate">npm run {scriptName}</code>
                 <CopyButton text={`npm run ${scriptName}`} variant="compact" />
               </div>
               <div className="p-2.5 rounded-lg bg-[#0a0a0a] border border-[#1a1a1a] font-mono text-[11px] text-neutral-400 overflow-x-auto">

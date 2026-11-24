@@ -28,7 +28,7 @@ function InlineText({ text = '' }: InlineTextProps) {
           return (
             <code
               key={index}
-              className="px-1.5 py-0.5 rounded bg-[#111111] border border-[#222222] text-[11px] font-mono text-blue-300"
+              className="px-1.5 py-0.5 rounded bg-[#111111] border border-[#222222] text-[11px] font-mono text-neutral-200"
             >
               {part.slice(1, -1)}
             </code>
@@ -64,7 +64,7 @@ function InlineText({ text = '' }: InlineTextProps) {
               href={link[2]}
               target={link[2].startsWith('http') ? '_blank' : undefined}
               rel={link[2].startsWith('http') ? 'noreferrer' : undefined}
-              className="text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors font-medium"
+              className="text-white hover:text-white underline underline-offset-2 transition-colors font-medium"
             >
               {link[1]}
             </a>
@@ -92,7 +92,7 @@ function CodeBlock({ code, language }: CodeBlockProps) {
       {/* Code Toolbar */}
       <div className="flex items-center justify-between px-3.5 py-2 bg-[#111111] border-b border-[#1a1a1a] text-xs">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#111111] text-blue-400 border border-[#222222]">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#111111] text-white border border-[#222222]">
             {language || 'text'}
           </span>
           <span className="text-[11px] font-mono text-neutral-500">
@@ -104,7 +104,7 @@ function CodeBlock({ code, language }: CodeBlockProps) {
             type="button"
             className={`px-2 py-0.5 rounded text-[10px] font-mono transition-colors ${
               wrap
-                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                ? 'bg-[#111111] text-white border border-[#222222]'
                 : 'text-neutral-500 hover:text-neutral-300 hover:bg-[#111111]'
             }`}
             onClick={() => setWrap(!wrap)}
@@ -164,8 +164,8 @@ function HeadingWithAnchor({ level, text = '' }: HeadingWithAnchorProps) {
       </span>
       <button
         type="button"
-        className={`opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono px-1.5 py-0.5 rounded text-neutral-500 hover:text-blue-400 hover:bg-[#111111] ${
-          copiedAnchor ? '!opacity-100 !text-blue-400' : ''
+        className={`opacity-0 group-hover:opacity-100 transition-opacity text-xs font-mono px-1.5 py-0.5 rounded text-neutral-500 hover:text-white hover:bg-[#111111] ${
+          copiedAnchor ? '!opacity-100 !text-white' : ''
         }`}
         onClick={copyAnchorLink}
         title={copiedAnchor ? 'Anchor link copied!' : 'Copy link to this section'}
@@ -275,7 +275,7 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
                         type="checkbox"
                         checked={task[1].toLowerCase() === 'x'}
                         disabled
-                        className="rounded border-[#222222] bg-[#111111] text-blue-500 focus:ring-0 w-3.5 h-3.5"
+                        className="rounded border-[#222222] bg-[#111111] accent-white focus:ring-0 w-3.5 h-3.5"
                         aria-label={task[1].toLowerCase() === 'x' ? 'Completed task' : 'Pending task'}
                       />
                     )}
@@ -297,7 +297,7 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
           return (
             <blockquote
               key={index}
-              className="my-3 pl-4 border-l-2 border-blue-500/40 bg-[#111111]/50 py-2 pr-3 rounded-r-lg italic text-neutral-400"
+              className="my-3 pl-4 border-l-2 border-neutral-600 bg-[#111111] py-2 pr-3 rounded-r-lg italic text-neutral-400"
             >
               <InlineText text={block.text} />
             </blockquote>

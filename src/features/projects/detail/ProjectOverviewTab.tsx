@@ -45,7 +45,7 @@ export default function ProjectOverviewTab({
               🗄️ {project.dbInfo || 'SQLite'}
             </span>
             {project.aiEngine && project.aiEngine !== 'N/A' && (
-              <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-blue-500/10 border border-blue-500/25 text-blue-400">
+              <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
                 ✨ {project.aiEngine.split('+')[0].trim()}
               </span>
             )}
@@ -69,7 +69,7 @@ export default function ProjectOverviewTab({
             <div className="flex items-center justify-between gap-2 p-2.5 px-3 rounded-xl bg-[#0a0a0a] border border-[#222222] font-mono text-xs">
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <span className="text-neutral-500 select-none font-bold">$</span>
-                <code className="text-blue-300 text-[11px] truncate select-all">{runnerCmd}</code>
+                <code className="text-neutral-200 text-[11px] truncate select-all">{runnerCmd}</code>
               </div>
               <CopyButton text={runnerCmd} variant="compact" label="Copy" />
             </div>
@@ -88,13 +88,13 @@ export default function ProjectOverviewTab({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">RUNTIME PORTS</span>
-            <strong className="text-xs md:text-sm font-bold text-blue-400 font-mono mt-1">
+            <strong className="text-xs md:text-sm font-bold text-white font-mono mt-1">
               Client :{project.frontendPort || 'N/A'} {project.backendPort ? `· Server :${project.backendPort}` : ''}
             </strong>
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">NPM SCRIPTS</span>
-            <strong className="text-xs md:text-sm font-bold text-blue-400 font-mono mt-1">{scriptsCount} commands</strong>
+            <strong className="text-xs md:text-sm font-bold text-white font-mono mt-1">{scriptsCount} commands</strong>
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">DEPENDENCIES</span>
@@ -110,7 +110,7 @@ export default function ProjectOverviewTab({
       {/* ── Architecture & Port Binding ── */}
       <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-4">
         <div className="flex flex-col gap-0.5 pb-2 border-b border-[#1a1a1a]">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">SYSTEM DESIGN</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">SYSTEM DESIGN</span>
           <h2 className="text-lg font-bold text-white">Runtime Architecture &amp; Port Binding</h2>
         </div>
 
@@ -118,35 +118,35 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
               <span className="text-xs font-bold text-white">Client Tier</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Port {project.frontendPort || 'N/A'}
               </span>
             </div>
             <div className="flex flex-col gap-1.5 text-xs text-neutral-400">
               <p><strong className="text-neutral-300">Framework:</strong> {project.framework || 'Vite React'}</p>
-              <p><strong className="text-neutral-300">Dev Command:</strong> <code className="text-[11px] text-blue-300 font-mono">{project.frontendCmd || 'npm run dev'}</code></p>
-              <p><strong className="text-neutral-300">Local URL:</strong> <a href={feUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{feUrl || 'Not configured'}</a></p>
+              <p><strong className="text-neutral-300">Dev Command:</strong> <code className="text-[11px] text-neutral-200 font-mono">{project.frontendCmd || 'npm run dev'}</code></p>
+              <p><strong className="text-neutral-300">Local URL:</strong> <a href={feUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">{feUrl || 'Not configured'}</a></p>
             </div>
           </div>
 
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
               <span className="text-xs font-bold text-white">Server Tier</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Port {project.backendPort || 'N/A'}
               </span>
             </div>
             <div className="flex flex-col gap-1.5 text-xs text-neutral-400">
               <p><strong className="text-neutral-300">Runtime:</strong> {project.backendCmd?.includes('python') ? 'Python (FastAPI / Uvicorn)' : 'Node.js Express / TS'}</p>
-              <p><strong className="text-neutral-300">Command:</strong> <code className="text-[11px] text-blue-300 font-mono">{project.backendCmd || 'Standalone fullstack'}</code></p>
-              <p><strong className="text-neutral-300">Local URL:</strong> <a href={beUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{beUrl || 'Not configured'}</a></p>
+              <p><strong className="text-neutral-300">Command:</strong> <code className="text-[11px] text-neutral-200 font-mono">{project.backendCmd || 'Standalone fullstack'}</code></p>
+              <p><strong className="text-neutral-300">Local URL:</strong> <a href={beUrl || '#'} target="_blank" rel="noopener noreferrer" className="text-white hover:underline">{beUrl || 'Not configured'}</a></p>
             </div>
           </div>
 
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-3">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
               <span className="text-xs font-bold text-white">Persistence</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-[#222222] text-blue-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-[#222222] text-white">
                 Database
               </span>
             </div>
@@ -176,10 +176,10 @@ export default function ProjectOverviewTab({
         <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-4">
           <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
             <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">CAPABILITIES</span>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">CAPABILITIES</span>
               <h2 className="text-lg font-bold text-white">Application Features &amp; Core Workflows</h2>
             </div>
-            <span className="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-blue-500/10 border border-blue-500/25 text-blue-400">
+            <span className="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
               {featuresList.length} features active
             </span>
           </div>
@@ -187,7 +187,7 @@ export default function ProjectOverviewTab({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {featuresList.map((feat, idx) => (
               <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-[#111111] border border-[#222222]">
-                <span className="w-5 h-5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center justify-center text-xs shrink-0 mt-0.5">
+                <span className="w-5 h-5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 flex items-center justify-center text-xs shrink-0 mt-0.5">
                   ✓
                 </span>
                 <div className="flex flex-col gap-0.5">
@@ -203,7 +203,7 @@ export default function ProjectOverviewTab({
       {/* ── Shared Monorepo Packages Integration ── */}
       <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-4">
         <div className="flex flex-col gap-0.5 pb-2 border-b border-[#1a1a1a]">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">ECOSYSTEM</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">ECOSYSTEM</span>
           <h2 className="text-lg font-bold text-white">Shared Monorepo Packages Integration</h2>
         </div>
 
@@ -211,7 +211,7 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
               <span className="text-xs font-mono font-bold text-white">@workspace/logger</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Telemetry
               </span>
             </div>
@@ -224,7 +224,7 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
               <span className="text-xs font-mono font-bold text-white">@workspace/config</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Foundations
               </span>
             </div>
@@ -237,13 +237,13 @@ export default function ProjectOverviewTab({
           <div className="flex flex-col p-4 rounded-xl bg-[#111111] border border-[#222222] gap-2.5">
             <div className="flex items-center justify-between pb-2 border-b border-[#1a1a1a]">
               <span className="text-xs font-mono font-bold text-white">@workspace/runner</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">
                 Orchestration
               </span>
             </div>
             <div className="flex flex-col gap-1 text-xs text-neutral-400">
               <p><strong className="text-neutral-300">Role:</strong> CLI dev runner with automatic port conflict guard</p>
-              <p><strong className="text-neutral-300">Command:</strong> <code className="text-[11px] text-blue-300 font-mono">{runnerCmd}</code></p>
+              <p><strong className="text-neutral-300">Command:</strong> <code className="text-[11px] text-neutral-200 font-mono">{runnerCmd}</code></p>
             </div>
           </div>
         </div>
@@ -253,15 +253,15 @@ export default function ProjectOverviewTab({
       {fileTree.length > 0 && (
         <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-blue-400 shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-neutral-400 shrink-0">
               <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
               </svg>
             </div>
             <div className="flex flex-col gap-0.5">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">REPOSITORY STRUCTURE</span>
-                <span className="px-2 py-0.2 rounded-full text-[10px] font-mono font-semibold bg-blue-500/10 border border-blue-500/30 text-blue-400">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">REPOSITORY STRUCTURE</span>
+                <span className="px-2 py-0.2 rounded-full text-[10px] font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
                   {fileTree.length} indexed items
                 </span>
               </div>
@@ -276,7 +276,7 @@ export default function ProjectOverviewTab({
             <button
               type="button"
               onClick={onNavigateToFiles}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 shadow-sm border border-blue-500 transition-all shrink-0 self-start sm:self-center"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white text-black font-bold hover:bg-neutral-200 shadow-sm border border-blue-500 transition-all shrink-0 self-start sm:self-center"
             >
               <span>Explore File Tree</span>
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -291,15 +291,15 @@ export default function ProjectOverviewTab({
       {project.localServices && Object.keys(project.localServices).length > 0 && (
         <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-4">
           <div className="flex flex-col gap-0.5 pb-2 border-b border-[#1a1a1a]">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">LOCAL ENDPOINTS</span>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">LOCAL ENDPOINTS</span>
             <h2 className="text-lg font-bold text-white">Network Services</h2>
           </div>
           <div className="flex flex-col gap-2">
             {Object.entries(project.localServices).map(([serviceName, url]) => (
-              <div key={serviceName} className="flex items-center justify-between p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 transition-all text-xs">
+              <div key={serviceName} className="flex items-center justify-between p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all text-xs">
                 <span className="font-semibold text-white">{serviceName}</span>
                 <div className="flex items-center gap-2">
-                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline font-mono">
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-white hover:underline font-mono">
                     {url}
                   </a>
                   <CopyButton text={url} variant="compact" />

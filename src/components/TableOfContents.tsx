@@ -149,7 +149,7 @@ export default function TableOfContents({
       {/* Card Header using Website Theme Palette */}
       <div className="flex items-center justify-between pb-2.5 border-b border-[#1a1a1a]">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-md bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-sm">
+          <div className="w-5 h-5 rounded-md bg-[#111111] border border-[#222222] flex items-center justify-center text-white shadow-sm">
             <svg
               width="12"
               height="12"
@@ -219,7 +219,7 @@ export default function TableOfContents({
                 <span
                   className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
                     isActive
-                      ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold'
+                      ? 'bg-blue-500/20 text-neutral-200 border border-blue-500/40 font-bold'
                       : 'bg-[#111111] border border-[#222222] text-neutral-400'
                   }`}
                 >

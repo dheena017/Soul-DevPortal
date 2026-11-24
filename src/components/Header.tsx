@@ -50,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-3 min-w-0">
         <button
           type="button"
-          className="p-2 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all shrink-0 shadow-sm"
+          className="p-2 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all shrink-0 shadow-sm"
           onClick={() => {
             consoleLogger.action('UI', menuOpen ? 'Closing sidebar navigation' : 'Opening sidebar navigation');
             onToggleSidebar();
@@ -75,14 +75,14 @@ export const Header: React.FC<HeaderProps> = ({
         <nav className="flex items-center gap-2 text-xs min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] font-mono text-neutral-300 hover:text-white transition-all shrink-0 shadow-sm"
+            className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] font-mono text-neutral-300 hover:text-white transition-all shrink-0 shadow-sm"
             onClick={() => onNavigate('overview')}
             title="Go to Overview Dashboard"
           >
             <SoulLogoIcon size={18} />
             <span className="font-semibold text-white">soul</span>
             <span className="text-neutral-600 font-bold">/</span>
-            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 font-bold">dev-portal</strong>
+            <strong className="text-white font-bold">dev-portal</strong>
           </button>
 
           {breadcrumbs.slice(1).map((crumb, idx) => (
@@ -91,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({
               {crumb.id ? (
                 <button
                   type="button"
-                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] text-neutral-300 hover:text-white transition-all truncate font-medium max-w-[200px]"
+                  className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] text-neutral-300 hover:text-white transition-all truncate font-medium max-w-[200px]"
                   onClick={() => onNavigate(crumb.id!)}
                   title={`Go to ${crumb.label}`}
                 >
@@ -209,7 +209,7 @@ export const Header: React.FC<HeaderProps> = ({
           href="https://github.com/dheena017/Soul-DevPortal"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all"
           title="Open GitHub Repository: dheena017/Soul-DevPortal"
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -221,7 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           type="button"
-          className="w-8 h-8 rounded-full bg-[#111111] border border-[#222222] flex items-center justify-center text-xs font-mono font-bold text-neutral-400 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all"
+          className="w-8 h-8 rounded-full bg-[#111111] border border-[#222222] flex items-center justify-center text-xs font-mono font-bold text-neutral-400 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all"
           onClick={() => {
             consoleLogger.action('SHORTCUT', 'Clicked help button: opening keyboard shortcuts modal');
             onOpenShortcuts();

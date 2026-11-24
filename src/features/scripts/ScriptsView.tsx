@@ -91,7 +91,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
               onClick={() => onNavigate('overview')}
               title="Return to Overview"
             >
@@ -106,8 +106,8 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
           </div>
 
           <div className="flex items-center gap-2.5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/40 text-xs font-semibold text-blue-400 select-none shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-blue-400" aria-hidden="true" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-xs font-semibold text-white select-none shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
               <span>19 Canonical Commands Active</span>
             </div>
             <CopyButton
@@ -120,7 +120,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
         {/* Title & Subtitle */}
         <div className="flex items-start sm:items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-[#222222] flex items-center justify-center text-blue-400 shrink-0 shadow-lg shadow-blue-500/5">
+          <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-[#222222] flex items-center justify-center text-neutral-400 shrink-0 shadow-lg shadow-blue-500/5">
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="4 17 10 11 4 5" />
               <line x1="12" y1="19" x2="20" y2="19" />
@@ -131,7 +131,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
               <h1 className="text-2xl font-extrabold tracking-tight text-white uppercase">
                 Workspace Commands &amp; Automation
               </h1>
-              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-blue-500/15 border border-[#222222] text-blue-400">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-blue-500/15 border border-[#222222] text-white">
                 CLI Supervisor
               </span>
             </div>
@@ -143,20 +143,20 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
         {/* ── KPI Metric Cards Ribbon ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 transition-all">
-            <span className="text-xl font-extrabold text-blue-400 font-mono">19</span>
+          <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
+            <span className="text-xl font-extrabold text-white font-mono">19</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Canonical Commands</span>
             <span className="text-[11px] text-neutral-500">0 redundant aliases</span>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 transition-all">
-            <span className="text-xl font-extrabold text-blue-400 font-mono">8</span>
+          <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 transition-all">
+            <span className="text-xl font-extrabold text-white font-mono">8</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Target Applications</span>
             <span className="text-[11px] text-neutral-500">Dual frontend &amp; backend</span>
           </div>
 
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-[#222222] transition-all">
-            <span className="text-xl font-extrabold text-blue-400 font-mono">4</span>
+            <span className="text-xl font-extrabold text-white font-mono">4</span>
             <span className="text-xs font-semibold text-neutral-200 mt-1">Core Orchestrators</span>
             <span className="text-[11px] text-neutral-500">All / Client / Server / Project</span>
           </div>
@@ -249,7 +249,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all ${
                   isActive
-                    ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                    ? 'bg-blue-500/15 text-white font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
                     : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
                 }`}
                 onClick={() => setFilterCategory(cat.id)}
@@ -290,18 +290,18 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
             return (
               <div
                 key={script.id}
-                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] hover:shadow-2xl transition-all duration-200 gap-3.5"
+                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] hover:shadow-2xl transition-all duration-200 gap-3.5"
               >
                 {/* Card Top: Code Pill, Category Badge, Copy Button */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-wrap min-w-0">
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#111111] border border-[#222222] min-w-0">
-                      <span className="text-blue-400 font-mono font-bold text-xs select-none">$</span>
+                      <span className="text-white font-mono font-bold text-xs select-none">$</span>
                       <code className="text-xs font-mono font-bold text-white truncate max-w-[190px]">
                         {formattedRunCmd}
                       </code>
                     </div>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider uppercase bg-blue-500/10 border border-blue-500/25 text-blue-400 shrink-0">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider uppercase bg-blue-500/10 border border-blue-500/25 text-neutral-400 shrink-0">
                       {script.badge}
                     </span>
                   </div>
@@ -316,23 +316,23 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 {/* Ports & Auto-Kill Status Tags */}
                 <div className="flex items-center gap-2 flex-wrap">
                   {script.ports ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#111111] border border-[#222222] text-[11px] font-mono text-blue-400">
-                      <svg className="w-3.5 h-3.5 text-blue-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#111111] border border-[#222222] text-[11px] font-mono text-white">
+                      <svg className="w-3.5 h-3.5 text-neutral-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <circle cx="12" cy="12" r="2" />
                         <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
                       </svg>
                       <span>{script.ports}</span>
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#111111] border border-[#222222] text-[11px] font-mono text-blue-400">
-                      <svg className="w-3.5 h-3.5 text-blue-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#111111] border border-[#222222] text-[11px] font-mono text-white">
+                      <svg className="w-3.5 h-3.5 text-neutral-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                       </svg>
                       <span>Dynamic Allocation</span>
                     </span>
                   )}
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#111111] border border-blue-500/30 text-[11px] font-mono text-blue-400">
-                    <svg className="w-3.5 h-3.5 text-blue-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#111111] border border-blue-500/30 text-[11px] font-mono text-white">
+                    <svg className="w-3.5 h-3.5 text-neutral-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
                     <span>Auto-Kill Enabled</span>
@@ -343,13 +343,13 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 <div className="pt-2.5 border-t border-[#1a1a1a] flex items-center justify-between">
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-neutral-400 hover:text-blue-400 transition-colors"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-neutral-400 hover:text-white transition-colors"
                     onClick={() => toggleExpand(script.id)}
                     aria-expanded={isExpanded}
                   >
                     <span>{isExpanded ? 'Hide implementation details' : 'Inspect execution details'}</span>
                     <svg
-                      className={`w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180 text-blue-400' : 'text-neutral-500'}`}
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180 text-white' : 'text-neutral-500'}`}
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -374,7 +374,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                         Raw Execution String:
                       </span>
                       <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#111111] border border-[#222222]">
-                        <code className="text-blue-300 text-[11px] break-all">
+                        <code className="text-neutral-200 text-[11px] break-all">
                           {rootScripts[script.id] || script.command}
                         </code>
                         <CopyButton text={rootScripts[script.id] || script.command} variant="compact" label="Copy" />
@@ -382,7 +382,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                     </div>
                     <div className="flex items-center justify-between text-[11px] text-neutral-400 pt-0.5">
                       <span>Target: <strong className="text-neutral-200 uppercase">{script.category}</strong></span>
-                      <span className="text-blue-400 font-mono text-[10.5px]">Automatic socket detachment active</span>
+                      <span className="text-white font-mono text-[10.5px]">Automatic socket detachment active</span>
                     </div>
                   </div>
                 )}
@@ -408,15 +408,15 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
               {filteredScripts.map((script) => (
                 <tr key={script.id} className="border-b border-[#1a1a1a] hover:bg-[#111111] transition-colors">
                   <td className="py-3 px-4">
-                    <code className="font-mono text-blue-400 font-bold">{formatCommand(script)}</code>
+                    <code className="font-mono text-white font-bold">{formatCommand(script)}</code>
                   </td>
                   <td className="py-3 px-4">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-500/15 border border-blue-500/30 text-blue-400">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#111111] border border-[#222222] text-neutral-300">
                       {script.category}
                     </span>
                   </td>
                   <td className="py-3 px-4 font-mono">
-                    <span className={script.ports ? 'text-blue-400' : 'text-neutral-600'}>
+                    <span className={script.ports ? 'text-white' : 'text-neutral-600'}>
                       {script.ports || '—'}
                     </span>
                   </td>

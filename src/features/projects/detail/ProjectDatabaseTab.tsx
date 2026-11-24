@@ -20,7 +20,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
     <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">DATA PERSISTENCE TIER</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">DATA PERSISTENCE TIER</span>
           <h2 className="text-lg font-bold text-white">Database Architecture &amp; Entities</h2>
         </div>
         {tables.length > 0 && (
@@ -56,7 +56,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Storage Engine</span>
-            <strong className="text-xs font-bold text-blue-400 font-mono mt-1">{project.dbInfo || 'SQLite'}</strong>
+            <strong className="text-xs font-bold text-white font-mono mt-1">{project.dbInfo || 'SQLite'}</strong>
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Dialect</span>
@@ -64,7 +64,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
           </div>
           <div className="flex flex-col p-3 rounded-xl bg-[#111111] border border-[#222222]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Schema Mode</span>
-            <strong className="text-xs font-bold text-blue-400 font-mono mt-1">
+            <strong className="text-xs font-bold text-white font-mono mt-1">
               {tables.length > 0 ? `${tables.length} Tables Registered` : 'Single Database File'}
             </strong>
           </div>
@@ -83,7 +83,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
               {filteredTables.map((tName) => (
                 <div
                   key={tName}
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] transition-all"
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] transition-all"
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="text-neutral-500">📋</span>

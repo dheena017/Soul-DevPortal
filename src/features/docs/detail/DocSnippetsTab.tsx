@@ -11,7 +11,7 @@ export default function DocSnippetsTab({ codeBlocks }: DocSnippetsTabProps) {
     <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">CODE EXAMPLES</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">CODE EXAMPLES</span>
           <h2 className="text-lg font-bold text-white">Extracted Implementation Snippets</h2>
         </div>
         <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#111111] border border-[#222222] text-neutral-300">

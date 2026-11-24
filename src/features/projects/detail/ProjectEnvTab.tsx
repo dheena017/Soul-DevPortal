@@ -77,7 +77,7 @@ export default function ProjectEnvTab({
       {/* Top Header Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#1a1a1a]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">CONFIGURATION REGISTRY</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">CONFIGURATION REGISTRY</span>
           <h2 className="text-lg font-bold text-white">Environment Variables &amp; Secret Keys</h2>
         </div>
         <div className="flex items-center gap-2.5 flex-wrap">
@@ -109,7 +109,7 @@ export default function ProjectEnvTab({
           )}
           <button
             type="button"
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 transition-all"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 transition-all"
             onClick={onToggleSecretPlaceholders}
           >
             {showSecretPlaceholders ? 'Mask Secrets' : 'Show Placeholders'}
@@ -124,7 +124,7 @@ export default function ProjectEnvTab({
           <div className="flex flex-wrap items-center justify-between gap-2.5 pb-2">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-white">Declared Configuration Keys</span>
-              <span className="px-2 py-0.5 rounded-full text-[10.5px] font-mono font-semibold bg-blue-500/10 border border-blue-500/30 text-blue-400">
+              <span className="px-2 py-0.5 rounded-full text-[10.5px] font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
                 {filteredItems.length} of {envKeys.length} variables
               </span>
             </div>
@@ -135,7 +135,7 @@ export default function ProjectEnvTab({
                 className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
                   filterType === 'all'
                     ? 'bg-blue-600 text-white shadow-sm border border-blue-500'
-                    : 'bg-[#111111] border border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-blue-500/40'
+                    : 'bg-[#111111] border border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-neutral-500'
                 }`}
                 onClick={() => setFilterType('all')}
               >
@@ -146,7 +146,7 @@ export default function ProjectEnvTab({
                 className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
                   filterType === 'secrets'
                     ? 'bg-blue-600 text-white shadow-sm border border-blue-500'
-                    : 'bg-[#111111] border border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-blue-500/40'
+                    : 'bg-[#111111] border border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-neutral-500'
                 }`}
                 onClick={() => setFilterType('secrets')}
               >
@@ -157,7 +157,7 @@ export default function ProjectEnvTab({
                 className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
                   filterType === 'active'
                     ? 'bg-blue-600 text-white shadow-sm border border-blue-500'
-                    : 'bg-[#111111] border border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-blue-500/40'
+                    : 'bg-[#111111] border border-[#222222] text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-neutral-500'
                 }`}
                 onClick={() => setFilterType('active')}
               >
@@ -172,7 +172,7 @@ export default function ProjectEnvTab({
               return (
                 <div
                   key={item.key}
-                  className="flex items-center justify-between p-2.5 px-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] transition-all gap-2"
+                  className="flex items-center justify-between p-2.5 px-3 rounded-xl bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] transition-all gap-2"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <span className="text-xs shrink-0">{item.isSecret ? '🔒' : '⚙️'}</span>
@@ -188,7 +188,7 @@ export default function ProjectEnvTab({
                   <div className="flex items-center gap-2 shrink-0">
                     <code
                       className={`text-xs font-mono truncate max-w-[140px] sm:max-w-[170px] ${
-                        item.isSet ? 'text-blue-400' : 'text-neutral-500 italic'
+                        item.isSet ? 'text-white' : 'text-neutral-500 italic'
                       }`}
                       title={item.displayVal}
                     >
@@ -207,7 +207,7 @@ export default function ProjectEnvTab({
               <p className="text-xs text-neutral-300 font-semibold">No environment variables match &ldquo;{filter}&rdquo;</p>
               <button
                 type="button"
-                className="px-3 py-1 text-xs rounded-md bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40"
+                className="px-3 py-1 text-xs rounded-md bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500"
                 onClick={() => {
                   setFilter('');
                   setFilterType('all');
@@ -230,7 +230,7 @@ export default function ProjectEnvTab({
               <span>📦</span>
               <span>Production Dependencies</span>
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-blue-500/10 border border-blue-500/30 text-blue-400">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#111111] border border-[#222222] text-neutral-300">
               {depsEntries.length}
             </span>
           </div>
@@ -238,7 +238,7 @@ export default function ProjectEnvTab({
             {depsEntries.length > 0 ? (
               depsEntries.map(([dep, ver]) => (
                 <div key={dep} className="flex items-center justify-between text-xs py-1 border-b border-[#1a1a1a] last:border-0">
-                  <code className="text-blue-300 font-mono truncate">{dep}</code>
+                  <code className="text-neutral-200 font-mono truncate">{dep}</code>
                   <span className="text-neutral-500 font-mono text-[11px] shrink-0">{ver}</span>
                 </div>
               ))
@@ -254,7 +254,7 @@ export default function ProjectEnvTab({
               <span>🛠️</span>
               <span>Dev Dependencies</span>
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-blue-500/10 border border-[#222222] text-blue-400">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-blue-500/10 border border-[#222222] text-white">
               {devDepsEntries.length}
             </span>
           </div>

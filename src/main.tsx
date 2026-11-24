@@ -452,7 +452,7 @@ function App() {
             >
               <div className="flex items-center justify-between pb-3 border-b border-[#1a1a1a]">
                 <div className="flex items-center gap-2.5 text-sm font-bold text-white">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
                     <rect x="2" y="4" width="20" height="16" rx="2" />
                     <line x1="6" y1="8" x2="6.01" y2="8" />
                     <line x1="10" y1="8" x2="10.01" y2="8" />
@@ -503,15 +503,15 @@ function App() {
                   <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">Monorepo Ports &amp; CLI</div>
                   <div className="flex items-center justify-between py-1.5 border-b border-[#1a1a1a] text-neutral-300">
                     <span>Monorepo Runner</span>
-                    <code className="text-blue-400 font-mono text-[11px]">npx @workspace/runner</code>
+                    <code className="text-white font-mono text-[11px]">npx @workspace/runner</code>
                   </div>
                   <div className="flex items-center justify-between py-1.5 border-b border-[#1a1a1a] text-neutral-300">
                     <span>Client Dev Servers</span>
-                    <code className="text-blue-400 font-mono text-[11px]">Ports 5173 - 5181</code>
+                    <code className="text-white font-mono text-[11px]">Ports 5173 - 5181</code>
                   </div>
                   <div className="flex items-center justify-between py-1.5 text-neutral-300">
                     <span>FastAPI Server APIs</span>
-                    <code className="text-blue-400 font-mono text-[11px]">Ports 8000 - 8008</code>
+                    <code className="text-white font-mono text-[11px]">Ports 8000 - 8008</code>
                   </div>
                 </div>
               </div>

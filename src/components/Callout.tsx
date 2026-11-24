@@ -12,8 +12,8 @@ interface CalloutConfig {
 const CALLOUT_CONFIGS: Record<CalloutType, CalloutConfig> = {
   note: {
     title: 'Note',
-    badgeClass: 'text-blue-400 bg-blue-500/10 border-blue-500/30',
-    containerClass: 'bg-sky-500/5 border-blue-500/30 text-sky-200',
+    badgeClass: 'text-neutral-300 bg-[#111111] border border-[#222222]',
+    containerClass: 'bg-[#111111] border border-[#222222] text-neutral-200',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10" />
@@ -24,8 +24,8 @@ const CALLOUT_CONFIGS: Record<CalloutType, CalloutConfig> = {
   },
   tip: {
     title: 'Tip',
-    badgeClass: 'text-blue-400 bg-blue-500/10 border-blue-500/30',
-    containerClass: 'bg-blue-500/5 border-blue-500/30 text-blue-200',
+    badgeClass: 'text-neutral-300 bg-[#111111] border border-[#222222]',
+    containerClass: 'bg-[#111111] border border-[#222222] text-neutral-200',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3.5z" />
@@ -34,8 +34,8 @@ const CALLOUT_CONFIGS: Record<CalloutType, CalloutConfig> = {
   },
   important: {
     title: 'Important',
-    badgeClass: 'text-blue-400 bg-blue-500/10 border-[#222222]',
-    containerClass: 'bg-blue-500/5 border-[#222222] text-neutral-200',
+    badgeClass: 'text-neutral-300 bg-[#111111] border border-[#222222]',
+    containerClass: 'bg-[#111111] border border-[#222222] text-neutral-200',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10" />

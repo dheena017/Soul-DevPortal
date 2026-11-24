@@ -19,7 +19,7 @@
   --border: #222222;
   --border-subtle: #1a1a1a;
   --border-muted: #1a1a1a;
-  --border-active: #3b82f6;
+  --border-active: #ffffff;
 
   /* ── Typography Colors ── */
   --text-primary: #f5f5f5;
@@ -27,13 +27,13 @@
   --text-muted: #737373;
 
   /* ── Accent & Pillar Colors ── */
-  --accent-sky: #3b82f6;
-  --accent-blue: #3b82f6;
-  --accent-emerald: #3b82f6;
-  --accent-amber: #3b82f6;
-  --accent-purple: #3b82f6;
+  --accent-sky: #ffffff;
+  --accent-blue: #ffffff;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
   --accent-rose: #ef4444;
-  --accent-indigo: #3b82f6;
+  --accent-indigo: #ffffff;
 
   /* ── Radii ── */
   --radius-sm: 6px;
@@ -69,12 +69,12 @@ body {
 
 /* ── Selection & Focus ── */
 ::selection {
-  background-color: rgba(56, 189, 248, 0.25);
+  background-color: rgba(255, 255, 255, 0.2);
   color: #ffffff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent-sky);
+  outline: 2px solid #555555;
   outline-offset: 2px;
 }
 
@@ -94,7 +94,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+  background: #555555;
 }
 
 /* ── Custom Scrollbar Utility ── */
@@ -112,5 +112,5 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+  background: #555555;
 }

@@ -84,7 +84,7 @@ export default function GuideDetail({
             aria-selected={selectedGuide === 'design'}
             className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               selectedGuide === 'design'
-                ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                ? 'bg-blue-500/15 text-white font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
                 : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
             }`}
             onClick={() => handleSelect('design')}
@@ -98,7 +98,7 @@ export default function GuideDetail({
               aria-selected={selectedGuide === 'ports'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'ports'
-                  ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                  ? 'bg-blue-500/15 text-white font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
                   : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('ports')}
@@ -113,7 +113,7 @@ export default function GuideDetail({
               aria-selected={selectedGuide === 'techstack'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'techstack'
-                  ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                  ? 'bg-blue-500/15 text-white font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
                   : 'text-neutral-400 hover:text-white hover:bg-[#111111] hover:border-[#222222] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('techstack')}

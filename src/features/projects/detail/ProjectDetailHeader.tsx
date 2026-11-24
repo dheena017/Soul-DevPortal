@@ -43,7 +43,7 @@ export default function ProjectDetailHeader({
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
               onClick={onBack}
               title="Back to all projects"
             >
@@ -56,7 +56,7 @@ export default function ProjectDetailHeader({
           ) : (
             <a
               href="#projects"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40 hover:bg-[#111111] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111111] border border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-[#111111] transition-all font-semibold shadow-sm"
               title="Back to all projects"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -70,7 +70,7 @@ export default function ProjectDetailHeader({
           <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
           <a
             href="#projects"
-            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] hover:border-blue-500/40 hover:bg-[#111111] hover:text-white transition-all text-neutral-300 font-medium"
+            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#111111] border border-[#222222] hover:border-neutral-500 hover:bg-[#111111] hover:text-white transition-all text-neutral-300 font-medium"
             onClick={(e) => {
               e.preventDefault();
               onBack?.();
@@ -88,7 +88,7 @@ export default function ProjectDetailHeader({
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
               portTesting
                 ? 'bg-[#111111] border-[#222222] text-neutral-300 animate-pulse'
-                : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-white hover:border-blue-500/40'
+                : 'bg-[#111111] border-[#222222] text-neutral-300 hover:text-white hover:border-neutral-500'
             }`}
             onClick={onTestPorts}
             disabled={portTesting}
@@ -105,7 +105,7 @@ export default function ProjectDetailHeader({
               href={feUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-200 hover:text-white hover:border-blue-500/40 transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-200 hover:text-white hover:border-neutral-500 transition-all shadow-sm"
               title="Open Client in Browser"
             >
               <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -121,7 +121,7 @@ export default function ProjectDetailHeader({
               href={beUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-200 hover:text-white hover:border-blue-500/40 transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#111111] border border-[#222222] text-neutral-200 hover:text-white hover:border-neutral-500 transition-all shadow-sm"
               title="Open Server API"
             >
               <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -185,14 +185,14 @@ export default function ProjectDetailHeader({
 
       {/* ── Port Prober Status Banner (if tested) ── */}
       {portStatus && (
-        <div className="flex flex-wrap items-center gap-4 p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs text-blue-300 font-mono">
+        <div className="flex flex-wrap items-center gap-4 p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs text-neutral-200 font-mono">
           <div className="flex items-center gap-2">
             <span className="text-neutral-400">Client :{project.frontendPort}</span>
-            <span className="font-bold text-blue-400">● {portStatus.fe}</span>
+            <span className="font-bold text-white">● {portStatus.fe}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-neutral-400">Server :{project.backendPort}</span>
-            <span className="font-bold text-blue-400">● {portStatus.be}</span>
+            <span className="font-bold text-white">● {portStatus.be}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-neutral-400">Latency:</span>
