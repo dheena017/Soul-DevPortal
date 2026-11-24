@@ -48,169 +48,169 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-sky-500/40 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-xl transition-all duration-200 gap-4 h-full">
       {/* Card Header: Brand, Meta, Ports */}
-      <div
-        className="flex flex-col gap-3.5"
-        onClick={handleCardClick}
-        style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
-      >
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div
-              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden shadow-inner"
-              style={{
-                borderColor: `${brand.themeColor}40`,
-                background: `${brand.themeColor}15`,
-              }}
-            >
-              {logoSrc ? (
-                <img
-                  src={logoSrc}
-                  alt={`${formattedTitle} logo`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLElement).style.display = 'none';
-                    const fallback = e.currentTarget.parentElement?.querySelector('.project-card-logo-fallback') as HTMLElement;
-                    if (fallback) fallback.style.display = 'grid';
-                  }}
-                />
-              ) : null}
-              <span
-                className="project-card-logo-fallback text-base"
-                style={{ display: logoSrc ? 'none' : 'grid' }}
-              >
-                {brand.icon || '⚡'}
-              </span>
-            </div>
-
-            <div className="flex flex-col min-w-0 gap-0.5">
-              <code className="text-xs font-mono font-bold text-neutral-200 truncate">{project.id}</code>
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-neutral-500" title="Git Branch">
-                <svg className="w-2.5 h-2.5 text-neutral-400" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                  <path d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.493 2.493 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25Z" />
-                </svg>
-                main
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-xs">
-            {project.frontendPort && (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-sky-500/10 border border-sky-500/25 text-sky-400 text-[11px] font-bold" title={`Client Port :${project.frontendPort}`}>
-                <span className="w-1.5 h-1.5 rounded-full bg-sky-400" aria-hidden="true" />
-                <span>:{project.frontendPort}</span>
-              </span>
-            )}
-            {project.backendPort && (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 text-[11px] font-bold" title={`Server Port :${project.backendPort}`}>
-                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" aria-hidden="true" />
-                <span>:{project.backendPort}</span>
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between gap-2">
-          <h3 className="text-base font-bold text-white group-hover:text-sky-400 transition-colors truncate">
-            {formattedTitle}
-          </h3>
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider bg-neutral-800/80 text-neutral-400 border border-neutral-700/60 shrink-0">
-            Public
-          </span>
-        </div>
-
-        {/* Description */}
-        <p
-          className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]"
-          title={description}
+        <div
+          className="flex flex-col gap-3.5"
+          onClick={handleCardClick}
+          style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
         >
-          {description}
-        </p>
-      </div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden shadow-inner"
+                style={{
+                  borderColor: `${brand.themeColor}40`,
+                  background: `${brand.themeColor}15`,
+                }}
+              >
+                {logoSrc ? (
+                  <img
+                    src={logoSrc}
+                    alt={`${formattedTitle} logo`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLElement).style.display = 'none';
+                      const fallback = e.currentTarget.parentElement?.querySelector('.project-card-logo-fallback') as HTMLElement;
+                      if (fallback) fallback.style.display = 'grid';
+                    }}
+                  />
+                ) : null}
+                <span
+                  className="project-card-logo-fallback text-base"
+                  style={{ display: logoSrc ? 'none' : 'grid' }}
+                >
+                  {brand.icon || '⚡'}
+                </span>
+              </div>
 
-      {/* Card Specs Matrix */}
-      <div
-        className="flex flex-col gap-2 p-2.5 rounded-xl bg-[#0d0d0d] border border-[#202020] text-xs"
-        onClick={handleCardClick}
-        style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
-      >
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-neutral-500 flex items-center gap-1.5 shrink-0">
-            <span>⚡</span>
-            <span>Stack</span>
-          </span>
-          <span className="text-neutral-300 font-mono text-[11px] truncate">
-            {project.framework ? project.framework.split('+').slice(0, 2).join(' + ') : 'React 19 + Vite 8'}
-          </span>
-        </div>
+              <div className="flex flex-col min-w-0 gap-0.5">
+                <code className="text-xs font-mono font-bold text-neutral-200 truncate">{project.id}</code>
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-neutral-500" title="Git Branch">
+                  <svg className="w-2.5 h-2.5 text-neutral-400" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.493 2.493 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25Z" />
+                  </svg>
+                  main
+                </span>
+              </div>
+            </div>
 
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-neutral-500 flex items-center gap-1.5 shrink-0">
-            <span>🗄️</span>
-            <span>Database</span>
-          </span>
-          <span className="text-neutral-300 font-mono text-[11px] truncate">
-            {project.dbInfo || 'SQLite (WAL Mode)'}
-          </span>
-        </div>
+            <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-xs">
+              {project.frontendPort && (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/25 text-blue-400 text-[11px] font-bold" title={`Client Port :${project.frontendPort}`}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400" aria-hidden="true" />
+                  <span>:{project.frontendPort}</span>
+                </span>
+              )}
+              {project.backendPort && (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 text-[11px] font-bold" title={`Server Port :${project.backendPort}`}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" aria-hidden="true" />
+                  <span>:{project.backendPort}</span>
+                </span>
+              )}
+            </div>
+          </div>
 
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-neutral-500 flex items-center gap-1.5 shrink-0">
-            <span>{project.aiEngine && project.aiEngine !== 'N/A' ? '✨' : '🚀'}</span>
-            <span>{project.aiEngine && project.aiEngine !== 'N/A' ? 'AI Engine' : 'Capability'}</span>
-          </span>
-          <span className="text-sky-400 font-mono text-[11px] font-medium truncate">
-            {project.aiEngine && project.aiEngine !== 'N/A'
-              ? project.aiEngine.split('+')[0].trim()
-              : brand.primaryCapability}
-          </span>
-        </div>
-      </div>
-
-      {/* GitHub Language Dots Tags Row */}
-      <div className="flex flex-wrap items-center gap-2">
-        {tags.slice(0, 4).map((tag) => {
-          const dotColor = getTagColor(tag);
-          return (
-            <span
-              key={tag}
-              className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#161616] border border-[#242424] text-[11px] font-mono text-neutral-400"
-            >
-              <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: dotColor }} aria-hidden="true" />
-              <span>{tag}</span>
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+              {formattedTitle}
+            </h3>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider bg-[#181824] text-neutral-400 border border-[#282838] shrink-0">
+              Public
             </span>
-          );
-        })}
-      </div>
+          </div>
 
-      {/* Card Footer: Action Buttons (Launch & Details) */}
-      <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#1e1e1e]">
-        {project.frontendPort && (
-          <a
-            href={`http://localhost:${project.frontendPort}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181818] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-neutral-500 transition-all"
-            title={`Launch on http://localhost:${project.frontendPort}`}
-            onClick={(e) => e.stopPropagation()}
+          {/* Description */}
+          <p
+            className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]"
+            title={description}
           >
-            <span>Launch</span>
-            <span className="text-neutral-500">↗</span>
-          </a>
-        )}
-        {onSelectProject && (
-          <button
-            type="button"
-            className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white hover:bg-sky-500 transition-all shadow-md shadow-sky-600/20"
-            onClick={handleCardClick}
-            title={`Open deep detail view for ${formattedTitle}`}
-          >
-            <span>Details</span>
-            <span>→</span>
-          </button>
-        )}
-      </div>
-    </article>
+            {description}
+          </p>
+        </div>
+
+        {/* Card Specs Matrix */}
+        <div
+          className="flex flex-col gap-2 p-2.5 rounded-xl bg-[#0e0e14] border border-[#222230] text-xs"
+          onClick={handleCardClick}
+          style={{ cursor: onSelectProject ? 'pointer' : 'default' }}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-neutral-500 flex items-center gap-1.5 shrink-0">
+              <span>⚡</span>
+              <span>Stack</span>
+            </span>
+            <span className="text-neutral-300 font-mono text-[11px] truncate">
+              {project.framework ? project.framework.split('+').slice(0, 2).join(' + ') : 'React 19 + Vite 8'}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-neutral-500 flex items-center gap-1.5 shrink-0">
+              <span>🗄️</span>
+              <span>Database</span>
+            </span>
+            <span className="text-neutral-300 font-mono text-[11px] truncate">
+              {project.dbInfo || 'SQLite (WAL Mode)'}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-neutral-500 flex items-center gap-1.5 shrink-0">
+              <span>{project.aiEngine && project.aiEngine !== 'N/A' ? '✨' : '🚀'}</span>
+              <span>{project.aiEngine && project.aiEngine !== 'N/A' ? 'AI Engine' : 'Capability'}</span>
+            </span>
+            <span className="text-blue-400 font-mono text-[11px] font-medium truncate">
+              {project.aiEngine && project.aiEngine !== 'N/A'
+                ? project.aiEngine.split('+')[0].trim()
+                : brand.primaryCapability}
+            </span>
+          </div>
+        </div>
+
+        {/* GitHub Language Dots Tags Row */}
+        <div className="flex flex-wrap items-center gap-2">
+          {tags.slice(0, 4).map((tag) => {
+            const dotColor = getTagColor(tag);
+            return (
+              <span
+                key={tag}
+                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#161622] border border-[#282838] text-[11px] font-mono text-neutral-400"
+              >
+                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: dotColor }} aria-hidden="true" />
+                <span>{tag}</span>
+              </span>
+            );
+          })}
+        </div>
+
+        {/* Card Footer: Action Buttons (Launch & Details) */}
+        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#222230]">
+          {project.frontendPort && (
+            <a
+              href={`http://localhost:${project.frontendPort}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#161622] border border-[#282838] text-neutral-300 hover:text-white hover:border-[#383848] transition-all"
+              title={`Launch on http://localhost:${project.frontendPort}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span>Launch</span>
+              <span className="text-neutral-500">↗</span>
+            </a>
+          )}
+          {onSelectProject && (
+            <button
+              type="button"
+              className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md shadow-blue-600/20"
+              onClick={handleCardClick}
+              title={`Open deep detail view for ${formattedTitle}`}
+            >
+              <span>Details</span>
+              <span>→</span>
+            </button>
+          )}
+        </div>
+      </article>
   );
 }

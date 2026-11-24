@@ -45,12 +45,12 @@ export const Header: React.FC<HeaderProps> = ({
     ['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
 
   return (
-    <header className="w-full h-14 bg-[#111111]/90 backdrop-blur-md border-b border-[#222222] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
+    <header className="w-full h-14 bg-[#111116]/95 backdrop-blur-md border-b border-[#282838] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
       {/* ── Left: Sidebar Toggle & Breadcrumbs ── */}
       <div className="flex items-center gap-3 min-w-0">
         <button
           type="button"
-          className="p-2 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1e1e1e] transition-all shrink-0 shadow-sm"
+          className="p-2 rounded-full bg-[#14141c] border border-[#282838] text-neutral-300 hover:text-white hover:border-[#38384a] hover:bg-[#181824] transition-all shrink-0 shadow-sm"
           onClick={() => {
             consoleLogger.action('UI', menuOpen ? 'Closing sidebar navigation' : 'Opening sidebar navigation');
             onToggleSidebar();

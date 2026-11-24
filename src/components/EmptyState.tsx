@@ -14,8 +14,8 @@ export default function EmptyState({
   onAction,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111111] border border-[#222222] text-center gap-4 shadow-xl" role="status">
-      <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/25 flex items-center justify-center text-sky-400" aria-hidden="true">
+    <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111116] border border-[#282838] text-center gap-4 shadow-2xl" role="status">
+      <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-blue-400" aria-hidden="true">
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -27,7 +27,7 @@ export default function EmptyState({
       {onAction && (
         <button
           type="button"
-          className="px-4 py-2 rounded-xl text-xs font-semibold bg-sky-600 text-white hover:bg-sky-500 transition-all shadow-md shadow-sky-600/20"
+          className="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md shadow-blue-600/20"
           onClick={onAction}
         >
           {actionLabel}

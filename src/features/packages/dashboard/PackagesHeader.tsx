@@ -1,5 +1,4 @@
 import React from 'react';
-import TiltCard3D from '../../../components/TiltCard3D';
 
 export interface PackagesHeaderProps {
   packagesCount: number;
@@ -86,56 +85,48 @@ export default function PackagesHeader({
         </div>
       </div>
 
-      {/* ── 4-Metric Quick Stats Strip with 3D Depth ── */}
+      {/* ── 4-Metric Quick Stats Strip ── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3" role="region" aria-label="Package metrics">
-        <TiltCard3D maxTilt={4} glare={false}>
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all h-full">
-            <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-              <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-              </svg>
-              <span>Shared Libraries</span>
-            </div>
-            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{packagesCount} Active</strong>
+        <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+            </svg>
+            <span>Shared Libraries</span>
           </div>
-        </TiltCard3D>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{packagesCount} Active</strong>
+        </div>
 
-        <TiltCard3D maxTilt={4} glare={false}>
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all h-full">
-            <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-              <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-              </svg>
-              <span>Runtimes</span>
-            </div>
-            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">Dual (TS + Python)</strong>
+        <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+            <span>Runtimes</span>
           </div>
-        </TiltCard3D>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">Dual (TS + Python)</strong>
+        </div>
 
-        <TiltCard3D maxTilt={4} glare={false}>
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all h-full">
-            <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-              <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-              </svg>
-              <span>Exported APIs</span>
-            </div>
-            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">59+ Symbols</strong>
+        <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+            <span>Exported APIs</span>
           </div>
-        </TiltCard3D>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">59+ Symbols</strong>
+        </div>
 
-        <TiltCard3D maxTilt={4} glare={false}>
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all h-full">
-            <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-              <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-              <span>Monorepo Adoption</span>
-            </div>
-            <strong className="text-xl font-extrabold text-purple-300 font-mono mt-1.5">100% Core</strong>
+        <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>Monorepo Adoption</span>
           </div>
-        </TiltCard3D>
+          <strong className="text-xl font-extrabold text-purple-300 font-mono mt-1.5">100% Core</strong>
+        </div>
       </div>
 
       {/* ── Search & Filter Toolbar ── */}

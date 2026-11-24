@@ -160,9 +160,9 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
   const activeSnippet = snippets.find((s) => s.id === selectedId) || snippets[0];
 
   return (
-    <div className="w-full flex flex-col gap-4 p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl">
-      <div className="flex flex-col gap-1 pb-3 border-b border-[#1f1f1f]">
-        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+    <div className="w-full flex flex-col gap-4 p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl">
+      <div className="flex flex-col gap-1 pb-3 border-b border-[#22222e]">
+        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">
           QUICK INTEGRATION
         </span>
         <h3 className="text-lg font-bold text-white">Integration Code Generator</h3>
@@ -171,7 +171,7 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl" role="tablist" aria-label="Snippet frameworks">
+      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0d0d12] border border-[#282838] rounded-xl" role="tablist" aria-label="Snippet frameworks">
         {snippets.map((snippet) => (
           <button
             type="button"
@@ -180,8 +180,8 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
             aria-selected={snippet.id === activeSnippet.id}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               snippet.id === activeSnippet.id
-                ? 'bg-[#222222] text-white shadow-md border border-[#333333]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616]'
+                ? 'bg-blue-600 text-white shadow-md border border-blue-500'
+                : 'text-neutral-400 hover:text-white hover:bg-[#14141c]'
             }`}
             onClick={() => setSelectedId(snippet.id)}
           >
@@ -190,10 +190,10 @@ export default function CodeSnippetGenerator({ pkgId }: CodeSnippetGeneratorProp
         ))}
       </div>
 
-      <div className="rounded-xl bg-[#0c0c0c] border border-[#222222] overflow-hidden shadow-lg">
-        <div className="flex items-center justify-between px-3.5 py-2 bg-[#141414] border-b border-[#1f1f1f] text-xs">
+      <div className="rounded-xl bg-[#0d0d12] border border-[#282838] overflow-hidden shadow-lg">
+        <div className="flex items-center justify-between px-3.5 py-2 bg-[#14141c] border-b border-[#22222e] text-xs">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/10 text-sky-400 border border-sky-500/25">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/25">
               {activeSnippet.language}
             </span>
             <code className="text-[11px] font-mono text-neutral-300">{activeSnippet.filename}</code>

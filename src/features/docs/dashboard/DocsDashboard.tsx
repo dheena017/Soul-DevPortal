@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
-import TiltCard3D from '../../../components/TiltCard3D';
 import { DOCUMENTATION_GUIDES_REGISTRY } from '../docsConstants';
 
 export interface DocsDashboardProps {
@@ -122,70 +121,60 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
           </div>
         </div>
 
-        {/* 5-Metric Quick Stats Strip with 3D Depth */}
+        {/* 5-Metric Quick Stats Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" role="region" aria-label="Documentation metrics">
-          <TiltCard3D maxTilt={4} glare={false}>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all h-full">
-              <span className="text-xs text-neutral-400 flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                </svg>
-                <span>Official Guides</span>
-              </span>
-              <strong className="text-xl font-extrabold text-white font-mono mt-1.5">5 Guides</strong>
-            </div>
-          </TiltCard3D>
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+              <span>Official Guides</span>
+            </span>
+            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">5 Guides</strong>
+          </div>
 
-          <TiltCard3D maxTilt={4} glare={false}>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all h-full">
-              <span className="text-xs text-neutral-400 flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-                <span>Coverage</span>
-              </span>
-              <strong className="text-xl font-extrabold text-white font-mono mt-1.5">100% Monorepo</strong>
-            </div>
-          </TiltCard3D>
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span>Coverage</span>
+            </span>
+            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">100% Monorepo</strong>
+          </div>
 
-          <TiltCard3D maxTilt={4} glare={false}>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all h-full">
-              <span className="text-xs text-neutral-400 flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                  <line x1="8" y1="21" x2="16" y2="21" />
-                  <line x1="12" y1="17" x2="12" y2="21" />
-                </svg>
-                <span>Applications</span>
-              </span>
-              <strong className="text-xl font-extrabold text-white font-mono mt-1.5">8 Integrated</strong>
-            </div>
-          </TiltCard3D>
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+              <span>Applications</span>
+            </span>
+            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">8 Integrated</strong>
+          </div>
 
-          <TiltCard3D maxTilt={4} glare={false}>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all h-full">
-              <span className="text-xs text-neutral-400 flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                </svg>
-                <span>Shared Packages</span>
-              </span>
-              <strong className="text-xl font-extrabold text-white font-mono mt-1.5">3 Core</strong>
-            </div>
-          </TiltCard3D>
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              </svg>
+              <span>Shared Packages</span>
+            </span>
+            <strong className="text-xl font-extrabold text-white font-mono mt-1.5">3 Core</strong>
+          </div>
 
-          <TiltCard3D maxTilt={4} glare={false}>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all h-full">
-              <span className="text-xs text-neutral-400 flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                </svg>
-                <span>Port Collisions</span>
-              </span>
-              <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">0 Collisions</strong>
-            </div>
-          </TiltCard3D>
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+            <span className="text-xs text-neutral-400 flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+              <span>Port Collisions</span>
+            </span>
+            <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">0 Collisions</strong>
+          </div>
         </div>
 
         {/* Merged Search & Category Filter Toolbar */}
@@ -306,130 +295,17 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
           </div>
         </div>
       </header>
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              ref={searchInputRef}
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search guides, rules, port assignments, and topics... (Press '/' to focus)"
-              aria-label="Filter documentation guides"
-              className="w-full h-10 pl-9 pr-9 rounded-xl bg-[#141414] border border-[#282828] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
-            />
-            {query ? (
-              <button
-                type="button"
-                className="absolute right-3 text-xs text-neutral-400 hover:text-white p-1"
-                onClick={() => {
-                  setQuery('');
-                  searchInputRef.current?.focus();
-                }}
-                aria-label="Clear search query"
-                title="Clear search"
-              >
-                ✕
-              </button>
-            ) : (
-              <kbd className="absolute right-3 px-1.5 py-0.5 rounded bg-[#1f1f1f] border border-[#2e2e2e] text-[10px] text-neutral-500 font-mono">
-                /
-              </kbd>
-            )}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#101010] border border-[#242424] rounded-xl" role="tablist" aria-label="Filter documentation guides by category">
-            <button
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                selectedCategory === 'all'
-                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
-              }`}
-              onClick={() => setSelectedCategory('all')}
-            >
-              <span>All Guides</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${selectedCategory === 'all' ? 'bg-[#161616] text-neutral-200 border border-[#2a2a2a]' : 'bg-[#1e1e1e] text-neutral-400'}`}>
-                {DOCUMENTATION_GUIDES_REGISTRY.length}
-              </span>
-            </button>
-            <button
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                selectedCategory === 'rules'
-                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
-              }`}
-              onClick={() => setSelectedCategory((prev) => (prev === 'rules' ? 'all' : 'rules'))}
-            >
-              📜 Projects Rules
-            </button>
-            <button
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                selectedCategory === 'design'
-                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
-              }`}
-              onClick={() => setSelectedCategory((prev) => (prev === 'design' ? 'all' : 'design'))}
-            >
-              📘 Packages Design
-            </button>
-            <button
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                selectedCategory === 'ports'
-                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
-              }`}
-              onClick={() => setSelectedCategory((prev) => (prev === 'ports' ? 'all' : 'ports'))}
-            >
-              🌐 Port Topology
-            </button>
-            <button
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                selectedCategory === 'techstack'
-                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
-              }`}
-              onClick={() => setSelectedCategory((prev) => (prev === 'techstack' ? 'all' : 'techstack'))}
-            >
-              ⚙️ Tech Stack
-            </button>
-            <button
-              type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                selectedCategory === 'cheatsheet'
-                  ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#181818]'
-              }`}
-              onClick={() => setSelectedCategory((prev) => (prev === 'cheatsheet' ? 'all' : 'cheatsheet'))}
-            >
-              📋 Cheatsheet
-            </button>
-          </div>
-        </div>
-      </header>
 
       {/* Guides Grid / Showcase Area */}
       <section className="w-full flex flex-col gap-4" aria-label="Available Architecture Guides">
         {filteredGuides.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111111] border border-[#222222] text-center gap-4 shadow-xl">
+          <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111116] border border-[#282838] text-center gap-4 shadow-xl">
             <span className="text-4xl">🔍</span>
             <h3 className="text-sm font-bold text-white">No documentation guides matched &ldquo;{query}&rdquo;</h3>
             <p className="text-xs text-neutral-400 max-w-sm">Try searching for topics like &ldquo;ports&rdquo;, &ldquo;rules&rdquo;, &ldquo;sqlite&rdquo;, &ldquo;logger&rdquo;, or &ldquo;react 19&rdquo;.</p>
             <button
               type="button"
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-sky-600 text-white hover:bg-sky-500 transition-all shadow-md shadow-sky-600/20"
+              className="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md shadow-blue-600/20"
               onClick={() => {
                 setQuery('');
                 setSelectedCategory('all');
@@ -441,16 +317,16 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
           </div>
         ) : filteredGuides.length === 1 ? (
           /* ── Featured Wide Showcase Layout When 1 Guide Matches (Eliminating Blank Void) ── */
-          <div className="w-full rounded-2xl bg-[#111111] border border-[#222222] p-5 md:p-8 shadow-2xl flex flex-col lg:flex-row items-start justify-between gap-8 group">
+          <div className="w-full rounded-2xl bg-[#111116] border border-[#282838] p-5 md:p-8 shadow-2xl flex flex-col lg:flex-row items-start justify-between gap-8 group">
             {/* Left Column: Full Identity, Description & Key Standards */}
             <div className="flex-1 flex flex-col gap-5 min-w-0">
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-[#161616] border border-[#262626] flex items-center justify-center shrink-0 text-3xl shadow-inner">
+                <div className="w-16 h-16 rounded-2xl bg-[#14141c] border border-[#282838] flex items-center justify-center shrink-0 text-3xl shadow-inner">
                   {filteredGuides[0].icon}
                 </div>
                 <div className="flex flex-col gap-1.5 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
+                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-blue-500/15 border border-blue-500/30 text-blue-400">
                       {filteredGuides[0].badge}
                     </span>
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
@@ -460,7 +336,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                       {filteredGuides[0].category.toUpperCase()}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-extrabold text-white tracking-tight group-hover:text-sky-400 transition-colors">
+                  <h3 className="text-2xl font-extrabold text-white tracking-tight group-hover:text-blue-400 transition-colors">
                     {filteredGuides[0].title}
                   </h3>
                   <code className="text-xs font-mono text-neutral-500">{filteredGuides[0].filename}</code>
@@ -471,7 +347,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                 {filteredGuides[0].description}
               </p>
 
-              <div className="flex flex-col gap-2.5 p-4 rounded-xl bg-[#0c0c0c] border border-[#1f1f1f]">
+              <div className="flex flex-col gap-2.5 p-4 rounded-xl bg-[#0e0e14] border border-[#222230]">
                 <strong className="text-[11px] font-mono font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-2">
                   <span>⭐</span>
                   <span>KEY MANDATORY STANDARDS &amp; SPECIFICATIONS:</span>
@@ -485,18 +361,18 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
             </div>
 
             {/* Right Column: Telemetry, Covered Topics, and Direct Launch */}
-            <div className="w-full lg:w-96 flex flex-col gap-4 shrink-0 p-5 rounded-xl bg-[#0e0e0e] border border-[#202020]">
-              <div className="flex items-center justify-between pb-3 border-b border-[#1c1c1c] text-xs">
+            <div className="w-full lg:w-96 flex flex-col gap-4 shrink-0 p-5 rounded-xl bg-[#14141c] border border-[#282838]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#22222e] text-xs">
                 <span className="text-neutral-500 font-mono font-semibold">EST. READ TIME</span>
                 <strong className="text-emerald-400 font-mono font-bold text-sm">{filteredGuides[0].readTime}</strong>
               </div>
 
-              <div className="flex items-center justify-between pb-3 border-b border-[#1c1c1c] text-xs">
+              <div className="flex items-center justify-between pb-3 border-b border-[#22222e] text-xs">
                 <span className="text-neutral-500 font-mono font-semibold">SPECIFICATION DEPTH</span>
-                <strong className="text-sky-400 font-mono font-bold text-sm">{filteredGuides[0].sectionsCount} Headings</strong>
+                <strong className="text-blue-400 font-mono font-bold text-sm">{filteredGuides[0].sectionsCount} Headings</strong>
               </div>
 
-              <div className="flex flex-col gap-1 pb-3 border-b border-[#1c1c1c] text-xs">
+              <div className="flex flex-col gap-1 pb-3 border-b border-[#22222e] text-xs">
                 <span className="text-neutral-500 font-mono font-semibold">TARGET AUDIENCE</span>
                 <span className="text-neutral-200 font-medium">{filteredGuides[0].targetAudience}</span>
               </div>
@@ -505,17 +381,17 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                 <span className="text-neutral-500 font-mono text-xs font-semibold">COVERED TOPICS</span>
                 <div className="flex flex-wrap gap-1.5">
                   {filteredGuides[0].topics.map((t) => (
-                    <span key={t} className="px-2 py-1 rounded-md bg-[#161616] border border-[#262626] text-[11px] font-mono text-neutral-300">
+                    <span key={t} className="px-2 py-1 rounded-md bg-[#161622] border border-[#282838] text-[11px] font-mono text-neutral-300">
                       {t}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 pt-2 border-t border-[#1c1c1c]">
+              <div className="flex flex-col gap-2 pt-2 border-t border-[#22222e]">
                 <button
                   type="button"
-                  className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-sky-600/25 transition-all"
+                  className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-600/25 transition-all"
                   onClick={() => onSelectGuide(filteredGuides[0].id)}
                 >
                   <span>Read Full Specification</span>
@@ -524,7 +400,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                 {selectedCategory !== 'all' && (
                   <button
                     type="button"
-                    className="w-full py-2 px-3 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white bg-[#141414] hover:bg-[#1a1a1a] border border-[#242424] transition-all"
+                    className="w-full py-2 px-3 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white bg-[#14141c] hover:bg-[#1a1a28] border border-[#282838] transition-all"
                     onClick={() => setSelectedCategory('all')}
                   >
                     View all 5 architecture guides
@@ -539,7 +415,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
             {filteredGuides.map((guide) => (
               <article
                 key={guide.id}
-                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-sky-500/40 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4 cursor-pointer"
+                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-xl transition-all duration-200 gap-4 cursor-pointer h-full"
                 onClick={() => {
                   consoleLogger.action('DOCS', `Selected guide: ${guide.title}`, { guideId: guide.id, slug: guide.slug });
                   onSelectGuide(guide.id);
@@ -549,7 +425,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl" aria-hidden="true">{guide.icon}</span>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider uppercase bg-blue-500/15 border border-blue-500/30 text-blue-400">
                         {guide.badge}
                       </span>
                     </div>
@@ -557,7 +433,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <h3 className="text-base font-bold text-white group-hover:text-sky-400 transition-colors">
+                    <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors">
                       {guide.title}
                     </h3>
                     <code className="text-[11px] font-mono text-neutral-500">{guide.filename}</code>
@@ -566,7 +442,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                     </p>
                   </div>
 
-                  <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-[#0d0d0d] border border-[#202020] text-xs">
+                  <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-[#0e0e14] border border-[#222230] text-xs">
                     <strong className="text-[10px] font-mono font-bold text-neutral-500 uppercase tracking-wider">KEY STANDARDS:</strong>
                     <ul className="flex flex-col gap-1 text-[11px] text-neutral-300 pl-3 list-disc">
                       {guide.keyHighlights.slice(0, 3).map((hl, i) => (
@@ -577,18 +453,18 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
 
                   <div className="flex flex-wrap items-center gap-1.5">
                     {guide.topics.slice(0, 4).map((topic) => (
-                      <span key={topic} className="px-2 py-0.5 rounded-md bg-[#161616] border border-[#242424] text-[10px] font-mono text-neutral-400">
+                      <span key={topic} className="px-2 py-0.5 rounded-md bg-[#161622] border border-[#282838] text-[10px] font-mono text-neutral-400">
                         {topic}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-3 border-t border-[#1e1e1e] text-xs font-mono">
+                <div className="flex items-center justify-between pt-3 border-t border-[#22222e] text-xs font-mono">
                   <span className="text-neutral-500">📑 {guide.sectionsCount} Sections</span>
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-600 text-white group-hover:bg-sky-500 transition-all shadow-md shadow-sky-600/20"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white group-hover:bg-blue-500 transition-all shadow-md shadow-blue-600/20"
                   >
                     <span>Read Guide</span>
                     <span>→</span>

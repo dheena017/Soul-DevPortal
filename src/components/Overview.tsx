@@ -3,8 +3,6 @@ import { consoleLogger } from '@workspace/logger';
 import CopyButton from './CopyButton';
 import StatsCards from './StatsCards';
 import EmptyState from './EmptyState';
-import Hero3DCanvas from './Hero3DCanvas';
-import TiltCard3D from './TiltCard3D';
 import { PackageData, ProjectData, StatsData } from '../types';
 import { PACKAGE_METADATA_MAP } from '../features/packages/packagesConstants';
 import { DOCUMENTATION_GUIDES_REGISTRY } from '../features/docs/docsConstants';
@@ -72,17 +70,14 @@ export default function Overview({
 
   return (
     <article className="w-full flex flex-col gap-8 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
-      {/* ── Standardized Hero Header matching Pillar Dashboards with 3D Ambient Canvas ── */}
-      <header className="relative overflow-hidden w-full bg-[#111116] border border-[#282838] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
-        {/* 3D Ambient Cyber Matrix Canvas */}
-        <Hero3DCanvas className="rounded-2xl" />
-
-        <div className="relative z-10 flex flex-col gap-6">
+      {/* ── Standardized Hero Header matching Pillar Dashboards ── */}
+      <header className="w-full bg-[#111116] border border-[#282838] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
             <div className="flex items-center gap-2 text-xs">
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#14141c] border border-[#262636] text-neutral-400 font-medium">Soul Workspace</span>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#14141c] border border-[#282838] text-neutral-400 font-medium">Soul Workspace</span>
               <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
-              <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e2c] border border-[#36364a] text-white font-semibold shadow-sm">Overview Dashboard</strong>
+              <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#181824] border border-[#303042] text-white font-semibold shadow-sm">Overview Dashboard</strong>
             </div>
 
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
@@ -114,137 +109,121 @@ export default function Overview({
             </p>
           </div>
 
-          {/* Dashboard Key Metrics Banner with 3D Tilt */}
+          {/* Dashboard Key Metrics Banner */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1">
-            <TiltCard3D maxTilt={4} glare={false} className="h-full">
-              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-blue-500/40 transition-all h-full">
-                <span className="text-lg font-extrabold text-blue-400 font-mono">3</span>
-                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Core Pillars</span>
-              </div>
-            </TiltCard3D>
-            <TiltCard3D maxTilt={4} glare={false} className="h-full">
-              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-emerald-500/40 transition-all h-full">
-                <span className="text-lg font-extrabold text-emerald-400 font-mono">{projects.length || 8}</span>
-                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Integrated Apps</span>
-              </div>
-            </TiltCard3D>
-            <TiltCard3D maxTilt={4} glare={false} className="h-full">
-              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-purple-500/40 transition-all h-full">
-                <span className="text-lg font-extrabold text-purple-400 font-mono">{packages.length || 3}</span>
-                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Shared Packages</span>
-              </div>
-            </TiltCard3D>
-            <TiltCard3D maxTilt={4} glare={false} className="h-full">
-              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-amber-500/40 transition-all h-full">
-                <span className="text-lg font-extrabold text-amber-400 font-mono">5</span>
-                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Architecture Specs</span>
-              </div>
-            </TiltCard3D>
-            <TiltCard3D maxTilt={4} glare={false} className="h-full">
-              <div className="flex flex-col p-3 rounded-xl bg-[#14141c]/85 backdrop-blur-sm border border-[#242434] hover:border-emerald-500/40 transition-all h-full">
-                <span className="text-lg font-extrabold text-emerald-400 font-mono">0</span>
-                <span className="text-xs font-semibold text-neutral-300 mt-0.5">Port Collisions</span>
-              </div>
-            </TiltCard3D>
+            <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
+              <span className="text-lg font-extrabold text-blue-400 font-mono">3</span>
+              <span className="text-xs font-semibold text-neutral-300 mt-0.5">Core Pillars</span>
+            </div>
+            <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-emerald-500/40 transition-all">
+              <span className="text-lg font-extrabold text-emerald-400 font-mono">{projects.length || 8}</span>
+              <span className="text-xs font-semibold text-neutral-300 mt-0.5">Integrated Apps</span>
+            </div>
+            <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-purple-500/40 transition-all">
+              <span className="text-lg font-extrabold text-purple-400 font-mono">{packages.length || 3}</span>
+              <span className="text-xs font-semibold text-neutral-300 mt-0.5">Shared Packages</span>
+            </div>
+            <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-amber-500/40 transition-all">
+              <span className="text-lg font-extrabold text-amber-400 font-mono">5</span>
+              <span className="text-xs font-semibold text-neutral-300 mt-0.5">Architecture Specs</span>
+            </div>
+            <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-emerald-500/40 transition-all">
+              <span className="text-lg font-extrabold text-emerald-400 font-mono">0</span>
+              <span className="text-xs font-semibold text-neutral-300 mt-0.5">Port Collisions</span>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* ── 3 Pillars Interactive 3D Gateway Navigation ── */}
+      {/* ── 3 Pillars Gateway Navigation ── */}
       <section className="w-full flex flex-col gap-4" aria-label="Monorepo 3 Pillars Navigation">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <TiltCard3D maxTilt={6} className="h-full">
-            <div
-              className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/50 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4 h-full"
-              onClick={() => onNavigate('projects')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('projects'); }}
-            >
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <span className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-2xl">
-                    💻
-                  </span>
-                  <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-blue-500/15 border border-blue-500/30 text-blue-400">
-                    Pillar 1
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">
-                  Projects &amp; Applications
-                </h3>
-                <p className="text-xs text-neutral-400 leading-relaxed">
-                  {projects.length || 8} fullstack applications, strict client &amp; server port allocations (:5173-:5180 / :8000-:8008), and SQLite datastores.
-                </p>
+          <div
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/50 hover:bg-[#14141c] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            onClick={() => onNavigate('projects')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('projects'); }}
+          >
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-2xl">
+                  💻
+                </span>
+                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-blue-500/15 border border-blue-500/30 text-blue-400">
+                  Pillar 1
+                </span>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-blue-400 pt-2 border-t border-[#22222e]">
-                <span>Explore {projects.length || 8} Apps</span>
-                <span>→</span>
-              </div>
+              <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">
+                Projects &amp; Applications
+              </h3>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                {projects.length || 8} fullstack applications, strict client &amp; server port allocations (:5173-:5180 / :8000-:8008), and SQLite datastores.
+              </p>
             </div>
-          </TiltCard3D>
+            <div className="flex items-center gap-1.5 text-xs font-bold text-blue-400 pt-2 border-t border-[#22222e]">
+              <span>Explore {projects.length || 8} Apps</span>
+              <span>→</span>
+            </div>
+          </div>
 
-          <TiltCard3D maxTilt={6} className="h-full">
-            <div
-              className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-emerald-500/50 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4 h-full"
-              onClick={() => onNavigate('packages')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('packages'); }}
-            >
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <span className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-2xl">
-                    📦
-                  </span>
-                  <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
-                    Pillar 2
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
-                  Shared Packages
-                </h3>
-                <p className="text-xs text-neutral-400 leading-relaxed">
-                  Core reusable libraries: @workspace/logger (universal logging), @workspace/runner (CLI supervisor), and @workspace/config (design tokens).
-                </p>
+          <div
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-emerald-500/50 hover:bg-[#14141c] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            onClick={() => onNavigate('packages')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('packages'); }}
+          >
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-2xl">
+                  📦
+                </span>
+                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                  Pillar 2
+                </span>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 pt-2 border-t border-[#22222e]">
-                <span>Inspect {packages.length || 3} Packages</span>
-                <span>→</span>
-              </div>
+              <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+                Shared Packages
+              </h3>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Core reusable libraries: @workspace/logger (universal logging), @workspace/runner (CLI supervisor), and @workspace/config (design tokens).
+              </p>
             </div>
-          </TiltCard3D>
+            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 pt-2 border-t border-[#22222e]">
+              <span>Inspect {packages.length || 3} Packages</span>
+              <span>→</span>
+            </div>
+          </div>
 
-          <TiltCard3D maxTilt={6} className="h-full">
-            <div
-              className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-amber-500/50 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4 h-full"
-              onClick={() => onNavigate('docs')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('docs'); }}
-            >
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <span className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-2xl">
-                    📚
-                  </span>
-                  <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 border border-amber-500/30 text-amber-400">
-                    Pillar 3
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
-                  Docs &amp; Specifications
-                </h3>
-                <p className="text-xs text-neutral-400 leading-relaxed">
-                  5 authoritative architecture guides: mandatory golden rules, port matrices, tech stack standards, and compliance cheatsheets.
-                </p>
+          <div
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#111116] border border-[#282838] hover:border-amber-500/50 hover:bg-[#14141c] hover:shadow-xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            onClick={() => onNavigate('docs')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('docs'); }}
+          >
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-2xl">
+                  📚
+                </span>
+                <span className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 border border-amber-500/30 text-amber-400">
+                  Pillar 3
+                </span>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 pt-2 border-t border-[#22222e]">
-                <span>Read 5 Guides</span>
-                <span>→</span>
-              </div>
+              <h3 className="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
+                Docs &amp; Specifications
+              </h3>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                5 authoritative architecture guides: mandatory golden rules, port matrices, tech stack standards, and compliance cheatsheets.
+              </p>
             </div>
-          </TiltCard3D>
+            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 pt-2 border-t border-[#22222e]">
+              <span>Read 5 Guides</span>
+              <span>→</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -252,25 +231,25 @@ export default function Overview({
       <StatsCards stats={stats} packagesCount={packages.length || 3} projectsCount={projects?.length || 8} />
 
       {/* ── Ecosystem Tabs Navigation ── */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)] self-start" role="tablist" aria-label="Ecosystem overview sections">
+      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0d0d12] border border-[#22222e] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)] self-start" role="tablist" aria-label="Ecosystem overview sections">
         <button
           type="button"
           role="tab"
           aria-selected={activeTab === 'apps'}
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'apps'
-              ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-              : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
+              ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+              : 'text-neutral-400 hover:text-white hover:bg-[#161622] hover:border-[#282838] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('apps')}
         >
-          <svg className={`w-3.5 h-3.5 ${activeTab === 'apps' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'apps' ? 'text-blue-400 drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
             <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
           <span>Consumer Applications</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'apps' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>{projects.length || 8}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'apps' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#161622] text-neutral-400 border border-[#282838]'}`}>{projects.length || 8}</span>
         </button>
 
         <button
@@ -279,17 +258,17 @@ export default function Overview({
           aria-selected={activeTab === 'packages'}
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'packages'
-              ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-              : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
+              ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+              : 'text-neutral-400 hover:text-white hover:bg-[#161622] hover:border-[#282838] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('packages')}
         >
-          <svg className={`w-3.5 h-3.5 ${activeTab === 'packages' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'packages' ? 'text-blue-400 drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="16.5" y1="9.4" x2="7.55" y2="4.24" />
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
           </svg>
           <span>Shared Packages</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'packages' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>{packages.length || 3}</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'packages' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#161622] text-neutral-400 border border-[#282838]'}`}>{packages.length || 3}</span>
         </button>
 
         <button
@@ -298,17 +277,17 @@ export default function Overview({
           aria-selected={activeTab === 'docs'}
           className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
             activeTab === 'docs'
-              ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-              : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
+              ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+              : 'text-neutral-400 hover:text-white hover:bg-[#161622] hover:border-[#282838] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('docs')}
         >
-          <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className={`w-3.5 h-3.5 ${activeTab === 'docs' ? 'text-blue-400 drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
           </svg>
           <span>Architecture Specifications</span>
-          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'docs' ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>5</span>
+          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'docs' ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#161622] text-neutral-400 border border-[#282838]'}`}>5</span>
         </button>
       </div>
 
@@ -339,86 +318,85 @@ export default function Overview({
               const aiSummary = hasAi ? p.aiEngine!.split('+')[0].trim() : null;
 
               return (
-                <TiltCard3D key={p.id} maxTilt={4} className="h-full">
-                  <div
-                    className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4 cursor-pointer h-full"
-                    onClick={() => onNavigate(`projects/${p.id}`)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(`projects/${p.id}`); }}
-                  >
-                    <div className="flex flex-col gap-3">
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div
-                            className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden"
-                            style={{
-                              borderColor: brand ? `${brand.themeColor}33` : undefined,
-                              background: brand ? brand.accentBg : undefined,
-                            }}
-                          >
-                            {logoSrc ? (
-                              <img
-                                src={logoSrc}
-                                alt={`${displayTitle} logo`}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  (e.currentTarget as HTMLElement).style.display = 'none';
-                                }}
-                              />
-                            ) : (
-                              <span className="text-base">{brand?.icon || '⚡'}</span>
-                            )}
-                          </div>
-                          <div className="flex flex-col min-w-0">
-                            <strong className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors truncate">
-                              {displayTitle}
-                            </strong>
-                            <div className="flex items-center gap-1.5">
-                              <code className="text-[11px] font-mono text-neutral-400">{p.id}</code>
-                              {brand?.tag && <span className="text-[10px] font-mono text-neutral-500">· {brand.tag}</span>}
-                            </div>
-                          </div>
+                <div
+                  key={p.id}
+                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-xl transition-all duration-200 gap-4 cursor-pointer h-full"
+                  onClick={() => onNavigate(`projects/${p.id}`)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter') onNavigate(`projects/${p.id}`); }}
+                >
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden"
+                          style={{
+                            borderColor: brand ? `${brand.themeColor}33` : undefined,
+                            background: brand ? brand.accentBg : undefined,
+                          }}
+                        >
+                          {logoSrc ? (
+                            <img
+                              src={logoSrc}
+                              alt={`${displayTitle} logo`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLElement).style.display = 'none';
+                              }}
+                            />
+                          ) : (
+                            <span className="text-base">{brand?.icon || '⚡'}</span>
+                          )}
                         </div>
-
-                        <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-[11px]">
-                          {p.frontendPort && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/25 text-blue-400 font-bold">
-                              FE :{p.frontendPort}
-                            </span>
-                          )}
-                          {p.backendPort && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 font-bold">
-                              BE :{p.backendPort}
-                            </span>
-                          )}
+                        <div className="flex flex-col min-w-0">
+                          <strong className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                            {displayTitle}
+                          </strong>
+                          <div className="flex items-center gap-1.5">
+                            <code className="text-[11px] font-mono text-neutral-400">{p.id}</code>
+                            {brand?.tag && <span className="text-[10px] font-mono text-neutral-500">· {brand.tag}</span>}
+                          </div>
                         </div>
                       </div>
 
-                      <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-[#0e0e12] border border-[#22222e] text-xs">
-                        <div className="flex items-center gap-2 text-neutral-400">
-                          <span>⚡</span>
-                          <span className="truncate">{p.framework || 'React 19 + Vite 8 + Tailwind v4'}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-neutral-400">
-                          <span>🗄️</span>
-                          <span className="truncate">{p.dbInfo || 'SQLite datastore'}</span>
-                        </div>
-                        {hasAi && (
-                          <div className="flex items-center gap-2 text-blue-400 font-medium">
-                            <span>✨</span>
-                            <span className="truncate">{aiSummary}</span>
-                          </div>
+                      <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-[11px]">
+                        {p.frontendPort && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/25 text-blue-400 font-bold">
+                            FE :{p.frontendPort}
+                          </span>
+                        )}
+                        {p.backendPort && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 font-bold">
+                            BE :{p.backendPort}
+                          </span>
                         )}
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-2 border-t border-[#22222e] text-xs font-semibold text-neutral-400 group-hover:text-blue-400 transition-colors">
-                      <span>Inspect Application</span>
-                      <span>→</span>
+                    <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-[#0e0e12] border border-[#22222e] text-xs">
+                      <div className="flex items-center gap-2 text-neutral-400">
+                        <span>⚡</span>
+                        <span className="truncate">{p.framework || 'React 19 + Vite 8 + Tailwind v4'}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-neutral-400">
+                        <span>🗄️</span>
+                        <span className="truncate">{p.dbInfo || 'SQLite datastore'}</span>
+                      </div>
+                      {hasAi && (
+                        <div className="flex items-center gap-2 text-blue-400 font-medium">
+                          <span>✨</span>
+                          <span className="truncate">{aiSummary}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </TiltCard3D>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-[#22222e] text-xs font-semibold text-neutral-400 group-hover:text-blue-400 transition-colors">
+                    <span>Inspect Application</span>
+                    <span>→</span>
+                  </div>
+                </div>
               );
             })}
           </div>
@@ -482,12 +460,12 @@ export default function Overview({
               return (
                 <article
                   key={pkg.id}
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-sky-500/40 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4"
+                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-2xl transition-all duration-300 gap-4"
                 >
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-sky-500/25 bg-sky-500/10 text-xl">
+                        <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-blue-500/25 bg-blue-500/10 text-xl">
                           {meta.icon}
                         </div>
                         <div className="flex flex-col">
@@ -503,7 +481,7 @@ export default function Overview({
                           </span>
                         )}
                         {pkg.hasPythonManifest && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/10 border border-sky-500/25 text-sky-400">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/10 border border-blue-500/25 text-blue-400">
                             python
                           </span>
                         )}
@@ -511,21 +489,21 @@ export default function Overview({
                     </div>
 
                     <div className="flex flex-col gap-1">
-                      <h3 className="text-base font-bold font-mono text-white group-hover:text-sky-400 transition-colors">
+                      <h3 className="text-base font-bold font-mono text-white group-hover:text-blue-400 transition-colors">
                         {pkg.displayName || pkg.name}
                       </h3>
-                      <span className="text-xs text-sky-400 font-semibold">{meta.role}</span>
+                      <span className="text-xs text-blue-400 font-semibold">{meta.role}</span>
                       {pkg.description && (
                         <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed min-h-[36px]">{pkg.description}</p>
                       )}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 p-2 rounded-xl bg-[#0d0d0d] border border-[#202020] text-center font-mono text-xs">
+                    <div className="grid grid-cols-3 gap-2 p-2 rounded-xl bg-[#0d0d12] border border-[#282838] text-center font-mono text-xs">
                       <div>
                         <span className="text-[10px] text-neutral-500 uppercase">EXPORTS</span>
-                        <strong className="block text-xs font-bold text-sky-400 mt-0.5">{exportsCount} APIs</strong>
+                        <strong className="block text-xs font-bold text-blue-400 mt-0.5">{exportsCount} APIs</strong>
                       </div>
-                      <div className="border-x border-[#1e1e1e]">
+                      <div className="border-x border-[#22222e]">
                         <span className="text-[10px] text-neutral-500 uppercase">LICENSE</span>
                         <strong className="block text-xs font-bold text-white mt-0.5">{pkg.license || 'MIT'}</strong>
                       </div>
@@ -535,16 +513,16 @@ export default function Overview({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-[#0c0c0c] border border-[#222222] font-mono text-xs">
-                      <code className="text-[11px] text-sky-300 truncate">$ {installCmd}</code>
+                    <div className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-[#0d0d12] border border-[#282838] font-mono text-xs">
+                      <code className="text-[11px] text-blue-300 truncate">$ {installCmd}</code>
                       <CopyButton text={installCmd} variant="compact" label="" copiedLabel="Copied!" />
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-[#1e1e1e]">
+                  <div className="pt-2 border-t border-[#22222e]">
                     <button
                       type="button"
-                      className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-500 transition-all shadow-md shadow-sky-600/20 flex items-center justify-center gap-2"
+                      className="w-full py-2 px-4 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-500 transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2"
                       onClick={() => onNavigate(`packages/${pkg.id}`)}
                     >
                       <span>Inspect Package API</span>
@@ -579,7 +557,7 @@ export default function Overview({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {DOCUMENTATION_GUIDES_REGISTRY.map((guide) => (
               <div
-                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-sky-500/40 hover:bg-[#131313] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 cursor-pointer gap-4"
+                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-2xl transition-all duration-300 cursor-pointer gap-4"
                 key={guide.id}
                 onClick={() => onNavigate(`docs/${guide.slug || guide.id}`)}
                 role="button"
@@ -589,16 +567,16 @@ export default function Overview({
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between">
                     <span className="text-2xl">{guide.icon}</span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/15 border border-sky-500/30 text-sky-400">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-blue-500/15 border border-blue-500/30 text-blue-400">
                       {guide.badge}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-white group-hover:text-sky-400 transition-colors">
+                  <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors">
                     {guide.title}
                   </h3>
                   <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed">{guide.description}</p>
                 </div>
-                <div className="flex items-center gap-1 text-xs font-bold text-sky-400 pt-2 border-t border-[#1e1e1e]">
+                <div className="flex items-center gap-1 text-xs font-bold text-blue-400 pt-2 border-t border-[#22222e]">
                   <span>Read Specification</span>
                   <span>→</span>
                 </div>

@@ -69,7 +69,7 @@ export default function GuideDetail({
 
   return (
     <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12">
-      <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-5">
+      <header className="w-full bg-[#111116] border border-[#282838] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5">
         <div className="flex items-center gap-2 text-xs text-neutral-400">
           <span>{guideMeta.breadcrumb}</span>
         </div>
@@ -77,15 +77,15 @@ export default function GuideDetail({
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">{guideMeta.description}</p>
 
         {/* Guides Switcher Bar */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]" role="tablist" aria-label="Monorepo documentation guides">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0d0d12] border border-[#282838] rounded-xl" role="tablist" aria-label="Monorepo documentation guides">
           <button
             type="button"
             role="tab"
             aria-selected={selectedGuide === 'design'}
             className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               selectedGuide === 'design'
-                ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-                : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
+                ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                : 'text-neutral-400 hover:text-white hover:bg-[#14141c] hover:border-[#282838] border border-transparent font-medium'
             }`}
             onClick={() => handleSelect('design')}
           >
@@ -98,8 +98,8 @@ export default function GuideDetail({
               aria-selected={selectedGuide === 'ports'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'ports'
-                  ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
+                  ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#14141c] hover:border-[#282838] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('ports')}
             >
@@ -113,8 +113,8 @@ export default function GuideDetail({
               aria-selected={selectedGuide === 'techstack'}
               className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                 selectedGuide === 'techstack'
-                  ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
+                  ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#14141c] hover:border-[#282838] border border-transparent font-medium'
               }`}
               onClick={() => handleSelect('techstack')}
             >
@@ -126,7 +126,7 @@ export default function GuideDetail({
 
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] items-start gap-6">
         <TableOfContents headings={headings} title="On this page" />
-        <section className="p-5 md:p-8 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl overflow-hidden min-w-0">
+        <section className="p-5 md:p-8 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl overflow-hidden min-w-0">
           <Markdown blocks={activeBlocks} skipFirstHeading />
         </section>
       </div>

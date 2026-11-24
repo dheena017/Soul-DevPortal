@@ -12,10 +12,10 @@ export default function PackageDocsTab({ pkg, headings }: PackageDocsTabProps) {
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5 items-start">
       <TableOfContents headings={headings} title="On this page" className="w-full" />
-      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-2xl flex flex-col gap-4 min-w-0">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#1f1f1f]">
+      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-4 min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#22222e]">
           <div className="flex flex-col gap-0.5">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">REFERENCE</span>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">REFERENCE</span>
             <h2 className="text-lg font-bold text-white">Package Documentation</h2>
           </div>
           <span className="text-xs font-mono text-neutral-400 truncate">

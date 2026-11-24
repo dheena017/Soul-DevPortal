@@ -43,10 +43,10 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
   }, [scripts, needle]);
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PACKAGE API</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">PACKAGE API</span>
           <h2 className="text-lg font-bold text-white">Exports &amp; Symbols Catalog</h2>
         </div>
         <div className="relative flex items-center min-w-[240px]">
@@ -60,7 +60,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Filter export paths or symbol names..."
             aria-label="Filter export symbols"
-            className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0e0e0e] border border-[#262626] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
+            className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#14141c] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
           />
           {filter && (
             <button
@@ -84,7 +84,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
               </span>
               <h3 className="text-xs font-bold text-white">npm import paths</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#14141c] border border-[#282838] text-neutral-300">
               {filteredNpm.length} paths
             </span>
           </div>
@@ -93,13 +93,13 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             {filteredNpm.map(({ exportPath, importPath }) => (
               <div
                 key={exportPath}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#0e0e0e] border border-[#202020] hover:border-[#333333] transition-all gap-3"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 hover:bg-[#181824] transition-all gap-3"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#181818] border border-[#2c2c2c] text-neutral-400">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#161622] border border-[#282838] text-neutral-400">
                     import
                   </span>
-                  <code className="text-xs font-mono text-sky-400 font-bold truncate">{importPath}</code>
+                  <code className="text-xs font-mono text-blue-400 font-bold truncate">{importPath}</code>
                   <span className="text-[11px] font-mono text-neutral-500 hidden sm:inline truncate">
                     ↳ export <code>{exportPath}</code>
                   </span>
@@ -115,12 +115,12 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/15 border border-sky-500/30 text-sky-400">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 border border-blue-500/30 text-blue-400">
                 TS
               </span>
               <h3 className="text-xs font-bold text-white">TypeScript Exported Symbols</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#14141c] border border-[#282838] text-neutral-300">
               {filteredTs.length} symbols
             </span>
           </div>
@@ -129,10 +129,10 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             {filteredTs.map((name) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-2.5 rounded-lg bg-[#0e0e0e] border border-[#202020] hover:border-sky-500/30 transition-all gap-2"
+                className="flex items-center justify-between p-2.5 rounded-lg bg-[#14141c] border border-[#282838] hover:border-blue-500/40 hover:bg-[#181824] transition-all gap-2"
                 title={`TypeScript symbol: ${name}`}
               >
-                <code className="text-xs font-mono text-sky-300 truncate">{name}</code>
+                <code className="text-xs font-mono text-blue-300 truncate">{name}</code>
                 <CopyButton text={name} variant="icon-only" title={`Copy symbol ${name}`} />
               </div>
             ))}
@@ -149,7 +149,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
               </span>
               <h3 className="text-xs font-bold text-white">Python Public API Symbols</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#14141c] border border-[#282838] text-neutral-300">
               {filteredPy.length} symbols
             </span>
           </div>
@@ -158,7 +158,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             {filteredPy.map((name) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-2.5 rounded-lg bg-[#0e0e0e] border border-[#202020] hover:border-emerald-500/30 transition-all gap-2"
+                className="flex items-center justify-between p-2.5 rounded-lg bg-[#14141c] border border-[#282838] hover:border-emerald-500/40 hover:bg-[#181824] transition-all gap-2"
                 title={`from ${pkg.pythonModule || pkg.pythonName} import ${name}`}
               >
                 <div className="flex items-center gap-1.5 min-w-0">
@@ -185,7 +185,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
               </span>
               <h3 className="text-xs font-bold text-white">Package Scripts</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#14141c] border border-[#282838] text-neutral-300">
               {filteredScripts.length} scripts
             </span>
           </div>
@@ -194,7 +194,7 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
             {filteredScripts.map(([name, command]) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#0e0e0e] border border-[#202020] gap-3"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 hover:bg-[#181824] transition-all gap-3"
               >
                 <div className="flex flex-col min-w-0">
                   <code className="text-xs font-mono font-bold text-white truncate">{name}</code>

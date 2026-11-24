@@ -33,14 +33,14 @@ export default function ProjectHeader({
   searchInputRef,
 }: ProjectHeaderProps) {
   return (
-    <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-5">
+    <header className="w-full bg-[#111116] border border-[#282838] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/60 flex flex-col gap-5">
       {/* Breadcrumb Navigation Row */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
         <div className="flex items-center gap-2 text-xs">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1c1c1c] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161622] border border-[#282838] text-neutral-300 hover:text-white hover:border-[#383848] hover:bg-[#1a1a28] transition-all font-semibold shadow-sm"
               onClick={onBack}
               title="Back to Soul Workspace"
             >
@@ -52,7 +52,7 @@ export default function ProjectHeader({
           ) : (
             <a
               href="#overview"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3e3e3e] hover:bg-[#1c1c1c] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161622] border border-[#282838] text-neutral-300 hover:text-white hover:border-[#383848] hover:bg-[#1a1a28] transition-all font-semibold shadow-sm"
               title="Back to Soul Workspace"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -61,9 +61,9 @@ export default function ProjectHeader({
               <span>Back</span>
             </a>
           )}
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#141414] border border-[#282828] text-neutral-400 font-medium">Soul Workspace</span>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#14141c] border border-[#282838] text-neutral-400 font-medium">Soul Workspace</span>
           <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
-          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e1e] border border-[#333333] text-white font-semibold shadow-sm">Pillar 1: Projects</strong>
+          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#181824] border border-[#303042] text-white font-semibold shadow-sm">Pillar 1: Projects</strong>
         </div>
 
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-semibold text-emerald-400">
@@ -74,7 +74,7 @@ export default function ProjectHeader({
 
       {/* Hero Title & Identity Row */}
       <div className="flex items-start sm:items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0 shadow-lg shadow-sky-500/5">
+        <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 shadow-lg shadow-blue-500/5">
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
@@ -84,7 +84,7 @@ export default function ProjectHeader({
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2.5">
             <h1 className="text-2xl font-extrabold tracking-tight text-white">Projects &amp; Applications Dashboard</h1>
-            <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-sky-500/15 border border-sky-500/30 text-sky-400">
+            <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold tracking-wider uppercase bg-blue-500/15 border border-blue-500/30 text-blue-400">
               Pillar 1: Monorepo Apps
             </span>
           </div>
@@ -96,9 +96,9 @@ export default function ProjectHeader({
 
       {/* 5-Metric Quick Stats Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" role="region" aria-label="Project metrics">
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+        <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-            <svg className="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="7" height="7" />
               <rect x="14" y="3" width="7" height="7" />
               <rect x="14" y="14" width="7" height="7" />
@@ -106,10 +106,10 @@ export default function ProjectHeader({
             </svg>
             <span>Total Apps</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{totalCount}</strong>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{totalCount} Active</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+        <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
             <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
@@ -117,12 +117,12 @@ export default function ProjectHeader({
               <line x1="6" y1="6" x2="6.01" y2="6" />
               <line x1="6" y1="18" x2="6.01" y2="18" />
             </svg>
-            <span>Client-Server Fullstack</span>
+            <span>Client-Server</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{fullstackCount}</strong>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{fullstackCount} Fullstack</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+        <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
             <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
@@ -131,20 +131,20 @@ export default function ProjectHeader({
             </svg>
             <span>Standalone Web</span>
           </div>
-          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{standaloneCount}</strong>
+          <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{standaloneCount} Apps</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+        <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
             <svg className="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
             <span>Port Conflicts</span>
           </div>
-          <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{collisionsCount}</strong>
+          <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{collisionsCount} Conflicts</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all">
+        <div className="flex flex-col p-3 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 transition-all">
           <div className="flex items-center gap-1.5 text-xs text-neutral-400">
             <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <ellipse cx="12" cy="5" rx="9" ry="3" />
@@ -171,7 +171,7 @@ export default function ProjectHeader({
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder={`Search ${totalCount} applications by name, port, framework, AI engine... (Press '/' to focus)`}
             aria-label="Filter applications"
-            className="w-full h-10 pl-9 pr-9 rounded-xl bg-[#141414] border border-[#282828] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
+            className="w-full h-10 pl-9 pr-9 rounded-xl bg-[#14141c] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono"
           />
           {query ? (
             <button
@@ -184,13 +184,13 @@ export default function ProjectHeader({
               ✕
             </button>
           ) : (
-            <kbd className="absolute right-3 px-1.5 py-0.5 rounded bg-[#1f1f1f] border border-[#2e2e2e] text-[10px] text-neutral-500 font-mono">
+            <kbd className="absolute right-3 px-1.5 py-0.5 rounded bg-[#181824] border border-[#282838] text-[10px] text-neutral-500 font-mono">
               /
             </kbd>
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0c0c0c] border border-[#222222] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]" role="tablist" aria-label="Filter by framework">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0d0d12] border border-[#22222e] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]" role="tablist" aria-label="Filter by framework">
           {frameworksList.map((fw) => {
             const count = fw === 'all'
               ? totalCount
@@ -204,13 +204,13 @@ export default function ProjectHeader({
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all ${
                   isActive
-                    ? 'bg-sky-500/15 text-sky-400 font-bold border border-sky-500/40 shadow-[0_2px_8px_rgba(56,189,248,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
-                    : 'text-neutral-400 hover:text-white hover:bg-[#161616] hover:border-[#262626] border border-transparent font-medium'
+                    ? 'bg-blue-500/15 text-blue-400 font-bold border border-blue-500/40 shadow-[0_2px_8px_rgba(59,130,246,0.18),inset_0_1px_0_rgba(255,255,255,0.08)]'
+                    : 'text-neutral-400 hover:text-white hover:bg-[#161622] hover:border-[#282838] border border-transparent font-medium'
                 }`}
                 onClick={() => onFilterFrameworkChange(fw)}
               >
                 <span>{fw === 'all' ? 'All Frameworks' : fw}</span>
-                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold' : 'bg-[#161616] text-neutral-400 border border-[#262626]'}`}>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isActive ? 'bg-blue-500/25 text-blue-300 border border-blue-500/40 font-bold' : 'bg-[#161622] text-neutral-400 border border-[#282838]'}`}>
                   {count}
                 </span>
               </button>

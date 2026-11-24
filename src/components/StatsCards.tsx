@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import TiltCard3D from './TiltCard3D';
 import { StatsData } from '../types';
 
 export interface StatsCardsProps {
@@ -86,10 +85,9 @@ export default function StatsCards({ stats, packagesCount = 3, projectsCount = 8
   return (
     <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Monorepo metrics">
       {displayStats.map((item, index) => (
-        <TiltCard3D
+        <div
           key={index}
-          maxTilt={5}
-          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] transition-all shadow-xl shadow-black/40 group cursor-default"
+          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] transition-all duration-200 shadow-xl shadow-black/40 group cursor-default"
         >
           <div
             className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border"
@@ -108,7 +106,7 @@ export default function StatsCards({ stats, packagesCount = 3, projectsCount = 8
             </strong>
             <span className="text-[11px] text-neutral-500 font-mono truncate">{item.sub}</span>
           </div>
-        </TiltCard3D>
+        </div>
       ))}
     </section>
   );

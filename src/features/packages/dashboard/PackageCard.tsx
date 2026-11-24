@@ -1,7 +1,6 @@
 import React from 'react';
 import { consoleLogger } from '@workspace/logger';
 import CopyButton from '../../../components/CopyButton';
-import TiltCard3D from '../../../components/TiltCard3D';
 import { PackageData } from '../../../types';
 import { PACKAGE_METADATA_MAP, PackageMetaInfo } from '../packagesConstants';
 
@@ -48,9 +47,8 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
   };
 
   return (
-    <TiltCard3D maxTilt={4} className="h-full">
-      <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 gap-4 h-full">
-        {/* ── Top Row: Icon, Version, Ecosystem Pills ── */}
+    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] hover:shadow-xl transition-all duration-200 gap-4 h-full">
+      {/* ── Top Row: Icon, Version, Ecosystem Pills ── */}
         <div className="flex flex-col gap-3.5" onClick={handleCardClick} style={{ cursor: onSelectPackage ? 'pointer' : 'default' }}>
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
@@ -149,7 +147,5 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
           </button>
         </div>
       </article>
-    </TiltCard3D>
-  );
   );
 }

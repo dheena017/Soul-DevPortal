@@ -198,40 +198,35 @@ export default function TableOfContents({
               href={`#${id}`}
               data-toc-id={id}
               aria-current={isActive ? 'location' : undefined}
-              className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-150 text-left ${
-                isH3 && !numberPart ? 'pl-5' : ''
+              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs transition-all duration-150 text-left ${
+                isH3 ? 'pl-4' : ''
               } ${
                 isActive
-                  ? 'bg-blue-500/10 text-white font-semibold border border-blue-500/35 shadow-[0_2px_10px_rgba(59,130,246,0.12)]'
-                  : 'text-neutral-400 hover:text-white hover:bg-[#161620] border border-transparent hover:border-[#282838]'
+                  ? 'bg-[#14141c] text-white font-semibold border border-blue-500/40 shadow-[0_2px_10px_rgba(59,130,246,0.15)]'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#14141c] border border-transparent hover:border-[#282838]'
               }`}
               onClick={(event) => handleItemClick(event, id, titlePart)}
             >
-              {isH3 && !numberPart && (
-                <span
-                  className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
-                    isActive
-                      ? 'bg-blue-400 shadow-[0_0_6px_rgba(96,165,250,0.6)]'
-                      : 'bg-neutral-600'
-                  }`}
-                  aria-hidden="true"
-                />
-              )}
+              <span
+                className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
+                  isActive
+                    ? 'bg-blue-400 shadow-[0_0_6px_rgba(96,165,250,0.8)]'
+                    : 'bg-neutral-600'
+                }`}
+                aria-hidden="true"
+              />
               {numberPart && (
                 <span
                   className={`px-1.5 py-0.5 rounded text-[10px] font-mono shrink-0 transition-colors ${
                     isActive
                       ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold'
-                      : 'bg-[#161620] border border-[#282838] text-neutral-400'
+                      : 'bg-[#161622] border border-[#282838] text-neutral-400'
                   }`}
                 >
                   {numberPart}
                 </span>
               )}
               <span className="truncate leading-tight flex-1">{titlePart}</span>
-              {isActive && (
-                <span className="w-1 h-3 rounded-full bg-blue-500 shrink-0" aria-hidden="true" />
-              )}
             </a>
           );
         })}

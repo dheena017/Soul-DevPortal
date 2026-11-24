@@ -41,12 +41,12 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
 
   return (
     <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12">
-      <header className="w-full bg-[#111111] border border-[#222222] rounded-2xl p-5 md:p-6 shadow-2xl shadow-black/50 flex flex-col gap-5">
+      <header className="w-full bg-[#111116] border border-[#282838] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5">
         <div className="flex items-center gap-3 text-xs">
           {onBack && (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] border border-[#2c2c2c] text-neutral-300 hover:text-white hover:border-[#3a3a3a] transition-all font-semibold"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#14141c] border border-[#282838] text-neutral-300 hover:text-white hover:border-[#38384a] hover:bg-[#181824] transition-all font-semibold"
               onClick={onBack}
             >
               ← Back to Overview
@@ -55,7 +55,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
           <span className="text-neutral-400 font-medium">Soul Workspace / Monorepo Applications</span>
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-          Workspace <span className="text-sky-400 font-mono">Applications &amp; Ports</span>
+          Workspace <span className="text-blue-400 font-mono">Applications &amp; Ports</span>
         </h1>
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">
           Catalog of all 8 applications consuming the shared packages, their assigned development ports, backend servers, databases, and AI engines.
@@ -73,7 +73,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter applications by name, port, framework, AI engine..."
               aria-label="Filter applications"
-              className="w-full bg-[#161616] border border-[#262626] rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-sky-500/50"
+              className="w-full bg-[#14141c] border border-[#282838] rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500/50"
             />
             {query && (
               <button
@@ -93,8 +93,8 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
                 type="button"
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   filterFramework === fw
-                    ? 'bg-[#222222] text-white shadow-sm border border-[#333333]'
-                    : 'bg-[#161616] border border-[#262626] text-neutral-400 hover:text-white'
+                    ? 'bg-blue-600 text-white shadow-sm border border-blue-500'
+                    : 'bg-[#14141c] border border-[#282838] text-neutral-400 hover:text-white hover:bg-[#181824]'
                 }`}
                 onClick={() => setFilterFramework(fw)}
               >
@@ -107,17 +107,17 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredProjects.map((p) => (
-          <div key={p.id} className="p-5 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-4">
+          <div key={p.id} className="p-5 rounded-2xl bg-[#111116] border border-[#282838] hover:border-blue-500/40 hover:bg-[#14141c] shadow-2xl transition-all duration-200 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-white">{p.title}</h3>
               <CopyButton text={`http://localhost:${p.frontendPort || 5173}`} label="Copy URL" variant="compact" />
             </div>
             <p className="text-xs text-neutral-400 line-clamp-2">{p.description}</p>
-            <div className="flex items-center gap-2 pt-2 border-t border-[#1f1f1f] text-xs">
+            <div className="flex items-center gap-2 pt-2 border-t border-[#22222e] text-xs">
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
                 Port :{p.frontendPort}
               </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-neutral-800 text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#14141c] border border-[#282838] text-neutral-300">
                 {p.framework || 'Vite React'}
               </span>
             </div>

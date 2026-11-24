@@ -220,13 +220,13 @@ export default function Sidebar({
   return (
     <>
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 sm:w-80 h-screen h-[100dvh] bg-[#111111] border-r border-[#222222] flex flex-col justify-between shadow-2xl shadow-black/80 transition-transform duration-300 ease-out ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 sm:w-80 h-screen h-[100dvh] bg-[#111116] border-r border-[#282838] flex flex-col justify-between shadow-2xl shadow-black/80 transition-transform duration-300 ease-out ${
           menuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-label="Monorepo navigation sidebar"
       >
         {/* ── Brand Header ── */}
-        <div className="h-14 px-4 flex items-center justify-between border-b border-[#1f1f1f] shrink-0">
+        <div className="h-14 px-4 flex items-center justify-between border-b border-[#22222e] shrink-0">
           <a
             className="flex items-center gap-2 group"
             href="#overview"

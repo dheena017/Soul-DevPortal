@@ -12,13 +12,13 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
   const pyDeps = pkg.pythonDependencies || [];
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PACKAGE MANIFEST</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">PACKAGE MANIFEST</span>
           <h2 className="text-lg font-bold text-white">Metadata &amp; Dependency Manifests</h2>
         </div>
-        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#181818] border border-[#2c2c2c] text-neutral-300">
+        <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#14141c] border border-[#282838] text-neutral-300">
           {pkg.name || `@workspace/${pkg.id}`}
         </span>
       </div>
@@ -26,22 +26,22 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
       <div className="flex flex-col gap-6">
         {/* 2-Card Summary Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col p-4 rounded-xl bg-[#0e0e0e] border border-[#202020] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#14141c] border border-[#282838] gap-3">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider text-neutral-400">Package Information</h4>
             <div className="flex flex-col gap-2 text-xs">
-              <div className="flex justify-between py-1 border-b border-[#161616]">
+              <div className="flex justify-between py-1 border-b border-[#22222e]">
                 <span className="text-neutral-500">Package ID</span>
-                <code className="text-sky-400 font-mono font-bold">{pkg.id}</code>
+                <code className="text-blue-400 font-mono font-bold">{pkg.id}</code>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#161616]">
+              <div className="flex justify-between py-1 border-b border-[#22222e]">
                 <span className="text-neutral-500">Full Name</span>
                 <code className="text-neutral-200 font-mono">{pkg.name}</code>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#161616]">
+              <div className="flex justify-between py-1 border-b border-[#22222e]">
                 <span className="text-neutral-500">Version</span>
                 <span className="text-emerald-400 font-mono font-bold">v{pkg.version}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#161616]">
+              <div className="flex justify-between py-1 border-b border-[#22222e]">
                 <span className="text-neutral-500">License</span>
                 <span className="text-amber-400 font-medium">{pkg.license || 'MIT'}</span>
               </div>
@@ -54,14 +54,14 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#0e0e0e] border border-[#202020] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#14141c] border border-[#282838] gap-3">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider text-neutral-400">Ecosystem Status</h4>
             <div className="flex flex-col gap-2 text-xs">
-              <div className="flex justify-between py-1 border-b border-[#161616]">
+              <div className="flex justify-between py-1 border-b border-[#22222e]">
                 <span className="text-neutral-500">npm Workspace</span>
                 <span className="text-neutral-200">{pkg.hasNpmManifest ? '✅ Yes (package.json)' : '❌ No'}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#161616]">
+              <div className="flex justify-between py-1 border-b border-[#22222e]">
                 <span className="text-neutral-500">Python Package</span>
                 <span className="text-neutral-200">{pkg.hasPythonManifest ? '✅ Yes (pyproject.toml)' : '❌ No'}</span>
               </div>
@@ -81,9 +81,9 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
             <h3 className="text-xs font-bold text-neutral-300">Runtime Dependencies ({deps.length})</h3>
             <div className="flex flex-wrap items-center gap-2">
               {deps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0e0e0e] border border-[#222222] text-xs font-mono">
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#14141c] border border-[#282838] text-xs font-mono">
                   <strong className="text-white">{dep}</strong>
-                  <code className="text-sky-400 text-[11px]">{ver}</code>
+                  <code className="text-blue-400 text-[11px]">{ver}</code>
                 </span>
               ))}
             </div>
@@ -96,7 +96,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
             <h3 className="text-xs font-bold text-neutral-300">Development Dependencies ({devDeps.length})</h3>
             <div className="flex flex-wrap items-center gap-2">
               {devDeps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0e0e0e] border border-[#222222] text-xs font-mono">
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#14141c] border border-[#282838] text-xs font-mono">
                   <strong className="text-white">{dep}</strong>
                   <code className="text-purple-400 text-[11px]">{ver}</code>
                 </span>
@@ -111,7 +111,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
             <h3 className="text-xs font-bold text-neutral-300">Peer Dependencies ({peerDeps.length})</h3>
             <div className="flex flex-wrap items-center gap-2">
               {peerDeps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0e0e0e] border border-[#222222] text-xs font-mono">
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#14141c] border border-[#282838] text-xs font-mono">
                   <strong className="text-white">{dep}</strong>
                   <code className="text-emerald-400 text-[11px]">{ver}</code>
                 </span>
@@ -126,7 +126,7 @@ export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
             <h3 className="text-xs font-bold text-neutral-300">Python Dependencies ({pyDeps.length})</h3>
             <div className="flex flex-wrap items-center gap-2">
               {pyDeps.map((dep) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0e0e0e] border border-[#222222] text-xs font-mono">
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#14141c] border border-[#282838] text-xs font-mono">
                   <strong className="text-white">{dep}</strong>
                 </span>
               ))}

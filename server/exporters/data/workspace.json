@@ -2,7 +2,7 @@
   "meta": {
     "generator": "workspace-fastapi-service",
     "version": "2.0.0",
-    "scannedAt": "2026-11-23T12:38:31.913861+00:00"
+    "scannedAt": "2026-11-24T03:07:23.623296+00:00"
   },
   "packages": [
     {
@@ -9009,7 +9009,6 @@
         "package.json",
         "README.md",
         "scratch",
-        "scripts",
         "server",
         "tsconfig.json",
         "client/image",

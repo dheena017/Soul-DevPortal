@@ -17,10 +17,10 @@ export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabP
   }, [scriptsEntries, filter]);
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111111] border border-[#222222] shadow-xl flex flex-col gap-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f1f]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">AUTOMATION &amp; LIFECYCLE</span>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">AUTOMATION &amp; LIFECYCLE</span>
           <h2 className="text-lg font-bold text-white">Project Package Scripts</h2>
         </div>
         <div className="relative flex items-center min-w-[220px]">
@@ -34,7 +34,7 @@ export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabP
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Filter npm scripts..."
             aria-label="Filter npm scripts"
-            className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0e0e0e] border border-[#262626] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-sky-500 transition-all font-mono"
+            className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#14141c] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
           />
           {filter && (
             <button
@@ -52,7 +52,7 @@ export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabP
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between pb-2">
           <span className="text-xs font-bold text-white">Executable Commands</span>
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-800 text-neutral-300">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#14141c] border border-[#282838] text-neutral-300">
             {filteredScripts.length} commands
           </span>
         </div>
@@ -61,13 +61,13 @@ export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabP
           {filteredScripts.map(([scriptName, scriptCmd]) => (
             <div
               key={scriptName}
-              className="flex flex-col justify-between p-4 rounded-xl bg-[#0e0e0e] border border-[#202020] hover:border-[#333333] transition-all gap-2.5"
+              className="flex flex-col justify-between p-4 rounded-xl bg-[#14141c] border border-[#282838] hover:border-blue-500/40 hover:bg-[#181824] transition-all gap-2.5"
             >
               <div className="flex items-center justify-between gap-2">
-                <code className="text-xs font-mono font-bold text-sky-400 truncate">npm run {scriptName}</code>
+                <code className="text-xs font-mono font-bold text-blue-400 truncate">npm run {scriptName}</code>
                 <CopyButton text={`npm run ${scriptName}`} variant="compact" />
               </div>
-              <div className="p-2.5 rounded-lg bg-[#080808] border border-[#1a1a1a] font-mono text-[11px] text-neutral-400 overflow-x-auto">
+              <div className="p-2.5 rounded-lg bg-[#0e0e14] border border-[#22222e] font-mono text-[11px] text-neutral-400 overflow-x-auto">
                 <code>{scriptCmd}</code>
               </div>
             </div>
