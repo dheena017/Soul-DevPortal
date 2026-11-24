@@ -36,7 +36,7 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter endpoint routes..."
               aria-label="Filter endpoint routes"
-              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#111116] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
+              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0a0a0a] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
             />
             {filter && (
               <button
@@ -85,10 +85,6 @@ export default function ProjectApiTab({ project, beUrl }: ProjectApiTabProps) {
                 ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
                 : isPost
                 ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
-                : isDelete
-                ? 'bg-rose-500/15 border-rose-500/30 text-rose-400'
-                : isPut
-                ? 'bg-[#111116] border-[#282838] text-neutral-300'
                 : 'bg-[#111116] border-[#282838] text-neutral-300';
 
               const fullUrl = beUrl ? `${beUrl}${pathStr || method}` : pathStr || method;

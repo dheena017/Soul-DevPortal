@@ -35,7 +35,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter schema tables..."
               aria-label="Filter schema tables"
-              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#111116] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
+              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0a0a0a] border border-[#282838] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
             />
             {filter && (
               <button

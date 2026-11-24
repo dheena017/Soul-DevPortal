@@ -31,7 +31,7 @@ export default function ProjectOverviewTab({
   return (
     <div className="w-full flex flex-col gap-6">
       {/* ── Project Executive Summary ── */}
-      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-4">
+      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111116] border border-[#282838] shadow-2xl flex flex-col gap-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#22222e]">
           <div className="flex flex-col gap-0.5">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400">APPLICATION OVERVIEW</span>
@@ -55,6 +55,34 @@ export default function ProjectOverviewTab({
         <p className="text-xs md:text-sm text-neutral-400 leading-relaxed max-w-4xl">
           {project.description || PROJECT_DESCRIPTIONS[project.id] || 'Monorepo application fully integrated with shared tooling.'}
         </p>
+
+        {/* Quickstart CLI Terminal Strip */}
+        <div className="flex flex-col gap-2 pt-1">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-white flex items-center gap-1.5">
+              <span>⚡</span>
+              <span>Quickstart CLI Commands</span>
+            </span>
+            <span className="text-[10px] font-mono text-neutral-500">Run from workspace root</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div className="flex items-center justify-between gap-2 p-2.5 px-3 rounded-xl bg-[#0a0a0a] border border-[#282838] font-mono text-xs">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <span className="text-neutral-500 select-none font-bold">$</span>
+                <code className="text-blue-300 text-[11px] truncate select-all">{runnerCmd}</code>
+              </div>
+              <CopyButton text={runnerCmd} variant="compact" label="Copy" />
+            </div>
+
+            <div className="flex items-center justify-between gap-2 p-2.5 px-3 rounded-xl bg-[#0a0a0a] border border-[#282838] font-mono text-xs">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <span className="text-neutral-500 select-none font-bold">$</span>
+                <code className="text-neutral-300 text-[11px] truncate select-all">cd Soul-DevPortal-Projects/{project.id} &amp;&amp; npm run dev</code>
+              </div>
+              <CopyButton text={`cd Soul-DevPortal-Projects/${project.id} && npm run dev`} variant="compact" label="Copy" />
+            </div>
+          </div>
+        </div>
 
         {/* 4-Stat Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
