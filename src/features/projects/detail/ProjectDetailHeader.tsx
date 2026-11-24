@@ -36,14 +36,14 @@ export default function ProjectDetailHeader({
   onBack,
 }: ProjectDetailHeaderProps) {
   return (
-    <header className="w-full bg-[#161b22] border border-[#30363d] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
+    <header className="w-full bg-[#17171c] border border-[#282832] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#21262d]">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#1f1f26]">
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161b22] border border-[#30363d] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#161b22] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#17171c] border border-[#282832] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#17171c] transition-all font-semibold shadow-sm"
               onClick={onBack}
               title="Back to all projects"
             >
@@ -56,7 +56,7 @@ export default function ProjectDetailHeader({
           ) : (
             <a
               href="#projects"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#161b22] border border-[#30363d] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#161b22] transition-all font-semibold shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#17171c] border border-[#282832] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#17171c] transition-all font-semibold shadow-sm"
               title="Back to all projects"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -66,11 +66,11 @@ export default function ProjectDetailHeader({
               <span>Back</span>
             </a>
           )}
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#161b22] border border-[#30363d] text-neutral-400 font-medium">Soul Workspace</span>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#17171c] border border-[#282832] text-neutral-400 font-medium">Soul Workspace</span>
           <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
           <a
             href="#projects"
-            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#161b22] border border-[#30363d] hover:border-neutral-500 hover:bg-[#161b22] hover:text-neutral-200 transition-all text-neutral-300 font-medium"
+            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#17171c] border border-[#282832] hover:border-neutral-500 hover:bg-[#17171c] hover:text-neutral-200 transition-all text-neutral-300 font-medium"
             onClick={(e) => {
               e.preventDefault();
               onBack?.();
@@ -79,7 +79,7 @@ export default function ProjectDetailHeader({
             Pillar 1: Projects
           </a>
           <span className="text-neutral-600 font-bold px-0.5" aria-hidden="true">›</span>
-          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#161b22] border border-[#30363d] text-neutral-200 font-semibold shadow-sm truncate max-w-sm">{project.title}</strong>
+          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#17171c] border border-[#282832] text-neutral-200 font-semibold shadow-sm truncate max-w-sm">{project.title}</strong>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -87,8 +87,8 @@ export default function ProjectDetailHeader({
             type="button"
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
               portTesting
-                ? 'bg-[#161b22] border-[#30363d] text-neutral-300 animate-pulse'
-                : 'bg-[#21262d] border border-[#30363d] text-neutral-200 hover:text-white hover:border-neutral-400 hover:bg-[#30363d]'
+                ? 'bg-[#17171c] border-[#282832] text-neutral-300 animate-pulse'
+                : 'bg-[#1f1f26] border border-[#282832] text-neutral-200 hover:text-white hover:border-neutral-400 hover:bg-[#282832]'
             }`}
             onClick={onTestPorts}
             disabled={portTesting}
@@ -105,7 +105,7 @@ export default function ProjectDetailHeader({
               href={feUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] border border-[#30363d] text-white hover:border-neutral-400 hover:bg-[#30363d] transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#1f1f26] border border-[#282832] text-white hover:border-neutral-400 hover:bg-[#282832] transition-all shadow-sm"
               title="Open Client in Browser"
             >
               <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -121,7 +121,7 @@ export default function ProjectDetailHeader({
               href={beUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#21262d] border border-[#30363d] text-white hover:border-neutral-400 hover:bg-[#30363d] transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#1f1f26] border border-[#282832] text-white hover:border-neutral-400 hover:bg-[#282832] transition-all shadow-sm"
               title="Open Server API"
             >
               <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -139,7 +139,7 @@ export default function ProjectDetailHeader({
 
       {/* ── Title & Identifiers Row ── */}
       <div className="flex items-start gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-[#161b22] border border-[#30363d] flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
+        <div className="w-14 h-14 rounded-2xl bg-[#17171c] border border-[#282832] flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
           {project.logo ? (
             <img
               src={project.logo}
@@ -156,11 +156,11 @@ export default function ProjectDetailHeader({
         <div className="flex flex-col gap-2 min-w-0">
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">{project.title}</h1>
-            <code className="px-2 py-0.5 rounded-md bg-[#21262d] border border-neutral-700 text-xs font-mono text-neutral-200 font-semibold">
+            <code className="px-2 py-0.5 rounded-md bg-[#1f1f26] border border-neutral-700 text-xs font-mono text-neutral-200 font-semibold">
               {project.id}
             </code>
             {project.version && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-[#21262d] border border-neutral-700 text-neutral-200">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-mono font-semibold bg-[#1f1f26] border border-neutral-700 text-neutral-200">
                 v{project.version}
               </span>
             )}
@@ -170,13 +170,13 @@ export default function ProjectDetailHeader({
           </p>
           <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
             <span className="text-[11px] font-mono font-bold tracking-wider text-neutral-500 uppercase">CONSUMES:</span>
-            <a href="#packages/logger" className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#161b22] border border-[#30363d] text-neutral-300 hover:text-neutral-200 hover:border-[#30363d] transition-all font-mono text-xs">
+            <a href="#packages/logger" className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#17171c] border border-[#282832] text-neutral-300 hover:text-neutral-200 hover:border-[#282832] transition-all font-mono text-xs">
               @workspace/logger
             </a>
-            <a href="#packages/config" className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#161b22] border border-[#30363d] text-neutral-300 hover:text-neutral-200 hover:border-[#30363d] transition-all font-mono text-xs">
+            <a href="#packages/config" className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#17171c] border border-[#282832] text-neutral-300 hover:text-neutral-200 hover:border-[#282832] transition-all font-mono text-xs">
               @workspace/config
             </a>
-            <a href="#packages/runner" className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#161b22] border border-[#30363d] text-neutral-300 hover:text-neutral-200 hover:border-[#30363d] transition-all font-mono text-xs">
+            <a href="#packages/runner" className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#17171c] border border-[#282832] text-neutral-300 hover:text-neutral-200 hover:border-[#282832] transition-all font-mono text-xs">
               @workspace/runner
             </a>
           </div>
@@ -185,7 +185,7 @@ export default function ProjectDetailHeader({
 
       {/* ── Port Prober Status Banner (if tested) ── */}
       {portStatus && (
-        <div className="flex flex-wrap items-center gap-4 p-3 rounded-xl bg-[#161b22] border border-[#30363d] text-xs text-neutral-200 font-mono">
+        <div className="flex flex-wrap items-center gap-4 p-3 rounded-xl bg-[#17171c] border border-[#282832] text-xs text-neutral-200 font-mono">
           <div className="flex items-center gap-2">
             <span className="text-neutral-400">Client :{project.frontendPort}</span>
             <span className="font-bold text-neutral-300">● {portStatus.fe}</span>
@@ -202,15 +202,15 @@ export default function ProjectDetailHeader({
       )}
 
       {/* ── Modern Navigation Tabs Bar ── */}
-      <div className="pt-2 border-t border-[#21262d]">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0d1117] border border-[#21262d] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]" role="tablist" aria-label="Project sections">
+      <div className="pt-2 border-t border-[#1f1f26]">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#0e0e11] border border-[#1f1f26] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)]" role="tablist" aria-label="Project sections">
           <button
             type="button"
             role="tab"
             aria-selected={activeTab === 'overview'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'overview'
-                ? 'bg-[#30363d] text-white font-bold border border-neutral-400 shadow-sm'
+                ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('overview')}
@@ -231,7 +231,7 @@ export default function ProjectDetailHeader({
               aria-selected={activeTab === 'files'}
               className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
                 activeTab === 'files'
-                  ? 'bg-[#30363d] text-white font-bold border border-neutral-400 shadow-sm'
+                  ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
                   : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
               }`}
               onClick={() => onTabChange('files')}
@@ -240,7 +240,7 @@ export default function ProjectDetailHeader({
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
               </svg>
               <span>Files &amp; Structure</span>
-              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'files' ? 'bg-[#30363d] text-white border border-neutral-400 font-bold' : 'bg-[#161b22] text-neutral-400 border border-[#30363d]'}`}>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'files' ? 'bg-[#282832] text-white border border-neutral-400 font-bold' : 'bg-[#17171c] text-neutral-400 border border-[#282832]'}`}>
                 {fileTreeCount}
               </span>
             </button>
@@ -252,7 +252,7 @@ export default function ProjectDetailHeader({
             aria-selected={activeTab === 'api'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'api'
-                ? 'bg-[#30363d] text-white font-bold border border-neutral-400 shadow-sm'
+                ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('api')}
@@ -261,7 +261,7 @@ export default function ProjectDetailHeader({
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
             <span>API &amp; Routes</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'api' ? 'bg-[#30363d] text-white border border-neutral-400 font-bold' : 'bg-[#161b22] text-neutral-400 border border-[#30363d]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'api' ? 'bg-[#282832] text-white border border-neutral-400 font-bold' : 'bg-[#17171c] text-neutral-400 border border-[#282832]'}`}>
               {project.apiEndpoints?.length || (project.backendPort ? 1 : 0)}
             </span>
           </button>
@@ -272,7 +272,7 @@ export default function ProjectDetailHeader({
             aria-selected={activeTab === 'database'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'database'
-                ? 'bg-[#30363d] text-white font-bold border border-neutral-400 shadow-sm'
+                ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('database')}
@@ -283,7 +283,7 @@ export default function ProjectDetailHeader({
               <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
             </svg>
             <span>Database &amp; Models</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'database' ? 'bg-[#30363d] text-white border border-neutral-400 font-bold' : 'bg-[#161b22] text-neutral-400 border border-[#30363d]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'database' ? 'bg-[#282832] text-white border border-neutral-400 font-bold' : 'bg-[#17171c] text-neutral-400 border border-[#282832]'}`}>
               {tablesCount || 1}
             </span>
           </button>
@@ -294,7 +294,7 @@ export default function ProjectDetailHeader({
             aria-selected={activeTab === 'scripts'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'scripts'
-                ? 'bg-[#30363d] text-white font-bold border border-neutral-400 shadow-sm'
+                ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('scripts')}
@@ -304,7 +304,7 @@ export default function ProjectDetailHeader({
               <line x1="12" y1="19" x2="20" y2="19" />
             </svg>
             <span>Scripts</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'scripts' ? 'bg-[#30363d] text-white border border-neutral-400 font-bold' : 'bg-[#161b22] text-neutral-400 border border-[#30363d]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'scripts' ? 'bg-[#282832] text-white border border-neutral-400 font-bold' : 'bg-[#17171c] text-neutral-400 border border-[#282832]'}`}>
               {scriptsCount}
             </span>
           </button>
@@ -315,7 +315,7 @@ export default function ProjectDetailHeader({
             aria-selected={activeTab === 'env'}
             className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
               activeTab === 'env'
-                ? 'bg-[#30363d] text-white font-bold border border-neutral-400 shadow-sm'
+                ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
                 : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('env')}
@@ -332,7 +332,7 @@ export default function ProjectDetailHeader({
               <line x1="17" y1="16" x2="23" y2="16" />
             </svg>
             <span>Environment</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'env' ? 'bg-[#30363d] text-white border border-neutral-400 font-bold' : 'bg-[#161b22] text-neutral-400 border border-[#30363d]'}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${activeTab === 'env' ? 'bg-[#282832] text-white border border-neutral-400 font-bold' : 'bg-[#17171c] text-neutral-400 border border-[#282832]'}`}>
               {envCount}
             </span>
           </button>
@@ -344,7 +344,7 @@ export default function ProjectDetailHeader({
               aria-selected={activeTab === 'readme'}
               className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
                 activeTab === 'readme'
-                  ? 'bg-[#30363d] text-white font-bold border border-neutral-400 shadow-sm'
+                  ? 'bg-[#282832] text-white font-bold border border-neutral-400 shadow-sm'
                   : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50 hover:border-neutral-700 border border-transparent font-medium'
               }`}
               onClick={() => onTabChange('readme')}

@@ -144,12 +144,12 @@ export default function ProjectsDashboard({
 
       {/* 3. Empty State Fallback */}
       {filteredProjects.length === 0 && (
-        <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#161b22] border border-[#30363d] text-center gap-4 shadow-2xl">
+        <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#17171c] border border-[#282832] text-center gap-4 shadow-2xl">
           <span className="text-4xl">🔍</span>
           <p className="text-sm text-neutral-400 font-medium">No projects match your filter criteria.</p>
           <button
             type="button"
-            className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#161b22] border border-[#30363d] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm"
+            className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#17171c] border border-[#282832] text-neutral-300 font-bold hover:text-neutral-100 hover:border-neutral-500 transition-all shadow-sm"
             onClick={() => {
               setQuery('');
               setFilterFramework('all');

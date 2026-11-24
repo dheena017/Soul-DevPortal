@@ -17,8 +17,8 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
   }, [tables, filter]);
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#161b22] border border-[#30363d] shadow-2xl flex flex-col gap-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#21262d]">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#17171c] border border-[#282832] shadow-2xl flex flex-col gap-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1f1f26]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">DATA PERSISTENCE TIER</span>
           <h2 className="text-lg font-bold text-white">Database Architecture &amp; Entities</h2>
@@ -35,7 +35,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter schema tables..."
               aria-label="Filter schema tables"
-              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0d1117] border border-[#30363d] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-all font-mono"
+              className="w-full h-9 pl-9 pr-8 rounded-lg bg-[#0e0e11] border border-[#282832] text-xs text-neutral-200 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-all font-mono"
             />
             {filter && (
               <button
@@ -54,15 +54,15 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
       <div className="flex flex-col gap-4">
         {/* Meta Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="flex flex-col p-3 rounded-xl bg-[#161b22] border border-[#30363d]">
+          <div className="flex flex-col p-3 rounded-xl bg-[#17171c] border border-[#282832]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Storage Engine</span>
             <strong className="text-xs font-bold text-neutral-200 font-mono mt-1">{project.dbInfo || 'SQLite'}</strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#161b22] border border-[#30363d]">
+          <div className="flex flex-col p-3 rounded-xl bg-[#17171c] border border-[#282832]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Dialect</span>
             <strong className="text-xs font-bold text-neutral-200 font-mono mt-1">Relational SQL / JSON</strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#161b22] border border-[#30363d]">
+          <div className="flex flex-col p-3 rounded-xl bg-[#17171c] border border-[#282832]">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Schema Mode</span>
             <strong className="text-xs font-bold text-neutral-200 font-mono mt-1">
               {tables.length > 0 ? `${tables.length} Tables Registered` : 'Single Database File'}
@@ -74,7 +74,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
           <div className="flex flex-col gap-3 pt-2">
             <div className="flex items-center justify-between pb-2">
               <span className="text-xs font-bold text-neutral-300">Registered Schema Tables</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#161b22] border border-[#30363d] text-neutral-300">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#17171c] border border-[#282832] text-neutral-300">
                 {filteredTables.length} tables
               </span>
             </div>
@@ -83,7 +83,7 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
               {filteredTables.map((tName) => (
                 <div
                   key={tName}
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-neutral-500 hover:bg-[#161b22] transition-all"
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#17171c] border border-[#282832] hover:border-neutral-500 hover:bg-[#17171c] transition-all"
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="text-neutral-500">📋</span>
@@ -95,11 +95,11 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
             </div>
           </div>
         ) : tables.length > 0 ? (
-          <div className="p-8 rounded-xl bg-[#161b22] border border-[#30363d] text-center">
+          <div className="p-8 rounded-xl bg-[#17171c] border border-[#282832] text-center">
             <p className="text-xs text-neutral-400">No tables match your search filter.</p>
           </div>
         ) : (
-          <div className="p-4 rounded-xl bg-[#161b22] border border-[#30363d] flex flex-col gap-2">
+          <div className="p-4 rounded-xl bg-[#17171c] border border-[#282832] flex flex-col gap-2">
             <h3 className="text-xs font-bold text-neutral-200">Storage Configuration</h3>
             <p className="text-xs text-neutral-400 leading-relaxed">
               Standalone embedded SQLite persistence configured with zero external cloud credentials needed. Automatic WAL mode and schema synchronization managed at startup.
