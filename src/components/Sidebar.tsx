@@ -346,6 +346,44 @@ export default function Sidebar({
                 15
               </span>
             </button>
+
+            <button
+              type="button"
+              aria-current={(isActive('computer') || isActive('system')) ? 'page' : undefined}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                (isActive('computer') || isActive('system'))
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
+              }`}
+              onClick={() => onNavigate('computer')}
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <svg
+                  className={`w-4 h-4 shrink-0 ${(isActive('computer') || isActive('system')) ? 'text-sky-400' : 'text-zinc-400'}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                  <line x1="8" y1="21" x2="16" y2="21" />
+                  <line x1="12" y1="17" x2="12" y2="21" />
+                </svg>
+                <span className="truncate font-semibold text-zinc-100">Computer &amp; Performance</span>
+              </div>
+              <span
+                className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                  (isActive('computer') || isActive('system'))
+                    ? 'bg-sky-500/15 text-sky-300 border-sky-400/35 font-bold'
+                    : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+                }`}
+              >
+                Live
+              </span>
+            </button>
           </div>
 
           {/* If searching and matching scripts exist */}

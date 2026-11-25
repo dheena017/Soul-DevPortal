@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
 import { SoulLogoIcon } from './SoulLogo';
-import { checkBackendHealth } from '../services/api';
+import { checkBackendHealth, fetchSystemLive } from '../services/api';
 
 export interface BreadcrumbItem {
   label: string;
@@ -48,6 +48,29 @@ export const Header: React.FC<HeaderProps> = ({
     ['rules', 'projects-rules', 'design', 'packages-design', 'guide', 'ports', 'port-architecture', 'ports-guide', 'techstack', 'tech-stack', 'cheatsheet', 'compliance-cheatsheet'].includes(active);
 
   const [isBackendLive, setIsBackendLive] = useState<boolean>(false);
+  const [quickTelemetry, setQuickTelemetry] = useState<{ cpu: number; ram: number } | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    if (!isBackendLive) return;
+
+    const pull = async () => {
+      if (document.hidden) return;
+      const snap = await fetchSystemLive();
+      if (mounted && snap) {
+        setQuickTelemetry({
+          cpu: Math.round(snap.cpu.totalPercent),
+          ram: Math.round(snap.memory.percent),
+        });
+      }
+    };
+    pull();
+    const id = window.setInterval(pull, 6000);
+    return () => {
+      mounted = false;
+      window.clearInterval(id);
+    };
+  }, [isBackendLive]);
 
   useEffect(() => {
     let isMounted = true;
@@ -235,6 +258,20 @@ export const Header: React.FC<HeaderProps> = ({
             {isBackendLive ? ':8008 Live' : ':8008 Standby'}
           </span>
         </div>
+
+        <button
+          type="button"
+          onClick={() => onNavigate('computer')}
+          title="Open Computer & Performance Monitor"
+          className={`hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono tabular-nums border transition-colors cursor-pointer ${
+            active === 'computer' || active === 'system'
+              ? 'bg-sky-500/20 border-sky-400/40 text-sky-200 font-bold'
+              : 'bg-[#16161c] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2]'
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
+          <span>{quickTelemetry ? `CPU ${quickTelemetry.cpu}% · RAM ${quickTelemetry.ram}%` : 'Computer'}</span>
+        </button>
 
         {onTriggerReload && (
           <button

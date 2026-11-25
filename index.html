@@ -16,27 +16,110 @@
   </head>
   <body style="margin: 0; background-color: #070708; color: #e4e4e7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
     <div id="root">
-      <div style="position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #070708; z-index: 9999;">
-        <div style="position: relative; width: 64px; height: 64px; margin-bottom: 24px;">
-          <div style="position: absolute; inset: -8px; border-radius: 50%; border: 1px solid rgba(56, 189, 248, 0.25); animation: spin 4s linear infinite;"></div>
-          <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #111116; border: 1px solid rgba(255, 255, 255, 0.12); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 24px rgba(56, 189, 248, 0.2);">
-            <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
-              <path d="M48 20C48 13.37 42.63 8 36 8H20C13.37 8 8 13.37 8 20V26C8 32.63 13.37 38 20 38H44C50.63 38 56 43.37 56 50V56C56 62.63 50.63 68 44 68H28C21.37 68 16 62.63 16 56" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
-            </svg>
+      <div style="position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #070708; color: #ffffff; user-select: none; overflow: hidden;">
+        <!-- Subtle Radial Glow & Dot Grid (matches LoadingScreen.tsx) -->
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; background: rgba(56,189,248,0.1); border-radius: 9999px; filter: blur(120px); pointer-events: none;"></div>
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: rgba(79,70,229,0.15); border-radius: 9999px; filter: blur(80px); pointer-events: none;"></div>
+        <div style="position: absolute; inset: 0; opacity: 0.03; pointer-events: none; background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+        <div style="position: relative; z-index: 10; width: 100%; max-width: 448px; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 28px;">
+          <!-- Emblem Pedestal with Orbital Glow -->
+          <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+            <div style="position: absolute; inset: -16px; border-radius: 9999px; border: 1px solid rgba(56, 189, 248, 0.2); animation: spin 6s linear infinite;"></div>
+            <div style="width: 80px; height: 80px; border-radius: 16px; background-color: #111116; border: 1px solid rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; box-shadow: 0 25px 50px -12px rgba(56, 189, 248, 0.2); position: relative; overflow: hidden;">
+              <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(56,189,248,0.15), transparent, rgba(99,102,241,0.2));"></div>
+              <svg width="44" height="44" viewBox="0 0 64 64" fill="none" style="position: relative; z-index: 10; filter: drop-shadow(0 0 12px rgba(56,189,248,0.6));">
+                <defs>
+                  <linearGradient id="html-soul-neon-1" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#38bdf8" />
+                    <stop offset="50%" stop-color="#6366f1" />
+                    <stop offset="100%" stop-color="#a855f7" />
+                  </linearGradient>
+                  <linearGradient id="html-soul-neon-2" x1="56" y1="12" x2="8" y2="52" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#38bdf8" />
+                    <stop offset="50%" stop-color="#818cf8" />
+                    <stop offset="100%" stop-color="#2dd4bf" />
+                  </linearGradient>
+                  <radialGradient id="html-soul-ambient" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3" />
+                    <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.08" />
+                    <stop offset="100%" stop-color="#070708" stop-opacity="0" />
+                  </radialGradient>
+                  <linearGradient id="html-soul-glass" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#151519" stop-opacity="0.8" />
+                    <stop offset="100%" stop-color="#070708" stop-opacity="0.95" />
+                  </linearGradient>
+                </defs>
+                <circle cx="32" cy="32" r="24" fill="url(#html-soul-ambient)" />
+                <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#html-soul-glass)" stroke="url(#html-soul-neon-1)" stroke-width="1.5" stroke-opacity="0.35" />
+                <path d="M20 22C20 16.4772 24.4772 12 30 12H41C43.7614 12 46 14.2386 46 17C46 19.7614 43.7614 22 41 22H29C26.7909 22 25 23.7909 25 26C25 28.2091 26.7909 30 29 30H38C44.6274 30 50 35.3726 50 42C50 48.6274 44.6274 54 38 54H25C22.2386 54 20 51.7614 20 49C20 46.2386 22.2386 44 25 44H38C40.2091 44 42 42.2091 42 40C42 37.7909 40.2091 36 38 36H29C22.3726 36 17 30.6274 17 24C17 19.5 19.5 15.5 23.5 13.5" stroke="url(#html-soul-neon-1)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="41" cy="17" r="2.5" fill="#38bdf8" />
+                <circle cx="25" cy="49" r="2.5" fill="#a855f7" />
+                <circle cx="33.5" cy="33" r="3" fill="#ffffff" opacity="0.9" />
+                <circle cx="33.5" cy="33" r="5" stroke="url(#html-soul-neon-2)" stroke-width="1" opacity="0.5" />
+              </svg>
+            </div>
           </div>
-        </div>
-        <div style="font-size: 16px; font-weight: 800; letter-spacing: 0.05em; color: #ffffff; margin-bottom: 6px;">
-          SOUL WORKSPACE
-        </div>
-        <div style="font-size: 11px; font-family: monospace; color: #71717a; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 20px;">
-          Developer Portal &bull; Booting Engine...
-        </div>
-        <div style="width: 180px; height: 4px; background-color: #18181b; border-radius: 9999px; overflow: hidden;">
-          <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #38bdf8, #6366f1, #34d399); animation: pulse-bar 1.5s ease-in-out infinite;"></div>
+
+          <!-- Brand Title & Subtitle -->
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="font-size: 22px; font-weight: 900; letter-spacing: -0.025em; color: #ffffff;">SOUL WORKSPACE</div>
+              <span style="padding: 2px 8px; border-radius: 9999px; font-size: 10px; font-family: monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.3); color: #38bdf8;">v1.0</span>
+            </div>
+            <div style="font-size: 12px; font-family: monospace; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.1em;">
+              Developer Portal &amp; Architecture Engine
+            </div>
+          </div>
+
+          <!-- Progress Bar & Status Row -->
+          <div style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-family: monospace;">
+              <span style="color: #a1a1aa; display: flex; align-items: center; gap: 8px;">
+                <span style="color: #38bdf8;">⚡</span>
+                <span>Booting Workspace Engine</span>
+              </span>
+              <strong style="color: #38bdf8; font-weight: 700;">12%</strong>
+            </div>
+            <div style="width: 100%; height: 8px; border-radius: 9999px; background-color: #16161c; border: 1px solid rgba(255,255,255,0.08); overflow: hidden; padding: 2px; box-sizing: border-box;">
+              <div style="width: 12%; height: 100%; border-radius: 9999px; background: linear-gradient(90deg, #0ea5e9, #6366f1, #34d399); box-shadow: 0 0 10px rgba(56,189,248,0.8);"></div>
+            </div>
+            <div style="font-size: 11px; font-family: monospace; color: #71717a; text-align: center;">
+              Initializing pure-live AST analyzer &amp; socket prober
+            </div>
+          </div>
+
+          <!-- Subsystem Checklist Box -->
+          <div style="width: 100%; padding: 14px; box-sizing: border-box; border-radius: 12px; background-color: rgba(17,17,22,0.8); border: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="color: #7dd3fc; font-weight: 600;">⚡ Booting Workspace Engine</span>
+              <span style="color: #38bdf8; font-family: monospace; font-size: 10px;">BOOTING...</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="color: #52525b;">📦 Mounting Shared Packages</span>
+              <span style="color: #3f3f46; font-family: monospace; font-size: 10px;">PENDING</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="color: #52525b;">🚀 Probing Applications &amp; Port Topology</span>
+              <span style="color: #3f3f46; font-family: monospace; font-size: 10px;">PENDING</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="color: #52525b;">📜 Hydrating Architecture Specs &amp; Rules</span>
+              <span style="color: #3f3f46; font-family: monospace; font-size: 10px;">PENDING</span>
+            </div>
+          </div>
+
+          <!-- Footer Telemetry -->
+          <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding-top: 4px; font-size: 11px; font-family: monospace; color: #71717a;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 6px; height: 6px; border-radius: 9999px; background-color: #34d399;"></span>
+              <span>:8008 LIVE &middot; :5181 VITE</span>
+            </div>
+            <span style="color: #a1a1aa;">Skip (ESC) &rarr;</span>
+          </div>
         </div>
         <style>
           @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-          @keyframes pulse-bar { 0% { transform: translateX(-100%); } 50% { transform: translateX(0%); } 100% { transform: translateX(100%); } }
         </style>
       </div>
     </div>

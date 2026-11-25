@@ -352,3 +352,56 @@ export async function fetchDocTab(category: string, topic: string, tab: string):
     return null;
   }
 }
+
+
+export async function fetchSystemOverview(): Promise<import('../types').SystemOverviewResponse | null> {
+  try {
+    const res = await fetch(`${API_BASE}/system/overview`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as import('../types').SystemOverviewResponse;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchSystemSpecs(): Promise<import('../types').SystemSpecs | null> {
+  try {
+    const res = await fetch(`${API_BASE}/system/specs`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as import('../types').SystemSpecs;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchSystemLive(): Promise<import('../types').SystemLiveSnapshot | null> {
+  try {
+    const res = await fetch(`${API_BASE}/system/live`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as import('../types').SystemLiveSnapshot;
+  } catch {
+    return null;
+  }
+}
+
+export async function refreshSystemSpecs(): Promise<{ success: boolean; specs?: import('../types').SystemSpecs } | null> {
+  try {
+    const res = await fetch(`${API_BASE}/system/refresh`, {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as { success: boolean; specs?: import('../types').SystemSpecs };
+  } catch {
+    return null;
+  }
+}

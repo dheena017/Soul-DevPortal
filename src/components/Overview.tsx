@@ -605,35 +605,70 @@ export default function Overview({
         </section>
       )}
 
-      {/* ── Monorepo Command Runners Quick Banner ── */}
-      <section className="w-full p-6 rounded-2xl bg-[#121216] border border-white/[0.08] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-[#09090c] border border-white/[0.08] flex items-center justify-center text-2xl shrink-0">
-            ⚡
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <h3 className="text-lg font-bold text-white">15 Monorepo Automation Scripts &amp; Command Runners</h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#09090c] border border-white/[0.08] text-zinc-300">
-                Python FastAPI · Vite · TS Gates
-              </span>
+      {/* ── Command Runners & Computer Monitor Gateway Banners ── */}
+      <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-5">
+        <section className="w-full p-6 rounded-2xl bg-[#121216] border border-white/[0.08] flex flex-col justify-between gap-5 shadow-2xl">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-[#09090c] border border-white/[0.08] flex items-center justify-center text-2xl shrink-0">
+              ⚡
             </div>
-            <p className="text-xs text-zinc-400 leading-relaxed max-w-3xl">
-              Orchestrate all {projects.length || 8} fullstack applications concurrently, launch micro-app dev servers,
-              run TypeScript validation gates, and supervise port lifecycles from the dedicated Command Runner.
-            </p>
+            <div className="flex flex-col gap-1.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-base sm:text-lg font-bold text-white">15 Monorepo Automation Scripts</h3>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#09090c] border border-white/[0.08] text-zinc-300">
+                  FastAPI · Vite · TS Gates
+                </span>
+              </div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Orchestrate all {projects.length || 8} fullstack applications concurrently, launch micro-app dev servers,
+                and supervise port lifecycles from the dedicated Command Runner.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 shadow-md shadow-white/10 transition-all shrink-0 cursor-pointer"
-          onClick={() => onNavigate('scripts')}
-        >
-          <span>Open Scripts &amp; Runners Center</span>
-          <span>→</span>
-        </button>
-      </section>
+          <button
+            type="button"
+            className="w-full sm:w-auto self-start inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 shadow-md shadow-white/10 transition-all cursor-pointer"
+            onClick={() => onNavigate('scripts')}
+          >
+            <span>Open Scripts &amp; Runners Center</span>
+            <span>→</span>
+          </button>
+        </section>
+
+        <section className="w-full p-6 rounded-2xl bg-[#121216] border border-sky-400/20 hover:border-sky-400/35 transition-colors flex flex-col justify-between gap-5 shadow-2xl">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-sky-500/12 border border-sky-400/30 flex items-center justify-center text-sky-400 shrink-0">
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-base sm:text-lg font-bold text-white">Computer &amp; Performance Monitor</h3>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-sky-500/15 border border-sky-400/30 text-sky-300">
+                  CPU · RAM · GPU · Wi-Fi
+                </span>
+              </div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Inspect live host silicon, motherboard DIMM slots, GPU displays, NVMe sector health, Wi-Fi signal strength,
+                and running processes with real-time SVG telemetry gauges.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="w-full sm:w-auto self-start inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-sky-500/18 border border-sky-400/40 text-sky-200 hover:bg-sky-500/25 hover:text-white transition-all cursor-pointer"
+            onClick={() => onNavigate('computer')}
+          >
+            <span>Open Computer &amp; Performance</span>
+            <span>→</span>
+          </button>
+        </section>
+      </div>
     </article>
   );
 }

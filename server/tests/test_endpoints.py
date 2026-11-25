@@ -25,6 +25,11 @@ all_endpoints = [
     # Dashboard
     ("GET", "/api/dashboard/overview"),
     ("GET", "/api/workspace"),
+
+    # Computer & Performance
+    ("GET", "/api/system/specs"),
+    ("GET", "/api/system/live"),
+    ("GET", "/api/system/overview"),
     
     # Projects
     ("GET", "/api/projects/navigation"),

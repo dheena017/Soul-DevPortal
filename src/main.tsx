@@ -22,6 +22,7 @@ import PackagesView from './features/packages/PackagesView';
 import PackageDetailView from './features/packages/PackageDetailView';
 import DocsView from './features/docs/DocsView';
 import ScriptsView from './features/scripts/ScriptsView';
+import SystemView from './features/system/SystemView';
 
 import { DOCUMENTATION_GUIDES_REGISTRY, findGuideMeta } from './features/docs/docsConstants';
 
@@ -285,6 +286,7 @@ function App() {
 
   const activeTitle = useMemo(() => {
     if (active === 'overview' || active === '' || active === '#') return null;
+    if (active === 'computer' || active === 'system') return 'Computer & Performance';
     if (active === 'projects') return 'Projects & Applications';
     if (active.startsWith('projects/') || active.startsWith('project/')) {
       const pId = active.replace(/^projects?\//, '');
@@ -356,6 +358,8 @@ function App() {
       crumbs.push({ label: activeTitle || active });
     } else if (active === 'scripts' || active === 'commands' || active === 'runners') {
       crumbs.push({ label: 'scripts & runners' });
+    } else if (active === 'computer' || active === 'system') {
+      crumbs.push({ label: 'computer & performance' });
     } else {
       crumbs.push({ label: activeTitle || active });
     }
@@ -544,6 +548,11 @@ function App() {
               rootScripts={liveWorkspace?.rootScripts || {}}
               onNavigate={navigate}
             />
+          )}
+
+          {/* Dedicated Feature View: Computer & Performance Hardware Monitor */}
+          {(active === 'computer' || active === 'system') && (
+            <SystemView onNavigate={navigate} />
           )}
         </div>
 

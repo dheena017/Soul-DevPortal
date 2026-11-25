@@ -26,6 +26,7 @@ from features.soul_dev_portal.router import router as portal_router
 from features.projects.router import router as projects_router
 from features.packages.router import router as packages_router
 from features.docs.router import router as docs_router
+from features.system.router import router as system_router
 from features.dashboard.service import DashboardService
 
 
@@ -70,6 +71,10 @@ def create_app() -> FastAPI:
     api_router.include_router(projects_router)
     api_router.include_router(packages_router)
     api_router.include_router(docs_router)
+    api_router.include_router(system_router)
+
+    from features.system.sampler import system_sampler
+    system_sampler.warm_up_async()
 
     # Global /api/health probe
     @api_router.get("/health", tags=["Health"])
