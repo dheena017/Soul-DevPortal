@@ -62,7 +62,7 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
   }, [query, selectedCategory]);
 
   return (
-    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger" aria-label="Documentation Hub & Architecture Specifications">
+    <article className="w-full flex flex-col gap-6 pb-12 animate-in fade-in duration-300 portal-stagger" aria-label="Documentation Hub & Architecture Specifications">
       {/* Hero Header with Merged Toolbar */}
       <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-5 portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="Documentation Blueprints Visual" />

@@ -113,7 +113,7 @@ export default function ProjectsDashboard({
   }, [projects, query, filterFramework]);
 
   return (
-    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
+    <article className="w-full flex flex-col gap-6 pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* 1. Projects Header Component */}
       <ProjectHeader
         totalCount={totalCount}

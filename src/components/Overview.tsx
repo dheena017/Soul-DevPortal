@@ -70,7 +70,7 @@ export default function Overview({
   }, [projects]);
 
   return (
-    <article className="w-full flex flex-col gap-8 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
+    <article className="w-full flex flex-col gap-8 pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* ── Standardized Hero Header matching Pillar Dashboards ── */}
       <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6 portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="Soul Monorepo Mesh Visual" />
@@ -132,7 +132,7 @@ export default function Overview({
               <span className="text-xl font-extrabold text-sky-300 font-mono">5</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Architecture Specs</span>
             </div>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c]/90 backdrop-blur-sm border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c]/95 border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-emerald-400 font-mono">0</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Port Collisions</span>
             </div>

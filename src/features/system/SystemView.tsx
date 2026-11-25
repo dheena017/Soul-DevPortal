@@ -40,17 +40,26 @@ export default function SystemView(_props: SystemViewProps) {
   const [isRescanning, setIsRescanning] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const loadInitial = useCallback(async () => {
-    setIsLoading(true);
-    setErrorMsg(null);
-    const data = await fetchSystemOverview(historyWindowSec);
+  const loadInitial = useCallback(async (attempt = 0) => {
+    if (attempt === 0) {
+      setIsLoading(true);
+      setErrorMsg(null);
+    }
+    const data = await fetchSystemOverview(60);
     if (data && data.specs && data.live) {
       setSpecs(data.specs);
       setLive(data.live);
       setErrorMsg(null);
-    } else {
-      setErrorMsg('Unable to reach the FastAPI hardware telemetry service on :8008.');
+      setIsLoading(false);
+      return;
     }
+    if (attempt < 4) {
+      window.setTimeout(() => {
+        void loadInitial(attempt + 1);
+      }, 1500);
+      return;
+    }
+    setErrorMsg('Unable to reach the FastAPI hardware telemetry service on :8008.');
     setIsLoading(false);
   }, []);
 
@@ -120,7 +129,7 @@ export default function SystemView(_props: SystemViewProps) {
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full py-2">
         <TabLoadingState
           title="Scanning Host Hardware & Telemetry"
           subtitle="Computer Monitor • Live Hardware Engine"
@@ -133,7 +142,7 @@ export default function SystemView(_props: SystemViewProps) {
 
   if (errorMsg || !specs || !live) {
     return (
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 fade-in-up">
+      <div className="w-full py-2 fade-in-up">
         <div className="p-6 rounded-2xl system-card border-rose-500/35 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
             <h2 className="text-base font-bold text-white">Host System Telemetry Offline</h2>
@@ -141,7 +150,7 @@ export default function SystemView(_props: SystemViewProps) {
           </div>
           <button
             type="button"
-            onClick={loadInitial}
+            onClick={() => void loadInitial(0)}
             className="px-4 py-2 rounded-xl bg-white text-zinc-950 text-xs font-bold hover:bg-zinc-200 transition-colors cursor-pointer shrink-0"
           >
             Retry Hardware Probe
@@ -152,7 +161,7 @@ export default function SystemView(_props: SystemViewProps) {
   }
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-5 fade-in-up">
+    <div className="w-full py-1 flex flex-col gap-5 fade-in-up">
       <SystemHeaderCard
         specs={specs}
         live={live}

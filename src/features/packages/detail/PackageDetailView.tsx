@@ -106,7 +106,7 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
   const totalExports = (livePkg.exports || []).length + (livePkg.pythonExports || []).length + (livePkg.typeScriptExports || []).length;
 
   return (
-    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 portal-stagger">
+    <article className="w-full flex flex-col gap-6 pb-12 portal-stagger">
       {/* ── Main Hero Header & Tabs Bar ── */}
       <PackageDetailHeader
         pkg={livePkg}

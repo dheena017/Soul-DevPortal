@@ -23,8 +23,14 @@ lerna-debug.log*
 dist/
 **/dist/
 dist-ssr/
+dist-electron/
+release/
 build/
 **/build/
+build-release/
+**/build-release/
+logs/
+**/logs/
 .next/
 **/.next/
 out/

@@ -29,7 +29,7 @@ class SystemTelemetrySampler:
     """Manages cached static specs and non-blocking live performance ring buffers."""
 
     IDLE_HIBERNATE_SECONDS = 30.0
-    SLOW_REFRESH_SECONDS = 5.0
+    SLOW_REFRESH_SECONDS = 15.0
     FAST_INTERVAL_SECONDS = 1.0
 
     def __init__(self) -> None:

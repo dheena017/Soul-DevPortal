@@ -2209,32 +2209,47 @@ def collect_slow_telemetry(
         )
     )
 
-    # 3. Live Wi-Fi
-    wifi_interfaces = probe_wifi_interfaces_windows()
-    connected_wifi = next((w for w in wifi_interfaces if str(w.get("state", "")).lower() == "connected"), None)
+    # 3 & 4. Live Wi-Fi & GPU Subprocess Probes (throttled to <= once per 20s to avoid PowerShell/WMI CPU spikes)
+    now_probe_mono = time.monotonic()
+    last_hw_probe_ts = float(cache_map.get("_hw_probe_ts") or 0.0)
+    cached_hw_probe = cache_map.get("_hw_probe_data")
 
-    # 4. GPU Live Utilization
-    gpu_live: Dict[str, Any] = {
-        "utilizationPercent": None,
-        "dedicatedUsedBytes": None,
-        "sharedUsedBytes": None,
-        "engines": None,
-        "nvidiaSensors": None,
-    }
-    nvidia_gpus = probe_nvidia_smi()
-    if nvidia_gpus:
-        primary_nv = nvidia_gpus[0]
-        gpu_live["utilizationPercent"] = primary_nv.get("utilizationPercent")
-        if primary_nv.get("vramUsedMB") is not None:
-            gpu_live["dedicatedUsedBytes"] = int(primary_nv["vramUsedMB"] * 1024 * 1024)
-        gpu_live["nvidiaSensors"] = nvidia_gpus
-    elif include_gpu_perf:
-        wddm = probe_windows_gpu_perf()
-        if wddm:
-            gpu_live["utilizationPercent"] = wddm.get("engineTotal")
-            gpu_live["engines"] = wddm.get("engines")
-            gpu_live["dedicatedUsedBytes"] = wddm.get("dedicatedUsed")
-            gpu_live["sharedUsedBytes"] = wddm.get("sharedUsed")
+    if cached_hw_probe is not None and (now_probe_mono - last_hw_probe_ts) < 20.0:
+        wifi_interfaces = cached_hw_probe["wifiInterfaces"]
+        connected_wifi = cached_hw_probe["connectedWifi"]
+        gpu_live = dict(cached_hw_probe["gpuLive"])
+    else:
+        wifi_interfaces = probe_wifi_interfaces_windows()
+        connected_wifi = next((w for w in wifi_interfaces if str(w.get("state", "")).lower() == "connected"), None)
+
+        gpu_live = {
+            "utilizationPercent": None,
+            "dedicatedUsedBytes": None,
+            "sharedUsedBytes": None,
+            "engines": None,
+            "nvidiaSensors": None,
+        }
+        nvidia_gpus = probe_nvidia_smi()
+        if nvidia_gpus:
+            primary_nv = nvidia_gpus[0]
+            gpu_live["utilizationPercent"] = primary_nv.get("utilizationPercent")
+            if primary_nv.get("vramUsedMB") is not None:
+                gpu_live["dedicatedUsedBytes"] = int(primary_nv["vramUsedMB"] * 1024 * 1024)
+            gpu_live["nvidiaSensors"] = nvidia_gpus
+        elif include_gpu_perf:
+            wddm = probe_windows_gpu_perf()
+            if wddm:
+                gpu_live["utilizationPercent"] = wddm.get("engineTotal")
+                gpu_live["engines"] = wddm.get("engines")
+                gpu_live["dedicatedUsedBytes"] = wddm.get("dedicatedUsed")
+                gpu_live["sharedUsedBytes"] = wddm.get("sharedUsed")
+
+        cache_map["_hw_probe_ts"] = now_probe_mono
+        cache_map["_hw_probe_data"] = {
+            "wifiInterfaces": wifi_interfaces,
+            "connectedWifi": connected_wifi,
+            "gpuLive": gpu_live,
+        }
 
     # 5. Active Socket States, Listening Ports & Live Peer Connections -> PID Correlation
     socket_counts = {"established": 0, "listening": 0, "timeWait": 0, "closeWait": 0, "total": 0}
@@ -2325,6 +2340,7 @@ def collect_slow_telemetry(
     live_pids: set[int] = set()
     all_procs: List[Dict[str, Any]] = []
     pid_info_lookup: Dict[int, Dict[str, Any]] = {}
+    raw_proc_handles: List[Tuple[int, float, Any]] = []
     total_threads = 0
 
     for p in psutil.process_iter(["pid", "ppid", "name", "memory_info", "cpu_times", "io_counters", "num_threads", "status", "create_time"]):
@@ -2373,28 +2389,9 @@ def collect_slow_telemetry(
             if cached_meta is not None and abs(cached_meta[0] - ctime) < 0.01:
                 exe_path, username, cmdline = cached_meta[1], cached_meta[2], cached_meta[3]
             else:
-                exe_path, username, cmdline = None, None, None
-                try:
-                    with p.oneshot():
-                        try:
-                            exe_path = p.exe() or None
-                        except Exception:
-                            pass
-                        try:
-                            username = p.username() or None
-                        except Exception:
-                            pass
-                        try:
-                            raw_cmd = p.cmdline()
-                            if raw_cmd:
-                                cmdline = _redact_cmdline(raw_cmd)
-                        except Exception:
-                            pass
-                except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                    pass
-                if not exe_path:
-                    exe_path = kernel_virtual_descriptions.get(pname.lower())
-                static_meta_cache[pid] = (ctime, exe_path, username, cmdline)
+                exe_path = kernel_virtual_descriptions.get(pname.lower())
+                username, cmdline = None, None
+                raw_proc_handles.append((pid, ctime, p))
 
             mem_info = info.get("memory_info")
             rss_bytes = int(mem_info.rss) if mem_info else 0
@@ -2441,6 +2438,43 @@ def collect_slow_telemetry(
     for stale_io_pid in list(io_cache.keys()):
         if stale_io_pid not in live_pids:
             io_cache.pop(stale_io_pid, None)
+
+    # Resolve exe/username/cmdline lazily ONLY for top 45 active consumers & listening-port owners
+    top_priority_pids: set[int] = set(pid_to_ports.keys())
+    for item in sorted(all_procs, key=lambda x: (x["cpuPercent"], x["memoryBytes"]), reverse=True)[:30]:
+        top_priority_pids.add(int(item["pid"]))
+    for item in sorted(all_procs, key=lambda x: x["memoryBytes"], reverse=True)[:25]:
+        top_priority_pids.add(int(item["pid"]))
+
+    for pid, ctime, p_obj in raw_proc_handles:
+        if pid not in top_priority_pids:
+            continue
+        p_dict = pid_info_lookup.get(pid)
+        if not p_dict:
+            continue
+        exe_path, username, cmdline = p_dict.get("exePath"), None, None
+        try:
+            with p_obj.oneshot():
+                try:
+                    exe_path = p_obj.exe() or exe_path
+                except Exception:
+                    pass
+                try:
+                    username = p_obj.username() or None
+                except Exception:
+                    pass
+                try:
+                    raw_cmd = p_obj.cmdline()
+                    if raw_cmd:
+                        cmdline = _redact_cmdline(raw_cmd)
+                except Exception:
+                    pass
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+        p_dict["exePath"] = exe_path
+        p_dict["username"] = username
+        p_dict["cmdline"] = cmdline
+        static_meta_cache[pid] = (ctime, exe_path, username, cmdline)
 
     for p_item in all_procs:
         ppid_val = p_item.get("ppid")

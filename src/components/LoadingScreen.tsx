@@ -18,36 +18,36 @@ interface BootStep {
 const BOOT_STEPS: BootStep[] = [
   {
     id: 'engine',
-    label: 'Booting Workspace Engine',
-    subLabel: 'Initializing pure-live AST analyzer & socket prober',
+    label: 'Starting Workspace Engine',
+    subLabel: 'Initializing local portal services & navigation',
     icon: '⚡',
     threshold: 20,
   },
   {
     id: 'packages',
-    label: 'Mounting Shared Packages',
-    subLabel: 'Connecting @workspace/logger, @workspace/config & @workspace/runner',
+    label: 'Loading Shared Packages',
+    subLabel: 'Indexing internal modules & utilities',
     icon: '📦',
     threshold: 45,
   },
   {
     id: 'projects',
-    label: 'Probing Applications & Port Topology',
-    subLabel: 'Mapping 9 micro-apps across :5173-:5181 & :8000-:8008',
-    icon: '🚀',
+    label: 'Discovering Workspace Apps',
+    subLabel: 'Syncing project registry & health probes',
+    icon: '🛰️',
     threshold: 75,
   },
   {
     id: 'docs',
-    label: 'Hydrating Architecture Specs & Rules',
-    subLabel: 'Loading golden rules, framework specs & compliance invariants',
+    label: 'Loading Guides & Specs',
+    subLabel: 'Preparing interactive portal views',
     icon: '📜',
     threshold: 95,
   },
   {
     id: 'ready',
     label: 'Workspace Portal Ready',
-    subLabel: 'Launching interactive developer dashboard',
+    subLabel: 'Launching Soul DevPortal',
     icon: '✨',
     threshold: 100,
   },
@@ -154,14 +154,14 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
         <div className="flex flex-col items-center gap-1.5 text-center">
           <div className="flex items-center gap-2">
             <h1 className="text-xl md:text-2xl font-black tracking-tight bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-              SOUL WORKSPACE
+              Soul DevPortal
             </h1>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/15 border border-sky-500/30 text-sky-400">
-              v1.0
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/15 border border-sky-400/30 text-sky-300">
+              v0.0.1
             </span>
           </div>
           <p className="text-xs font-mono text-zinc-400 uppercase tracking-widest">
-            Developer Portal &amp; Architecture Engine
+            Workspace &amp; System Portal
           </p>
         </div>
 
@@ -216,7 +216,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
         <div className="flex items-center justify-between w-full pt-1 text-[11px] font-mono text-zinc-500">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>:8008 LIVE · :5181 VITE</span>
+            <span>SOUL DEVPORTAL · v0.0.1</span>
           </div>
 
           <button

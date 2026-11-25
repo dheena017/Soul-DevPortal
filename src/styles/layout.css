@@ -14,6 +14,22 @@
   overflow: hidden;
 }
 
+/* ── GPU-Cached Fixed Doodle Backdrop Layer (avoids MainThread background-attachment:fixed scroll jank) ── */
+.portal-doodle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--page-bg);
+  background-image:
+    radial-gradient(ellipse 80% 45% at 50% 0%, rgba(56, 189, 248, 0.04), transparent 70%),
+    url('/visuals/soul-doodle-bg.svg');
+  background-repeat: no-repeat, repeat;
+  background-size: 100% 100%, 480px 480px;
+  transform: translate3d(0, 0, 0);
+  contain: strict;
+}
+
 /* ── Main Scroll Viewport ── */
 .main {
   width: 100%;
@@ -23,13 +39,15 @@
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  background-color: var(--page-bg);
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Content Container ── */
 .content {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 1.5rem 1rem 6rem;
   box-sizing: border-box;

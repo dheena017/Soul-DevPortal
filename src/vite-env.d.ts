@@ -21,3 +21,25 @@ declare module '@workspace/config/tailwind/tokens' {
     [key: string]: any;
   };
 }
+
+interface SoulDesktopBridge {
+  isDesktop: boolean;
+  platform: string;
+  versions?: {
+    electron?: string;
+    chrome?: string;
+    node?: string;
+  };
+  navigate?: (route: string) => void;
+  onNavigate?: (cb: (route: string) => void) => () => void;
+  openExternal?: (url: string) => void;
+}
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
+interface Window {
+  soulDesktop?: SoulDesktopBridge;
+}

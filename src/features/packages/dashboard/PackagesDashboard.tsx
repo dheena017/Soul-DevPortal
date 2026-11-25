@@ -100,7 +100,7 @@ export default function PackagesDashboard({
   }, [packages, query, ecosystemFilter, sortBy]);
 
   return (
-    <div className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
+    <div className="w-full flex flex-col gap-6 pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* ── Sub-component 1: Header (Breadcrumb, Metrics, Search, Filters, Sort) ── */}
       <PackagesHeader
         packagesCount={packages.length}

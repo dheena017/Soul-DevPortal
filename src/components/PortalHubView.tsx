@@ -20,6 +20,7 @@ export interface PortalHubViewProps {
   packages?: PackageData[];
   onNavigate: (viewId: string) => void;
   onBack?: () => void;
+  onOpenShortcuts?: () => void;
 }
 
 type PortalHubTab = 'endpoints' | 'repositories' | 'api' | 'blueprint';
@@ -42,6 +43,7 @@ export default function PortalHubView({
   packages = [],
   onNavigate,
   onBack,
+  onOpenShortcuts,
 }: PortalHubViewProps) {
   const [activeTab, setActiveTab] = useState<PortalHubTab>('endpoints');
   const [filterText, setFilterText] = useState<string>('');
@@ -77,7 +79,7 @@ export default function PortalHubView({
   }, [projects, filterText]);
 
   return (
-    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
+    <article className="w-full flex flex-col gap-6 pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* ── Hero Banner ── */}
       <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-5 portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="Developer Hub & GitHub Mesh" />
@@ -103,6 +105,20 @@ export default function PortalHubView({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
+              {onOpenShortcuts && (
+                <button
+                  type="button"
+                  onClick={onOpenShortcuts}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-500/15 border border-sky-400/35 text-sky-200 hover:bg-sky-500/25 transition-all cursor-pointer"
+                >
+                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                    <line x1="8" y1="21" x2="16" y2="21" />
+                    <line x1="12" y1="17" x2="12" y2="21" />
+                  </svg>
+                  <span>Desktop App .exe</span>
+                </button>
+              )}
               <CopyButton text={`git clone ${GITHUB_REPO_URL}.git`} label="Clone Monorepo" copiedLabel="Clone CMD Copied!" variant="compact" />
               <a
                 href={GITHUB_REPO_URL}

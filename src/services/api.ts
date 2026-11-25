@@ -51,15 +51,24 @@ export interface ApiHealthResponse {
 /**
  * Checks if the FastAPI backend server is alive and reachable.
  */
-export async function checkBackendHealth(): Promise<boolean> {
+export async function fetchBackendHealthStatus(): Promise<{ live: boolean; port?: number; version?: string }> {
   try {
     const res = await fetch(`${API_BASE}/health`, { method: 'GET', headers: { Accept: 'application/json' } });
-    if (!res.ok) return false;
+    if (!res.ok) return { live: false };
     const data = await res.json();
-    return data.status === 'healthy';
+    return {
+      live: data.status === 'healthy',
+      port: typeof data.port === 'number' ? data.port : undefined,
+      version: typeof data.version === 'string' ? data.version : undefined,
+    };
   } catch {
-    return false;
+    return { live: false };
   }
+}
+
+export async function checkBackendHealth(): Promise<boolean> {
+  const status = await fetchBackendHealthStatus();
+  return status.live;
 }
 
 /**
@@ -430,6 +439,70 @@ export async function refreshSystemSpecs(): Promise<{ success: boolean; specs?: 
     });
     if (!res.ok) return null;
     return (await res.json()) as { success: boolean; specs?: import('../types').SystemSpecs };
+  } catch {
+    return null;
+  }
+}
+
+export interface DesktopArtifact {
+  name: string;
+  variant: 'setup' | 'portable';
+  sizeBytes: number;
+  sizeLabel: string;
+  downloadUrl: string;
+  modifiedAt: string;
+}
+
+export interface DesktopInfoResponse {
+  available: boolean;
+  recommendedVariant: 'setup' | 'portable' | null;
+  primaryDownloadUrl: string | null;
+  artifacts: DesktopArtifact[];
+  githubReleasesUrl: string;
+  buildCommand: string;
+  launchCommand: string;
+  shortcutSupported?: boolean;
+  shortcutInstalled?: boolean;
+  desktopShortcutPath?: string | null;
+  canLaunchDesktop?: boolean;
+}
+
+export async function fetchDesktopInfo(): Promise<DesktopInfoResponse | null> {
+  try {
+    const res = await fetch(`${API_BASE}/soul-dev-portal/desktop-info`, {
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as DesktopInfoResponse;
+  } catch {
+    return null;
+  }
+}
+
+export async function createDesktopShortcut(): Promise<{
+  success: boolean;
+  desktopShortcut?: string;
+  startMenuShortcut?: string | null;
+  error?: string;
+} | null> {
+  try {
+    const res = await fetch(`${API_BASE}/soul-dev-portal/desktop-shortcut`, {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+    });
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function launchDesktopApp(): Promise<{ launched: boolean; error?: string } | null> {
+  try {
+    const res = await fetch(`${API_BASE}/soul-dev-portal/desktop-launch`, {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+    });
+    return await res.json();
   } catch {
     return null;
   }

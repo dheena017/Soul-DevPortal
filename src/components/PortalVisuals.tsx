@@ -92,9 +92,12 @@ export function HeroArtworkBackdrop({
   }, [src]);
 
   return (
-    <div className="portal-hero-art-wrap absolute top-0 right-0 w-full md:w-3/4 lg:w-[60%] h-full max-h-[300px] overflow-hidden pointer-events-none select-none rounded-tr-2xl rounded-br-2xl z-0" aria-hidden="true">
+    <div
+      className="portal-hero-art-wrap absolute inset-y-0 right-0 w-full md:w-3/4 lg:w-[62%] overflow-hidden pointer-events-none select-none rounded-r-2xl z-0"
+      aria-hidden="true"
+    >
       <div
-        className={`absolute inset-0 bg-gradient-to-bl from-sky-500/15 via-purple-500/10 to-transparent transition-opacity duration-500 ${
+        className={`absolute inset-0 bg-gradient-to-bl from-sky-500/12 via-purple-500/8 to-transparent transition-opacity duration-500 ${
           loaded && !failed ? 'opacity-20' : 'opacity-100'
         }`}
       />
@@ -113,7 +116,6 @@ export function HeroArtworkBackdrop({
           }`}
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#111115]/20 via-transparent to-[#111115]" />
     </div>
   );
 }

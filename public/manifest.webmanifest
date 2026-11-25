@@ -1,0 +1,23 @@
+{
+  "name": "Soul DevPortal",
+  "short_name": "Soul Portal",
+  "description": "Standalone Developer Portal, AST architecture explorer, and live system telemetry monitor for the Soul Workspace monorepo.",
+  "start_url": "/#overview",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#070708",
+  "theme_color": "#0d0d10",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -123,7 +123,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
+    <div className="w-full flex flex-col gap-6 pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* ── Modern Hero Header ── */}
       <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5 portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="Scripts & Command Runners Visual" />

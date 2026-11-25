@@ -40,7 +40,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
   }, [projects, query, filterFramework]);
 
   return (
-    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12">
+    <article className="w-full flex flex-col gap-6 pb-12">
       <header className="w-full bg-[#151519] border border-[#212126] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5">
         <div className="flex items-center gap-3 text-xs">
           {onBack && (

@@ -14,7 +14,7 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 from shared.paths import PACKAGES_ROOT
-from shared.config import APP_VERSION, SERVICE_NAME
+from shared.config import PORT, APP_VERSION, SERVICE_NAME
 
 # Ensure shared packages can be imported
 if str(PACKAGES_ROOT) not in sys.path:
@@ -32,10 +32,17 @@ from features.dashboard.service import DashboardService
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Perform background warm-up scan
+    # Perform background warm-up scan after HTTP socket bind so :8008 responds immediately
     import asyncio
-    svc = DashboardService()
-    asyncio.create_task(asyncio.to_thread(svc.get_dashboard_overview))
+    from features.system.sampler import system_sampler
+
+    async def _delayed_warmup():
+        await asyncio.sleep(0.25)
+        system_sampler.warm_up_async()
+        svc = DashboardService()
+        await asyncio.to_thread(svc.get_dashboard_overview)
+
+    asyncio.create_task(_delayed_warmup())
     yield
 
 
@@ -73,9 +80,6 @@ def create_app() -> FastAPI:
     api_router.include_router(docs_router)
     api_router.include_router(system_router)
 
-    from features.system.sampler import system_sampler
-    system_sampler.warm_up_async()
-
     # Global /api/health probe
     @api_router.get("/health", tags=["Health"])
     def global_health_probe():
@@ -83,7 +87,7 @@ def create_app() -> FastAPI:
             "status": "healthy",
             "service": SERVICE_NAME,
             "version": APP_VERSION,
-            "port": 8008,
+            "port": PORT,
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 

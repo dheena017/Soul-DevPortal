@@ -1,0 +1,531 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <!-- Primary hand-drawn doodle contours -->
+  <g fill="none" stroke="rgba(186, 206, 236, 0.13)" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 1. Cyber Walkie-Talkie Transceiver -->
+    <g transform="translate(34 30) rotate(-13)">
+      <rect x="6" y="14" width="22" height="30" rx="4" />
+      <path d="M12 14 L12 2 M12 2 L14 2" />
+      <rect x="10" y="18" width="14" height="9" rx="1.5" />
+      <path d="M6 21 L3 21 L3 27 L6 27 M2 9 C4 6 6 5 9 6" />
+    </g>
+
+    <!-- 2. Origami Cyber Crane -->
+    <g transform="translate(172 30) rotate(18)">
+      <path d="M4 22 L18 14 L26 24 L15 30 Z" />
+      <path d="M18 14 L34 4 L26 24 M15 30 L8 40 L12 27 M26 24 L37 32 L22 28" />
+    </g>
+
+    <!-- 3. Companion Robot Droid -->
+    <g transform="translate(262 36) rotate(-9)">
+      <rect x="12" y="14" width="28" height="22" rx="7" />
+      <path d="M26 14 L26 7 M22 36 L30 36" />
+      <circle cx="26" cy="4.5" r="2.2" />
+      <path d="M10 22 L7 22 L7 28 L10 28 M42 22 L45 22 L45 28 L42 28" />
+      <path d="M14 40 C14 37 18 36 26 36 C34 36 38 37 38 40 L40 50 L12 50 Z" />
+      <path d="M12 43 L6 48 M40 43 L46 37" />
+    </g>
+
+    <!-- 4. Tesla Coil Plasma Tower -->
+    <g transform="translate(368 28) rotate(16)">
+      <ellipse cx="22" cy="14" rx="13" ry="4.5" />
+      <path d="M16 18.5 L13 42 L31 42 L28 18.5 M9 42 L35 42 L37 46 L7 46 Z" />
+      <path d="M8 10 L3 5 M36 10 L41 5 M22 6 L20 1 L25 2" />
+    </g>
+
+    <!-- 5. DNA Double Helix -->
+    <g transform="translate(504 52) rotate(-26)">
+      <path d="M10 4 C24 10 24 20 10 26 C-2 31 -2 41 10 47" />
+      <path d="M26 4 C12 10 12 20 26 26 C38 31 38 41 26 47" />
+      <circle cx="34" cy="13" r="1.8" />
+      <circle cx="2" cy="36" r="1.8" />
+    </g>
+
+    <!-- 6. Retro CRT Workstation Monitor -->
+    <g transform="translate(46 138) rotate(13)">
+      <rect x="4" y="4" width="46" height="36" rx="5" />
+      <path d="M16 40 L14 47 L40 47 L38 40 M10 47 L44 47" />
+      <path d="M40 44 C48 44 52 48 48 53 C45 56 50 59 55 57" />
+    </g>
+
+    <!-- 7. Ringed Exoplanet & Moonlet -->
+    <g transform="translate(186 124) rotate(-20)">
+      <circle cx="26" cy="22" r="13" />
+      <path d="M13 21 C3 22 2 26 12 28 C23 30 39 28 48 23 C54 20 50 16 39 17" />
+      <circle cx="5" cy="9" r="3.2" />
+    </g>
+
+    <!-- 8. Mechanical Chronometer Stopwatch -->
+    <g transform="translate(310 130) rotate(24)">
+      <circle cx="22" cy="24" r="16" />
+      <path d="M19 8 L19 4 L25 4 L25 8 M17 2 C19 -1 25 -1 27 2 M33 12 L37 8" />
+    </g>
+
+    <!-- 9. Astronaut Space Helmet -->
+    <g transform="translate(414 108) rotate(-15)">
+      <path d="M10 38 C6 30 7 15 16 8 C25 1 39 3 45 14 C50 23 48 33 42 39" />
+      <path d="M9 38 C16 44 35 44 43 39 L45 45 C36 50 15 50 7 45 Z" />
+      <rect x="13" y="13" width="28" height="20" rx="9" />
+      <path d="M6 21 L3 21 L3 29 L7 29 M48 20 L51 20 L51 28 L47 28 M50 20 L50 11" />
+    </g>
+
+    <!-- 10. Quadcopter Reconnaissance Drone -->
+    <g transform="translate(508 174) rotate(17)">
+      <rect x="18" y="18" width="12" height="12" rx="3.5" />
+      <path d="M18 18 L10 10 M30 18 L38 10 M18 30 L10 38 M30 30 L38 38" />
+      <circle cx="9" cy="9" r="6" />
+      <circle cx="39" cy="9" r="6" />
+      <circle cx="9" cy="39" r="6" />
+      <circle cx="39" cy="39" r="6" />
+    </g>
+
+    <!-- 11. Faceted Polyhedral Data Prism -->
+    <g transform="translate(106 234) rotate(-18)">
+      <path d="M22 2 L38 15 L32 41 L12 41 L6 15 Z" />
+      <path d="M22 2 L22 21 L38 15 M22 21 L6 15 M22 21 L12 41 M22 21 L32 41" />
+    </g>
+
+    <!-- 12. Mechanical Keycap & Esc Toggle Pair -->
+    <g transform="translate(198 228) rotate(12)">
+      <path d="M4 11 L10 4 L29 4 L35 11 L35 28 L29 33 L10 33 L4 28 Z" />
+      <path d="M24 25 L35 25 L39 20 L49 20 L53 25 L53 38 L49 42 L26 42 L22 38 Z" />
+    </g>
+
+    <!-- 13. Vinyl Turntable Synth Deck -->
+    <g transform="translate(278 224) rotate(9)">
+      <rect x="4" y="6" width="54" height="42" rx="5" />
+      <circle cx="26" cy="27" r="15" />
+      <circle cx="26" cy="27" r="4.5" />
+      <circle cx="49" cy="14" r="2.8" />
+      <path d="M49 17 L49 27 L41 35 L38 34" />
+    </g>
+
+    <!-- 14. Vintage Prime-Lens Camera -->
+    <g transform="translate(406 216) rotate(-16)">
+      <path d="M4 14 L14 14 L18 8 L32 8 L36 14 L46 14 C48 14 49 15 49 17 L49 38 C49 40 48 41 46 41 L4 41 C2 41 1 40 1 38 L1 17 C1 15 2 14 4 14 Z" />
+      <circle cx="25" cy="27" r="9.5" />
+      <path d="M7 14 L7 11 L11 11 L11 14 M39 14 L39 11 L43 11 L43 14" />
+    </g>
+
+    <!-- 15. Horseshoe Magnet with Field Loops -->
+    <g transform="translate(506 274) rotate(22)">
+      <path d="M10 8 L10 24 C10 33 17 39 24 39 C31 39 38 33 38 24 L38 8 L30 8 L30 24 C30 28 27 31 24 31 C21 31 18 28 18 24 L18 8 Z" />
+      <path d="M14 4 C14 -1 34 -1 34 4 M8 10 C3 16 3 32 10 38" />
+    </g>
+
+    <!-- 16. Supersonic Origami Delta Jet -->
+    <g transform="translate(36 336) rotate(-16)">
+      <path d="M44 16 L4 8 L14 20 L4 34 Z" />
+      <path d="M44 16 L14 20 L18 26 L44 16 M18 26 L13 31" />
+    </g>
+
+    <!-- 17. Astronomical Telescope on Tripod -->
+    <g transform="translate(124 326) rotate(-19)">
+      <path d="M6 16 L36 8 L39 18 L9 24 Z" />
+      <path d="M36 8 L44 5 L47 17 L39 18 M6 19 L2 21 L4 26 L9 24" />
+      <circle cx="24" cy="23" r="3" />
+      <path d="M22 26 L10 49 M24 26 L24 51 M26 26 L38 49" />
+    </g>
+
+    <!-- 18. Architect Fountain Stylus Nib & Flow Ribbon -->
+    <g transform="translate(230 336) rotate(29)">
+      <path d="M22 4 L31 22 L27 34 L17 34 L13 22 Z" />
+      <rect x="16" y="34" width="12" height="8" rx="1.5" />
+      <path d="M22 4 L22 18" />
+      <circle cx="22" cy="21" r="2.2" />
+    </g>
+
+    <!-- 19. Bubbling Neural Elixir Flask -->
+    <g transform="translate(342 320) rotate(-14)">
+      <path d="M18 6 L28 6 M20 6 L20 17 L8 37 C6 41 9 45 13 45 L33 45 C37 45 40 41 38 37 L26 17 L26 6" />
+      <circle cx="25" cy="1" r="2" />
+      <circle cx="19" cy="11" r="1.4" />
+    </g>
+
+    <!-- 20. Articulated Mecha Claw Holding Crystal -->
+    <g transform="translate(438 326) rotate(14)">
+      <path d="M8 46 L14 31 L22 33 L16 48 Z" />
+      <circle cx="19" cy="28" r="4" />
+      <path d="M22 25 L31 15 L36 18 L24 28 M17 24 L16 11 L21 9 L21 24" />
+      <path d="M31 15 L38 11 L35 20 M16 11 L22 4 L24 12" />
+      <path d="M28 5 L31 9 L28 13 L25 9 Z" />
+    </g>
+
+    <!-- 21. Portable Keytar Synthesizer -->
+    <g transform="translate(56 456) rotate(15)">
+      <path d="M6 12 L48 12 C51 12 53 14 53 17 L53 34 C53 37 51 39 48 39 L16 39 L12 31 L4 31 L4 15 Z" />
+      <path d="M17 25 L49 25 L49 36 L17 36 Z" />
+      <circle cx="10" cy="20" r="2.2" />
+      <circle cx="22" cy="18" r="2" />
+      <circle cx="30" cy="18" r="2" />
+    </g>
+
+    <!-- 22. Architect Articulated Desk Lamp -->
+    <g transform="translate(172 462) rotate(-11)">
+      <ellipse cx="18" cy="46" rx="11" ry="3.5" />
+      <path d="M18 42.5 L10 27 L24 14 M24 14 L36 20" />
+      <circle cx="10" cy="27" r="2.2" />
+      <circle cx="24" cy="14" r="2.2" />
+      <path d="M31 20 C33 14 40 13 44 18 L48 27 L29 26 Z" />
+    </g>
+
+    <!-- 23. Solar-Wing Space Probe Satellite -->
+    <g transform="translate(286 454) rotate(-13)">
+      <rect x="21" y="16" width="16" height="18" rx="2.5" />
+      <rect x="3" y="19" width="15" height="12" rx="1.5" />
+      <rect x="40" y="19" width="15" height="12" rx="1.5" />
+      <path d="M18 25 L21 25 M37 25 L40 25 M29 16 L29 11 M23 11 C25 7 33 7 35 11" />
+    </g>
+
+    <!-- 24. Spatial VR Visor Headset -->
+    <g transform="translate(396 440) rotate(-17)">
+      <path d="M6 16 C6 11 10 9 16 9 L36 9 C42 9 46 11 46 16 L44 27 C43 31 39 32 34 30 L28 26 C26 24 26 24 24 26 L18 30 C13 32 9 31 8 27 Z" />
+      <path d="M6 18 C1 18 1 25 7 25 M46 18 C51 18 51 25 45 25" />
+    </g>
+
+    <!-- 25. Telemetry Radar Dish -->
+    <g transform="translate(502 418) rotate(18)">
+      <path d="M8 14 C8 27 17 36 30 36 L14 20 Z" />
+      <path d="M21 15 L29 7 M13 32 L10 42 L22 42" />
+    </g>
+
+    <!-- 26. Interlocked Precision Twin Gears -->
+    <g transform="translate(226 518) rotate(-14)">
+      <circle cx="14" cy="20" r="9" />
+      <circle cx="14" cy="20" r="3.5" />
+      <path d="M14 8 L14 11 M14 29 L14 32 M2 20 L5 20 M23 20 L26 20 M6 12 L8 14 M20 26 L22 28 M22 12 L20 14 M8 26 L6 28" />
+      <circle cx="31" cy="14" r="6.5" />
+      <circle cx="31" cy="14" r="2.2" />
+      <path d="M31 5 L31 7.5 M31 20.5 L31 23 M22 14 L24.5 14 M37.5 14 L40 14" />
+    </g>
+
+    <!-- 27. Azimuth Compass Rose -->
+    <g transform="translate(382 512) rotate(21)">
+      <circle cx="22" cy="22" r="17" />
+      <path d="M22 11 L26 22 L22 33 L18 22 Z" />
+    </g>
+
+    <!-- 28. Vault Encryption Cube -->
+    <g transform="translate(492 516) rotate(-13)">
+      <path d="M20 4 L35 12 L35 28 L20 36 L5 28 L5 12 Z" />
+      <path d="M20 12 L27 16 L27 24 L20 28 L13 24 L13 16 Z" />
+    </g>
+
+    <!-- Seamless Wrap Motifs across ALL tile boundaries (0 & 600) -->
+    <!-- Top/Bottom Wrap A: Cyber Floppy Diskette -->
+    <g transform="translate(106 -18) rotate(14)">
+      <path d="M4 4 L30 4 L36 10 L36 36 L4 36 Z" />
+      <rect x="11" y="4" width="16" height="11" />
+      <rect x="9" y="21" width="22" height="15" rx="1.5" />
+    </g>
+    <g transform="translate(106 582) rotate(14)">
+      <path d="M4 4 L30 4 L36 10 L36 36 L4 36 Z" />
+      <rect x="11" y="4" width="16" height="11" />
+      <rect x="9" y="21" width="22" height="15" rx="1.5" />
+    </g>
+
+    <!-- Top/Bottom Wrap B: Oscillating Signal Pendulum / Metronome Prism -->
+    <g transform="translate(306 -16) rotate(-14)">
+      <path d="M12 36 L18 6 L24 6 L30 36 Z" />
+      <path d="M21 30 L34 10" />
+      <circle cx="31" cy="14" r="3" />
+    </g>
+    <g transform="translate(306 584) rotate(-14)">
+      <path d="M12 36 L18 6 L24 6 L30 36 Z" />
+      <path d="M21 30 L34 10" />
+      <circle cx="31" cy="14" r="3" />
+    </g>
+
+    <!-- Top/Bottom Wrap C: Audio Jack TRS Plug -->
+    <g transform="translate(468 -16) rotate(-22)">
+      <rect x="10" y="14" width="14" height="16" rx="2" />
+      <path d="M14 14 L14 4 L20 4 L20 14 M17 30 C17 37 24 39 29 36" />
+    </g>
+    <g transform="translate(468 584) rotate(-22)">
+      <rect x="10" y="14" width="14" height="16" rx="2" />
+      <path d="M14 14 L14 4 L20 4 L20 14 M17 30 C17 37 24 39 29 36" />
+    </g>
+
+    <!-- Left/Right Wrap A: Modular Synth Rotary Knob -->
+    <g transform="translate(-18 124) rotate(12)">
+      <circle cx="18" cy="18" r="12" />
+      <circle cx="18" cy="18" r="7" />
+      <path d="M18 11 L18 16 M8 6 L10 8 M28 6 L26 8 M4 18 L1 18 M32 18 L35 18" />
+    </g>
+    <g transform="translate(582 124) rotate(12)">
+      <circle cx="18" cy="18" r="12" />
+      <circle cx="18" cy="18" r="7" />
+      <path d="M18 11 L18 16 M8 6 L10 8 M28 6 L26 8 M4 18 L1 18 M32 18 L35 18" />
+    </g>
+
+    <!-- Left/Right Wrap B: Vintage Data Cassette Tape -->
+    <g transform="translate(-22 280) rotate(-11)">
+      <rect x="3" y="6" width="38" height="24" rx="3" />
+      <rect x="10" y="12" width="24" height="8" rx="2" />
+      <circle cx="14" cy="16" r="2.2" />
+      <circle cx="30" cy="16" r="2.2" />
+      <path d="M10 30 L12 24 L32 24 L34 30" />
+    </g>
+    <g transform="translate(578 280) rotate(-11)">
+      <rect x="3" y="6" width="38" height="24" rx="3" />
+      <rect x="10" y="12" width="24" height="8" rx="2" />
+      <circle cx="14" cy="16" r="2.2" />
+      <circle cx="30" cy="16" r="2.2" />
+      <path d="M10 30 L12 24 L32 24 L34 30" />
+    </g>
+
+    <!-- Left/Right Wrap C: Retro Cartridge / USB Drive Module -->
+    <g transform="translate(-16 498) rotate(22)">
+      <rect x="6" y="4" width="22" height="12" rx="1.5" />
+      <rect x="3" y="16" width="28" height="24" rx="4" />
+      <path d="M12 9 L12 12 M22 9 L22 12" />
+    </g>
+    <g transform="translate(584 498) rotate(22)">
+      <rect x="6" y="4" width="22" height="12" rx="1.5" />
+      <rect x="3" y="16" width="28" height="24" rx="4" />
+      <path d="M12 9 L12 12 M22 9 L22 12" />
+    </g>
+
+    <!-- 4-Corner Seamless Compact Prism Ring -->
+    <g transform="translate(-16 -16)">
+      <circle cx="16" cy="16" r="10" stroke-dasharray="10 5" />
+      <circle cx="16" cy="16" r="3.5" />
+    </g>
+    <g transform="translate(584 -16)">
+      <circle cx="16" cy="16" r="10" stroke-dasharray="10 5" />
+      <circle cx="16" cy="16" r="3.5" />
+    </g>
+    <g transform="translate(-16 584)">
+      <circle cx="16" cy="16" r="10" stroke-dasharray="10 5" />
+      <circle cx="16" cy="16" r="3.5" />
+    </g>
+    <g transform="translate(584 584)">
+      <circle cx="16" cy="16" r="10" stroke-dasharray="10 5" />
+      <circle cx="16" cy="16" r="3.5" />
+    </g>
+
+    <!-- Small Expressive Pocket Doodles tucked in open gaps -->
+    <!-- Pocket 1: Binary Curly Braces { } -->
+    <g transform="translate(116 74) rotate(-16)">
+      <path d="M8 2 C5 2 4 4 4 7 L4 10 C4 12 2 13 0 13 C2 13 4 14 4 16 L4 19 C4 22 5 24 8 24 M16 2 C19 2 20 4 20 7 L20 10 C20 12 22 13 24 13 C22 13 20 14 20 16 L20 19 C20 22 19 24 16 24" />
+    </g>
+    <!-- Pocket 2: Swirl Vortex Comet -->
+    <g transform="translate(454 66) rotate(22)">
+      <path d="M14 10 C17 10 18 14 14 16 C9 18 5 13 7 8 C10 2 19 1 23 7 C26 12 22 21 14 22" />
+    </g>
+    <!-- Pocket 3: Mini Crescent Eclipse -->
+    <g transform="translate(262 178) rotate(25)">
+      <path d="M14 3 C7 5 5 13 9 19 C13 24 21 24 24 20 C18 21 12 18 11 12 C10 8 12 5 14 3 Z" />
+      <circle cx="20" cy="8" r="1.5" />
+    </g>
+    <!-- Pocket 4: Signal Ribbon Arc -->
+    <g transform="translate(44 210) rotate(-18)">
+      <path d="M2 12 C7 4 14 18 20 9 C24 3 28 11 32 6" />
+    </g>
+    <!-- Pocket 5: Hexagon Screw Bolt -->
+    <g transform="translate(166 286) rotate(16)">
+      <path d="M11 2 L19 6.5 L19 15.5 L11 20 L3 15.5 L3 6.5 Z" />
+      <path d="M7 13 L15 9" />
+    </g>
+    <!-- Pocket 6: Tiny Tuning Knob -->
+    <g transform="translate(394 274) rotate(-20)">
+      <circle cx="11" cy="11" r="8" />
+      <path d="M11 11 L15 6" />
+    </g>
+    <!-- Pocket 7: Tiny 3-node Cluster -->
+    <g transform="translate(284 398) rotate(12)">
+      <circle cx="4" cy="14" r="2.6" />
+      <circle cx="14" cy="4" r="2.6" />
+      <circle cx="22" cy="16" r="2.6" />
+      <path d="M6 12 L12 6 M16 6 L20 14 M7 15 L19 16" />
+    </g>
+    <!-- Pocket 8: Spring Coil -->
+    <g transform="translate(36 420) rotate(-28)">
+      <path d="M2 8 C6 2 10 14 14 8 C18 2 22 14 26 8" />
+    </g>
+    <!-- Pocket 9: Mini Circuit Bend -->
+    <g transform="translate(148 524) rotate(14)">
+      <path d="M2 14 L12 14 L18 6 L28 6" />
+      <circle cx="30.5" cy="6" r="2.2" />
+      <circle cx="2" cy="14" r="1.5" />
+    </g>
+    <!-- Pocket 10: Mini Logic Gate / Diamond Node near lower right -->
+    <g transform="translate(556 376) rotate(-18)">
+      <path d="M4 6 L16 6 C22 6 26 11 26 16 C26 21 22 26 16 26 L4 26 Z" />
+      <path d="M0 11 L4 11 M0 21 L4 21 M26 16 L31 16" />
+    </g>
+  </g>
+
+  <!-- Secondary softer inner details, glints, hatching & signal trails (hand-sketched depth) -->
+  <g fill="none" stroke="rgba(186, 206, 236, 0.085)" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 1. Walkie-Talkie grille & screen curve -->
+    <g transform="translate(34 30) rotate(-13)">
+      <path d="M11 33 L23 33 M11 37 L23 37 M13 23 L21 21" />
+    </g>
+    <!-- 2. Crane wing ridge -->
+    <g transform="translate(172 30) rotate(18)">
+      <path d="M16 19 L28 11" />
+    </g>
+    <!-- 3. Robot eyes, visor shine & chest gauge -->
+    <g transform="translate(262 36) rotate(-9)">
+      <path d="M18 23 C19 20 22 20 23 23 M29 23 C30 20 33 20 34 23" />
+      <circle cx="26" cy="43" r="3" />
+      <path d="M16 17 L21 17" />
+    </g>
+    <!-- 4. Tesla coil windings -->
+    <g transform="translate(368 28) rotate(16)">
+      <path d="M15 24 L29 24 M14.5 29 L29.5 29 M14 34 L30 34 M13.5 39 L30.5 39" />
+    </g>
+    <!-- 5. DNA base-pair rungs -->
+    <g transform="translate(504 52) rotate(-26)">
+      <path d="M11 9 L25 9 M14 15 L22 15 M11 21 L25 21 M8 31 L28 31 M7 37 L29 37 M11 43 L25 43" />
+    </g>
+    <!-- 6. CRT inner screen glass, wave trace & slot -->
+    <g transform="translate(46 138) rotate(13)">
+      <rect x="10" y="9" width="34" height="23" rx="3" />
+      <path d="M13 22 L19 22 L22 15 L26 26 L29 19 L33 22 L41 22" />
+      <path d="M14 13 L19 13 M33 36 L42 36" />
+    </g>
+    <!-- 7. Exoplanet atmosphere stripe & craters -->
+    <g transform="translate(186 124) rotate(-20)">
+      <path d="M16 15 C22 13 29 13 35 16" />
+      <circle cx="22" cy="19" r="2.2" />
+      <circle cx="31" cy="24" r="1.6" />
+    </g>
+    <!-- 8. Stopwatch dial ticks & hands -->
+    <g transform="translate(310 130) rotate(24)">
+      <circle cx="22" cy="24" r="12" />
+      <path d="M22 24 L22 15 M22 24 L29 27 M22 13 L22 15 M32 24 L30 24 M22 35 L22 33 M12 24 L14 24" />
+    </g>
+    <!-- 9. Helmet visor glare arcs & stripes -->
+    <g transform="translate(414 108) rotate(-15)">
+      <path d="M17 17 C20 15 24 15 27 16 M35 28 L37 26" />
+      <path d="M11 42 L43 42" />
+    </g>
+    <!-- 10. Drone gimbal & motion arcs -->
+    <g transform="translate(508 174) rotate(17)">
+      <circle cx="24" cy="24" r="2.5" />
+      <path d="M5 9 L13 9 M35 9 L43 9 M5 39 L13 39 M35 39 L43 39" />
+    </g>
+    <!-- 11. Crystal aura rays -->
+    <g transform="translate(106 234) rotate(-18)">
+      <path d="M3 8 L6 11 M41 8 L38 11 M22 -2 L22 0" />
+    </g>
+    <!-- 12. Clean Keycap legends -->
+    <g transform="translate(198 228) rotate(12)">
+      <rect x="10" y="7" width="19" height="14" rx="2" />
+      <path d="M14 14 L22 14 M32 27 L46 27 L46 35 L32 35 Z" />
+    </g>
+    <!-- 13. Turntable vinyl grooves & pitch slider -->
+    <g transform="translate(278 224) rotate(9)">
+      <circle cx="26" cy="27" r="10.5" />
+      <path d="M16 20 C19 16 24 15 28 16 M48 33 L48 43 M45 38 L51 38" />
+    </g>
+    <!-- 14. Camera lens glint & textured grip -->
+    <g transform="translate(406 216) rotate(-16)">
+      <circle cx="25" cy="27" r="5.5" />
+      <path d="M22 24 C23 23 25 23 27 24 M5 19 L5 36 M8 19 L8 36" />
+    </g>
+    <!-- 15. Magnet pole rings -->
+    <g transform="translate(506 274) rotate(22)">
+      <path d="M10 14 L18 14 M30 14 L38 14 M19 5 C21 3 27 3 29 5" />
+    </g>
+    <!-- 16. Delta jet contrails -->
+    <g transform="translate(36 336) rotate(-16)">
+      <path d="M-2 10 L-9 10 M0 32 L-8 33" />
+    </g>
+    <!-- 17. Telescope lens & mount brace -->
+    <g transform="translate(124 326) rotate(-19)">
+      <path d="M17 13 L19 22 M29 10 L31 20 M16 40 L32 40" />
+    </g>
+    <!-- 18. Stylus ink swirl tail -->
+    <g transform="translate(230 336) rotate(29)">
+      <path d="M22 42 C22 50 11 49 14 56 C17 61 24 58 21 53 M16 22 L28 22" />
+    </g>
+    <!-- 19. Flask liquid wave meniscus & bubbles -->
+    <g transform="translate(342 320) rotate(-14)">
+      <path d="M13 30 C18 28 22 33 27 30 C30 28 32 30 34 31" />
+      <circle cx="19" cy="38" r="2" />
+      <circle cx="27" cy="36" r="1.4" />
+    </g>
+    <!-- 20. Mecha hydraulic shading -->
+    <g transform="translate(438 326) rotate(14)">
+      <path d="M12 40 L18 42 M18 35 L16 43" />
+    </g>
+    <!-- 21. Keytar piano keys -->
+    <g transform="translate(56 456) rotate(15)">
+      <path d="M23 25 L23 36 M29 25 L29 36 M35 25 L35 36 M41 25 L41 36 M21 25 L21 31 M27 25 L27 31 M39 25 L39 31 M45 25 L45 31" />
+    </g>
+    <!-- 22. Lamp light beam rays -->
+    <g transform="translate(172 462) rotate(-11)">
+      <path d="M33 30 L30 37 M39 31 L40 39 M44 30 L49 36" />
+    </g>
+    <!-- 23. Solar panel cells grid -->
+    <g transform="translate(286 454) rotate(-13)">
+      <path d="M8 19 L8 31 M13 19 L13 31 M3 25 L18 25 M45 19 L45 31 M50 19 L50 31 M40 25 L55 25 M24 21 L34 21 M24 27 L34 27" />
+    </g>
+    <!-- 24. VR visor gloss streaks -->
+    <g transform="translate(396 440) rotate(-17)">
+      <path d="M13 14 L18 22 M19 14 L22 19 M12 12 L40 12" />
+    </g>
+    <!-- 25. Radar dish wave arcs -->
+    <g transform="translate(502 418) rotate(18)">
+      <path d="M27 5 C32 5 36 9 36 14 M30 2 C37 2 41 6 41 13" />
+    </g>
+    <!-- 27. Compass tick marks -->
+    <g transform="translate(382 512) rotate(21)">
+      <path d="M22 6 L22 8 M22 36 L22 38 M6 22 L8 22 M36 22 L38 22 M12 22 L32 22" />
+    </g>
+    <!-- 28. Encryption cube ridges -->
+    <g transform="translate(492 516) rotate(-13)">
+      <path d="M5 12 L20 20 L35 12 M20 20 L20 36" />
+    </g>
+    <!-- Floppy diskette lines & USB casing ribs -->
+    <g transform="translate(106 -18) rotate(14)">
+      <path d="M13 26 L27 26 M13 31 L27 31 M22 7 L22 12" />
+    </g>
+    <g transform="translate(106 582) rotate(14)">
+      <path d="M13 26 L27 26 M13 31 L27 31 M22 7 L22 12" />
+    </g>
+    <g transform="translate(-16 498) rotate(22)">
+      <path d="M10 24 L24 24 M10 29 L20 29" />
+    </g>
+    <g transform="translate(584 498) rotate(22)">
+      <path d="M10 24 L24 24 M10 29 L20 29" />
+    </g>
+
+    <!-- Delicate 4-Point Sparkles, Plus Marks, Crosshairs & Tiny Orbit Dots -->
+    <path d="M148 16 L151 21 L156 23 L151 25 L148 30 L145 25 L140 23 L145 21 Z" />
+    <path d="M336 92 L338 96 L342 98 L338 100 L336 104 L334 100 L330 98 L334 96 Z" />
+    <path d="M476 154 L479 159 L484 161 L479 163 L476 168 L473 163 L468 161 L473 159 Z" />
+    <path d="M98 198 L100 202 L104 204 L100 206 L98 210 L96 206 L92 204 L96 202 Z" />
+    <path d="M244 294 L247 299 L252 301 L247 303 L244 308 L241 303 L236 301 L241 299 Z" />
+    <path d="M372 288 L374 292 L378 294 L374 296 L372 300 L370 296 L366 294 L370 292 Z" />
+    <path d="M482 260 L484 264 L488 266 L484 268 L482 272 L480 268 L476 266 L480 264 Z" />
+    <path d="M92 406 L95 411 L100 413 L95 415 L92 420 L89 415 L84 413 L89 411 Z" />
+    <path d="M214 416 L216 420 L220 422 L216 424 L214 428 L212 424 L208 422 L212 420 Z" />
+    <path d="M384 398 L387 403 L392 405 L387 407 L384 412 L381 407 L376 405 L381 403 Z" />
+    <path d="M498 386 L500 390 L504 392 L500 394 L498 398 L496 394 L492 392 L496 390 Z" />
+    <path d="M138 510 L140 514 L144 516 L140 518 L138 522 L136 518 L132 516 L136 514 Z" />
+    <path d="M342 528 L345 533 L350 535 L345 537 L342 542 L339 537 L334 535 L339 533 Z" />
+    <path d="M466 492 L468 496 L472 498 L468 500 L466 504 L464 500 L460 498 L464 496 Z" />
+    <path d="M554 498 L556 502 L560 504 L556 506 L554 510 L552 506 L548 504 L552 502 Z" />
+
+    <!-- Scattered Mini Circles, Plus Crosshairs & Constellation Dots -->
+    <circle cx="84" cy="112" r="2.2" />
+    <circle cx="242" cy="110" r="2" />
+    <circle cx="432" cy="28" r="2.2" />
+    <circle cx="556" cy="118" r="2" />
+    <circle cx="158" cy="196" r="2.4" />
+    <circle cx="348" cy="196" r="2" />
+    <circle cx="56" cy="300" r="2.2" />
+    <circle cx="308" cy="306" r="2" />
+    <circle cx="560" cy="348" r="2.2" />
+    <circle cx="144" cy="436" r="2" />
+    <circle cx="338" cy="422" r="2.2" />
+    <circle cx="458" cy="410" r="2" />
+    <circle cx="34" cy="542" r="2.2" />
+    <circle cx="294" cy="566" r="2.2" />
+
+    <path d="M222 18 L228 18 M225 15 L225 21 M396 176 L402 176 M399 173 L399 179 M182 390 L188 390 M185 387 L185 393 M426 500 L432 500 M429 497 L429 503 M66 290 L72 290 M69 287 L69 293 M538 248 L544 248 M541 245 L541 251" />
+  </g>
+</svg>

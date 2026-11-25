@@ -138,7 +138,7 @@ class ProcessController:
 
         healthy, elapsed = wait_for_server_healthy(
             self.backend_port,
-            timeout=12.0,
+            timeout=25.0,
             process_handle=self.p_backend,
         )
         if healthy:
@@ -150,7 +150,7 @@ class ProcessController:
                 print(format_universal_line("SYSTEM  ", "ERROR", "HEALTHCHECK", msg), flush=True)
                 _render_backend_crash_card(self.backend_port, exit_code, self.cwd)
             else:
-                msg = f"Backend did not respond on port {self.backend_port} within 12s, proceeding..."
+                msg = f"Backend did not respond on port {self.backend_port} within 25s, proceeding..."
                 print(format_universal_line("SYSTEM  ", "WARN", "HEALTHCHECK", msg), flush=True)
 
         return healthy

@@ -4,7 +4,8 @@ Soul Dev Portal API Router.
 
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Query
+from fastapi.responses import FileResponse
 from features.soul_dev_portal.service import SoulDevPortalService
 
 router = APIRouter(prefix="/soul-dev-portal", tags=["Soul Dev Portal"])
@@ -26,3 +27,43 @@ def get_portal_health():
 def get_portal_overview():
     """Core portal service metadata and documentation links."""
     return SoulDevPortalService.get_overview()
+
+
+@router.get("/desktop-info")
+def get_desktop_info():
+    """Lists available standalone Windows Electron installers built under release/."""
+    return SoulDevPortalService.get_desktop_info()
+
+
+@router.get("/desktop-download")
+def download_desktop_app(variant: str = Query(default="auto", pattern="^(auto|setup|portable)$")):
+    """Streams the Windows standalone Desktop App (.exe) installer or portable binary."""
+    artifact = SoulDevPortalService.resolve_desktop_artifact(variant)
+    if artifact is None or not artifact.is_file():
+        raise HTTPException(
+            status_code=404,
+            detail="Windows desktop installer not built yet. Run 'npm run desktop:build' to generate release artifacts.",
+        )
+    return FileResponse(
+        path=str(artifact),
+        filename=artifact.name,
+        media_type="application/vnd.microsoft.portable-executable",
+    )
+
+
+@router.post("/desktop-shortcut")
+def create_desktop_shortcut():
+    """Creates a single-click Windows Desktop & Start Menu shortcut for the standalone Desktop App."""
+    result = SoulDevPortalService.create_desktop_shortcut()
+    if not result.get("success"):
+        raise HTTPException(status_code=500, detail=result.get("error", "Shortcut creation failed"))
+    return result
+
+
+@router.post("/desktop-launch")
+def launch_desktop_app():
+    """Launches the standalone Electron Desktop Application window with embedded UI and FastAPI backend."""
+    result = SoulDevPortalService.launch_desktop_app()
+    if not result.get("launched"):
+        raise HTTPException(status_code=500, detail=result.get("error", "Failed to launch desktop app"))
+    return result

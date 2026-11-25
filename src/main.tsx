@@ -15,6 +15,8 @@ import Overview from './components/Overview';
 import { Header } from './components/Header';
 import LoadingScreen from './components/LoadingScreen';
 import TabLoadingState from './components/TabLoadingState';
+import ShortcutsModal from './components/ShortcutsModal';
+import GlobalStatusBar from './components/GlobalStatusBar';
 
 // Lazy-loaded Pillar Feature Views (code-split cleanly)
 const PortalHubView = lazy(() => import('./components/PortalHubView'));
@@ -117,12 +119,15 @@ function App() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [isBootLoading, setIsBootLoading] = useState<boolean>(true);
+  const [deferredInstallPrompt, setDeferredInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const [liveWorkspace, setLiveWorkspace] = useState<WorkspaceApiResponse>(workspaceData);
   const packagesList = liveWorkspace?.packages || [];
   const projectsList = liveWorkspace?.projects || [];
   const stats = liveWorkspace?.stats;
+
+  const [canScrollTop, setCanScrollTop] = useState<boolean>(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -216,15 +221,41 @@ function App() {
 
   // Warm lazy-loaded views after initial boot so route transitions never wait on chunk compilation
   useEffect(() => {
+    const prefetch = (loader: () => Promise<unknown>) => {
+      void loader().catch(() => {
+        // Ignore transient dev-server reloads or offline chunk fetches during background warm-up
+      });
+    };
     const timer = window.setTimeout(() => {
-      void import('./components/PortalHubView');
-      void import('./features/projects/ProjectsView');
-      void import('./features/packages/PackagesView');
-      void import('./features/docs/DocsView');
-      void import('./features/scripts/ScriptsView');
-      void import('./features/system/SystemView');
+      prefetch(() => import('./components/PortalHubView'));
+      prefetch(() => import('./features/projects/ProjectsView'));
+      prefetch(() => import('./features/packages/PackagesView'));
+      prefetch(() => import('./features/docs/DocsView'));
+      prefetch(() => import('./features/scripts/ScriptsView'));
+      prefetch(() => import('./features/system/SystemView'));
     }, 950);
-    return () => window.clearTimeout(timer);
+
+    const onBeforeInstall = (evt: Event) => {
+      evt.preventDefault();
+      setDeferredInstallPrompt(evt as BeforeInstallPromptEvent);
+    };
+    window.addEventListener('beforeinstallprompt', onBeforeInstall);
+
+    if (
+      typeof window !== 'undefined' &&
+      'serviceWorker' in navigator &&
+      !window.soulDesktop?.isDesktop &&
+      (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {
+        // Ignore non-fatal SW registration issues
+      });
+    }
+
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('beforeinstallprompt', onBeforeInstall);
+    };
   }, []);
 
   const handleSidebarToggle = () => {
@@ -250,7 +281,18 @@ function App() {
 
     syncHash();
     window.addEventListener('hashchange', syncHash);
-    return () => window.removeEventListener('hashchange', syncHash);
+    const desktopNavCleanup = (window as any).soulDesktop?.onNavigate?.((hash: string) => {
+      if (hash) {
+        setActive(hash);
+        window.location.hash = hash;
+        setMenuOpen(false);
+        mainRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    });
+    return () => {
+      window.removeEventListener('hashchange', syncHash);
+      desktopNavCleanup?.();
+    };
   }, []);
 
   useEffect(() => {
@@ -437,7 +479,8 @@ function App() {
   }, [active, activeTitle, projectsList, packagesList]);
 
   return (
-    <div className="h-screen h-[100dvh] bg-[#070708] text-neutral-200 flex flex-col overflow-hidden font-sans">
+    <div className="h-screen h-[100dvh] bg-[#070708] text-neutral-200 flex flex-col overflow-hidden font-sans relative">
+      <div className="portal-doodle-canvas" aria-hidden="true" />
       {isBootLoading && (
         <LoadingScreen
           minDurationMs={850}
@@ -472,15 +515,22 @@ function App() {
         onTriggerReload={() => setIsBootLoading(true)}
       />
 
-      <main ref={mainRef} className="main w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden flex flex-col bg-[#070708]">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 box-border">
+      <main
+        ref={mainRef}
+        onScroll={(e) => {
+          const next = e.currentTarget.scrollTop > 160;
+          setCanScrollTop((prev) => (prev === next ? prev : next));
+        }}
+        className="main w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden flex flex-col"
+      >
+        <div className="w-full max-w-[1800px] mx-auto px-3 sm:px-5 lg:px-6 py-5 pb-12 box-border">
           <PortalErrorBoundary routeKey={active} onRecover={() => navigate('overview')}>
             <Suspense
               fallback={
                 <TabLoadingState
                   title="Loading Workspace View"
-                  subtitle="Soul DevPortal · Hydrating Interactive Module"
-                  badgeText="LIVE PORTAL"
+                  subtitle="Soul DevPortal · Preparing Module"
+                  badgeText="v0.0.1"
                   backdropSrc="/visuals/hero-overview-mesh.jpg"
                 />
               }
@@ -504,6 +554,7 @@ function App() {
               packages={packagesList}
               onNavigate={navigate}
               onBack={() => navigate('overview')}
+              onOpenShortcuts={() => setShowShortcuts(true)}
             />
           )}
 
@@ -649,85 +700,33 @@ function App() {
           </PortalErrorBoundary>
         </div>
 
-        {/* Global Keyboard Shortcuts Modal */}
-        {showShortcuts && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
-            onClick={() => setShowShortcuts(false)}
-          >
-            <div
-              className="w-full max-w-lg rounded-2xl bg-[#151519] border border-[#19191d] shadow-2xl p-5 md:p-6 flex flex-col gap-4 portal-header-sheen portal-page-enter"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between pb-3 border-b border-[#19191d]">
-                <div className="flex items-center gap-2.5 text-sm font-bold text-neutral-300">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-neutral-300">
-                    <rect x="2" y="4" width="20" height="16" rx="2" />
-                    <line x1="6" y1="8" x2="6.01" y2="8" />
-                    <line x1="10" y1="8" x2="10.01" y2="8" />
-                    <line x1="14" y1="8" x2="14.01" y2="8" />
-                    <line x1="18" y1="8" x2="18.01" y2="8" />
-                    <line x1="6" y1="12" x2="6.01" y2="12" />
-                    <line x1="18" y1="12" x2="18.01" y2="12" />
-                    <line x1="7" y1="16" x2="17" y2="16" />
-                  </svg>
-                  <span>Keyboard Shortcuts &amp; Quick Commands</span>
-                </div>
-                <button
-                  type="button"
-                  className="p-1 rounded-lg text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] transition-colors text-xs"
-                  onClick={() => setShowShortcuts(false)}
-                  aria-label="Close shortcuts dialog"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <div className="flex flex-col gap-4 text-xs">
-                <div className="flex flex-col gap-2">
-                  <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">Navigation &amp; Controls</div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#19191d] text-neutral-300">
-                    <span>Toggle / Pin Sidebar</span>
-                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#151519] border border-[#212126] text-neutral-300">Ctrl + B</kbd>
-                  </div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#19191d] text-neutral-300">
-                    <span>Omni Search Palette</span>
-                    <div className="flex items-center gap-1.5">
-                      <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#151519] border border-[#212126] text-neutral-300">/</kbd>
-                      <span className="text-neutral-500 text-[10px]">or</span>
-                      <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#151519] border border-[#212126] text-neutral-300">Ctrl + K</kbd>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#19191d] text-neutral-300">
-                    <span>Dismiss Search / Modals</span>
-                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#151519] border border-[#212126] text-neutral-300">Esc</kbd>
-                  </div>
-                  <div className="flex items-center justify-between py-1.5 text-neutral-300">
-                    <span>Toggle Shortcuts Dialog</span>
-                    <kbd className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#151519] border border-[#212126] text-neutral-300">?</kbd>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2 pt-2 border-t border-[#19191d]">
-                  <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">Monorepo Ports &amp; CLI</div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#19191d] text-neutral-300">
-                    <span>Monorepo Runner</span>
-                    <code className="text-neutral-300 font-mono text-[11px]">npx @workspace/runner</code>
-                  </div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#19191d] text-neutral-300">
-                    <span>Client Dev Servers</span>
-                    <code className="text-neutral-300 font-mono text-[11px]">Ports 5173 - 5181</code>
-                  </div>
-                  <div className="flex items-center justify-between py-1.5 text-neutral-300">
-                    <span>FastAPI Server APIs</span>
-                    <code className="text-neutral-300 font-mono text-[11px]">Ports 8000 - 8008</code>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Global Desktop App, Shortcuts & Commands Modal */}
+        <ShortcutsModal
+          open={showShortcuts}
+          onClose={() => setShowShortcuts(false)}
+          onNavigate={navigate}
+          projectsCount={projectsList.length}
+          packagesCount={packagesList.length}
+          docsCount={DOCUMENTATION_GUIDES_REGISTRY.length}
+          canInstallPwa={Boolean(deferredInstallPrompt)}
+          onInstallPwa={async () => {
+            if (!deferredInstallPrompt) return;
+            await deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            setDeferredInstallPrompt(null);
+          }}
+        />
       </main>
+
+      <GlobalStatusBar
+        active={active}
+        onNavigate={navigate}
+        canScrollTop={canScrollTop}
+        onScrollTop={() => mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })}
+        projectsCount={projectsList.length}
+        onOpenShortcuts={() => setShowShortcuts(true)}
+        onFocusSearch={() => searchInputRef.current?.focus()}
+      />
     </div>
   );
 }

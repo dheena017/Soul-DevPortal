@@ -112,7 +112,31 @@ class ProjectService:
         """Serves specific tab data for a project without hardcoded data."""
         proj_dir = self.projects_root / project_name
         if not proj_dir.is_dir():
-            return {"error": f"Project '{project_name}' not found on disk"}
+            cached_proj = self.get_project_by_id(project_name)
+            if not cached_proj:
+                return {"error": f"Project '{project_name}' not found on disk"}
+            if tab == "overview":
+                return {
+                    "id": project_name,
+                    "name": cached_proj.get("title") or project_name,
+                    "description": cached_proj.get("description") or "",
+                    "features": cached_proj.get("features", []),
+                    "techStack": {"frontend": cached_proj.get("framework"), "backend": cached_proj.get("serverStack")},
+                    "localServices": cached_proj.get("localServices", {}),
+                    "commands": cached_proj.get("commands", {}),
+                }
+            if tab == "scripts":
+                return {
+                    "id": project_name,
+                    "scripts": cached_proj.get("scripts", {}),
+                    "dependencies": cached_proj.get("dependencies", {}),
+                    "devDependencies": cached_proj.get("devDependencies", {}),
+                }
+            return {
+                "id": project_name,
+                "standaloneFallback": True,
+                "blocks": [{"type": "paragraph", "text": "Running in standalone desktop mode without local sub-repository source checkout."}],
+            }
 
         meta = read_json_manifest(proj_dir / "metadata.json")
         pkg = read_json_manifest(proj_dir / "package.json")

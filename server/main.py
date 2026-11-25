@@ -36,14 +36,18 @@ def main():
         print(f"✅ Extraction completed! Discovered {stats.get('projectsCount')} projects, {stats.get('packagesCount')} packages, {stats.get('docsCount')} docs, {stats.get('totalSymbols')} symbols.")
         return
 
-    uvicorn.run(
-        "app.server:app",
+    uvicorn_kwargs = dict(
         host=args.host,
         port=args.port,
         reload=args.reload,
         app_dir=str(SERVER_DIR),
         log_level="warning",
     )
+    if args.reload:
+        uvicorn_kwargs["reload_dirs"] = [str(SERVER_DIR)]
+        uvicorn_kwargs["reload_excludes"] = ["data/*", "*.db*", "__pycache__/*", "tests/*"]
+
+    uvicorn.run("app.server:app", **uvicorn_kwargs)
 
 
 if __name__ == "__main__":

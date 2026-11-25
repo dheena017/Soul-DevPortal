@@ -131,10 +131,77 @@ def _crawl_single_project(proj_dir: Path, idx: int, registry: Dict[str, Any]) ->
     }
 
 
+def _synthesize_from_registry(registry: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Synthesizes project entries from projects.json when source repos aren't checked out locally."""
+    entries: List[Dict[str, Any]] = []
+    specs = list(registry.items())
+    ports: List[int] = []
+    for idx, (_pid, spec) in enumerate(specs):
+        ports.append(int(spec.get("frontend_port") or (5173 + idx)))
+        ports.append(int(spec.get("backend_port") or (8000 + idx)))
+
+    with ThreadPoolExecutor(max_workers=min(12, max(1, len(ports)))) as pool:
+        live_flags = list(pool.map(is_port_live, ports))
+
+    for idx, (pid, spec) in enumerate(specs):
+        fe_port = ports[idx * 2]
+        be_port = ports[idx * 2 + 1]
+        fe_live = live_flags[idx * 2]
+        be_live = live_flags[idx * 2 + 1]
+        title = spec.get("title") or pid.replace("-", " ").title()
+        logo = ""
+        png_logo = WORKSPACE_ROOT / "public" / "project-logos" / f"{pid}.png"
+        svg_logo = WORKSPACE_ROOT / "public" / "project-logos" / f"{pid}.svg"
+        if png_logo.is_file():
+            logo = f"/project-logos/{pid}.png"
+        elif svg_logo.is_file():
+            logo = f"/project-logos/{pid}.svg"
+
+        fe_cmd = " ".join(spec.get("frontend_cmd", [])) if isinstance(spec.get("frontend_cmd"), list) else str(spec.get("frontend_cmd") or "")
+        be_cmd = " ".join(spec.get("backend_cmd", [])) if isinstance(spec.get("backend_cmd"), list) else str(spec.get("backend_cmd") or "")
+        entries.append({
+            "id": pid,
+            "slug": pid,
+            "name": title,
+            "title": title,
+            "version": "1.0.0",
+            "logo": logo,
+            "description": spec.get("description") or f"{title} workspace micro-application.",
+            "frontendPort": fe_port,
+            "backendPort": be_port,
+            "framework": spec.get("framework") or "React 19 + Vite 8 + Tailwind CSS v4",
+            "serverStack": spec.get("server_stack", "Python FastAPI + Uvicorn"),
+            "dbInfo": spec.get("db_info") or f"SQLite (server/data/{pid}.db)",
+            "aiEngine": spec.get("ai_engine") or "N/A",
+            "features": [],
+            "apiEndpoints": [],
+            "rawEndpoints": [],
+            "configuration": [],
+            "commands": {"frontend": fe_cmd, "backend": be_cmd},
+            "localServices": {},
+            "scripts": {"dev:client": fe_cmd, "dev:server": be_cmd},
+            "dependencies": {},
+            "devDependencies": {},
+            "frontend": {"port": fe_port, "isLive": fe_live},
+            "backend": {"port": be_port, "isLive": be_live},
+            "tabs": [
+                {"id": "overview", "label": "Overview", "hasData": True},
+                {"id": "scripts", "label": "Scripts", "hasData": True},
+            ],
+            "fileTree": [],
+            "tree": [],
+            "totalFiles": 0,
+            "updatedAt": None,
+            "relativeTime": "registry",
+            "commitHash": None,
+        })
+    return entries
+
+
 def crawl_projects(projects_root: Path, registry: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Discovers all projects concurrently, reads metadata, and probes live socket states."""
     if not projects_root.is_dir():
-        return []
+        return _synthesize_from_registry(registry) if registry else []
 
     project_dirs = [
         proj_dir
@@ -142,7 +209,7 @@ def crawl_projects(projects_root: Path, registry: Dict[str, Any]) -> List[Dict[s
         if proj_dir.is_dir() and not proj_dir.name.startswith(".") and not proj_dir.name.startswith("__")
     ]
     if not project_dirs:
-        return []
+        return _synthesize_from_registry(registry) if registry else []
 
     with ThreadPoolExecutor(max_workers=min(8, len(project_dirs))) as pool:
         futures = [
