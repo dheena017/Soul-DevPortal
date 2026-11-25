@@ -346,7 +346,7 @@ function HeadingWithAnchor({ level, text = '' }: HeadingWithAnchorProps) {
   // ── LEVEL 2: Header Topic (Major Section) ──
   if (level === 2) {
     return (
-      <div className="mt-12 mb-5 pt-6 border-t border-white/[0.1] first:mt-2 first:pt-0 first:border-t-0">
+      <div className="mt-8 mb-4 pt-6 border-t border-white/[0.1] first:mt-2 first:pt-0 first:border-t-0">
         <div className="group flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-sky-400 to-indigo-500 shrink-0"></span>
@@ -456,13 +456,22 @@ export default React.memo(function Markdown({ blocks = [], skipFirstHeading = fa
   for (let index = 0; index < blocks.length; index += 1) {
     const block = blocks[index];
 
+    if (block.type === 'hr') {
+      if (groupedBlocks[groupedBlocks.length - 1]?.type !== 'hr') {
+        groupedBlocks.push({ type: 'hr' });
+      }
+      continue;
+    }
+
     if (block.type === 'p' || block.type === 'paragraph') {
       const trimmed = (block.text || '').trim();
       if (!trimmed || isPureHtmlWrapper(trimmed)) {
         continue;
       }
       if (isHorizontalRule(trimmed)) {
-        groupedBlocks.push({ type: 'hr' });
+        if (groupedBlocks[groupedBlocks.length - 1]?.type !== 'hr') {
+          groupedBlocks.push({ type: 'hr' });
+        }
         continue;
       }
       if (isBadgeOnlyLine(trimmed)) {
@@ -524,11 +533,27 @@ export default React.memo(function Markdown({ blocks = [], skipFirstHeading = fa
     groupedBlocks.push({ type: 'list-group', ordered: block.type === 'ordered', items });
   }
 
+  // Strip skipped first H1, leading/trailing dividers, and redundant dividers right before H2
+  const withoutSkippedHeading = groupedBlocks.filter((b) => {
+    if (b.type === 'h1' && skipFirstHeading && !skippedHeading) {
+      skippedHeading = true;
+      return false;
+    }
+    return true;
+  });
+
+  const cleanBlocks = withoutSkippedHeading.filter((b, idx, arr) => {
+    if (b.type !== 'hr') return true;
+    if (idx === 0 || idx === arr.length - 1) return false;
+    if (arr[idx + 1]?.type === 'h2') return false;
+    return true;
+  });
+
   return (
     <div className="w-full flex flex-col text-zinc-300 leading-relaxed text-xs md:text-sm">
-      {groupedBlocks.map((block, index) => {
+      {cleanBlocks.map((block, index) => {
         if (block.type === 'hr') {
-          return <hr key={index} className="my-5 border-0 border-t border-white/[0.08]" />;
+          return <hr key={index} className="my-4 border-0 border-t border-white/[0.08]" />;
         }
         if (block.type === 'badge-group') {
           return (
@@ -540,10 +565,6 @@ export default React.memo(function Markdown({ blocks = [], skipFirstHeading = fa
           );
         }
         if (block.type === 'h1') {
-          if (skipFirstHeading && !skippedHeading) {
-            skippedHeading = true;
-            return null;
-          }
           return <HeadingWithAnchor level={1} text={block.text} key={index} />;
         }
         if (block.type === 'h2') return <HeadingWithAnchor level={2} text={block.text} key={index} />;
