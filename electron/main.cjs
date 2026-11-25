@@ -33,6 +33,7 @@ const MIME_TYPES = {
 };
 
 let mainWindow = null;
+const panelWindows = new Map();
 let tray = null;
 let staticServer = null;
 let spawnedBackend = null;
@@ -511,6 +512,91 @@ function startStaticAppServer(distDir) {
   );
 }
 
+function getActiveAppBaseUrl() {
+  return IS_DEV
+    ? `http://${BACKEND_HOST}:${DEV_VITE_PORT}/`
+    : `http://${BACKEND_HOST}:${activeClientPort}/`;
+}
+
+function resolveWindowIcon() {
+  const iconPng = path.join(__dirname, 'assets', 'icon.png');
+  const iconIco = path.join(__dirname, 'assets', 'icon.ico');
+  return process.platform === 'win32' && fs.existsSync(iconIco) ? iconIco : iconPng;
+}
+
+function attachWindowOpenRouter(win) {
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    const internalOrigin = `http://${BACKEND_HOST}:${IS_DEV ? DEV_VITE_PORT : activeClientPort}`;
+    if (url.startsWith(internalOrigin)) {
+      try {
+        const parsed = new URL(url);
+        const hash = (parsed.hash || '#changelog').replace(/^#/, '');
+        const panelKey = parsed.searchParams.get('panel') || hash || 'panel';
+        openPanelWindow({
+          hash,
+          panelKey,
+          title: panelKey === 'changelog' ? 'Workspace Changelog · Soul DevPortal' : 'Soul DevPortal Panel',
+        });
+      } catch {
+        // ignore malformed internal URL
+      }
+      return { action: 'deny' };
+    }
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      shell.openExternal(url);
+    }
+    return { action: 'deny' };
+  });
+}
+
+function openPanelWindow({ hash = 'changelog', title = 'Soul DevPortal Panel', panelKey } = {}) {
+  const cleanHash = String(hash || 'changelog').replace(/^#/, '');
+  const key = String(panelKey || cleanHash || 'changelog');
+  const existing = panelWindows.get(key);
+  if (existing && !existing.isDestroyed()) {
+    if (existing.isMinimized()) existing.restore();
+    existing.show();
+    existing.focus();
+    return existing;
+  }
+
+  nativeTheme.themeSource = 'dark';
+  const windowIcon = resolveWindowIcon();
+  const panelWin = new BrowserWindow({
+    width: 1200,
+    height: 820,
+    minWidth: 820,
+    minHeight: 540,
+    title: String(title || 'Soul DevPortal Panel'),
+    backgroundColor: '#070708',
+    autoHideMenuBar: true,
+    show: false,
+    icon: fs.existsSync(windowIcon) ? windowIcon : undefined,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.cjs'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+    },
+  });
+
+  panelWindows.set(key, panelWin);
+  panelWin.once('ready-to-show', () => {
+    if (!panelWin.isDestroyed()) {
+      panelWin.show();
+      panelWin.focus();
+    }
+  });
+  panelWin.on('closed', () => {
+    panelWindows.delete(key);
+  });
+
+  attachWindowOpenRouter(panelWin);
+  const targetUrl = `${getActiveAppBaseUrl()}?panel=${encodeURIComponent(key)}#${cleanHash}`;
+  void panelWin.loadURL(targetUrl);
+  return panelWin;
+}
+
 function navigateWindow(hash) {
   if (!mainWindow || mainWindow.isDestroyed()) return;
   if (mainWindow.isMinimized()) mainWindow.restore();
@@ -545,6 +631,12 @@ function buildAppMenu() {
         { label: 'Docs & Specifications', accelerator: 'CmdOrCtrl+4', click: () => navigateWindow('docs') },
         { label: 'Computer & Performance', accelerator: 'CmdOrCtrl+5', click: () => navigateWindow('computer') },
         { label: 'Developer Hub & GitHub Links', accelerator: 'CmdOrCtrl+6', click: () => navigateWindow('portal') },
+        { type: 'separator' },
+        { label: 'Workspace Changelog (New Panel)', click: () => openPanelWindow({ hash: 'changelog', title: 'Workspace Changelog · Soul DevPortal', panelKey: 'changelog' }) },
+        { type: 'separator' },
+        { label: 'Everyday Utilities', accelerator: 'CmdOrCtrl+7', click: () => navigateWindow('everyday') },
+        { label: 'Everyday Utilities: Notes & Journal', accelerator: 'CmdOrCtrl+8', click: () => navigateWindow('everyday/notes') },
+        { label: 'Everyday Utilities: Focus Timer & Breathing', accelerator: 'CmdOrCtrl+9', click: () => navigateWindow('everyday/focus') },
         { type: 'separator' },
         { role: 'quit', label: 'Quit Soul DevPortal' },
       ],
@@ -664,12 +756,7 @@ async function createMainWindow() {
     mainWindow = null;
   });
 
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      shell.openExternal(url);
-    }
-    return { action: 'deny' };
-  });
+  attachWindowOpenRouter(mainWindow);
 
   // Show an immediate dark splash while booting the Desktop App's isolated FastAPI backend
   if (!IS_SMOKE && !IS_DEV) {
@@ -788,6 +875,42 @@ async function createMainWindow() {
           );
           const closeModalBtn = document.querySelector('[aria-label="Close desktop app and shortcuts dialog"]');
           if (closeModalBtn) closeModalBtn.click();
+          const checkRoute = async (hash, text) => {
+            window.location.hash = hash;
+            for (let i = 0; i < 20; i += 1) {
+              await wait(100);
+              if ((document.body.innerText || '').includes(text)) return true;
+            }
+            return false;
+          };
+          const hasTasksPage = await checkRoute('tasks', 'Add Task');
+          let canAddTask = false;
+          if (hasTasksPage) {
+            const origTasksRes = await fetch('/api/workspace-tools/state/tasks').then((r) => r.json()).catch(() => null);
+            const taskInput = document.querySelector('input[aria-label="New task title"]');
+            const addTaskBtn = Array.from(document.querySelectorAll('button[type="submit"]')).find((b) =>
+              (b.innerText || '').includes('Add Task')
+            );
+            if (taskInput && addTaskBtn) {
+              const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+              setter.call(taskInput, 'Smoke Verify Task');
+              taskInput.dispatchEvent(new Event('input', { bubbles: true }));
+              await wait(60);
+              addTaskBtn.click();
+              await wait(220);
+              canAddTask = (document.body.innerText || '').includes('Smoke Verify Task');
+              if (origTasksRes && origTasksRes.exists) {
+                await fetch('/api/workspace-tools/state/tasks', {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ data: origTasksRes.data }),
+                });
+              }
+            }
+          }
+          const hasChangelogPage = await checkRoute('changelog', 'Track new features, improvements, and bug fixes');
+          const hasNotesPage = await checkRoute('notes', 'Notes & Journal');
+          const hasToolsPage = await checkRoute('tools', 'Everyday Utilities');
           let clockPopoverFitsViewport = false;
           const clockBtn = statusBar ? statusBar.querySelector('button[aria-label*="Current date and time"]') : null;
           if (clockBtn) {
@@ -823,6 +946,11 @@ async function createMainWindow() {
             headerFitsViewport,
             hasStatusBar,
             clockPopoverFitsViewport,
+            hasTasksPage,
+            canAddTask,
+            hasChangelogPage,
+            hasNotesPage,
+            hasToolsPage,
             hasDoodleBg,
           };
         })()
@@ -840,6 +968,11 @@ async function createMainWindow() {
         report.headerFitsViewport &&
         report.hasStatusBar &&
         report.clockPopoverFitsViewport &&
+        report.hasTasksPage &&
+        report.canAddTask &&
+        report.hasChangelogPage &&
+        report.hasNotesPage &&
+        report.hasToolsPage &&
         report.hasDoodleBg &&
         report.brokenImages.length === 0
       );
@@ -907,6 +1040,16 @@ if (!gotSingleInstanceLock) {
       return shell.openExternal(url);
     }
     return undefined;
+  });
+
+  ipcMain.handle('soul:open-panel', (_evt, payload) => {
+    if (!payload || typeof payload !== 'object') return undefined;
+    openPanelWindow({
+      hash: payload.hash || 'changelog',
+      title: payload.title || 'Workspace Changelog · Soul DevPortal',
+      panelKey: payload.panelKey || 'changelog',
+    });
+    return true;
   });
 
   app.whenReady().then(createMainWindow);

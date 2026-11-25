@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSharedTelemetry } from '../services/telemetryStore';
 import { SystemLiveSnapshot } from '../types';
+import { isEverydayRoute } from '../features/everyday/everydayTabsRegistry';
+import { openChangelogPanel } from '../utils/openStandalonePanel';
 
 export interface GlobalStatusBarProps {
   active: string;
@@ -44,6 +46,7 @@ function formatRate(kbps?: number): string {
 }
 
 export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
+  active,
   onNavigate,
   isBackendLive: propBackendLive,
   liveTelemetry: propLiveTelemetry,
@@ -402,8 +405,30 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
 
           <button
             type="button"
+            onClick={() => openChangelogPanel()}
+            className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-sky-300 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer shrink-0"
+            title="Open Workspace Changelog in New Tab / Desktop Panel"
+          >
+            <span>Changelog ↗</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onNavigate('everyday')}
+            className={`hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-md transition-colors cursor-pointer shrink-0 ${
+              isEverydayRoute(active)
+                ? 'bg-emerald-500/15 text-emerald-300 font-semibold'
+                : 'text-zinc-300 hover:text-white hover:bg-white/[0.06]'
+            }`}
+            title="Open Everyday Utilities — Tasks, Notes, Focus, Habits, Budget & Dev Tools (Ctrl+7)"
+          >
+            <span>Everyday Utilities</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => onNavigate('projects')}
-            className="hidden xl:inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.05] transition-colors cursor-pointer shrink-0"
+            className="hidden 2xl:inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.05] transition-colors cursor-pointer shrink-0"
             title="View Workspace Applications"
           >
             <span>Apps:</span>

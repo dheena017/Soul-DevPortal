@@ -14,12 +14,14 @@ import Sidebar from './components/Sidebar';
 import Overview from './components/Overview';
 import { Header } from './components/Header';
 import LoadingScreen from './components/LoadingScreen';
+import { SoulLogoIcon } from './components/SoulLogo';
 import TabLoadingState from './components/TabLoadingState';
 import ShortcutsModal from './components/ShortcutsModal';
 import GlobalStatusBar from './components/GlobalStatusBar';
 
 // Lazy-loaded Pillar Feature Views (code-split cleanly)
 const PortalHubView = lazy(() => import('./components/PortalHubView'));
+const ChangelogView = lazy(() => import('./features/changelog/ChangelogView'));
 const ProjectsView = lazy(() => import('./features/projects/ProjectsView'));
 const ProjectDetailView = lazy(() => import('./features/projects/ProjectDetailView'));
 const PackagesView = lazy(() => import('./features/packages/PackagesView'));
@@ -27,8 +29,14 @@ const PackageDetailView = lazy(() => import('./features/packages/PackageDetailVi
 const DocsView = lazy(() => import('./features/docs/DocsView'));
 const ScriptsView = lazy(() => import('./features/scripts/ScriptsView'));
 const SystemView = lazy(() => import('./features/system/SystemView'));
+const EverydayUtilitiesPage = lazy(() => import('./features/everyday/EverydayUtilitiesPage'));
 
 import { DOCUMENTATION_GUIDES_REGISTRY, findGuideMeta } from './features/docs/docsConstants';
+import {
+  getEverydayTabMeta,
+  isEverydayRoute,
+  resolveEverydayRouteToTab,
+} from './features/everyday/everydayTabsRegistry';
 
 import './styles.css';
 
@@ -114,11 +122,22 @@ function mergeById<T extends { id: string }>(
 }
 
 function App() {
-  const [active, setActive] = useState<string>('overview');
+  const [panelMode, setPanelMode] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return new URLSearchParams(window.location.search).get('panel');
+  });
+  const [active, setActive] = useState<string>(() => {
+    if (typeof window === 'undefined') return 'overview';
+    const hash = window.location.hash.slice(1);
+    if (hash) return hash;
+    return new URLSearchParams(window.location.search).get('panel') || 'overview';
+  });
   const [query, setQuery] = useState<string>('');
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
-  const [isBootLoading, setIsBootLoading] = useState<boolean>(true);
+  const [isBootLoading, setIsBootLoading] = useState<boolean>(
+    () => !(typeof window !== 'undefined' && Boolean(new URLSearchParams(window.location.search).get('panel')))
+  );
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -228,11 +247,13 @@ function App() {
     };
     const timer = window.setTimeout(() => {
       prefetch(() => import('./components/PortalHubView'));
+      prefetch(() => import('./features/changelog/ChangelogView'));
       prefetch(() => import('./features/projects/ProjectsView'));
       prefetch(() => import('./features/packages/PackagesView'));
       prefetch(() => import('./features/docs/DocsView'));
       prefetch(() => import('./features/scripts/ScriptsView'));
       prefetch(() => import('./features/system/SystemView'));
+      prefetch(() => import('./features/everyday/EverydayUtilitiesPage'));
     }, 950);
 
     const onBeforeInstall = (evt: Event) => {
@@ -274,7 +295,8 @@ function App() {
     });
 
     const syncHash = () => {
-      const hashView = window.location.hash.slice(1) || 'overview';
+      const initialPanel = new URLSearchParams(window.location.search).get('panel');
+      const hashView = window.location.hash.slice(1) || initialPanel || 'overview';
       setActive((prev) => (prev === hashView ? prev : hashView));
       consoleLogger.action('ROUTER', `Navigated to view: #${hashView}`);
     };
@@ -331,6 +353,25 @@ function App() {
         } else if (document.activeElement === searchInputRef.current) {
           searchInputRef.current?.blur();
         }
+      } else if ((event.ctrlKey || event.metaKey) && ['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(event.key)) {
+        const keyMap: Record<string, string> = {
+          '1': 'overview',
+          '2': 'projects',
+          '3': 'packages',
+          '4': 'docs',
+          '5': 'computer',
+          '6': 'portal',
+          '7': 'everyday',
+          '8': 'everyday/notes',
+          '9': 'everyday/focus',
+        };
+        const target = keyMap[event.key];
+        if (target) {
+          event.preventDefault();
+          setActive(target);
+          window.location.hash = target;
+          setMenuOpen(false);
+        }
       }
     };
 
@@ -354,6 +395,12 @@ function App() {
   const mainRef = useRef<HTMLElement>(null);
 
   const navigate = (id: string) => {
+    if (panelMode && id !== panelMode) {
+      setPanelMode(null);
+      if (typeof window !== 'undefined') {
+        window.history.replaceState({}, '', `${window.location.pathname}#${id}`);
+      }
+    }
     setActive(id);
     window.location.hash = id;
     setMenuOpen(false);
@@ -395,6 +442,11 @@ function App() {
 
   const activeTitle = useMemo(() => {
     if (active === 'overview' || active === '' || active === '#') return null;
+    if (isEverydayRoute(active)) {
+      const tab = getEverydayTabMeta(resolveEverydayRouteToTab(active));
+      return tab.id === 'overview' ? 'Everyday Utilities' : `Everyday Utilities — ${tab.label}`;
+    }
+    if (['changelog', 'catalog', 'portfolio', 'showcase'].includes(active)) return 'Changelog';
     if (active === 'portal' || active === 'hub') return 'Developer Hub & GitHub Links';
     if (active === 'computer' || active === 'system') return 'Computer & Performance';
     if (active === 'projects') return 'Projects & Applications';
@@ -470,6 +522,16 @@ function App() {
       crumbs.push({ label: 'scripts & runners' });
     } else if (active === 'computer' || active === 'system') {
       crumbs.push({ label: 'computer & performance' });
+    } else if (isEverydayRoute(active)) {
+      const tab = getEverydayTabMeta(resolveEverydayRouteToTab(active));
+      if (tab.id === 'overview') {
+        crumbs.push({ label: 'everyday utilities' });
+      } else {
+        crumbs.push({ label: 'everyday utilities', id: 'everyday' });
+        crumbs.push({ label: tab.shortLabel.toLowerCase() });
+      }
+    } else if (['changelog', 'catalog', 'portfolio', 'showcase'].includes(active)) {
+      crumbs.push({ label: 'changelog' });
     } else if (active === 'portal' || active === 'hub') {
       crumbs.push({ label: 'developer hub & github' });
     } else {
@@ -488,32 +550,75 @@ function App() {
         />
       )}
 
-      <Sidebar
-        active={active}
-        packages={packagesList}
-        projects={projectsList}
-        projectsCount={projectsList.length}
-        menuOpen={menuOpen}
-        onNavigate={navigate}
-        onClose={() => setMenuOpen(false)}
-      />
+      {!panelMode && (
+        <Sidebar
+          active={active}
+          packages={packagesList}
+          projects={projectsList}
+          projectsCount={projectsList.length}
+          menuOpen={menuOpen}
+          onNavigate={navigate}
+          onClose={() => setMenuOpen(false)}
+        />
+      )}
 
-      <Header
-        active={active}
-        menuOpen={menuOpen}
-        onToggleSidebar={handleSidebarToggle}
-        breadcrumbs={breadcrumbs}
-        onNavigate={navigate}
-        query={query}
-        onSearchChange={handleSearchChange}
-        onClearSearch={() => setQuery('')}
-        searchInputRef={searchInputRef}
-        projectsCount={projectsList.length}
-        packagesCount={packagesList.length}
-        docsCount={DOCUMENTATION_GUIDES_REGISTRY.length}
-        onOpenShortcuts={() => setShowShortcuts(true)}
-        onTriggerReload={() => setIsBootLoading(true)}
-      />
+      {panelMode ? (
+        <header
+          className="w-full h-14 bg-[#0d0d10]/[0.97] border-b border-white/[0.08] sticky top-0 z-30 shrink-0"
+          role="banner"
+        >
+          <div className="w-full max-w-[1800px] mx-auto h-full px-4 sm:px-6 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <SoulLogoIcon className="w-6 h-6 shrink-0" />
+              <span className="text-sm font-extrabold text-white tracking-tight truncate">
+                Workspace Changelog
+              </span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-sky-500/15 border border-sky-400/30 text-sky-300 shrink-0">
+                {typeof window !== 'undefined' && window.soulDesktop?.isDesktop
+                  ? 'Desktop Panel'
+                  : 'Standalone Tab'}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => navigate('overview')}
+                className="px-3 py-1.5 rounded-lg bg-[#16161c] border border-white/[0.1] hover:border-white/[0.25] text-xs font-semibold text-zinc-200 hover:text-white cursor-pointer"
+              >
+                Open Full Portal
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  window.close();
+                  navigate('overview');
+                }}
+                className="px-3 py-1.5 rounded-lg bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-bold cursor-pointer"
+              >
+                Close Panel
+              </button>
+            </div>
+          </div>
+        </header>
+      ) : (
+        <Header
+          active={active}
+          menuOpen={menuOpen}
+          onToggleSidebar={handleSidebarToggle}
+          breadcrumbs={breadcrumbs}
+          onNavigate={navigate}
+          query={query}
+          onSearchChange={handleSearchChange}
+          onClearSearch={() => setQuery('')}
+          searchInputRef={searchInputRef}
+          projectsCount={projectsList.length}
+          packagesCount={packagesList.length}
+          docsCount={DOCUMENTATION_GUIDES_REGISTRY.length}
+          onOpenShortcuts={() => setShowShortcuts(true)}
+          onTriggerReload={() => setIsBootLoading(true)}
+        />
+      )}
 
       <main
         ref={mainRef}
@@ -555,6 +660,18 @@ function App() {
               onNavigate={navigate}
               onBack={() => navigate('overview')}
               onOpenShortcuts={() => setShowShortcuts(true)}
+            />
+          )}
+
+          {['changelog', 'catalog', 'portfolio', 'showcase'].includes(active) && (
+            <ChangelogView
+              projects={projectsList}
+              packages={packagesList}
+              stats={stats}
+              rootScripts={liveWorkspace?.rootScripts || {}}
+              externalQuery={query}
+              onNavigate={navigate}
+              onBack={() => navigate('overview')}
             />
           )}
 
@@ -694,6 +811,14 @@ function App() {
 
             {(active === 'computer' || active === 'system') && (
               <SystemView onNavigate={navigate} />
+            )}
+
+            {isEverydayRoute(active) && (
+              <EverydayUtilitiesPage
+                initialTab={resolveEverydayRouteToTab(active)}
+                onSelectTab={(tab) => navigate(tab === 'overview' ? 'everyday' : `everyday/${tab}`)}
+                onNavigate={navigate}
+              />
             )}
             </div>
           </Suspense>

@@ -22,4 +22,6 @@ contextBridge.exposeInMainWorld('soulDesktop', {
     return () => ipcRenderer.removeListener('soul:navigate', listener);
   },
   openExternal: (url) => ipcRenderer.invoke('soul:open-external', url),
+  openPanel: (hash, title, panelKey) =>
+    ipcRenderer.invoke('soul:open-panel', { hash, title, panelKey }),
 });

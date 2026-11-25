@@ -33,6 +33,7 @@ interface SoulDesktopBridge {
   navigate?: (route: string) => void;
   onNavigate?: (cb: (route: string) => void) => () => void;
   openExternal?: (url: string) => void;
+  openPanel?: (hash: string, title?: string, panelKey?: string) => Promise<void> | void;
 }
 
 interface BeforeInstallPromptEvent extends Event {

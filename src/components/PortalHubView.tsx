@@ -442,8 +442,9 @@ export default function PortalHubView({
               dbInfo="SQLite WAL (portal.db)"
               aiEngine="PSUtil + WMI + SSE Stream"
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 portal-grid-stagger">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 portal-grid-stagger">
               {[
+                { id: 'changelog', title: 'Changelog', desc: 'Release history, features, improvements & fixes' },
                 { id: 'projects', title: 'Projects Hub', desc: 'Micro-apps, API routes & SQLite schemas' },
                 { id: 'packages', title: 'Packages Hub', desc: 'Logger, Config & Runner shared libraries' },
                 { id: 'docs', title: 'Docs & Specs', desc: 'Architecture specs & golden engineering rules' },

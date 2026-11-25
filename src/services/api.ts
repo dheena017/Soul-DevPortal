@@ -5,7 +5,7 @@
 
 import { PackageData, ProjectData, StatsData, MarkdownBlock } from '../types';
 
-const API_BASE = '/api';
+export const API_BASE = '/api';
 
 export interface WorkspaceApiResponse {
   meta: {

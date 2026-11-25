@@ -64,6 +64,15 @@ all_endpoints = [
     ("GET", "/api/docs/details/03-networking-and-ports/golden-rules"),
     ("GET", "/api/docs/details/04-cheatsheets/main"),
     ("GET", "/api/docs/details/04-cheatsheets/golden-rules"),
+
+    # Human Workspace Tools (Tasks, Notes, Habits, Focus, Bookmarks, Expenses, Goals, Schedule, Checklists)
+    ("GET", "/api/workspace-tools/summary"),
+    ("GET", "/api/workspace-tools/state/tasks"),
+    ("GET", "/api/workspace-tools/state/notes"),
+    ("GET", "/api/workspace-tools/state/expenses"),
+    ("GET", "/api/workspace-tools/state/goals"),
+    ("GET", "/api/workspace-tools/state/schedule"),
+    ("GET", "/api/workspace-tools/state/checklists"),
 ]
 
 print("=== RUNNING FASTAPI ENDPOINT TESTS ===")
@@ -87,6 +96,16 @@ with client.stream("GET", "/api/system/stream?interval_ms=1000&window_sec=60&max
             break
     assert '"windowSec":60' in first_chunk, f"Unexpected SSE payload: {first_chunk[:160]}"
 print("[200] GET  /api/system/stream (SSE verified)")
+
+# Verify workspace tools PUT/GET persistence roundtrip cleanly restores original state
+orig_scratch = client.get("/api/workspace-tools/state/scratchpad").json()
+save_res = client.put("/api/workspace-tools/state/scratchpad", json={"data": {"text": "smoke-test", "count": 1}})
+assert save_res.status_code == 200 and save_res.json().get("saved") is True
+read_res = client.get("/api/workspace-tools/state/scratchpad")
+assert read_res.status_code == 200 and read_res.json().get("data") == {"text": "smoke-test", "count": 1}
+if orig_scratch.get("exists"):
+    client.put("/api/workspace-tools/state/scratchpad", json={"data": orig_scratch.get("data")})
+print("[200] PUT/GET /api/workspace-tools/state/scratchpad (SQLite persistence verified)")
 
 # Verify SQLite DB
 print("\n=== VERIFYING SQLITE DATABASE ===")

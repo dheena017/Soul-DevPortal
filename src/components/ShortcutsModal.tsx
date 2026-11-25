@@ -24,11 +24,15 @@ const GITHUB_RELEASE_EXE_URL = 'https://github.com/dheena017/Soul-DevPortal/rele
 
 const ROUTE_SHORTCUTS = [
   { keys: 'Ctrl + 1', label: 'Workspace Overview', route: 'overview' },
+  { keys: '#changelog', label: 'Workspace Changelog', route: 'changelog' },
   { keys: 'Ctrl + 2', label: 'Projects & Apps', route: 'projects' },
   { keys: 'Ctrl + 3', label: 'Shared Packages', route: 'packages' },
   { keys: 'Ctrl + 4', label: 'Architecture & Docs', route: 'docs' },
   { keys: 'Ctrl + 5', label: 'Computer & Performance', route: 'computer' },
   { keys: 'Ctrl + 6', label: 'Developer Hub', route: 'portal' },
+  { keys: 'Ctrl + 7', label: 'Everyday Utilities', route: 'everyday' },
+  { keys: 'Ctrl + 8', label: 'Everyday Utilities: Notes & Journal', route: 'everyday/notes' },
+  { keys: 'Ctrl + 9', label: 'Everyday Utilities: Focus Timer & Breathing', route: 'everyday/focus' },
 ];
 
 export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({

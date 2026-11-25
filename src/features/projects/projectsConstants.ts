@@ -156,6 +156,7 @@ export const PROJECT_DESCRIPTIONS: Record<string, string> = {
   'college-management-system': 'Campus hostel management, student attendance, room allocation directory, and billing workflows.',
   'globalpulse-ai': 'Real-time international news aggregator and breaking alerts synthesizer powered by Gemini AI.',
   'postcraft-ai': 'Multi-platform social media post generation, smart publishing scheduler, and AI marketing assistant.',
+  'home-management': 'Unified household document vault, warranty lifecycle tracker, spatial room inventory, maintenance logs, and utility telemetry OS.',
 };
 
 export const PROJECT_TAGS: Record<string, string[]> = {
@@ -167,6 +168,7 @@ export const PROJECT_TAGS: Record<string, string[]> = {
   'college-management-system': ['React 19', 'FastAPI', 'Vite 8', 'Tailwind v4', 'SQLite'],
   'globalpulse-ai': ['React 19', 'FastAPI', 'Vite 8', 'Tailwind v4', 'Gemini AI'],
   'postcraft-ai': ['React 19', 'FastAPI', 'Vite 8', 'Tailwind v4', 'GenAI'],
+  'home-management': ['React 19', 'FastAPI', 'Vite 8', 'Tailwind v4', 'SQLite'],
 };
 
 export const PROJECT_FEATURES_MAP: Record<string, string[]> = {
@@ -228,5 +230,12 @@ export const PROJECT_FEATURES_MAP: Record<string, string[]> = {
     'Smart publishing calendar with scheduled queue management',
     'Visual post preview card mimicking actual social platform layouts',
     'Unified React 19 + Vite 8 + Tailwind CSS v4 architecture with dedicated API server',
+  ],
+  'home-management': [
+    'Automated document indexing, metadata extraction, and ASN assignment',
+    'Warranty lifecycle countdowns, expiration alerts, and 1-click insurance claim packets',
+    'Spatial room & floor valuation tracking with garage fleet service history',
+    'Preventive maintenance scheduling, vendor directory, and emergency utility shutoff coordinates',
+    'High-performance SQLite WAL persistence across 40+ household API endpoints',
   ],
 };

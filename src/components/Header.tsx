@@ -4,6 +4,8 @@ import { SoulLogoIcon } from './SoulLogo';
 import { HeaderEqualizerBars, MiniRadialRing } from './PortalVisuals';
 import { useSharedTelemetry } from '../services/telemetryStore';
 import { SystemLiveSnapshot } from '../types';
+import { EVERYDAY_TABS, isEverydayRoute } from '../features/everyday/everydayTabsRegistry';
+import { openChangelogPanel } from '../utils/openStandalonePanel';
 
 export interface BreadcrumbItem {
   label: string;
@@ -49,6 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
   backendPort: propBackendPort,
   liveTelemetry: propLiveTelemetry,
 }) => {
+  const isChangelogActive = ['changelog', 'catalog', 'portfolio', 'showcase'].includes(active);
   const isProjectsActive = active.startsWith('project');
   const isPackagesActive = active.startsWith('package') || ['logger', 'runner', 'config'].includes(active);
   const isDocsActive =
@@ -144,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* ── Center: Omni Command Search ── */}
-        <div className="relative w-36 xl:w-44 2xl:w-60 shrink-0 hidden lg:flex items-center" role="search">
+        <div className="relative w-32 xl:w-40 2xl:w-52 shrink-0 hidden lg:flex items-center" role="search">
           <svg className="absolute left-2.5 w-3.5 h-3.5 text-zinc-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -241,7 +244,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               role="tab"
               aria-selected={isDocsActive}
-              className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+              className={`inline-flex items-center gap-1.5 h-7 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                 isDocsActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
               }`}
               onClick={() => onNavigate('docs')}
@@ -252,8 +255,32 @@ export const Header: React.FC<HeaderProps> = ({
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
               </svg>
               <span>Docs</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-sky-500/20 text-sky-300 border border-sky-500/35 font-bold' : 'bg-sky-500/15 text-sky-400 border border-sky-500/25'}`}>
+              <span className={`hidden 2xl:inline-flex px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-sky-500/20 text-sky-300 border border-sky-500/35 font-bold' : 'bg-sky-500/15 text-sky-400 border border-sky-500/25'}`}>
                 {docsCount}
+              </span>
+            </button>
+
+            <span className="w-px h-4 bg-white/[0.08] mx-0.5 shrink-0" aria-hidden="true" />
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={isEverydayRoute(active)}
+              className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                isEverydayRoute(active) ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
+              }`}
+              onClick={() => onNavigate('everyday')}
+              title="Everyday Utilities — Tasks, Notes, Focus, Habits, Budget, Converters & Dev Tools (Ctrl+7)"
+            >
+              <svg className={`w-3.5 h-3.5 shrink-0 ${isEverydayRoute(active) ? 'text-emerald-400' : 'text-zinc-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              </svg>
+              <span>Everyday Utilities</span>
+              <span className={`hidden 2xl:inline-flex px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isEverydayRoute(active) ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 font-bold' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'}`}>
+                {EVERYDAY_TABS.length}
               </span>
             </button>
           </nav>
@@ -268,6 +295,35 @@ export const Header: React.FC<HeaderProps> = ({
               {isBackendLive ? 'Live' : 'Sync'}
             </span>
           </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              consoleLogger.action('NAV', 'Opening Changelog in separate tab / desktop panel');
+              openChangelogPanel();
+            }}
+            title={
+              typeof window !== 'undefined' && window.soulDesktop?.isDesktop
+                ? 'Open Workspace Changelog in a Separate Desktop Panel'
+                : 'Open Workspace Changelog in a New Browser Tab'
+            }
+            aria-label="Open Changelog in new tab or panel"
+            className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs font-semibold border transition-all active:scale-[0.98] cursor-pointer shadow-sm whitespace-nowrap shrink-0 ${
+              isChangelogActive
+                ? 'bg-sky-500/20 border-sky-400/45 text-white font-bold'
+                : 'bg-[#16161c] border-sky-400/30 text-sky-200 hover:text-white hover:border-sky-400/55 hover:bg-sky-500/12'
+            }`}
+          >
+            <svg className="w-3.5 h-3.5 text-sky-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 6h14" />
+              <path d="M4 12h10" />
+              <path d="M4 18h8" />
+              <path d="M18 13v7" />
+              <path d="M15 16l3-3 3 3" />
+            </svg>
+            <span className="hidden sm:inline">Changelog</span>
+            <span className="hidden xl:inline text-[10px] font-mono text-sky-300/80" aria-hidden="true">↗</span>
+          </button>
 
           <button
             type="button"

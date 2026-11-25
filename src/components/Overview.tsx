@@ -7,7 +7,9 @@ import { PackageData, ProjectData, StatsData } from '../types';
 import { PACKAGE_METADATA_MAP } from '../features/packages/packagesConstants';
 import { DOCUMENTATION_GUIDES_REGISTRY } from '../features/docs/docsConstants';
 import { PROJECT_LOGOS, PROJECT_BRAND_MAP, formatProjectTitle } from '../features/projects/projectsConstants';
+import { EVERYDAY_TABS } from '../features/everyday/everydayTabsRegistry';
 import { HeroArtworkBackdrop, ProjectLogoFleetStrip, ProjectLogoImage } from './PortalVisuals';
+import { openChangelogPanel } from '../utils/openStandalonePanel';
 
 function getPackageInstallCommand(pkg: PackageData): string {
   if (pkg.id === 'logger') return 'npm install @workspace/logger';
@@ -99,15 +101,26 @@ export default function Overview({
                   Enterprise Monorepo
                 </span>
               </div>
-              <button
-                type="button"
-                onClick={() => onNavigate('portal')}
-                className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-md shadow-white/10 shrink-0 cursor-pointer"
-                title="Open full Developer Portal Hub with GitHub links & live endpoints"
-              >
-                <span>Developer Hub &amp; GitHub Links</span>
-                <span className="portal-arrow-glide">→</span>
-              </button>
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => openChangelogPanel()}
+                  className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#16161c] border border-sky-400/35 text-sky-200 hover:bg-sky-500/15 hover:text-white hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-sm cursor-pointer"
+                  title="Open Workspace Changelog in New Tab / Desktop Panel"
+                >
+                  <span>Changelog</span>
+                  <span className="portal-arrow-glide">↗</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('portal')}
+                  className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-md shadow-white/10 shrink-0 cursor-pointer"
+                  title="Open full Developer Portal Hub with GitHub links & live endpoints"
+                >
+                  <span>Developer Hub &amp; GitHub Links</span>
+                  <span className="portal-arrow-glide">→</span>
+                </button>
+              </div>
             </div>
             <p className="text-xs md:text-sm text-zinc-300 leading-relaxed max-w-4xl">
               Unified command center, runtime telemetry, live port topology, and SDK catalog for all applications and shared libraries in the monorepo.
@@ -609,6 +622,45 @@ export default function Overview({
           </div>
         </section>
       )}
+
+      {/* ── Unified Everyday Utilities Hub ── */}
+      <section className="w-full flex flex-col gap-3" aria-label="Everyday Utilities Unified Hub">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 className="text-base sm:text-lg font-extrabold tracking-tight text-white">
+              Everyday Utilities
+            </h2>
+            <p className="text-xs text-zinc-400">
+              One unified personal &amp; daily workspace with {EVERYDAY_TABS.length} horizontal tabbed tools synced via SQLite WAL.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => onNavigate('everyday')}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 text-xs font-bold text-emerald-200 cursor-pointer self-start sm:self-auto"
+          >
+            <span>Open Everyday Utilities →</span>
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-black/35 text-emerald-300">Ctrl+7</span>
+          </button>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-[#121216] border border-emerald-500/20 hover:border-emerald-400/35 transition-colors flex flex-col gap-4 portal-card-hover">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5">
+            {EVERYDAY_TABS.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => onNavigate(tab.id === 'overview' ? 'everyday' : `everyday/${tab.id}`)}
+                className="p-3 rounded-xl bg-[#0b0c10] border border-white/[0.08] hover:border-white/[0.24] hover:bg-[#14151c] text-left transition-colors cursor-pointer flex flex-col gap-1"
+              >
+                <span className="text-lg">{tab.icon}</span>
+                <span className="text-xs font-bold text-white leading-snug">{tab.label}</span>
+                <span className="text-[10px] text-zinc-400 line-clamp-2 leading-tight">{tab.subtitle}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── Command Runners & Computer Monitor Gateway Banners ── */}
       <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-5 portal-grid-stagger">

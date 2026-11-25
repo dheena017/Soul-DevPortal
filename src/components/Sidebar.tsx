@@ -5,6 +5,12 @@ import { PackageData, ProjectData } from '../types';
 import { DOCUMENTATION_GUIDES_REGISTRY, GuideMeta } from '../features/docs/docsConstants';
 import { WORKSPACE_SCRIPTS_REGISTRY } from '../features/scripts/scriptsConstants';
 import { PROJECT_BRAND_MAP } from '../features/projects/projectsConstants';
+import {
+  EVERYDAY_TABS,
+  isEverydayRoute,
+  resolveEverydayRouteToTab,
+} from '../features/everyday/everydayTabsRegistry';
+import { openChangelogPanel } from '../utils/openStandalonePanel';
 
 function packageBadge(pkg: PackageData, isActive: boolean = false): { text: string; color: string } {
   const text = pkg.pythonModule ? 'PY' : pkg.name?.includes('config') ? 'CFG' : 'TS';
@@ -123,6 +129,7 @@ export default function Sidebar({
     projects: false,
     packages: false,
     docs: false,
+    everyday: true,
   });
 
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -326,6 +333,33 @@ export default function Sidebar({
 
             <button
               type="button"
+              aria-current={['changelog', 'catalog', 'portfolio', 'showcase'].includes(active) ? 'page' : undefined}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                ['changelog', 'catalog', 'portfolio', 'showcase'].includes(active)
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
+              }`}
+              onClick={() => {
+                onClose();
+                openChangelogPanel();
+              }}
+              title="Open Workspace Changelog in New Tab / Separate Panel"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-base" aria-hidden="true">🧾</span>
+                <span className="truncate font-semibold text-zinc-100">Changelog</span>
+              </div>
+              <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                ['changelog', 'catalog', 'portfolio', 'showcase'].includes(active)
+                  ? 'bg-sky-500/15 text-sky-300 border-sky-400/35 font-bold'
+                  : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+              }`}>
+                New Tab ↗
+              </span>
+            </button>
+
+            <button
+              type="button"
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))
@@ -384,6 +418,71 @@ export default function Sidebar({
                 Live
               </span>
             </button>
+
+            <div className="pt-2 pb-1 px-2 text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500">
+              Everyday Workspace
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  aria-current={isEverydayRoute(active) ? 'page' : undefined}
+                  className={`flex-1 flex items-center justify-between px-3 py-2 rounded-xl transition-colors ${
+                    isEverydayRoute(active)
+                      ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                      : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                  }`}
+                  onClick={() => onNavigate('everyday')}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="text-base" aria-hidden="true">🧰</span>
+                    <span className="truncate font-semibold text-zinc-100">Everyday Utilities</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">
+                    {EVERYDAY_TABS.length} Tabs
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => toggleSection('everyday')}
+                  aria-label="Toggle Everyday Utilities tabs"
+                  className="w-8 h-9 rounded-xl bg-transparent hover:bg-white/[0.06] text-zinc-400 hover:text-white flex items-center justify-center text-xs cursor-pointer shrink-0"
+                >
+                  {(!collapsedSections.everyday || isEverydayRoute(active) || isFiltering) ? '▾' : '▸'}
+                </button>
+              </div>
+
+              {(!collapsedSections.everyday || isEverydayRoute(active) || isFiltering) && (
+                <div className="pl-3 ml-2 border-l border-white/[0.08] flex flex-col gap-0.5">
+                  {EVERYDAY_TABS.filter(
+                    (tab) =>
+                      !isFiltering ||
+                      tab.label.toLowerCase().includes(needle) ||
+                      tab.keywords.some((k) => k.includes(needle))
+                  ).map((tab) => {
+                    const activeSub = isEverydayRoute(active) && resolveEverydayRouteToTab(active) === tab.id;
+                    const targetRoute = tab.id === 'overview' ? 'everyday' : `everyday/${tab.id}`;
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        aria-current={activeSub ? 'page' : undefined}
+                        onClick={() => onNavigate(targetRoute)}
+                        className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-colors cursor-pointer text-left ${
+                          activeSub
+                            ? 'bg-white/[0.08] text-white font-bold'
+                            : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04]'
+                        }`}
+                      >
+                        <span className="text-sm shrink-0" aria-hidden="true">{tab.icon}</span>
+                        <span className="truncate">{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* If searching and matching scripts exist */}
@@ -841,7 +940,7 @@ export default function Sidebar({
       {/* ── Backdrop Overlay ── */}
       {menuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-md portal-backdrop-enter"
+          className="fixed inset-0 z-40 bg-black/75 portal-backdrop-enter"
           aria-label="Close menu"
           onClick={onClose}
         />

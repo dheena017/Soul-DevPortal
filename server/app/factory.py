@@ -27,6 +27,7 @@ from features.projects.router import router as projects_router
 from features.packages.router import router as packages_router
 from features.docs.router import router as docs_router
 from features.system.router import router as system_router
+from features.workspace_tools.router import router as workspace_tools_router
 from features.dashboard.service import DashboardService
 
 
@@ -79,6 +80,7 @@ def create_app() -> FastAPI:
     api_router.include_router(packages_router)
     api_router.include_router(docs_router)
     api_router.include_router(system_router)
+    api_router.include_router(workspace_tools_router)
 
     # Global /api/health probe
     @api_router.get("/health", tags=["Health"])
