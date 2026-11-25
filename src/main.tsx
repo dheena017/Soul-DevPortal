@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef, ChangeEvent } from 'react';
+import React, { Suspense, lazy, useEffect, useMemo, useState, useRef, ChangeEvent } from 'react';
 import { createRoot } from 'react-dom/client';
 import workspaceData from 'virtual:workspace-packages';
 import { fetchWorkspaceData, fetchProjectsLive, WorkspaceApiResponse } from './services/api';
@@ -15,14 +15,14 @@ import Overview from './components/Overview';
 import { Header } from './components/Header';
 import LoadingScreen from './components/LoadingScreen';
 
-// 4 Pillar Feature Views
-import ProjectsView from './features/projects/ProjectsView';
-import ProjectDetailView from './features/projects/ProjectDetailView';
-import PackagesView from './features/packages/PackagesView';
-import PackageDetailView from './features/packages/PackageDetailView';
-import DocsView from './features/docs/DocsView';
-import ScriptsView from './features/scripts/ScriptsView';
-import SystemView from './features/system/SystemView';
+// Lazy-loaded Pillar Feature Views (code-split cleanly)
+const ProjectsView = lazy(() => import('./features/projects/ProjectsView'));
+const ProjectDetailView = lazy(() => import('./features/projects/ProjectDetailView'));
+const PackagesView = lazy(() => import('./features/packages/PackagesView'));
+const PackageDetailView = lazy(() => import('./features/packages/PackageDetailView'));
+const DocsView = lazy(() => import('./features/docs/DocsView'));
+const ScriptsView = lazy(() => import('./features/scripts/ScriptsView'));
+const SystemView = lazy(() => import('./features/system/SystemView'));
 
 import { DOCUMENTATION_GUIDES_REGISTRY, findGuideMeta } from './features/docs/docsConstants';
 
@@ -404,7 +404,8 @@ function App() {
 
       <main ref={mainRef} className="main w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden flex flex-col bg-[#070708]">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 box-border">
-          {active === 'overview' && (
+          <Suspense fallback={<div className="p-8 text-xs font-mono text-zinc-400">Loading workspace view...</div>}>
+            {active === 'overview' && (
             <Overview
               packages={filteredPackages}
               projects={projectsList}
@@ -550,10 +551,10 @@ function App() {
             />
           )}
 
-          {/* Dedicated Feature View: Computer & Performance Hardware Monitor */}
-          {(active === 'computer' || active === 'system') && (
-            <SystemView onNavigate={navigate} />
-          )}
+            {(active === 'computer' || active === 'system') && (
+              <SystemView onNavigate={navigate} />
+            )}
+          </Suspense>
         </div>
 
         {/* Global Keyboard Shortcuts Modal */}

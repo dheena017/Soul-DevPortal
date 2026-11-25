@@ -29,7 +29,8 @@ all_endpoints = [
     # Computer & Performance
     ("GET", "/api/system/specs"),
     ("GET", "/api/system/live"),
-    ("GET", "/api/system/overview"),
+    ("GET", "/api/system/live?window_sec=300"),
+    ("GET", "/api/system/overview?window_sec=900"),
     
     # Projects
     ("GET", "/api/projects/navigation"),
@@ -73,6 +74,18 @@ for method, url in all_endpoints:
     print(f"[{res.status_code}] {method:<4} {url}")
 
 print(f"\nEndpoint Tests: {passed}/{len(all_endpoints)} PASSED")
+
+# Verify SSE streaming endpoint emits first live frame and closes cleanly
+with client.stream("GET", "/api/system/stream?interval_ms=1000&window_sec=60&max_events=1") as stream_res:
+    assert stream_res.status_code == 200
+    assert "text/event-stream" in (stream_res.headers.get("content-type") or "")
+    first_chunk = ""
+    for line in stream_res.iter_lines():
+        if line.startswith("data: "):
+            first_chunk = line
+            break
+    assert '"windowSec":60' in first_chunk, f"Unexpected SSE payload: {first_chunk[:160]}"
+print("[200] GET  /api/system/stream (SSE verified)")
 
 # Verify SQLite DB
 print("\n=== VERIFYING SQLITE DATABASE ===")

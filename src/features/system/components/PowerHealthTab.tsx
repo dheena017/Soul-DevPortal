@@ -1,5 +1,6 @@
-import React from 'react';
-import { SystemLiveSnapshot, SystemSpecs } from '../../../types';
+import React, { useMemo, useState } from 'react';
+import CopyButton from '../../../components/CopyButton';
+import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../../types';
 import { formatBytes, formatUptime } from '../systemConstants';
 import RadialGauge from './RadialGauge';
 import TelemetrySparkline from './TelemetrySparkline';
@@ -7,12 +8,25 @@ import TelemetrySparkline from './TelemetrySparkline';
 export interface PowerHealthTabProps {
   specs: SystemSpecs;
   live: SystemLiveSnapshot;
+  historyWindowSec?: HistoryWindowSec;
 }
 
-export default function PowerHealthTab({ specs, live }: PowerHealthTabProps) {
+export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: PowerHealthTabProps) {
   const { host, motherboard, battery: batStatic } = specs;
   const batLive = live.battery;
   const posture = live.healthPosture;
+  const systemEvents = specs.systemEvents || [];
+  const caps = specs.sensorCapabilities;
+  const [eventFilter, setEventFilter] = useState<'all' | 'error' | 'warning'>('all');
+  const winLabel = historyWindowSec >= 900 ? '15-Minute' : historyWindowSec >= 300 ? '5-Minute' : '60-Second';
+
+  const filteredEvents = useMemo(() => {
+    return systemEvents.filter((ev) => {
+      if (eventFilter === 'error') return /error|critical/i.test(ev.level);
+      if (eventFilter === 'warning') return /warning/i.test(ev.level);
+      return true;
+    });
+  }, [systemEvents, eventFilter]);
 
   const postureStyle =
     posture.severity === 'critical'
@@ -24,7 +38,7 @@ export default function PowerHealthTab({ specs, live }: PowerHealthTabProps) {
   const remainingMin = batLive?.secsLeft ? Math.round(batLive.secsLeft / 60) : null;
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 sys-stagger">
       {/* Live Bottleneck & System Posture Diagnostics */}
       <section className={`p-5 rounded-2xl border flex flex-col gap-4 ${postureStyle}`}>
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -171,7 +185,7 @@ export default function PowerHealthTab({ specs, live }: PowerHealthTabProps) {
                   {batStatic?.healthPercent !== null && batStatic?.healthPercent !== undefined && (
                     <div className="w-full h-2 rounded-full bg-[#0a0a0e] border border-white/[0.06] overflow-hidden">
                       <div
-                        className={`h-full rounded-full ${
+                        className={`h-full rounded-full sys-bar-shimmer transition-all duration-500 ${
                           batStatic.healthPercent >= 80 ? 'bg-emerald-400' : batStatic.healthPercent >= 60 ? 'bg-amber-400' : 'bg-rose-500'
                         }`}
                         style={{ width: `${Math.min(100, batStatic.healthPercent)}%` }}
@@ -229,7 +243,9 @@ export default function PowerHealthTab({ specs, live }: PowerHealthTabProps) {
                 </svg>
               </span>
               <div>
-                <span className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400">Platform Security &amp; 60-Second Benchmarks</span>
+                <span className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400">
+                  Platform Security &amp; {winLabel} Benchmarks
+                </span>
                 <h3 className="text-base font-bold text-white">Firmware Trust &amp; System Load Trend</h3>
               </div>
             </div>
@@ -323,6 +339,78 @@ export default function PowerHealthTab({ specs, live }: PowerHealthTabProps) {
           )}
         </section>
       </div>
+
+      {/* Hardware Sensor Probe Capabilities + Windows System Event Log Feed */}
+      <section className="p-5 rounded-2xl system-card flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
+              Windows System Event Log (Last 7 Days · Errors &amp; Warnings)
+            </span>
+            <h3 className="text-sm font-bold text-white">Kernel, Hardware &amp; Driver Diagnostics Feed</h3>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
+            {caps && (
+              <>
+                <span className={`px-2 py-0.5 rounded border ${caps.nvmeSmartAvailable ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300' : 'bg-[#16161c] border-white/[0.08] text-zinc-400'}`}>
+                  NVMe SMART: {caps.nvmeSmartAvailable ? 'Active' : 'Requires Admin'}
+                </span>
+                <span className={`px-2 py-0.5 rounded border ${caps.thermalAvailable ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300' : 'bg-[#16161c] border-white/[0.08] text-zinc-400'}`}>
+                  ACPI Thermal: {caps.thermalAvailable ? 'Active' : 'Requires Admin'}
+                </span>
+              </>
+            )}
+            {(['all', 'error', 'warning'] as const).map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setEventFilter(f)}
+                className={`px-2.5 py-1 rounded-lg border cursor-pointer capitalize ${
+                  eventFilter === f
+                    ? 'bg-sky-500/15 border-sky-500/40 text-sky-200 font-bold'
+                    : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                {f} ({f === 'all' ? systemEvents.length : systemEvents.filter((e) => (f === 'error' ? /error|critical/i.test(e.level) : /warning/i.test(e.level))).length})
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2 max-h-80 overflow-y-auto pr-1">
+          {filteredEvents.slice(0, 15).map((ev, idx) => (
+            <div
+              key={`${ev.id}-${ev.timestamp}-${idx}`}
+              className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col sm:flex-row sm:items-start justify-between gap-2 text-xs"
+            >
+              <div className="flex flex-col gap-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-2 font-mono text-[10px]">
+                  <span
+                    className={`px-1.5 py-0.5 rounded border font-bold ${
+                      /critical|error/i.test(ev.level)
+                        ? 'bg-rose-500/15 border-rose-500/35 text-rose-300'
+                        : 'bg-amber-500/15 border-amber-500/35 text-amber-300'
+                    }`}
+                  >
+                    {ev.level}
+                  </span>
+                  <strong className="text-white text-xs">{ev.provider}</strong>
+                  <span className="text-zinc-400">Event #{ev.id}</span>
+                  <span className="text-zinc-500">{ev.timestamp}</span>
+                </div>
+                <p className="text-zinc-300 text-[11px] leading-relaxed break-words">{ev.message}</p>
+              </div>
+              <CopyButton text={`[${ev.level}] ${ev.provider} #${ev.id} (${ev.timestamp}): ${ev.message}`} variant="icon-only" className="shrink-0" />
+            </div>
+          ))}
+          {filteredEvents.length === 0 && (
+            <div className="p-6 text-center text-xs font-mono text-emerald-300 bg-[#16161c] rounded-xl border border-emerald-500/20">
+              No matching Critical, Error, or Warning hardware/kernel events logged in the last 7 days.
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

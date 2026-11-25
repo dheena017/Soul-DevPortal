@@ -18,6 +18,8 @@ export interface TelemetrySparklineProps {
   showAvgLine?: boolean;
   showStatsFooter?: boolean;
   valueFormatter?: (val: number) => string;
+  syncHoverIdx?: number | null;
+  onHoverChange?: (idx: number | null) => void;
 }
 
 interface ChartCoord {
@@ -87,9 +89,12 @@ export default function TelemetrySparkline({
   showAvgLine = true,
   showStatsFooter = true,
   valueFormatter,
+  syncHoverIdx,
+  onHoverChange,
 }: TelemetrySparklineProps) {
   const uid = useId().replace(/:/g, '');
-  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const [localHoverIdx, setLocalHoverIdx] = useState<number | null>(null);
+  const hoverIdx = syncHoverIdx !== undefined ? syncHoverIdx : localHoverIdx;
 
   const width = 560;
   const padTop = compact ? 10 : 14;
@@ -181,7 +186,13 @@ export default function TelemetrySparkline({
     const relX = (e.clientX - rect.left) * scaleX - padLeft;
     const ratio = Math.max(0, Math.min(1, relX / Math.max(1, innerW)));
     const idx = Math.round(ratio * Math.max(0, data.length - 1));
-    setHoverIdx(idx);
+    setLocalHoverIdx(idx);
+    onHoverChange?.(idx);
+  };
+
+  const handleMouseLeave = () => {
+    setLocalHoverIdx(null);
+    onHoverChange?.(null);
   };
 
   const activePoint = activeIdx !== null && data[activeIdx] ? data[activeIdx] : null;
@@ -235,7 +246,7 @@ export default function TelemetrySparkline({
         style={{ height: `${height}px` }}
         preserveAspectRatio="none"
         onMouseMove={handleMouseMove}
-        onMouseLeave={() => setHoverIdx(null)}
+        onMouseLeave={handleMouseLeave}
         role="img"
         aria-label="Smooth live telemetry spline graph"
       >
@@ -341,7 +352,7 @@ export default function TelemetrySparkline({
               )}
               {lastPt && activeCoordX === null && (
                 <g>
-                  <circle cx={lastPt.x} cy={lastPt.y} r="6" fill={p.series.color} opacity="0.24" />
+                  <circle cx={lastPt.x} cy={lastPt.y} r="6.5" fill={p.series.color} className="sys-spark-beacon" />
                   <circle cx={lastPt.x} cy={lastPt.y} r="3" fill="#0a0a0e" stroke={p.series.color} strokeWidth="2.1" />
                 </g>
               )}

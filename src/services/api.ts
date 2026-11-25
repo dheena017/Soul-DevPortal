@@ -354,9 +354,9 @@ export async function fetchDocTab(category: string, topic: string, tab: string):
 }
 
 
-export async function fetchSystemOverview(): Promise<import('../types').SystemOverviewResponse | null> {
+export async function fetchSystemOverview(windowSec = 60): Promise<import('../types').SystemOverviewResponse | null> {
   try {
-    const res = await fetch(`${API_BASE}/system/overview`, {
+    const res = await fetch(`${API_BASE}/system/overview?window_sec=${windowSec}`, {
       method: 'GET',
       headers: { Accept: 'application/json' },
     });
@@ -380,9 +380,9 @@ export async function fetchSystemSpecs(): Promise<import('../types').SystemSpecs
   }
 }
 
-export async function fetchSystemLive(): Promise<import('../types').SystemLiveSnapshot | null> {
+export async function fetchSystemLive(windowSec = 60): Promise<import('../types').SystemLiveSnapshot | null> {
   try {
-    const res = await fetch(`${API_BASE}/system/live`, {
+    const res = await fetch(`${API_BASE}/system/live?window_sec=${windowSec}`, {
       method: 'GET',
       headers: { Accept: 'application/json' },
     });
@@ -391,6 +391,35 @@ export async function fetchSystemLive(): Promise<import('../types').SystemLiveSn
   } catch {
     return null;
   }
+}
+
+export function subscribeSystemStream(
+  intervalMs: number,
+  windowSec: number,
+  onData: (snapshot: import('../types').SystemLiveSnapshot) => void,
+  onError: () => void
+): () => void {
+  if (typeof EventSource === 'undefined') {
+    onError();
+    return () => {};
+  }
+  const url = `${API_BASE}/system/stream?interval_ms=${Math.max(1000, intervalMs)}&window_sec=${windowSec}`;
+  const source = new EventSource(url);
+  source.onmessage = (evt) => {
+    try {
+      const parsed = JSON.parse(evt.data) as import('../types').SystemLiveSnapshot;
+      onData(parsed);
+    } catch {
+      // Ignore malformed chunk
+    }
+  };
+  source.onerror = () => {
+    source.close();
+    onError();
+  };
+  return () => {
+    source.close();
+  };
 }
 
 export async function refreshSystemSpecs(): Promise<{ success: boolean; specs?: import('../types').SystemSpecs } | null> {

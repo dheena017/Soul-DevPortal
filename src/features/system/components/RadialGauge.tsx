@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { getLoadTone } from '../systemConstants';
 
 export interface RadialGaugeProps {
@@ -81,6 +81,12 @@ export default function RadialGauge({
 }: RadialGaugeProps) {
   const uid = useId().replace(/:/g, '');
   const gradId = `gauge-grad-${uid}`;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const id = window.requestAnimationFrame(() => setMounted(true));
+    return () => window.cancelAnimationFrame(id);
+  }, []);
 
   const hasValue = value !== null && value !== undefined && !Number.isNaN(value);
   const clamped = hasValue ? Math.max(0, Math.min(100, value!)) : 0;
@@ -106,7 +112,7 @@ export default function RadialGauge({
 
   const radius = 46;
   const circumference = 2 * Math.PI * radius;
-  const dashOffset = circumference - (clamped / 100) * circumference;
+  const dashOffset = mounted ? circumference - (clamped / 100) * circumference : circumference;
   const displayValue = !hasValue ? '—' : centerText ?? `${Math.round(clamped)}%`;
 
   return (
@@ -166,6 +172,7 @@ export default function RadialGauge({
             stroke="rgba(255,255,255,0.08)"
             strokeWidth="1.2"
             strokeDasharray="1.5 5.5"
+            className="origin-center transition-transform duration-700 ease-out group-hover:rotate-12"
           />
 
           {/* Outer track */}

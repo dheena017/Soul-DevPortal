@@ -402,7 +402,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
       : 0;
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 sys-stagger">
       {/* ── Hardware Specifications Toolbar ── */}
       <div className="p-3.5 rounded-2xl system-card flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
         <div className="relative flex-1 min-w-0">
@@ -914,7 +914,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
               {primaryDisplay ? (
                 <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col items-center justify-center gap-2 text-center flex-1">
                   <div className="flex flex-col items-center">
-                    <div className="w-32 aspect-video rounded-lg border-2 border-sky-400/55 bg-gradient-to-br from-sky-500/18 via-[#0b0b0f] to-purple-500/18 flex flex-col items-center justify-center gap-0.5 shadow-inner">
+                    <div className="w-32 aspect-video rounded-lg border-2 border-sky-400/55 bg-gradient-to-br from-sky-500/18 via-[#0b0b0f] to-purple-500/18 flex flex-col items-center justify-center gap-0.5 shadow-inner sys-screen-bezel">
                       <span className="text-[11px] font-mono font-extrabold text-sky-200">
                         {primaryDisplay.aspectRatio || 'Display'}
                       </span>

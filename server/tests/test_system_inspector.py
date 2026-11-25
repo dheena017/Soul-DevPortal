@@ -93,6 +93,8 @@ def test_live_fast_telemetry_and_static_specs():
     assert len(slow["processes"]) == slow["totalProcessesCount"] or len(slow["processes"]) >= 10
     assert slow["totalThreadsCount"] >= slow["totalProcessesCount"]
     assert "activeConnections" in slow and "activePorts" in slow
+    assert "topDiskIo" in slow and len(slow["topDiskIo"]) >= 1
+    assert "ioReadBps" in slow["processes"][0] and "rxKBps" in slow["networkAdapters"][0]
 
     specs = get_static_hardware_specs()
     assert specs["host"]["hostname"]
@@ -104,6 +106,7 @@ def test_live_fast_telemetry_and_static_specs():
     assert "registrySource" in specs["environment"]["pathEntries"][0]
     assert "services" in specs and "startupApps" in specs
     assert "scheduledTasks" in specs and "systemDrivers" in specs
+    assert "networkGateways" in specs and "systemEvents" in specs and "sensorCapabilities" in specs
     if specs["startupApps"]:
         assert "enabled" in specs["startupApps"][0]
         assert "fileExists" in specs["startupApps"][0]

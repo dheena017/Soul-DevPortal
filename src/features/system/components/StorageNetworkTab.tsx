@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { SystemLiveSnapshot, SystemSpecs } from '../../../types';
+import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../../types';
 import { formatBytes, formatNetRate } from '../systemConstants';
 import HardwareDetailsTable, { HardwareDetailTableRow } from './HardwareDetailsTable';
 import TelemetrySparkline from './TelemetrySparkline';
@@ -7,14 +7,18 @@ import TelemetrySparkline from './TelemetrySparkline';
 export interface StorageNetworkTabProps {
   specs: SystemSpecs;
   live: SystemLiveSnapshot;
+  historyWindowSec?: HistoryWindowSec;
 }
 
-export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProps) {
+export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }: StorageNetworkTabProps) {
   const wifi = live.connectedWifi;
   const netProfile = specs.networkProfiles[0];
   const primaryVol = live.disk.volumes[0];
   const primaryDisk = specs.physicalDisks[0];
   const [nicSearch, setNicSearch] = useState('');
+  const [syncHoverIdx, setSyncHoverIdx] = useState<number | null>(null);
+  const winLabel = historyWindowSec >= 900 ? '15-Minute' : historyWindowSec >= 300 ? '5-Minute' : '60-Second';
+  const primaryGateway = specs.networkGateways?.find((g) => g.ipv4Gateway) || specs.networkGateways?.[0];
 
   const wifiBars = wifi?.signalPercent
     ? wifi.signalPercent >= 85
@@ -47,24 +51,30 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
 
   const adapterRows: HardwareDetailTableRow[] = useMemo(() => {
     const q = nicSearch.trim().toLowerCase();
-    const mapped = sortedAdapters.map((nic, idx) => ({
-      id: `nic-${idx}-${nic.name}`,
-      name: nic.name,
-      summary: nic.ipv4 ? `IPv4 ${nic.ipv4}` : nic.mac ? `MAC ${nic.mac}` : 'Virtual / No IPv4',
-      hardwareCode: nic.mtu ? `MTU ${nic.mtu}` : null,
-      statusLabel: nic.isUp ? 'Connected' : 'Disconnected',
-      statusTone: (nic.isUp ? 'emerald' : 'zinc') as 'emerald' | 'zinc',
-      primaryMetric: nic.speedMbps > 0 ? `${nic.speedMbps} Mbps` : nic.isUp ? 'Active' : 'Down',
-      accent: (nic.isUp ? 'emerald' : 'zinc') as 'emerald' | 'zinc',
-      details: [
-        { label: 'Adapter Interface Name', value: nic.name },
-        { label: 'IPv4 Address', value: nic.ipv4 || 'Unassigned', copyValue: nic.ipv4 || '' },
-        { label: 'IPv6 Address', value: nic.ipv6 || 'Unassigned', copyValue: nic.ipv6 || '' },
-        { label: 'MAC Physical Address', value: nic.mac || 'N/A', copyValue: nic.mac || '' },
-        { label: 'Link Speed & MTU', value: `${nic.speedMbps > 0 ? `${nic.speedMbps} Mbps` : 'N/A'} · MTU ${nic.mtu}` },
-        { label: 'Session Received / Sent', value: `↓ ${formatBytes(nic.bytesRecv)} · ↑ ${formatBytes(nic.bytesSent)}`, tone: 'sky' as const },
-      ],
-    }));
+    const mapped = sortedAdapters.map((nic, idx) => {
+      const rateSummary =
+        (nic.rxKBps || 0) > 0 || (nic.txKBps || 0) > 0
+          ? ` · ↓ ${formatNetRate(nic.rxKBps)} / ↑ ${formatNetRate(nic.txKBps)}`
+          : '';
+      return {
+        id: `nic-${idx}-${nic.name}`,
+        name: nic.name,
+        summary: nic.ipv4 ? `IPv4 ${nic.ipv4}${rateSummary}` : nic.mac ? `MAC ${nic.mac}${rateSummary}` : 'Virtual / No IPv4',
+        hardwareCode: nic.mtu ? `MTU ${nic.mtu}` : null,
+        statusLabel: nic.isUp ? 'Connected' : 'Disconnected',
+        statusTone: (nic.isUp ? 'emerald' : 'zinc') as 'emerald' | 'zinc',
+        primaryMetric: nic.speedMbps > 0 ? `${nic.speedMbps} Mbps` : nic.isUp ? 'Active' : 'Down',
+        accent: (nic.isUp ? 'emerald' : 'zinc') as 'emerald' | 'zinc',
+        details: [
+          { label: 'Adapter Interface Name', value: nic.name },
+          { label: 'Live Interface Rate', value: `↓ ${formatNetRate(nic.rxKBps || 0)} · ↑ ${formatNetRate(nic.txKBps || 0)}`, tone: 'emerald' as const },
+          { label: 'IPv4 Address', value: nic.ipv4 || 'Unassigned', copyValue: nic.ipv4 || '' },
+          { label: 'IPv6 Address', value: nic.ipv6 || 'Unassigned', copyValue: nic.ipv6 || '' },
+          { label: 'MAC Physical Address', value: nic.mac || 'N/A', copyValue: nic.mac || '' },
+          { label: 'Session Counters & Link', value: `${nic.speedMbps > 0 ? `${nic.speedMbps} Mbps` : 'N/A'} · ↓ ${formatBytes(nic.bytesRecv)} · ↑ ${formatBytes(nic.bytesSent)}`, tone: 'sky' as const },
+        ],
+      };
+    });
 
     if (!q) return mapped;
     return mapped.filter(
@@ -76,7 +86,7 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
   }, [sortedAdapters, nicSearch]);
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 sys-stagger">
       {/* ── Top Storage & Network KPI Strip ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         <div className="p-4 rounded-2xl system-kpi-card flex flex-col gap-1">
@@ -171,6 +181,15 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
                     <span className="px-2 py-0.5 rounded bg-[#0c0c10] border border-white/[0.08]">{formatBytes(disk.sizeBytes, 1)}</span>
                     <span className="px-2 py-0.5 rounded bg-[#0c0c10] border border-white/[0.08]">{disk.partitionStyle}</span>
                     <span className="px-2 py-0.5 rounded bg-[#0c0c10] border border-white/[0.08]">{disk.sectorAlignment}</span>
+                    <span
+                      className={`px-2 py-0.5 rounded border ${
+                        specs.sensorCapabilities?.nvmeSmartAvailable
+                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                          : 'bg-[#0c0c10] border-white/[0.08] text-zinc-400'
+                      }`}
+                    >
+                      {specs.sensorCapabilities?.nvmeSmartAvailable ? 'SMART Counters Active' : 'SMART IOCTL Requires Admin'}
+                    </span>
                   </div>
                 </div>
               ))
@@ -246,7 +265,7 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
                 </div>
                 <div className="w-full h-2.5 rounded-full bg-[#0c0c10] overflow-hidden border border-white/[0.06]">
                   <div
-                    className={`h-full rounded-full transition-all duration-300 ${
+                    className={`h-full rounded-full sys-bar-shimmer transition-all duration-300 ${
                       vol.usedPercent >= 90 ? 'bg-rose-500' : vol.usedPercent >= 75 ? 'bg-amber-400' : 'soul-gradient-bar'
                     }`}
                     style={{ width: `${Math.min(100, vol.usedPercent)}%` }}
@@ -300,7 +319,7 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
                   <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                 </svg>
               </span>
-              <strong className="text-white">60-Second Disk Read / Write Trend</strong>
+              <strong className="text-white">{winLabel} Disk Read / Write Trend</strong>
             </div>
             <span className="font-mono tabular-nums text-emerald-300">
               R {live.disk.readMBps.toFixed(1)} · W {live.disk.writeMBps.toFixed(1)} MB/s
@@ -309,6 +328,8 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
           <TelemetrySparkline
             data={live.history}
             height={145}
+            syncHoverIdx={syncHoverIdx}
+            onHoverChange={setSyncHoverIdx}
             series={[
               { key: 'diskReadMBps', label: 'Disk Read', color: '#10b981', unit: ' MB/s', decimals: 1 },
               { key: 'diskWriteMBps', label: 'Disk Write', color: '#f59e0b', unit: ' MB/s', decimals: 1 },
@@ -326,7 +347,7 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
                   <circle cx="12" cy="20" r="1" />
                 </svg>
               </span>
-              <strong className="text-white">60-Second Network Down / Up Trend</strong>
+              <strong className="text-white">{winLabel} Network Down / Up Trend</strong>
             </div>
             <span className="font-mono tabular-nums text-sky-300">
               ↓ {formatNetRate(live.network.rxKBps)} · ↑ {formatNetRate(live.network.txKBps)}
@@ -335,6 +356,8 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
           <TelemetrySparkline
             data={live.history}
             height={145}
+            syncHoverIdx={syncHoverIdx}
+            onHoverChange={setSyncHoverIdx}
             valueFormatter={(v) => formatNetRate(v)}
             series={[
               { key: 'netRxKBps', label: 'Download', color: '#38bdf8', unit: ' KB/s', decimals: 1 },
@@ -352,8 +375,8 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
               {[1, 2, 3, 4, 5].map((bar) => (
                 <span
                   key={bar}
-                  className={`w-1.5 rounded-xs ${wifi && bar <= wifiBars ? 'bg-emerald-400' : 'bg-zinc-700'}`}
-                  style={{ height: `${bar * 20}%` }}
+                  className={`w-1.5 rounded-xs ${wifi && bar <= wifiBars ? 'bg-emerald-400 sys-wifi-bar-active' : 'bg-zinc-700'}`}
+                  style={{ height: `${bar * 20}%`, animationDelay: `${bar * 140}ms` }}
                 />
               ))}
             </div>
@@ -407,15 +430,15 @@ export default function StorageNetworkTab({ specs, live }: StorageNetworkTabProp
             </strong>
           </div>
           <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
-            <span className="block text-[10px] text-zinc-400">Sockets &amp; DNS</span>
+            <span className="block text-[10px] text-zinc-400">Gateway, DNS &amp; Sockets</span>
             <strong className="text-amber-300 block truncate">
-              {live.socketCounts.established} Est / {live.socketCounts.listening} Lsn
+              {primaryGateway?.ipv4Gateway ? `GW ${primaryGateway.ipv4Gateway}` : `${live.socketCounts.established} Est / ${live.socketCounts.listening} Lsn`}
             </strong>
-            {specs.dnsServers && specs.dnsServers[0]?.servers[0] && (
-              <span className="block text-[10px] text-zinc-400 truncate mt-0.5">
-                DNS {specs.dnsServers[0].servers[0]}
-              </span>
-            )}
+            <span className="block text-[10px] text-zinc-400 truncate mt-0.5">
+              {specs.dnsServers?.[0]?.servers[0]
+                ? `DNS ${specs.dnsServers[0].servers[0]} · ${live.socketCounts.established} Est`
+                : `${live.socketCounts.established} Est / ${live.socketCounts.listening} Lsn`}
+            </span>
           </div>
         </div>
 

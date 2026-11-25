@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import CopyButton from '../../../components/CopyButton';
 import { EnvVarSpec, PathEntrySpec, RuntimeToolSpec, SystemSpecs } from '../../../types';
 import { formatBytes } from '../systemConstants';
+import { ExpandToggleCell, FilterPillBar } from './SystemTablePrimitives';
 
 export interface EnvironmentTabProps {
   specs: SystemSpecs;
@@ -164,7 +165,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 sys-stagger">
       {/* 4-Card Summary Strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         <div className="p-4 rounded-2xl system-kpi-card flex flex-col gap-1.5">
@@ -388,66 +389,39 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
         </div>
 
         {/* Sub-Filter Pill Strip */}
-        {section !== 'shell' && (
-          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/[0.05]">
-            <div className="flex flex-wrap items-center gap-1.5">
-              {section === 'path' &&
-                (
-                  [
-                    { id: 'all', label: `All (${pathEntries.length})` },
-                    { id: 'verified', label: `Verified (${pathStats.verified})` },
-                    { id: 'missing', label: `Missing (${pathStats.missing})` },
-                    { id: 'machine', label: `Machine HKLM (${pathStats.machine})` },
-                    { id: 'user', label: `User HKCU (${pathStats.user})` },
-                    { id: 'session', label: `Session Injected (${pathStats.session})` },
-                  ] as const
-                ).map((f) => (
-                  <button
-                    key={f.id}
-                    type="button"
-                    onClick={() => setPathFilter(f.id)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                      pathFilter === f.id
-                        ? f.id === 'missing'
-                          ? 'bg-rose-500/15 border-rose-500/40 text-rose-200 font-bold'
-                          : 'bg-sky-500/15 border-sky-500/40 text-sky-200 font-bold'
-                        : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
-                    }`}
-                  >
-                    {f.label}
-                  </button>
-                ))}
-
-              {section === 'env' &&
-                (
-                  [
-                    { id: 'all', label: `All (${envVars.length})` },
-                    { id: 'machine', label: `Machine HKLM (${envStats.machine})` },
-                    { id: 'user', label: `User HKCU (${envStats.user})` },
-                    { id: 'session', label: `Session / Process (${envStats.session})` },
-                    { id: 'sdk', label: `Developer & SDK (${envStats.sdk})` },
-                    { id: 'sensitive', label: `Redacted Secrets (${envStats.redacted})` },
-                  ] as const
-                ).map((f) => (
-                  <button
-                    key={f.id}
-                    type="button"
-                    onClick={() => setEnvFilter(f.id)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                      envFilter === f.id
-                        ? 'bg-purple-500/15 border-purple-500/40 text-purple-200 font-bold'
-                        : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
-                    }`}
-                  >
-                    {f.label}
-                  </button>
-                ))}
-            </div>
-
-            <span className="text-[11px] font-mono text-zinc-400 tabular-nums">
-              Showing {visibleKeys.length} of {section === 'path' ? pathEntries.length : envVars.length}
-            </span>
-          </div>
+        {section === 'path' && (
+          <FilterPillBar
+            tone="sky"
+            activeId={pathFilter}
+            onSelect={(id) => setPathFilter(id as PathFilter)}
+            shownCount={visibleKeys.length}
+            totalCount={pathEntries.length}
+            items={[
+              { id: 'all', label: `All (${pathEntries.length})` },
+              { id: 'verified', label: `Verified (${pathStats.verified})` },
+              { id: 'missing', label: `Missing (${pathStats.missing})`, danger: pathStats.missing > 0 },
+              { id: 'machine', label: `Machine HKLM (${pathStats.machine})` },
+              { id: 'user', label: `User HKCU (${pathStats.user})` },
+              { id: 'session', label: `Session Injected (${pathStats.session})` },
+            ]}
+          />
+        )}
+        {section === 'env' && (
+          <FilterPillBar
+            tone="purple"
+            activeId={envFilter}
+            onSelect={(id) => setEnvFilter(id as EnvFilter)}
+            shownCount={visibleKeys.length}
+            totalCount={envVars.length}
+            items={[
+              { id: 'all', label: `All (${envVars.length})` },
+              { id: 'machine', label: `Machine HKLM (${envStats.machine})` },
+              { id: 'user', label: `User HKCU (${envStats.user})` },
+              { id: 'session', label: `Session / Process (${envStats.session})` },
+              { id: 'sdk', label: `Developer & SDK (${envStats.sdk})` },
+              { id: 'sensitive', label: `Redacted Secrets (${envStats.redacted})` },
+            ]}
+          />
         )}
       </div>
 
@@ -476,13 +450,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <span
-                        className={`w-6 h-6 inline-flex items-center justify-center rounded-md border text-xs font-mono font-bold shrink-0 ${
-                          isOpen ? 'bg-sky-500/20 border-sky-400/50 text-sky-300' : 'bg-[#181820] border-white/[0.1] text-zinc-300'
-                        }`}
-                      >
-                        {isOpen ? '−' : '+'}
-                      </span>
+                      <ExpandToggleCell isOpen={isOpen} tone="sky" />
                       <span className="text-[10px] font-mono tabular-nums text-zinc-500 w-6 shrink-0">#{entry.index}</span>
                       <code className="text-xs font-mono text-white break-all">{entry.path}</code>
                     </div>
@@ -510,7 +478,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
 
                   {isOpen && (
                     <div className="px-5 py-3.5 bg-[#0b0b0f] border-t border-sky-400/15">
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs sys-drawer-open">
                         <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                           <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                             Registry Provenance &amp; Scope

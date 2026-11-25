@@ -459,6 +459,30 @@ export interface PhysicalNetworkHwSpec {
   pnpId: string;
 }
 
+export type HistoryWindowSec = 60 | 300 | 900;
+
+export interface SystemEventSpec {
+  id: number;
+  level: string;
+  provider: string;
+  timestamp: string;
+  message: string;
+}
+
+export interface NetworkGatewaySpec {
+  interfaceAlias: string;
+  description: string;
+  ipv4Gateway?: string | null;
+  dnsServers: string[];
+}
+
+export interface SensorCapabilitiesSpec {
+  thermalAvailable: boolean;
+  nvmeSmartAvailable: boolean;
+  batteryWearAvailable: boolean;
+  elevationRequiredForSmartThermal: boolean;
+}
+
 export interface DnsServerEntry {
   interfaceAlias: string;
   servers: string[];
@@ -491,6 +515,9 @@ export interface SystemSpecs {
   diskPartitions?: DiskPartitionSpec[];
   physicalNetworkHw?: PhysicalNetworkHwSpec[];
   dnsServers?: DnsServerEntry[];
+  networkGateways?: NetworkGatewaySpec[];
+  systemEvents?: SystemEventSpec[];
+  sensorCapabilities?: SensorCapabilitiesSpec;
   startupApps?: StartupAppSpec[];
   services?: SystemServiceSpec[];
   scheduledTasks?: ScheduledTaskSpec[];
@@ -519,6 +546,8 @@ export interface NetworkAdapterLive {
   mac?: string | null;
   bytesRecv: number;
   bytesSent: number;
+  rxKBps?: number;
+  txKBps?: number;
 }
 
 export interface WifiInterfaceLive {
@@ -564,6 +593,10 @@ export interface ProcessMetric {
   cpuPercent: number;
   memoryBytes: number;
   memoryMB: number;
+  ioReadBps?: number;
+  ioWriteBps?: number;
+  ioReadBytes?: number;
+  ioWriteBytes?: number;
   threads: number;
   status: string;
   username?: string | null;
@@ -681,8 +714,11 @@ export interface SystemLiveSnapshot {
   processes: ProcessMetric[];
   topCpu: ProcessMetric[];
   topMemory: ProcessMetric[];
+  topDiskIo?: ProcessMetric[];
   totalProcessesCount: number;
   totalThreadsCount?: number;
+  windowSec?: number;
+  historyTotalSamples?: number;
   healthPosture: {
     label: string;
     severity: 'optimal' | 'warn' | 'critical';

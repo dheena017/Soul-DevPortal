@@ -25,11 +25,56 @@ export const SYSTEM_SUB_TABS: SystemSubTabConfig[] = [
   { id: 'environment', label: 'Environment & PATH', shortLabel: 'Env & PATH' },
 ];
 
+import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../types';
+
 export const POLL_INTERVAL_OPTIONS = [
   { label: '1s', ms: 1000 },
   { label: '2s', ms: 2000 },
   { label: '5s', ms: 5000 },
 ] as const;
+
+export const HISTORY_WINDOW_OPTIONS: ReadonlyArray<{ label: string; sec: HistoryWindowSec }> = [
+  { label: '1m', sec: 60 },
+  { label: '5m', sec: 300 },
+  { label: '15m', sec: 900 },
+];
+
+export function buildDiagnosticReportMarkdown(specs: SystemSpecs, live: SystemLiveSnapshot): string {
+  const bat = live.battery;
+  const topCpuLines = live.topCpu
+    .map((p, i) => `${i + 1}. \`${p.name}\` (#${p.pid}) — ${p.cpuPercent.toFixed(1)}% CPU, ${p.memoryMB.toFixed(1)} MB RAM`)
+    .join('\n');
+  const topRamLines = live.topMemory
+    .map((p, i) => `${i + 1}. \`${p.name}\` (#${p.pid}) — ${p.memoryMB.toFixed(1)} MB RAM, ${p.cpuPercent.toFixed(1)}% CPU`)
+    .join('\n');
+  const evtLines = (specs.systemEvents || [])
+    .slice(0, 8)
+    .map((e) => `- [${e.level}] ${e.provider} (#${e.id}) @ ${e.timestamp}: ${e.message}`)
+    .join('\n');
+  return [
+    `# System Diagnostic Report — ${specs.host.hostname}`,
+    `Generated: ${new Date().toISOString()} | Uptime: ${formatUptime(live.uptimeSeconds)} | Posture: **${live.healthPosture.label}**`,
+    '',
+    '## Hardware & Platform',
+    `- **Model**: ${specs.host.manufacturer} ${specs.host.model} (${specs.host.chassisType})`,
+    `- **OS**: ${specs.host.osName} (${specs.host.architecture})`,
+    `- **CPU**: ${specs.cpu.name} (${specs.cpu.physicalCores}C/${specs.cpu.logicalThreads}T · Live ${formatClock(live.cpu.currentClockMHz)})`,
+    `- **Memory**: ${formatBytes(live.memory.usedBytes)} / ${formatBytes(live.memory.totalBytes)} (${live.memory.percent}%)`,
+    bat ? `- **Battery**: ${Math.round(bat.percent)}% (${bat.statusLabel})` : '- **Power**: AC Mains',
+    '',
+    '## Top CPU Processes',
+    topCpuLines || '- None',
+    '',
+    '## Top Memory Processes',
+    topRamLines || '- None',
+    '',
+    `## Listening Ports (${live.activePorts.length})`,
+    ...live.activePorts.slice(0, 20).map((p) => `- \`:${p.port}\` (${p.protocol}) — ${p.serviceLabel} [${p.processName || 'System'} #${p.pid ?? '?'}] (${p.address})`),
+    '',
+    '## Recent System Events',
+    evtLines || '- No recent Critical/Error/Warning system events captured.',
+  ].join('\n');
+}
 
 export function formatBytes(bytes?: number | null, decimals = 1): string {
   if (bytes === undefined || bytes === null || Number.isNaN(bytes) || bytes <= 0) {

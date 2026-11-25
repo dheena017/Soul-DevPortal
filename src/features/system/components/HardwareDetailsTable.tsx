@@ -199,7 +199,7 @@ export default function HardwareDetailsTable({
                   {isOpen && (
                     <tr className="bg-[#0b0b0f]">
                       <td colSpan={5} className="px-5 py-4 border-t border-sky-400/15 shadow-[inset_3px_0_0_#38bdf8]">
-                        <div className={`grid ${detailGridCols} gap-2.5`}>
+                        <div className={`grid ${detailGridCols} gap-2.5 sys-drawer-open`}>
                           {row.details.map((item, idx) => (
                             <div
                               key={`${row.id}-d-${idx}`}

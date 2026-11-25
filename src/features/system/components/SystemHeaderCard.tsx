@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { SystemLiveSnapshot, SystemSpecs } from '../../../types';
-import { formatUptime, POLL_INTERVAL_OPTIONS, SystemSubTabId } from '../systemConstants';
+import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../../types';
+import {
+  buildDiagnosticReportMarkdown,
+  formatUptime,
+  HISTORY_WINDOW_OPTIONS,
+  POLL_INTERVAL_OPTIONS,
+  SystemSubTabId,
+} from '../systemConstants';
 
 export interface SystemHeaderCardProps {
   specs: SystemSpecs;
@@ -10,9 +16,12 @@ export interface SystemHeaderCardProps {
   isPaused: boolean;
   isTabHidden: boolean;
   pollIntervalMs: number;
+  historyWindowSec: HistoryWindowSec;
+  streamMode: 'sse' | 'poll';
   isRescanning: boolean;
   onTogglePause: () => void;
   onChangePollInterval: (ms: number) => void;
+  onChangeHistoryWindow: (sec: HistoryWindowSec) => void;
   onRescanHardware: () => void;
 }
 
@@ -24,11 +33,45 @@ export default function SystemHeaderCard({
   isPaused,
   isTabHidden,
   pollIntervalMs,
+  historyWindowSec,
+  streamMode,
   isRescanning,
   onTogglePause,
   onChangePollInterval,
+  onChangeHistoryWindow,
   onRescanHardware,
 }: SystemHeaderCardProps) {
+  const [exportFlash, setExportFlash] = useState<'json' | 'md' | null>(null);
+
+  const triggerDownload = (filename: string, content: string, mime: string, tag: 'json' | 'md') => {
+    try {
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setExportFlash(tag);
+      window.setTimeout(() => setExportFlash(null), 1600);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleExportJson = () => {
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+    const payload = JSON.stringify({ exportedAt: new Date().toISOString(), specs, live }, null, 2);
+    triggerDownload(`system-report-${specs.host.hostname}-${stamp}.json`, payload, 'application/json', 'json');
+  };
+
+  const handleExportMarkdown = () => {
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+    const md = buildDiagnosticReportMarkdown(specs, live);
+    triggerDownload(`system-report-${specs.host.hostname}-${stamp}.md`, md, 'text/markdown;charset=utf-8', 'md');
+  };
   const { host, motherboard } = specs;
   const battery = live.battery;
   const posture = live.healthPosture;
@@ -156,10 +199,16 @@ export default function SystemHeaderCard({
             title={statusActive ? 'Click to pause live updates' : 'Click to resume live updates'}
           >
             <span className={`w-2 h-2 rounded-full ${statusActive ? 'bg-emerald-400 status-pulse' : 'bg-amber-400'}`} />
-            <span>{isTabHidden ? 'TAB HIDDEN' : isPaused ? 'PAUSED' : `LIVE ${pollIntervalMs / 1000}s`}</span>
+            <span>
+              {isTabHidden
+                ? 'TAB HIDDEN'
+                : isPaused
+                  ? 'PAUSED'
+                  : `${streamMode === 'sse' ? 'SSE' : 'LIVE'} ${pollIntervalMs / 1000}s`}
+            </span>
           </button>
 
-          <div className="inline-flex items-center rounded-lg bg-[#16161c] border border-white/[0.08] p-0.5">
+          <div className="inline-flex items-center rounded-lg bg-[#16161c] border border-white/[0.08] p-0.5" title="Sample cadence">
             {POLL_INTERVAL_OPTIONS.map((opt) => (
               <button
                 key={opt.ms}
@@ -172,6 +221,23 @@ export default function SystemHeaderCard({
                 }`}
               >
                 {opt.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="inline-flex items-center rounded-lg bg-[#16161c] border border-white/[0.08] p-0.5" title="Sparkline time window">
+            {HISTORY_WINDOW_OPTIONS.map((w) => (
+              <button
+                key={w.sec}
+                type="button"
+                onClick={() => onChangeHistoryWindow(w.sec)}
+                className={`px-2 py-1 rounded-md text-[11px] font-mono font-bold transition-colors cursor-pointer ${
+                  historyWindowSec === w.sec
+                    ? 'bg-purple-500/20 text-purple-200 border border-purple-400/35'
+                    : 'text-zinc-400 hover:text-white border border-transparent'
+                }`}
+              >
+                {w.label}
               </button>
             ))}
           </div>
@@ -219,6 +285,25 @@ export default function SystemHeaderCard({
             </svg>
             <span>{isRescanning ? 'Scanning...' : 'Rescan Hardware'}</span>
           </button>
+
+          <div className="inline-flex items-center rounded-lg bg-[#16161c] border border-white/[0.1] p-0.5">
+            <button
+              type="button"
+              onClick={handleExportMarkdown}
+              title="Download diagnostic summary as Markdown"
+              className="px-2 py-1 rounded-md text-[11px] font-mono font-bold text-zinc-300 hover:text-white hover:bg-white/[0.06] cursor-pointer"
+            >
+              {exportFlash === 'md' ? 'Saved .md' : 'Export .md'}
+            </button>
+            <button
+              type="button"
+              onClick={handleExportJson}
+              title="Download full sanitized telemetry bundle as JSON"
+              className="px-2 py-1 rounded-md text-[11px] font-mono font-bold text-sky-300 hover:text-sky-200 hover:bg-sky-500/15 cursor-pointer"
+            >
+              {exportFlash === 'json' ? 'Saved .json' : '.json'}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -1,17 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import TabLoadingState, { LoadingStepItem } from '../../components/TabLoadingState';
-import { fetchSystemLive, fetchSystemOverview, refreshSystemSpecs } from '../../services/api';
-import { SystemLiveSnapshot, SystemSpecs } from '../../types';
+import { fetchSystemLive, fetchSystemOverview, refreshSystemSpecs, subscribeSystemStream } from '../../services/api';
+import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../types';
 import { SystemSubTabId } from './systemConstants';
 import SystemHeaderCard from './components/SystemHeaderCard';
 import PerformanceOverviewTab from './components/PerformanceOverviewTab';
-import HardwareSpecsTab from './components/HardwareSpecsTab';
-import PeripheralsDisplaysTab from './components/PeripheralsDisplaysTab';
-import StorageNetworkTab from './components/StorageNetworkTab';
-import PowerHealthTab from './components/PowerHealthTab';
-import StartupServicesTab from './components/StartupServicesTab';
-import ProcessesTab from './components/ProcessesTab';
-import EnvironmentTab from './components/EnvironmentTab';
+
+const HardwareSpecsTab = lazy(() => import('./components/HardwareSpecsTab'));
+const PeripheralsDisplaysTab = lazy(() => import('./components/PeripheralsDisplaysTab'));
+const StorageNetworkTab = lazy(() => import('./components/StorageNetworkTab'));
+const PowerHealthTab = lazy(() => import('./components/PowerHealthTab'));
+const StartupServicesTab = lazy(() => import('./components/StartupServicesTab'));
+const ProcessesTab = lazy(() => import('./components/ProcessesTab'));
+const EnvironmentTab = lazy(() => import('./components/EnvironmentTab'));
 
 export interface SystemViewProps {
   onNavigate?: (viewId: string) => void;
@@ -34,13 +35,15 @@ export default function SystemView(_props: SystemViewProps) {
     typeof document !== 'undefined' ? document.hidden : false
   );
   const [pollIntervalMs, setPollIntervalMs] = useState<number>(2000);
+  const [historyWindowSec, setHistoryWindowSec] = useState<HistoryWindowSec>(60);
+  const [streamMode, setStreamMode] = useState<'sse' | 'poll'>('sse');
   const [isRescanning, setIsRescanning] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const loadInitial = useCallback(async () => {
     setIsLoading(true);
     setErrorMsg(null);
-    const data = await fetchSystemOverview();
+    const data = await fetchSystemOverview(historyWindowSec);
     if (data && data.specs && data.live) {
       setSpecs(data.specs);
       setLive(data.live);
@@ -61,12 +64,38 @@ export default function SystemView(_props: SystemViewProps) {
     return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, []);
 
+  // Re-fetch immediately when window changes (even if paused)
+  useEffect(() => {
+    if (!specs) return;
+    let cancelled = false;
+    fetchSystemLive(historyWindowSec).then((nextLive) => {
+      if (!cancelled && nextLive) setLive(nextLive);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [historyWindowSec, specs]);
+
+  // Live SSE stream with automatic graceful HTTP polling fallback
   useEffect(() => {
     if (isPaused || isTabHidden || !specs) return;
 
+    if (streamMode === 'sse') {
+      return subscribeSystemStream(
+        pollIntervalMs,
+        historyWindowSec,
+        (nextLive) => {
+          setLive(nextLive);
+        },
+        () => {
+          setStreamMode('poll');
+        }
+      );
+    }
+
     let cancelled = false;
     const timer = window.setInterval(async () => {
-      const nextLive = await fetchSystemLive();
+      const nextLive = await fetchSystemLive(historyWindowSec);
       if (!cancelled && nextLive) {
         setLive(nextLive);
       }
@@ -76,7 +105,7 @@ export default function SystemView(_props: SystemViewProps) {
       cancelled = true;
       window.clearInterval(timer);
     };
-  }, [isPaused, isTabHidden, pollIntervalMs, specs]);
+  }, [isPaused, isTabHidden, pollIntervalMs, historyWindowSec, streamMode, specs]);
 
   const handleRescan = async () => {
     setIsRescanning(true);
@@ -84,7 +113,7 @@ export default function SystemView(_props: SystemViewProps) {
     if (res?.success && res.specs) {
       setSpecs(res.specs);
     }
-    const nextLive = await fetchSystemLive();
+    const nextLive = await fetchSystemLive(historyWindowSec);
     if (nextLive) setLive(nextLive);
     setIsRescanning(false);
   };
@@ -131,23 +160,34 @@ export default function SystemView(_props: SystemViewProps) {
         isPaused={isPaused}
         isTabHidden={isTabHidden}
         pollIntervalMs={pollIntervalMs}
+        historyWindowSec={historyWindowSec}
+        streamMode={streamMode}
         isRescanning={isRescanning}
         onTogglePause={() => setIsPaused((p) => !p)}
         onChangePollInterval={(ms) => setPollIntervalMs(ms)}
+        onChangeHistoryWindow={(sec) => setHistoryWindowSec(sec)}
         onRescanHardware={handleRescan}
       />
 
       <div key={activeTab} className="tab-content-animate">
-        {activeTab === 'performance' && (
-          <PerformanceOverviewTab specs={specs} live={live} onSelectTab={setActiveTab} />
-        )}
-        {activeTab === 'hardware' && <HardwareSpecsTab specs={specs} live={live} onSelectTab={setActiveTab} />}
-        {activeTab === 'peripherals' && <PeripheralsDisplaysTab specs={specs} />}
-        {activeTab === 'storage-network' && <StorageNetworkTab specs={specs} live={live} />}
-        {activeTab === 'power-health' && <PowerHealthTab specs={specs} live={live} />}
-        {activeTab === 'startup-services' && <StartupServicesTab specs={specs} />}
-        {activeTab === 'processes' && <ProcessesTab live={live} />}
-        {activeTab === 'environment' && <EnvironmentTab specs={specs} />}
+        <Suspense
+          fallback={
+            <div className="p-6 rounded-2xl system-card text-xs font-mono text-zinc-400">
+              Loading module telemetry...
+            </div>
+          }
+        >
+          {activeTab === 'performance' && (
+            <PerformanceOverviewTab specs={specs} live={live} onSelectTab={setActiveTab} historyWindowSec={historyWindowSec} />
+          )}
+          {activeTab === 'hardware' && <HardwareSpecsTab specs={specs} live={live} onSelectTab={setActiveTab} />}
+          {activeTab === 'peripherals' && <PeripheralsDisplaysTab specs={specs} />}
+          {activeTab === 'storage-network' && <StorageNetworkTab specs={specs} live={live} historyWindowSec={historyWindowSec} />}
+          {activeTab === 'power-health' && <PowerHealthTab specs={specs} live={live} historyWindowSec={historyWindowSec} />}
+          {activeTab === 'startup-services' && <StartupServicesTab specs={specs} />}
+          {activeTab === 'processes' && <ProcessesTab live={live} />}
+          {activeTab === 'environment' && <EnvironmentTab specs={specs} />}
+        </Suspense>
       </div>
     </div>
   );

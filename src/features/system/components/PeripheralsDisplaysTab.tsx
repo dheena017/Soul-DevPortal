@@ -150,7 +150,7 @@ export default function PeripheralsDisplaysTab({ specs }: PeripheralsDisplaysTab
   }, [peripherals, keyboards, pointing, usbDevices, btHostAdapter, btPaired.length, searchQuery]);
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 sys-stagger">
       {/* ── Quick Peripherals Summary KPI Bento Strip ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <div className="p-4 rounded-2xl system-kpi-card flex flex-col gap-1.5">
@@ -245,7 +245,7 @@ export default function PeripheralsDisplaysTab({ specs }: PeripheralsDisplaysTab
             >
               {/* Stylized Physical Screen & Stand Visual */}
               <div className="flex flex-col items-center shrink-0">
-                <div className="w-44 aspect-video rounded-xl border-2 border-sky-400/55 bg-gradient-to-br from-sky-500/18 via-[#09090d] to-purple-500/18 flex flex-col items-center justify-center p-2 text-center shadow-inner">
+                <div className="w-44 aspect-video rounded-xl border-2 border-sky-400/55 bg-gradient-to-br from-sky-500/18 via-[#09090d] to-purple-500/18 flex flex-col items-center justify-center p-2 text-center shadow-inner sys-screen-bezel">
                   <span className="text-sm font-mono font-extrabold text-white">
                     {disp.nativeWidth}×{disp.nativeHeight}
                   </span>

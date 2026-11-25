@@ -38,7 +38,7 @@ class SystemTelemetrySampler:
         self._fast_lock = threading.Lock()
         self._slow_lock = threading.Lock()
         self._static_specs: Optional[Dict[str, Any]] = None
-        self._history: Deque[Dict[str, Any]] = deque(maxlen=60)
+        self._history: Deque[Dict[str, Any]] = deque(maxlen=900)
         self._latest_fast: Optional[Dict[str, Any]] = None
         self._latest_slow: Optional[Dict[str, Any]] = None
         self._prev_state: Optional[Dict[str, Any]] = None
@@ -200,8 +200,25 @@ class SystemTelemetrySampler:
 
             time.sleep(self.FAST_INTERVAL_SECONDS)
 
-    def get_live(self) -> Dict[str, Any]:
-        """Returns latest fast + slow snapshots and 60-sample history in < 5ms (non-blocking cold start)."""
+    def _slice_history(self, raw_history: list[Dict[str, Any]], window_sec: int) -> list[Dict[str, Any]]:
+        """Slices history to requested window (60s / 300s / 900s) and downsamples <= 90 points."""
+        if not raw_history:
+            return []
+        sec = max(30, min(900, int(window_sec)))
+        cutoff = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(seconds=sec)).isoformat()
+        sliced = [pt for pt in raw_history if str(pt.get("timestampIso") or "") >= cutoff]
+        if not sliced:
+            sliced = raw_history[-min(len(raw_history), sec):]
+        max_pts = 90
+        if len(sliced) <= max_pts:
+            return sliced
+        step = (len(sliced) - 1) / float(max_pts - 1)
+        sampled = [sliced[int(round(i * step))] for i in range(max_pts - 1)]
+        sampled.append(sliced[-1])
+        return sampled
+
+    def get_live(self, window_sec: int = 60) -> Dict[str, Any]:
+        """Returns latest fast + slow snapshots and windowed history ring buffer in < 5ms."""
         with self._lock:
             need_bootstrap = self._latest_fast is None
 
@@ -214,8 +231,9 @@ class SystemTelemetrySampler:
         with self._lock:
             fast = self._latest_fast or {}
             slow = self._latest_slow or {}
-            history = list(self._history)
+            raw_history = list(self._history)
 
+        history = self._slice_history(raw_history, window_sec)
         cpu_vals = [h["cpuPercent"] for h in history] or [fast.get("cpu", {}).get("totalPercent", 0.0)]
         ram_vals = [h["ramPercent"] for h in history] or [fast.get("memory", {}).get("percent", 0.0)]
         d_read_vals = [h["diskReadMBps"] for h in history] or [0.0]
@@ -248,10 +266,13 @@ class SystemTelemetrySampler:
             "processes": slow.get("processes", []),
             "topCpu": slow.get("topCpu", []),
             "topMemory": slow.get("topMemory", []),
+            "topDiskIo": slow.get("topDiskIo", []),
             "totalProcessesCount": slow.get("totalProcessesCount", 0),
             "totalThreadsCount": slow.get("totalThreadsCount", 0),
             "healthPosture": health_posture,
             "history": history,
+            "windowSec": max(30, min(900, int(window_sec))),
+            "historyTotalSamples": len(raw_history),
             "peaks": {
                 "cpuPeakPercent": round(max(cpu_vals), 1),
                 "cpuAvgPercent": round(sum(cpu_vals) / len(cpu_vals), 1),

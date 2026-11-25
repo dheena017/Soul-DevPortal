@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SystemLiveSnapshot, SystemSpecs } from '../../../types';
+import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../../types';
 import { formatBytes, formatClock, formatNetRate, getLoadTone, SystemSubTabId } from '../systemConstants';
 import RadialGauge from './RadialGauge';
 import TelemetrySparkline from './TelemetrySparkline';
@@ -8,11 +8,19 @@ export interface PerformanceOverviewTabProps {
   specs: SystemSpecs;
   live: SystemLiveSnapshot;
   onSelectTab: (tab: SystemSubTabId) => void;
+  historyWindowSec?: HistoryWindowSec;
 }
 
-export default function PerformanceOverviewTab({ specs, live, onSelectTab }: PerformanceOverviewTabProps) {
-  const [consumerMode, setConsumerMode] = useState<'cpu' | 'ram'>('cpu');
+export default function PerformanceOverviewTab({
+  specs,
+  live,
+  onSelectTab,
+  historyWindowSec = 60,
+}: PerformanceOverviewTabProps) {
+  const [consumerMode, setConsumerMode] = useState<'cpu' | 'ram' | 'disk'>('cpu');
   const [overlayRam, setOverlayRam] = useState<boolean>(true);
+  const [syncHoverIdx, setSyncHoverIdx] = useState<number | null>(null);
+  const winLabel = historyWindowSec >= 900 ? '15m' : historyWindowSec >= 300 ? '5m' : '60s';
 
   const primaryGpu = specs.graphics.find((g) => g.role !== 'Virtual') || specs.graphics[0];
   const primaryDisplay = specs.displays.find((d) => d.primary) || specs.displays[0];
@@ -22,10 +30,21 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
 
   const nvidiaSensor = live.gpu.nvidiaSensors?.[0];
   const gpuLoadPct = live.gpu.utilizationPercent ?? null;
-  const consumers = consumerMode === 'cpu' ? live.topCpu : live.topMemory;
+  const consumers =
+    consumerMode === 'cpu'
+      ? live.topCpu
+      : consumerMode === 'ram'
+        ? live.topMemory
+        : live.topDiskIo || live.topCpu;
   const maxConsumerVal = Math.max(
     1,
-    ...consumers.map((p) => (consumerMode === 'cpu' ? p.cpuPercent : p.memoryMB))
+    ...consumers.map((p) =>
+      consumerMode === 'cpu'
+        ? p.cpuPercent
+        : consumerMode === 'ram'
+          ? p.memoryMB
+          : (p.ioReadBps || 0) + (p.ioWriteBps || 0)
+    )
   );
 
   const wifiBars = wifi?.signalPercent
@@ -41,7 +60,7 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
     : 0;
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 sys-stagger">
       {/* ── Row 1: 4 Live SVG Radial Ring KPI Gauges ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <RadialGauge
@@ -176,6 +195,8 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
               data={live.history}
               fixedMax={100}
               height={215}
+              syncHoverIdx={syncHoverIdx}
+              onHoverChange={setSyncHoverIdx}
               series={
                 overlayRam
                   ? [
@@ -350,6 +371,8 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
               data={live.history}
               height={102}
               compact
+              syncHoverIdx={syncHoverIdx}
+              onHoverChange={setSyncHoverIdx}
               series={[
                 { key: 'diskReadMBps', label: 'Read', color: '#10b981', unit: ' MB/s', decimals: 1 },
                 { key: 'diskWriteMBps', label: 'Write', color: '#f59e0b', unit: ' MB/s', decimals: 1 },
@@ -357,7 +380,7 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
             />
             <div className="flex items-center justify-between text-[10px] font-mono tabular-nums text-zinc-400">
               <span>R {live.disk.readIops.toFixed(0)} / W {live.disk.writeIops.toFixed(0)} IOPS</span>
-              <span>Peak R {live.peaks.diskReadPeakMBps} / W {live.peaks.diskWritePeakMBps} MB/s</span>
+              <span>{winLabel} Peak R {live.peaks.diskReadPeakMBps} / W {live.peaks.diskWritePeakMBps} MB/s</span>
             </div>
           </div>
 
@@ -380,6 +403,8 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
               data={live.history}
               height={102}
               compact
+              syncHoverIdx={syncHoverIdx}
+              onHoverChange={setSyncHoverIdx}
               valueFormatter={(v) => formatNetRate(v)}
               series={[
                 { key: 'netRxKBps', label: 'Down', color: '#38bdf8', unit: ' KB/s', decimals: 1 },
@@ -388,7 +413,7 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
             />
             <div className="flex items-center justify-between text-[10px] font-mono tabular-nums text-zinc-400">
               <span>{live.socketCounts.established} Estab · {live.socketCounts.listening} Listen</span>
-              <span>Peak ↓ {formatNetRate(live.peaks.netRxPeakKBps)} · ↑ {formatNetRate(live.peaks.netTxPeakKBps)}</span>
+              <span>{winLabel} Peak ↓ {formatNetRate(live.peaks.netRxPeakKBps)} · ↑ {formatNetRate(live.peaks.netTxPeakKBps)}</span>
             </div>
           </div>
 
@@ -400,7 +425,7 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
                 <button
                   type="button"
                   onClick={() => setConsumerMode('cpu')}
-                  className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all ${
+                  className={`px-2 py-1 rounded-lg cursor-pointer transition-all ${
                     consumerMode === 'cpu'
                       ? 'bg-zinc-800 text-sky-300 border border-white/20 shadow-sm'
                       : 'text-zinc-400 hover:text-white border border-transparent'
@@ -411,20 +436,37 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
                 <button
                   type="button"
                   onClick={() => setConsumerMode('ram')}
-                  className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all ${
+                  className={`px-2 py-1 rounded-lg cursor-pointer transition-all ${
                     consumerMode === 'ram'
                       ? 'bg-zinc-800 text-purple-300 border border-white/20 shadow-sm'
                       : 'text-zinc-400 hover:text-white border border-transparent'
                   }`}
                 >
-                  Memory MB
+                  RAM MB
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConsumerMode('disk')}
+                  className={`px-2 py-1 rounded-lg cursor-pointer transition-all ${
+                    consumerMode === 'disk'
+                      ? 'bg-zinc-800 text-emerald-300 border border-white/20 shadow-sm'
+                      : 'text-zinc-400 hover:text-white border border-transparent'
+                  }`}
+                >
+                  Disk I/O
                 </button>
               </div>
             </div>
 
             <div className="flex flex-col gap-2">
               {consumers.map((proc, rankIdx) => {
-                const rawVal = consumerMode === 'cpu' ? proc.cpuPercent : proc.memoryMB;
+                const diskTotalBps = (proc.ioReadBps || 0) + (proc.ioWriteBps || 0);
+                const rawVal =
+                  consumerMode === 'cpu'
+                    ? proc.cpuPercent
+                    : consumerMode === 'ram'
+                      ? proc.memoryMB
+                      : diskTotalBps;
                 const relPct = Math.min(100, Math.max(8, Math.round((rawVal / maxConsumerVal) * 100)));
                 return (
                   <button
@@ -450,12 +492,22 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
                         <span className={consumerMode === 'ram' ? 'font-bold text-purple-300' : 'text-zinc-400'}>
                           {proc.memoryMB.toFixed(0)} MB
                         </span>
+                        {consumerMode === 'disk' && (
+                          <>
+                            <span className="text-zinc-600">·</span>
+                            <span className="font-bold text-emerald-300">{formatBytes(diskTotalBps)}/s</span>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all duration-300 ${
-                          consumerMode === 'cpu' ? 'soul-gradient-bar' : 'bg-gradient-to-r from-purple-500 to-fuchsia-400'
+                          consumerMode === 'cpu'
+                            ? 'soul-gradient-bar'
+                            : consumerMode === 'ram'
+                              ? 'bg-gradient-to-r from-purple-500 to-fuchsia-400'
+                              : 'bg-gradient-to-r from-emerald-500 to-teal-300'
                         }`}
                         style={{ width: `${relPct}%` }}
                       />
@@ -470,7 +522,7 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
 
       {/* ── Row 3: Memory Commit Trend + Graphics Engine Trend ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Memory & Pagefile Allocation Card with Live 60s Trend */}
+        {/* Memory & Pagefile Allocation Card with Live Trend */}
         <section className="p-5 rounded-2xl system-card flex flex-col gap-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-sm font-bold text-white">Memory &amp; Pagefile Allocation</h3>
@@ -484,12 +536,14 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
             fixedMax={100}
             height={110}
             compact
+            syncHoverIdx={syncHoverIdx}
+            onHoverChange={setSyncHoverIdx}
             series={[{ key: 'ramPercent', label: 'RAM', color: '#a855f7', unit: '%', decimals: 1 }]}
           />
 
           <div className="w-full h-2.5 rounded-full bg-[#181820] overflow-hidden flex border border-white/[0.06]">
             <div
-              className="h-full soul-gradient-bar transition-all duration-300"
+              className="h-full soul-gradient-bar sys-bar-shimmer transition-all duration-300"
               style={{ width: `${Math.min(100, live.memory.percent)}%` }}
             />
           </div>
@@ -528,6 +582,8 @@ export default function PerformanceOverviewTab({ specs, live, onSelectTab }: Per
             fixedMax={100}
             height={110}
             compact
+            syncHoverIdx={syncHoverIdx}
+            onHoverChange={setSyncHoverIdx}
             series={[{ key: 'gpuPercent', label: 'GPU Engine', color: '#f59e0b', unit: '%', decimals: 1 }]}
           />
 

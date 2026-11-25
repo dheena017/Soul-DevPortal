@@ -1,16 +1,31 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import CopyButton from '../../../components/CopyButton';
 import { ActiveConnectionMetric, ActivePortMetric, ProcessMetric, SystemLiveSnapshot } from '../../../types';
+import { formatBytes } from '../systemConstants';
+import { ExpandToggleCell, FilterPillBar, TableLoadAllFooter } from './SystemTablePrimitives';
 
 export interface ProcessesTabProps {
   live: SystemLiveSnapshot;
 }
 
 type SectionKey = 'processes' | 'ports' | 'connections';
-type SortField = 'cpu' | 'memory' | 'threads' | 'pid' | 'ppid' | 'name';
-type ProcessFilter = 'all' | 'active_cpu' | 'with_ports' | 'heavy_ram' | 'user_space';
+type SortField = 'cpu' | 'memory' | 'disk' | 'threads' | 'pid' | 'ppid' | 'name';
+type ProcessFilter = 'all' | 'pinned' | 'active_cpu' | 'disk_io' | 'with_ports' | 'heavy_ram' | 'user_space';
 type PortFilter = 'all' | 'tcp' | 'udp' | 'exposed' | 'loopback' | 'portal';
 type ConnFilter = 'all' | 'established' | 'external' | 'local' | 'time_wait';
+
+const PINNED_STORAGE_KEY = 'soul.system.pinnedProcs';
+
+function loadPinnedProcs(): string[] {
+  try {
+    const raw = localStorage.getItem(PINNED_STORAGE_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr.map((x) => String(x).toLowerCase()) : [];
+  } catch {
+    return [];
+  }
+}
 
 function SectionIcon({ kind, className }: { kind: SectionKey | 'threads'; className?: string }) {
   if (kind === 'processes') {
@@ -56,17 +71,35 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
   const [connFilter, setConnFilter] = useState<ConnFilter>('all');
   const [expandedKeys, setExpandedKeys] = useState<Record<string, boolean>>({});
   const [showAllRows, setShowAllRows] = useState(false);
+  const [pinnedNames, setPinnedNames] = useState<string[]>(loadPinnedProcs);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(PINNED_STORAGE_KEY, JSON.stringify(pinnedNames));
+    } catch {
+      // ignore storage quota errors
+    }
+  }, [pinnedNames]);
+
+  const pinnedSet = useMemo(() => new Set(pinnedNames), [pinnedNames]);
+
+  const togglePin = (procName: string) => {
+    const low = procName.toLowerCase();
+    setPinnedNames((prev) => (prev.includes(low) ? prev.filter((x) => x !== low) : [...prev, low]));
+  };
 
   const procStats = useMemo(() => {
     const activeCpu = live.processes.filter((p) => p.cpuPercent > 0).length;
+    const diskActive = live.processes.filter((p) => (p.ioReadBps || 0) + (p.ioWriteBps || 0) > 1024).length;
     const withPorts = live.processes.filter((p) => p.ports.length > 0).length;
     const heavyRam = live.processes.filter((p) => p.memoryMB >= 100).length;
+    const pinnedCount = live.processes.filter((p) => pinnedSet.has(p.name.toLowerCase())).length;
     const userSpace = live.processes.filter(
       (p) => p.username && !p.username.toLowerCase().includes('nt authority\\') && !p.username.toLowerCase().includes('window manager\\')
     ).length;
     const totalThreads = live.totalThreadsCount || live.processes.reduce((sum, p) => sum + (p.threads || 0), 0);
-    return { activeCpu, withPorts, heavyRam, userSpace, totalThreads };
-  }, [live.processes, live.totalThreadsCount]);
+    return { activeCpu, diskActive, withPorts, heavyRam, pinnedCount, userSpace, totalThreads };
+  }, [live.processes, live.totalThreadsCount, pinnedSet]);
 
   const portStats = useMemo(() => {
     const tcp = live.activePorts.filter((p) => p.protocol === 'TCP').length;
@@ -88,7 +121,10 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
   const filteredProcesses = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const list = live.processes.filter((p) => {
+      const isPinned = pinnedSet.has(p.name.toLowerCase());
+      if (procFilter === 'pinned' && !isPinned) return false;
       if (procFilter === 'active_cpu' && p.cpuPercent <= 0) return false;
+      if (procFilter === 'disk_io' && (p.ioReadBps || 0) + (p.ioWriteBps || 0) <= 1024) return false;
       if (procFilter === 'with_ports' && p.ports.length === 0) return false;
       if (procFilter === 'heavy_ram' && p.memoryMB < 100) return false;
       if (
@@ -110,14 +146,20 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
     });
 
     return [...list].sort((a, b) => {
+      if (procFilter === 'all') {
+        const pa = pinnedSet.has(a.name.toLowerCase()) ? 0 : 1;
+        const pb = pinnedSet.has(b.name.toLowerCase()) ? 0 : 1;
+        if (pa !== pb) return pa - pb;
+      }
       if (sortBy === 'memory') return b.memoryBytes - a.memoryBytes;
+      if (sortBy === 'disk') return (b.ioReadBps || 0) + (b.ioWriteBps || 0) - ((a.ioReadBps || 0) + (a.ioWriteBps || 0));
       if (sortBy === 'threads') return b.threads - a.threads;
       if (sortBy === 'pid') return a.pid - b.pid;
       if (sortBy === 'ppid') return (a.ppid || 0) - (b.ppid || 0);
       if (sortBy === 'name') return a.name.localeCompare(b.name);
       return b.cpuPercent - a.cpuPercent || b.memoryBytes - a.memoryBytes;
     });
-  }, [live.processes, procFilter, searchQuery, sortBy]);
+  }, [live.processes, procFilter, searchQuery, sortBy, pinnedSet]);
 
   const filteredPorts = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -205,7 +247,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 sys-stagger">
       {/* 4-Card KPI Overview Strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         <button
@@ -232,7 +274,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
             <span className="px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 border border-sky-500/30">
               {procStats.activeCpu} Active CPU
             </span>
-            <span className="text-zinc-400">{procStats.userSpace} User Space</span>
+            <span className="text-zinc-400">{procStats.diskActive} Disk Active</span>
           </div>
         </button>
 
@@ -245,7 +287,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
           className="p-4 rounded-2xl system-kpi-card text-left flex flex-col gap-1.5 cursor-pointer transition-all"
         >
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">OS Threads &amp; RAM</span>
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">OS Threads &amp; Watchlist</span>
             <span className="w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-300">
               <SectionIcon kind="threads" className="w-3.5 h-3.5" />
             </span>
@@ -258,7 +300,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
             <span className="px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30">
               {procStats.heavyRam} &gt;= 100 MB
             </span>
-            <span className="text-zinc-400">{procStats.withPorts} Binding Ports</span>
+            <span className="text-zinc-400">{procStats.pinnedCount} Pinned ★</span>
           </div>
         </button>
 
@@ -390,6 +432,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
               >
                 <option value="cpu">Sort: CPU %</option>
                 <option value="memory">Sort: Memory MB</option>
+                <option value="disk">Sort: Disk I/O</option>
                 <option value="threads">Sort: Threads</option>
                 <option value="name">Sort: Name</option>
                 <option value="pid">Sort: PID</option>
@@ -408,86 +451,57 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
         </div>
 
         {/* Sub-Filter Pill Strip */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/[0.05]">
-          <div className="flex flex-wrap items-center gap-1.5">
-            {viewSection === 'processes' &&
-              (
-                [
-                  { id: 'all', label: `All (${live.processes.length})` },
-                  { id: 'active_cpu', label: `Active CPU (${procStats.activeCpu})` },
-                  { id: 'with_ports', label: `With Ports (${procStats.withPorts})` },
-                  { id: 'heavy_ram', label: `RAM >= 100M (${procStats.heavyRam})` },
-                  { id: 'user_space', label: `User Apps (${procStats.userSpace})` },
-                ] as const
-              ).map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setProcFilter(f.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                    procFilter === f.id
-                      ? 'bg-sky-500/15 border-sky-500/40 text-sky-200 font-bold'
-                      : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
-
-            {viewSection === 'ports' &&
-              (
-                [
-                  { id: 'all', label: `All (${live.activePorts.length})` },
-                  { id: 'tcp', label: `TCP (${portStats.tcp})` },
-                  { id: 'udp', label: `UDP (${portStats.udp})` },
-                  { id: 'exposed', label: `Exposed Interfaces (${portStats.exposed})` },
-                  { id: 'loopback', label: `Loopback (${portStats.loopback})` },
-                  { id: 'portal', label: `Portal & Dev (${portStats.portal})` },
-                ] as const
-              ).map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setPortFilter(f.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                    portFilter === f.id
-                      ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200 font-bold'
-                      : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
-
-            {viewSection === 'connections' &&
-              (
-                [
-                  { id: 'all', label: `All Captured (${activeConnections.length})` },
-                  { id: 'established', label: `Established (${connStats.established})` },
-                  { id: 'external', label: `External Peers (${connStats.external})` },
-                  { id: 'local', label: `Loopback / LAN (${connStats.local})` },
-                  { id: 'time_wait', label: `Time-Wait (${connStats.timeWait})` },
-                ] as const
-              ).map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setConnFilter(f.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                    connFilter === f.id
-                      ? 'bg-amber-500/15 border-amber-500/40 text-amber-200 font-bold'
-                      : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
-          </div>
-
-          <span className="text-[11px] font-mono text-zinc-400 tabular-nums">
-            Showing {visibleRowKeys.length} of {activeTotalCount} matched
-          </span>
-        </div>
+        {viewSection === 'processes' && (
+          <FilterPillBar
+            tone="sky"
+            activeId={procFilter}
+            onSelect={(id) => setProcFilter(id as ProcessFilter)}
+            shownCount={visibleRowKeys.length}
+            totalCount={activeTotalCount}
+            items={[
+              { id: 'all', label: `All (${live.processes.length})` },
+              { id: 'pinned', label: `Pinned ★ (${procStats.pinnedCount})` },
+              { id: 'active_cpu', label: `Active CPU (${procStats.activeCpu})` },
+              { id: 'disk_io', label: `Disk I/O (${procStats.diskActive})` },
+              { id: 'with_ports', label: `With Ports (${procStats.withPorts})` },
+              { id: 'heavy_ram', label: `RAM >= 100M (${procStats.heavyRam})` },
+              { id: 'user_space', label: `User Apps (${procStats.userSpace})` },
+            ]}
+          />
+        )}
+        {viewSection === 'ports' && (
+          <FilterPillBar
+            tone="emerald"
+            activeId={portFilter}
+            onSelect={(id) => setPortFilter(id as PortFilter)}
+            shownCount={visibleRowKeys.length}
+            totalCount={activeTotalCount}
+            items={[
+              { id: 'all', label: `All (${live.activePorts.length})` },
+              { id: 'tcp', label: `TCP (${portStats.tcp})` },
+              { id: 'udp', label: `UDP (${portStats.udp})` },
+              { id: 'exposed', label: `Exposed Interfaces (${portStats.exposed})` },
+              { id: 'loopback', label: `Loopback (${portStats.loopback})` },
+              { id: 'portal', label: `Portal & Dev (${portStats.portal})` },
+            ]}
+          />
+        )}
+        {viewSection === 'connections' && (
+          <FilterPillBar
+            tone="amber"
+            activeId={connFilter}
+            onSelect={(id) => setConnFilter(id as ConnFilter)}
+            shownCount={visibleRowKeys.length}
+            totalCount={activeTotalCount}
+            items={[
+              { id: 'all', label: `All Captured (${activeConnections.length})` },
+              { id: 'established', label: `Established (${connStats.established})` },
+              { id: 'external', label: `External Peers (${connStats.external})` },
+              { id: 'local', label: `Loopback / LAN (${connStats.local})` },
+              { id: 'time_wait', label: `Time-Wait (${connStats.timeWait})` },
+            ]}
+          />
+        )}
       </div>
 
       {/* SECTION 1: All Running Processes */}
@@ -498,10 +512,12 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
               <thead>
                 <tr className="border-b border-white/[0.06] bg-[#0e0e12] text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
                   <th className="py-2.5 pl-4 pr-2 w-10 text-center">+</th>
+                  <th className="py-2.5 px-2 w-8 text-center">★</th>
                   <th className="py-2.5 px-3">PID / PPID</th>
                   <th className="py-2.5 px-3">Process, Owner &amp; Bound Ports</th>
                   <th className="py-2.5 px-3 text-right">CPU %</th>
                   <th className="py-2.5 px-3 text-right">Memory (RSS)</th>
+                  <th className="py-2.5 px-3 text-right">Disk R/W</th>
                   <th className="py-2.5 px-3 text-right">Threads</th>
                   <th className="py-2.5 pl-3 pr-5 text-right">State</th>
                 </tr>
@@ -510,7 +526,9 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                 {visibleProcesses.map((proc: ProcessMetric) => {
                   const key = `proc-${proc.pid}`;
                   const isOpen = Boolean(expandedKeys[key]);
+                  const isPinned = pinnedSet.has(proc.name.toLowerCase());
                   const shortUser = proc.username ? proc.username.split('\\').pop() || proc.username : 'System';
+                  const diskRate = (proc.ioReadBps || 0) + (proc.ioWriteBps || 0);
                   return (
                     <React.Fragment key={key}>
                       <tr
@@ -520,17 +538,24 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                         onClick={() => toggleExpand(key)}
                         onKeyDown={(e) => handleRowKeyDown(e, key)}
                         className={`cursor-pointer transition-colors focus:outline-none focus:bg-sky-500/[0.08] ${
-                          isOpen ? 'bg-sky-500/[0.06]' : 'hover:bg-white/[0.03]'
+                          isOpen ? 'bg-sky-500/[0.06]' : isPinned ? 'bg-amber-500/[0.03] hover:bg-amber-500/[0.06]' : 'hover:bg-white/[0.03]'
                         }`}
                       >
                         <td className="py-2.5 pl-4 pr-2 text-center">
-                          <span
-                            className={`w-6 h-6 inline-flex items-center justify-center rounded-md border text-xs font-mono font-bold ${
-                              isOpen ? 'bg-sky-500/20 border-sky-400/50 text-sky-300' : 'bg-[#181820] border-white/[0.1] text-zinc-300'
+                          <ExpandToggleCell isOpen={isOpen} tone="sky" />
+                        </td>
+                        <td className="py-2.5 px-2 text-center" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            type="button"
+                            onClick={() => togglePin(proc.name)}
+                            title={isPinned ? `Unpin ${proc.name}` : `Pin ${proc.name} to Watchlist`}
+                            aria-label={isPinned ? `Unpin ${proc.name}` : `Pin ${proc.name}`}
+                            className={`text-sm leading-none cursor-pointer transition-colors ${
+                              isPinned ? 'text-amber-300' : 'text-zinc-600 hover:text-zinc-300'
                             }`}
                           >
-                            {isOpen ? '−' : '+'}
-                          </span>
+                            {isPinned ? '★' : '☆'}
+                          </button>
                         </td>
                         <td className="py-2.5 px-3 font-mono tabular-nums text-xs">
                           <div className="flex flex-col">
@@ -570,6 +595,9 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                         <td className="py-2.5 px-3 text-right font-mono tabular-nums text-xs font-bold text-purple-300">
                           {proc.memoryMB.toFixed(1)} MB
                         </td>
+                        <td className="py-2.5 px-3 text-right font-mono tabular-nums text-xs text-emerald-300">
+                          {diskRate > 0 ? `${formatBytes(diskRate, 1)}/s` : '0 B/s'}
+                        </td>
                         <td className="py-2.5 px-3 text-right font-mono tabular-nums text-xs text-zinc-300">{proc.threads}</td>
                         <td className="py-2.5 pl-3 pr-5 text-right">
                           <span className="px-2 py-0.5 rounded bg-[#181820] border border-white/[0.08] text-[10px] font-mono text-zinc-300">
@@ -580,8 +608,8 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
 
                       {isOpen && (
                         <tr className="bg-[#0b0b0f]">
-                          <td colSpan={7} className="p-4 border-t border-sky-400/15">
-                            <div className="flex flex-col gap-3 text-xs">
+                          <td colSpan={9} className="p-4 border-t border-sky-400/15">
+                            <div className="flex flex-col gap-3 text-xs sys-drawer-open">
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
@@ -601,7 +629,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
 
                                 <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
-                                    Listeners &amp; Footprint
+                                    Listeners &amp; Disk I/O Footprint
                                   </span>
                                   <div className="flex flex-wrap gap-1">
                                     {proc.ports.length > 0 ? (
@@ -615,7 +643,10 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                                     )}
                                   </div>
                                   <span className="text-[11px] font-mono text-zinc-300">
-                                    {proc.memoryMB.toFixed(1)} MB RSS · {proc.threads} Threads · {proc.cpuPercent.toFixed(1)}% CPU
+                                    Disk Live: R {formatBytes(proc.ioReadBps || 0)}/s · W {formatBytes(proc.ioWriteBps || 0)}/s
+                                  </span>
+                                  <span className="text-[10px] font-mono text-zinc-400">
+                                    Total Cumulative: {formatBytes(proc.ioReadBytes || 0)} R · {formatBytes(proc.ioWriteBytes || 0)} W
                                   </span>
                                 </div>
 
@@ -652,7 +683,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                 })}
                 {visibleProcesses.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="py-8 text-center text-xs text-zinc-400">
+                    <td colSpan={9} className="py-8 text-center text-xs text-zinc-400">
                       No running processes matched your current filter.
                     </td>
                   </tr>
@@ -670,9 +701,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                 <div key={`m-${proc.pid}`} className="p-3.5 flex flex-col gap-2">
                   <button type="button" onClick={() => toggleExpand(key)} className="w-full flex items-center justify-between gap-2 text-left">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="w-5 h-5 rounded border border-white/[0.12] bg-[#181820] text-center text-xs font-mono text-zinc-300 shrink-0">
-                        {isOpen ? '−' : '+'}
-                      </span>
+                      <ExpandToggleCell isOpen={isOpen} tone="sky" />
                       <span className="text-xs font-bold text-white truncate">{proc.name}</span>
                       <span className="text-[10px] font-mono text-zinc-400">#{proc.pid}</span>
                     </div>
@@ -692,19 +721,15 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
             })}
           </div>
 
-          {filteredProcesses.length > 120 && !searchQuery.trim() && (
-            <div className="px-4 py-3 border-t border-white/[0.06] bg-[#0e0e12] flex items-center justify-between text-xs">
-              <span className="font-mono text-zinc-400">
-                Displaying {visibleProcesses.length} of {filteredProcesses.length} live OS processes
-              </span>
-              <button
-                type="button"
-                onClick={() => setShowAllRows((v) => !v)}
-                className="px-3 py-1 rounded-lg bg-[#181820] hover:bg-white/[0.08] border border-white/[0.1] font-mono text-sky-300 cursor-pointer"
-              >
-                {showAllRows ? 'Show Compact 120' : `Load All ${filteredProcesses.length} Processes`}
-              </button>
-            </div>
+          {!searchQuery.trim() && (
+            <TableLoadAllFooter
+              visibleCount={visibleProcesses.length}
+              totalCount={filteredProcesses.length}
+              noun="live OS processes"
+              showAll={showAllRows}
+              onToggle={() => setShowAllRows((v) => !v)}
+              tone="sky"
+            />
           )}
         </section>
       )}
@@ -743,13 +768,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                         }`}
                       >
                         <td className="py-2.5 pl-4 pr-2 text-center">
-                          <span
-                            className={`w-6 h-6 inline-flex items-center justify-center rounded-md border text-xs font-mono font-bold ${
-                              isOpen ? 'bg-emerald-500/20 border-emerald-400/50 text-emerald-300' : 'bg-[#181820] border-white/[0.1] text-zinc-300'
-                            }`}
-                          >
-                            {isOpen ? '−' : '+'}
-                          </span>
+                          <ExpandToggleCell isOpen={isOpen} tone="emerald" />
                         </td>
                         <td className="py-2.5 px-3 font-mono tabular-nums font-bold text-white">:{item.port}</td>
                         <td className="py-2.5 px-3">
@@ -884,13 +903,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                         }`}
                       >
                         <td className="py-2.5 pl-4 pr-2 text-center">
-                          <span
-                            className={`w-6 h-6 inline-flex items-center justify-center rounded-md border text-xs font-mono font-bold ${
-                              isOpen ? 'bg-amber-500/20 border-amber-400/50 text-amber-300' : 'bg-[#181820] border-white/[0.1] text-zinc-300'
-                            }`}
-                          >
-                            {isOpen ? '−' : '+'}
-                          </span>
+                          <ExpandToggleCell isOpen={isOpen} tone="amber" />
                         </td>
                         <td className="py-2.5 px-3">
                           <strong className="text-white">{conn.processName || 'Kernel / Closed PID'}</strong>{' '}
@@ -973,19 +986,15 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
               </tbody>
             </table>
           </div>
-          {filteredConnections.length > 120 && !searchQuery.trim() && (
-            <div className="px-4 py-3 border-t border-white/[0.06] bg-[#0e0e12] flex items-center justify-between text-xs">
-              <span className="font-mono text-zinc-400">
-                Displaying {visibleConnections.length} of {filteredConnections.length} captured sockets
-              </span>
-              <button
-                type="button"
-                onClick={() => setShowAllRows((v) => !v)}
-                className="px-3 py-1 rounded-lg bg-[#181820] hover:bg-white/[0.08] border border-white/[0.1] font-mono text-amber-300 cursor-pointer"
-              >
-                {showAllRows ? 'Show Compact 120' : `Load All ${filteredConnections.length} Sockets`}
-              </button>
-            </div>
+          {!searchQuery.trim() && (
+            <TableLoadAllFooter
+              visibleCount={visibleConnections.length}
+              totalCount={filteredConnections.length}
+              noun="captured sockets"
+              showAll={showAllRows}
+              onToggle={() => setShowAllRows((v) => !v)}
+              tone="amber"
+            />
           )}
         </section>
       )}

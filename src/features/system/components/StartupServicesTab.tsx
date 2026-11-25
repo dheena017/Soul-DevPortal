@@ -8,6 +8,7 @@ import {
   SystemSpecs,
 } from '../../../types';
 import { formatBytes } from '../systemConstants';
+import { FilterPillBar, TableLoadAllFooter } from './SystemTablePrimitives';
 
 export interface StartupServicesTabProps {
   specs: SystemSpecs;
@@ -253,7 +254,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 sys-stagger">
       {/* 4-Card Summary KPI Strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         <button
@@ -373,6 +374,49 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
         </button>
       </div>
 
+      {/* Alert Strip when Automatic Services are Stopped or Startup Binaries are Missing */}
+      {(serviceStats.autoStopped > 0 || startupStats.missing > 0) && (
+        <div className="p-3.5 rounded-2xl bg-amber-500/[0.06] border border-amber-500/30 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex flex-wrap items-center gap-2 font-mono text-amber-200">
+            <span className="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/40 text-[10px] font-bold uppercase">
+              Boot Audit Alerts
+            </span>
+            {serviceStats.autoStopped > 0 && (
+              <span>{serviceStats.autoStopped} Automatic (non-delayed) services currently stopped</span>
+            )}
+            {startupStats.missing > 0 && (
+              <span>· {startupStats.missing} Startup command target(s) missing on disk</span>
+            )}
+          </div>
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+            {serviceStats.autoStopped > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  switchSection('services');
+                  setSvcFilter('auto_stopped');
+                }}
+                className="px-2.5 py-1 rounded-lg bg-[#16161c] hover:bg-white/[0.08] border border-amber-500/35 text-amber-300 cursor-pointer"
+              >
+                Inspect Auto-Stopped
+              </button>
+            )}
+            {startupStats.missing > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  switchSection('startup');
+                  setStartupFilter('all');
+                }}
+                className="px-2.5 py-1 rounded-lg bg-[#16161c] hover:bg-white/[0.08] border border-rose-500/35 text-rose-300 cursor-pointer"
+              >
+                Review Startup Entries
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Unified 4-Section Switcher, Filter & Search Bar */}
       <div className="p-4 rounded-2xl system-card flex flex-col gap-3">
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
@@ -447,111 +491,72 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
         </div>
 
         {/* Sub-Filter Pill Strip */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/[0.05]">
-          <div className="flex flex-wrap items-center gap-1.5">
-            {section === 'startup' &&
-              (
-                [
-                  { id: 'all', label: `All (${startupApps.length})` },
-                  { id: 'enabled', label: `Enabled (${startupStats.enabled})` },
-                  { id: 'disabled', label: `Disabled (${startupStats.disabled})` },
-                  { id: 'folder', label: `Startup Folder (${startupStats.folder})` },
-                  { id: 'hkcu', label: `User Registry (${startupStats.hkcu})` },
-                  { id: 'hklm', label: `Machine Registry (${startupStats.hklm})` },
-                ] as const
-              ).map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setStartupFilter(f.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                    startupFilter === f.id
-                      ? 'bg-cyan-500/15 border-cyan-500/40 text-cyan-200 font-bold'
-                      : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
-
-            {section === 'services' &&
-              (
-                [
-                  { id: 'running', label: `Running (${serviceStats.running})` },
-                  { id: 'third_party', label: `Third-Party (${serviceStats.thirdParty})` },
-                  { id: 'automatic', label: `Auto-Start (${serviceStats.automatic})` },
-                  { id: 'delayed', label: `Delayed Auto (${serviceStats.delayed})` },
-                  { id: 'auto_stopped', label: `Auto Stopped (${serviceStats.autoStopped})` },
-                  { id: 'all', label: `All Services (${services.length})` },
-                ] as const
-              ).map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setSvcFilter(f.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                    svcFilter === f.id
-                      ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200 font-bold'
-                      : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
-
-            {section === 'tasks' &&
-              (
-                [
-                  { id: 'vendor', label: `Vendor & User (${taskStats.vendor})` },
-                  { id: 'logon_boot', label: `Logon / Boot Triggers (${taskStats.logonBoot})` },
-                  { id: 'active', label: `Ready / Running (${taskStats.active})` },
-                  { id: 'disabled', label: `Disabled (${taskStats.disabled})` },
-                  { id: 'all', label: `All Tasks (${scheduledTasks.length})` },
-                ] as const
-              ).map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setTaskFilter(f.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                    taskFilter === f.id
-                      ? 'bg-violet-500/15 border-violet-500/40 text-violet-200 font-bold'
-                      : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
-
-            {section === 'drivers' &&
-              (
-                [
-                  { id: 'running', label: `Running (${driverStats.running})` },
-                  { id: 'boot_system', label: `Boot / System Core (${driverStats.bootSystem})` },
-                  { id: 'third_party', label: `Third-Party / Store (${driverStats.thirdParty})` },
-                  { id: 'filesystem', label: `File System (${driverStats.filesystem})` },
-                  { id: 'all', label: `All Drivers (${systemDrivers.length})` },
-                ] as const
-              ).map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setDriverFilter(f.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                    driverFilter === f.id
-                      ? 'bg-amber-500/15 border-amber-500/40 text-amber-200 font-bold'
-                      : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              ))}
-          </div>
-
-          <span className="text-[11px] font-mono text-zinc-400 tabular-nums">
-            Showing {visibleRowKeys.length} of {activeTotalCount} matched
-          </span>
-        </div>
+        {section === 'startup' && (
+          <FilterPillBar
+            tone="cyan"
+            activeId={startupFilter}
+            onSelect={(id) => setStartupFilter(id as StartupFilter)}
+            shownCount={visibleRowKeys.length}
+            totalCount={activeTotalCount}
+            items={[
+              { id: 'all', label: `All (${startupApps.length})` },
+              { id: 'enabled', label: `Enabled (${startupStats.enabled})` },
+              { id: 'disabled', label: `Disabled (${startupStats.disabled})` },
+              { id: 'folder', label: `Startup Folder (${startupStats.folder})` },
+              { id: 'hkcu', label: `User Registry (${startupStats.hkcu})` },
+              { id: 'hklm', label: `Machine Registry (${startupStats.hklm})` },
+            ]}
+          />
+        )}
+        {section === 'services' && (
+          <FilterPillBar
+            tone="emerald"
+            activeId={svcFilter}
+            onSelect={(id) => setSvcFilter(id as ServiceFilter)}
+            shownCount={visibleRowKeys.length}
+            totalCount={activeTotalCount}
+            items={[
+              { id: 'running', label: `Running (${serviceStats.running})` },
+              { id: 'third_party', label: `Third-Party (${serviceStats.thirdParty})` },
+              { id: 'automatic', label: `Auto-Start (${serviceStats.automatic})` },
+              { id: 'delayed', label: `Delayed Auto (${serviceStats.delayed})` },
+              { id: 'auto_stopped', label: `Auto Stopped (${serviceStats.autoStopped})`, danger: serviceStats.autoStopped > 0 },
+              { id: 'all', label: `All Services (${services.length})` },
+            ]}
+          />
+        )}
+        {section === 'tasks' && (
+          <FilterPillBar
+            tone="violet"
+            activeId={taskFilter}
+            onSelect={(id) => setTaskFilter(id as TaskFilter)}
+            shownCount={visibleRowKeys.length}
+            totalCount={activeTotalCount}
+            items={[
+              { id: 'vendor', label: `Vendor & User (${taskStats.vendor})` },
+              { id: 'logon_boot', label: `Logon / Boot Triggers (${taskStats.logonBoot})` },
+              { id: 'active', label: `Ready / Running (${taskStats.active})` },
+              { id: 'disabled', label: `Disabled (${taskStats.disabled})` },
+              { id: 'all', label: `All Tasks (${scheduledTasks.length})` },
+            ]}
+          />
+        )}
+        {section === 'drivers' && (
+          <FilterPillBar
+            tone="amber"
+            activeId={driverFilter}
+            onSelect={(id) => setDriverFilter(id as DriverFilter)}
+            shownCount={visibleRowKeys.length}
+            totalCount={activeTotalCount}
+            items={[
+              { id: 'running', label: `Running (${driverStats.running})` },
+              { id: 'boot_system', label: `Boot / System Core (${driverStats.bootSystem})` },
+              { id: 'third_party', label: `Third-Party / Store (${driverStats.thirdParty})` },
+              { id: 'filesystem', label: `File System (${driverStats.filesystem})` },
+              { id: 'all', label: `All Drivers (${systemDrivers.length})` },
+            ]}
+          />
+        )}
       </div>
 
       {/* SECTION 1: Boot Startup Apps */}
@@ -901,19 +906,15 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
               </tbody>
             </table>
           </div>
-          {filteredServices.length > 120 && !search.trim() && (
-            <div className="px-4 py-3 border-t border-white/[0.06] bg-[#0e0e12] flex items-center justify-between text-xs">
-              <span className="font-mono text-zinc-400">
-                Displaying {visibleServices.length} of {filteredServices.length} services
-              </span>
-              <button
-                type="button"
-                onClick={() => setShowAllRows((v) => !v)}
-                className="px-3 py-1 rounded-lg bg-[#181820] hover:bg-white/[0.08] border border-white/[0.1] font-mono text-emerald-300 cursor-pointer"
-              >
-                {showAllRows ? 'Show Compact 120' : `Load All ${filteredServices.length} Services`}
-              </button>
-            </div>
+          {!search.trim() && (
+            <TableLoadAllFooter
+              visibleCount={visibleServices.length}
+              totalCount={filteredServices.length}
+              noun="services"
+              showAll={showAllRows}
+              onToggle={() => setShowAllRows((v) => !v)}
+              tone="emerald"
+            />
           )}
         </section>
       )}
@@ -1063,19 +1064,15 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
               </tbody>
             </table>
           </div>
-          {filteredTasks.length > 120 && !search.trim() && (
-            <div className="px-4 py-3 border-t border-white/[0.06] bg-[#0e0e12] flex items-center justify-between text-xs">
-              <span className="font-mono text-zinc-400">
-                Displaying {visibleTasks.length} of {filteredTasks.length} scheduled tasks
-              </span>
-              <button
-                type="button"
-                onClick={() => setShowAllRows((v) => !v)}
-                className="px-3 py-1 rounded-lg bg-[#181820] hover:bg-white/[0.08] border border-white/[0.1] font-mono text-violet-300 cursor-pointer"
-              >
-                {showAllRows ? 'Show Compact 120' : `Load All ${filteredTasks.length} Tasks`}
-              </button>
-            </div>
+          {!search.trim() && (
+            <TableLoadAllFooter
+              visibleCount={visibleTasks.length}
+              totalCount={filteredTasks.length}
+              noun="scheduled tasks"
+              showAll={showAllRows}
+              onToggle={() => setShowAllRows((v) => !v)}
+              tone="violet"
+            />
           )}
         </section>
       )}
@@ -1221,19 +1218,15 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
               </tbody>
             </table>
           </div>
-          {filteredDrivers.length > 120 && !search.trim() && (
-            <div className="px-4 py-3 border-t border-white/[0.06] bg-[#0e0e12] flex items-center justify-between text-xs">
-              <span className="font-mono text-zinc-400">
-                Displaying {visibleDrivers.length} of {filteredDrivers.length} kernel drivers
-              </span>
-              <button
-                type="button"
-                onClick={() => setShowAllRows((v) => !v)}
-                className="px-3 py-1 rounded-lg bg-[#181820] hover:bg-white/[0.08] border border-white/[0.1] font-mono text-amber-300 cursor-pointer"
-              >
-                {showAllRows ? 'Show Compact 120' : `Load All ${filteredDrivers.length} Drivers`}
-              </button>
-            </div>
+          {!search.trim() && (
+            <TableLoadAllFooter
+              visibleCount={visibleDrivers.length}
+              totalCount={filteredDrivers.length}
+              noun="kernel drivers"
+              showAll={showAllRows}
+              onToggle={() => setShowAllRows((v) => !v)}
+              tone="amber"
+            />
           )}
         </section>
       )}

@@ -13,12 +13,12 @@ class SystemService:
     def get_specs(self, force_refresh: bool = False) -> Dict[str, Any]:
         return system_sampler.get_specs(force_refresh=force_refresh)
 
-    def get_live(self) -> Dict[str, Any]:
-        return system_sampler.get_live()
+    def get_live(self, window_sec: int = 60) -> Dict[str, Any]:
+        return system_sampler.get_live(window_sec=window_sec)
 
-    def get_overview(self, force_refresh: bool = False) -> Dict[str, Any]:
+    def get_overview(self, force_refresh: bool = False, window_sec: int = 60) -> Dict[str, Any]:
         specs = self.get_specs(force_refresh=force_refresh)
-        live = self.get_live()
+        live = self.get_live(window_sec=window_sec)
         return {
             "specs": specs,
             "live": live,
