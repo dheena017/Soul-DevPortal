@@ -63,20 +63,20 @@ export default function CopyButton({
   return (
     <button
       type="button"
-      className={`inline-flex items-center justify-center border font-sans transition-all cursor-pointer select-none shrink-0 shadow-sm group ${
-        sizeStyles[variant] || sizeStyles.default
-      } ${variantStyles[variant] || variantStyles.default} ${className}`.trim()}
+      className={`inline-flex items-center justify-center border font-sans transition-all active:scale-95 cursor-pointer select-none shrink-0 group ${
+        copied ? 'shadow-[0_0_14px_rgba(16,185,129,0.28)]' : 'shadow-sm'
+      } ${sizeStyles[variant] || sizeStyles.default} ${variantStyles[variant] || variantStyles.default} ${className}`.trim()}
       onClick={handleCopy}
       aria-label={copied ? copiedLabel : title}
       title={copied ? copiedLabel : title}
     >
       <span className="shrink-0 flex items-center justify-center" aria-hidden="true">
         {copied ? (
-          <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-emerald-400 portal-copy-pop" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         ) : (
-          <svg className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-200 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-200 group-hover:scale-110 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
           </svg>

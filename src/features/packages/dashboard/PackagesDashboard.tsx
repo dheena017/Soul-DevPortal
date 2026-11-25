@@ -100,7 +100,7 @@ export default function PackagesDashboard({
   }, [packages, query, ecosystemFilter, sortBy]);
 
   return (
-    <div className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
+    <div className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* ── Sub-component 1: Header (Breadcrumb, Metrics, Search, Filters, Sort) ── */}
       <PackagesHeader
         packagesCount={packages.length}
@@ -116,7 +116,7 @@ export default function PackagesDashboard({
 
       {/* ── Sub-component 2: Package Grid of Package Cards ── */}
       <section className="w-full" aria-label="Shared packages explorer">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 portal-grid-stagger">
           {filteredPackages.map((pkg) => (
             <PackageCard
               key={pkg.id}

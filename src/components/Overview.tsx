@@ -7,6 +7,7 @@ import { PackageData, ProjectData, StatsData } from '../types';
 import { PACKAGE_METADATA_MAP } from '../features/packages/packagesConstants';
 import { DOCUMENTATION_GUIDES_REGISTRY } from '../features/docs/docsConstants';
 import { PROJECT_LOGOS, PROJECT_BRAND_MAP, formatProjectTitle } from '../features/projects/projectsConstants';
+import { HeroArtworkBackdrop, ProjectLogoFleetStrip, ProjectLogoImage } from './PortalVisuals';
 
 function getPackageInstallCommand(pkg: PackageData): string {
   if (pkg.id === 'logger') return 'npm install @workspace/logger';
@@ -69,10 +70,11 @@ export default function Overview({
   }, [projects]);
 
   return (
-    <article className="w-full flex flex-col gap-8 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
+    <article className="w-full flex flex-col gap-8 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* ── Standardized Hero Header matching Pillar Dashboards ── */}
-      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
-        <div className="flex flex-col gap-6">
+      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6 portal-header-sheen">
+        <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="Soul Monorepo Mesh Visual" />
+        <div className="relative z-10 flex flex-col gap-6">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
             <div className="flex items-center gap-2 text-xs">
               <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 font-medium">Soul Workspace</span>
@@ -100,11 +102,11 @@ export default function Overview({
               <button
                 type="button"
                 onClick={() => onNavigate('portal')}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all shadow-md shadow-white/10 shrink-0"
+                className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-md shadow-white/10 shrink-0 cursor-pointer"
                 title="Open full Developer Portal Hub with GitHub links & live endpoints"
               >
                 <span>Developer Hub &amp; GitHub Links</span>
-                <span>→</span>
+                <span className="portal-arrow-glide">→</span>
               </button>
             </div>
             <p className="text-xs md:text-sm text-zinc-300 leading-relaxed max-w-4xl">
@@ -113,47 +115,53 @@ export default function Overview({
           </div>
 
           {/* Dashboard Key Metrics Banner */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1">
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1 portal-grid-stagger">
+            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-white font-mono">3</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Core Pillars</span>
             </div>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-emerald-400 font-mono">{projects.length || 8}</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Integrated Apps</span>
             </div>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-purple-300 font-mono">{packages.length || 3}</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Shared Packages</span>
             </div>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-sky-300 font-mono">5</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Architecture Specs</span>
             </div>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c]/90 backdrop-blur-sm border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-emerald-400 font-mono">0</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Port Collisions</span>
             </div>
           </div>
+
+          <ProjectLogoFleetStrip
+            projects={projects}
+            onSelectProject={(projectId) => onNavigate(`projects/${projectId}`)}
+          />
         </div>
       </header>
 
       {/* ── 3 Pillars Gateway Navigation ── */}
       <section className="w-full flex flex-col gap-4" aria-label="Monorepo 3 Pillars Navigation">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 portal-grid-stagger">
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 h-full portal-card-hover portal-header-sheen"
             onClick={() => onNavigate('projects')}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('projects'); }}
           >
-            <div className="flex flex-col gap-3">
+            <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="" opacityClass="opacity-35 sm:opacity-52" />
+            <div className="relative z-10 flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner">
+                <span className="w-12 h-12 rounded-xl bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner portal-emblem-hover">
                   💻
                 </span>
-                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider bg-[#181820] border border-white/[0.1] text-zinc-200">
+                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider bg-[#181820]/90 border border-white/[0.1] text-zinc-200">
                   Pillar 1
                 </span>
               </div>
@@ -164,25 +172,26 @@ export default function Overview({
                 {projects.length || 8} fullstack applications, strict client &amp; server port allocations (:5173-:5180 / :8000-:8008), and SQLite datastores.
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-200 pt-3 border-t border-white/[0.06] group-hover:text-white transition-colors">
+            <div className="relative z-10 flex items-center gap-1.5 text-xs font-bold text-zinc-200 pt-3 border-t border-white/[0.06] group-hover:text-white transition-colors">
               <span>Explore {projects.length || 8} Apps</span>
-              <span>→</span>
+              <span className="portal-arrow-glide">→</span>
             </div>
           </div>
 
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 h-full portal-card-hover portal-header-sheen"
             onClick={() => onNavigate('packages')}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('packages'); }}
           >
-            <div className="flex flex-col gap-3">
+            <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="" opacityClass="opacity-35 sm:opacity-52" />
+            <div className="relative z-10 flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner">
+                <span className="w-12 h-12 rounded-xl bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner portal-emblem-hover">
                   📦
                 </span>
-                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider bg-[#181820] border border-white/[0.1] text-zinc-200">
+                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider bg-[#181820]/90 border border-white/[0.1] text-zinc-200">
                   Pillar 2
                 </span>
               </div>
@@ -193,25 +202,26 @@ export default function Overview({
                 Core reusable libraries: @workspace/logger (universal logging), @workspace/runner (CLI supervisor), and @workspace/config (design tokens).
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-200 pt-3 border-t border-white/[0.06] group-hover:text-white transition-colors">
+            <div className="relative z-10 flex items-center gap-1.5 text-xs font-bold text-zinc-200 pt-3 border-t border-white/[0.06] group-hover:text-white transition-colors">
               <span>Inspect {packages.length || 3} Packages</span>
-              <span>→</span>
+              <span className="portal-arrow-glide">→</span>
             </div>
           </div>
 
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-200 cursor-pointer gap-4 h-full"
+            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 h-full portal-card-hover portal-header-sheen"
             onClick={() => onNavigate('docs')}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('docs'); }}
           >
-            <div className="flex flex-col gap-3">
+            <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-35 sm:opacity-52" />
+            <div className="relative z-10 flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner">
+                <span className="w-12 h-12 rounded-xl bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner portal-emblem-hover">
                   📚
                 </span>
-                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider bg-[#181820] border border-white/[0.1] text-zinc-200">
+                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider bg-[#181820]/90 border border-white/[0.1] text-zinc-200">
                   Pillar 3
                 </span>
               </div>
@@ -222,9 +232,9 @@ export default function Overview({
                 5 authoritative architecture guides: mandatory golden rules, port matrices, tech stack standards, and compliance cheatsheets.
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-200 pt-3 border-t border-white/[0.06] group-hover:text-white transition-colors">
+            <div className="relative z-10 flex items-center gap-1.5 text-xs font-bold text-zinc-200 pt-3 border-t border-white/[0.06] group-hover:text-white transition-colors">
               <span>Read 5 Guides</span>
-              <span>→</span>
+              <span className="portal-arrow-glide">→</span>
             </div>
           </div>
         </div>
@@ -296,7 +306,7 @@ export default function Overview({
 
       {/* ── Tab 1: Integrated Consumer Applications ── */}
       {activeTab === 'apps' && projects && projects.length > 0 && (
-        <section className="w-full flex flex-col gap-4" aria-label="Integrated monorepo applications">
+        <section key="tab-apps" className="w-full flex flex-col gap-4 tab-content-animate" aria-label="Integrated monorepo applications">
           <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-400">PILLAR 1: APPLICATIONS</span>
@@ -304,15 +314,15 @@ export default function Overview({
             </div>
             <button
               type="button"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#16161c] border border-white/[0.1] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all"
+              className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#16161c] border border-white/[0.1] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
               onClick={() => onNavigate('projects')}
             >
               <span>View all {projects.length} apps &amp; ports</span>
-              <span>→</span>
+              <span className="portal-arrow-glide">→</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 portal-grid-stagger">
             {previewProjects.map((p) => {
               const brand = PROJECT_BRAND_MAP[p.id];
               const displayTitle = formatProjectTitle(p.id, p.title);
@@ -323,7 +333,7 @@ export default function Overview({
               return (
                 <div
                   key={p.id}
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-200 gap-4 cursor-pointer h-full"
+                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 h-full portal-card-hover"
                   onClick={() => onNavigate(`projects/${p.id}`)}
                   role="button"
                   tabIndex={0}
@@ -333,24 +343,19 @@ export default function Overview({
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0">
                         <div
-                          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden shadow-inner"
+                          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden shadow-inner portal-emblem-hover"
                           style={{
                             borderColor: brand ? `${brand.themeColor}33` : undefined,
                             background: brand ? brand.accentBg : undefined,
                           }}
                         >
-                          {logoSrc ? (
-                            <img
-                              src={logoSrc}
-                              alt={`${displayTitle} logo`}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                (e.currentTarget as HTMLElement).style.display = 'none';
-                              }}
-                            />
-                          ) : (
-                            <span className="text-base">{brand?.icon || '⚡'}</span>
-                          )}
+                          <ProjectLogoImage
+                            src={logoSrc}
+                            alt={`${displayTitle} logo`}
+                            fallbackIcon={brand?.icon || '⚡'}
+                            className="w-full h-full object-cover"
+                            fallbackClassName="text-base"
+                          />
                         </div>
                         <div className="flex flex-col min-w-0">
                           <strong className="text-sm font-bold text-white group-hover:text-white transition-colors truncate">
@@ -405,7 +410,7 @@ export default function Overview({
 
                   <div className="flex items-center justify-between pt-3 border-t border-white/[0.06] text-xs font-semibold text-zinc-300 group-hover:text-white transition-colors">
                     <span>Inspect Application</span>
-                    <span>→</span>
+                    <span className="portal-arrow-glide">→</span>
                   </div>
                 </div>
               );
@@ -416,7 +421,7 @@ export default function Overview({
 
       {/* ── Tab 2: Core Monorepo Packages ── */}
       {activeTab === 'packages' && (
-        <section className="w-full flex flex-col gap-4" aria-label="Shared packages explorer">
+        <section key="tab-packages" className="w-full flex flex-col gap-4 tab-content-animate" aria-label="Shared packages explorer">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pb-2 border-b border-[#19191d]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">PILLAR 2: SHARED LIBRARIES</span>
@@ -455,7 +460,7 @@ export default function Overview({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 portal-grid-stagger">
             {filteredPackages.map((pkg) => {
               const meta = PACKAGE_METADATA_MAP[pkg.id] || {
                 icon: '📦',
@@ -471,12 +476,12 @@ export default function Overview({
               return (
                 <article
                   key={pkg.id}
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-300 gap-4"
+                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] gap-4 portal-card-hover"
                 >
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.08] bg-[#09090c] text-xl">
+                        <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.08] bg-[#09090c] text-xl portal-emblem-hover">
                           {meta.icon}
                         </div>
                         <div className="flex flex-col">
@@ -545,7 +550,7 @@ export default function Overview({
                       onClick={() => onNavigate(`packages/${pkg.id}`)}
                     >
                       <span>Inspect Package API</span>
-                      <span>→</span>
+                      <span className="portal-arrow-glide">→</span>
                     </button>
                   </div>
                 </article>
@@ -557,7 +562,7 @@ export default function Overview({
 
       {/* ── Tab 3: Documentation Hub Overview ── */}
       {activeTab === 'docs' && (
-        <section className="w-full flex flex-col gap-4" aria-label="Docs Dashboard and architectural specifications">
+        <section key="tab-docs" className="w-full flex flex-col gap-4 tab-content-animate" aria-label="Docs Dashboard and architectural specifications">
           <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500">PILLAR 3: SPECIFICATIONS</span>
@@ -565,18 +570,18 @@ export default function Overview({
             </div>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
               onClick={() => onNavigate('docs')}
             >
               <span>Open Docs Dashboard</span>
-              <span>→</span>
+              <span className="portal-arrow-glide">→</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 portal-grid-stagger">
             {DOCUMENTATION_GUIDES_REGISTRY.map((guide) => (
               <div
-                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-300 cursor-pointer gap-4"
+                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 portal-card-hover"
                 key={guide.id}
                 onClick={() => onNavigate(`docs/${guide.slug || guide.id}`)}
                 role="button"
@@ -585,7 +590,7 @@ export default function Overview({
               >
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl">{guide.icon}</span>
+                    <span className="text-2xl portal-emblem-hover">{guide.icon}</span>
                     <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#09090c] border border-white/[0.08] text-zinc-300">
                       {guide.badge}
                     </span>
@@ -595,9 +600,9 @@ export default function Overview({
                   </h3>
                   <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">{guide.description}</p>
                 </div>
-                <div className="flex items-center gap-1 text-xs font-bold text-zinc-300 pt-2 border-t border-white/[0.06]">
+                <div className="flex items-center gap-1 text-xs font-bold text-zinc-300 pt-2 border-t border-white/[0.06] group-hover:text-white transition-colors">
                   <span>Read Specification</span>
-                  <span>→</span>
+                  <span className="portal-arrow-glide">→</span>
                 </div>
               </div>
             ))}
@@ -606,16 +611,17 @@ export default function Overview({
       )}
 
       {/* ── Command Runners & Computer Monitor Gateway Banners ── */}
-      <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-5">
-        <section className="w-full p-6 rounded-2xl bg-[#121216] border border-white/[0.08] flex flex-col justify-between gap-5 shadow-2xl">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#09090c] border border-white/[0.08] flex items-center justify-center text-2xl shrink-0">
+      <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-5 portal-grid-stagger">
+        <section className="group w-full p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] flex flex-col justify-between gap-5 shadow-2xl portal-card-hover portal-header-sheen">
+          <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="" opacityClass="opacity-35 sm:opacity-52" />
+          <div className="relative z-10 flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-[#09090c]/90 border border-white/[0.08] flex items-center justify-center text-2xl shrink-0 portal-emblem-hover">
               ⚡
             </div>
             <div className="flex flex-col gap-1.5">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="text-base sm:text-lg font-bold text-white">15 Monorepo Automation Scripts</h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#09090c] border border-white/[0.08] text-zinc-300">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#09090c]/90 border border-white/[0.08] text-zinc-300">
                   FastAPI · Vite · TS Gates
                 </span>
               </div>
@@ -628,17 +634,18 @@ export default function Overview({
 
           <button
             type="button"
-            className="w-full sm:w-auto self-start inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 shadow-md shadow-white/10 transition-all cursor-pointer"
+            className="relative z-10 w-full sm:w-auto self-start inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 shadow-md shadow-white/10 transition-all cursor-pointer"
             onClick={() => onNavigate('scripts')}
           >
             <span>Open Scripts &amp; Runners Center</span>
-            <span>→</span>
+            <span className="portal-arrow-glide">→</span>
           </button>
         </section>
 
-        <section className="w-full p-6 rounded-2xl bg-[#121216] border border-sky-400/20 hover:border-sky-400/35 transition-colors flex flex-col justify-between gap-5 shadow-2xl">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-sky-500/12 border border-sky-400/30 flex items-center justify-center text-sky-400 shrink-0">
+        <section className="group w-full p-6 rounded-2xl bg-[#121216] border border-sky-400/20 hover:border-sky-400/40 flex flex-col justify-between gap-5 shadow-2xl portal-card-hover portal-header-sheen">
+          <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="" opacityClass="opacity-35 sm:opacity-52" />
+          <div className="relative z-10 flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-sky-500/12 border border-sky-400/30 flex items-center justify-center text-sky-400 shrink-0 portal-emblem-hover">
               <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
                 <line x1="8" y1="21" x2="16" y2="21" />
@@ -661,11 +668,11 @@ export default function Overview({
 
           <button
             type="button"
-            className="w-full sm:w-auto self-start inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-sky-500/18 border border-sky-400/40 text-sky-200 hover:bg-sky-500/25 hover:text-white transition-all cursor-pointer"
+            className="relative z-10 w-full sm:w-auto self-start inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-sky-500/18 border border-sky-400/40 text-sky-200 hover:bg-sky-500/25 hover:text-white transition-all cursor-pointer"
             onClick={() => onNavigate('computer')}
           >
             <span>Open Computer &amp; Performance</span>
-            <span>→</span>
+            <span className="portal-arrow-glide">→</span>
           </button>
         </section>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
 import CopyButton from '../../components/CopyButton';
+import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../components/PortalVisuals';
 import { fetchPortalCommands } from '../../services/api';
 import { WORKSPACE_SCRIPTS_REGISTRY, ScriptDefinition } from './scriptsConstants';
 
@@ -122,19 +123,21 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
+    <div className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* ── Modern Hero Header ── */}
-      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5">
+      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5 portal-header-sheen">
+        <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="Scripts & Command Runners Visual" />
+        <div className="relative z-10 flex flex-col gap-5">
         {/* Breadcrumb & Top Actions Row */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               onClick={() => onNavigate('overview')}
               title="Return to Overview"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
               <span>Back</span>
@@ -184,30 +187,40 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
         </div>
 
         {/* ── KPI Metric Cards Ribbon ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 portal-grid-stagger">
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-xl font-extrabold text-amber-400 font-mono">19</span>
             <span className="text-xs font-semibold text-white mt-1">Canonical Commands</span>
             <span className="text-[11px] text-zinc-400">0 redundant aliases</span>
           </div>
 
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-xl font-extrabold text-emerald-400 font-mono">8</span>
             <span className="text-xs font-semibold text-white mt-1">Target Applications</span>
             <span className="text-[11px] text-zinc-400">Dual frontend &amp; backend</span>
           </div>
 
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-xl font-extrabold text-indigo-400 font-mono">4</span>
             <span className="text-xs font-semibold text-white mt-1">Core Orchestrators</span>
             <span className="text-[11px] text-zinc-400">All / Client / Server / Project</span>
           </div>
 
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-xl font-extrabold text-sky-400 font-mono">100%</span>
             <span className="text-xs font-semibold text-white mt-1">Port Protected</span>
             <span className="text-[11px] text-zinc-400">Automated --kill-port</span>
           </div>
+        </div>
+
+        <ProportionalSpectrumBar
+          title="COMMAND SUITE DISTRIBUTION"
+          segments={[
+            { label: 'Orchestrators', value: allScripts.filter((s) => s.category === 'orchestration').length || 4, colorClass: 'bg-amber-400', hex: '#fbbf24' },
+            { label: 'App Runners', value: allScripts.filter((s) => s.category === 'apps').length || 8, colorClass: 'bg-emerald-400', hex: '#34d399' },
+            { label: 'Portal & Gates', value: allScripts.filter((s) => s.category === 'portal' || s.category === 'pipeline' || s.category === 'setup').length || 7, colorClass: 'bg-indigo-400', hex: '#818cf8' },
+          ]}
+        />
         </div>
       </header>
 
@@ -324,7 +337,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
       {/* ── Command Deck Cards Grid ── */}
       {viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div key={`${viewMode}-${filterCategory}`} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 portal-grid-stagger">
           {filteredScripts.map((script) => {
             const formattedRunCmd = formatCommand(script);
             const isExpanded = Boolean(expandedCards[script.id]);
@@ -332,7 +345,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
             return (
               <div
                 key={script.id}
-                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-200 gap-3.5"
+                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] gap-3.5 portal-card-hover"
               >
                 {/* Card Top: Code Pill, Category Badge, Copy Button */}
                 <div className="flex items-center justify-between gap-2">

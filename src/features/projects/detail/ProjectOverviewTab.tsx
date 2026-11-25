@@ -1,5 +1,6 @@
 import React from 'react';
 import CopyButton from '../../../components/CopyButton';
+import { ArchitectureFlowDiagram, HeroArtworkBackdrop } from '../../../components/PortalVisuals';
 import { ProjectData } from '../../../types';
 import { PROJECT_DESCRIPTIONS } from '../projectsConstants';
 
@@ -29,9 +30,10 @@ export default function ProjectOverviewTab({
   onNavigateToFiles,
 }: ProjectOverviewTabProps) {
   return (
-    <div className="w-full flex flex-col gap-6">
+    <div className="w-full flex flex-col gap-6 portal-stagger">
       {/* ── Project Executive Summary ── */}
-      <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-5">
+      <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-5 portal-header-sheen">
+        <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="" opacityClass="opacity-28 sm:opacity-40" />
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3.5 border-b border-white/[0.06]">
           <div className="flex flex-col gap-0.5">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-400">APPLICATION OVERVIEW</span>
@@ -84,8 +86,8 @@ export default function ProjectOverviewTab({
         </div>
 
         {/* 4-Stat Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 portal-grid-stagger">
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">RUNTIME PORTS</span>
             <strong className="text-xs md:text-sm font-bold text-emerald-400 font-mono mt-1 inline-flex items-center gap-1.5">
               <span className="relative flex h-1.5 w-1.5">
@@ -95,15 +97,15 @@ export default function ProjectOverviewTab({
               <span>Client :{project.frontendPort || 'N/A'} {project.backendPort ? `· Server :${project.backendPort}` : ''}</span>
             </strong>
           </div>
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">NPM SCRIPTS</span>
             <strong className="text-xs md:text-sm font-bold text-amber-300 font-mono mt-1">{scriptsCount} commands</strong>
           </div>
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">DEPENDENCIES</span>
             <strong className="text-xs md:text-sm font-bold text-sky-300 font-mono mt-1">{totalDepsCount} packages</strong>
           </div>
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">ENV VARIABLES</span>
             <strong className="text-xs md:text-sm font-bold text-purple-300 font-mono mt-1">{envCount} configured</strong>
           </div>
@@ -111,14 +113,22 @@ export default function ProjectOverviewTab({
       </section>
 
       {/* ── Architecture & Port Binding ── */}
-      <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-4">
+      <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-4 portal-header-sheen">
         <div className="flex flex-col gap-0.5 pb-2 border-b border-white/[0.06]">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">SYSTEM DESIGN</span>
           <h2 className="text-lg font-bold text-neutral-200">Runtime Architecture &amp; Port Binding</h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-3">
+        <ArchitectureFlowDiagram
+          frontendPort={project.frontendPort}
+          backendPort={project.backendPort}
+          framework={project.framework}
+          dbInfo={project.dbInfo}
+          aiEngine={project.aiEngine}
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 portal-grid-stagger">
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-emerald-500/35 gap-3 portal-card-hover">
             <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
               <span className="text-xs font-bold text-neutral-300">Client Tier</span>
               <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
@@ -132,7 +142,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-indigo-500/35 gap-3 portal-card-hover">
             <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
               <span className="text-xs font-bold text-neutral-300">Server Tier</span>
               <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-indigo-500/15 border border-indigo-500/30 text-indigo-300">
@@ -146,7 +156,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-purple-500/35 gap-3 portal-card-hover">
             <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
               <span className="text-xs font-bold text-neutral-300">Persistence</span>
               <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-purple-500/15 border border-purple-500/30 text-purple-300">
@@ -159,7 +169,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-amber-500/35 gap-3 portal-card-hover">
             <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
               <span className="text-xs font-bold text-neutral-300">AI Intelligence</span>
               <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] border border-white/[0.08] text-neutral-300">
@@ -176,7 +186,7 @@ export default function ProjectOverviewTab({
 
       {/* ── Features Card ── */}
       {featuresList.length > 0 && (
-        <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-4">
+        <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-4 portal-header-sheen">
           <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-white/[0.06]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">CAPABILITIES</span>
@@ -187,9 +197,9 @@ export default function ProjectOverviewTab({
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 portal-grid-stagger">
             {featuresList.map((feat, idx) => (
-              <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-[#16161c] border border-white/[0.08]">
+              <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-emerald-500/35 portal-card-hover">
                 <span className="w-5 h-5 rounded-full bg-[#09090c] border border-white/[0.08] text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5">
                   ✓
                 </span>
@@ -204,14 +214,14 @@ export default function ProjectOverviewTab({
       )}
 
       {/* ── Shared Monorepo Packages Integration ── */}
-      <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-4">
+      <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-4 portal-header-sheen">
         <div className="flex flex-col gap-0.5 pb-2 border-b border-white/[0.06]">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">ECOSYSTEM</span>
           <h2 className="text-lg font-bold text-neutral-200">Shared Monorepo Packages Integration</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 portal-grid-stagger">
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] gap-2.5 portal-card-hover">
             <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
               <span className="text-xs font-mono font-bold text-neutral-200">@workspace/logger</span>
               <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] border border-white/[0.08] text-neutral-300">
@@ -224,7 +234,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-2.5">
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] gap-2.5 portal-card-hover">
             <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
               <span className="text-xs font-mono font-bold text-neutral-200">@workspace/config</span>
               <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] border border-white/[0.08] text-neutral-300">
@@ -237,7 +247,7 @@ export default function ProjectOverviewTab({
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-2.5">
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] gap-2.5 portal-card-hover">
             <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
               <span className="text-xs font-mono font-bold text-neutral-200">@workspace/runner</span>
               <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#09090c] border border-white/[0.08] text-neutral-300">
@@ -254,9 +264,9 @@ export default function ProjectOverviewTab({
 
       {/* ── Repository Structure CTA Banner ── */}
       {fileTree.length > 0 && (
-        <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <section className="group w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] hover:border-white/[0.2] shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 portal-card-hover portal-header-sheen">
           <div className="flex items-center gap-4 min-w-0">
-            <div className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-neutral-400 shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-neutral-400 shrink-0 portal-emblem-hover">
               <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
               </svg>
@@ -282,7 +292,7 @@ export default function ProjectOverviewTab({
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold bg-[#16161c] border border-white/[0.1] text-neutral-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] shadow-sm transition-all shrink-0 self-start sm:self-center cursor-pointer"
             >
               <span>Explore File Tree</span>
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-3.5 h-3.5 portal-arrow-glide" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             </button>
@@ -292,14 +302,14 @@ export default function ProjectOverviewTab({
 
       {/* ── Local Services Card ── */}
       {project.localServices && Object.keys(project.localServices).length > 0 && (
-        <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-4">
+        <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-4 portal-header-sheen">
           <div className="flex flex-col gap-0.5 pb-2 border-b border-white/[0.06]">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">LOCAL ENDPOINTS</span>
             <h2 className="text-lg font-bold text-neutral-200">Network Services</h2>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 portal-list-stagger">
             {Object.entries(project.localServices).map(([serviceName, url]) => (
-              <div key={serviceName} className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all text-xs">
+              <div key={serviceName} className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] text-xs portal-row-hover">
                 <span className="font-semibold text-neutral-200">{serviceName}</span>
                 <div className="flex items-center gap-2 min-w-0">
                   <a href={url} target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:text-white hover:underline font-mono truncate">

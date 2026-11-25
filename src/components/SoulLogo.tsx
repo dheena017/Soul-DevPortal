@@ -96,12 +96,12 @@ export const SoulLogoIcon: React.FC<{ size?: number; className?: string }> = ({
       />
 
       {/* Accent Inner Core Sparks */}
-      <circle cx="41" cy="17" r="2.5" fill="#38bdf8" />
-      <circle cx="25" cy="49" r="2.5" fill="#a855f7" />
+      <circle cx="41" cy="17" r="2.5" fill="#38bdf8" className="portal-logo-spark" />
+      <circle cx="25" cy="49" r="2.5" fill="#a855f7" className="portal-logo-spark" style={{ animationDelay: '1.6s' }} />
       
       {/* Central Nexus Anchor Node */}
       <circle cx="33.5" cy="33" r="3" fill="#ffffff" opacity="0.9" />
-      <circle cx="33.5" cy="33" r="5" stroke="url(#soul-neon-2)" strokeWidth="1" opacity="0.5" />
+      <circle cx="33.5" cy="33" r="5" stroke="url(#soul-neon-2)" strokeWidth="1" opacity="0.5" className="portal-logo-spark" />
     </svg>
   );
 };

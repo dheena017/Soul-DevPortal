@@ -23,7 +23,7 @@
 @keyframes tabEnter {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(10px) scale(0.994);
   }
   to {
     opacity: 1;
@@ -33,13 +33,13 @@
 
 .tab-content-animate {
   transform-origin: top center;
-  animation: tabEnter 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: tabEnter 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -48,7 +48,615 @@
 }
 
 .fade-in-up {
-  animation: fadeInUp 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInUp 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Native support for animate-in + fade-in classes across routes & modals */
+@keyframes portalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.996);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-in.fade-in {
+  animation: portalFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes portalPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.994);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.portal-page-enter {
+  transform-origin: top center;
+  animation: portalPageEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes portalStaggerReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.988);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.portal-stagger > * {
+  animation: portalStaggerReveal 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.portal-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.portal-stagger > *:nth-child(2) { animation-delay: 45ms; }
+.portal-stagger > *:nth-child(3) { animation-delay: 90ms; }
+.portal-stagger > *:nth-child(4) { animation-delay: 135ms; }
+.portal-stagger > *:nth-child(5) { animation-delay: 180ms; }
+.portal-stagger > *:nth-child(6) { animation-delay: 225ms; }
+
+.portal-grid-stagger > * {
+  animation: portalStaggerReveal 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.portal-grid-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.portal-grid-stagger > *:nth-child(2) { animation-delay: 35ms; }
+.portal-grid-stagger > *:nth-child(3) { animation-delay: 70ms; }
+.portal-grid-stagger > *:nth-child(4) { animation-delay: 105ms; }
+.portal-grid-stagger > *:nth-child(5) { animation-delay: 140ms; }
+.portal-grid-stagger > *:nth-child(6) { animation-delay: 175ms; }
+.portal-grid-stagger > *:nth-child(7) { animation-delay: 210ms; }
+.portal-grid-stagger > *:nth-child(8) { animation-delay: 245ms; }
+.portal-grid-stagger > *:nth-child(9) { animation-delay: 280ms; }
+.portal-grid-stagger > *:nth-child(10) { animation-delay: 315ms; }
+.portal-grid-stagger > *:nth-child(11) { animation-delay: 350ms; }
+.portal-grid-stagger > *:nth-child(n + 12) { animation-delay: 385ms; }
+
+@keyframes portalPrismSweep {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.portal-header-sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.portal-header-sheen > :not(.portal-hero-art-wrap) {
+  position: relative;
+  z-index: 1;
+}
+
+.portal-header-sheen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.55) 20%,
+    rgba(168, 85, 247, 0.55) 50%,
+    rgba(52, 211, 153, 0.5) 80%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: portalPrismSweep 8s linear infinite;
+  opacity: 0.85;
+}
+
+header[role="banner"] {
+  position: sticky;
+  backdrop-filter: blur(12px);
+  background-color: rgba(13, 13, 16, 0.92);
+}
+
+header[role="banner"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.45) 28%,
+    rgba(168, 85, 247, 0.4) 55%,
+    rgba(52, 211, 153, 0.45) 80%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: portalPrismSweep 10s linear infinite;
+  opacity: 0.75;
+}
+
+@keyframes portalCrumbIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.portal-crumb-enter {
+  animation: portalCrumbIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes portalTabIndicator {
+  from {
+    opacity: 0;
+    transform: scaleX(0.35);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+[role="tab"] {
+  position: relative;
+  transition:
+    transform 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.2s ease;
+}
+
+[role="tab"]:not([disabled]):active {
+  transform: scale(0.97);
+}
+
+[role="tab"][aria-selected="true"] {
+  box-shadow: 0 2px 12px -4px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[role="tab"][aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 1px;
+  height: 2px;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.9), rgba(192, 132, 252, 0.9));
+  transform-origin: center;
+  animation: portalTabIndicator 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes portalRowReveal {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.portal-list-stagger > * {
+  animation: portalRowReveal 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.portal-list-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.portal-list-stagger > *:nth-child(2) { animation-delay: 28ms; }
+.portal-list-stagger > *:nth-child(3) { animation-delay: 56ms; }
+.portal-list-stagger > *:nth-child(4) { animation-delay: 84ms; }
+.portal-list-stagger > *:nth-child(5) { animation-delay: 112ms; }
+.portal-list-stagger > *:nth-child(6) { animation-delay: 140ms; }
+.portal-list-stagger > *:nth-child(7) { animation-delay: 168ms; }
+.portal-list-stagger > *:nth-child(8) { animation-delay: 196ms; }
+.portal-list-stagger > *:nth-child(9) { animation-delay: 224ms; }
+.portal-list-stagger > *:nth-child(10) { animation-delay: 252ms; }
+.portal-list-stagger > *:nth-child(n + 11) { animation-delay: 280ms; }
+
+.portal-row-hover {
+  transition:
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.2s ease;
+}
+
+.portal-row-hover:hover {
+  transform: translateX(3px);
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.65);
+}
+
+@keyframes portalDrawerExpand {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.portal-drawer-enter {
+  transform-origin: top center;
+  animation: portalDrawerExpand 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes portalCopyPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.55) rotate(-12deg);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.18) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.portal-copy-pop {
+  animation: portalCopyPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes portalLogoSpark {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+.portal-logo-spark {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: portalLogoSpark 3.2s ease-in-out infinite;
+}
+
+@keyframes portalBackdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.portal-backdrop-enter {
+  animation: portalBackdropIn 0.22s ease-out both;
+}
+
+@keyframes portalShimmerTrack {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 250% 0;
+  }
+}
+
+.portal-shimmer-bar {
+  background-size: 200% 100%;
+  animation: portalShimmerTrack 2s linear infinite;
+}
+
+/* ── Header Artwork Backdrop & Visual Diagrams ── */
+@keyframes portalArtDrift {
+  0%,
+  100% {
+    transform: scale(1.03) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate3d(-8px, -4px, 0);
+  }
+}
+
+.portal-hero-art {
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(270deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.58) 52%, transparent 98%);
+  mask-image: linear-gradient(270deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.58) 52%, transparent 98%);
+  animation: portalArtDrift 18s ease-in-out infinite;
+}
+
+.portal-visual-zoom {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.group:hover .portal-visual-zoom,
+header:hover .portal-visual-zoom {
+  transform: scale(1.07);
+}
+
+@keyframes portalFlowDash {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.portal-flow-dash {
+  stroke-dasharray: 4 4;
+  animation: portalFlowDash 1.4s linear infinite;
+}
+
+@keyframes portalEqPulse {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.portal-eq-bar {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: portalEqPulse 1.15s ease-in-out infinite;
+}
+
+@keyframes portalRingSpinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.portal-spin-slow {
+  animation: portalRingSpinSlow 16s linear infinite;
+}
+
+.portal-card-hover {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.22s ease,
+    background-color 0.22s ease,
+    box-shadow 0.28s ease;
+}
+
+.portal-card-hover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.045) 45%,
+    transparent 65%
+  );
+  transform: translateX(-110%);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.78), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.portal-card-hover:hover::before {
+  transform: translateX(110%);
+}
+
+.portal-arrow-glide {
+  display: inline-block;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .portal-arrow-glide,
+button:hover .portal-arrow-glide,
+a:hover .portal-arrow-glide {
+  transform: translateX(4px);
+}
+
+.portal-emblem-hover {
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.group:hover .portal-emblem-hover,
+header:hover .portal-emblem-hover {
+  transform: scale(1.06) rotate(-2deg);
+}
+
+.portal-icon-spin:hover svg {
+  transform: rotate(180deg);
+}
+
+.portal-icon-spin svg {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-diag-nudge svg {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-diag-nudge:hover svg {
+  transform: translate(1.5px, -1.5px);
+}
+
+.portal-sidebar-drawer {
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s ease;
+}
+
+.portal-nav-item {
+  transition:
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    box-shadow 0.2s ease;
+}
+
+.portal-nav-item:hover {
+  transform: translateX(3px);
+}
+
+@keyframes portalNavStagger {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.portal-sidebar-open .portal-nav-item {
+  animation: portalNavStagger 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Automatic motion upgrades for global Header & Sidebar controls */
+header[role="banner"] button,
+header[role="banner"] a {
+  transition:
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.22s ease;
+}
+
+header[role="banner"] button:not([disabled]):active {
+  transform: scale(0.95);
+}
+
+header[role="banner"] button[title*="Reload" i] svg,
+header[role="banner"] button[aria-label*="Reload" i] svg {
+  transition: transform 0.52s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+header[role="banner"] button[title*="Reload" i]:hover svg,
+header[role="banner"] button[aria-label*="Reload" i]:hover svg {
+  transform: rotate(180deg);
+}
+
+header[role="banner"] a svg {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+header[role="banner"] a:hover svg {
+  transform: translate(1.5px, -1.5px);
+}
+
+header[role="banner"] input:focus {
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.18), 0 8px 22px rgba(0, 0, 0, 0.45);
+}
+
+aside {
+  transition:
+    transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.32s ease !important;
+}
+
+aside nav button,
+aside nav a {
+  transition:
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    box-shadow 0.2s ease;
+}
+
+aside nav button:hover,
+aside nav a:hover {
+  transform: translateX(3px);
+}
+
+aside svg.rotate-0,
+aside svg.-rotate-90 {
+  transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-content-animate,
+  .fade-in-up,
+  .animate-in.fade-in,
+  .portal-page-enter,
+  .portal-stagger > *,
+  .portal-grid-stagger > *,
+  .portal-list-stagger > *,
+  .portal-drawer-enter,
+  .portal-crumb-enter,
+  .portal-copy-pop,
+  .portal-logo-spark,
+  .portal-backdrop-enter,
+  .portal-shimmer-bar,
+  .portal-hero-art,
+  .portal-flow-dash,
+  .portal-eq-bar,
+  .portal-spin-slow,
+  .portal-header-sheen::before,
+  header[role="banner"]::after,
+  [role="tab"][aria-selected="true"]::after,
+  .portal-sidebar-open .portal-nav-item,
+  .status-pulse {
+    animation: none !important;
+  }
+
+  .portal-card-hover,
+  .portal-card-hover::before,
+  .portal-row-hover,
+  .portal-arrow-glide,
+  .portal-emblem-hover,
+  .portal-visual-zoom,
+  .portal-icon-spin svg,
+  .portal-diag-nudge svg,
+  .portal-sidebar-drawer,
+  .portal-nav-item,
+  [role="tab"],
+  header[role="banner"] button,
+  header[role="banner"] a,
+  header[role="banner"] button[title*="Reload" i] svg,
+  header[role="banner"] button[aria-label*="Reload" i] svg,
+  header[role="banner"] a svg,
+  aside,
+  aside nav button,
+  aside nav a,
+  aside svg.rotate-0,
+  aside svg.-rotate-90 {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 /* ── Clean Flat Card & Surface Elevation ── */

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import { HeroArtworkBackdrop } from '../../../components/PortalVisuals';
 import TabLoadingState from '../../../components/TabLoadingState';
 
 export interface ProjectScriptsTabProps {
@@ -29,7 +30,8 @@ export default function ProjectScriptsTab({ scriptsEntries, isLoading = false }:
   }
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5 portal-stagger portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="" opacityClass="opacity-28 sm:opacity-40" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">AUTOMATION &amp; LIFECYCLE</span>
@@ -62,6 +64,25 @@ export default function ProjectScriptsTab({ scriptsEntries, isLoading = false }:
       </div>
 
       <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-2.5 rounded-xl bg-[#0b0b0f] border border-white/[0.06] portal-grid-stagger">
+          <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[#14141a] border border-white/[0.07] text-[11px] font-mono text-zinc-300 portal-card-hover">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 status-pulse shrink-0" />
+            <span className="truncate">1. Dev / HMR</span>
+          </div>
+          <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[#14141a] border border-white/[0.07] text-[11px] font-mono text-zinc-300 portal-card-hover">
+            <span className="w-2 h-2 rounded-full bg-sky-400 status-pulse shrink-0" />
+            <span className="truncate">2. Typecheck</span>
+          </div>
+          <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[#14141a] border border-white/[0.07] text-[11px] font-mono text-zinc-300 portal-card-hover">
+            <span className="w-2 h-2 rounded-full bg-amber-400 status-pulse shrink-0" />
+            <span className="truncate">3. Lint Gate</span>
+          </div>
+          <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[#14141a] border border-white/[0.07] text-[11px] font-mono text-zinc-300 portal-card-hover">
+            <span className="w-2 h-2 rounded-full bg-purple-400 status-pulse shrink-0" />
+            <span className="truncate">4. Vite Build</span>
+          </div>
+        </div>
+
         <div className="flex items-center justify-between pb-2">
           <span className="text-xs font-bold text-neutral-300">Executable Commands</span>
           <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
@@ -70,11 +91,11 @@ export default function ProjectScriptsTab({ scriptsEntries, isLoading = false }:
         </div>
 
         {filteredScripts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 portal-grid-stagger">
             {filteredScripts.map(([scriptName, scriptCmd]) => (
               <div
                 key={scriptName}
-                className="flex flex-col justify-between p-4 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all gap-2.5"
+                className="flex flex-col justify-between p-4 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2.5 portal-card-hover"
               >
                 <div className="flex items-center justify-between gap-2">
                   <code className="text-xs font-mono font-bold text-neutral-300 truncate">npm run {scriptName}</code>

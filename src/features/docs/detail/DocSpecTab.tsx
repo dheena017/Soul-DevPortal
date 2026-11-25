@@ -1,5 +1,6 @@
 import React from 'react';
 import Markdown from '../../../components/Markdown';
+import { HeroArtworkBackdrop } from '../../../components/PortalVisuals';
 import TableOfContents from '../../../components/TableOfContents';
 import TabLoadingState from '../../../components/TabLoadingState';
 import { MarkdownBlock } from '../../../types';
@@ -40,16 +41,17 @@ export default function DocSpecTab({
     <div
       className={`w-full ${
         hasHeadings ? 'grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[316px_1fr]' : 'flex flex-col'
-      } gap-6 items-start`}
+      } gap-6 items-start portal-stagger`}
     >
       {hasHeadings && (
         <TableOfContents headings={headings} title="On this page" className="w-full" />
       )}
-      <section className="w-full p-4 sm:p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-5 sm:gap-6 min-w-0">
+      <section className="w-full p-4 sm:p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-5 sm:gap-6 min-w-0 portal-header-sheen">
+        <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-28 sm:opacity-38" />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-sky-400"></span>
+              <span className="w-2 h-2 rounded-full bg-sky-400 status-pulse"></span>
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400">
                 MASTER SPECIFICATION BLUEPRINT
               </span>

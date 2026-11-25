@@ -113,7 +113,7 @@ export default function ProjectsDashboard({
   }, [projects, query, filterFramework]);
 
   return (
-    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* 1. Projects Header Component */}
       <ProjectHeader
         totalCount={totalCount}
@@ -132,7 +132,7 @@ export default function ProjectsDashboard({
       />
 
       {/* 2. Projects Grid with ProjectCard Components */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" aria-label="Monorepo projects">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 portal-grid-stagger" aria-label="Monorepo projects">
         {filteredProjects.map((project) => (
           <ProjectCard
             key={project.id}

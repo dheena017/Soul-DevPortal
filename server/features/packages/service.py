@@ -5,6 +5,7 @@ Handles shared packages discovery, AST symbols, manifests, and playgrounds.
 
 from __future__ import annotations
 
+import threading
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -14,13 +15,15 @@ from shared.extractors.packages_crawler import crawl_packages
 from shared.extractors.markdown_parser import parse_markdown_to_blocks
 
 
+_SHARED_PKG_LOCK = threading.Lock()
+_SHARED_PACKAGES_CACHE: Dict[str, tuple[float, List[Dict[str, Any]]]] = {}
+
+
 class PackageService:
-    _CACHE_TTL_SECONDS = 20.0
+    _CACHE_TTL_SECONDS = 300.0
 
     def __init__(self, packages_root: Path = PACKAGES_ROOT):
         self.packages_root = packages_root
-        self._packages_cache: Optional[List[Dict[str, Any]]] = None
-        self._cache_timestamp: float = 0.0
 
     def get_navigation(self) -> List[Dict[str, Any]]:
         """Returns dynamic navigation tree of all packages with their available tabs."""
@@ -37,18 +40,16 @@ class PackageService:
         ]
 
     def get_all_packages(self, force_refresh: bool = False) -> List[Dict[str, Any]]:
-        """Returns live list of all shared packages with short TTL cache to avoid burst re-crawls."""
-        now = time.monotonic()
-        if (
-            not force_refresh
-            and self._packages_cache is not None
-            and (now - self._cache_timestamp) < self._CACHE_TTL_SECONDS
-        ):
-            return self._packages_cache
-        packages = crawl_packages(self.packages_root)
-        self._packages_cache = packages
-        self._cache_timestamp = now
-        return packages
+        """Returns live list of all shared packages with shared thread-safe TTL cache."""
+        cache_key = str(self.packages_root.resolve())
+        with _SHARED_PKG_LOCK:
+            entry = _SHARED_PACKAGES_CACHE.get(cache_key)
+            now = time.monotonic()
+            if not force_refresh and entry is not None and (now - entry[0]) < self._CACHE_TTL_SECONDS:
+                return entry[1]
+            packages = crawl_packages(self.packages_root)
+            _SHARED_PACKAGES_CACHE[cache_key] = (time.monotonic(), packages)
+            return packages
 
     def get_package_by_id(self, package_name: str) -> Optional[Dict[str, Any]]:
         """Retrieves a single package's complete metadata and AST."""

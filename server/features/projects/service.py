@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
 import os
+import threading
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -20,13 +21,15 @@ from shared.extractors.env_inspector import inspect_dual_environment
 from shared.extractors.markdown_parser import parse_markdown_to_blocks
 
 
+_SHARED_CACHE_LOCK = threading.Lock()
+_SHARED_PROJECTS_CACHE: Dict[str, tuple[float, List[Dict[str, Any]]]] = {}
+
+
 class ProjectService:
-    _CACHE_TTL_SECONDS = 20.0
+    _CACHE_TTL_SECONDS = 300.0
 
     def __init__(self, projects_root: Path = PROJECTS_ROOT):
         self.projects_root = projects_root
-        self._projects_cache: Optional[List[Dict[str, Any]]] = None
-        self._cache_timestamp: float = 0.0
 
     def _get_registry(self) -> Dict[str, Any]:
         return read_json_manifest(ROOT_PROJECTS_JSON)
@@ -47,22 +50,25 @@ class ProjectService:
         ]
 
     def get_all_projects(self, force_refresh: bool = False) -> List[Dict[str, Any]]:
-        """Returns all consumer projects with cached filesystem metadata and fast parallel socket status."""
+        """Returns all consumer projects with shared static AST cache and live TCP port probes."""
+        cache_key = str(self.projects_root.resolve())
         now = time.monotonic()
-        if (
-            not force_refresh
-            and self._projects_cache is not None
-            and (now - self._cache_timestamp) < self._CACHE_TTL_SECONDS
-        ):
-            # Refresh socket liveness concurrently without re-walking disk/git
-            ports = []
-            for p in self._projects_cache:
+        cached_projects: Optional[List[Dict[str, Any]]] = None
+
+        with _SHARED_CACHE_LOCK:
+            entry = _SHARED_PROJECTS_CACHE.get(cache_key)
+            if not force_refresh and entry is not None and (now - entry[0]) < self._CACHE_TTL_SECONDS:
+                cached_projects = entry[1]
+
+        if cached_projects is not None:
+            ports: List[int] = []
+            for p in cached_projects:
                 ports.append(p.get("frontendPort") or 0)
                 ports.append(p.get("backendPort") or 0)
             with ThreadPoolExecutor(max_workers=12) as pool:
                 live_flags = list(pool.map(is_port_live, ports))
             refreshed: List[Dict[str, Any]] = []
-            for idx, proj in enumerate(self._projects_cache):
+            for idx, proj in enumerate(cached_projects):
                 fe_live = live_flags[idx * 2]
                 be_live = live_flags[idx * 2 + 1]
                 refreshed.append({
@@ -72,9 +78,14 @@ class ProjectService:
                 })
             return refreshed
 
-        projects = crawl_projects(self.projects_root, self._get_registry())
-        self._projects_cache = projects
-        self._cache_timestamp = now
+        with _SHARED_CACHE_LOCK:
+            entry = _SHARED_PROJECTS_CACHE.get(cache_key)
+            now = time.monotonic()
+            if not force_refresh and entry is not None and (now - entry[0]) < self._CACHE_TTL_SECONDS:
+                projects = entry[1]
+            else:
+                projects = crawl_projects(self.projects_root, self._get_registry())
+                _SHARED_PROJECTS_CACHE[cache_key] = (time.monotonic(), projects)
         return projects
 
     def get_project_by_id(self, project_name: str) -> Optional[Dict[str, Any]]:
@@ -121,8 +132,11 @@ class ProjectService:
             }
 
         elif tab == "api":
-            server_dir = proj_dir / "server"
-            endpoints = inspect_fastapi_routers(server_dir)
+            cached_proj = self.get_project_by_id(project_name)
+            endpoints = list(cached_proj.get("rawEndpoints") or []) if cached_proj else []
+            if not endpoints:
+                server_dir = proj_dir / "server"
+                endpoints = inspect_fastapi_routers(server_dir)
             # If no router files found, fallback to metadata.json apiEndpoints
             if not endpoints and meta.get("apiEndpoints"):
                 for ep in meta.get("apiEndpoints", []):

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ProjectData } from '../../types';
+import { HeroArtworkBackdrop, ProjectLogoFleetStrip } from '../../components/PortalVisuals';
 
 export interface ProjectHeaderProps {
   totalCount: number;
@@ -33,7 +34,9 @@ export default function ProjectHeader({
   searchInputRef,
 }: ProjectHeaderProps) {
   return (
-    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-5">
+    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-5 portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="Projects Microservice Topology Visual" />
+      <div className="relative z-10 flex flex-col gap-4 sm:gap-5">
       {/* Breadcrumb Navigation Row */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center gap-1.5 sm:gap-2 text-xs min-w-0">
@@ -77,7 +80,7 @@ export default function ProjectHeader({
 
       {/* Hero Title & Identity Row */}
       <div className="flex items-start sm:items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-emerald-400 shrink-0 shadow-lg">
+        <div className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-emerald-400 shrink-0 shadow-lg portal-emblem-hover">
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
@@ -98,8 +101,8 @@ export default function ProjectHeader({
       </div>
 
       {/* 5-Metric Quick Stats Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" role="region" aria-label="Project metrics">
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 portal-grid-stagger" role="region" aria-label="Project metrics">
+        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="7" height="7" />
@@ -112,7 +115,7 @@ export default function ProjectHeader({
           <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{totalCount} Active</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
@@ -125,7 +128,7 @@ export default function ProjectHeader({
           <strong className="text-xl font-extrabold text-indigo-400 font-mono mt-1.5">{fullstackCount} Fullstack</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
@@ -137,7 +140,7 @@ export default function ProjectHeader({
           <strong className="text-xl font-extrabold text-sky-400 font-mono mt-1.5">{standaloneCount} Apps</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -147,7 +150,7 @@ export default function ProjectHeader({
           <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{collisionsCount} Conflicts</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <ellipse cx="12" cy="5" rx="9" ry="3" />
@@ -220,6 +223,16 @@ export default function ProjectHeader({
             );
           })}
         </div>
+      </div>
+      {/* ── Quick-Jump App Logo Fleet ── */}
+      {onBack && (
+        <ProjectLogoFleetStrip
+          projects={projects}
+          onSelectProject={(id) => {
+            window.location.hash = `projects/${id}`;
+          }}
+        />
+      )}
       </div>
     </header>
 );

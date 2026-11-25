@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
 import { SoulLogoIcon } from './SoulLogo';
+import { HeaderEqualizerBars, MiniRadialRing } from './PortalVisuals';
 import { checkBackendHealth, fetchSystemLive } from '../services/api';
 
 export interface BreadcrumbItem {
@@ -93,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         <button
           type="button"
-          className="p-2 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all shrink-0 shadow-sm cursor-pointer"
+          className="p-2 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] hover:scale-105 active:scale-95 transition-all shrink-0 shadow-sm cursor-pointer"
           onClick={() => {
             consoleLogger.action('UI', menuOpen ? 'Closing sidebar navigation' : 'Opening sidebar navigation');
             onToggleSidebar();
@@ -115,15 +116,15 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </button>
 
-        <nav className="flex items-center gap-1.5 sm:gap-2 text-xs min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
+        <nav className="flex items-center gap-1.5 sm:gap-2 text-xs shrink-0" aria-label="Breadcrumb navigation">
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] font-mono text-zinc-200 hover:text-white transition-all shrink-0 shadow-sm"
+            className="group inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-sky-400/35 hover:bg-white/[0.06] hover:scale-[1.02] active:scale-[0.98] font-mono text-zinc-200 hover:text-white transition-all shrink-0 shadow-sm cursor-pointer"
             onClick={() => onNavigate('overview')}
             title="Go to Overview Dashboard"
           >
-            <SoulLogoIcon size={18} />
-            <span className="font-semibold text-zinc-300 hidden sm:inline">soul</span>
+            <SoulLogoIcon size={19} className="group-hover:scale-110 transition-transform" />
+            <span className="font-semibold text-zinc-200 hidden sm:inline">soul</span>
             <span className="text-zinc-600 font-bold hidden sm:inline">/</span>
             <strong className="text-zinc-100 font-bold text-[11px] sm:text-xs">dev-portal</strong>
           </button>
@@ -132,14 +133,15 @@ export const Header: React.FC<HeaderProps> = ({
             const isLast = idx === breadcrumbs.slice(1).length - 1;
             return (
               <div
-                key={idx}
-                className={`${isLast ? 'flex' : 'hidden sm:flex'} items-center gap-1.5 sm:gap-2 min-w-0`}
+                key={`${active}-${idx}`}
+                style={{ animationDelay: `${idx * 45}ms` }}
+                className={`${isLast ? 'flex shrink-0' : 'hidden xl:flex shrink-0'} items-center gap-1.5 sm:gap-2 portal-crumb-enter`}
               >
-                <span className="text-zinc-600 font-bold px-0.5">/</span>
+                <span className="text-zinc-600 font-bold px-0.5 shrink-0">/</span>
                 {crumb.id ? (
                   <button
                     type="button"
-                    className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] text-zinc-200 hover:text-white transition-all truncate font-medium max-w-[120px] sm:max-w-[200px]"
+                    className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] text-zinc-200 hover:text-white transition-all truncate font-medium max-w-[115px] sm:max-w-[160px]"
                     onClick={() => onNavigate(crumb.id!)}
                     title={`Go to ${crumb.label}`}
                   >
@@ -147,7 +149,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </button>
                 ) : (
                   <span
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-[140px] sm:max-w-[200px]"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-[125px] sm:max-w-[175px]"
                     title={crumb.label}
                   >
                     {breadcrumbs.length > 2 && (
@@ -163,7 +165,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* ── Center: Omni Command Search ── */}
-      <div className="relative flex-1 max-w-sm hidden md:flex items-center" role="search">
+      <div className="relative flex-1 min-w-[140px] max-w-xs hidden xl:flex items-center" role="search">
         <svg className="absolute left-3.5 w-3.5 h-3.5 text-zinc-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -194,26 +196,41 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* ── Right: Navigation Tabs, GitHub Link & Shortcuts ── */}
       <div className="flex items-center gap-2 shrink-0">
-        <nav className="flex items-center gap-1 p-1 bg-[#09090c] border border-white/[0.08] rounded-xl hidden sm:flex" aria-label="Portal Dashboards">
+        <nav className="flex items-center gap-1 p-1 bg-[#09090c] border border-white/[0.08] rounded-xl hidden sm:flex" role="tablist" aria-label="Portal Dashboards">
           <button
             type="button"
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            role="tab"
+            aria-selected={active === 'overview'}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               active === 'overview' ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => onNavigate('overview')}
             title="Overview Dashboard"
           >
-            Overview
+            <svg className={`w-3.5 h-3.5 shrink-0 ${active === 'overview' ? 'text-sky-300' : 'text-zinc-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="9" rx="1" />
+              <rect x="14" y="3" width="7" height="5" rx="1" />
+              <rect x="14" y="12" width="7" height="9" rx="1" />
+              <rect x="3" y="16" width="7" height="5" rx="1" />
+            </svg>
+            <span>Overview</span>
           </button>
 
           <button
             type="button"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            role="tab"
+            aria-selected={isProjectsActive}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               isProjectsActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => onNavigate('projects')}
             title={`Pillar 1: Applications (${projectsCount})`}
           >
+            <svg className={`w-3.5 h-3.5 shrink-0 ${isProjectsActive ? 'text-emerald-400' : 'text-zinc-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg>
             <span>Projects</span>
             <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isProjectsActive ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 font-bold' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'}`}>
               {projectsCount}
@@ -222,12 +239,19 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             type="button"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            role="tab"
+            aria-selected={isPackagesActive}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               isPackagesActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => onNavigate('packages')}
             title={`Pillar 2: Shared Libraries (${packagesCount})`}
           >
+            <svg className={`w-3.5 h-3.5 shrink-0 ${isPackagesActive ? 'text-purple-400' : 'text-zinc-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
             <span>Packages</span>
             <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isPackagesActive ? 'bg-purple-500/20 text-purple-300 border border-purple-500/35 font-bold' : 'bg-purple-500/15 text-purple-400 border border-purple-500/25'}`}>
               {packagesCount}
@@ -236,12 +260,18 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             type="button"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            role="tab"
+            aria-selected={isDocsActive}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               isDocsActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => onNavigate('docs')}
             title={`Pillar 3: Documentation Hub (${docsCount} Guides)`}
           >
+            <svg className={`w-3.5 h-3.5 shrink-0 ${isDocsActive ? 'text-sky-400' : 'text-zinc-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
             <span>Docs</span>
             <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${isDocsActive ? 'bg-sky-500/20 text-sky-300 border border-sky-500/35 font-bold' : 'bg-sky-500/15 text-sky-400 border border-sky-500/25'}`}>
               {docsCount}
@@ -250,10 +280,11 @@ export const Header: React.FC<HeaderProps> = ({
         </nav>
 
         <div
-          className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border bg-[#16161c] border-white/[0.08]"
+          className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border bg-[#16161c] border-white/[0.08] hover:border-emerald-400/25 transition-all"
           title={isBackendLive ? "FastAPI Backend is online on port 8008" : "FastAPI Backend is on standby"}
         >
-          <span className={`w-2 h-2 rounded-full ${isBackendLive ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bg-neutral-600'}`} />
+          <span className={`w-2 h-2 rounded-full ${isBackendLive ? 'bg-emerald-400 status-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bg-neutral-600'}`} />
+          <HeaderEqualizerBars active={isBackendLive} tone="emerald" />
           <span className={isBackendLive ? 'text-emerald-400 font-semibold' : 'text-zinc-500'}>
             {isBackendLive ? ':8008 Live' : ':8008 Standby'}
           </span>
@@ -263,20 +294,20 @@ export const Header: React.FC<HeaderProps> = ({
           type="button"
           onClick={() => onNavigate('computer')}
           title="Open Computer & Performance Monitor"
-          className={`hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono tabular-nums border transition-colors cursor-pointer ${
+          className={`hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono tabular-nums border transition-all hover:scale-[1.03] active:scale-[0.97] cursor-pointer ${
             active === 'computer' || active === 'system'
-              ? 'bg-sky-500/20 border-sky-400/40 text-sky-200 font-bold'
-              : 'bg-[#16161c] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2]'
+              ? 'bg-sky-500/20 border-sky-400/40 text-sky-200 font-bold shadow-[0_0_16px_rgba(56,189,248,0.18)]'
+              : 'bg-[#16161c] border-white/[0.08] text-zinc-300 hover:text-white hover:border-sky-400/30 hover:bg-sky-500/10'
           }`}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
+          <MiniRadialRing percent={quickTelemetry?.cpu ?? 22} color="#38bdf8" size={15} />
           <span>{quickTelemetry ? `CPU ${quickTelemetry.cpu}% · RAM ${quickTelemetry.ram}%` : 'Computer'}</span>
         </button>
 
         {onTriggerReload && (
           <button
             type="button"
-            className="hidden sm:inline-flex items-center gap-1.5 p-2 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer shadow-sm"
+            className="hidden sm:inline-flex items-center gap-1.5 p-2 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-sm"
             onClick={() => {
               consoleLogger.action('UI', 'Triggered full workspace reload & sync');
               onTriggerReload();
@@ -297,7 +328,7 @@ export const Header: React.FC<HeaderProps> = ({
           href="https://github.com/dheena017/Soul-DevPortal"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer"
           title="Open GitHub Repository: dheena017/Soul-DevPortal"
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -309,7 +340,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           type="button"
-          className="w-8 h-8 rounded-full bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-xs font-mono font-bold text-zinc-400 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
+          className="w-8 h-8 rounded-full bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-xs font-mono font-bold text-zinc-400 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] hover:scale-105 active:scale-95 transition-all cursor-pointer"
           onClick={() => {
             consoleLogger.action('SHORTCUT', 'Clicked help button: opening keyboard shortcuts modal');
             onOpenShortcuts();

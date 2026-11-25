@@ -1,4 +1,5 @@
 import React from 'react';
+import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../../components/PortalVisuals';
 import TabLoadingState from '../../../components/TabLoadingState';
 import { PackageData } from '../../../types';
 
@@ -30,7 +31,8 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
   }
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6 portal-stagger portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="" opacityClass="opacity-28 sm:opacity-40" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400">PACKAGE MANIFEST</span>
@@ -49,9 +51,18 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
       </div>
 
       <div className="flex flex-col gap-6">
+        <ProportionalSpectrumBar
+          title="PACKAGE DEPENDENCY DISTRIBUTION"
+          segments={[
+            { label: 'Runtime Deps', value: deps.length, colorClass: 'bg-emerald-400', hex: '#34d399' },
+            { label: 'Dev Deps', value: devDeps.length, colorClass: 'bg-sky-400', hex: '#38bdf8' },
+            { label: 'Peer Deps', value: peerDeps.length, colorClass: 'bg-purple-400', hex: '#c084fc' },
+            { label: 'Python Deps', value: pyDeps.length, colorClass: 'bg-amber-400', hex: '#fbbf24' },
+          ]}
+        />
         {/* 2-Card Summary Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 portal-grid-stagger">
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] gap-3 portal-card-hover">
             <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Package Information</h4>
             <div className="flex flex-col gap-2 text-xs">
               <div className="flex justify-between py-1 border-b border-white/[0.06]">
@@ -89,7 +100,7 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] gap-3">
+          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] gap-3 portal-card-hover">
             <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Ecosystem Status</h4>
             <div className="flex flex-col gap-2 text-xs">
               <div className="flex justify-between py-1 border-b border-white/[0.06]">
@@ -114,9 +125,9 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
         {deps.length > 0 && (
           <div className="flex flex-col gap-2.5">
             <h3 className="text-xs font-bold text-zinc-300">Runtime Dependencies ({deps.length})</h3>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 portal-grid-stagger">
               {deps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-xs font-mono">
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
                   <strong className="text-white">{dep}</strong>
                   <code className="text-zinc-400 text-[11px]">{ver}</code>
                 </span>
@@ -129,9 +140,9 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
         {devDeps.length > 0 && (
           <div className="flex flex-col gap-2.5">
             <h3 className="text-xs font-bold text-zinc-300">Development Dependencies ({devDeps.length})</h3>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 portal-grid-stagger">
               {devDeps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-xs font-mono">
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
                   <strong className="text-white">{dep}</strong>
                   <code className="text-zinc-400 text-[11px]">{ver}</code>
                 </span>
@@ -144,9 +155,9 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
         {peerDeps.length > 0 && (
           <div className="flex flex-col gap-2.5">
             <h3 className="text-xs font-bold text-zinc-300">Peer Dependencies ({peerDeps.length})</h3>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 portal-grid-stagger">
               {peerDeps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-xs font-mono">
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
                   <strong className="text-white">{dep}</strong>
                   <code className="text-zinc-400 text-[11px]">{ver}</code>
                 </span>
@@ -159,9 +170,9 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
         {pyDeps.length > 0 && (
           <div className="flex flex-col gap-2.5">
             <h3 className="text-xs font-bold text-zinc-300">Python Dependencies ({pyDeps.length})</h3>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 portal-grid-stagger">
               {pyDeps.map((dep) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-xs font-mono">
+                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
                   <strong className="text-white">{dep}</strong>
                 </span>
               ))}

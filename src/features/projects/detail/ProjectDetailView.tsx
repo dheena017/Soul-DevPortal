@@ -203,7 +203,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
   }, [envKeys, project.backendPort, project.frontendPort]);
 
   return (
-    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300">
+    <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300 portal-stagger">
       <ProjectDetailHeader
         project={enhancedProject}
         activeTab={activeTab}

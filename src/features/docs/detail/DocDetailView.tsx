@@ -166,7 +166,7 @@ export default function DocDetailView({
   }, [activeTab, guideMeta.badge]);
 
   return (
-    <div className="w-full flex flex-col gap-6">
+    <div className="w-full flex flex-col gap-6 portal-stagger">
       {/* ── Master Document Header with 4 Tab Controls ── */}
       <DocDetailHeader
         guideMeta={guideMeta}

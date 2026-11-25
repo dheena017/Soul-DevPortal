@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from './CopyButton';
+import { HeroArtworkBackdrop } from './PortalVisuals';
 import { PackageData } from '../types';
 
 interface SnippetItem {
@@ -266,7 +267,8 @@ export default {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl">
+    <div className="w-full flex flex-col gap-6 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl portal-header-sheen portal-stagger">
+      <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Interactive Code Playground Visual" opacityClass="opacity-30 sm:opacity-42" />
       {/* ── Header Row with Metadata and Dynamic Dates ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
         <div className="flex flex-col gap-1">
@@ -386,14 +388,14 @@ export default {
         </div>
 
         {/* Code Area */}
-        <pre className="p-4 md:p-5 text-xs font-mono text-zinc-200 leading-relaxed overflow-x-auto whitespace-pre selection:bg-purple-500/30">
+        <pre key={activeSnippet.id} className="p-4 md:p-5 text-xs font-mono text-zinc-200 leading-relaxed overflow-x-auto whitespace-pre selection:bg-purple-500/30 tab-content-animate">
           <code>{activeSnippet.code}</code>
         </pre>
       </div>
 
       {/* ── Interactive Live Execution Console Terminal ── */}
       {runOutput && (
-        <div className="rounded-xl bg-[#070709] border border-emerald-500/25 overflow-hidden shadow-2xl flex flex-col">
+        <div className="rounded-xl bg-[#070709] border border-emerald-500/25 overflow-hidden shadow-2xl flex flex-col portal-drawer-enter">
           <div className="flex items-center justify-between px-4 py-2 bg-[#16161c] border-b border-white/[0.06] text-xs">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -420,7 +422,7 @@ export default {
             </div>
           </div>
 
-          <div className="p-4 font-mono text-xs flex flex-col gap-1.5 leading-relaxed overflow-x-auto bg-[#070709]">
+          <div className="p-4 font-mono text-xs flex flex-col gap-1.5 leading-relaxed overflow-x-auto bg-[#070709] portal-list-stagger">
             {runOutput.lines.map((l, i) => (
               <div key={i} className="flex items-start gap-2 text-zinc-300">
                 <span className="text-zinc-500 text-[11px] shrink-0">[{l.time.split('T')[1].replace('Z', '')}]</span>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Markdown from '../../../components/Markdown';
+import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../../components/PortalVisuals';
 import TableOfContents from '../../../components/TableOfContents';
 import TabLoadingState from '../../../components/TabLoadingState';
 import { MarkdownBlock } from '../../../types';
@@ -28,9 +29,10 @@ export default function DocHighlightsTab({
   const displayFilename = activeFilename || guideMeta.rulesFile || `${guideMeta.folder}/golden-rules.md`;
 
   return (
-    <div className="w-full flex flex-col gap-6">
+    <div className="w-full flex flex-col gap-6 portal-stagger">
       {/* ── Key Rules & Highlights Card: Compliance & Authoritative Mandates ── */}
-      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6">
+      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6 portal-header-sheen">
+        <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-28 sm:opacity-40" />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
           <div className="flex flex-col gap-0.5">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400">
@@ -43,9 +45,18 @@ export default function DocHighlightsTab({
           </span>
         </div>
 
+        <ProportionalSpectrumBar
+          title="SPECIFICATION COMPLIANCE BREAKDOWN"
+          segments={[
+            { label: 'Key Rules', value: guideMeta.keyHighlights.length, colorClass: 'bg-amber-400', hex: '#fbbf24' },
+            { label: 'Golden Sections', value: headings.length || 6, colorClass: 'bg-sky-400', hex: '#38bdf8' },
+            { label: 'Content Blocks', value: goldenRulesBlocks.length || 12, colorClass: 'bg-emerald-400', hex: '#34d399' },
+          ]}
+        />
+
         {/* Top Audience & Compliance Card */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col p-4 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-neutral-500 transition-all gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 portal-grid-stagger">
+          <div className="flex flex-col p-4 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover">
             <div className="flex items-center gap-2">
               <span className="text-base">🎯</span>
               <h3 className="text-xs font-bold text-neutral-200">Target Audience</h3>
@@ -55,7 +66,7 @@ export default function DocHighlightsTab({
             </p>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-neutral-500 transition-all gap-2">
+          <div className="flex flex-col p-4 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-base">🛡️</span>
@@ -76,11 +87,11 @@ export default function DocHighlightsTab({
           <div className="flex items-center gap-2 pb-1">
             <span className="text-xs font-bold text-neutral-300">Authoritative Highlights</span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 portal-grid-stagger">
             {guideMeta.keyHighlights.map((hl, idx) => (
               <div
                 key={idx}
-                className="flex items-start gap-3 p-3.5 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-amber-500/40 transition-all"
+                className="flex items-start gap-3 p-3.5 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-amber-500/40 portal-card-hover"
               >
                 <span className="w-5 h-5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 flex items-center justify-center text-xs shrink-0 mt-0.5">
                   ✓
@@ -112,7 +123,7 @@ export default function DocHighlightsTab({
           {hasHeadings && (
             <TableOfContents headings={headings} title="Golden Invariants" className="w-full" />
           )}
-          <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-4 min-w-0">
+          <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-4 min-w-0 portal-header-sheen">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#19191d]">
               <div className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400">

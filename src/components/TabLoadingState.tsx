@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { HeroArtworkBackdrop } from './PortalVisuals';
 import { SoulLogoIcon } from './SoulLogo';
 
 export interface LoadingStepItem {
@@ -14,6 +15,7 @@ export interface TabLoadingStateProps {
   variant?: 'article' | 'grid' | 'list';
   steps?: LoadingStepItem[];
   badgeText?: string;
+  backdropSrc?: string;
 }
 
 const DEFAULT_STEPS: LoadingStepItem[] = [
@@ -28,6 +30,7 @@ export default function TabLoadingState({
   subtitle = 'Developer Portal • Live Data Engine',
   steps = DEFAULT_STEPS,
   badgeText = 'v1.0',
+  backdropSrc = '/visuals/hero-overview-mesh.jpg',
 }: TabLoadingStateProps) {
   const [progress, setProgress] = useState<number>(22);
 
@@ -42,13 +45,14 @@ export default function TabLoadingState({
 
   return (
     <div
-      className="relative w-full min-h-[420px] py-10 px-6 rounded-2xl bg-[#0b0b0e] border border-[#212126] shadow-2xl flex flex-col items-center justify-center overflow-hidden fade-in-up"
+      className="relative w-full min-h-[420px] py-10 px-6 rounded-2xl bg-[#0b0b0e] border border-[#212126] shadow-2xl flex flex-col items-center justify-center overflow-hidden fade-in-up portal-header-sheen"
       role="progressbar"
       aria-valuenow={progress}
       aria-valuemin={0}
       aria-valuemax={100}
       aria-live="polite"
     >
+      <HeroArtworkBackdrop src={backdropSrc} alt="" opacityClass="opacity-30 sm:opacity-45" />
       {/* Subtle Ambient Glow + Tech Dot Grid matching LoadingScreen.tsx */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] bg-sky-500/10 rounded-full blur-[100px] pointer-events-none" />
       <div
@@ -95,14 +99,14 @@ export default function TabLoadingState({
           </div>
           <div className="w-full h-2 rounded-full bg-[#16161c] border border-white/[0.08] overflow-hidden p-0.5 shadow-inner">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-400 transition-all duration-150 ease-out shadow-[0_0_10px_rgba(56,189,248,0.8)]"
+              className="h-full rounded-full bg-gradient-to-r from-sky-500 via-indigo-400 to-emerald-400 transition-all duration-150 ease-out shadow-[0_0_10px_rgba(56,189,248,0.8)] portal-shimmer-bar"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
         {/* Unified 4-Step Verification Box */}
-        <div className="w-full p-3.5 rounded-xl bg-[#111116]/85 border border-white/[0.06] flex flex-col gap-2">
+        <div className="w-full p-3.5 rounded-xl bg-[#111116]/85 border border-white/[0.06] flex flex-col gap-2 portal-list-stagger">
           {steps.map((step, idx) => {
             const isDone = progress >= step.threshold;
             const isCurrent = !isDone && progress >= (steps[idx - 1]?.threshold || 0);

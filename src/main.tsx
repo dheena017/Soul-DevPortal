@@ -14,8 +14,10 @@ import Sidebar from './components/Sidebar';
 import Overview from './components/Overview';
 import { Header } from './components/Header';
 import LoadingScreen from './components/LoadingScreen';
+import TabLoadingState from './components/TabLoadingState';
 
 // Lazy-loaded Pillar Feature Views (code-split cleanly)
+const PortalHubView = lazy(() => import('./components/PortalHubView'));
 const ProjectsView = lazy(() => import('./features/projects/ProjectsView'));
 const ProjectDetailView = lazy(() => import('./features/projects/ProjectDetailView'));
 const PackagesView = lazy(() => import('./features/packages/PackagesView'));
@@ -27,6 +29,58 @@ const SystemView = lazy(() => import('./features/system/SystemView'));
 import { DOCUMENTATION_GUIDES_REGISTRY, findGuideMeta } from './features/docs/docsConstants';
 
 import './styles.css';
+
+interface PortalErrorBoundaryProps {
+  routeKey: string;
+  onRecover: () => void;
+  children: React.ReactNode;
+}
+
+class PortalErrorBoundary extends React.Component<
+  PortalErrorBoundaryProps,
+  { error: Error | null }
+> {
+  declare props: PortalErrorBoundaryProps;
+  declare setState: (state: { error: Error | null }) => void;
+  state: { error: Error | null } = { error: null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  componentDidUpdate(prevProps: PortalErrorBoundaryProps) {
+    if (prevProps.routeKey !== this.props.routeKey && this.state.error) {
+      this.setState({ error: null });
+    }
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="p-6 md:p-8 rounded-2xl bg-[#111115] border border-rose-500/35 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400">
+              VIEW RENDER INTERRUPTED
+            </span>
+            <h2 className="text-base font-bold text-white">Unable to mount workspace view</h2>
+            <p className="text-xs text-zinc-400 font-mono">{this.state.error.message}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              this.setState({ error: null });
+              this.props.onRecover();
+            }}
+            className="px-4 py-2 rounded-xl bg-white text-zinc-950 text-xs font-bold hover:bg-zinc-200 transition-colors cursor-pointer shrink-0"
+          >
+            Return to Overview
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function mergeById<T extends { id: string }>(
   prevList: T[] = [],
@@ -160,6 +214,19 @@ function App() {
     };
   }, []);
 
+  // Warm lazy-loaded views after initial boot so route transitions never wait on chunk compilation
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void import('./components/PortalHubView');
+      void import('./features/projects/ProjectsView');
+      void import('./features/packages/PackagesView');
+      void import('./features/docs/DocsView');
+      void import('./features/scripts/ScriptsView');
+      void import('./features/system/SystemView');
+    }, 950);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const handleSidebarToggle = () => {
     setMenuOpen((prev) => !prev);
   };
@@ -286,6 +353,7 @@ function App() {
 
   const activeTitle = useMemo(() => {
     if (active === 'overview' || active === '' || active === '#') return null;
+    if (active === 'portal' || active === 'hub') return 'Developer Hub & GitHub Links';
     if (active === 'computer' || active === 'system') return 'Computer & Performance';
     if (active === 'projects') return 'Projects & Applications';
     if (active.startsWith('projects/') || active.startsWith('project/')) {
@@ -360,6 +428,8 @@ function App() {
       crumbs.push({ label: 'scripts & runners' });
     } else if (active === 'computer' || active === 'system') {
       crumbs.push({ label: 'computer & performance' });
+    } else if (active === 'portal' || active === 'hub') {
+      crumbs.push({ label: 'developer hub & github' });
     } else {
       crumbs.push({ label: activeTitle || active });
     }
@@ -404,8 +474,19 @@ function App() {
 
       <main ref={mainRef} className="main w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden flex flex-col bg-[#070708]">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 box-border">
-          <Suspense fallback={<div className="p-8 text-xs font-mono text-zinc-400">Loading workspace view...</div>}>
-            {active === 'overview' && (
+          <PortalErrorBoundary routeKey={active} onRecover={() => navigate('overview')}>
+            <Suspense
+              fallback={
+                <TabLoadingState
+                  title="Loading Workspace View"
+                  subtitle="Soul DevPortal · Hydrating Interactive Module"
+                  badgeText="LIVE PORTAL"
+                  backdropSrc="/visuals/hero-overview-mesh.jpg"
+                />
+              }
+            >
+              <div key={active === 'system' ? 'computer' : active} className="portal-page-enter">
+              {active === 'overview' && (
             <Overview
               packages={filteredPackages}
               projects={projectsList}
@@ -414,6 +495,15 @@ function App() {
               stats={stats}
               onNavigate={navigate}
               onClearSearch={() => setQuery('')}
+            />
+          )}
+
+          {(active === 'portal' || active === 'hub') && (
+            <PortalHubView
+              projects={projectsList}
+              packages={packagesList}
+              onNavigate={navigate}
+              onBack={() => navigate('overview')}
             />
           )}
 
@@ -554,7 +644,9 @@ function App() {
             {(active === 'computer' || active === 'system') && (
               <SystemView onNavigate={navigate} />
             )}
+            </div>
           </Suspense>
+          </PortalErrorBoundary>
         </div>
 
         {/* Global Keyboard Shortcuts Modal */}
@@ -564,7 +656,7 @@ function App() {
             onClick={() => setShowShortcuts(false)}
           >
             <div
-              className="w-full max-w-lg rounded-2xl bg-[#151519] border border-[#19191d] shadow-2xl p-5 md:p-6 flex flex-col gap-4"
+              className="w-full max-w-lg rounded-2xl bg-[#151519] border border-[#19191d] shadow-2xl p-5 md:p-6 flex flex-col gap-4 portal-header-sheen portal-page-enter"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between pb-3 border-b border-[#19191d]">

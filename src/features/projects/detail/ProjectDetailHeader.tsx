@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import { ArchitectureFlowDiagram, HeroArtworkBackdrop, ProjectLogoImage } from '../../../components/PortalVisuals';
 import { ProjectData } from '../../../types';
 import { PROJECT_LOGOS } from '../projectsConstants';
 
@@ -39,18 +40,20 @@ export default function ProjectDetailHeader({
   const logoSrc = project.logo || PROJECT_LOGOS[project.id];
 
   return (
-    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6">
+    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6 portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="Project Architecture Visual" opacityClass="opacity-42 sm:opacity-58" />
+      <div className="relative z-10 flex flex-col gap-4 sm:gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 pb-3.5 sm:pb-4 border-b border-white/[0.06]">
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs min-w-0">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               onClick={onBack}
               title="Back to all projects"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
@@ -59,10 +62,10 @@ export default function ProjectDetailHeader({
           ) : (
             <a
               href="#projects"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               title="Back to all projects"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
@@ -155,19 +158,14 @@ export default function ProjectDetailHeader({
 
       {/* ── Title & Identifiers Row ── */}
       <div className="flex items-start gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.1] flex items-center justify-center shrink-0 overflow-hidden shadow-inner p-2">
-          {logoSrc ? (
-            <img
-              src={logoSrc}
-              alt={`${project.title} logo`}
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                (e.currentTarget as HTMLElement).style.display = 'none';
-              }}
-            />
-          ) : (
-            <span className="text-2xl">⚡</span>
-          )}
+        <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.1] flex items-center justify-center shrink-0 overflow-hidden shadow-inner p-2 portal-emblem-hover">
+          <ProjectLogoImage
+            src={logoSrc}
+            alt={`${project.title} logo`}
+            fallbackIcon="⚡"
+            className="w-full h-full object-contain"
+            fallbackClassName="text-2xl"
+          />
         </div>
         <div className="flex flex-col gap-2 min-w-0">
           <div className="flex flex-wrap items-center gap-3">
@@ -240,6 +238,15 @@ export default function ProjectDetailHeader({
           </div>
         </div>
       )}
+
+      <ArchitectureFlowDiagram
+        compact
+        frontendPort={project.frontendPort}
+        backendPort={project.backendPort}
+        framework={project.framework}
+        dbInfo={project.dbInfo}
+        aiEngine={project.aiEngine}
+      />
 
       {/* ── 7 High-Density Project Detail Tabs ── */}
       <div className="w-full flex items-center justify-between border-b border-white/[0.06] pb-px overflow-x-auto scrollbar-none" role="tablist">
@@ -393,6 +400,7 @@ export default function ProjectDetailHeader({
             <span>Documentation</span>
           </button>
         </div>
+      </div>
       </div>
     </header>
   );

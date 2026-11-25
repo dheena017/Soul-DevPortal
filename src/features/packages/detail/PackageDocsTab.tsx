@@ -1,5 +1,6 @@
 import React from 'react';
 import Markdown from '../../../components/Markdown';
+import { HeroArtworkBackdrop } from '../../../components/PortalVisuals';
 import TableOfContents from '../../../components/TableOfContents';
 import TabLoadingState from '../../../components/TabLoadingState';
 import { PackageData, MarkdownBlock } from '../../../types';
@@ -25,11 +26,12 @@ export default function PackageDocsTab({ pkg, headings, isLoading = false }: Pac
   }
 
   return (
-    <div className={`w-full ${hasHeadings ? 'grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[316px_1fr]' : 'flex flex-col'} gap-5 items-start`}>
+    <div className={`w-full ${hasHeadings ? 'grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[316px_1fr]' : 'flex flex-col'} gap-5 items-start portal-stagger`}>
       {hasHeadings && (
         <TableOfContents headings={headings} title="On this page" className="w-full" />
       )}
-      <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-4 min-w-0">
+      <section className="w-full p-4 sm:p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-4 min-w-0 portal-header-sheen">
+        <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="Package Documentation Blueprint Visual" opacityClass="opacity-28 sm:opacity-38" />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#19191d]">
           <div className="flex flex-col gap-0.5">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">REFERENCE</span>

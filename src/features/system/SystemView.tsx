@@ -125,6 +125,7 @@ export default function SystemView(_props: SystemViewProps) {
           title="Scanning Host Hardware & Telemetry"
           subtitle="Computer Monitor • Live Hardware Engine"
           steps={HARDWARE_PROBE_STEPS}
+          backdropSrc="/visuals/pillar-computer-silicon.jpg"
         />
       </div>
     );
@@ -172,9 +173,12 @@ export default function SystemView(_props: SystemViewProps) {
       <div key={activeTab} className="tab-content-animate">
         <Suspense
           fallback={
-            <div className="p-6 rounded-2xl system-card text-xs font-mono text-zinc-400">
-              Loading module telemetry...
-            </div>
+            <TabLoadingState
+              title="Loading Telemetry Module"
+              subtitle="Computer Monitor • Hydrating Hardware View"
+              badgeText="LIVE SSE"
+              backdropSrc="/visuals/pillar-computer-silicon.jpg"
+            />
           }
         >
           {activeTab === 'performance' && (

@@ -5,6 +5,7 @@ Discovers all packages in Soul-DevPortal-Packages/ and traverses AST symbols.
 
 from __future__ import annotations
 
+import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -37,6 +38,7 @@ def _get_path_meta(target_path: Path) -> Dict[str, Any]:
             ["git", "log", "-n", "1", "--pretty=format:%cI|%cr|%h", "--", str(target_path)],
             text=True,
             stderr=subprocess.DEVNULL,
+            timeout=2.0,
         ).strip()
         if out:
             parts = out.split("|")
@@ -88,13 +90,15 @@ def crawl_packages(packages_root: Path) -> List[Dict[str, Any]]:
         total_lines = 0
         total_bytes = 0
 
-        # Traverse source files
-        for p in pkg_dir.rglob("*"):
-            if p.is_file() and not any(part in p.parts for part in ("node_modules", ".git", "__pycache__", "dist")):
+        # Traverse source files while pruning heavy dependency/build trees
+        ignored_dirs = {"node_modules", ".git", "__pycache__", "dist", ".venv", "venv"}
+        for root, dirs, files in os.walk(pkg_dir):
+            dirs[:] = sorted(d for d in dirs if d not in ignored_dirs)
+            for fname in sorted(files):
+                p = Path(root) / fname
                 file_count += 1
                 try:
-                    size = p.stat().st_size
-                    total_bytes += size
+                    total_bytes += p.stat().st_size
                 except Exception:
                     pass
 

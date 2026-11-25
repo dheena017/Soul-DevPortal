@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../../components/PortalVisuals';
 import TabLoadingState from '../../../components/TabLoadingState';
 import { ProjectData } from '../../../types';
 
@@ -86,7 +87,8 @@ export default function ProjectEnvTab({
   }
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5 portal-stagger portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/tab-env-security.jpg" alt="Environment Secrets & Vault Visual" opacityClass="opacity-30 sm:opacity-42" />
       {/* Top Header Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#19191d]">
         <div className="flex flex-col gap-0.5">
@@ -133,6 +135,14 @@ export default function ProjectEnvTab({
 
       {envKeys.length > 0 ? (
         <div className="flex flex-col gap-3">
+          <ProportionalSpectrumBar
+            title="ENVIRONMENT SECURITY & CONFIG READINESS"
+            segments={[
+              { label: 'Active Runtime Values', value: activeCount, colorClass: 'bg-emerald-400', hex: '#34d399' },
+              { label: 'Masked Secrets', value: secretCount, colorClass: 'bg-amber-400', hex: '#fbbf24' },
+              { label: 'Standard Keys', value: Math.max(0, envKeys.length - secretCount), colorClass: 'bg-sky-400', hex: '#38bdf8' },
+            ]}
+          />
           {/* Section Toolbar & Quick Filter Pills */}
           <div className="flex flex-wrap items-center justify-between gap-2.5 pb-2">
             <div className="flex items-center gap-2">
@@ -142,13 +152,15 @@ export default function ProjectEnvTab({
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Filter variables">
+            <div className="flex items-center gap-1.5" role="tablist" aria-label="Filter variables">
               <button
                 type="button"
-                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
+                role="tab"
+                aria-selected={filterType === 'all'}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
                   filterType === 'all'
-                    ? 'bg-[#151519] text-neutral-200 font-bold shadow-sm border border-[#212126]'
-                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-neutral-500'
+                    ? 'bg-zinc-800 text-neutral-100 font-bold shadow-sm border border-white/20'
+                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500'
                 }`}
                 onClick={() => setFilterType('all')}
               >
@@ -156,10 +168,12 @@ export default function ProjectEnvTab({
               </button>
               <button
                 type="button"
-                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
+                role="tab"
+                aria-selected={filterType === 'secrets'}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
                   filterType === 'secrets'
-                    ? 'bg-[#151519] text-neutral-200 font-bold shadow-sm border border-[#212126]'
-                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-neutral-500'
+                    ? 'bg-zinc-800 text-neutral-100 font-bold shadow-sm border border-white/20'
+                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500'
                 }`}
                 onClick={() => setFilterType('secrets')}
               >
@@ -167,10 +181,12 @@ export default function ProjectEnvTab({
               </button>
               <button
                 type="button"
-                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
+                role="tab"
+                aria-selected={filterType === 'active'}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
                   filterType === 'active'
-                    ? 'bg-[#151519] text-neutral-200 font-bold shadow-sm border border-[#212126]'
-                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-neutral-500'
+                    ? 'bg-zinc-800 text-neutral-100 font-bold shadow-sm border border-white/20'
+                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500'
                 }`}
                 onClick={() => setFilterType('active')}
               >
@@ -180,12 +196,12 @@ export default function ProjectEnvTab({
           </div>
 
           {/* 2-Column Responsive Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
+          <div key={filterType} className="grid grid-cols-1 lg:grid-cols-2 gap-2.5 portal-grid-stagger">
             {filteredItems.map((item) => {
               return (
                 <div
                   key={item.key}
-                  className="flex items-center justify-between p-2.5 px-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all gap-2"
+                  className="flex items-center justify-between p-2.5 px-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2 portal-row-hover"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <span className="text-xs shrink-0">{item.isSecret ? '🔒' : '⚙️'}</span>
@@ -236,8 +252,8 @@ export default function ProjectEnvTab({
       )}
 
       {/* Dependencies Breakdown */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-[#19191d]">
-        <div className="flex flex-col gap-3 p-4 rounded-xl bg-[#151519] border border-[#212126]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-[#19191d] portal-grid-stagger">
+        <div className="flex flex-col gap-3 p-4 rounded-xl bg-[#151519] border border-[#212126] portal-card-hover">
           <div className="flex items-center justify-between pb-2 border-b border-[#19191d]">
             <span className="text-xs font-bold text-neutral-300 flex items-center gap-1.5">
               <span>📦</span>

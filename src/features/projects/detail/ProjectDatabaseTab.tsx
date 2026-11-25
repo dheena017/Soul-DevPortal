@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import { HeroArtworkBackdrop } from '../../../components/PortalVisuals';
 import TabLoadingState from '../../../components/TabLoadingState';
 import { ProjectData } from '../../../types';
 
@@ -29,7 +30,8 @@ export default function ProjectDatabaseTab({ project, tables, isLoading = false 
   }
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5 portal-stagger portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/tab-database-wal.jpg" alt="SQLite WAL Vault Visual" opacityClass="opacity-30 sm:opacity-42" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">DATA PERSISTENCE TIER</span>
@@ -64,17 +66,52 @@ export default function ProjectDatabaseTab({ project, tables, isLoading = false 
       </div>
 
       <div className="flex flex-col gap-4">
+        {/* Visual WAL Persistence Pipeline Diagram */}
+        <div className="w-full p-3.5 rounded-xl bg-[#0b0b0f] border border-white/[0.08] overflow-x-auto">
+          <div className="flex items-center justify-between gap-2 min-w-[460px]">
+            <div className="flex-1 flex items-center gap-2.5 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/30 portal-card-hover">
+              <span className="text-base portal-emblem-hover">⚙️</span>
+              <div className="flex flex-col">
+                <span className="text-[11px] font-bold text-white">ORM / SQL Engine</span>
+                <span className="text-[10px] font-mono text-purple-300">FastAPI Async / Sync</span>
+              </div>
+            </div>
+            <svg className="w-7 h-4 shrink-0 text-purple-400/80" viewBox="0 0 28 16" fill="none" aria-hidden="true">
+              <line x1="2" y1="8" x2="22" y2="8" stroke="currentColor" strokeWidth="1.6" className="portal-flow-dash" />
+              <polyline points="18 4 23 8 18 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <div className="flex-1 flex items-center gap-2.5 px-3 py-2 rounded-lg bg-sky-500/10 border border-sky-500/30 portal-card-hover">
+              <span className="text-base portal-emblem-hover">📝</span>
+              <div className="flex flex-col">
+                <span className="text-[11px] font-bold text-white">WAL Write Log</span>
+                <span className="text-[10px] font-mono text-sky-300">Concurrent Append</span>
+              </div>
+            </div>
+            <svg className="w-7 h-4 shrink-0 text-emerald-400/80" viewBox="0 0 28 16" fill="none" aria-hidden="true">
+              <line x1="2" y1="8" x2="22" y2="8" stroke="currentColor" strokeWidth="1.6" className="portal-flow-dash" />
+              <polyline points="18 4 23 8 18 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <div className="flex-1 flex items-center gap-2.5 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 portal-card-hover">
+              <span className="text-base portal-emblem-hover">🗄️</span>
+              <div className="flex flex-col">
+                <span className="text-[11px] font-bold text-white">SQLite Datastore</span>
+                <span className="text-[10px] font-mono text-emerald-300">{tables.length} Tables Isolated</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Meta Stats Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 portal-grid-stagger">
+          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] portal-card-hover">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Storage Engine</span>
             <strong className="text-xs font-bold text-neutral-200 font-mono mt-1">{project.dbInfo || 'SQLite'}</strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
+          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] portal-card-hover">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Dialect</span>
             <strong className="text-xs font-bold text-neutral-200 font-mono mt-1">Relational SQL / JSON</strong>
           </div>
-          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126]">
+          <div className="flex flex-col p-3 rounded-xl bg-[#151519] border border-[#212126] portal-card-hover">
             <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Schema Mode</span>
             <strong className="text-xs font-bold text-neutral-200 font-mono mt-1">
               {tables.length > 0 ? `${tables.length} Tables Registered` : 'Single Database File'}
@@ -91,11 +128,11 @@ export default function ProjectDatabaseTab({ project, tables, isLoading = false 
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 portal-grid-stagger">
               {filteredTables.map((tName) => (
                 <div
                   key={tName}
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all"
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 portal-card-hover"
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="text-neutral-500">📋</span>

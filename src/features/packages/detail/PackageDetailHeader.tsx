@@ -1,5 +1,6 @@
 import React from 'react';
 import CopyButton from '../../../components/CopyButton';
+import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../../components/PortalVisuals';
 import { PackageData } from '../../../types';
 
 export type PackageDetailTab = 'docs' | 'api' | 'playground' | 'manifest';
@@ -15,7 +16,7 @@ export interface PackageDetailHeaderProps {
 export function PackageIconSvg({ pkg }: { pkg: PackageData }) {
   if (pkg.pythonModule || pkg.hasPythonManifest) {
     return (
-      <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner" title="Python Package">
+      <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner portal-emblem-hover" title="Python Package">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
           <path
             d="M11.91 2C6.91 2 7.23 4.17 7.23 4.17L7.24 6.42H12V7.1H5.16S2 6.74 2 11.75c0 5 2.76 4.83 2.76 4.83H6.4v-2.31s-.15-2.76 2.71-2.76h4.63s2.59.04 2.59-2.52V4.56S16.92 2 11.91 2zm-2.07 1.54a.88.88 0 1 1 0 1.76.88.88 0 0 1 0-1.76z"
@@ -42,7 +43,7 @@ export function PackageIconSvg({ pkg }: { pkg: PackageData }) {
 
   if (pkg.name?.includes('config')) {
     return (
-      <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner text-zinc-300" title="Configuration Package">
+      <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner text-zinc-300 portal-emblem-hover" title="Configuration Package">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="3" />
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
@@ -52,7 +53,7 @@ export function PackageIconSvg({ pkg }: { pkg: PackageData }) {
   }
 
   return (
-    <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner text-zinc-300" title="NPM Workspace Package">
+    <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner text-zinc-300 portal-emblem-hover" title="NPM Workspace Package">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55L16.5 14.6a1.78 1.78 0 0 0 0-3.2z" />
         <polyline points="3.29 7 12 12 20.71 7" />
@@ -70,18 +71,20 @@ export default function PackageDetailHeader({
   onBack,
 }: PackageDetailHeaderProps) {
   return (
-    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6">
+    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6 portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="Package Module Visual" opacityClass="opacity-42 sm:opacity-58" />
+      <div className="relative z-10 flex flex-col gap-4 sm:gap-6">
       {/* ── Navigation Breadcrumb Row ── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 pb-3.5 sm:pb-4 border-b border-white/[0.06]">
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs min-w-0">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               onClick={onBack}
               title="Return to packages dashboard"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
@@ -90,10 +93,10 @@ export default function PackageDetailHeader({
           ) : (
             <a
               href="#packages"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               title="Return to packages dashboard"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
@@ -180,13 +183,13 @@ export default function PackageDetailHeader({
         </div>
 
         {/* 4-Card Metadata Grid */}
-        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full lg:w-auto lg:min-w-[280px] shrink-0">
-          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full lg:w-auto lg:min-w-[280px] shrink-0 portal-grid-stagger">
+          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] portal-card-hover">
             <span className="text-[10px] text-zinc-400 font-mono font-bold uppercase tracking-wider">VERSION</span>
             <strong className="text-base font-bold text-white font-mono mt-1">v{pkg.version || '1.0.0'}</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all" title={pkg.updatedAt || ''}>
+          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] portal-card-hover" title={pkg.updatedAt || ''}>
             <span className="text-[10px] text-zinc-400 font-mono font-bold uppercase tracking-wider flex items-center justify-between">
               <span>LAST UPDATED</span>
               <span className="text-emerald-400 text-[10px]">● LIVE</span>
@@ -194,17 +197,26 @@ export default function PackageDetailHeader({
             <strong className="text-base font-bold text-white font-mono mt-1">{pkg.relativeTime || 'Recently'}</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] portal-card-hover">
             <span className="text-[10px] text-zinc-400 font-mono font-bold uppercase tracking-wider">LICENSE</span>
             <strong className="text-base font-bold text-zinc-300 font-mono mt-1">{pkg.license || 'MIT'}</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] portal-card-hover">
             <span className="text-[10px] text-zinc-400 font-mono font-bold uppercase tracking-wider">TOTAL EXPORTS</span>
             <strong className="text-base font-bold text-white font-mono mt-1">{totalExports} symbols</strong>
           </div>
         </div>
       </div>
+
+      <ProportionalSpectrumBar
+        title="MODULE EXPORT & RUNTIME BREAKDOWN"
+        segments={[
+          { label: 'NPM Paths', value: (pkg.exports || []).length || 1, colorClass: 'bg-rose-400', hex: '#fb7185' },
+          { label: 'TypeScript APIs', value: (pkg.typeScriptExports || []).length, colorClass: 'bg-sky-400', hex: '#38bdf8' },
+          { label: 'Python APIs', value: (pkg.pythonExports || []).length, colorClass: 'bg-amber-400', hex: '#fbbf24' },
+        ]}
+      />
 
       {/* Modern Navigation Tabs inside Header */}
       <div className="pt-2 border-t border-white/[0.06]">
@@ -284,6 +296,7 @@ export default function PackageDetailHeader({
             <span>Manifest &amp; Metadata</span>
           </button>
         </div>
+      </div>
       </div>
     </header>
   );

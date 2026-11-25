@@ -14,8 +14,8 @@ export default function EmptyState({
   onAction,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111115] border border-white/[0.08] text-center gap-4 shadow-2xl" role="status">
-      <div className="w-12 h-12 rounded-xl bg-[#09090c] border border-white/[0.08] flex items-center justify-center text-zinc-300" aria-hidden="true">
+    <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111115] border border-white/[0.08] text-center gap-4 shadow-2xl fade-in-up portal-header-sheen portal-stagger" role="status">
+      <div className="w-12 h-12 rounded-xl bg-[#09090c] border border-white/[0.08] flex items-center justify-center text-zinc-300 portal-emblem-hover" aria-hidden="true">
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />

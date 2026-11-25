@@ -83,14 +83,14 @@ export default function StatsCards({ stats, packagesCount = 3, projectsCount = 8
   ];
 
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Monorepo metrics">
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 portal-grid-stagger" aria-label="Monorepo metrics">
       {displayStats.map((item, index) => (
         <div
           key={index}
-          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] transition-all duration-200 shadow-xl shadow-black/40 group cursor-default"
+          className="flex items-center gap-4 p-4 md:p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] shadow-xl shadow-black/40 group cursor-default portal-card-hover"
         >
           <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border"
+            className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border portal-emblem-hover"
             style={{
               backgroundColor: item.bgColor,
               borderColor: item.borderColor,

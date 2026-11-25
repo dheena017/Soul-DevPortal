@@ -1,4 +1,5 @@
 import React from 'react';
+import { ProjectLogoImage } from '../../components/PortalVisuals';
 import { ProjectData } from '../../types';
 import { PROJECT_LOGOS, PROJECT_BRAND_MAP, formatProjectTitle } from './projectsConstants';
 
@@ -48,7 +49,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-200 gap-4 h-full">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] gap-4 h-full portal-card-hover">
       {/* Card Header: Brand, Meta, Ports */}
         <div
           className="flex flex-col gap-3.5"
@@ -58,30 +59,19 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
               <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden shadow-inner"
+                className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden shadow-inner portal-emblem-hover"
                 style={{
                   borderColor: `${brand.themeColor}40`,
                   background: `${brand.themeColor}15`,
                 }}
               >
-                {logoSrc ? (
-                  <img
-                    src={logoSrc}
-                    alt={`${formattedTitle} logo`}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLElement).style.display = 'none';
-                      const fallback = e.currentTarget.parentElement?.querySelector('.project-card-logo-fallback') as HTMLElement;
-                      if (fallback) fallback.style.display = 'grid';
-                    }}
-                  />
-                ) : null}
-                <span
-                  className="project-card-logo-fallback text-base"
-                  style={{ display: logoSrc ? 'none' : 'grid' }}
-                >
-                  {brand.icon || '⚡'}
-                </span>
+                <ProjectLogoImage
+                  src={logoSrc}
+                  alt={`${formattedTitle} logo`}
+                  fallbackIcon={brand.icon || '⚡'}
+                  className="w-full h-full object-cover"
+                  fallbackClassName="text-base"
+                />
               </div>
 
               <div className="flex flex-col min-w-0 gap-0.5">

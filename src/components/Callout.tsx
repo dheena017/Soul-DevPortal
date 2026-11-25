@@ -84,7 +84,7 @@ export default function Callout({ type = 'note', title, children }: CalloutProps
 
   return (
     <div
-      className={`my-3 p-4 rounded-xl border flex flex-col gap-2 text-xs md:text-sm ${config.containerClass}`}
+      className={`my-3 p-4 rounded-xl border flex flex-col gap-2 text-xs md:text-sm fade-in-up portal-card-hover ${config.containerClass}`}
       role="note"
     >
       <div className="flex items-center gap-2 font-semibold">

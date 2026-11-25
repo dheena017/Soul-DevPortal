@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../../components/PortalVisuals';
 import TabLoadingState from '../../../components/TabLoadingState';
 import { ProjectData } from '../../../types';
 
@@ -23,23 +24,70 @@ export interface ApiRouteItem {
 }
 
 function deriveGroupFromPath(path: string): string {
-  const clean = path.trim().replace(/^\/+/, '');
-  const parts = clean.split('/');
+  const staticParts = path
+    .trim()
+    .replace(/^\/+/, '')
+    .split('/')
+    .filter((p) => p && !(p.startsWith('{') && p.endsWith('}')) && p !== 'api' && p !== 'v1' && p !== 'v2');
 
-  if (parts.length >= 3 && parts[0] === 'api') {
-    const section = parts[1].replace(/[-_]/g, ' ');
-    const sub = parts[2].replace(/[-_]/g, ' ');
+  if (staticParts.length >= 2) {
+    const section = staticParts[0].replace(/[-_]/g, ' ');
+    const sub = staticParts[1].replace(/[-_]/g, ' ');
     return `${section.charAt(0).toUpperCase() + section.slice(1)} · ${sub.charAt(0).toUpperCase() + sub.slice(1)}`;
   }
-  if (parts.length >= 2 && parts[0] === 'api') {
-    const section = parts[1].replace(/[-_]/g, ' ');
-    return section.charAt(0).toUpperCase() + section.slice(1);
-  }
-  if (parts.length >= 1) {
-    const section = parts[0].replace(/[-_]/g, ' ');
+  if (staticParts.length === 1) {
+    const section = staticParts[0].replace(/[-_]/g, ' ');
     return section.charAt(0).toUpperCase() + section.slice(1);
   }
   return 'General';
+}
+
+function extractPathParams(path: string): string[] {
+  const matches = path.match(/\{([^}]+)\}/g) || [];
+  return Array.from(new Set(matches.map((m) => m.slice(1, -1))));
+}
+
+function applyPathParams(path: string, values: Record<string, string>): string {
+  const normalized = path.startsWith('/') ? path : `/${path}`;
+  return normalized.replace(/\{([^}]+)\}/g, (_, key) => encodeURIComponent(values[key]?.trim() || `{${key}}`));
+}
+
+function isRedundantSummary(summary?: string, handler?: string): boolean {
+  if (!summary) return true;
+  if (!handler) return false;
+  const norm = (v: string) => v.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return norm(summary) === norm(handler);
+}
+
+function renderRoutePath(path: string) {
+  const normalized = path.startsWith('/') ? path : `/${path}`;
+  const segments = normalized.split('/');
+  const lastStaticIdx = segments.length - 1;
+
+  return (
+    <span className="inline-flex items-baseline flex-wrap font-mono text-xs min-w-0 leading-relaxed">
+      {segments.map((seg, i) => {
+        if (i === 0) return null;
+        const isParam = seg.startsWith('{') && seg.endsWith('}');
+        const isLast = i === lastStaticIdx;
+        return (
+          <React.Fragment key={`${i}-${seg}`}>
+            <span className="text-zinc-600 select-none">/</span>
+            {isParam ? (
+              <span className="mx-0.5 px-1.5 py-0.5 rounded bg-amber-500/12 border border-amber-500/30 text-amber-300 font-semibold text-[11px]">
+                {seg}
+              </span>
+            ) : (
+              <span className={isLast ? 'text-white font-bold' : 'text-zinc-400 font-medium'}>
+                {seg}
+              </span>
+            )}
+          </React.Fragment>
+        );
+      })}
+      {normalized === '/' && <span className="text-white font-bold">/</span>}
+    </span>
+  );
 }
 
 function getMethodBadgeStyle(method: string) {
@@ -90,6 +138,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const [testingEndpointId, setTestingEndpointId] = useState<string | null>(null);
   const [testPayload, setTestPayload] = useState<string>('{}');
+  const [pathParamValues, setPathParamValues] = useState<Record<string, string>>({});
   const [testResult, setTestResult] = useState<{
     endpointId: string;
     status: number | string;
@@ -224,7 +273,8 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
     setIsSending(true);
     setTestResult(null);
     const start = performance.now();
-    const targetUrl = beUrl ? `${beUrl}${route.path}` : `http://localhost:${project.backendPort || 8000}${route.path}`;
+    const resolvedPath = applyPathParams(route.path, pathParamValues);
+    const targetUrl = beUrl ? `${beUrl}${resolvedPath}` : `http://localhost:${project.backendPort || 8000}${resolvedPath}`;
 
     try {
       const options: RequestInit = {
@@ -292,7 +342,8 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
   }
 
   return (
-    <section className="w-full flex flex-col gap-5 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl animate-in fade-in duration-200">
+    <section className="w-full flex flex-col gap-5 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl animate-in fade-in duration-200 portal-stagger portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="REST API Pipeline Visual" opacityClass="opacity-30 sm:opacity-42" />
       {/* ── Top Header Bar ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
         <div className="flex flex-col gap-1">
@@ -348,6 +399,17 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
           )}
         </div>
       </div>
+
+      {/* ── HTTP Method Ratio Visual ── */}
+      <ProportionalSpectrumBar
+        title="HTTP METHOD DISTRIBUTION"
+        segments={[
+          { label: 'GET', value: methodStats['GET'] || 0, colorClass: 'bg-emerald-400', hex: '#34d399' },
+          { label: 'POST', value: methodStats['POST'] || 0, colorClass: 'bg-blue-400', hex: '#60a5fa' },
+          { label: 'PUT / PATCH', value: (methodStats['PUT'] || 0) + (methodStats['PATCH'] || 0), colorClass: 'bg-amber-400', hex: '#fbbf24' },
+          { label: 'DELETE', value: methodStats['DELETE'] || 0, colorClass: 'bg-rose-400', hex: '#fb7185' },
+        ]}
+      />
 
       {/* ── Search & Filter Controls ── */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3 rounded-xl bg-[#14141a] border border-white/[0.06]">
@@ -440,79 +502,105 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
 
       {/* ── Main Grouped Endpoints List ── */}
       {Object.keys(groupedRoutes).length > 0 ? (
-        <div className="flex flex-col gap-6">
+        <div key={`${methodFilter}-${activeGroupFilter}`} className="flex flex-col gap-4 portal-grid-stagger">
           {(Object.entries(groupedRoutes) as [string, ApiRouteItem[]][]).map(([groupTitle, routes]) => {
             const isCollapsed = Boolean(collapsedGroups[groupTitle]);
+            const groupMethodCounts = routes.reduce<Record<string, number>>((acc, item) => {
+              const m = item.method.toUpperCase();
+              acc[m] = (acc[m] || 0) + 1;
+              return acc;
+            }, {});
 
             return (
               <div
                 key={groupTitle}
-                className="flex flex-col rounded-xl bg-[#131317] border border-white/[0.06] overflow-hidden shadow-lg transition-all"
+                className="flex flex-col rounded-2xl bg-[#121217]/95 border border-white/[0.08] hover:border-white/[0.16] overflow-hidden shadow-lg transition-all"
               >
                 {/* Group Header Banner */}
                 <button
                   type="button"
                   onClick={() => toggleGroupCollapse(groupTitle)}
-                  className="w-full flex items-center justify-between p-3.5 bg-[#17171e] hover:bg-[#1a1a24] border-b border-white/[0.06] transition-all text-left group"
+                  className="w-full flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-[#16161d] hover:bg-[#1a1a24] border-b border-white/[0.06] transition-all text-left group cursor-pointer"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-sm font-mono text-zinc-400 group-hover:text-zinc-200 transition-colors">
-                      {isCollapsed ? '▶' : '▼'}
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="w-6 h-6 rounded-lg bg-[#0d0d12] border border-white/[0.08] flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-white/20 transition-colors shrink-0">
+                      <svg
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${isCollapsed ? 'rotate-0' : 'rotate-90'}`}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
                     </span>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-extrabold text-white tracking-tight group-hover:text-emerald-300 transition-colors">
+                    <div className="flex flex-wrap items-center gap-2 min-w-0">
+                      <h3 className="text-sm font-extrabold text-white tracking-tight group-hover:text-emerald-300 transition-colors truncate">
                         {groupTitle}
                       </h3>
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#1d1d27] border border-white/[0.08] text-zinc-300">
-                        {routes.length} {routes.length === 1 ? 'endpoint' : 'endpoints'}
+                        {routes.length} {routes.length === 1 ? 'route' : 'routes'}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-medium text-zinc-400 hidden sm:inline-block">
-                      {isCollapsed ? 'Click to expand' : 'Click to collapse'}
+                  <div className="flex items-center gap-2 shrink-0">
+                    <div className="hidden sm:flex items-center gap-1">
+                      {Object.entries(groupMethodCounts).map(([m, cnt]) => {
+                        const mStyle = getMethodBadgeStyle(m);
+                        return (
+                          <span
+                            key={m}
+                            className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border ${mStyle.badge}`}
+                          >
+                            {cnt} {m}
+                          </span>
+                        );
+                      })}
+                    </div>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold bg-[#0f0f14] border border-white/[0.08] text-zinc-400 group-hover:text-zinc-200 group-hover:border-white/[0.18] transition-colors">
+                      <span>{isCollapsed ? 'Expand' : 'Collapse'}</span>
                     </span>
                   </div>
                 </button>
 
                 {/* Group Routes List */}
                 {!isCollapsed && (
-                  <div className="flex flex-col divide-y divide-white/[0.04] p-2">
+                  <div className="flex flex-col divide-y divide-white/[0.05] p-2 portal-list-stagger portal-drawer-enter">
                     {routes.map((route) => {
                       const style = getMethodBadgeStyle(route.method);
-                      const fullUrl = beUrl ? `${beUrl}${route.path}` : `http://localhost:${project.backendPort || 8000}${route.path}`;
+                      const isTesting = testingEndpointId === route.id;
+                      const pathParams = extractPathParams(route.path);
+                      const resolvedPath = isTesting ? applyPathParams(route.path, pathParamValues) : (route.path.startsWith('/') ? route.path : `/${route.path}`);
+                      const fullUrl = beUrl ? `${beUrl}${resolvedPath}` : `http://localhost:${project.backendPort || 8000}${resolvedPath}`;
                       const curlCmd = `curl -X ${route.method} "${fullUrl}" -H "Accept: application/json"${
                         ['POST', 'PUT', 'PATCH'].includes(route.method) ? ' -H "Content-Type: application/json" -d \'{}\'' : ''
                       }`;
-                      const isTesting = testingEndpointId === route.id;
                       const hasTestResult = testResult && testResult.endpointId === route.id;
-
-                      // Split path into parent prefix and action target
-                      const lastSlashIdx = route.path.lastIndexOf('/');
-                      const pathPrefix = lastSlashIdx > 0 ? route.path.substring(0, lastSlashIdx + 1) : '';
-                      const pathTarget = lastSlashIdx >= 0 ? route.path.substring(lastSlashIdx + 1) : route.path;
+                      const showSummary = !isRedundantSummary(route.summary, route.handler);
 
                       return (
                         <div
                           key={route.id}
-                          className={`flex flex-col p-3 rounded-lg hover:bg-[#181820] transition-all gap-2.5 border border-transparent ${style.border}`}
+                          className={`flex flex-col p-3.5 rounded-xl hover:bg-[#181821] gap-2 border border-transparent portal-row-hover ${style.border}`}
                         >
-                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
                             {/* Route Path & Metadata */}
                             <div className="flex items-center gap-3 min-w-0 flex-1">
                               {/* Method Badge */}
-                              <span className={`px-2.5 py-1 rounded-md text-[11px] font-mono font-bold uppercase tracking-wider border shrink-0 flex items-center gap-1.5 shadow-sm ${style.badge}`}>
+                              <span className={`w-20 justify-center px-2.5 py-1 rounded-md text-[11px] font-mono font-bold uppercase tracking-wider border shrink-0 flex items-center gap-1.5 shadow-sm ${style.badge}`}>
                                 <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
-                                {route.method}
+                                <span>{route.method}</span>
                               </span>
 
                               {/* Formatted URL Path */}
-                              <div className="flex items-center gap-1.5 min-w-0 font-mono text-xs">
-                                <span className="text-zinc-500 font-normal truncate">{pathPrefix}</span>
-                                <span className="text-white font-bold">{pathTarget}</span>
+                              <div className="flex items-center gap-2 min-w-0 flex-1 flex-wrap">
+                                {renderRoutePath(route.path)}
                                 {route.isAsync && (
-                                  <span className="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 border border-white/[0.06]" title="Async handler">
+                                  <span className="hidden sm:inline-flex items-center text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#1d1d26] text-sky-300/90 border border-sky-400/20" title="Async FastAPI handler">
                                     async
                                   </span>
                                 )}
@@ -529,6 +617,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
                                   } else {
                                     setTestingEndpointId(route.id);
                                     setTestResult(null);
+                                    setPathParamValues({});
                                     if (['POST', 'PUT', 'PATCH'].includes(route.method)) {
                                       setTestPayload('{\n  "demo": true\n}');
                                     } else {
@@ -536,14 +625,24 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
                                     }
                                   }
                                 }}
-                                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border transition-all ${
+                                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
                                   isTesting
                                     ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-sm'
-                                    : 'bg-[#171720] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/20 hover:bg-[#1c1c28]'
+                                    : 'bg-[#171720] border-white/[0.1] text-zinc-200 hover:text-white hover:border-emerald-400/40 hover:bg-emerald-500/10'
                                 }`}
                                 title="Open interactive test runner"
                               >
-                                <span>{isTesting ? '✕ Close Test' : '▶ Try It'}</span>
+                                {isTesting ? (
+                                  <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                    <line x1="18" y1="6" x2="6" y2="18" />
+                                    <line x1="6" y1="6" x2="18" y2="18" />
+                                  </svg>
+                                ) : (
+                                  <svg className="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <polygon points="6 4 20 12 6 20 6 4" />
+                                  </svg>
+                                )}
+                                <span>{isTesting ? 'Close' : 'Try It'}</span>
                               </button>
 
                               <CopyButton text={fullUrl} variant="compact" label="URL" />
@@ -551,17 +650,22 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
                             </div>
                           </div>
 
-                          {/* Secondary info: handler function or docstring summary */}
-                          {(route.summary || route.handler) && (
-                            <div className="flex items-center gap-2 text-xs text-zinc-400 pl-1">
+                          {/* Secondary info: docstring summary, handler function & source file */}
+                          {(showSummary || route.handler || route.file) && (
+                            <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-400 md:pl-[92px]">
+                              {showSummary && (
+                                <span className="text-zinc-300 text-xs font-medium">
+                                  {route.summary}
+                                </span>
+                              )}
                               {route.handler && (
-                                <code className="text-[11px] font-mono text-zinc-500 bg-[#0e0e12] px-1.5 py-0.5 rounded border border-white/[0.04]">
+                                <code className="text-[11px] font-mono text-zinc-400 bg-[#0d0d12] px-2 py-0.5 rounded border border-white/[0.06]">
                                   {route.handler}()
                                 </code>
                               )}
-                              {route.summary && (
-                                <span className="truncate text-zinc-400 text-[11px]">
-                                  {route.summary}
+                              {route.file && (
+                                <span className="text-[10px] font-mono text-zinc-500 truncate">
+                                  {route.file}
                                 </span>
                               )}
                             </div>
@@ -569,10 +673,10 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
 
                           {/* ── Interactive Test Drawer ── */}
                           {isTesting && (
-                            <div className="mt-2 p-4 rounded-xl bg-[#0c0c10] border border-emerald-500/30 flex flex-col gap-3 animate-in fade-in duration-150">
+                            <div className="mt-2 p-4 rounded-xl bg-[#0c0c10] border border-emerald-500/30 flex flex-col gap-3 portal-drawer-enter">
                               <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-white/[0.08]">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded shrink-0">
                                     LIVE TEST RUNNER
                                   </span>
                                   <span className="text-xs font-mono text-zinc-300 truncate max-w-lg">
@@ -583,7 +687,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
                                   type="button"
                                   disabled={isSending}
                                   onClick={() => handleExecuteLiveTest(route)}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 transition-all shadow-md disabled:opacity-50"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 transition-all shadow-md disabled:opacity-50 cursor-pointer shrink-0"
                                 >
                                   {isSending ? (
                                     <>
@@ -592,11 +696,34 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
                                     </>
                                   ) : (
                                     <>
-                                      <span>▶ Send Request</span>
+                                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <polygon points="6 4 20 12 6 20 6 4" />
+                                      </svg>
+                                      <span>Send Request</span>
                                     </>
                                   )}
                                 </button>
                               </div>
+
+                              {/* Path parameter inputs for parameterized endpoints */}
+                              {pathParams.length > 0 && (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                  {pathParams.map((param) => (
+                                    <label key={param} className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[#07070a] border border-amber-500/25 text-xs font-mono">
+                                      <span className="text-amber-300 shrink-0">{`{${param}}`}:</span>
+                                      <input
+                                        type="text"
+                                        value={pathParamValues[param] || ''}
+                                        onChange={(e) =>
+                                          setPathParamValues((prev) => ({ ...prev, [param]: e.target.value }))
+                                        }
+                                        placeholder={`Enter ${param}...`}
+                                        className="flex-1 bg-transparent text-white placeholder-zinc-600 focus:outline-none min-w-0"
+                                      />
+                                    </label>
+                                  ))}
+                                </div>
+                              )}
 
                               {/* Payload editor for write methods */}
                               {['POST', 'PUT', 'PATCH'].includes(route.method) && (

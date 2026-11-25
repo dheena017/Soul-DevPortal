@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { HeaderEqualizerBars, HeroArtworkBackdrop, MiniRadialRing } from '../../../components/PortalVisuals';
 import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../../types';
 import {
   buildDiagnosticReportMarkdown,
@@ -146,11 +147,13 @@ export default function SystemHeaderCard({
     }`;
 
   return (
-    <header className="w-full p-4 sm:p-5 md:p-6 rounded-2xl system-card shadow-2xl flex flex-col gap-4 sm:gap-5">
+    <header className="relative overflow-hidden w-full p-4 sm:p-5 md:p-6 rounded-2xl system-card shadow-2xl flex flex-col gap-4 sm:gap-5">
+      <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="Hardware Silicon Die Architecture" opacityClass="opacity-42 sm:opacity-60" />
+      <div className="relative z-10 flex flex-col gap-4 sm:gap-5">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Host Identity */}
         <div className="flex items-start gap-3.5 min-w-0">
-          <div className="w-11 h-11 rounded-xl soul-emblem-box flex items-center justify-center text-sky-400 shrink-0">
+          <div className="w-11 h-11 rounded-xl soul-emblem-box flex items-center justify-center text-sky-400 shrink-0 portal-emblem-hover">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
               <line x1="8" y1="21" x2="16" y2="21" />
@@ -191,7 +194,7 @@ export default function SystemHeaderCard({
           <button
             type="button"
             onClick={onTogglePause}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-mono font-bold transition-colors cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-mono font-bold hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer ${
               statusActive
                 ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300 hover:bg-emerald-500/20'
                 : 'bg-amber-500/15 border-amber-500/35 text-amber-300 hover:bg-amber-500/20'
@@ -199,6 +202,7 @@ export default function SystemHeaderCard({
             title={statusActive ? 'Click to pause live updates' : 'Click to resume live updates'}
           >
             <span className={`w-2 h-2 rounded-full ${statusActive ? 'bg-emerald-400 status-pulse' : 'bg-amber-400'}`} />
+            <HeaderEqualizerBars active={statusActive} tone="emerald" />
             <span>
               {isTabHidden
                 ? 'TAB HIDDEN'
@@ -269,7 +273,7 @@ export default function SystemHeaderCard({
             type="button"
             onClick={onRescanHardware}
             disabled={isRescanning}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs font-semibold text-zinc-200 hover:text-white hover:border-white/[0.22] hover:bg-white/[0.06] disabled:opacity-50 transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs font-semibold text-zinc-200 hover:text-white hover:border-white/[0.22] hover:bg-white/[0.06] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 transition-all cursor-pointer portal-icon-spin"
           >
             <svg
               className={`w-3.5 h-3.5 ${isRescanning ? 'animate-spin text-sky-400' : 'text-zinc-400'}`}
@@ -305,6 +309,71 @@ export default function SystemHeaderCard({
             </button>
           </div>
         </div>
+      </div>
+
+      {/* ── Live Silicon Visual Telemetry Bar ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 portal-grid-stagger">
+        <button
+          type="button"
+          onClick={() => onSelectTab('performance')}
+          className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-sky-400/35 text-left cursor-pointer portal-card-hover"
+        >
+          <div className="flex flex-col min-w-0">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">CPU LOAD</span>
+            <strong className="text-sm font-mono font-bold text-sky-300 tabular-nums">{Math.round(live.cpu.totalPercent)}%</strong>
+          </div>
+          <MiniRadialRing percent={live.cpu.totalPercent} color="#38bdf8" size={26} />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onSelectTab('performance')}
+          className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-purple-400/35 text-left cursor-pointer portal-card-hover"
+        >
+          <div className="flex flex-col min-w-0">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">MEMORY</span>
+            <strong className="text-sm font-mono font-bold text-purple-300 tabular-nums">{Math.round(live.memory.percent)}%</strong>
+          </div>
+          <MiniRadialRing percent={live.memory.percent} color="#c084fc" size={26} />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onSelectTab('storage-network')}
+          className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-emerald-400/35 text-left cursor-pointer portal-card-hover"
+        >
+          <div className="flex flex-col min-w-0">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">VOLUMES</span>
+            <strong className="text-sm font-mono font-bold text-emerald-300 tabular-nums">
+              {live.disk.volumes[0] ? `${Math.round(live.disk.volumes[0].usedPercent)}%` : `${live.disk.volumes.length}Vol`}
+            </strong>
+          </div>
+          <MiniRadialRing percent={live.disk.volumes[0]?.usedPercent ?? 0} color="#34d399" size={26} />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onSelectTab('power-health')}
+          className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-amber-400/35 text-left cursor-pointer portal-card-hover"
+        >
+          <div className="flex flex-col min-w-0">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
+              {battery ? 'BATTERY' : 'GPU LOAD'}
+            </span>
+            <strong className="text-sm font-mono font-bold text-amber-300 tabular-nums">
+              {battery
+                ? `${Math.round(battery.percent)}%`
+                : live.gpu.utilizationPercent != null
+                  ? `${Math.round(live.gpu.utilizationPercent)}%`
+                  : `${live.socketCounts.established} Est`}
+            </strong>
+          </div>
+          <MiniRadialRing
+            percent={battery?.percent ?? live.gpu.utilizationPercent ?? Math.min(100, live.socketCounts.established)}
+            color="#fbbf24"
+            size={26}
+          />
+        </button>
       </div>
 
       {/* ── Integrated 8-Tab Icon + Pill Strip with Styled Left / Right Scroll Arrows ── */}
@@ -443,6 +512,7 @@ export default function SystemHeaderCard({
             </svg>
           </button>
         )}
+      </div>
       </div>
     </header>
   );

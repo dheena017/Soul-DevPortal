@@ -47,12 +47,12 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] hover:shadow-2xl transition-all duration-200 gap-4 h-full">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] gap-4 h-full portal-card-hover">
       {/* ── Top Row: Icon, Version, Ecosystem Pills ── */}
         <div className="flex flex-col gap-3.5" onClick={handleCardClick} style={{ cursor: onSelectPackage ? 'pointer' : 'default' }}>
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.1] bg-[#16161c] text-xl shadow-inner">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.1] bg-[#16161c] text-xl shadow-inner portal-emblem-hover">
                 {meta.icon}
               </div>
 

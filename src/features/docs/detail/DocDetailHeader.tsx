@@ -1,5 +1,6 @@
 import React from 'react';
 import CopyButton from '../../../components/CopyButton';
+import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../../components/PortalVisuals';
 import { GuideMeta } from '../docsConstants';
 
 export type DocDetailTab = 'spec' | 'highlights' | 'snippets' | 'tables';
@@ -42,18 +43,20 @@ export default function DocDetailHeader({
   const displayFilename = activeFilename || guideMeta.filename;
 
   return (
-    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6">
+    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6 portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="Documentation Specification Visual" opacityClass="opacity-42 sm:opacity-58" />
+      <div className="relative z-10 flex flex-col gap-4 sm:gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 pb-3.5 sm:pb-4 border-b border-white/[0.06]">
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs min-w-0">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               onClick={onBack}
               title="Return to docs dashboard"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
@@ -62,10 +65,10 @@ export default function DocDetailHeader({
           ) : (
             <a
               href="#docs"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               title="Return to docs dashboard"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="19" y1="12" x2="5" y2="12" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
@@ -118,7 +121,7 @@ export default function DocDetailHeader({
       {/* ── Hero Title & 2x2 Balanced Cards Row ── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="flex items-start gap-4 min-w-0">
-          <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 text-2xl shadow-inner">
+          <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 text-2xl shadow-inner portal-emblem-hover">
             {displayIcon}
           </div>
 
@@ -159,8 +162,8 @@ export default function DocDetailHeader({
         </div>
 
         {/* 4-Card Balanced Metadata Grid */}
-        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full lg:w-auto lg:min-w-[340px] shrink-0">
-          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full lg:w-auto lg:min-w-[340px] shrink-0 portal-grid-stagger">
+          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] portal-card-hover">
             <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>📑</span>
               <span>SECTIONS</span>
@@ -168,7 +171,7 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-sky-400 font-mono mt-1">{headingsCount} headings</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] portal-card-hover">
             <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>⏱️</span>
               <span>READ TIME</span>
@@ -176,7 +179,7 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-amber-400 font-mono mt-1">{guideMeta.readTime}</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] portal-card-hover">
             <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>💻</span>
               <span>CODE EXAMPLES</span>
@@ -184,7 +187,7 @@ export default function DocDetailHeader({
             <strong className="text-base font-bold text-emerald-400 font-mono mt-1">{codeBlocksCount} snippets</strong>
           </div>
 
-          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
+          <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] portal-card-hover">
             <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>📊</span>
               <span>TABLES &amp; MATRICES</span>
@@ -193,6 +196,16 @@ export default function DocDetailHeader({
           </div>
         </div>
       </div>
+
+      <ProportionalSpectrumBar
+        title="SPECIFICATION CONTENT PROFILE"
+        segments={[
+          { label: 'Headings', value: headingsCount, colorClass: 'bg-sky-400', hex: '#38bdf8' },
+          { label: 'Golden Rules', value: guideMeta.keyHighlights.length, colorClass: 'bg-amber-400', hex: '#fbbf24' },
+          { label: 'Code Snippets', value: codeBlocksCount, colorClass: 'bg-emerald-400', hex: '#34d399' },
+          { label: 'Tables', value: tablesCount, colorClass: 'bg-purple-400', hex: '#c084fc' },
+        ]}
+      />
 
       {/* ── Integrated Header Navigation Tabs ── */}
       <div className="pt-2 border-t border-white/[0.06]">
@@ -282,6 +295,7 @@ export default function DocDetailHeader({
             </span>
           </button>
         </div>
+      </div>
       </div>
     </header>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../../components/PortalVisuals';
 import TabLoadingState from '../../../components/TabLoadingState';
 import { PackageData } from '../../../types';
 
@@ -61,7 +62,8 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
   }
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6">
+    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6 portal-stagger portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="Package Exports Pipeline Visual" opacityClass="opacity-30 sm:opacity-42" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">PACKAGE API</span>
@@ -93,6 +95,16 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
         </div>
       </div>
 
+      <ProportionalSpectrumBar
+        title="EXPORTS & SCRIPTS COMPOSITION"
+        segments={[
+          { label: 'NPM Paths', value: filteredNpm.length, colorClass: 'bg-rose-400', hex: '#fb7185' },
+          { label: 'TypeScript AST', value: filteredTs.length, colorClass: 'bg-sky-400', hex: '#38bdf8' },
+          { label: 'Python AST', value: filteredPy.length, colorClass: 'bg-amber-400', hex: '#fbbf24' },
+          { label: 'Scripts', value: filteredScripts.length, colorClass: 'bg-purple-400', hex: '#c084fc' },
+        ]}
+      />
+
       {filteredNpm.length > 0 && (
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
@@ -107,11 +119,11 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
             </span>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 portal-list-stagger">
             {filteredNpm.map(({ exportPath, importPath }) => (
               <div
                 key={exportPath}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all gap-3"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-3 portal-row-hover"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-400">
@@ -143,11 +155,11 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 portal-grid-stagger">
             {filteredTs.map((name) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all gap-2"
+                className="flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover"
                 title={`TypeScript symbol: ${name}`}
               >
                 <code className="text-xs font-mono text-neutral-200 truncate">{name}</code>
@@ -172,11 +184,11 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 portal-grid-stagger">
             {filteredPy.map((name) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all gap-2"
+                className="flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover"
                 title={`from ${pkg.pythonModule || pkg.pythonName} import ${name}`}
               >
                 <div className="flex items-center gap-1.5 min-w-0">
@@ -208,11 +220,11 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 portal-grid-stagger">
             {filteredScripts.map(([name, command]) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all gap-3"
+                className="flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-3 portal-card-hover"
               >
                 <div className="flex flex-col min-w-0">
                   <code className="text-xs font-mono font-bold text-neutral-300 truncate">{name}</code>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Markdown from '../../../components/Markdown';
+import { HeroArtworkBackdrop } from '../../../components/PortalVisuals';
 import TabLoadingState from '../../../components/TabLoadingState';
 import { MarkdownBlock } from '../../../types';
 
@@ -19,11 +20,12 @@ export default function DocSnippetsTab({ codeBlocks, isLoading = false }: DocSni
     );
   }
   return (
-    <section className="w-full p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6">
+    <section className="w-full p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6 portal-stagger portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Code Snippets Synthesis Visual" opacityClass="opacity-30 sm:opacity-42" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 status-pulse"></span>
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400">
               EXTRACTED IMPLEMENTATION EXAMPLES
             </span>

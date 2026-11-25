@@ -1,4 +1,5 @@
 import React from 'react';
+import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../../components/PortalVisuals';
 
 export interface PackagesHeaderProps {
   packagesCount: number;
@@ -24,18 +25,20 @@ export default function PackagesHeader({
   onBack,
 }: PackagesHeaderProps) {
   return (
-    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-5">
+    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-5 portal-header-sheen">
+      <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="Shared Packages Prism Architecture" />
+      <div className="relative z-10 flex flex-col gap-4 sm:gap-5">
       {/* ── Breadcrumb & Live Status Row ── */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center gap-1.5 sm:gap-2 text-xs min-w-0">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="group inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               onClick={onBack}
               title="Back to Soul Workspace"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
               <span>Back</span>
@@ -43,10 +46,10 @@ export default function PackagesHeader({
           ) : (
             <a
               href="#overview"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm"
+              className="group inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm"
               title="Back to Soul Workspace"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
               <span>Back</span>
@@ -68,7 +71,7 @@ export default function PackagesHeader({
 
       {/* ── Hero Title & Identity Row ── */}
       <div className="flex items-start sm:items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-purple-400 shrink-0 shadow-lg">
+        <div className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-purple-400 shrink-0 shadow-lg portal-emblem-hover">
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
             <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
@@ -89,8 +92,8 @@ export default function PackagesHeader({
       </div>
 
       {/* ── 4-Metric Quick Stats Strip ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3" role="region" aria-label="Package metrics">
-        <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 portal-grid-stagger" role="region" aria-label="Package metrics">
+        <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
@@ -100,7 +103,7 @@ export default function PackagesHeader({
           <strong className="text-xl font-extrabold text-white font-mono mt-1.5">{packagesCount} Active</strong>
         </div>
 
-        <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+        <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
@@ -110,7 +113,7 @@ export default function PackagesHeader({
           <strong className="text-xl font-extrabold text-white font-mono mt-1.5">Dual (TS + Python)</strong>
         </div>
 
-        <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+        <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6" />
@@ -121,7 +124,7 @@ export default function PackagesHeader({
           <strong className="text-xl font-extrabold text-white font-mono mt-1.5">59+ Symbols</strong>
         </div>
 
-        <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] transition-all">
+        <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -238,6 +241,15 @@ export default function PackagesHeader({
             </select>
           </div>
         </div>
+      </div>
+      <ProportionalSpectrumBar
+        title="DUAL-RUNTIME SHARED ECOSYSTEM FOOTPRINT"
+        segments={[
+          { label: 'TS / ESM Exports', value: 28, colorClass: 'bg-sky-400', hex: '#38bdf8' },
+          { label: 'Python Modules', value: 19, colorClass: 'bg-amber-400', hex: '#fbbf24' },
+          { label: 'CLI & Config Presets', value: 12, colorClass: 'bg-purple-400', hex: '#c084fc' },
+        ]}
+      />
       </div>
     </header>
   );
