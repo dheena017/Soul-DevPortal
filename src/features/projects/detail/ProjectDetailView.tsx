@@ -12,6 +12,7 @@ import ProjectEnvTab from './ProjectEnvTab';
 import ProjectReadmeTab from './ProjectReadmeTab';
 
 export interface ProjectDetailViewProps {
+  key?: React.Key;
   project: ProjectData;
   onBack?: () => void;
 }
@@ -22,10 +23,30 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
   const [portStatus, setPortStatus] = useState<{ fe: string; be: string; latency: number } | null>(null);
   const [showSecretPlaceholders, setShowSecretPlaceholders] = useState<boolean>(false);
   const [tabData, setTabData] = useState<Record<string, any>>({});
+  const [loadingTabs, setLoadingTabs] = useState<Record<ProjectDetailTab, boolean>>({
+    overview: true,
+    files: true,
+    api: true,
+    database: true,
+    scripts: true,
+    env: true,
+    readme: true,
+  });
 
   useEffect(() => {
     let isMounted = true;
     const tabNames: ProjectDetailTab[] = ['overview', 'files', 'api', 'database', 'scripts', 'env', 'readme'];
+
+    setTabData({});
+    setLoadingTabs({
+      overview: true,
+      files: true,
+      api: true,
+      database: true,
+      scripts: true,
+      env: true,
+      readme: true,
+    });
 
     // Preload all tabs concurrently so badges and tab explorer immediately have live data
     tabNames.forEach(async (tab) => {
@@ -36,6 +57,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         }
       } catch {
         // Fallback to static props
+      } finally {
+        if (isMounted) {
+          setLoadingTabs((prev) => ({ ...prev, [tab]: false }));
+        }
       }
     });
 
@@ -213,7 +238,11 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         )}
 
         {activeTab === 'files' && (
-          <ProjectFilesTab project={project} fileTree={fileTree} />
+          <ProjectFilesTab
+            project={project}
+            fileTree={fileTree}
+            isLoading={loadingTabs.files && fileTree.length === 0}
+          />
         )}
 
         {activeTab === 'api' && (
@@ -221,15 +250,23 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             project={apiProject}
             beUrl={beUrl}
             rawEndpoints={tabData.api?.endpoints || (project as any).rawEndpoints}
+            isLoading={loadingTabs.api && (apiProject.apiEndpoints?.length || 0) === 0 && !(tabData.api?.endpoints?.length || (project as any).rawEndpoints?.length)}
           />
         )}
 
         {activeTab === 'database' && (
-          <ProjectDatabaseTab project={project} tables={tables} />
+          <ProjectDatabaseTab
+            project={project}
+            tables={tables}
+            isLoading={loadingTabs.database && tables.length === 0}
+          />
         )}
 
         {activeTab === 'scripts' && (
-          <ProjectScriptsTab scriptsEntries={scriptsEntries} />
+          <ProjectScriptsTab
+            scriptsEntries={scriptsEntries}
+            isLoading={loadingTabs.scripts && scriptsEntries.length === 0}
+          />
         )}
 
         {activeTab === 'env' && (
@@ -241,11 +278,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             onToggleSecretPlaceholders={() => setShowSecretPlaceholders(!showSecretPlaceholders)}
             depsEntries={depsEntries}
             devDepsEntries={devDepsEntries}
+            isLoading={loadingTabs.env && envKeys.length === 0 && depsEntries.length === 0 && devDepsEntries.length === 0}
           />
         )}
 
         {activeTab === 'readme' && (
-          <ProjectReadmeTab project={readmeProject} />
+          <ProjectReadmeTab
+            project={readmeProject}
+            isLoading={loadingTabs.readme && !(readmeProject.readmeBlocks && readmeProject.readmeBlocks.length > 0)}
+          />
         )}
       </div>
     </article>

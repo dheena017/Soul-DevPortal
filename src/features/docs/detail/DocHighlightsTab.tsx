@@ -1,6 +1,7 @@
 import React from 'react';
 import Markdown from '../../../components/Markdown';
 import TableOfContents from '../../../components/TableOfContents';
+import TabLoadingState from '../../../components/TabLoadingState';
 import { MarkdownBlock } from '../../../types';
 import { GuideMeta } from '../docsConstants';
 
@@ -10,6 +11,7 @@ export interface DocHighlightsTabProps {
   headings?: MarkdownBlock[];
   activeTitle?: string;
   activeFilename?: string;
+  isLoading?: boolean;
 }
 
 export default function DocHighlightsTab({
@@ -18,6 +20,7 @@ export default function DocHighlightsTab({
   headings = [],
   activeTitle,
   activeFilename,
+  isLoading = false,
 }: DocHighlightsTabProps) {
   const hasHeadings = headings && headings.length > 0;
   const hasGoldenRulesContent = goldenRulesBlocks && goldenRulesBlocks.length > 0;
@@ -93,10 +96,17 @@ export default function DocHighlightsTab({
       </section>
 
       {/* ── Complete Golden Rules Markdown Specification (golden-rules.md) ── */}
+      {!hasGoldenRulesContent && isLoading && (
+        <TabLoadingState
+          variant="article"
+          title={`Loading ${displayTitle}`}
+          subtitle={`Fetching Soul-DevPortal-Docs/${displayFilename}...`}
+        />
+      )}
       {hasGoldenRulesContent && (
         <div
           className={`w-full ${
-            hasHeadings ? 'grid grid-cols-1 lg:grid-cols-[280px_1fr]' : 'flex flex-col'
+            hasHeadings ? 'grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[316px_1fr]' : 'flex flex-col'
           } gap-5 items-start`}
         >
           {hasHeadings && (

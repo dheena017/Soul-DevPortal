@@ -52,11 +52,12 @@ export const Header: React.FC<HeaderProps> = ({
   useEffect(() => {
     let isMounted = true;
     async function probe() {
+      if (typeof document !== 'undefined' && document.hidden) return;
       const live = await checkBackendHealth();
       if (isMounted) setIsBackendLive(live);
     }
     probe();
-    const timer = setInterval(probe, 6000);
+    const timer = setInterval(probe, 20000);
     return () => {
       isMounted = false;
       clearInterval(timer);
@@ -64,9 +65,9 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   return (
-    <header className="w-full h-14 bg-[#0d0d10]/95 backdrop-blur-md border-b border-white/[0.08] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
+    <header className="w-full h-14 bg-[#0d0d10] border-b border-white/[0.08] px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
       {/* ── Left: Sidebar Toggle & Breadcrumbs ── */}
-      <div className="flex items-center gap-3 min-w-0">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         <button
           type="button"
           className="p-2 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all shrink-0 shadow-sm cursor-pointer"
@@ -91,44 +92,50 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </button>
 
-        <nav className="flex items-center gap-2 text-xs min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
+        <nav className="flex items-center gap-1.5 sm:gap-2 text-xs min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] font-mono text-zinc-200 hover:text-white transition-all shrink-0 shadow-sm"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] font-mono text-zinc-200 hover:text-white transition-all shrink-0 shadow-sm"
             onClick={() => onNavigate('overview')}
             title="Go to Overview Dashboard"
           >
             <SoulLogoIcon size={18} />
-            <span className="font-semibold text-zinc-300">soul</span>
-            <span className="text-zinc-600 font-bold">/</span>
-            <strong className="text-zinc-100 font-bold">dev-portal</strong>
+            <span className="font-semibold text-zinc-300 hidden sm:inline">soul</span>
+            <span className="text-zinc-600 font-bold hidden sm:inline">/</span>
+            <strong className="text-zinc-100 font-bold text-[11px] sm:text-xs">dev-portal</strong>
           </button>
 
-          {breadcrumbs.slice(1).map((crumb, idx) => (
-            <div key={idx} className="flex items-center gap-2 min-w-0">
-              <span className="text-zinc-600 font-bold px-0.5">/</span>
-              {crumb.id ? (
-                <button
-                  type="button"
-                  className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] text-zinc-200 hover:text-white transition-all truncate font-medium max-w-[200px]"
-                  onClick={() => onNavigate(crumb.id!)}
-                  title={`Go to ${crumb.label}`}
-                >
-                  {crumb.label}
-                </button>
-              ) : (
-                <span
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-[200px]"
-                  title={crumb.label}
-                >
-                  {breadcrumbs.length > 2 && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                  )}
-                  <span className="truncate">{crumb.label}</span>
-                </span>
-              )}
-            </div>
-          ))}
+          {breadcrumbs.slice(1).map((crumb, idx) => {
+            const isLast = idx === breadcrumbs.slice(1).length - 1;
+            return (
+              <div
+                key={idx}
+                className={`${isLast ? 'flex' : 'hidden sm:flex'} items-center gap-1.5 sm:gap-2 min-w-0`}
+              >
+                <span className="text-zinc-600 font-bold px-0.5">/</span>
+                {crumb.id ? (
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] text-zinc-200 hover:text-white transition-all truncate font-medium max-w-[120px] sm:max-w-[200px]"
+                    onClick={() => onNavigate(crumb.id!)}
+                    title={`Go to ${crumb.label}`}
+                  >
+                    {crumb.label}
+                  </button>
+                ) : (
+                  <span
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-[140px] sm:max-w-[200px]"
+                    title={crumb.label}
+                  >
+                    {breadcrumbs.length > 2 && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                    )}
+                    <span className="truncate">{crumb.label}</span>
+                  </span>
+                )}
+              </div>
+            );
+          })}
         </nav>
       </div>
 

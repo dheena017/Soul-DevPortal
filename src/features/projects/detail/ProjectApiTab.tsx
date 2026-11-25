@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import TabLoadingState from '../../../components/TabLoadingState';
 import { ProjectData } from '../../../types';
 
 export interface ProjectApiTabProps {
   project: ProjectData;
   beUrl: string | null;
   rawEndpoints?: any[];
+  isLoading?: boolean;
 }
 
 export interface ApiRouteItem {
@@ -81,7 +83,7 @@ function getMethodBadgeStyle(method: string) {
   }
 }
 
-export default function ProjectApiTab({ project, beUrl, rawEndpoints }: ProjectApiTabProps) {
+export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading = false }: ProjectApiTabProps) {
   const [filterQuery, setFilterQuery] = useState<string>('');
   const [methodFilter, setMethodFilter] = useState<string>('ALL');
   const [activeGroupFilter, setActiveGroupFilter] = useState<string>('ALL');
@@ -278,6 +280,16 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints }: ProjectA
       setIsSending(false);
     }
   };
+
+  if (allRoutes.length === 0 && isLoading) {
+    return (
+      <TabLoadingState
+        variant="grid"
+        title={`Inspecting ${project.title} API Endpoints`}
+        subtitle="Scanning FastAPI router modules and OpenAPI route definitions..."
+      />
+    );
+  }
 
   return (
     <section className="w-full flex flex-col gap-5 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl animate-in fade-in duration-200">

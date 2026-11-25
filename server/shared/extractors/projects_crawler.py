@@ -5,6 +5,7 @@ Discovers all projects in Soul-DevPortal-Projects/ and probes live TCP sockets.
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 import os
 import socket
 from pathlib import Path
@@ -46,8 +47,11 @@ def crawl_projects(projects_root: Path, registry: Dict[str, Any]) -> List[Dict[s
         fe_port = spec.get("frontend_port") or (5173 + len(projects))
         be_port = spec.get("backend_port") or (8000 + len(projects))
 
-        fe_live = is_port_live(fe_port)
-        be_live = is_port_live(be_port)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            fe_future = pool.submit(is_port_live, fe_port)
+            be_future = pool.submit(is_port_live, be_port)
+            fe_live = fe_future.result()
+            be_live = be_future.result()
 
         title = spec.get("title") or meta.get("name") or pid.replace("-", " ").title()
         description = meta.get("description") or spec.get("description", "")

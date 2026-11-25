@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import TabLoadingState from '../../../components/TabLoadingState';
 
 export interface ProjectScriptsTabProps {
   scriptsEntries: Array<[string, string]>;
+  isLoading?: boolean;
 }
 
-export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabProps) {
+export default function ProjectScriptsTab({ scriptsEntries, isLoading = false }: ProjectScriptsTabProps) {
   const [filter, setFilter] = useState<string>('');
 
   const filteredScripts = useMemo(() => {
@@ -15,6 +17,16 @@ export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabP
       ([name, cmd]) => name.toLowerCase().includes(needle) || cmd.toLowerCase().includes(needle)
     );
   }, [scriptsEntries, filter]);
+
+  if (scriptsEntries.length === 0 && isLoading) {
+    return (
+      <TabLoadingState
+        variant="grid"
+        title="Loading Project Scripts"
+        subtitle="Reading package.json lifecycle and automation commands..."
+      />
+    );
+  }
 
   return (
     <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5">
@@ -57,22 +69,32 @@ export default function ProjectScriptsTab({ scriptsEntries }: ProjectScriptsTabP
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {filteredScripts.map(([scriptName, scriptCmd]) => (
-            <div
-              key={scriptName}
-              className="flex flex-col justify-between p-4 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all gap-2.5"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <code className="text-xs font-mono font-bold text-neutral-300 truncate">npm run {scriptName}</code>
-                <CopyButton text={`npm run ${scriptName}`} variant="compact" />
+        {filteredScripts.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {filteredScripts.map(([scriptName, scriptCmd]) => (
+              <div
+                key={scriptName}
+                className="flex flex-col justify-between p-4 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all gap-2.5"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <code className="text-xs font-mono font-bold text-neutral-300 truncate">npm run {scriptName}</code>
+                  <CopyButton text={`npm run ${scriptName}`} variant="compact" />
+                </div>
+                <div className="p-2.5 rounded-lg bg-[#070708] border border-[#19191d] font-mono text-[11px] text-neutral-400 overflow-x-auto">
+                  <code>{scriptCmd}</code>
+                </div>
               </div>
-              <div className="p-2.5 rounded-lg bg-[#070708] border border-[#19191d] font-mono text-[11px] text-neutral-400 overflow-x-auto">
-                <code>{scriptCmd}</code>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="p-8 rounded-xl bg-[#111115] border border-white/[0.06] text-center">
+            <p className="text-xs text-zinc-400 font-mono">
+              {scriptsEntries.length === 0
+                ? 'No npm lifecycle scripts declared in package.json.'
+                : `No scripts match "${filter}".`}
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

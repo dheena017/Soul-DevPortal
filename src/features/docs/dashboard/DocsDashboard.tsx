@@ -63,9 +63,9 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
   return (
     <article className="w-full flex flex-col gap-6 max-w-7xl mx-auto pb-12 animate-in fade-in duration-300" aria-label="Documentation Hub & Architecture Specifications">
       {/* Hero Header with Merged Toolbar */}
-      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5">
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
-          <div className="flex items-center gap-2 text-xs">
+      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-5">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 pb-3 border-b border-white/[0.08]">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-xs min-w-0">
             {onBackToOverview ? (
               <button
                 type="button"
@@ -90,9 +90,9 @@ export default function DocsDashboard({ onSelectGuide, onBackToOverview }: DocsD
                 <span>Back</span>
               </a>
             )}
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 font-medium">Soul Workspace</span>
+            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 font-medium">Soul Workspace</span>
             <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
-            <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e28] border border-white/15 text-white font-semibold shadow-sm">Pillar 3: Docs Dashboard</strong>
+            <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e28] border border-white/15 text-white font-semibold shadow-sm truncate">Pillar 3: Docs Dashboard</strong>
           </div>
 
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-200 select-none shadow-sm">

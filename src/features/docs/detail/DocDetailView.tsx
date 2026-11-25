@@ -12,6 +12,7 @@ import DocTablesTab from './DocTablesTab';
 export type { DocDetailTab };
 
 export interface DocDetailViewProps {
+  key?: React.Key;
   guideId: string;
   blocks?: MarkdownBlock[];
   portGuideBlocks?: MarkdownBlock[];
@@ -58,28 +59,49 @@ export default function DocDetailView({
   // Dynamic API fetched blocks when not present in virtual bundle
   const [apiMainBlocks, setApiMainBlocks] = useState<MarkdownBlock[] | null>(null);
   const [apiRulesBlocks, setApiRulesBlocks] = useState<MarkdownBlock[] | null>(null);
+  const [isLoadingMain, setIsLoadingMain] = useState<boolean>(false);
+  const [isLoadingRules, setIsLoadingRules] = useState<boolean>(false);
 
   // Fetch from FastAPI if blocks are missing from effectiveBlocksMap
   useEffect(() => {
     let isMounted = true;
-    async function loadFromBackend() {
-      const mainPath = guideMeta.mainFile;
-      const rulesPath = guideMeta.rulesFile;
+    const mainPath = guideMeta.mainFile;
+    const rulesPath = guideMeta.rulesFile;
+    const hasMainLocal = Boolean(effectiveBlocksMap[mainPath]?.length || fallbackMainBlocks.length);
+    const hasRulesLocal = Boolean(effectiveBlocksMap[rulesPath]?.length);
 
+    setApiMainBlocks(null);
+    setApiRulesBlocks(null);
+    setIsLoadingMain(!hasMainLocal);
+    setIsLoadingRules(!hasRulesLocal);
+
+    async function loadFromBackend() {
       // Check if main blocks exist
       if (!effectiveBlocksMap[mainPath]?.length) {
-        const res = await fetchDocFileContent(guideMeta.folder, 'main');
-        if (res && res.blocks && res.blocks.length > 0 && isMounted) {
-          setApiMainBlocks(res.blocks);
+        try {
+          const res = await fetchDocFileContent(guideMeta.folder, 'main');
+          if (res && res.blocks && res.blocks.length > 0 && isMounted) {
+            setApiMainBlocks(res.blocks);
+          }
+        } finally {
+          if (isMounted) setIsLoadingMain(false);
         }
+      } else if (isMounted) {
+        setIsLoadingMain(false);
       }
 
       // Check if rules blocks exist
       if (!effectiveBlocksMap[rulesPath]?.length) {
-        const res = await fetchDocFileContent(guideMeta.folder, 'golden-rules');
-        if (res && res.blocks && res.blocks.length > 0 && isMounted) {
-          setApiRulesBlocks(res.blocks);
+        try {
+          const res = await fetchDocFileContent(guideMeta.folder, 'golden-rules');
+          if (res && res.blocks && res.blocks.length > 0 && isMounted) {
+            setApiRulesBlocks(res.blocks);
+          }
+        } finally {
+          if (isMounted) setIsLoadingRules(false);
         }
+      } else if (isMounted) {
+        setIsLoadingRules(false);
       }
     }
 
@@ -87,7 +109,7 @@ export default function DocDetailView({
     return () => {
       isMounted = false;
     };
-  }, [guideMeta.folder, guideMeta.mainFile, guideMeta.rulesFile, effectiveBlocksMap]);
+  }, [guideMeta.folder, guideMeta.mainFile, guideMeta.rulesFile, effectiveBlocksMap, fallbackMainBlocks.length]);
 
   // 1. Full Specification Blocks (main.md)
   const mainBlocks: MarkdownBlock[] = useMemo(() => {
@@ -172,6 +194,7 @@ export default function DocDetailView({
             guideMeta={guideMeta}
             activeTitle={`${guideMeta.title} — Full Specification`}
             activeFilename={guideMeta.mainFile}
+            isLoading={isLoadingMain && mainBlocks.length === 0}
           />
         )}
 
@@ -183,17 +206,24 @@ export default function DocDetailView({
             headings={rulesHeadings}
             activeTitle={`${guideMeta.title} — Golden Invariants & Engineering Rules`}
             activeFilename={guideMeta.rulesFile}
+            isLoading={isLoadingRules && goldenRulesBlocks.length === 0}
           />
         )}
 
         {/* Tab 3: Code Snippets */}
         {activeTab === 'snippets' && (
-          <DocSnippetsTab codeBlocks={codeBlocks} />
+          <DocSnippetsTab
+            codeBlocks={codeBlocks}
+            isLoading={(isLoadingMain || isLoadingRules) && codeBlocks.length === 0}
+          />
         )}
 
         {/* Tab 4: Tables & Matrices */}
         {activeTab === 'tables' && (
-          <DocTablesTab tables={tableBlocks} />
+          <DocTablesTab
+            tables={tableBlocks}
+            isLoading={(isLoadingMain || isLoadingRules) && tableBlocks.length === 0}
+          />
         )}
       </div>
     </div>

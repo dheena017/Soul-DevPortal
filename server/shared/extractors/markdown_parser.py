@@ -69,28 +69,33 @@ def parse_markdown_to_blocks(markdown: str) -> List[Dict[str, Any]]:
         # Callouts / Blockquotes
         if trimmed.startswith(">"):
             quote_text = trimmed.lstrip(">").strip()
-            callout_type = "note"
-            if "[!NOTE]" in quote_text:
-                callout_type = "note"
-                quote_text = quote_text.replace("[!NOTE]", "").strip()
-            elif "[!TIP]" in quote_text:
-                callout_type = "tip"
-                quote_text = quote_text.replace("[!TIP]", "").strip()
-            elif "[!IMPORTANT]" in quote_text:
-                callout_type = "important"
-                quote_text = quote_text.replace("[!IMPORTANT]", "").strip()
-            elif "[!WARNING]" in quote_text:
-                callout_type = "warning"
-                quote_text = quote_text.replace("[!WARNING]", "").strip()
-            elif "[!CAUTION]" in quote_text:
-                callout_type = "caution"
-                quote_text = quote_text.replace("[!CAUTION]", "").strip()
+            if not quote_text:
+                index += 1
+                continue
+            callout_type = None
+            for marker, ctype in (
+                ("[!NOTE]", "note"),
+                ("[!TIP]", "tip"),
+                ("[!IMPORTANT]", "important"),
+                ("[!WARNING]", "warning"),
+                ("[!CAUTION]", "caution"),
+            ):
+                if marker in quote_text:
+                    callout_type = ctype
+                    quote_text = quote_text.replace(marker, "").strip()
+                    break
 
-            blocks.append({
-                "type": "callout",
-                "calloutType": callout_type,
-                "text": quote_text,
-            })
+            if callout_type is not None:
+                blocks.append({
+                    "type": "callout",
+                    "calloutType": callout_type,
+                    "text": quote_text,
+                })
+            else:
+                blocks.append({
+                    "type": "quote",
+                    "text": quote_text,
+                })
             index += 1
             continue
 
@@ -113,6 +118,38 @@ def parse_markdown_to_blocks(markdown: str) -> List[Dict[str, Any]]:
                     "headers": headers,
                     "rows": rows,
                 })
+            continue
+
+        # Skip pure HTML container tags & comments
+        if re.match(r"^(?:</?(?:div|center|p|span|section|article|header|footer|details|summary|figure|figcaption)\b[^>]*>|<!--[\s\S]*-->)$", trimmed, re.IGNORECASE):
+            index += 1
+            continue
+
+        # Horizontal rule
+        if re.match(r"^(?:-{3,}|\*{3,}|_{3,}|<hr\s*/?>)$", trimmed, re.IGNORECASE):
+            blocks.append({"type": "hr"})
+            index += 1
+            continue
+
+        # Bullet list
+        bullet_match = re.match(r"^\s*[-*]\s+(.+)$", line)
+        if bullet_match:
+            blocks.append({
+                "type": "list",
+                "text": bullet_match.group(1).strip(),
+            })
+            index += 1
+            continue
+
+        # Ordered list
+        ordered_match = re.match(r"^\s*(\d+)[.)]\s+(.+)$", line)
+        if ordered_match:
+            blocks.append({
+                "type": "ordered",
+                "number": int(ordered_match.group(1)),
+                "text": ordered_match.group(2).strip(),
+            })
+            index += 1
             continue
 
         # Paragraphs / Text

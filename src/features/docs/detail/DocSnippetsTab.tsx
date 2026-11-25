@@ -1,12 +1,23 @@
 import React from 'react';
 import Markdown from '../../../components/Markdown';
+import TabLoadingState from '../../../components/TabLoadingState';
 import { MarkdownBlock } from '../../../types';
 
 export interface DocSnippetsTabProps {
   codeBlocks: MarkdownBlock[];
+  isLoading?: boolean;
 }
 
-export default function DocSnippetsTab({ codeBlocks }: DocSnippetsTabProps) {
+export default function DocSnippetsTab({ codeBlocks, isLoading = false }: DocSnippetsTabProps) {
+  if (codeBlocks.length === 0 && isLoading) {
+    return (
+      <TabLoadingState
+        variant="list"
+        title="Extracting Code Snippets"
+        subtitle="Indexing implementation examples from specification markdown..."
+      />
+    );
+  }
   return (
     <section className="w-full p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">

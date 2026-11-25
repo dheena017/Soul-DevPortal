@@ -27,7 +27,7 @@ def get_workspace_bundle():
 @router.post("/workspace/refresh")
 def refresh_workspace_bundle():
     """Triggers live filesystem re-scan, re-computes telemetry, and syncs SQLite."""
-    data = service.get_dashboard_overview()
+    data = service.get_dashboard_overview(force_refresh=True)
     return {
         "success": True,
         "message": "Workspace refreshed successfully.",

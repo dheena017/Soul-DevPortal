@@ -134,7 +134,11 @@ function markdownBlocks(markdown) {
     }
 
     if (!line.trim()) continue;
-    if (/^-{3,}$/.test(line.trim())) continue;
+    if (/^(?:<\/?(?:div|center|p|span|section|article|header|footer|details|summary|figure|figcaption)\b[^>]*>|<!--[\s\S]*-->)$/i.test(line.trim())) continue;
+    if (/^(?:-{3,}|\*{3,}|_{3,}|<hr\s*\/?>)$/i.test(line.trim())) {
+      blocks.push({ type: 'hr' });
+      continue;
+    }
 
     const quote = line.match(/^>\s*(.+)$/);
     if (quote) {

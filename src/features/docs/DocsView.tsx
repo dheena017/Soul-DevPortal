@@ -45,6 +45,7 @@ export default function DocsView({
   // Otherwise, render the specific Guide Detail view with back link to Docs Dashboard
   return (
     <DocDetailView
+      key={activeGuideId}
       guideId={activeGuideId}
       blocks={blocks}
       portGuideBlocks={portGuideBlocks}

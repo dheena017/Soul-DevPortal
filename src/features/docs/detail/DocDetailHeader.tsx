@@ -42,14 +42,14 @@ export default function DocDetailHeader({
   const displayFilename = activeFilename || guideMeta.filename;
 
   return (
-    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6">
+    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
-        <div className="flex flex-wrap items-center gap-2 text-xs">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 pb-3.5 sm:pb-4 border-b border-white/[0.06]">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs min-w-0">
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               onClick={onBack}
               title="Return to docs dashboard"
             >
@@ -62,7 +62,7 @@ export default function DocDetailHeader({
           ) : (
             <a
               href="#docs"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
               title="Return to docs dashboard"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -72,11 +72,11 @@ export default function DocDetailHeader({
               <span>Back to Docs</span>
             </a>
           )}
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 font-medium">Soul Workspace</span>
-          <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
+          <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 font-medium">Soul Workspace</span>
+          <span className="hidden sm:inline text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
           <a
             href="#docs"
-            className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] hover:text-white transition-all text-zinc-300 font-medium"
+            className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] hover:text-white transition-all text-zinc-300 font-medium"
             onClick={(e) => {
               if (onBack) {
                 e.preventDefault();
@@ -87,16 +87,17 @@ export default function DocDetailHeader({
             Pillar 3: Docs Dashboard
           </a>
           <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
-          <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#16161c] border border-white/10 text-zinc-300 font-medium truncate max-w-xs">{guideMeta.title}</span>
+          <span className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#16161c] border border-white/10 text-zinc-300 font-medium truncate max-w-[175px] sm:max-w-xs">{guideMeta.title}</span>
           {activeTitle && activeTitle !== guideMeta.title && (
             <>
               <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
-              <strong className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1e1e28] border border-white/20 text-white font-semibold shadow-sm truncate max-w-sm">{displayTitle}</strong>
+              <strong className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#1e1e28] border border-white/20 text-white font-semibold shadow-sm truncate max-w-[180px] sm:max-w-sm">{displayTitle}</strong>
             </>
           )}
-          <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/10 border border-sky-500/25 text-sky-400 shadow-sm inline-flex items-center gap-1.5 ml-1">
+          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/10 border border-sky-500/25 text-sky-400 shadow-sm inline-flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
-            <span>SPECIFICATION INSPECTOR</span>
+            <span className="sm:hidden">INSPECTOR</span>
+            <span className="hidden sm:inline">SPECIFICATION INSPECTOR</span>
           </span>
         </div>
 
@@ -158,7 +159,7 @@ export default function DocDetailHeader({
         </div>
 
         {/* 4-Card Balanced Metadata Grid */}
-        <div className="grid grid-cols-2 gap-3 min-w-[280px] lg:min-w-[340px] shrink-0">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full lg:w-auto lg:min-w-[340px] shrink-0">
           <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] transition-all">
             <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase tracking-wider flex items-center gap-1">
               <span>📑</span>
@@ -195,12 +196,12 @@ export default function DocDetailHeader({
 
       {/* ── Integrated Header Navigation Tabs ── */}
       <div className="pt-2 border-t border-white/[0.06]">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#09090c] border border-white/[0.08] rounded-xl" role="tablist" aria-label="Documentation guide sections">
+        <div className="flex flex-nowrap sm:flex-wrap items-center gap-1.5 p-1 bg-[#09090c] border border-white/[0.08] rounded-xl overflow-x-auto scrollbar-none" role="tablist" aria-label="Documentation guide sections">
           <button
             type="button"
             role="tab"
             aria-selected={activeTab === 'spec'}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
+            className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'spec'
                 ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
@@ -221,7 +222,7 @@ export default function DocDetailHeader({
             type="button"
             role="tab"
             aria-selected={activeTab === 'highlights'}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
+            className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'highlights'
                 ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
@@ -241,7 +242,7 @@ export default function DocDetailHeader({
             type="button"
             role="tab"
             aria-selected={activeTab === 'snippets'}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
+            className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'snippets'
                 ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
@@ -262,7 +263,7 @@ export default function DocDetailHeader({
             type="button"
             role="tab"
             aria-selected={activeTab === 'tables'}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
+            className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'tables'
                 ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'

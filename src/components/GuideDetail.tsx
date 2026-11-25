@@ -124,9 +124,9 @@ export default function GuideDetail({
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] items-start gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[316px_1fr] items-start gap-6">
         <TableOfContents headings={headings} title="On this page" />
-        <section className="p-5 md:p-8 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl overflow-hidden min-w-0">
+        <section className="p-4 sm:p-5 md:p-8 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl overflow-hidden min-w-0">
           <Markdown blocks={activeBlocks} skipFirstHeading />
         </section>
       </div>

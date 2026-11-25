@@ -5,6 +5,7 @@ Handles shared packages discovery, AST symbols, manifests, and playgrounds.
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -14,12 +15,16 @@ from shared.extractors.markdown_parser import parse_markdown_to_blocks
 
 
 class PackageService:
+    _CACHE_TTL_SECONDS = 20.0
+
     def __init__(self, packages_root: Path = PACKAGES_ROOT):
         self.packages_root = packages_root
+        self._packages_cache: Optional[List[Dict[str, Any]]] = None
+        self._cache_timestamp: float = 0.0
 
     def get_navigation(self) -> List[Dict[str, Any]]:
         """Returns dynamic navigation tree of all packages with their available tabs."""
-        packages = crawl_packages(self.packages_root)
+        packages = self.get_all_packages()
         return [
             {
                 "id": p["id"],
@@ -31,9 +36,19 @@ class PackageService:
             for p in packages
         ]
 
-    def get_all_packages(self) -> List[Dict[str, Any]]:
-        """Returns live list of all shared packages."""
-        return crawl_packages(self.packages_root)
+    def get_all_packages(self, force_refresh: bool = False) -> List[Dict[str, Any]]:
+        """Returns live list of all shared packages with short TTL cache to avoid burst re-crawls."""
+        now = time.monotonic()
+        if (
+            not force_refresh
+            and self._packages_cache is not None
+            and (now - self._cache_timestamp) < self._CACHE_TTL_SECONDS
+        ):
+            return self._packages_cache
+        packages = crawl_packages(self.packages_root)
+        self._packages_cache = packages
+        self._cache_timestamp = now
+        return packages
 
     def get_package_by_id(self, package_name: str) -> Optional[Dict[str, Any]]:
         """Retrieves a single package's complete metadata and AST."""
@@ -71,12 +86,18 @@ class PackageService:
             }
 
         elif tab == "manifest":
+            manifests = pkg_data.get("manifests", {})
             return {
                 "id": package_name,
                 "name": pkg_data["name"],
-                "manifests": pkg_data.get("manifests", {}),
+                "manifests": manifests,
+                "npmManifest": manifests.get("npm", {}),
+                "pythonManifest": manifests.get("python", {}),
+                "exports": pkg_data.get("exports", []),
+                "pythonDependencies": pkg_data.get("pythonDependencies", []),
                 "dependencies": pkg_data.get("dependencies", {}),
                 "devDependencies": pkg_data.get("devDependencies", {}),
+                "peerDependencies": pkg_data.get("peerDependencies", {}),
             }
 
         elif tab == "playground":

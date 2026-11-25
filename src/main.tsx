@@ -27,6 +27,35 @@ import { DOCUMENTATION_GUIDES_REGISTRY, findGuideMeta } from './features/docs/do
 
 import './styles.css';
 
+function mergeById<T extends { id: string }>(
+  prevList: T[] = [],
+  nextList: T[] = [],
+  fallbackKeys: Array<keyof T>
+): T[] {
+  if (!nextList.length) return prevList;
+  const prevMap = new Map(prevList.map((item) => [item.id, item]));
+  return nextList.map((nextItem) => {
+    const prevItem = prevMap.get(nextItem.id);
+    if (!prevItem) return nextItem;
+    const merged = { ...prevItem, ...nextItem };
+    for (const key of fallbackKeys) {
+      const nextVal = nextItem[key];
+      const isEmptyArray = Array.isArray(nextVal) && nextVal.length === 0;
+      const isEmptyObj =
+        nextVal &&
+        typeof nextVal === 'object' &&
+        !Array.isArray(nextVal) &&
+        Object.keys(nextVal).length === 0;
+      if (nextVal === undefined || nextVal === null || isEmptyArray || isEmptyObj) {
+        if (prevItem[key] !== undefined) {
+          merged[key] = prevItem[key];
+        }
+      }
+    }
+    return merged;
+  });
+}
+
 function App() {
   const [active, setActive] = useState<string>('overview');
   const [query, setQuery] = useState<string>('');
@@ -48,11 +77,36 @@ function App() {
         setLiveWorkspace((prev) => ({
           ...prev,
           ...data,
+          packages: mergeById(prev.packages || [], data.packages || [], [
+            'readmeBlocks',
+            'exports',
+            'pythonExports',
+            'typeScriptExports',
+            'peerDependencies',
+            'pythonName',
+            'pythonModule',
+            'pythonDependencies',
+          ]),
+          projects: mergeById(prev.projects || [], data.projects || [], [
+            'readmeBlocks',
+            'tables',
+            'envKeys',
+            'configuration',
+            'fileTree',
+            'apiEndpoints',
+            'scripts',
+            'dependencies',
+            'devDependencies',
+          ]),
           guideBlocks: data.guideBlocks && data.guideBlocks.length > 0 ? data.guideBlocks : prev.guideBlocks,
           portGuideBlocks: data.portGuideBlocks && data.portGuideBlocks.length > 0 ? data.portGuideBlocks : prev.portGuideBlocks,
           techStackBlocks: data.techStackBlocks && data.techStackBlocks.length > 0 ? data.techStackBlocks : prev.techStackBlocks,
           projectRulesBlocks: data.projectRulesBlocks && data.projectRulesBlocks.length > 0 ? data.projectRulesBlocks : prev.projectRulesBlocks,
           cheatsheetBlocks: data.cheatsheetBlocks && data.cheatsheetBlocks.length > 0 ? data.cheatsheetBlocks : prev.cheatsheetBlocks,
+          docsBlocksMap: {
+            ...(prev.docsBlocksMap || {}),
+            ...(data.docsBlocksMap || {}),
+          },
         }));
         consoleLogger.success('API', 'Dynamic workspace payload received from FastAPI flow', {
           packagesCount: data.packages?.length || 0,
@@ -63,6 +117,7 @@ function App() {
     loadWorkspaceFromApi();
 
     const intervalId = setInterval(async () => {
+      if (typeof document !== 'undefined' && document.hidden) return;
       const liveProjects = await fetchProjectsLive();
       if (liveProjects && liveProjects.length > 0 && isMounted) {
         setLiveWorkspace((prev) => {
@@ -72,19 +127,31 @@ function App() {
             prevProjects.every(
               (p, i) =>
                 p.id === liveProjects[i].id &&
-                (p.frontendActive === liveProjects[i].frontendActive || p.frontend?.isLive === liveProjects[i].frontend?.isLive) &&
-                (p.backendActive === liveProjects[i].backendActive || p.backend?.isLive === liveProjects[i].backend?.isLive)
+                Boolean(p.frontend?.isLive ?? p.frontendActive) ===
+                  Boolean(liveProjects[i].frontend?.isLive ?? liveProjects[i].frontendActive) &&
+                Boolean(p.backend?.isLive ?? p.backendActive) ===
+                  Boolean(liveProjects[i].backend?.isLive ?? liveProjects[i].backendActive)
             )
           ) {
             return prev;
           }
           return {
             ...prev,
-            projects: liveProjects,
+            projects: mergeById(prevProjects, liveProjects, [
+              'readmeBlocks',
+              'tables',
+              'envKeys',
+              'configuration',
+              'fileTree',
+              'apiEndpoints',
+              'scripts',
+              'dependencies',
+              'devDependencies',
+            ]),
           };
         });
       }
-    }, 5000);
+    }, 30000);
 
     return () => {
       isMounted = false;
@@ -370,6 +437,7 @@ function App() {
               }
               return (
                 <ProjectDetailView
+                  key={project.id}
                   project={project}
                   onBack={() => navigate('projects')}
                 />

@@ -1,15 +1,33 @@
 import React from 'react';
+import TabLoadingState from '../../../components/TabLoadingState';
 import { PackageData } from '../../../types';
 
 export interface PackageManifestTabProps {
   pkg: PackageData;
+  isLoading?: boolean;
 }
 
-export default function PackageManifestTab({ pkg }: PackageManifestTabProps) {
+export default function PackageManifestTab({ pkg, isLoading = false }: PackageManifestTabProps) {
   const deps = Object.entries(pkg.dependencies || {});
   const devDeps = Object.entries(pkg.devDependencies || {});
   const peerDeps = Object.entries(pkg.peerDependencies || {});
   const pyDeps = pkg.pythonDependencies || [];
+
+  if (
+    isLoading &&
+    deps.length === 0 &&
+    devDeps.length === 0 &&
+    peerDeps.length === 0 &&
+    pyDeps.length === 0
+  ) {
+    return (
+      <TabLoadingState
+        variant="grid"
+        title={`Loading @workspace/${pkg.id} Manifests`}
+        subtitle="Reading package.json, pyproject.toml, and dependency graph..."
+      />
+    );
+  }
 
   return (
     <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6">

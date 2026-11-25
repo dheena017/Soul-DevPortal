@@ -1,13 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import TabLoadingState from '../../../components/TabLoadingState';
 import { ProjectData } from '../../../types';
 
 export interface ProjectDatabaseTabProps {
   project: ProjectData;
   tables: string[];
+  isLoading?: boolean;
 }
 
-export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseTabProps) {
+export default function ProjectDatabaseTab({ project, tables, isLoading = false }: ProjectDatabaseTabProps) {
   const [filter, setFilter] = useState<string>('');
 
   const filteredTables = useMemo(() => {
@@ -15,6 +17,16 @@ export default function ProjectDatabaseTab({ project, tables }: ProjectDatabaseT
     if (!needle) return tables;
     return tables.filter((t) => t.toLowerCase().includes(needle));
   }, [tables, filter]);
+
+  if (tables.length === 0 && isLoading) {
+    return (
+      <TabLoadingState
+        variant="grid"
+        title={`Inspecting ${project.title} Database`}
+        subtitle="Scanning SQLite WAL tables, schema models, and persistence configuration..."
+      />
+    );
+  }
 
   return (
     <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5">

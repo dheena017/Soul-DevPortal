@@ -5,7 +5,9 @@ Handles projects discovery, navigation tree, socket probes, and granular per-tab
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 import os
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -19,15 +21,19 @@ from shared.extractors.markdown_parser import parse_markdown_to_blocks
 
 
 class ProjectService:
+    _CACHE_TTL_SECONDS = 20.0
+
     def __init__(self, projects_root: Path = PROJECTS_ROOT):
         self.projects_root = projects_root
+        self._projects_cache: Optional[List[Dict[str, Any]]] = None
+        self._cache_timestamp: float = 0.0
 
     def _get_registry(self) -> Dict[str, Any]:
         return read_json_manifest(ROOT_PROJECTS_JSON)
 
     def get_navigation(self) -> List[Dict[str, Any]]:
         """Returns the dynamic navigation tree of all projects with their available tabs."""
-        projects = crawl_projects(self.projects_root, self._get_registry())
+        projects = self.get_all_projects()
         return [
             {
                 "id": p["id"],
@@ -40,9 +46,36 @@ class ProjectService:
             for p in projects
         ]
 
-    def get_all_projects(self) -> List[Dict[str, Any]]:
-        """Returns the full live list of all 8 consumer projects."""
-        return crawl_projects(self.projects_root, self._get_registry())
+    def get_all_projects(self, force_refresh: bool = False) -> List[Dict[str, Any]]:
+        """Returns all consumer projects with cached filesystem metadata and fast parallel socket status."""
+        now = time.monotonic()
+        if (
+            not force_refresh
+            and self._projects_cache is not None
+            and (now - self._cache_timestamp) < self._CACHE_TTL_SECONDS
+        ):
+            # Refresh socket liveness concurrently without re-walking disk/git
+            ports = []
+            for p in self._projects_cache:
+                ports.append(p.get("frontendPort") or 0)
+                ports.append(p.get("backendPort") or 0)
+            with ThreadPoolExecutor(max_workers=12) as pool:
+                live_flags = list(pool.map(is_port_live, ports))
+            refreshed: List[Dict[str, Any]] = []
+            for idx, proj in enumerate(self._projects_cache):
+                fe_live = live_flags[idx * 2]
+                be_live = live_flags[idx * 2 + 1]
+                refreshed.append({
+                    **proj,
+                    "frontend": {"port": proj.get("frontendPort"), "isLive": fe_live},
+                    "backend": {"port": proj.get("backendPort"), "isLive": be_live},
+                })
+            return refreshed
+
+        projects = crawl_projects(self.projects_root, self._get_registry())
+        self._projects_cache = projects
+        self._cache_timestamp = now
+        return projects
 
     def get_project_by_id(self, project_name: str) -> Optional[Dict[str, Any]]:
         """Retrieves a single project's top-level metadata."""

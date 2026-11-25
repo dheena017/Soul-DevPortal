@@ -12,6 +12,7 @@ from typing import Any, Dict, List
 
 from shared.extractors.ast_visitor import parse_python_symbols
 from shared.extractors.manifest_reader import read_json_manifest, read_pyproject_toml
+from shared.extractors.markdown_parser import parse_markdown_to_blocks
 from shared.extractors.typescript_parser import parse_typescript_symbols
 
 
@@ -119,19 +120,56 @@ def crawl_packages(packages_root: Path) -> List[Dict[str, Any]]:
 
         git_meta = _get_path_meta(pkg_dir)
 
+        readme_path = pkg_dir / "README.md"
+        readme_blocks = (
+            parse_markdown_to_blocks(readme_path.read_text(encoding="utf-8"))
+            if readme_path.is_file()
+            else []
+        )
+
+        raw_exports = npm_manifest.get("exports")
+        npm_exports = list(raw_exports.keys()) if isinstance(raw_exports, dict) else ["."]
+
+        py_exports = list(
+            dict.fromkeys(
+                s["name"] for s in symbols if s.get("language") == "python" and s.get("name")
+            )
+        )
+        ts_exports = list(
+            dict.fromkeys(
+                s["name"] for s in symbols if s.get("language") == "typescript" and s.get("name")
+            )
+        )
+
+        py_dirs = [
+            d.name
+            for d in pkg_dir.iterdir()
+            if d.is_dir() and d.name.startswith("workspace_")
+        ]
+        py_module = py_dirs[0] if py_dirs else None
+
         packages.append({
             "id": pkg_id,
             "name": name,
             "displayName": name,
             "version": version,
+            "license": npm_manifest.get("license") or "MIT",
             "description": description,
             "relativePath": f"Soul-DevPortal-Packages/{pkg_id}",
             "language": "Python + TypeScript" if py_manifest.get("name") else "TypeScript",
             "hasNpmManifest": bool(npm_manifest),
             "hasPythonManifest": bool(py_manifest.get("name")),
+            "pythonName": py_manifest.get("name"),
+            "pythonModule": py_module,
+            "pythonDependencies": py_manifest.get("dependencies", []),
+            "exports": npm_exports,
+            "pythonExports": py_exports,
+            "typeScriptExports": ts_exports,
+            "readmeBlocks": readme_blocks,
             "scripts": npm_manifest.get("scripts", {}),
             "dependencies": npm_manifest.get("dependencies", {}),
             "devDependencies": npm_manifest.get("devDependencies", {}),
+            "peerDependencies": npm_manifest.get("peerDependencies", {}),
             "manifests": {"npm": npm_manifest, "python": py_manifest},
             "symbols": symbols,
             "updatedAt": git_meta["updatedAt"],

@@ -12,14 +12,107 @@ export function headingId(text: string): string {
 }
 
 interface InlineTextProps {
+  key?: React.Key;
   text?: string;
+}
+
+interface LinkedBadgeProps {
+  key?: React.Key;
+  alt: string;
+  imgSrc: string;
+  href: string;
+}
+
+function LinkedBadge({
+  alt,
+  imgSrc,
+  href,
+}: LinkedBadgeProps) {
+  const [imgFailed, setImgFailed] = useState<boolean>(false);
+  const isExternal = href.startsWith('http');
+
+  const handleAnchorClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (!href.startsWith('#')) return;
+    e.preventDefault();
+    const targetId = headingId(href.slice(1));
+    const el = document.getElementById(targetId) || document.getElementById(href.slice(1));
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  return (
+    <a
+      href={href}
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
+      onClick={handleAnchorClick}
+      title={alt || href}
+      className="inline-flex items-center align-middle transition-transform hover:-translate-y-0.5"
+    >
+      {!imgFailed ? (
+        <img
+          src={imgSrc}
+          alt={alt || 'Badge'}
+          loading="lazy"
+          className="h-6 w-auto rounded-[5px] border border-white/[0.08] shadow-sm"
+          onError={() => setImgFailed(true)}
+        />
+      ) : (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold bg-[#16161c] border border-white/[0.12] text-zinc-200 hover:border-sky-400/40 hover:text-white transition-colors">
+          <span>{alt || 'Link'}</span>
+          {isExternal && <span className="text-[10px] text-zinc-400">↗</span>}
+        </span>
+      )}
+    </a>
+  );
+}
+
+interface MarkdownImageProps {
+  key?: React.Key;
+  src: string;
+  alt?: string;
+  width?: string;
+}
+
+function MarkdownImage({
+  src,
+  alt,
+  width,
+}: MarkdownImageProps) {
+  const [failed, setFailed] = useState<boolean>(false);
+  const parsedWidth = width ? Number.parseInt(width, 10) : NaN;
+  const maxWidthStyle =
+    !Number.isNaN(parsedWidth) && parsedWidth > 0 ? { maxWidth: `${parsedWidth}px` } : undefined;
+
+  if (failed) {
+    return (
+      <span className="inline-flex items-center gap-2 my-1.5 px-3 py-1.5 rounded-lg bg-[#16161c] border border-white/[0.08] text-[11px] font-mono text-zinc-400">
+        <span aria-hidden="true">🖼️</span>
+        <span className="truncate max-w-xs">{alt || src}</span>
+      </span>
+    );
+  }
+
+  return (
+    <span className="inline-block my-2 max-w-full align-middle">
+      <img
+        src={src}
+        alt={alt || 'Preview'}
+        loading="lazy"
+        style={maxWidthStyle}
+        className="w-auto max-w-full max-h-96 rounded-xl border border-white/[0.08] shadow-md object-contain"
+        onError={() => setFailed(true)}
+      />
+    </span>
+  );
 }
 
 function InlineText({ text = '' }: InlineTextProps) {
   if (!text) return null;
 
   const parts = text.split(
-    /(!\[[^\]]*\]\([^)]+\)|<img\s+[^>]+>|`[^`]+`|\*\*[^*]+\*\*|~~[^~]+~~|\[[^\]]+\]\([^)]+\)|\*[^*]+\*|_[^_]+_)/g
+    /(\[!\[[^\]]*\]\([^)]+\)\]\([^)]+\)|!\[[^\]]*\]\([^)]+\)|<img\s+[^>]+>|`[^`]+`|\*\*[^*]+\*\*|~~[^~]+~~|\[[^\]]+\]\([^)]+\)|\*[^*]+\*|_[^_]+_|<br\s*\/?>)/gi
   );
 
   return (
@@ -27,38 +120,46 @@ function InlineText({ text = '' }: InlineTextProps) {
       {parts.map((part, index) => {
         if (!part) return null;
 
-        // Markdown Image: ![alt](url)
-        const imgMatch = part.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
-        if (imgMatch) {
+        if (/^<br\s*\/?>$/i.test(part)) {
+          return <br key={index} />;
+        }
+
+        // Linked Markdown Image / Badge: [![alt](imgSrc)](href)
+        const linkedImgMatch = part.match(/^\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)$/);
+        if (linkedImgMatch) {
           return (
-            <span key={index} className="inline-block my-2 max-w-full">
-              <img
-                src={imgMatch[2]}
-                alt={imgMatch[1] || 'Preview'}
-                className="max-h-96 rounded-xl border border-white/[0.08] shadow-md object-contain"
-                onError={(e) => {
-                  (e.currentTarget as HTMLElement).style.display = 'none';
-                }}
-              />
-            </span>
+            <LinkedBadge
+              key={index}
+              alt={linkedImgMatch[1]}
+              imgSrc={linkedImgMatch[2]}
+              href={linkedImgMatch[3]}
+            />
           );
         }
 
+        // Markdown Image: ![alt](url)
+        const imgMatch = part.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+        if (imgMatch) {
+          return <MarkdownImage key={index} src={imgMatch[2]} alt={imgMatch[1]} />;
+        }
+
         // HTML Image: <img src="..." />
-        const htmlImgMatch = part.match(/<img\s+[^>]*src=["']([^"']+)["'][^>]*\/?>/i);
+        const htmlImgMatch = part.match(/<img\s+([^>]+)\/?>/i);
         if (htmlImgMatch) {
-          return (
-            <span key={index} className="inline-block my-2 max-w-full">
-              <img
-                src={htmlImgMatch[1]}
-                alt="Image preview"
-                className="max-h-96 rounded-xl border border-white/[0.08] shadow-md object-contain"
-                onError={(e) => {
-                  (e.currentTarget as HTMLElement).style.display = 'none';
-                }}
+          const attrs = htmlImgMatch[1];
+          const srcMatch = attrs.match(/src=["']([^"']+)["']/i);
+          const altMatch = attrs.match(/alt=["']([^"']+)["']/i);
+          const widthMatch = attrs.match(/width=["']?(\d+)["']?/i);
+          if (srcMatch) {
+            return (
+              <MarkdownImage
+                key={index}
+                src={srcMatch[1]}
+                alt={altMatch?.[1]}
+                width={widthMatch?.[1]}
               />
-            </span>
-          );
+            );
+          }
         }
 
         if (part.startsWith('`') && part.endsWith('`')) {
@@ -98,12 +199,25 @@ function InlineText({ text = '' }: InlineTextProps) {
 
         const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
         if (link) {
+          const href = link[2];
+          const isExternal = href.startsWith('http');
+          const isHash = href.startsWith('#');
           return (
             <a
               key={index}
-              href={link[2]}
-              target={link[2].startsWith('http') ? '_blank' : undefined}
-              rel={link[2].startsWith('http') ? 'noopener noreferrer' : undefined}
+              href={href}
+              target={isExternal ? '_blank' : undefined}
+              rel={isExternal ? 'noopener noreferrer' : undefined}
+              onClick={(e) => {
+                if (!isHash) return;
+                e.preventDefault();
+                const targetId = headingId(href.slice(1));
+                const el =
+                  document.getElementById(targetId) || document.getElementById(href.slice(1));
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
               className="text-sky-400 hover:text-sky-300 underline decoration-sky-400/40 hover:decoration-sky-300 transition-colors font-medium"
             >
               {link[1]}
@@ -150,7 +264,7 @@ function CodeBlock({ code, language = 'text' }: CodeBlockProps) {
   };
 
   return (
-    <div className={`my-4 w-full rounded-2xl border ${isMermaid ? 'border-purple-500/30 bg-[#0d0914]' : 'border-white/[0.08] bg-[#09090c]'} overflow-hidden shadow-2xl`}>
+    <div className={`my-4 w-full rounded-2xl border ${isMermaid ? 'border-purple-500/30 bg-[#0d0914]' : 'border-white/[0.08] bg-[#09090c]'} overflow-hidden shadow-md`}>
       <div className="flex items-center justify-between px-4 py-2 border-b border-white/[0.06] bg-[#121217]">
         <div className="flex items-center gap-2">
           {isMermaid && <span className="text-xs">📊</span>}
@@ -313,12 +427,76 @@ export interface MarkdownProps {
   skipFirstHeading?: boolean;
 }
 
-export default function Markdown({ blocks = [], skipFirstHeading = false }: MarkdownProps) {
+function isPureHtmlWrapper(text: string): boolean {
+  const trimmed = text.trim();
+  return (
+    /^<\/?(?:div|center|p|span|section|article|header|footer|details|summary|figure|figcaption)\b[^>]*>$/i.test(
+      trimmed
+    ) || /^<!--[\s\S]*-->$/.test(trimmed)
+  );
+}
+
+function isHorizontalRule(text: string): boolean {
+  const trimmed = text.trim();
+  return /^(?:-{3,}|\*{3,}|_{3,})$/.test(trimmed) || /^<hr\s*\/?>$/i.test(trimmed);
+}
+
+function isBadgeOnlyLine(text: string): boolean {
+  const trimmed = text.trim();
+  if (!trimmed) return false;
+  return /^(?:\[!\[[^\]]*\]\([^)]+\)\]\([^)]+\)|!\[[^\]]*\]\(https?:\/\/img\.shields\.io[^)]+\)|\s)+$/.test(
+    trimmed
+  );
+}
+
+export default React.memo(function Markdown({ blocks = [], skipFirstHeading = false }: MarkdownProps) {
   let skippedHeading = false;
   const groupedBlocks: any[] = [];
 
   for (let index = 0; index < blocks.length; index += 1) {
     const block = blocks[index];
+
+    if (block.type === 'p' || block.type === 'paragraph') {
+      const trimmed = (block.text || '').trim();
+      if (!trimmed || isPureHtmlWrapper(trimmed)) {
+        continue;
+      }
+      if (isHorizontalRule(trimmed)) {
+        groupedBlocks.push({ type: 'hr' });
+        continue;
+      }
+      if (isBadgeOnlyLine(trimmed)) {
+        const badgeTexts = [trimmed];
+        while (
+          index + 1 < blocks.length &&
+          (blocks[index + 1].type === 'p' || blocks[index + 1].type === 'paragraph') &&
+          isBadgeOnlyLine((blocks[index + 1].text || '').trim())
+        ) {
+          badgeTexts.push((blocks[index + 1].text || '').trim());
+          index += 1;
+        }
+        groupedBlocks.push({ type: 'badge-group', items: badgeTexts });
+        continue;
+      }
+      const bulletMatch = trimmed.match(/^[-*]\s+(.+)$/);
+      if (bulletMatch) {
+        const items = [{ type: 'list', text: bulletMatch[1] }];
+        while (index + 1 < blocks.length) {
+          const next = blocks[index + 1];
+          const nextBullet =
+            next.type === 'list'
+              ? next.text
+              : (next.type === 'p' || next.type === 'paragraph')
+              ? next.text?.trim().match(/^[-*]\s+(.+)$/)?.[1]
+              : undefined;
+          if (!nextBullet) break;
+          items.push({ type: 'list', text: nextBullet });
+          index += 1;
+        }
+        groupedBlocks.push({ type: 'list-group', ordered: false, items });
+        continue;
+      }
+    }
 
     // Check for callouts in quotes
     if (block.type === 'quote') {
@@ -349,6 +527,18 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
   return (
     <div className="w-full flex flex-col text-zinc-300 leading-relaxed text-xs md:text-sm">
       {groupedBlocks.map((block, index) => {
+        if (block.type === 'hr') {
+          return <hr key={index} className="my-5 border-0 border-t border-white/[0.08]" />;
+        }
+        if (block.type === 'badge-group') {
+          return (
+            <div key={index} className="my-3 flex flex-wrap items-center gap-2">
+              {block.items.map((badgeText: string, badgeIdx: number) => (
+                <InlineText key={badgeIdx} text={badgeText} />
+              ))}
+            </div>
+          );
+        }
         if (block.type === 'h1') {
           if (skipFirstHeading && !skippedHeading) {
             skippedHeading = true;
@@ -377,6 +567,7 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
         }
 
         if (block.type === 'callout') {
+          if (!(block.text || '').trim()) return null;
           return (
             <Callout type={block.calloutType} key={index}>
               <InlineText text={block.text} />
@@ -536,7 +727,7 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
           return (
             <div
               key={index}
-              className="my-5 w-full overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#09090c] shadow-2xl"
+              className="my-5 w-full overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#09090c] shadow-md"
             >
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
@@ -577,4 +768,4 @@ export default function Markdown({ blocks = [], skipFirstHeading = false }: Mark
       })}
     </div>
   );
-}
+});

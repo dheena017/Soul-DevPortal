@@ -1,12 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import TabLoadingState from '../../../components/TabLoadingState';
 import { PackageData } from '../../../types';
 
 export interface PackageApiTabProps {
   pkg: PackageData;
+  isLoading?: boolean;
 }
 
-export default function PackageApiTab({ pkg }: PackageApiTabProps) {
+export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabProps) {
   const [filter, setFilter] = useState<string>('');
   const npmExports = pkg.exports || [];
   const pyExports = pkg.pythonExports || [];
@@ -41,6 +43,22 @@ export default function PackageApiTab({ pkg }: PackageApiTabProps) {
     if (!needle) return Object.entries(scripts);
     return Object.entries(scripts).filter(([k, v]) => k.toLowerCase().includes(needle) || v.toLowerCase().includes(needle));
   }, [scripts, needle]);
+
+  const hasAnySymbols =
+    npmImports.length > 0 ||
+    tsExports.length > 0 ||
+    pyExports.length > 0 ||
+    Object.keys(scripts).length > 0;
+
+  if (!hasAnySymbols && isLoading) {
+    return (
+      <TabLoadingState
+        variant="grid"
+        title={`Indexing @workspace/${pkg.id} API & Exports`}
+        subtitle="Scanning TypeScript exports, Python AST symbols, and package scripts..."
+      />
+    );
+  }
 
   return (
     <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6">

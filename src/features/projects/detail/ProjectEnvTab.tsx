@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import CopyButton from '../../../components/CopyButton';
+import TabLoadingState from '../../../components/TabLoadingState';
 import { ProjectData } from '../../../types';
 
 export interface ProjectEnvTabProps {
@@ -10,6 +11,7 @@ export interface ProjectEnvTabProps {
   onToggleSecretPlaceholders: () => void;
   depsEntries: Array<[string, string]>;
   devDepsEntries: Array<[string, string]>;
+  isLoading?: boolean;
 }
 
 export default function ProjectEnvTab({
@@ -20,6 +22,7 @@ export default function ProjectEnvTab({
   onToggleSecretPlaceholders,
   depsEntries,
   devDepsEntries,
+  isLoading = false,
 }: ProjectEnvTabProps) {
   const [filter, setFilter] = useState<string>('');
   const [filterType, setFilterType] = useState<'all' | 'secrets' | 'active'>('all');
@@ -71,6 +74,16 @@ export default function ProjectEnvTab({
       return item.key.toLowerCase().includes(needle);
     });
   }, [items, filter, filterType]);
+
+  if (isLoading && envKeys.length === 0 && depsEntries.length === 0 && devDepsEntries.length === 0) {
+    return (
+      <TabLoadingState
+        variant="grid"
+        title={`Loading ${project.title} Environment & Dependencies`}
+        subtitle="Inspecting .env.example keys and package dependency manifests..."
+      />
+    );
+  }
 
   return (
     <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5">

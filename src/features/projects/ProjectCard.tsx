@@ -97,20 +97,14 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
 
             <div className="flex flex-col items-end gap-1 shrink-0 font-mono text-xs">
               {project.frontendPort && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 text-[11px] font-bold shadow-[0_0_8px_rgba(16,185,129,0.15)]" title={`Client Port :${project.frontendPort}`}>
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
-                  </span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 text-[11px] font-bold" title={`Client Port :${project.frontendPort}`}>
+                  <span className="inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.7)]" />
                   <span>:{project.frontendPort}</span>
                 </span>
               )}
               {project.backendPort && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-indigo-500/15 border border-indigo-500/35 text-indigo-300 text-[11px] font-bold shadow-[0_0_8px_rgba(99,102,241,0.15)]" title={`Server Port :${project.backendPort}`}>
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-400"></span>
-                  </span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-indigo-500/15 border border-indigo-500/35 text-indigo-300 text-[11px] font-bold" title={`Server Port :${project.backendPort}`}>
+                  <span className="inline-flex rounded-full h-1.5 w-1.5 bg-indigo-400 shadow-[0_0_6px_rgba(129,140,248,0.7)]" />
                   <span>:{project.backendPort}</span>
                 </span>
               )}

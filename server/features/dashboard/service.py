@@ -25,10 +25,10 @@ class DashboardService:
         self.portal_service = SoulDevPortalService()
         self.repo = DatabaseRepository(DB_PATH, SCHEMA_PATH)
 
-    def get_dashboard_overview(self) -> Dict[str, Any]:
+    def get_dashboard_overview(self, force_refresh: bool = False) -> Dict[str, Any]:
         """Consolidates all 3 domains into the live overview contract."""
-        projects = self.project_service.get_all_projects()
-        packages = self.package_service.get_all_packages()
+        projects = self.project_service.get_all_projects(force_refresh=force_refresh)
+        packages = self.package_service.get_all_packages(force_refresh=force_refresh)
         docs = self.doc_service.get_all_docs()
         commands_data = self.portal_service.get_commands()
         stats = compute_workspace_telemetry(projects, packages, docs)

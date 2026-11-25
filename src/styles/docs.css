@@ -11,3 +11,282 @@
 .markdown-prose code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
+
+/* ==========================================================================
+   TABLE OF CONTENTS ("ON THIS PAGE") SIDEBAR SYSTEM
+   ========================================================================== */
+
+.toc-panel {
+  background: linear-gradient(
+    180deg,
+    rgba(21, 21, 27, 0.98) 0%,
+    rgba(15, 15, 20, 0.99) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.085);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 20px 40px -16px rgba(0, 0, 0, 0.72);
+  contain: layout style;
+}
+
+.toc-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    240px circle at 14% 0%,
+    rgba(56, 189, 248, 0.09),
+    transparent 70%
+  );
+}
+
+.toc-icon-badge {
+  background: linear-gradient(
+    135deg,
+    rgba(56, 189, 248, 0.18) 0%,
+    rgba(99, 102, 241, 0.12) 100%
+  );
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 14px -2px rgba(56, 189, 248, 0.25);
+}
+
+.toc-progress-track {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.toc-progress-fill {
+  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 55%, #34d399 100%);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  transition: width 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toc-search-input {
+  background: #09090d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.65);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.toc-search-input:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.toc-search-input:focus {
+  outline: none;
+  background: #0c0c12;
+  border-color: rgba(56, 189, 248, 0.52);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.6),
+    0 0 0 3px rgba(56, 189, 248, 0.12);
+}
+
+/* ── Scrollable Rail & Dynamic Edge Fade Masks ── */
+.toc-rail {
+  border-left: 1px solid rgba(255, 255, 255, 0.085);
+}
+
+.toc-scroll-fade-top {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18px, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 18px, #000 100%);
+}
+
+.toc-scroll-fade-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 22px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 22px), transparent 100%);
+}
+
+.toc-scroll-fade-both {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 18px,
+    #000 calc(100% - 22px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 18px,
+    #000 calc(100% - 22px),
+    transparent 100%
+  );
+}
+
+/* ── Item Surface & Active Rail Indicators ── */
+.toc-item-h2 {
+  border: 1px solid transparent;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.toc-item-h2:hover {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.toc-item-h2--parent-active {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.065);
+}
+
+.toc-item-h2--active {
+  background: linear-gradient(
+    90deg,
+    rgba(56, 189, 248, 0.16) 0%,
+    rgba(56, 189, 248, 0.05) 75%,
+    rgba(56, 189, 248, 0.02) 100%
+  );
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 4px 14px -4px rgba(14, 165, 233, 0.25);
+}
+
+.toc-item-h2--active:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(56, 189, 248, 0.2) 0%,
+    rgba(56, 189, 248, 0.06) 80%,
+    rgba(56, 189, 248, 0.03) 100%
+  );
+  border-color: rgba(56, 189, 248, 0.38);
+}
+
+.toc-item-sub {
+  border: 1px solid transparent;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.toc-item-sub:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.toc-item-h3--active {
+  background: linear-gradient(
+    90deg,
+    rgba(52, 211, 153, 0.14) 0%,
+    rgba(52, 211, 153, 0.04) 80%,
+    transparent 100%
+  );
+  border-color: rgba(52, 211, 153, 0.26);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.toc-item-h4--active {
+  background: linear-gradient(
+    90deg,
+    rgba(251, 191, 36, 0.12) 0%,
+    rgba(251, 191, 36, 0.03) 80%,
+    transparent 100%
+  );
+  border-color: rgba(251, 191, 36, 0.24);
+}
+
+/* ── Active Rail Accent Bar ── */
+.toc-rail-bar {
+  position: absolute;
+  left: -12px;
+  top: 5px;
+  bottom: 5px;
+  width: 2.5px;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.toc-rail-bar--sky {
+  background: linear-gradient(180deg, #7dd3fc 0%, #38bdf8 55%, #818cf8 100%);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.85);
+}
+
+.toc-rail-bar--emerald {
+  background: linear-gradient(180deg, #6ee7b7 0%, #10b981 100%);
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.8);
+}
+
+.toc-rail-bar--amber {
+  background: linear-gradient(180deg, #fcd34d 0%, #f59e0b 100%);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.75);
+}
+
+.toc-node-dot--emerald {
+  background: #34d399;
+  box-shadow:
+    0 0 0 3px rgba(52, 211, 153, 0.16),
+    0 0 8px rgba(52, 211, 153, 0.8);
+}
+
+.toc-footer-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.toc-footer-btn:hover {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.28);
+  color: #bae6fd;
+}
+
+/* ── Mobile Floating Dock & Slide-Up Bottom Sheet ── */
+.toc-mobile-dock {
+  background: rgba(15, 15, 21, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 32px -8px rgba(0, 0, 0, 0.85);
+}
+
+@keyframes tocBackdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tocSheetUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.toc-sheet-backdrop {
+  animation: tocBackdropIn 180ms ease-out forwards;
+}
+
+.toc-mobile-sheet {
+  background: linear-gradient(
+    180deg,
+    rgba(22, 22, 29, 0.98) 0%,
+    rgba(13, 13, 18, 0.99) 100%
+  );
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 -24px 56px -12px rgba(0, 0, 0, 0.9);
+  animation: tocSheetUp 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

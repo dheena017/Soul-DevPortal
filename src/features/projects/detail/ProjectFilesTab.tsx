@@ -1,13 +1,24 @@
 import React from 'react';
 import { ProjectData } from '../../../types';
 import ProjectFileExplorer from '../ProjectFileExplorer';
+import TabLoadingState from '../../../components/TabLoadingState';
 
 export interface ProjectFilesTabProps {
   project: ProjectData;
   fileTree: string[];
+  isLoading?: boolean;
 }
 
-export default function ProjectFilesTab({ project, fileTree }: ProjectFilesTabProps) {
+export default function ProjectFilesTab({ project, fileTree, isLoading = false }: ProjectFilesTabProps) {
+  if (fileTree.length === 0 && isLoading) {
+    return (
+      <TabLoadingState
+        variant="list"
+        title={`Scanning ${project.title} File Tree`}
+        subtitle={`Indexing directories and source files in Soul-DevPortal-Projects/${project.id}...`}
+      />
+    );
+  }
   return (
     <section className="w-full flex flex-col gap-4 animate-in fade-in duration-200">
       {/* ── Tab Header Card ── */}

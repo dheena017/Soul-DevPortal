@@ -18,12 +18,21 @@ export interface PackageDetailViewProps {
 export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProps) {
   const [activeTab, setActiveTab] = useState<PackageDetailTab>('docs');
   const [tabData, setTabData] = useState<Record<string, any>>({});
+  const [loadingTabs, setLoadingTabs] = useState<Record<PackageDetailTab, boolean>>({
+    docs: true,
+    api: true,
+    manifest: true,
+    playground: true,
+  });
 
   useEffect(() => {
     let isMounted = true;
     const tabNames: PackageDetailTab[] = ['docs', 'api', 'manifest', 'playground'];
 
-    // Preload all tabs concurrently so exports and manifest tabs have live data
+    setTabData({});
+    setLoadingTabs({ docs: true, api: true, manifest: true, playground: true });
+
+    // Preload all tabs concurrently so exports, docs, and manifests always resolve
     tabNames.forEach(async (tab) => {
       try {
         const data = await fetchPackageTab(pkg.id, tab);
@@ -32,6 +41,10 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
         }
       } catch {
         // Fallback to static props
+      } finally {
+        if (isMounted) {
+          setLoadingTabs((prev) => ({ ...prev, [tab]: false }));
+        }
       }
     });
 
@@ -47,13 +60,41 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
     }
     if (tabData.api?.symbols && tabData.api.symbols.length > 0) {
       const symbols = tabData.api.symbols;
-      const pySyms = symbols.filter((s: any) => s.language === 'python').map((s: any) => s.name);
-      const tsSyms = symbols.filter((s: any) => s.language === 'typescript').map((s: any) => s.name);
+      const pySyms: string[] = Array.from(
+        new Set(symbols.filter((s: any) => s.language === 'python').map((s: any) => String(s.name)))
+      );
+      const tsSyms: string[] = Array.from(
+        new Set(symbols.filter((s: any) => s.language === 'typescript').map((s: any) => String(s.name)))
+      );
       if (pySyms.length > 0) updated.pythonExports = pySyms;
       if (tsSyms.length > 0) updated.typeScriptExports = tsSyms;
     }
-    if (tabData.manifest?.npmManifest) {
-      updated.scripts = tabData.manifest.npmManifest.scripts || updated.scripts;
+    const manifestPayload = tabData.manifest;
+    if (manifestPayload) {
+      const npmManifest = manifestPayload.npmManifest || manifestPayload.manifests?.npm;
+      const pyManifest = manifestPayload.pythonManifest || manifestPayload.manifests?.python;
+      if (npmManifest?.scripts && Object.keys(npmManifest.scripts).length > 0) {
+        updated.scripts = npmManifest.scripts;
+      }
+      if (npmManifest?.exports && typeof npmManifest.exports === 'object') {
+        updated.exports = Object.keys(npmManifest.exports);
+      } else if (manifestPayload.exports?.length > 0) {
+        updated.exports = manifestPayload.exports;
+      }
+      if (manifestPayload.dependencies && Object.keys(manifestPayload.dependencies).length > 0) {
+        updated.dependencies = manifestPayload.dependencies;
+      }
+      if (manifestPayload.devDependencies && Object.keys(manifestPayload.devDependencies).length > 0) {
+        updated.devDependencies = manifestPayload.devDependencies;
+      }
+      if (manifestPayload.peerDependencies && Object.keys(manifestPayload.peerDependencies).length > 0) {
+        updated.peerDependencies = manifestPayload.peerDependencies;
+      }
+      if (pyManifest?.dependencies?.length > 0) {
+        updated.pythonDependencies = pyManifest.dependencies;
+      } else if (manifestPayload.pythonDependencies?.length > 0) {
+        updated.pythonDependencies = manifestPayload.pythonDependencies;
+      }
     }
     return updated;
   }, [pkg, tabData]);
@@ -78,11 +119,18 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
       {/* ── Separate Tab Panels with Smooth Motion ── */}
       <div key={activeTab} className="w-full tab-content-animate">
         {activeTab === 'docs' && (
-          <PackageDocsTab pkg={livePkg} headings={headings} />
+          <PackageDocsTab
+            pkg={livePkg}
+            headings={headings}
+            isLoading={loadingTabs.docs && !(livePkg.readmeBlocks && livePkg.readmeBlocks.length > 0)}
+          />
         )}
 
         {activeTab === 'api' && (
-          <PackageApiTab pkg={livePkg} />
+          <PackageApiTab
+            pkg={livePkg}
+            isLoading={loadingTabs.api && totalExports === 0}
+          />
         )}
 
         {activeTab === 'playground' && (
@@ -90,7 +138,10 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
         )}
 
         {activeTab === 'manifest' && (
-          <PackageManifestTab pkg={livePkg} />
+          <PackageManifestTab
+            pkg={livePkg}
+            isLoading={loadingTabs.manifest && !livePkg.hasNpmManifest && !livePkg.hasPythonManifest}
+          />
         )}
       </div>
     </article>

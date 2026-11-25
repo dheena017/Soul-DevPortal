@@ -219,7 +219,7 @@ export default function Sidebar({
   return (
     <>
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-80 sm:w-[336px] h-screen h-[100dvh] bg-[#0d0d10] border-r border-white/[0.08] flex flex-col justify-between shadow-2xl shadow-black/80 transition-transform duration-300 ease-out ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-[min(86vw,20rem)] sm:w-[336px] h-screen h-[100dvh] bg-[#0d0d10] border-r border-white/[0.08] flex flex-col justify-between shadow-2xl shadow-black/80 transition-transform duration-300 ease-out ${
           menuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-label="Monorepo navigation sidebar"
