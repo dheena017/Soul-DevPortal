@@ -148,7 +148,7 @@ export default function SystemHeaderCard({
 
   return (
     <header className="relative overflow-hidden w-full p-4 sm:p-5 md:p-6 rounded-2xl system-card shadow-2xl flex flex-col gap-4 sm:gap-5">
-      <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="Hardware Silicon Die Architecture" opacityClass="opacity-42 sm:opacity-60" />
+      <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="Hardware Silicon Die Architecture" opacityClass="opacity-80 sm:opacity-95" />
       <div className="relative z-10 flex flex-col gap-4 sm:gap-5">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Host Identity */}

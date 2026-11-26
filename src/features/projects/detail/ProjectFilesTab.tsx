@@ -39,7 +39,7 @@ export default function ProjectFilesTab({ project, fileTree, isLoading = false }
     <section className="w-full flex flex-col gap-4 animate-in fade-in duration-200 portal-stagger">
       {/* ── Tab Header Card ── */}
       <div className="flex flex-col gap-4 p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl portal-header-sheen">
-        <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Repository Source Code Visual" opacityClass="opacity-28 sm:opacity-40" />
+        <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Repository Source Code Visual" opacityClass="opacity-68 sm:opacity-84" />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex flex-col gap-1">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400">REPOSITORY STRUCTURE</span>

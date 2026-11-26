@@ -321,27 +321,28 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      const activeEl = document.activeElement as HTMLElement | null;
+      const isEditableTarget =
+        activeEl === searchInputRef.current ||
+        ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl?.tagName || '') ||
+        Boolean(activeEl?.isContentEditable);
+
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'b') {
         event.preventDefault();
+        setShowShortcuts(false);
         consoleLogger.action('SHORTCUT', 'Ctrl+B: Toggled sidebar drawer');
         handleSidebarToggle();
       } else if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
+        setShowShortcuts(false);
         consoleLogger.action('SHORTCUT', 'Ctrl+K: Focused command search');
         searchInputRef.current?.focus();
-      } else if (
-        event.key === '/' &&
-        document.activeElement !== searchInputRef.current &&
-        !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName || '')
-      ) {
+      } else if (event.key === '/' && !isEditableTarget) {
         event.preventDefault();
+        setShowShortcuts(false);
         consoleLogger.action('SHORTCUT', '/: Focused search');
         searchInputRef.current?.focus();
-      } else if (
-        event.key === '?' &&
-        document.activeElement !== searchInputRef.current &&
-        !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName || '')
-      ) {
+      } else if (event.key === '?' && !isEditableTarget) {
         event.preventDefault();
         consoleLogger.action('SHORTCUT', '?: Toggled keyboard shortcuts modal');
         setShowShortcuts((prev) => !prev);
@@ -370,16 +371,18 @@ function App() {
         const target = keyMap[event.key];
         if (target) {
           event.preventDefault();
+          setShowShortcuts(false);
           setActive(target);
           window.location.hash = target;
           setMenuOpen(false);
+          mainRef.current?.scrollTo({ top: 0, behavior: 'instant' });
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [menuOpen]);
+  }, [menuOpen, showShortcuts]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -898,23 +901,6 @@ function App() {
           </Suspense>
           </PortalErrorBoundary>
         </div>
-
-        {/* Global Desktop App, Shortcuts & Commands Modal */}
-        <ShortcutsModal
-          open={showShortcuts}
-          onClose={() => setShowShortcuts(false)}
-          onNavigate={navigate}
-          projectsCount={projectsList.length}
-          packagesCount={packagesList.length}
-          docsCount={DOCUMENTATION_GUIDES_REGISTRY.length}
-          canInstallPwa={Boolean(deferredInstallPrompt)}
-          onInstallPwa={async () => {
-            if (!deferredInstallPrompt) return;
-            await deferredInstallPrompt.prompt();
-            await deferredInstallPrompt.userChoice;
-            setDeferredInstallPrompt(null);
-          }}
-        />
       </main>
 
       <GlobalStatusBar
@@ -924,6 +910,25 @@ function App() {
         onScrollTop={() => mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })}
         projectsCount={projectsList.length}
         onOpenShortcuts={() => setShowShortcuts(true)}
+        onFocusSearch={() => searchInputRef.current?.focus()}
+      />
+
+      {/* Global Desktop App, Shortcuts & Commands Modal */}
+      <ShortcutsModal
+        open={showShortcuts}
+        onClose={() => setShowShortcuts(false)}
+        onNavigate={navigate}
+        projectsCount={projectsList.length}
+        packagesCount={packagesList.length}
+        docsCount={DOCUMENTATION_GUIDES_REGISTRY.length}
+        canInstallPwa={Boolean(deferredInstallPrompt)}
+        onInstallPwa={async () => {
+          if (!deferredInstallPrompt) return;
+          await deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+          setDeferredInstallPrompt(null);
+        }}
+        onToggleSidebar={handleSidebarToggle}
         onFocusSearch={() => searchInputRef.current?.focus()}
       />
     </div>

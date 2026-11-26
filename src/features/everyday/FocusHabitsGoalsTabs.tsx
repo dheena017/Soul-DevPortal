@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { HeroArtworkBackdrop, MiniRadialRing } from '../../components/PortalVisuals';
 import { useSyncedWorkspaceState } from '../../services/workspaceStateStore';
 import { copyTextSafe } from '../../utils/clipboard';
 import {
@@ -298,158 +299,168 @@ export const GuidedBreathingCard: React.FC = () => {
   const ringDashOffset = active ? ringCirc * (1 - phaseInfo.progress) : ringCirc;
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col justify-between items-center gap-3.5">
-      <div className="w-full flex flex-wrap items-start justify-between gap-2">
-        <div>
-          <h2 className="text-base font-bold text-white">Guided Calm Breathing</h2>
-          <p className="text-xs text-zinc-400">Reset focus &amp; lower stress.</p>
-        </div>
+    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0d1018] shrink-0">
+        <HeroArtworkBackdrop src="/visuals/world-clock-globe.jpg" alt="Calm Breathing Visual" opacityClass="opacity-75 sm:opacity-90" />
+        <div className="relative z-10 w-full flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h2 className="text-base font-extrabold text-white">Guided Calm Breathing</h2>
+            <p className="text-xs text-zinc-300/90">Reset focus &amp; lower stress.</p>
+          </div>
 
-        <label className="inline-flex items-center gap-1.5 text-[11px] text-zinc-400 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={phaseCueSound}
-            onChange={(e) => {
-              getSharedAudioContext();
-              setPhaseCueSound(e.target.checked);
-            }}
-            className="accent-sky-400"
-          />
-          Phase cue
-        </label>
+          <label className="inline-flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-1 rounded-lg bg-[#08090c]/90 border border-white/[0.1] text-zinc-300 cursor-pointer shrink-0">
+            <input
+              type="checkbox"
+              checked={phaseCueSound}
+              onChange={(e) => {
+                getSharedAudioContext();
+                setPhaseCueSound(e.target.checked);
+              }}
+              className="accent-sky-400"
+            />
+            Phase cue
+          </label>
+        </div>
       </div>
 
-      {/* Pattern selector pills */}
-      <div className="w-full flex flex-wrap items-center justify-between gap-1.5 text-[11px] font-mono">
-        <div className="flex flex-wrap items-center gap-1">
-          {BREATH_PATTERNS.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => {
-                setPatternId(p.id);
-                setElapsedMs(0);
-                if (active) startedAtRef.current = Date.now();
-              }}
-              className={`px-2 py-1 rounded-lg border cursor-pointer transition-colors ${
-                patternId === p.id
-                  ? 'bg-sky-500/20 border-sky-400/45 text-sky-200 font-bold'
-                  : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
-              }`}
-            >
-              {p.shortLabel}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-1">
-          {[1, 2, 3, 5, 0].map((m) => (
-            <button
-              key={m}
-              type="button"
-              onClick={() => {
-                setSessionMin(m);
-                if (active) {
+      <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col justify-between items-center gap-3.5">
+        {/* Pattern selector pills */}
+        <div className="w-full flex flex-wrap items-center justify-between gap-1.5 text-[11px] font-mono">
+          <div className="flex flex-wrap items-center gap-1">
+            {BREATH_PATTERNS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => {
+                  setPatternId(p.id);
                   setElapsedMs(0);
-                  startedAtRef.current = Date.now();
-                }
-              }}
-              title={m === 0 ? 'Continuous loop until stopped' : `Stop automatically after ${m} min`}
-              className={`px-1.5 py-0.5 rounded border text-[10px] cursor-pointer ${
-                sessionMin === m
-                  ? 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200 font-bold'
-                  : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
-              }`}
-            >
-              {m === 0 ? '∞' : `${m}m`}
-            </button>
-          ))}
-        </div>
-      </div>
+                  if (active) startedAtRef.current = Date.now();
+                }}
+                className={`px-2 py-1 rounded-lg border cursor-pointer transition-colors ${
+                  patternId === p.id
+                    ? 'bg-sky-500/20 border-sky-400/45 text-sky-200 font-bold'
+                    : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
+                }`}
+              >
+                {p.shortLabel}
+              </button>
+            ))}
+          </div>
 
-      {/* Smooth SVG Breathing Visualizer */}
-      <div className="relative flex items-center justify-center my-1 w-40 h-40">
-        <div
-          className="relative w-36 h-36 rounded-full bg-[#0d1018] border border-white/[0.09] flex flex-col items-center justify-center transition-transform duration-150 ease-linear shadow-inner"
-          style={{
-            transform: `scale(${active ? phaseInfo.scaleNum.toFixed(3) : 1})`,
-          }}
-        >
-          <svg
-            className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none"
-            viewBox="0 0 136 136"
-            aria-hidden="true"
+          <div className="flex items-center gap-1">
+            {[1, 2, 3, 5, 0].map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => {
+                  setSessionMin(m);
+                  if (active) {
+                    setElapsedMs(0);
+                    startedAtRef.current = Date.now();
+                  }
+                }}
+                title={m === 0 ? 'Continuous loop until stopped' : `Stop automatically after ${m} min`}
+                className={`px-1.5 py-0.5 rounded border text-[10px] cursor-pointer ${
+                  sessionMin === m
+                    ? 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200 font-bold'
+                    : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
+                }`}
+              >
+                {m === 0 ? '∞' : `${m}m`}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Smooth SVG Breathing Visualizer */}
+        <div className="relative flex items-center justify-center my-1 w-40 h-40">
+          <div
+            className="relative w-36 h-36 rounded-full bg-[#0d1018] border border-white/[0.09] flex flex-col items-center justify-center transition-transform duration-150 ease-linear shadow-inner"
+            style={{
+              transform: `scale(${active ? phaseInfo.scaleNum.toFixed(3) : 1})`,
+            }}
           >
-            <circle
-              cx="68"
-              cy="68"
-              r={ringRadius}
-              fill="none"
-              stroke="rgba(255,255,255,0.06)"
-              strokeWidth="4"
-            />
-            <circle
-              cx="68"
-              cy="68"
-              r={ringRadius}
-              fill="none"
-              stroke={active ? phaseInfo.ringColor : '#475569'}
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeDasharray={ringCirc}
-              strokeDashoffset={ringDashOffset}
-            />
-          </svg>
+            <svg
+              className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none"
+              viewBox="0 0 136 136"
+              aria-hidden="true"
+            >
+              <circle
+                cx="68"
+                cy="68"
+                r={ringRadius}
+                fill="none"
+                stroke="rgba(255,255,255,0.06)"
+                strokeWidth="4"
+              />
+              <circle
+                cx="68"
+                cy="68"
+                r={ringRadius}
+                fill="none"
+                stroke={active ? phaseInfo.ringColor : '#475569'}
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray={ringCirc}
+                strokeDashoffset={ringDashOffset}
+              />
+            </svg>
 
-          <span className={`text-xs font-bold ${active ? phaseInfo.textClass : 'text-zinc-300'}`}>
-            {active ? phaseInfo.label : 'Ready'}
-          </span>
-          <span className="text-2xl font-mono font-extrabold text-white tabular-nums mt-0.5">
-            {active ? `${phaseInfo.secLeft}s` : '—'}
-          </span>
-          <span className="text-[10px] font-mono text-zinc-400 tabular-nums mt-0.5">
-            {active
-              ? sessionMin > 0
-                ? `${pad2(Math.floor(remainingSessionSec / 60))}:${pad2(remainingSessionSec % 60)} left`
-                : `Cycle #${phaseInfo.cycleCount}`
-              : patternMeta.shortLabel}
-          </span>
+            <span className={`text-xs font-bold ${active ? phaseInfo.textClass : 'text-zinc-300'}`}>
+              {active ? phaseInfo.label : 'Ready'}
+            </span>
+            <span className="text-2xl font-mono font-extrabold text-white tabular-nums mt-0.5">
+              {active ? `${phaseInfo.secLeft}s` : '—'}
+            </span>
+            <span className="text-[10px] font-mono text-zinc-400 tabular-nums mt-0.5">
+              {active
+                ? sessionMin > 0
+                  ? `${pad2(Math.floor(remainingSessionSec / 60))}:${pad2(remainingSessionSec % 60)} left`
+                  : `Cycle #${phaseInfo.cycleCount}`
+                : patternMeta.shortLabel}
+            </span>
+          </div>
         </div>
+
+        <div className="text-[11px] font-mono text-zinc-400 text-center min-h-[16px]">
+          {completedMsg ? (
+            <span className="text-emerald-300 font-semibold">✓ {completedMsg}</span>
+          ) : (
+            <span>{patternMeta.spec}</span>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            getSharedAudioContext();
+            setCompletedMsg(null);
+            if (active) {
+              setActive(false);
+              setElapsedMs(0);
+            } else {
+              setElapsedMs(0);
+              setActive(true);
+            }
+          }}
+          className={`w-full py-2.5 rounded-xl text-xs font-extrabold border transition-colors cursor-pointer ${
+            active
+              ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
+              : 'bg-sky-500/20 border-sky-400/45 text-sky-100 hover:bg-sky-500/30'
+          }`}
+        >
+          {active
+            ? '⏹ Stop Breathing Session'
+            : sessionMin === 0
+            ? '▶ Start Guided Breathing'
+            : `▶ Start ${sessionMin}-Min Breather`}
+        </button>
       </div>
 
-      <div className="text-[11px] font-mono text-zinc-400 text-center min-h-[16px]">
-        {completedMsg ? (
-          <span className="text-emerald-300 font-semibold">✓ {completedMsg}</span>
-        ) : (
-          <span>{patternMeta.spec}</span>
-        )}
+      <div className="px-5 py-2 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10.5px] font-mono text-zinc-500 shrink-0">
+        <span>{patternMeta.shortLabel}</span>
+        <span className="text-sky-300/80">{sessionMin === 0 ? 'Continuous' : `${sessionMin} min target`}</span>
       </div>
-
-      <button
-        type="button"
-        onClick={() => {
-          getSharedAudioContext();
-          setCompletedMsg(null);
-          if (active) {
-            setActive(false);
-            setElapsedMs(0);
-          } else {
-            setElapsedMs(0);
-            setActive(true);
-          }
-        }}
-        className={`w-full py-2.5 rounded-xl text-xs font-extrabold border transition-colors cursor-pointer ${
-          active
-            ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
-            : 'bg-sky-500/20 border-sky-400/45 text-sky-100 hover:bg-sky-500/30'
-        }`}
-      >
-        {active
-          ? '⏹ Stop Breathing Session'
-          : sessionMin === 0
-          ? '▶ Start Guided Breathing'
-          : `▶ Start ${sessionMin}-Min Breather`}
-      </button>
     </section>
   );
 };
@@ -731,343 +742,367 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
         {/* Pomodoro Focus Timer */}
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3.5">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <div>
-              <h2 className="text-base font-bold text-white">Pomodoro Focus Timer</h2>
-              <p className="text-xs text-zinc-400">
-                Today:{' '}
-                <span className="font-mono text-amber-300 font-bold">
-                  {todaySessions} sessions · {todayFocusMins}m
-                </span>
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => playGentleChime('complete')}
-                title="Test completion chime"
-                className="px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
-              >
-                🔔 Test
-              </button>
-              <label className="inline-flex items-center gap-1.5 text-xs text-zinc-300 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={pomo.chimeEnabled}
-                  onChange={(e) => setPomo((p) => ({ ...p, chimeEnabled: e.target.checked }))}
-                  className="accent-amber-400"
-                />
-                Chime
-              </label>
-            </div>
-          </div>
-
-          {/* Phase Selector: Focus / Short Break / Long Break */}
-          <div className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#08090c] border border-white/[0.08] text-[11px] font-mono">
-            {(
-              [
-                { id: 'focus', label: 'Focus (25m)', mins: 25, hint: 'Deep Focus Session' },
-                { id: 'shortBreak', label: 'Break (5m)', mins: 5, hint: 'Short Recharge Break' },
-                { id: 'longBreak', label: 'Long (15m)', mins: 15, hint: 'Long Recovery Break' },
-              ] as const
-            ).map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                onClick={() => applyModeOrPreset(m.id, m.mins, m.hint)}
-                className={`py-1.5 rounded-lg transition-colors cursor-pointer ${
-                  pomo.mode === m.id
-                    ? m.id === 'focus'
-                      ? 'bg-amber-500/20 text-amber-200 font-bold'
-                      : 'bg-emerald-500/20 text-emerald-200 font-bold'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                {m.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Session label + Linked Task */}
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              value={pomo.label}
-              onChange={(e) => setPomo((p) => ({ ...p, label: e.target.value }))}
-              placeholder="Session intention (e.g., Reading, Deep Coding, Study)..."
-              aria-label="Focus session label"
-              className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400/50"
-            />
-            <div className="flex items-center gap-1.5">
-              <select
-                value={pomo.linkedTaskId}
-                onChange={(e) => {
-                  const id = e.target.value;
-                  const picked = openTasks.find((t) => t.id === id);
-                  setPomo((p) => ({
-                    ...p,
-                    linkedTaskId: id,
-                    label: picked ? picked.title : p.label,
-                  }));
-                }}
-                aria-label="Link task to focus timer"
-                className="flex-1 min-w-0 h-8 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.09] text-[11px] text-zinc-200"
-              >
-                <option value="">Link an open task (optional)...</option>
-                {openTasks.slice(0, 25).map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.title} ({t.spentMin || 0}m)
-                  </option>
-                ))}
-              </select>
-              {linkedTask && (
+        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+          <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#12100d] shrink-0">
+            <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="Pomodoro Focus Timer Visual" opacityClass="opacity-72 sm:opacity-88" />
+            <div className="relative z-10 flex items-center justify-between gap-2 flex-wrap">
+              <div>
+                <h2 className="text-base font-extrabold text-white">Pomodoro Focus Timer</h2>
+                <p className="text-xs text-zinc-300/90">
+                  Today:{' '}
+                  <span className="font-mono text-amber-300 font-bold">
+                    {todaySessions} sessions · {todayFocusMins}m
+                  </span>
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <MiniRadialRing percent={pct} color="#fbbf24" size={26} />
                 <button
                   type="button"
-                  onClick={() => {
-                    setTasks((prev) =>
-                      prev.map((t) =>
-                        t.id === linkedTask.id ? { ...t, done: true, status: 'done' } : t
-                      )
-                    );
-                    setPomo((p) => ({ ...p, linkedTaskId: '' }));
-                  }}
-                  title="Mark linked task complete"
-                  className="h-8 px-2.5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-[11px] font-bold text-emerald-200 hover:bg-emerald-500/30 cursor-pointer shrink-0"
+                  onClick={() => playGentleChime('complete')}
+                  title="Test completion chime"
+                  className="px-2 py-1 rounded-lg bg-[#16171e]/95 border border-white/[0.1] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
                 >
-                  ✓ Done
+                  🔔 Test
                 </button>
+                <label className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#08090c]/90 border border-white/[0.1] text-[11px] text-zinc-300 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={pomo.chimeEnabled}
+                    onChange={(e) => setPomo((p) => ({ ...p, chimeEnabled: e.target.checked }))}
+                    className="accent-amber-400"
+                  />
+                  Chime
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col justify-between gap-3.5">
+            {/* Phase Selector: Focus / Short Break / Long Break */}
+            <div className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#08090c] border border-white/[0.08] text-[11px] font-mono">
+              {(
+                [
+                  { id: 'focus', label: 'Focus (25m)', mins: 25, hint: 'Deep Focus Session' },
+                  { id: 'shortBreak', label: 'Break (5m)', mins: 5, hint: 'Short Recharge Break' },
+                  { id: 'longBreak', label: 'Long (15m)', mins: 15, hint: 'Long Recovery Break' },
+                ] as const
+              ).map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => applyModeOrPreset(m.id, m.mins, m.hint)}
+                  className={`py-1.5 rounded-lg transition-colors cursor-pointer ${
+                    pomo.mode === m.id
+                      ? m.id === 'focus'
+                        ? 'bg-amber-500/20 text-amber-200 font-bold'
+                        : 'bg-emerald-500/20 text-emerald-200 font-bold'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Session label + Linked Task */}
+            <div className="flex flex-col gap-2">
+              <input
+                type="text"
+                value={pomo.label}
+                onChange={(e) => setPomo((p) => ({ ...p, label: e.target.value }))}
+                placeholder="Session intention (e.g., Reading, Deep Coding, Study)..."
+                aria-label="Focus session label"
+                className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400/50"
+              />
+              <div className="flex items-center gap-1.5">
+                <select
+                  value={pomo.linkedTaskId}
+                  onChange={(e) => {
+                    const id = e.target.value;
+                    const picked = openTasks.find((t) => t.id === id);
+                    setPomo((p) => ({
+                      ...p,
+                      linkedTaskId: id,
+                      label: picked ? picked.title : p.label,
+                    }));
+                  }}
+                  aria-label="Link task to focus timer"
+                  className="flex-1 min-w-0 h-8 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.09] text-[11px] text-zinc-200"
+                >
+                  <option value="">Link an open task (optional)...</option>
+                  {openTasks.slice(0, 25).map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.title} ({t.spentMin || 0}m)
+                    </option>
+                  ))}
+                </select>
+                {linkedTask && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTasks((prev) =>
+                        prev.map((t) =>
+                          t.id === linkedTask.id ? { ...t, done: true, status: 'done' } : t
+                        )
+                      );
+                      setPomo((p) => ({ ...p, linkedTaskId: '' }));
+                    }}
+                    title="Mark linked task complete"
+                    className="h-8 px-2.5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-[11px] font-bold text-emerald-200 hover:bg-emerald-500/30 cursor-pointer shrink-0"
+                  >
+                    ✓ Done
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center justify-center py-4 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-2.5">
+              <div className="text-5xl font-extrabold font-mono tracking-wider text-white tabular-nums">
+                {pad2(Math.floor(secondsLeft / 60))}:{pad2(secondsLeft % 60)}
+              </div>
+              <div className="w-4/5 h-2 rounded-full bg-white/[0.06] overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-300 ${
+                    pomo.mode === 'focus'
+                      ? 'bg-gradient-to-r from-amber-400 to-emerald-400'
+                      : 'bg-gradient-to-r from-sky-400 to-emerald-400'
+                  }`}
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+
+              {completionBanner && (
+                <div className="px-3 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/35 text-[11px] font-mono text-emerald-200">
+                  {completionBanner}
+                </div>
+              )}
+
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={togglePomodoro}
+                  className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
+                    pomo.running
+                      ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
+                      : 'bg-amber-400/90 border-amber-300 text-zinc-950 hover:bg-amber-300'
+                  }`}
+                >
+                  {pomo.running ? '⏸ Pause' : secondsLeft < pomo.totalSec ? '▶ Resume' : '▶ Start Focus'}
+                </button>
+                <button
+                  type="button"
+                  onClick={resetPomodoro}
+                  className="px-3 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
+                >
+                  ↺ Reset
+                </button>
+                <button
+                  type="button"
+                  onClick={() => adjustPomodoroMinutes(1)}
+                  title="Add 1 minute"
+                  className="px-2.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-mono text-sky-300 hover:text-white cursor-pointer"
+                >
+                  +1m
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSelectTab('tasks')}
+                  className="px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/25 cursor-pointer"
+                >
+                  Tasks →
+                </button>
+              </div>
+            </div>
+
+            {/* Presets + Custom Minutes */}
+            <div className="flex flex-wrap items-center justify-between gap-1.5">
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { mins: 5, label: '5m', mode: 'shortBreak' as PomodoroMode },
+                  { mins: 15, label: '15m', mode: 'focus' as PomodoroMode },
+                  { mins: 25, label: '25m', mode: 'focus' as PomodoroMode },
+                  { mins: 45, label: '45m', mode: 'focus' as PomodoroMode },
+                  { mins: 60, label: '60m', mode: 'focus' as PomodoroMode },
+                ].map((p) => (
+                  <button
+                    key={p.mins}
+                    type="button"
+                    onClick={() => applyModeOrPreset(p.mode, p.mins)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer ${
+                      pomo.totalSec === p.mins * 60
+                        ? 'bg-amber-500/20 border-amber-400/45 text-amber-200 font-bold'
+                        : 'bg-[#16171e] border-white/[0.08] text-zinc-300 hover:text-white'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const val = parseInt(customMinInput, 10);
+                  if (val > 0) applyModeOrPreset('focus', val);
+                }}
+                className="flex items-center gap-1"
+              >
+                <input
+                  type="number"
+                  min={1}
+                  max={180}
+                  value={customMinInput}
+                  onChange={(e) => setCustomMinInput(e.target.value)}
+                  aria-label="Custom focus minutes"
+                  className="w-12 h-7 px-1.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-[11px] font-mono text-white text-center"
+                />
+                <button
+                  type="submit"
+                  className="h-7 px-2 rounded-lg bg-[#16171e] border border-white/[0.1] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
+                >
+                  Set m
+                </button>
+              </form>
+            </div>
+
+            {sessionLog.length > 0 && (
+              <div className="pt-2 border-t border-white/[0.06] flex flex-col gap-1 max-h-24 overflow-y-auto custom-scrollbar">
+                {sessionLog.slice(0, 4).map((s) => (
+                  <div key={s.id} className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
+                    <span className="truncate">
+                      ✓ {s.label} ({s.minutes}m)
+                    </span>
+                    <span className="shrink-0 text-zinc-500">{s.timeLabel}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="px-5 py-2 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10.5px] font-mono text-zinc-500 shrink-0">
+            <span>{pomo.running ? 'Timer running' : 'Ready'}</span>
+            <span className="text-amber-300/80">{pct}% elapsed</span>
+          </div>
+        </section>
+
+        {/* Precision Stopwatch & Split Laps */}
+        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+          <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1017] shrink-0">
+            <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="Precision Stopwatch Visual" opacityClass="opacity-72 sm:opacity-88" />
+            <div className="relative z-10 flex items-start justify-between gap-2">
+              <div>
+                <h2 className="text-base font-extrabold text-white">Stopwatch &amp; Lap Recorder</h2>
+                <p className="text-xs text-zinc-300/90">
+                  Drift-free precision timer with split deltas &amp; tab persistence.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="px-2.5 py-1 rounded-md bg-[#080b12]/85 backdrop-blur-sm border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
+                  {sw.laps.length} laps
+                </span>
+                {sw.laps.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const text = [...sw.laps]
+                        .reverse()
+                        .map((l) => `Lap #${l.index}\tSplit +${formatStopwatch(l.splitMs)}\tTotal ${formatStopwatch(l.totalMs)}`)
+                        .join('\n');
+                      void copyTextSafe(text).then((ok) => {
+                        if (ok) {
+                          setCopiedLaps(true);
+                          window.setTimeout(() => setCopiedLaps(false), 1600);
+                        }
+                      });
+                    }}
+                    className="px-2 py-1 rounded-lg bg-[#16171e]/95 border border-white/[0.1] text-[11px] font-mono text-sky-300 cursor-pointer"
+                  >
+                    {copiedLaps ? '✓ Copied' : 'Copy'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col justify-between gap-4">
+            <div className="flex flex-col items-center justify-center py-6 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-3">
+              <div className="text-5xl font-extrabold font-mono tracking-wider text-sky-300 tabular-nums">
+                {formatStopwatch(swDisplayMs)}
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={toggleStopwatch}
+                  className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
+                    sw.running
+                      ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
+                      : 'bg-sky-500/25 border-sky-400/45 text-white hover:bg-sky-500/35'
+                  }`}
+                >
+                  {sw.running ? '⏸ Pause' : swDisplayMs > 0 ? '▶ Resume' : '▶ Start'}
+                </button>
+                <button
+                  type="button"
+                  onClick={recordStopwatchLap}
+                  disabled={!sw.running}
+                  title={sw.running ? 'Record lap split' : 'Start stopwatch to record a lap'}
+                  className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
+                >
+                  🏁 Lap
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSw({ running: false, startedAtMs: null, accumulatedMs: 0, laps: [] })}
+                  disabled={!sw.running && swDisplayMs === 0 && sw.laps.length === 0}
+                  className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col gap-1.5 min-h-[110px]">
+              {sw.laps.length === 0 ? (
+                <div className="flex-1 flex items-center justify-center rounded-xl bg-[#0b0c11] border border-dashed border-white/[0.07] text-[11px] font-mono text-zinc-500 p-4 text-center">
+                  Press Start, then click Lap to capture split intervals.
+                </div>
+              ) : (
+                <div className="max-h-44 overflow-y-auto flex flex-col gap-1.5 pr-1 custom-scrollbar">
+                  {sw.laps.map((lap) => {
+                    const isFastest = lap.id === lapExtremes.fastestId;
+                    const isSlowest = lap.id === lapExtremes.slowestId;
+                    return (
+                      <div
+                        key={lap.id}
+                        className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.06] text-xs font-mono"
+                      >
+                        <span className="text-zinc-400">Lap #{lap.index}</span>
+                        <span
+                          className={`text-right ${
+                            isFastest
+                              ? 'text-emerald-300 font-bold'
+                              : isSlowest
+                              ? 'text-amber-300'
+                              : 'text-sky-300'
+                          }`}
+                        >
+                          +{formatStopwatch(lap.splitMs)}
+                          {isFastest ? ' ★' : ''}
+                        </span>
+                        <span className="text-white font-bold tabular-nums">{formatStopwatch(lap.totalMs)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               )}
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-center py-4 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-2.5">
-            <div className="text-5xl font-extrabold font-mono tracking-wider text-white tabular-nums">
-              {pad2(Math.floor(secondsLeft / 60))}:{pad2(secondsLeft % 60)}
-            </div>
-            <div className="w-4/5 h-2 rounded-full bg-white/[0.06] overflow-hidden">
-              <div
-                className={`h-full transition-all duration-300 ${
-                  pomo.mode === 'focus'
-                    ? 'bg-gradient-to-r from-amber-400 to-emerald-400'
-                    : 'bg-gradient-to-r from-sky-400 to-emerald-400'
-                }`}
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-
-            {completionBanner && (
-              <div className="px-3 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/35 text-[11px] font-mono text-emerald-200">
-                {completionBanner}
-              </div>
-            )}
-
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-              <button
-                type="button"
-                onClick={togglePomodoro}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
-                  pomo.running
-                    ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
-                    : 'bg-amber-400/90 border-amber-300 text-zinc-950 hover:bg-amber-300'
-                }`}
-              >
-                {pomo.running ? '⏸ Pause' : secondsLeft < pomo.totalSec ? '▶ Resume' : '▶ Start Focus'}
-              </button>
-              <button
-                type="button"
-                onClick={resetPomodoro}
-                className="px-3 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
-              >
-                ↺ Reset
-              </button>
-              <button
-                type="button"
-                onClick={() => adjustPomodoroMinutes(1)}
-                title="Add 1 minute"
-                className="px-2.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-mono text-sky-300 hover:text-white cursor-pointer"
-              >
-                +1m
-              </button>
-              <button
-                type="button"
-                onClick={() => onSelectTab('tasks')}
-                className="px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/25 cursor-pointer"
-              >
-                Tasks →
-              </button>
-            </div>
-          </div>
-
-          {/* Presets + Custom Minutes */}
-          <div className="flex flex-wrap items-center justify-between gap-1.5">
-            <div className="flex flex-wrap gap-1.5">
-              {[
-                { mins: 5, label: '5m', mode: 'shortBreak' as PomodoroMode },
-                { mins: 15, label: '15m', mode: 'focus' as PomodoroMode },
-                { mins: 25, label: '25m', mode: 'focus' as PomodoroMode },
-                { mins: 45, label: '45m', mode: 'focus' as PomodoroMode },
-                { mins: 60, label: '60m', mode: 'focus' as PomodoroMode },
-              ].map((p) => (
-                <button
-                  key={p.mins}
-                  type="button"
-                  onClick={() => applyModeOrPreset(p.mode, p.mins)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer ${
-                    pomo.totalSec === p.mins * 60
-                      ? 'bg-amber-500/20 border-amber-400/45 text-amber-200 font-bold'
-                      : 'bg-[#16171e] border-white/[0.08] text-zinc-300 hover:text-white'
-                  }`}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const val = parseInt(customMinInput, 10);
-                if (val > 0) applyModeOrPreset('focus', val);
-              }}
-              className="flex items-center gap-1"
-            >
-              <input
-                type="number"
-                min={1}
-                max={180}
-                value={customMinInput}
-                onChange={(e) => setCustomMinInput(e.target.value)}
-                aria-label="Custom focus minutes"
-                className="w-12 h-7 px-1.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-[11px] font-mono text-white text-center"
-              />
-              <button
-                type="submit"
-                className="h-7 px-2 rounded-lg bg-[#16171e] border border-white/[0.1] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
-              >
-                Set m
-              </button>
-            </form>
-          </div>
-
-          {sessionLog.length > 0 && (
-            <div className="pt-2 border-t border-white/[0.06] flex flex-col gap-1 max-h-24 overflow-y-auto custom-scrollbar">
-              {sessionLog.slice(0, 4).map((s) => (
-                <div key={s.id} className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
-                  <span className="truncate">
-                    ✓ {s.label} ({s.minutes}m)
-                  </span>
-                  <span className="shrink-0 text-zinc-500">{s.timeLabel}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* Precision Stopwatch & Split Laps */}
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col justify-between gap-4">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <h2 className="text-base font-bold text-white">Stopwatch &amp; Lap Recorder</h2>
-              <p className="text-xs text-zinc-400">
-                Drift-free precision timer with split deltas &amp; tab persistence.
-              </p>
-            </div>
-            {sw.laps.length > 0 && (
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => {
-                    const text = [...sw.laps]
-                      .reverse()
-                      .map((l) => `Lap #${l.index}\tSplit +${formatStopwatch(l.splitMs)}\tTotal ${formatStopwatch(l.totalMs)}`)
-                      .join('\n');
-                    void copyTextSafe(text).then((ok) => {
-                      if (ok) {
-                        setCopiedLaps(true);
-                        window.setTimeout(() => setCopiedLaps(false), 1600);
-                      }
-                    });
-                  }}
-                  className="px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.09] text-[11px] font-mono text-sky-300 cursor-pointer"
-                >
-                  {copiedLaps ? '✓ Copied' : 'Copy Laps'}
-                </button>
-              </div>
-            )}
-          </div>
-
-          <div className="flex flex-col items-center justify-center py-6 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-3">
-            <div className="text-5xl font-extrabold font-mono tracking-wider text-sky-300 tabular-nums">
-              {formatStopwatch(swDisplayMs)}
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <button
-                type="button"
-                onClick={toggleStopwatch}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
-                  sw.running
-                    ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
-                    : 'bg-sky-500/25 border-sky-400/45 text-white hover:bg-sky-500/35'
-                }`}
-              >
-                {sw.running ? '⏸ Pause' : swDisplayMs > 0 ? '▶ Resume' : '▶ Start'}
-              </button>
-              <button
-                type="button"
-                onClick={recordStopwatchLap}
-                disabled={!sw.running}
-                title={sw.running ? 'Record lap split' : 'Start stopwatch to record a lap'}
-                className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
-              >
-                🏁 Lap
-              </button>
-              <button
-                type="button"
-                onClick={() => setSw({ running: false, startedAtMs: null, accumulatedMs: 0, laps: [] })}
-                disabled={!sw.running && swDisplayMs === 0 && sw.laps.length === 0}
-                className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-
-          <div className="flex-1 flex flex-col gap-1.5 min-h-[92px]">
-            {sw.laps.length === 0 ? (
-              <div className="flex-1 flex items-center justify-center rounded-xl bg-[#0b0c11] border border-white/[0.05] text-[11px] font-mono text-zinc-500 p-4 text-center">
-                Press Start, then click Lap to capture split intervals.
-              </div>
-            ) : (
-              <div className="max-h-44 overflow-y-auto flex flex-col gap-1.5 pr-1 custom-scrollbar">
-                {sw.laps.map((lap) => {
-                  const isFastest = lap.id === lapExtremes.fastestId;
-                  const isSlowest = lap.id === lapExtremes.slowestId;
-                  return (
-                    <div
-                      key={lap.id}
-                      className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.06] text-xs font-mono"
-                    >
-                      <span className="text-zinc-400">Lap #{lap.index}</span>
-                      <span
-                        className={`text-right ${
-                          isFastest
-                            ? 'text-emerald-300 font-bold'
-                            : isSlowest
-                            ? 'text-amber-300'
-                            : 'text-sky-300'
-                        }`}
-                      >
-                        +{formatStopwatch(lap.splitMs)}
-                        {isFastest ? ' ★' : ''}
-                      </span>
-                      <span className="text-white font-bold tabular-nums">{formatStopwatch(lap.totalMs)}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+          <div className="px-5 py-2 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10.5px] font-mono text-zinc-500 shrink-0">
+            <span>{sw.running ? 'Recording active' : 'Standing by'}</span>
+            <span className="text-sky-300/80">Delta split tracking</span>
           </div>
         </section>
 
@@ -1150,11 +1185,12 @@ const AmbientFocusSoundscapeCard: React.FC<{
   };
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3.5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex flex-col gap-0.5">
+    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <div className="relative overflow-hidden px-5 py-4 border-b border-white/[0.07] bg-[#0d0f16] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Ambient Soundscapes Visual" opacityClass="opacity-72 sm:opacity-88" />
+        <div className="relative z-10 flex flex-col gap-0.5">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-base font-bold text-white">Offline Ambient Focus Soundscapes</h2>
+            <h2 className="text-base font-extrabold text-white">Offline Ambient Focus Soundscapes</h2>
             {audioStatus === 'playing' && soundMode !== 'off' && (
               <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/35 text-[10px] font-mono font-bold text-emerald-300">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -1171,12 +1207,12 @@ const AmbientFocusSoundscapeCard: React.FC<{
               </button>
             )}
           </div>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-zinc-300/90">
             Synthesized locally via Web Audio API — keeps playing while you switch tabs.
           </p>
         </div>
 
-        <label className="inline-flex items-center gap-1.5 text-xs text-zinc-300 cursor-pointer shrink-0">
+        <label className="relative z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#08090c]/90 border border-white/[0.1] text-xs text-zinc-300 cursor-pointer shrink-0">
           <input
             type="checkbox"
             checked={autoStopWithTimer}
@@ -1187,7 +1223,7 @@ const AmbientFocusSoundscapeCard: React.FC<{
         </label>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="px-5 py-3.5 flex flex-wrap items-center gap-2">
         {(
           [
             { id: 'off', label: '🔇 Off' },
@@ -1343,195 +1379,237 @@ export const HabitsMoodTab: React.FC = () => {
   return (
     <div className="flex flex-col gap-5">
       {/* 7-Day Habit Grid */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <h2 className="text-base font-bold text-white">7-Day Daily Habit Streak Tracker</h2>
-            <p className="text-xs text-zinc-400">Build consistent routines across the past 7 days.</p>
+      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+        <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1110] flex flex-wrap items-center justify-between gap-3">
+          <HeroArtworkBackdrop src="/visuals/checklists-workspace.jpg" alt="Daily Habit Tracker Visual" opacityClass="opacity-75 sm:opacity-90" />
+          <div className="relative z-10">
+            <h2 className="text-base font-extrabold text-white">7-Day Daily Habit Streak Tracker</h2>
+            <p className="text-xs text-zinc-300/90">Build consistent routines across the past 7 days.</p>
           </div>
-          <span className="px-3 py-1 rounded-xl bg-emerald-500/15 border border-emerald-500/35 text-xs font-mono font-bold text-emerald-300">
-            Weekly Consistency: {weeklyCompletionPct}%
-          </span>
+          <div className="relative z-10 flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#080b0a]/90 border border-emerald-400/25 shrink-0">
+            <MiniRadialRing percent={weeklyCompletionPct} color="#34d399" size={26} />
+            <span className="text-xs font-mono font-bold text-emerald-300 tabular-nums">
+              Weekly Consistency: {weeklyCompletionPct}%
+            </span>
+          </div>
         </div>
 
-        <form onSubmit={addHabit} className="flex flex-wrap gap-2">
-          <select
-            value={newHabitEmoji}
-            onChange={(e) => setNewHabitEmoji(e.target.value)}
-            aria-label="Habit icon"
-            className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm text-white"
-          >
-            {['✨', '💧', '🏃', '📖', '🧘', '🥗', '💤', '🧹', '💻', '🎸'].map((ic) => (
-              <option key={ic} value={ic}>{ic}</option>
-            ))}
-          </select>
-          <input
-            type="text"
-            value={newHabitName}
-            onChange={(e) => setNewHabitName(e.target.value)}
-            placeholder="Add new daily habit (e.g., 10k steps, Evening walk)..."
-            aria-label="New habit name"
-            className="flex-1 min-w-[200px] h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white"
-          />
-          <button
-            type="submit"
-            className="h-9 px-4 rounded-xl bg-white text-zinc-950 text-xs font-extrabold cursor-pointer"
-          >
-            + Add Habit
-          </button>
-        </form>
+        <div className="p-4 sm:p-5 flex flex-col gap-4">
+          <form onSubmit={addHabit} className="flex flex-wrap gap-2">
+            <select
+              value={newHabitEmoji}
+              onChange={(e) => setNewHabitEmoji(e.target.value)}
+              aria-label="Habit icon"
+              className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm text-white"
+            >
+              {['✨', '💧', '🏃', '📖', '🧘', '🥗', '💤', '🧹', '💻', '🎸'].map((ic) => (
+                <option key={ic} value={ic}>{ic}</option>
+              ))}
+            </select>
+            <input
+              type="text"
+              value={newHabitName}
+              onChange={(e) => setNewHabitName(e.target.value)}
+              placeholder="Add new daily habit (e.g., 10k steps, Evening walk)..."
+              aria-label="New habit name"
+              className="flex-1 min-w-[200px] h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-emerald-400/45"
+            />
+            <button
+              type="submit"
+              className="h-9 px-4 rounded-xl bg-white hover:bg-emerald-100 text-zinc-950 text-xs font-extrabold cursor-pointer"
+            >
+              + Add Habit
+            </button>
+          </form>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-white/[0.08] text-[11px] font-mono text-zinc-400">
-                <th className="py-2 pr-3">Habit</th>
-                {last7Days.map((d) => (
-                  <th key={d.iso} className="py-2 px-1.5 text-center">
-                    <div>{d.dayLabel}</div>
-                    <div className={`text-[10px] ${d.iso === today ? 'text-sky-300 font-bold' : 'text-zinc-500'}`}>
-                      {d.dateNum}
-                    </div>
-                  </th>
-                ))}
-                <th className="py-2 pl-2 text-right">Streak</th>
-                <th className="py-2 pl-2" />
-              </tr>
-            </thead>
-            <tbody>
-              {habitsState.habits.map((h) => {
-                const count7 = last7Days.filter((d) => h.completedDates.includes(d.iso)).length;
-                return (
-                  <tr key={h.id} className="border-b border-white/[0.05] hover:bg-white/[0.02]">
-                    <td className="py-2.5 pr-3 text-xs font-semibold text-white">
-                      {h.emoji} {h.name}
-                    </td>
-                    {last7Days.map((d) => {
-                      const done = h.completedDates.includes(d.iso);
-                      return (
-                        <td key={d.iso} className="py-2.5 px-1.5 text-center">
-                          <button
-                            type="button"
-                            onClick={() => toggleHabitDay(h.id, d.iso)}
-                            aria-label={`Toggle ${h.name} for ${d.iso}`}
-                            className={`w-7 h-7 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-                              done
-                                ? 'bg-emerald-500/25 border-emerald-400/50 text-emerald-200'
-                                : 'bg-[#08090c] border-white/[0.08] text-zinc-600 hover:border-white/[0.22]'
-                            }`}
-                          >
-                            {done ? '✓' : '·'}
-                          </button>
-                        </td>
-                      );
-                    })}
-                    <td className="py-2.5 pl-2 text-right text-xs font-mono text-emerald-300 font-bold">
-                      {count7}/7
-                    </td>
-                    <td className="py-2.5 pl-2 text-right">
-                      <button
-                        type="button"
-                        onClick={() => deleteHabit(h.id)}
-                        className="text-zinc-500 hover:text-rose-300 text-xs cursor-pointer"
-                        aria-label={`Delete ${h.name}`}
-                      >
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-white/[0.08] text-[11px] font-mono text-zinc-400">
+                  <th className="py-2 pr-3">Habit</th>
+                  {last7Days.map((d) => (
+                    <th key={d.iso} className="py-2 px-1.5 text-center">
+                      <div>{d.dayLabel}</div>
+                      <div className={`text-[10px] ${d.iso === today ? 'text-sky-300 font-bold' : 'text-zinc-500'}`}>
+                        {d.dateNum}
+                      </div>
+                    </th>
+                  ))}
+                  <th className="py-2 pl-2 text-right">Streak</th>
+                  <th className="py-2 pl-2" />
+                </tr>
+              </thead>
+              <tbody>
+                {habitsState.habits.map((h) => {
+                  const count7 = last7Days.filter((d) => h.completedDates.includes(d.iso)).length;
+                  return (
+                    <tr key={h.id} className="border-b border-white/[0.05] hover:bg-white/[0.02]">
+                      <td className="py-2.5 pr-3 text-xs font-semibold text-white">
+                        {h.emoji} {h.name}
+                      </td>
+                      {last7Days.map((d) => {
+                        const done = h.completedDates.includes(d.iso);
+                        return (
+                          <td key={d.iso} className="py-2.5 px-1.5 text-center">
+                            <button
+                              type="button"
+                              onClick={() => toggleHabitDay(h.id, d.iso)}
+                              aria-label={`Toggle ${h.name} for ${d.iso}`}
+                              className={`w-7 h-7 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                                done
+                                  ? 'bg-emerald-500/25 border-emerald-400/50 text-emerald-200'
+                                  : 'bg-[#08090c] border-white/[0.08] text-zinc-600 hover:border-white/[0.22]'
+                              }`}
+                            >
+                              {done ? '✓' : '·'}
+                            </button>
+                          </td>
+                        );
+                      })}
+                      <td className="py-2.5 pl-2 text-right text-xs font-mono text-emerald-300 font-bold">
+                        {count7}/7
+                      </td>
+                      <td className="py-2.5 pl-2 text-right">
+                        <button
+                          type="button"
+                          onClick={() => deleteHabit(h.id)}
+                          className="text-zinc-500 hover:text-rose-300 text-xs cursor-pointer"
+                          aria-label={`Delete ${h.name}`}
+                        >
+                          ✕
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3">
-          <div>
-            <h2 className="text-base font-bold text-white">Daily Mood &amp; Reflection Check-In</h2>
-            <p className="text-xs text-zinc-400">How are you feeling today ({today})?</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {['🤩 Energized', '🙂 Calm', '🎯 Focused', '😴 Tired', '😰 Stressed', '🙏 Grateful'].map((m) => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => setTodayMood({ mood: m })}
-                className={`px-3 py-1.5 rounded-xl text-xs border cursor-pointer ${
-                  todayMood.mood === m
-                    ? 'bg-sky-500/20 border-sky-400/45 text-white font-bold'
-                    : 'bg-[#16171e] border-white/[0.08] text-zinc-300 hover:text-white'
-                }`}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
-          <textarea
-            rows={3}
-            value={todayMood.reflection}
-            onChange={(e) => setTodayMood({ reflection: e.target.value })}
-            placeholder="One gratitude note, highlight, or thought for today..."
-            aria-label="Daily reflection"
-            className="w-full p-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-zinc-200 focus:outline-none focus:border-sky-400/50 resize-y"
-          />
-        </section>
-
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3 justify-between">
-          <div>
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-base font-bold text-white">Daily Hydration Tracker</h2>
-              <span className="text-xs font-mono text-sky-300 font-bold">
-                {glassesToday * 250} ml / 2000 ml ({glassesToday}/8 glasses)
-              </span>
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 items-stretch">
+        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+          <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#100e17] shrink-0">
+            <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Daily Mood Check-In Visual" opacityClass="opacity-72 sm:opacity-88" />
+            <div className="relative z-10 flex items-center justify-between gap-2">
+              <div>
+                <h2 className="text-base font-extrabold text-white">Daily Mood &amp; Reflection Check-In</h2>
+                <p className="text-xs text-zinc-300/90">How are you feeling today ({today})?</p>
+              </div>
+              {todayMood.mood && (
+                <span className="shrink-0 px-2.5 py-1 rounded-lg bg-sky-500/15 border border-sky-400/35 text-xs font-semibold text-sky-200">
+                  {todayMood.mood}
+                </span>
+              )}
             </div>
-            <p className="text-xs text-zinc-400">Tap glasses or use quick buttons to log water intake today.</p>
           </div>
 
-          <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 py-2">
-            {Array.from({ length: 8 }, (_, idx) => {
-              const filled = idx < glassesToday;
-              return (
+          <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col gap-3">
+            <div className="flex flex-wrap gap-2">
+              {['🤩 Energized', '🙂 Calm', '🎯 Focused', '😴 Tired', '😰 Stressed', '🙏 Grateful'].map((m) => (
                 <button
-                  key={idx}
+                  key={m}
                   type="button"
-                  onClick={() => setGlasses(filled && idx === glassesToday - 1 ? idx : idx + 1)}
-                  className={`h-12 rounded-xl border flex flex-col items-center justify-center text-sm cursor-pointer transition-colors ${
-                    filled
-                      ? 'bg-sky-500/20 border-sky-400/45 text-sky-200'
-                      : 'bg-[#16171e] border-white/[0.08] text-zinc-600 hover:border-sky-400/30'
+                  onClick={() => setTodayMood({ mood: m })}
+                  className={`px-3 py-1.5 rounded-xl text-xs border cursor-pointer transition-colors ${
+                    todayMood.mood === m
+                      ? 'bg-sky-500/20 border-sky-400/45 text-white font-bold'
+                      : 'bg-[#16171e] border-white/[0.08] text-zinc-300 hover:text-white'
                   }`}
                 >
-                  <span>💧</span>
-                  <span className="text-[10px] font-mono">{idx + 1}</span>
+                  {m}
                 </button>
-              );
-            })}
+              ))}
+            </div>
+            <textarea
+              rows={3}
+              value={todayMood.reflection}
+              onChange={(e) => setTodayMood({ reflection: e.target.value })}
+              placeholder="One gratitude note, highlight, or thought for today..."
+              aria-label="Daily reflection"
+              className="w-full flex-1 min-h-[84px] p-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-zinc-200 focus:outline-none focus:border-sky-400/50 resize-none custom-scrollbar"
+            />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setGlasses(glassesToday + 1)}
-              className="px-3.5 py-1.5 rounded-xl bg-sky-500/20 border border-sky-400/40 text-xs font-bold text-sky-200 cursor-pointer"
-            >
-              +1 Glass (250ml)
-            </button>
-            <button
-              type="button"
-              onClick={() => setGlasses(Math.max(0, glassesToday - 1))}
-              className="px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs font-mono text-zinc-300 cursor-pointer"
-            >
-              -1
-            </button>
-            <button
-              type="button"
-              onClick={() => setGlasses(0)}
-              className="px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs text-zinc-400 hover:text-white cursor-pointer"
-            >
-              Reset Today
-            </button>
+          <div className="px-5 py-2 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10.5px] font-mono text-zinc-500 shrink-0">
+            <span>{today}</span>
+            <span className="text-zinc-600">Synced live</span>
+          </div>
+        </section>
+
+        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+          <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1015] shrink-0">
+            <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="Daily Hydration Visual" opacityClass="opacity-72 sm:opacity-88" />
+            <div className="relative z-10 flex items-center justify-between gap-2">
+              <div>
+                <h2 className="text-base font-extrabold text-white">Daily Hydration Tracker</h2>
+                <p className="text-xs text-zinc-300/90">Tap glasses or use quick controls to log water intake.</p>
+              </div>
+              <div className="shrink-0 flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[#080b0e]/90 border border-sky-400/25">
+                <MiniRadialRing percent={Math.min(100, Math.round((glassesToday / 8) * 100))} color="#38bdf8" size={26} />
+                <span className="text-xs font-mono text-sky-300 font-bold tabular-nums">
+                  {glassesToday * 250} ml
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col justify-between gap-3">
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 py-1">
+              {Array.from({ length: 8 }, (_, idx) => {
+                const filled = idx < glassesToday;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setGlasses(filled && idx === glassesToday - 1 ? idx : idx + 1)}
+                    className={`h-12 rounded-xl border flex flex-col items-center justify-center text-sm cursor-pointer transition-colors ${
+                      filled
+                        ? 'bg-sky-500/20 border-sky-400/45 text-sky-200'
+                        : 'bg-[#16171e] border-white/[0.08] text-zinc-600 hover:border-sky-400/30'
+                    }`}
+                  >
+                    <span>💧</span>
+                    <span className="text-[10px] font-mono">{idx + 1}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setGlasses(glassesToday + 1)}
+                  className="px-3.5 py-1.5 rounded-xl bg-sky-500/20 border border-sky-400/40 hover:bg-sky-500/30 text-xs font-bold text-sky-200 cursor-pointer"
+                >
+                  +1 Glass (250ml)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGlasses(Math.max(0, glassesToday - 1))}
+                  className="px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs font-mono text-zinc-300 cursor-pointer"
+                >
+                  -1
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGlasses(0)}
+                  className="px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs text-zinc-400 hover:text-white cursor-pointer"
+                >
+                  Reset Today
+                </button>
+              </div>
+              <span className="text-xs font-mono text-sky-300 font-bold tabular-nums">
+                {glassesToday}/8 glasses
+              </span>
+            </div>
+          </div>
+
+          <div className="px-5 py-2 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10.5px] font-mono text-zinc-500 shrink-0">
+            <span>Goal: 2000 ml</span>
+            <span className="text-sky-300/80 tabular-nums">{glassesToday * 250} / 2000 ml</span>
           </div>
         </section>
       </div>
@@ -1559,108 +1637,128 @@ export const PersonalGoalsCard: React.FC = () => {
     setTitle('');
   };
 
+  const avgPct = useMemo(() => {
+    if (goals.length === 0) return 0;
+    const sum = goals.reduce(
+      (acc, g) => acc + Math.min(100, Math.round((g.current / Math.max(1, g.target)) * 100)),
+      0
+    );
+    return Math.round(sum / goals.length);
+  }, [goals]);
+
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
-      <div>
-        <h2 className="text-base font-bold text-white">Personal Goals &amp; Milestones</h2>
-        <p className="text-xs text-zinc-400">Track measurable life targets like books, savings, fitness, or projects.</p>
+    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1017] flex flex-wrap items-center justify-between gap-3">
+        <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="Personal Goals Visual" opacityClass="opacity-75 sm:opacity-90" />
+        <div className="relative z-10">
+          <h2 className="text-base font-extrabold text-white">Personal Goals &amp; Milestones</h2>
+          <p className="text-xs text-zinc-300/90">Track measurable life targets like books, savings, fitness, or projects.</p>
+        </div>
+        <div className="relative z-10 shrink-0 flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#080b10]/90 border border-sky-400/25">
+          <MiniRadialRing percent={avgPct} color="#38bdf8" size={26} />
+          <span className="text-xs font-mono font-bold text-sky-300 tabular-nums">
+            {goals.length} active · {avgPct}% avg
+          </span>
+        </div>
       </div>
 
-      <form onSubmit={handleAddGoal} className="grid grid-cols-1 sm:grid-cols-[1.5fr_80px_90px_auto] gap-2">
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="New goal (e.g., Save emergency fund, Learn Spanish)..."
-          aria-label="Goal title"
-          className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white"
-        />
-        <input
-          type="number"
-          min={1}
-          value={target}
-          onChange={(e) => setTarget(e.target.value)}
-          aria-label="Goal target"
-          className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
-        />
-        <input
-          type="text"
-          value={unit}
-          onChange={(e) => setUnit(e.target.value)}
-          placeholder="unit"
-          aria-label="Goal unit"
-          className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white"
-        />
-        <button
-          type="submit"
-          className="h-9 px-4 rounded-xl bg-white text-zinc-950 text-xs font-bold cursor-pointer"
-        >
-          + Goal
-        </button>
-      </form>
+      <div className="p-4 sm:p-5 flex flex-col gap-4">
+        <form onSubmit={handleAddGoal} className="grid grid-cols-1 sm:grid-cols-[1.5fr_80px_90px_auto] gap-2">
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="New goal (e.g., Save emergency fund, Learn Spanish)..."
+            aria-label="Goal title"
+            className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-sky-400/45"
+          />
+          <input
+            type="number"
+            min={1}
+            value={target}
+            onChange={(e) => setTarget(e.target.value)}
+            aria-label="Goal target"
+            className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
+          />
+          <input
+            type="text"
+            value={unit}
+            onChange={(e) => setUnit(e.target.value)}
+            placeholder="unit"
+            aria-label="Goal unit"
+            className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white"
+          />
+          <button
+            type="submit"
+            className="h-9 px-4 rounded-xl bg-white hover:bg-sky-100 text-zinc-950 text-xs font-extrabold cursor-pointer"
+          >
+            + Goal
+          </button>
+        </form>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {goals.map((g) => {
-          const pct = Math.min(100, Math.round((g.current / Math.max(1, g.target)) * 100));
-          return (
-            <div key={g.id} className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-bold text-white truncate">{g.title}</span>
-                <button
-                  type="button"
-                  onClick={() => setGoals((prev) => prev.filter((item) => item.id !== g.id))}
-                  className="text-zinc-500 hover:text-rose-300 text-xs cursor-pointer"
-                  aria-label={`Remove ${g.title}`}
-                >
-                  ✕
-                </button>
-              </div>
-              <div className="flex items-center justify-between text-xs font-mono gap-2">
-                <span className="text-sky-300 font-bold tabular-nums">
-                  {g.current} / {g.target} {g.unit} ({pct}%)
-                </span>
-                <div className="flex items-center gap-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {goals.map((g) => {
+            const pct = Math.min(100, Math.round((g.current / Math.max(1, g.target)) * 100));
+            return (
+              <div key={g.id} className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-bold text-white truncate">{g.title}</span>
                   <button
                     type="button"
-                    onClick={() =>
-                      setGoals((prev) =>
-                        prev.map((x) => (x.id === g.id ? { ...x, current: Math.max(0, x.current - 1) } : x))
-                      )
-                    }
-                    className="w-6 h-6 rounded bg-[#0c0d12] border border-white/[0.1] text-white cursor-pointer"
+                    onClick={() => setGoals((prev) => prev.filter((item) => item.id !== g.id))}
+                    className="text-zinc-500 hover:text-rose-300 text-xs cursor-pointer"
+                    aria-label={`Remove ${g.title}`}
                   >
-                    -
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setGoals((prev) =>
-                        prev.map((x) => (x.id === g.id ? { ...x, current: x.current + 1 } : x))
-                      )
-                    }
-                    className="w-6 h-6 rounded bg-emerald-500/20 border border-emerald-400/35 text-emerald-200 font-bold cursor-pointer"
-                  >
-                    +1
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setGoals((prev) =>
-                        prev.map((x) => (x.id === g.id ? { ...x, current: x.current + 5 } : x))
-                      )
-                    }
-                    className="px-1.5 h-6 rounded bg-sky-500/15 border border-sky-400/30 text-[10px] text-sky-200 font-bold cursor-pointer"
-                  >
-                    +5
+                    ✕
                   </button>
                 </div>
+                <div className="flex items-center justify-between text-xs font-mono gap-2">
+                  <span className="text-sky-300 font-bold tabular-nums">
+                    {g.current} / {g.target} {g.unit} ({pct}%)
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setGoals((prev) =>
+                          prev.map((x) => (x.id === g.id ? { ...x, current: Math.max(0, x.current - 1) } : x))
+                        )
+                      }
+                      className="w-6 h-6 rounded bg-[#0c0d12] border border-white/[0.1] text-white cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setGoals((prev) =>
+                          prev.map((x) => (x.id === g.id ? { ...x, current: x.current + 1 } : x))
+                        )
+                      }
+                      className="w-6 h-6 rounded bg-emerald-500/20 border border-emerald-400/35 text-emerald-200 font-bold cursor-pointer"
+                    >
+                      +1
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setGoals((prev) =>
+                          prev.map((x) => (x.id === g.id ? { ...x, current: x.current + 5 } : x))
+                        )
+                      }
+                      className="px-1.5 h-6 rounded bg-sky-500/15 border border-sky-400/30 text-[10px] text-sky-200 font-bold cursor-pointer"
+                    >
+                      +5
+                    </button>
+                  </div>
+                </div>
+                <div className="w-full h-1.5 rounded-full bg-black/50 overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-sky-400 to-emerald-400 transition-all" style={{ width: `${pct}%` }} />
+                </div>
               </div>
-              <div className="w-full h-1.5 rounded-full bg-black/50 overflow-hidden">
-                <div className="h-full bg-emerald-400 transition-all" style={{ width: `${pct}%` }} />
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -1697,42 +1795,61 @@ export const DateCountdownCalculatorCard: React.FC = () => {
   }, [targetDate, birthDate]);
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
-      <h2 className="text-base font-bold text-white">Countdown &amp; Exact Age Calculator</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
-          <label className="text-xs text-zinc-400 flex flex-col gap-1">
-            Event / Deadline Date
-            <input
-              type="date"
-              value={targetDate}
-              onChange={(e) => setTargetDate(e.target.value)}
-              className="h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
-            />
-          </label>
-          <div className="text-sm font-mono font-extrabold text-sky-300">
-            {diffInfo.days === 0
-              ? 'Today!'
-              : diffInfo.days > 0
-              ? `${diffInfo.days} days remaining`
-              : `${Math.abs(diffInfo.days)} days ago`}
+    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1015] shrink-0">
+        <HeroArtworkBackdrop src="/visuals/world-clock-globe.jpg" alt="Date Countdown Calculator Visual" opacityClass="opacity-75 sm:opacity-90" />
+        <div className="relative z-10 flex items-center justify-between gap-2">
+          <div>
+            <h2 className="text-base font-extrabold text-white">Countdown &amp; Exact Age Calculator</h2>
+            <p className="text-xs text-zinc-300/90">Compute exact days left until deadlines or elapsed life duration.</p>
           </div>
+          <span className="shrink-0 px-2.5 py-1 rounded-md bg-[#080b12]/85 backdrop-blur-sm border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
+            Exact Diff
+          </span>
         </div>
+      </div>
 
-        <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
-          <label className="text-xs text-zinc-400 flex flex-col gap-1">
-            Start / Birth Date
-            <input
-              type="date"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              className="h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
-            />
-          </label>
-          <div className="text-sm font-mono font-extrabold text-emerald-300">
-            {diffInfo.ageValid ? diffInfo.ageText : 'Pick a valid past date'}
+      <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
+            <label className="text-xs text-zinc-400 flex flex-col gap-1">
+              Event / Deadline Date
+              <input
+                type="date"
+                value={targetDate}
+                onChange={(e) => setTargetDate(e.target.value)}
+                className="h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
+              />
+            </label>
+            <div className="text-sm font-mono font-extrabold text-sky-300">
+              {diffInfo.days === 0
+                ? 'Today!'
+                : diffInfo.days > 0
+                ? `${diffInfo.days} days remaining`
+                : `${Math.abs(diffInfo.days)} days ago`}
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
+            <label className="text-xs text-zinc-400 flex flex-col gap-1">
+              Start / Birth Date
+              <input
+                type="date"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                className="h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
+              />
+            </label>
+            <div className="text-sm font-mono font-extrabold text-emerald-300">
+              {diffInfo.ageValid ? diffInfo.ageText : 'Pick a valid past date'}
+            </div>
           </div>
         </div>
+      </div>
+
+      <div className="px-5 py-2 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10.5px] font-mono text-zinc-500 shrink-0">
+        <span>Calendar delta math</span>
+        <span className="text-sky-300/80">{targetDate}</span>
       </div>
     </section>
   );
@@ -1783,76 +1900,91 @@ export const GoalsCountdownTab: React.FC = () => {
     <div className="flex flex-col gap-5">
       <PersonalGoalsCard />
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 items-stretch">
         <DateCountdownCalculatorCard />
 
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
-          <div>
-            <h2 className="text-base font-bold text-white">Saved Event Countdowns</h2>
-            <p className="text-xs text-zinc-400">Pin important launches, birthdays, exams, or holidays.</p>
+        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+          <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#100e17] shrink-0">
+            <HeroArtworkBackdrop src="/visuals/reading-queue.jpg" alt="Event Countdowns Visual" opacityClass="opacity-75 sm:opacity-90" />
+            <div className="relative z-10 flex items-center justify-between gap-2">
+              <div>
+                <h2 className="text-base font-extrabold text-white">Saved Event Countdowns</h2>
+                <p className="text-xs text-zinc-300/90">Pin important launches, birthdays, exams, or holidays.</p>
+              </div>
+              <span className="shrink-0 px-2.5 py-1 rounded-md bg-[#0c0a14]/85 backdrop-blur-sm border border-purple-400/35 text-[10px] font-mono font-bold text-purple-300">
+                {events.length} pinned
+              </span>
+            </div>
           </div>
 
-          <form onSubmit={addEvent} className="grid grid-cols-1 sm:grid-cols-[1fr_140px_auto] gap-2">
-            <input
-              type="text"
-              value={evLabel}
-              onChange={(e) => setEvLabel(e.target.value)}
-              placeholder="Event title (e.g., Product Launch)..."
-              aria-label="Event countdown label"
-              className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white"
-            />
-            <input
-              type="date"
-              value={evDate}
-              onChange={(e) => setEvDate(e.target.value)}
-              aria-label="Event countdown date"
-              className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
-            />
-            <button
-              type="submit"
-              className="h-9 px-4 rounded-xl bg-white text-zinc-950 text-xs font-extrabold cursor-pointer"
-            >
-              + Pin
-            </button>
-          </form>
+          <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col gap-4">
+            <form onSubmit={addEvent} className="grid grid-cols-1 sm:grid-cols-[1fr_140px_auto] gap-2">
+              <input
+                type="text"
+                value={evLabel}
+                onChange={(e) => setEvLabel(e.target.value)}
+                placeholder="Event title (e.g., Product Launch)..."
+                aria-label="Event countdown label"
+                className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-purple-400/45"
+              />
+              <input
+                type="date"
+                value={evDate}
+                onChange={(e) => setEvDate(e.target.value)}
+                aria-label="Event countdown date"
+                className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
+              />
+              <button
+                type="submit"
+                className="h-9 px-4 rounded-xl bg-white hover:bg-purple-100 text-zinc-950 text-xs font-extrabold cursor-pointer"
+              >
+                + Pin
+              </button>
+            </form>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {events.map((ev) => {
-              const diffDays = Math.round((new Date(`${ev.date}T00:00:00`).getTime() - todayMs) / 86400000);
-              const badge =
-                diffDays === 0
-                  ? 'Today!'
-                  : diffDays > 0
-                  ? `D-${diffDays} days`
-                  : `${Math.abs(diffDays)}d ago`;
-              return (
-                <div key={ev.id} className="p-3 rounded-xl bg-[#16171e] border border-white/[0.07] flex items-center justify-between gap-2">
-                  <div className="min-w-0">
-                    <div className="text-xs font-bold text-white truncate">{ev.label}</div>
-                    <div className="text-[11px] font-mono text-zinc-400">{ev.date}</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {events.map((ev) => {
+                const diffDays = Math.round((new Date(`${ev.date}T00:00:00`).getTime() - todayMs) / 86400000);
+                const badge =
+                  diffDays === 0
+                    ? 'Today!'
+                    : diffDays > 0
+                    ? `D-${diffDays} days`
+                    : `${Math.abs(diffDays)}d ago`;
+                return (
+                  <div key={ev.id} className="p-3 rounded-xl bg-[#16171e] border border-white/[0.07] flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold text-white truncate">{ev.label}</div>
+                      <div className="text-[11px] font-mono text-zinc-400">{ev.date}</div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span
+                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
+                          diffDays >= 0
+                            ? 'bg-purple-500/15 border-purple-400/35 text-purple-200'
+                            : 'bg-zinc-800 border-white/[0.08] text-zinc-400'
+                        }`}
+                      >
+                        {badge}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => persistEvents(events.filter((x) => x.id !== ev.id))}
+                        className="text-zinc-500 hover:text-rose-300 text-xs cursor-pointer"
+                        aria-label={`Remove ${ev.label}`}
+                      >
+                        ✕
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span
-                      className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
-                        diffDays >= 0
-                          ? 'bg-purple-500/15 border-purple-400/35 text-purple-200'
-                          : 'bg-zinc-800 border-white/[0.08] text-zinc-400'
-                      }`}
-                    >
-                      {badge}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => persistEvents(events.filter((x) => x.id !== ev.id))}
-                      className="text-zinc-500 hover:text-rose-300 text-xs cursor-pointer"
-                      aria-label={`Remove ${ev.label}`}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="px-5 py-2 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10.5px] font-mono text-zinc-500 shrink-0">
+            <span>{events.length} countdowns</span>
+            <span className="text-zinc-600">Stored locally</span>
           </div>
         </section>
       </div>

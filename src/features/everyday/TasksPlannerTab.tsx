@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { HeroArtworkBackdrop } from '../../components/PortalVisuals';
+import { HeroArtworkBackdrop, MiniRadialRing } from '../../components/PortalVisuals';
 import { useSyncedWorkspaceState } from '../../services/workspaceStateStore';
 import { copyTextSafe } from '../../utils/clipboard';
 import { getSharedAudioContext, playGentleChime } from '../../utils/focusAudio';
@@ -1242,13 +1242,15 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
       <header
         className={
           embedded
-            ? 'relative overflow-hidden w-full bg-[#111218] border border-white/[0.08] rounded-2xl p-4 sm:p-5 shadow-lg'
+            ? 'relative overflow-hidden w-full bg-[#111218] border border-white/[0.09] rounded-2xl p-4 sm:p-5 shadow-xl portal-header-sheen'
             : 'relative overflow-hidden w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-2xl portal-header-sheen'
         }
       >
-        {!embedded && (
-          <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="" opacityClass="opacity-30 sm:opacity-45" />
-        )}
+        <HeroArtworkBackdrop
+          src={embedded ? '/visuals/pillar-projects-topology.jpg' : '/visuals/hero-overview-mesh.jpg'}
+          alt=""
+          opacityClass={embedded ? 'opacity-75 sm:opacity-90' : 'opacity-80 sm:opacity-95'}
+        />
         <div className="relative z-10 flex flex-col gap-4">
           <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
             <div className="flex items-start gap-3 min-w-0">
@@ -1412,19 +1414,19 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                 {formatMinutes(stats.focusMinsLeft)}
               </span>
             </div>
-            <div className="p-3 rounded-xl bg-[#0b0c10]/90 border border-white/[0.08] flex flex-col justify-between gap-1.5">
-              <div className="flex items-center justify-between text-[11px] font-mono">
-                <span className="text-zinc-400">Completion</span>
-                <span className="text-zinc-400 tabular-nums">
-                  {stats.completed}/{stats.total}
-                </span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl font-extrabold font-mono text-emerald-400 tabular-nums leading-none">{stats.pct}%</span>
-                <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
-                  <div className="h-full bg-emerald-400 transition-all duration-200" style={{ width: `${stats.pct}%` }} />
+            <div className="p-3 rounded-xl bg-[#0b0c10]/90 border border-white/[0.08] flex items-center justify-between gap-2.5">
+              <div className="flex flex-col justify-between gap-1 min-w-0">
+                <span className="text-[11px] font-mono text-zinc-400">Completion</span>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xl font-extrabold font-mono text-emerald-400 tabular-nums leading-none">
+                    {stats.pct}%
+                  </span>
+                  <span className="text-[10px] font-mono text-zinc-500 tabular-nums">
+                    {stats.completed}/{stats.total}
+                  </span>
                 </div>
               </div>
+              <MiniRadialRing percent={stats.pct} color="#10b981" size={38} />
             </div>
           </div>
         </div>

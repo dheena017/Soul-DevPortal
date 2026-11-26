@@ -21,7 +21,7 @@ export default function DocTablesTab({ tables, isLoading = false }: DocTablesTab
   }
   return (
     <section className="w-full p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6 portal-stagger portal-header-sheen">
-      <HeroArtworkBackdrop src="/visuals/tab-database-wal.jpg" alt="Specification Matrices & Tables Visual" opacityClass="opacity-30 sm:opacity-42" />
+      <HeroArtworkBackdrop src="/visuals/tab-database-wal.jpg" alt="Specification Matrices & Tables Visual" opacityClass="opacity-70 sm:opacity-85" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">

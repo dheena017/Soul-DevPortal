@@ -71,51 +71,38 @@ export function MiniRadialRing({
 export function HeroArtworkBackdrop({
   src,
   alt,
-  opacityClass = 'opacity-55 sm:opacity-75',
+  opacityClass = 'opacity-80 sm:opacity-95',
 }: {
   src: string;
   alt: string;
   opacityClass?: string;
 }) {
-  const imgRef = useRef<HTMLImageElement | null>(null);
-  const [loaded, setLoaded] = useState<boolean>(false);
   const [failed, setFailed] = useState<boolean>(false);
 
   useEffect(() => {
     setFailed(false);
-    const img = imgRef.current;
-    if (img && img.complete && img.naturalWidth > 0) {
-      setLoaded(true);
-    } else {
-      setLoaded(false);
-    }
   }, [src]);
 
   return (
     <div
-      className="portal-hero-art-wrap absolute inset-y-0 right-0 w-full md:w-3/4 lg:w-[62%] overflow-hidden pointer-events-none select-none rounded-r-2xl z-0"
+      className="portal-hero-art-wrap absolute inset-y-0 right-0 w-[86%] sm:w-[78%] lg:w-[70%] overflow-hidden pointer-events-none select-none rounded-r-2xl z-0"
       aria-hidden="true"
     >
-      <div
-        className={`absolute inset-0 bg-gradient-to-bl from-sky-500/12 via-purple-500/8 to-transparent transition-opacity duration-500 ${
-          loaded && !failed ? 'opacity-20' : 'opacity-100'
-        }`}
-      />
+      {failed && (
+        <div className="absolute inset-0 bg-gradient-to-bl from-sky-500/15 via-purple-500/10 to-transparent" />
+      )}
       {!failed && (
         <img
-          ref={imgRef}
           src={src}
           alt={alt}
           loading="eager"
-          decoding="async"
+          decoding="sync"
           fetchPriority="high"
-          onLoad={() => setLoaded(true)}
           onError={() => setFailed(true)}
-          className={`w-full h-full object-cover object-center portal-hero-art transition-opacity duration-500 ${
-            loaded ? opacityClass : 'opacity-0'
-          }`}
+          className={`w-full h-full object-cover object-right portal-hero-art ${opacityClass}`}
         />
       )}
+      <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-[#0d0f15]/75 via-[#0d0f15]/25 to-transparent pointer-events-none" />
     </div>
   );
 }

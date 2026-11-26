@@ -72,7 +72,7 @@ export default function PackageDetailHeader({
 }: PackageDetailHeaderProps) {
   return (
     <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6 portal-header-sheen">
-      <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="Package Module Visual" opacityClass="opacity-42 sm:opacity-58" />
+      <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="Package Module Visual" opacityClass="opacity-80 sm:opacity-95" />
       <div className="relative z-10 flex flex-col gap-4 sm:gap-6">
       {/* ── Navigation Breadcrumb Row ── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 pb-3.5 sm:pb-4 border-b border-white/[0.06]">

@@ -268,7 +268,7 @@ export default {
 
   return (
     <div className="w-full flex flex-col gap-6 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl portal-header-sheen portal-stagger">
-      <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Interactive Code Playground Visual" opacityClass="opacity-30 sm:opacity-42" />
+      <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Interactive Code Playground Visual" opacityClass="opacity-70 sm:opacity-85" />
       {/* ── Header Row with Metadata and Dynamic Dates ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
         <div className="flex flex-col gap-1">

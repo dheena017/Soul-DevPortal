@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { HeroArtworkBackdrop, MiniRadialRing } from '../../components/PortalVisuals';
 import { useSyncedWorkspaceState } from '../../services/workspaceStateStore';
 import type { HumanNote } from './NotesJournalTab';
 import {
@@ -190,67 +191,78 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
     year: 'numeric',
   });
 
+  const taskCompletionPct =
+    activeTasks.length > 0 ? Math.round(((activeTasks.length - openTasks.length) / activeTasks.length) * 100) : 0;
+  const habitPct =
+    habitsState.habits.length > 0 ? Math.round((habitsTodayDone / habitsState.habits.length) * 100) : 0;
+  const focusGoalPct = Math.min(100, Math.round((focusMinutesToday / 90) * 100));
+  const budgetLeftPct =
+    expensesState.monthlyBudget > 0 ? Math.round((budgetLeft / expensesState.monthlyBudget) * 100) : 100;
+
   return (
     <div className="flex flex-col gap-5">
       {/* Greeting + Quick Capture Strip */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-sky-300">
-              {readableToday}
-            </span>
-            <h2 className="text-xl font-extrabold text-white mt-0.5">
-              {getGreeting()} — Daily Overview &amp; Quick Capture
-            </h2>
+      <section className="relative overflow-hidden rounded-2xl bg-[#111218] border border-white/[0.09] p-5 shadow-xl portal-header-sheen">
+        <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="" opacityClass="opacity-75 sm:opacity-92" />
+        <div className="relative z-10 flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-sky-300">
+                {readableToday}
+              </span>
+              <h2 className="text-xl font-extrabold text-white mt-0.5">
+                {getGreeting()} — Daily Overview &amp; Quick Capture
+              </h2>
+            </div>
+            {captureNotice && (
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/15 border border-emerald-500/35 text-emerald-300">
+                ✓ {captureNotice}
+              </span>
+            )}
           </div>
-          {captureNotice && (
-            <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/15 border border-emerald-500/35 text-emerald-300">
-              ✓ {captureNotice}
-            </span>
-          )}
+
+          <form onSubmit={handleQuickCapture} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div className="flex items-center p-0.5 rounded-xl bg-[#08090c] border border-white/[0.08] shrink-0">
+              <button
+                type="button"
+                onClick={() => setCaptureKind('task')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
+                  captureKind === 'task' ? 'bg-emerald-500/20 text-emerald-200 font-bold' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                ✅ Quick Task
+              </button>
+              <button
+                type="button"
+                onClick={() => setCaptureKind('note')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
+                  captureKind === 'note' ? 'bg-sky-500/20 text-sky-200 font-bold' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                📝 Quick Note
+              </button>
+            </div>
+
+            <input
+              type="text"
+              value={captureText}
+              onChange={(e) => setCaptureText(e.target.value)}
+              placeholder={
+                captureKind === 'task'
+                  ? 'Capture a task for today (e.g., Pay electric bill, Review PR)...'
+                  : 'Jot down a quick note, thought, or snippet...'
+              }
+              aria-label="Quick capture input"
+              className="flex-1 h-10 px-3.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
+            />
+            <button
+              type="submit"
+              className="h-10 px-5 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-extrabold cursor-pointer shrink-0"
+            >
+              + Save {captureKind === 'task' ? 'Task' : 'Note'}
+            </button>
+          </form>
         </div>
-
-        <form onSubmit={handleQuickCapture} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-          <div className="flex items-center p-0.5 rounded-xl bg-[#08090c] border border-white/[0.08] shrink-0">
-            <button
-              type="button"
-              onClick={() => setCaptureKind('task')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
-                captureKind === 'task' ? 'bg-emerald-500/20 text-emerald-200 font-bold' : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              ✅ Quick Task
-            </button>
-            <button
-              type="button"
-              onClick={() => setCaptureKind('note')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
-                captureKind === 'note' ? 'bg-sky-500/20 text-sky-200 font-bold' : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              📝 Quick Note
-            </button>
-          </div>
-
-          <input
-            type="text"
-            value={captureText}
-            onChange={(e) => setCaptureText(e.target.value)}
-            placeholder={
-              captureKind === 'task'
-                ? 'Capture a task for today (e.g., Pay electric bill, Review PR)...'
-                : 'Jot down a quick note, thought, or snippet...'
-            }
-            aria-label="Quick capture input"
-            className="flex-1 h-10 px-3.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
-          />
-          <button
-            type="submit"
-            className="h-10 px-5 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-extrabold cursor-pointer shrink-0"
-          >
-            + Save {captureKind === 'task' ? 'Task' : 'Note'}
-          </button>
-        </form>
       </section>
 
       {/* Live Daily KPI Summary */}
@@ -258,99 +270,100 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
         <button
           type="button"
           onClick={() => onSelectTab('tasks')}
-          className="text-left p-4 rounded-2xl bg-[#111218] border border-emerald-500/20 hover:border-emerald-400/45 transition-colors cursor-pointer"
+          className="text-left p-4 rounded-2xl bg-[#111218] border border-emerald-500/25 hover:border-emerald-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
         >
-          <div className="flex items-center justify-between text-xs text-zinc-400">
-            <span>Open Tasks</span>
-            <span>✅</span>
+          <div className="min-w-0">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">Open Tasks</div>
+            <div className="text-2xl font-extrabold font-mono text-white tabular-nums mt-1">
+              {openTasks.length}
+            </div>
+            <div className="text-[11px] text-emerald-300 mt-1">
+              {openTasks.filter((t) => t.dueDate === today).length} due today →
+            </div>
           </div>
-          <div className="text-2xl font-extrabold font-mono text-white tabular-nums mt-1">
-            {openTasks.length}
-          </div>
-          <div className="text-[11px] text-emerald-300 mt-1">
-            {openTasks.filter((t) => t.dueDate === today).length} due today →
-          </div>
+          <MiniRadialRing percent={taskCompletionPct} color="#10b981" size={44} />
         </button>
 
         <button
           type="button"
           onClick={() => onSelectTab('habits')}
-          className="text-left p-4 rounded-2xl bg-[#111218] border border-sky-400/20 hover:border-sky-400/45 transition-colors cursor-pointer"
+          className="text-left p-4 rounded-2xl bg-[#111218] border border-sky-400/25 hover:border-sky-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
         >
-          <div className="flex items-center justify-between text-xs text-zinc-400">
-            <span>Habits Today</span>
-            <span>🌱</span>
+          <div className="min-w-0">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">Habits Today</div>
+            <div className="text-2xl font-extrabold font-mono text-white tabular-nums mt-1">
+              {habitsTodayDone}/{habitsState.habits.length}
+            </div>
+            <div className="text-[11px] text-sky-300 mt-1">
+              Toggle daily streaks →
+            </div>
           </div>
-          <div className="text-2xl font-extrabold font-mono text-white tabular-nums mt-1">
-            {habitsTodayDone}/{habitsState.habits.length}
-          </div>
-          <div className="text-[11px] text-sky-300 mt-1">
-            Toggle daily streaks →
-          </div>
+          <MiniRadialRing percent={habitPct} color="#38bdf8" size={44} />
         </button>
 
         <button
           type="button"
           onClick={() => onSelectTab('focus')}
-          className="text-left p-4 rounded-2xl bg-[#111218] border border-amber-400/20 hover:border-amber-400/45 transition-colors cursor-pointer"
+          className="text-left p-4 rounded-2xl bg-[#111218] border border-amber-400/25 hover:border-amber-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
         >
-          <div className="flex items-center justify-between text-xs text-zinc-400">
-            <span>Focus Logged</span>
-            <span>⏱️</span>
+          <div className="min-w-0">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">Focus Logged</div>
+            <div className="text-2xl font-extrabold font-mono text-amber-300 tabular-nums mt-1">
+              {focusMinutesToday}m
+            </div>
+            <div className="text-[11px] text-zinc-400 mt-1">
+              {focusSessionsToday} sessions today →
+            </div>
           </div>
-          <div className="text-2xl font-extrabold font-mono text-amber-300 tabular-nums mt-1">
-            {focusMinutesToday}m
-          </div>
-          <div className="text-[11px] text-zinc-400 mt-1">
-            {focusSessionsToday} sessions today →
-          </div>
+          <MiniRadialRing percent={focusGoalPct} color="#f59e0b" size={44} />
         </button>
 
         <button
           type="button"
           onClick={() => onSelectTab('budget')}
-          className="text-left p-4 rounded-2xl bg-[#111218] border border-purple-400/20 hover:border-purple-400/45 transition-colors cursor-pointer"
+          className="text-left p-4 rounded-2xl bg-[#111218] border border-purple-400/25 hover:border-purple-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
         >
-          <div className="flex items-center justify-between text-xs text-zinc-400">
-            <span>Budget Left</span>
-            <span>💰</span>
+          <div className="min-w-0">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">Budget Left</div>
+            <div className="text-2xl font-extrabold font-mono text-emerald-300 tabular-nums mt-1">
+              {expensesState.currency}
+              {budgetLeft.toLocaleString()}
+            </div>
+            <div className="text-[11px] text-zinc-400 mt-1">
+              Spent {expensesState.currency}
+              {monthSpent.toLocaleString()} this month →
+            </div>
           </div>
-          <div className="text-2xl font-extrabold font-mono text-emerald-300 tabular-nums mt-1">
-            {expensesState.currency}
-            {budgetLeft.toLocaleString()}
-          </div>
-          <div className="text-[11px] text-zinc-400 mt-1">
-            Spent {expensesState.currency}
-            {monthSpent.toLocaleString()} this month →
-          </div>
+          <MiniRadialRing percent={budgetLeftPct} color="#a855f7" size={44} />
         </button>
       </div>
 
       {/* Interactive Today's Priorities & Habit Quick Check */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 items-stretch">
         {/* Tasks Glance */}
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3">
-          <div className="flex items-center justify-between gap-2">
-            <div>
+        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col justify-between">
+          <div className="relative overflow-hidden px-5 pt-4 pb-3.5 border-b border-white/[0.07] shrink-0 flex items-center justify-between gap-2">
+            <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="" opacityClass="opacity-65 sm:opacity-80" />
+            <div className="relative z-10 min-w-0">
               <h3 className="text-sm font-bold text-white">Priority Tasks Queue</h3>
               <p className="text-xs text-zinc-400">Click to check off or open full planner</p>
             </div>
             <button
               type="button"
               onClick={() => onSelectTab('tasks')}
-              className="px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/35 text-xs font-bold text-emerald-200 cursor-pointer"
+              className="relative z-10 px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 text-xs font-bold text-emerald-200 cursor-pointer shrink-0"
             >
               Open Tasks →
             </button>
           </div>
 
-          {priorityTasks.length === 0 ? (
-            <div className="p-5 rounded-xl bg-[#08090c] border border-white/[0.06] text-xs text-zinc-400 text-center">
-              All clear! No pending tasks in your queue.
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2">
-              {priorityTasks.map((t) => {
+          <div className="flex-1 p-5 flex flex-col gap-2">
+            {priorityTasks.length === 0 ? (
+              <div className="flex-1 min-h-[140px] p-5 rounded-xl bg-[#08090c] border border-dashed border-white/[0.07] flex items-center justify-center text-xs text-zinc-400 text-center">
+                All clear! No pending tasks in your queue.
+              </div>
+            ) : (
+              priorityTasks.map((t) => {
                 const due = formatDueBadge(t.dueDate, t.dueTime);
                 const prio = priorityStyle(t.priority);
                 return (
@@ -383,89 +396,125 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
                     </div>
                   </div>
                 );
-              })}
-            </div>
-          )}
+              })
+            )}
+          </div>
+
+          <div className="px-5 py-2.5 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10px] font-mono text-zinc-500 shrink-0">
+            <span>{openTasks.length} open · {openTasks.filter((t) => t.starred).length} starred</span>
+            <span className="text-zinc-600">Top {priorityTasks.length} sorted by urgency</span>
+          </div>
         </section>
 
         {/* Habits + Notes Preview */}
         <div className="flex flex-col gap-5">
-          <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3">
-            <div className="flex items-center justify-between gap-2">
-              <div>
+          <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col justify-between flex-1">
+            <div className="relative overflow-hidden px-5 pt-4 pb-3.5 border-b border-white/[0.07] shrink-0 flex items-center justify-between gap-2">
+              <HeroArtworkBackdrop src="/visuals/checklists-workspace.jpg" alt="" opacityClass="opacity-65 sm:opacity-80" />
+              <div className="relative z-10 min-w-0">
                 <h3 className="text-sm font-bold text-white">Today’s Habit Check-In</h3>
                 <p className="text-xs text-zinc-400">One-tap checkoff for {localToday}</p>
               </div>
               <button
                 type="button"
                 onClick={() => onSelectTab('habits')}
-                className="px-3 py-1.5 rounded-xl bg-sky-500/15 border border-sky-400/35 text-xs font-bold text-sky-200 cursor-pointer"
+                className="relative z-10 px-3 py-1.5 rounded-xl bg-sky-500/15 border border-sky-400/35 hover:bg-sky-500/25 text-xs font-bold text-sky-200 cursor-pointer shrink-0"
               >
                 7-Day Grid →
               </button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {habitsState.habits.map((h) => {
-                const doneToday = h.completedDates.includes(localToday);
-                return (
-                  <button
-                    key={h.id}
-                    type="button"
-                    onClick={() => toggleHabitToday(h.id)}
-                    className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border text-left transition-colors cursor-pointer ${
-                      doneToday
-                        ? 'bg-emerald-500/15 border-emerald-400/40 text-emerald-100'
-                        : 'bg-[#16171e] border-white/[0.07] text-zinc-300 hover:border-white/[0.2]'
-                    }`}
-                  >
-                    <span className="text-xs font-semibold truncate">
-                      {h.emoji} {h.name}
-                    </span>
-                    <span className="text-xs font-mono shrink-0">{doneToday ? '✓' : '○'}</span>
-                  </button>
-                );
-              })}
+
+            <div className="flex-1 p-5 flex flex-col justify-center">
+              {habitsState.habits.length === 0 ? (
+                <div className="p-5 rounded-xl bg-[#08090c] border border-dashed border-white/[0.08] flex flex-col items-center justify-center gap-2 text-center">
+                  <span className="text-xs font-semibold text-zinc-300">No habits tracked yet</span>
+                  <span className="text-[11px] text-zinc-500 max-w-xs">
+                    Add daily routines in the 7-Day Grid to check off streaks directly from your morning overview.
+                  </span>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {habitsState.habits.map((h) => {
+                    const doneToday = h.completedDates.includes(localToday);
+                    return (
+                      <button
+                        key={h.id}
+                        type="button"
+                        onClick={() => toggleHabitToday(h.id)}
+                        className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border text-left transition-colors cursor-pointer ${
+                          doneToday
+                            ? 'bg-emerald-500/15 border-emerald-400/40 text-emerald-100'
+                            : 'bg-[#16171e] border-white/[0.07] text-zinc-300 hover:border-white/[0.2]'
+                        }`}
+                      >
+                        <span className="text-xs font-semibold truncate">
+                          {h.emoji} {h.name}
+                        </span>
+                        <span className="text-xs font-mono shrink-0">{doneToday ? '✓' : '○'}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-2.5 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10px] font-mono text-zinc-500 shrink-0">
+              <span>{habitsTodayDone}/{habitsState.habits.length} completed today</span>
+              <span className={habitPct === 100 && habitsState.habits.length > 0 ? 'text-emerald-300' : 'text-zinc-600'}>
+                {habitPct}% consistency
+              </span>
             </div>
           </section>
 
-          <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3">
-            <div className="flex items-center justify-between gap-2">
-              <div>
+          <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col justify-between">
+            <div className="relative overflow-hidden px-5 pt-4 pb-3.5 border-b border-white/[0.07] shrink-0 flex items-center justify-between gap-2">
+              <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-65 sm:opacity-80" />
+              <div className="relative z-10 min-w-0">
                 <h3 className="text-sm font-bold text-white">Pinned &amp; Recent Notes</h3>
                 <p className="text-xs text-zinc-400">{activeNotes.length} active markdown notes</p>
               </div>
               <button
                 type="button"
                 onClick={() => onSelectTab('notes')}
-                className="px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.1] hover:border-sky-400/40 text-xs font-bold text-zinc-200 cursor-pointer"
+                className="relative z-10 px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.1] hover:border-sky-400/40 text-xs font-bold text-zinc-200 cursor-pointer shrink-0"
               >
                 Open Notes →
               </button>
             </div>
-            {featuredNotes.length === 0 ? (
-              <div className="text-xs text-zinc-500">No notes yet. Create one above!</div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {featuredNotes.map((n) => (
-                  <button
-                    key={n.id}
-                    type="button"
-                    onClick={() => onSelectTab('notes')}
-                    className="p-3 rounded-xl bg-[#16171e] border border-white/[0.07] hover:border-sky-400/40 text-left cursor-pointer"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-bold text-white truncate">
-                        {n.pinned ? '📌 ' : ''}
-                        {n.title}
-                      </span>
-                      <span className="text-[10px] font-mono text-zinc-500 shrink-0">
-                        {n.notebook || 'Personal'}
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+
+            <div className="p-5">
+              {featuredNotes.length === 0 ? (
+                <div className="p-4 rounded-xl bg-[#08090c] border border-dashed border-white/[0.07] text-xs text-zinc-500 text-center">
+                  No notes yet. Create one via Quick Capture above!
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {featuredNotes.map((n) => (
+                    <button
+                      key={n.id}
+                      type="button"
+                      onClick={() => onSelectTab('notes')}
+                      className="p-3 rounded-xl bg-[#16171e] border border-white/[0.07] hover:border-sky-400/40 text-left cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-bold text-white truncate">
+                          {n.pinned ? '📌 ' : ''}
+                          {n.title}
+                        </span>
+                        <span className="text-[10px] font-mono text-zinc-500 shrink-0">
+                          {n.notebook || 'Personal'}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-2.5 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10px] font-mono text-zinc-500 shrink-0">
+              <span>{featuredNotes.filter((n) => n.pinned).length} pinned · {activeNotes.length} total</span>
+              <span className="text-zinc-600">Markdown Synced</span>
+            </div>
           </section>
         </div>
       </div>

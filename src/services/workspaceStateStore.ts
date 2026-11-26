@@ -74,10 +74,27 @@ export interface SyncStatus {
   lastSavedAt: string | null;
 }
 
+const WORKSPACE_SYNC_EVENT = 'soul-workspace-state-sync';
+
+interface WorkspaceSyncDetail {
+  namespace: WorkspaceNamespace;
+  data: unknown;
+  sourceId: symbol;
+}
+
+function broadcastWorkspaceSync(namespace: WorkspaceNamespace, data: unknown, sourceId: symbol): void {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(
+    new CustomEvent<WorkspaceSyncDetail>(WORKSPACE_SYNC_EVENT, {
+      detail: { namespace, data, sourceId },
+    })
+  );
+}
+
 /**
  * Dual-persistence React state hook backed by instant localStorage cache
  * and FastAPI SQLite WAL storage (/api/workspace-tools/state/{namespace}).
- * Always flushes pending writes on navigation/unmount so rapid tab switches never lose edits.
+ * Always flushes pending writes on navigation/unmount and syncs live across mounted hook instances.
  */
 export function useSyncedWorkspaceState<T>(
   namespace: WorkspaceNamespace,
@@ -97,6 +114,7 @@ export function useSyncedWorkspaceState<T>(
     lastSavedAt: null,
   });
 
+  const hookIdRef = useRef<symbol>(Symbol('workspace-hook'));
   const latestValueRef = useRef<T>(value);
   latestValueRef.current = value;
 
@@ -106,6 +124,18 @@ export function useSyncedWorkspaceState<T>(
     hasPending: false,
     data: value,
   });
+
+  useEffect(() => {
+    const onSiblingSync = (evt: Event) => {
+      const detail = (evt as CustomEvent<WorkspaceSyncDetail>).detail;
+      if (!detail || detail.namespace !== namespace || detail.sourceId === hookIdRef.current) return;
+      const nextData = detail.data as T;
+      latestValueRef.current = nextData;
+      setValue(nextData);
+    };
+    window.addEventListener(WORKSPACE_SYNC_EVENT, onSiblingSync);
+    return () => window.removeEventListener(WORKSPACE_SYNC_EVENT, onSiblingSync);
+  }, [namespace]);
 
   useEffect(() => {
     let active = true;
@@ -129,6 +159,7 @@ export function useSyncedWorkspaceState<T>(
           latestValueRef.current = res.data;
           setValue(res.data);
           writeLocalValue(namespace, res.data, serverTs || Date.now());
+          broadcastWorkspaceSync(namespace, res.data, hookIdRef.current);
           setSyncStatus({
             hydratedFromServer: true,
             saving: false,
@@ -171,6 +202,7 @@ export function useSyncedWorkspaceState<T>(
       latestValueRef.current = next;
       writeLocalValue(namespace, next, Date.now());
       setValue(next);
+      broadcastWorkspaceSync(namespace, next, hookIdRef.current);
       setSyncStatus((s) => ({ ...s, saving: true }));
 
       pendingPayloadRef.current = { hasPending: true, data: next };

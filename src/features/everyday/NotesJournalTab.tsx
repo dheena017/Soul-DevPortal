@@ -747,13 +747,15 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
         <header
           className={
             embedded
-              ? 'relative overflow-hidden w-full bg-[#111218] border border-white/[0.08] rounded-2xl p-4 sm:p-5 shadow-lg'
+              ? 'relative overflow-hidden w-full bg-[#111218] border border-white/[0.09] rounded-2xl p-4 sm:p-5 shadow-xl portal-header-sheen'
               : 'relative overflow-hidden w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-2xl portal-header-sheen'
           }
         >
-          {!embedded && (
-            <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-28 sm:opacity-42" />
-          )}
+          <HeroArtworkBackdrop
+            src="/visuals/pillar-docs-blueprint.jpg"
+            alt=""
+            opacityClass={embedded ? 'opacity-75 sm:opacity-90' : 'opacity-80 sm:opacity-95'}
+          />
           <div className="relative z-10 flex flex-col gap-3.5">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-start gap-3 min-w-0">
@@ -899,11 +901,11 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                 ))}
               </div>
 
-              <div className="hidden lg:flex items-center gap-2 text-[11px] font-mono text-zinc-500">
+              <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#090b10]/85 backdrop-blur-sm border border-white/[0.08] text-[11px] font-mono text-zinc-300">
                 <span>{scopeCounts.starred} favorites</span>
-                <span className="text-zinc-700">·</span>
+                <span className="text-zinc-600">·</span>
                 <span>{scopeCounts.pinned} pinned</span>
-                <span className="text-zinc-700">·</span>
+                <span className="text-zinc-600">·</span>
                 <span>Ctrl+F find</span>
               </div>
             </div>

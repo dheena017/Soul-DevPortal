@@ -71,9 +71,9 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="w-full h-14 bg-[#0d0d10]/[0.97] border-b border-white/[0.08] sticky top-0 z-30 shrink-0 transition-[filter,opacity] duration-200" role="banner">
-      <div className="w-full max-w-[1800px] mx-auto h-full px-3 sm:px-4 lg:px-5 flex items-center justify-between gap-2 min-w-0">
+      <div className="w-full max-w-[1800px] mx-auto h-full px-3 sm:px-4 lg:px-5 flex items-center justify-between gap-2.5 min-w-0">
         {/* ── Left: Sidebar Toggle & Breadcrumbs ── */}
-        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 shrink">
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0 overflow-hidden">
           <button
             type="button"
             className="w-8 h-8 rounded-lg bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] active:scale-95 transition-all flex items-center justify-center shrink-0 shadow-sm cursor-pointer"
@@ -98,15 +98,15 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          <nav className="flex items-center gap-1 text-xs min-w-0" aria-label="Breadcrumb navigation">
+          <nav className="flex items-center gap-1 text-xs flex-1 min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
             <button
               type="button"
               className="group inline-flex items-center gap-1.5 h-8 px-2 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-sky-400/35 hover:bg-white/[0.06] font-mono text-zinc-200 hover:text-white transition-all shrink-0 shadow-sm cursor-pointer"
               onClick={() => onNavigate('overview')}
               title="Go to Overview Dashboard"
             >
-              <SoulLogoIcon size={18} className="group-hover:scale-110 transition-transform" />
-              <strong className="text-zinc-100 font-bold text-[11px] sm:text-xs">dev-portal</strong>
+              <SoulLogoIcon size={18} className="group-hover:scale-110 transition-transform shrink-0" />
+              <strong className="text-zinc-100 font-bold text-[11px] sm:text-xs whitespace-nowrap">dev-portal</strong>
             </button>
 
             {breadcrumbs.slice(1).map((crumb, idx) => {
@@ -115,21 +115,23 @@ export const Header: React.FC<HeaderProps> = ({
                 <div
                   key={`${active}-${idx}`}
                   style={{ animationDelay: `${idx * 45}ms` }}
-                  className={`${isLast ? 'flex min-w-0 shrink-0' : 'hidden 2xl:flex shrink-0'} items-center gap-1 portal-crumb-enter`}
+                  className={`${
+                    isLast ? 'flex min-w-0 flex-1 max-w-[180px] xl:max-w-[210px]' : 'hidden 2xl:flex min-w-0 shrink max-w-[145px]'
+                  } items-center gap-1 overflow-hidden portal-crumb-enter`}
                 >
                   <span className="text-zinc-600 font-bold px-0.5 shrink-0">/</span>
                   {crumb.id ? (
                     <button
                       type="button"
-                      className="inline-flex items-center h-8 px-2 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] text-zinc-200 hover:text-white transition-all truncate font-medium max-w-[125px] 2xl:max-w-[155px]"
+                      className="inline-flex items-center h-8 px-2 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] text-zinc-200 hover:text-white transition-all truncate font-medium min-w-0 max-w-full cursor-pointer"
                       onClick={() => onNavigate(crumb.id!)}
                       title={`Go to ${crumb.label}`}
                     >
-                      {crumb.label}
+                      <span className="truncate">{crumb.label}</span>
                     </button>
                   ) : (
                     <span
-                      className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm min-w-[72px] max-w-[140px] xl:max-w-[175px] 2xl:max-w-[210px]"
+                      className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm min-w-0 max-w-full overflow-hidden"
                       title={crumb.label}
                     >
                       {breadcrumbs.length > 2 && (
@@ -145,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* ── Center: Omni Command Search ── */}
-        <div className="relative w-28 xl:w-36 2xl:w-44 shrink hidden lg:flex items-center" role="search">
+        <div className="relative w-28 xl:w-36 2xl:w-44 shrink-0 hidden lg:flex items-center" role="search">
           <svg className="absolute left-2.5 w-3.5 h-3.5 text-zinc-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
