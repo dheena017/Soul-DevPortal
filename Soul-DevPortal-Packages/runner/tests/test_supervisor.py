@@ -62,10 +62,51 @@ def test_controller_instantiation():
     assert controller.service_name == "Test"
 
 
+def test_keyboard_listener_tty_skips_stdin_readline():
+    """Ensure TTY mode uses raw/cbreak key reading without blocking on sys.stdin.readline()."""
+    import io
+    import time
+    from unittest.mock import patch
+
+    controller = ProcessController(
+        frontend_cmd=["echo", "fe"],
+        backend_cmd=["echo", "be"],
+        service_name="Test",
+    )
+
+    readline_called = False
+
+    class FakeTTYStdin(io.StringIO):
+        def isatty(self):
+            return True
+
+        def readline(self, *args, **kwargs):
+            nonlocal readline_called
+            readline_called = True
+            return ""
+
+    dispatched = []
+    controller._dispatch_hotkey = lambda key: dispatched.append(key)
+
+    fake_stdin = FakeTTYStdin()
+    try:
+        if sys.platform == "win32":
+            with patch.object(sys, "stdin", fake_stdin), \
+                 patch("msvcrt.kbhit", side_effect=[True, False]), \
+                 patch("msvcrt.getch", return_value=b"p"):
+                controller.run_keyboard_listener()
+                time.sleep(0.15)
+            assert "p" in dispatched
+            assert not readline_called
+    finally:
+        controller._shutdown_event.set()
+
+
 if __name__ == "__main__":
     test_sandboxing()
     test_ports()
     test_formatting()
     test_dashboard()
     test_controller_instantiation()
+    test_keyboard_listener_tty_skips_stdin_readline()
     print("✓ All supervisor modular tests passed!")

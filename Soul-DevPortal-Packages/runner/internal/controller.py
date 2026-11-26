@@ -91,6 +91,7 @@ class ProcessController:
             real_cmd,
             cwd=str(self.cwd) if self.cwd else None,
             env=self.env,
+            stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -284,28 +285,35 @@ class ProcessController:
         os._exit(0)
 
     def run_keyboard_listener(self) -> None:
-        if sys.platform == "win32":
-            def _win_loop():
-                try:
-                    import msvcrt
-                    while not self._shutdown_event.is_set():
-                        if msvcrt.kbhit():
-                            ch = msvcrt.getch()
-                            if ch in (b"\x00", b"\xe0"):
-                                msvcrt.getch()
-                                continue
-                            try:
-                                key = ch.decode("utf-8", errors="ignore").lower()
-                            except Exception:
-                                continue
-                            self._dispatch_hotkey(key)
-                        time.sleep(0.05)
-                except Exception:
-                    pass
+        is_tty = bool(sys.stdin and hasattr(sys.stdin, "isatty") and sys.stdin.isatty())
 
-            t_win = threading.Thread(target=_win_loop, daemon=True)
-            t_win.start()
-        else:
+        if sys.platform == "win32" and is_tty:
+            try:
+                import msvcrt
+
+                def _win_loop():
+                    try:
+                        while not self._shutdown_event.is_set():
+                            if msvcrt.kbhit():
+                                ch = msvcrt.getch()
+                                if ch in (b"\x00", b"\xe0"):
+                                    msvcrt.getch()
+                                    continue
+                                try:
+                                    key = ch.decode("utf-8", errors="ignore").lower()
+                                except Exception:
+                                    continue
+                                self._dispatch_hotkey(key)
+                            time.sleep(0.05)
+                    except Exception:
+                        pass
+
+                t_win = threading.Thread(target=_win_loop, daemon=True)
+                t_win.start()
+                return
+            except Exception:
+                pass
+        elif sys.platform != "win32" and is_tty:
             try:
                 import select
                 import termios
@@ -326,6 +334,7 @@ class ProcessController:
 
                 t_posix = threading.Thread(target=_posix_loop, daemon=True)
                 t_posix.start()
+                return
             except Exception:
                 pass
 

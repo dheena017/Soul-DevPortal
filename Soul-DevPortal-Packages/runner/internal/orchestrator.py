@@ -496,38 +496,49 @@ def run_master_orchestrator(
             os.system("cls" if sys.platform == "win32" else "clear")
             print_master_banner(registry, with_portal, lan_ip)
 
-    if sys.platform == "win32":
-        def _msvcrt_listener():
+    def _start_hotkey_listener():
+        is_tty = bool(sys.stdin and hasattr(sys.stdin, "isatty") and sys.stdin.isatty())
+        if sys.platform == "win32" and is_tty:
             try:
                 import msvcrt
-                while not _shutdown_initiated:
-                    if msvcrt.kbhit():
-                        ch = msvcrt.getch()
-                        if ch in (b"\x00", b"\xe0"):
-                            msvcrt.getch()
-                            continue
-                        try:
-                            k = ch.decode("utf-8", errors="ignore").lower()
-                        except Exception:
-                            continue
-                        _dev_all_hotkey_handler(k)
-                    time.sleep(0.05)
+
+                def _msvcrt_listener():
+                    try:
+                        while not _shutdown_initiated:
+                            if msvcrt.kbhit():
+                                ch = msvcrt.getch()
+                                if ch in (b"\x00", b"\xe0"):
+                                    msvcrt.getch()
+                                    continue
+                                try:
+                                    k = ch.decode("utf-8", errors="ignore").lower()
+                                except Exception:
+                                    continue
+                                _dev_all_hotkey_handler(k)
+                            time.sleep(0.05)
+                    except Exception:
+                        pass
+
+                threading.Thread(target=_msvcrt_listener, daemon=True).start()
+                return
             except Exception:
                 pass
-        threading.Thread(target=_msvcrt_listener, daemon=True).start()
 
-    def _stdin_listener():
-        try:
-            while not _shutdown_initiated:
-                line = sys.stdin.readline()
-                if not line:
-                    time.sleep(0.2)
-                    continue
-                for char in line.strip().lower():
-                    _dev_all_hotkey_handler(char)
-        except Exception:
-            pass
-    threading.Thread(target=_stdin_listener, daemon=True).start()
+        def _stdin_listener():
+            try:
+                while not _shutdown_initiated:
+                    line = sys.stdin.readline()
+                    if not line:
+                        time.sleep(0.2)
+                        continue
+                    for char in line.strip().lower():
+                        _dev_all_hotkey_handler(char)
+            except Exception:
+                pass
+
+        threading.Thread(target=_stdin_listener, daemon=True).start()
+
+    _start_hotkey_listener()
 
     try:
         while True:
