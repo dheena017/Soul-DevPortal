@@ -15,6 +15,7 @@ export interface DeveloperProfileData {
   status: AvailabilityStatus;
   skills: string[];
   pinnedNotes: string;
+  workspaceRootPath: string;
   defaultLandingView: string;
   showHostMetricsInHeader: boolean;
 }
@@ -50,6 +51,7 @@ export const DEFAULT_DEVELOPER_PROFILE: DeveloperProfileData = {
   ],
   pinnedNotes:
     'Keep port ranges isolated (:5173–:5182 client / :8000–:8009 server) and route all API calls through /api.',
+  workspaceRootPath: 'C:\\Users\\dheen\\Soul-DevPortal',
   defaultLandingView: 'overview',
   showHostMetricsInHeader: true,
 };

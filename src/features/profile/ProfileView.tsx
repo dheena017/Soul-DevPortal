@@ -4,6 +4,8 @@ import { PackageData, ProjectData, StatsData } from '../../types';
 import { useSharedTelemetry } from '../../services/telemetryStore';
 import { HeroArtworkBackdrop, MiniRadialRing } from '../../components/PortalVisuals';
 import CopyButton from '../../components/CopyButton';
+import { DOCUMENTATION_GUIDES_REGISTRY } from '../docs/docsConstants';
+import { PROJECT_BRAND_MAP } from '../projects/projectsConstants';
 import {
   ACCENT_COLOR_PRESETS,
   AVAILABILITY_OPTIONS,
@@ -46,7 +48,8 @@ export default function ProfileView({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newSkill, setNewSkill] = useState<string>('');
   const [saveNotice, setSaveNotice] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState<'overview' | 'workspace' | 'preferences'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'paths' | 'workspace' | 'preferences'>('overview');
+  const [pathFilter, setPathFilter] = useState<string>('');
 
   const { isBackendLive, backendPort, liveTelemetry } = useSharedTelemetry(true);
 
@@ -183,6 +186,51 @@ export default function ProfileView({
   const ramPct = liveTelemetry ? Math.round(liveTelemetry.memory.percent) : 0;
   const hostName = 'Local Workstation';
   const osName = typeof navigator !== 'undefined' ? navigator.platform : 'Windows';
+
+  const workspaceRoot = (profile.workspaceRootPath || DEFAULT_DEVELOPER_PROFILE.workspaceRootPath).replace(/[\\/]+$/, '');
+  const joinPath = (...parts: string[]) => `${workspaceRoot}\\${parts.map((p) => p.replace(/^[\\/]+|[\\/]+$/g, '').replace(/\//g, '\\')).filter(Boolean).join('\\')}`;
+  const pathNeedle = pathFilter.trim().toLowerCase();
+
+  const mainDirectoryPaths = useMemo(
+    () => [
+      { label: 'Workspace Root', path: workspaceRoot },
+      { label: 'Projects Root', path: joinPath('Soul-DevPortal-Projects') },
+      { label: 'Packages Root', path: joinPath('Soul-DevPortal-Packages') },
+      { label: 'Docs Root', path: joinPath('Soul-DevPortal-Docs') },
+    ],
+    [workspaceRoot]
+  );
+
+  const filteredProjectsPaths = useMemo(
+    () =>
+      projects.filter((p) =>
+        !pathNeedle ||
+        p.id.toLowerCase().includes(pathNeedle) ||
+        p.title.toLowerCase().includes(pathNeedle)
+      ),
+    [projects, pathNeedle]
+  );
+
+  const filteredPackagesPaths = useMemo(
+    () =>
+      packages.filter((pkg) =>
+        !pathNeedle ||
+        pkg.id.toLowerCase().includes(pathNeedle) ||
+        pkg.name.toLowerCase().includes(pathNeedle)
+      ),
+    [packages, pathNeedle]
+  );
+
+  const filteredDocsPaths = useMemo(
+    () =>
+      DOCUMENTATION_GUIDES_REGISTRY.filter((g) =>
+        !pathNeedle ||
+        g.id.toLowerCase().includes(pathNeedle) ||
+        g.title.toLowerCase().includes(pathNeedle) ||
+        g.folder.toLowerCase().includes(pathNeedle)
+      ),
+    [pathNeedle]
+  );
 
   return (
     <div className="flex flex-col gap-5 pb-8">
@@ -421,6 +469,17 @@ export default function ProfileView({
             </label>
 
             <label className="flex flex-col gap-1.5 text-xs md:col-span-2 lg:col-span-3">
+              <span className="font-semibold text-zinc-300">Workspace Root Path</span>
+              <input
+                type="text"
+                value={draft.workspaceRootPath}
+                onChange={(e) => setDraft({ ...draft, workspaceRootPath: e.target.value })}
+                className="h-9 px-3 rounded-xl bg-[#09090c] border border-white/[0.1] text-zinc-100 font-mono focus:outline-none focus:border-sky-400/50"
+                placeholder="C:\Users\dheen\Soul-DevPortal"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1.5 text-xs md:col-span-2 lg:col-span-3">
               <span className="font-semibold text-zinc-300">Bio</span>
               <textarea
                 rows={2}
@@ -521,9 +580,10 @@ export default function ProfileView({
       )}
 
       {/* ── Section Switcher Tabs ── */}
-      <div className="flex items-center gap-1 p-1 rounded-xl bg-[#09090c] border border-white/[0.08] w-fit" role="tablist">
+      <div className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-[#09090c] border border-white/[0.08] w-fit" role="tablist">
         {[
           { id: 'overview', label: 'Developer Overview' },
+          { id: 'paths', label: `Main Paths (${projects.length + packages.length + DOCUMENTATION_GUIDES_REGISTRY.length})` },
           { id: 'workspace', label: 'Workspace & Host' },
           { id: 'preferences', label: 'Portal Preferences' },
         ].map((tab) => (
@@ -636,12 +696,165 @@ export default function ProfileView({
                   </button>
                 ))}
               </div>
+              <button
+                type="button"
+                onClick={() => setActiveSection('paths')}
+                className="h-8 px-3 rounded-xl bg-sky-500/15 border border-sky-400/35 hover:bg-sky-500/25 text-xs font-semibold text-sky-200 hover:text-white text-left transition-all cursor-pointer"
+              >
+                Open Main Paths →
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── Tab 2: Workspace & Host ── */}
+      {/* ── Tab 2: Main Paths ── */}
+      {activeSection === 'paths' && (
+        <div className="flex flex-col gap-5">
+          {/* Filter Bar */}
+          <div className="rounded-2xl neu-card bg-[#111115] border border-white/[0.08] p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="flex flex-col gap-1 min-w-0">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500">
+                Main Workspace Paths
+              </span>
+              <p className="text-xs text-zinc-400">
+                Root folders for the portal, projects, shared packages, and documentation.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 w-full md:w-80">
+              <input
+                type="text"
+                value={pathFilter}
+                onChange={(e) => setPathFilter(e.target.value)}
+                placeholder="Filter main paths..."
+                className="w-full h-9 px-3 rounded-xl bg-[#09090c] border border-white/[0.1] text-xs font-mono text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
+              />
+              {pathFilter && (
+                <button
+                  type="button"
+                  onClick={() => setPathFilter('')}
+                  className="h-9 px-2.5 rounded-xl bg-[#16161c] border border-white/[0.1] text-xs text-zinc-400 hover:text-white cursor-pointer"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Main Root Directories */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {mainDirectoryPaths.map((dir) => (
+              <div
+                key={dir.label}
+                className="p-3.5 rounded-xl neu-card bg-[#111115] border border-white/[0.08] flex items-center justify-between gap-2 min-w-0"
+              >
+                <div className="min-w-0">
+                  <div className="text-[10px] font-mono text-zinc-400 uppercase">{dir.label}</div>
+                  <div className="text-xs font-mono text-sky-300 truncate">{dir.path}</div>
+                </div>
+                <CopyButton text={dir.path} variant="compact" label="Copy" />
+              </div>
+            ))}
+          </div>
+
+          {/* 1. Projects Main Paths */}
+          <div className="rounded-2xl neu-card bg-[#111115] border border-white/[0.08] p-5 flex flex-col gap-3">
+            <h2 className="text-sm font-bold text-white">
+              Projects ({filteredProjectsPaths.length})
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              {filteredProjectsPaths.map((proj) => {
+                const fullProjPath =
+                  proj.id === 'devportal'
+                    ? workspaceRoot
+                    : joinPath('Soul-DevPortal-Projects', proj.id);
+                const brand = PROJECT_BRAND_MAP[proj.id];
+                return (
+                  <div
+                    key={proj.id}
+                    className="p-3 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-between gap-2 min-w-0"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <button
+                        type="button"
+                        onClick={() => onNavigate(`projects/${proj.id}`)}
+                        className="text-xs font-bold text-white hover:text-sky-300 text-left truncate cursor-pointer block max-w-full"
+                      >
+                        {brand?.icon || '💻'} {proj.title}
+                      </button>
+                      <div className="text-[11px] font-mono text-zinc-400 truncate">{fullProjPath}</div>
+                    </div>
+                    <CopyButton text={fullProjPath} variant="compact" label="Copy" />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 2. Packages Main Paths */}
+          <div className="rounded-2xl neu-card bg-[#111115] border border-white/[0.08] p-5 flex flex-col gap-3">
+            <h2 className="text-sm font-bold text-white">
+              Packages ({filteredPackagesPaths.length})
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+              {filteredPackagesPaths.map((pkg) => {
+                const fullPkgPath = joinPath('Soul-DevPortal-Packages', pkg.id);
+                return (
+                  <div
+                    key={pkg.id}
+                    className="p-3 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-between gap-2 min-w-0"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <button
+                        type="button"
+                        onClick={() => onNavigate(`packages/${pkg.id}`)}
+                        className="text-xs font-bold text-white hover:text-purple-300 truncate cursor-pointer block max-w-full"
+                      >
+                        📦 {pkg.displayName || pkg.name}
+                      </button>
+                      <div className="text-[11px] font-mono text-zinc-400 truncate">{fullPkgPath}</div>
+                    </div>
+                    <CopyButton text={fullPkgPath} variant="compact" label="Copy" />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 3. Docs Main Paths */}
+          <div className="rounded-2xl neu-card bg-[#111115] border border-white/[0.08] p-5 flex flex-col gap-3">
+            <h2 className="text-sm font-bold text-white">
+              Docs ({filteredDocsPaths.length})
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              {filteredDocsPaths.map((guide) => {
+                const fullDocPath = joinPath('Soul-DevPortal-Docs', guide.folder);
+                return (
+                  <div
+                    key={guide.id}
+                    className="p-3 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-between gap-2 min-w-0"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <button
+                        type="button"
+                        onClick={() => onNavigate(`docs/${guide.slug}`)}
+                        className="text-xs font-bold text-white hover:text-sky-300 truncate cursor-pointer block max-w-full"
+                      >
+                        {guide.icon} {guide.title}
+                      </button>
+                      <div className="text-[11px] font-mono text-zinc-400 truncate">{fullDocPath}</div>
+                    </div>
+                    <CopyButton text={fullDocPath} variant="compact" label="Copy" />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Tab 3: Workspace & Host ── */}
       {activeSection === 'workspace' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="rounded-2xl neu-card bg-[#111115] border border-white/[0.08] p-5 flex flex-col gap-4">
@@ -741,7 +954,7 @@ export default function ProfileView({
         </div>
       )}
 
-      {/* ── Tab 3: Portal Preferences ── */}
+      {/* ── Tab 4: Portal Preferences ── */}
       {activeSection === 'preferences' && (
         <div className="rounded-2xl neu-card bg-[#111115] border border-white/[0.08] p-5 sm:p-6 flex flex-col gap-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
