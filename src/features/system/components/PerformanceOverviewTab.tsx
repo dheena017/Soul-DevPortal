@@ -539,8 +539,8 @@ export default function PerformanceOverviewTab({
             const memItems: TelemetryTileItem[] = [
               {
                 id: 'mem-used',
-                label: 'RAM',
-                badge: 'USE',
+                label: 'Used',
+                badge: 'RAM',
                 badgeTone: 'purple',
                 valueText: `${Math.round(live.memory.percent)}%`,
                 percent: live.memory.percent,
@@ -548,8 +548,8 @@ export default function PerformanceOverviewTab({
               },
               {
                 id: 'mem-avail',
-                label: 'FREE',
-                badge: 'AVL',
+                label: 'Free',
+                badge: 'Avail',
                 badgeTone: 'emerald',
                 valueText: formatBytes(live.memory.availableBytes, 0),
                 percent: Math.max(0, 100 - live.memory.percent),
@@ -557,8 +557,8 @@ export default function PerformanceOverviewTab({
               },
               {
                 id: 'mem-swap',
-                label: 'SWAP',
-                badge: 'PG',
+                label: 'Swap',
+                badge: 'Page',
                 badgeTone: 'amber',
                 valueText: `${Math.round(live.swap.percent)}%`,
                 percent: live.swap.percent,
@@ -566,10 +566,10 @@ export default function PerformanceOverviewTab({
               },
               ...specs.memory.modules.map((mod, idx): TelemetryTileItem => ({
                 id: `dimm-${idx}`,
-                label: `D${idx}`,
+                label: `Slot ${idx + 1}`,
                 badge: specs.memory.ddrType || 'DIMM',
                 badgeTone: 'sky',
-                valueText: `${mod.capacityGB}G`,
+                valueText: `${mod.capacityGB} GB`,
                 percent: live.memory.percent,
                 tooltip: `${mod.slotName}: ${mod.capacityGB} GB ${mod.ddrType} ${mod.manufacturer} (${mod.partNumber}) @ ${mod.configuredSpeedMTs} MT/s`,
                 onClick: () => onSelectTab('hardware'),
@@ -579,10 +579,10 @@ export default function PerformanceOverviewTab({
                   const slotIdx = specs.memory.modules.length + emptyIdx;
                   return {
                     id: `dimm-empty-${slotIdx}`,
-                    label: `D${slotIdx}`,
-                    badge: 'EMP',
+                    label: `Slot ${slotIdx + 1}`,
+                    badge: 'Empty',
                     badgeTone: 'neutral',
-                    valueText: '0G',
+                    valueText: '0 GB',
                     percent: 0,
                     muted: true,
                     tooltip: `DIMM Slot ${slotIdx + 1}: Empty`,
@@ -596,7 +596,7 @@ export default function PerformanceOverviewTab({
                 title={`Memory & DIMM Structure (${specs.memory.populatedSlots}/${specs.memory.totalSlots} Slots · ${specs.memory.channelMode})`}
                 rightLabel={specs.memory.configuredSpeedMTs ? `${specs.memory.configuredSpeedMTs} MT/s` : specs.memory.ddrType}
                 rightToneClass="text-purple-300"
-                columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
+                columnsClass="grid-cols-2 sm:grid-cols-3"
                 items={memItems}
               />
             );
@@ -734,7 +734,7 @@ export default function PerformanceOverviewTab({
                 title={`Graphics & Display Matrix (${specs.graphics.length} GPU · ${specs.displays.length} Display)`}
                 rightLabel={primaryDisplay?.nativeWidth ? `${primaryDisplay.nativeWidth}×${primaryDisplay.nativeHeight}` : 'Ready'}
                 rightToneClass="text-amber-300"
-                columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
+                columnsClass="grid-cols-2 sm:grid-cols-3"
                 items={gpuItems}
               />
             );
@@ -928,7 +928,7 @@ export default function PerformanceOverviewTab({
               </span>
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <TelemetryTileGrid
                 title={`Storage & Drives (${live.disk.volumes.length} Vol · ${specs.physicalDisks.length} Disk)`}
                 rightLabel={primaryVol ? `${formatBytes(primaryVol.freeBytes, 1)} Free` : 'Online'}
@@ -943,14 +943,15 @@ export default function PerformanceOverviewTab({
                 columnsClass="grid-cols-2 sm:grid-cols-3"
                 items={netItems}
               />
-              <TelemetryTileGrid
-                title={`Power, Board & Peripherals (${specs.host.chassisType})`}
-                rightLabel={live.healthPosture.label}
-                rightToneClass="text-amber-300"
-                columnsClass="grid-cols-2 sm:grid-cols-3"
-                items={sysItems}
-              />
             </div>
+
+            <TelemetryTileGrid
+              title={`Power, Board & Peripherals (${specs.host.chassisType})`}
+              rightLabel={live.healthPosture.label}
+              rightToneClass="text-amber-300"
+              columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
+              items={sysItems}
+            />
           </section>
         );
       })()}
