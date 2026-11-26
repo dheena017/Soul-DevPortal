@@ -375,9 +375,9 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
         </button>
       </div>
 
-      {/* ── Boot, Services & Driver Structure Matrix ── */}
+      {/* ── 3 · Software Layer: OS, Device Drivers & Services Matrix ── */}
       <TelemetryTileGrid
-        title="Startup, Services & Kernel Structure Matrix"
+        title="3 · Software Layer — OS, Device Drivers & Services Matrix"
         rightLabel={`${serviceStats.running} Active Services · ${driverStats.running} Drivers`}
         rightToneClass="text-emerald-300"
         columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"

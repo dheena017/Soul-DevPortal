@@ -483,71 +483,122 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
         </div>
       </div>
 
-      {/* ── Hardware Architecture Matrix ── */}
-      <TelemetryTileGrid
-        title={`Hardware Architecture Matrix (${host.manufacturer} ${host.model})`}
-        rightLabel={`${cpu.physicalCores}C/${cpu.logicalThreads}T · ${formatBytes(memory.installedBytes, 0)}`}
-        rightToneClass="text-sky-300"
-        columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
-        items={[
-          {
-            id: 'hw-cpu',
-            label: 'CPU',
-            badge: `${cpu.physicalCores}C/${cpu.logicalThreads}T`,
-            badgeTone: 'sky',
-            valueText: `${Math.round(live.cpu.totalPercent)}%`,
-            percent: live.cpu.totalPercent,
-            tooltip: `${cpu.name} (${cpu.topologyMode})`,
-          },
-          {
-            id: 'hw-ram',
-            label: 'Memory',
-            badge: memory.ddrType,
-            badgeTone: 'purple',
-            valueText: `${Math.round(live.memory.percent)}%`,
-            percent: live.memory.percent,
-            tooltip: `${formatBytes(memory.installedBytes, 1)} ${memory.ddrType} (${memory.populatedSlots}/${memory.totalSlots} Slots)`,
-          },
-          {
-            id: 'hw-gpu',
-            label: 'Graphics',
-            badge: `${graphics.length} GPU`,
-            badgeTone: 'amber',
-            valueText: `${Math.round(live.gpu.utilizationPercent ?? 0)}%`,
-            percent: live.gpu.utilizationPercent ?? 0,
-            tooltip: graphics.map((g) => g.name).join(' · ') || 'Graphics Adapter',
-          },
-          {
-            id: 'hw-disk',
-            label: 'Storage',
-            badge: physicalDisks[0]?.busType || 'Disk',
-            badgeTone: 'emerald',
-            valueText: formatBytes(physicalDisks[0]?.sizeBytes, 0),
-            percent: live.disk.volumes[0]?.usedPercent ?? 0,
-            tooltip: physicalDisks.map((d) => `${d.model} (${d.healthStatus})`).join(' · ') || 'Physical Storage',
-          },
-          {
-            id: 'hw-pcie',
-            label: 'PCIe',
-            badge: 'Bus',
-            badgeTone: 'sky',
-            tone: 'sky',
-            valueText: `${pcieDevices.length}`,
-            percent: Math.min(100, (pcieDevices.length / 24) * 100),
-            tooltip: `${pcieDevices.length} PCIe Devices · ${expansionSlots.length} Expansion Slots`,
-          },
-          {
-            id: 'hw-bios',
-            label: 'BIOS',
-            badge: host.secureBoot === 'Enabled' ? 'Secure' : 'UEFI',
-            badgeTone: host.secureBoot === 'Enabled' ? 'emerald' : 'amber',
-            tone: host.secureBoot === 'Enabled' ? 'sky' : 'amber',
-            valueText: motherboard.biosVersion.slice(0, 7),
-            percent: 100,
-            tooltip: `${motherboard.manufacturer} ${motherboard.product} · BIOS ${motherboard.biosVersion}`,
-          },
-        ]}
-      />
+      {/* ── 1 · Internal Hardware (Inside the Case) Matrix ── */}
+      {(() => {
+        const nvSensor = live.gpu.nvidiaSensors?.[0];
+        const coolingVal = nvSensor?.temperatureC != null ? `${nvSensor.temperatureC}°C` : live.healthPosture.label;
+        const coolingPct = nvSensor?.temperatureC != null ? Math.min(100, (nvSensor.temperatureC / 95) * 100) : 25;
+        const activeNics = live.networkAdapters.filter((n) => n.isUp).length;
+        return (
+          <TelemetryTileGrid
+            title={`1 · Internal Hardware (Inside the Case) — ${host.manufacturer} ${host.model}`}
+            rightLabel={`${cpu.physicalCores}C/${cpu.logicalThreads}T · ${formatBytes(memory.installedBytes, 0)} · ${physicalDisks.length} Drive(s)`}
+            rightToneClass="text-sky-300"
+            columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
+            items={[
+              {
+                id: 'hw-mobo',
+                label: 'Motherboard',
+                badge: 'PCB',
+                badgeTone: 'sky',
+                tone: 'sky',
+                valueText: motherboard.product.slice(0, 8),
+                percent: 100,
+                tooltip: `${motherboard.manufacturer} ${motherboard.product} · ${pcieDevices.length} PCIe Devices`,
+              },
+              {
+                id: 'hw-cpu',
+                label: 'CPU',
+                badge: `${cpu.physicalCores}C/${cpu.logicalThreads}T`,
+                badgeTone: 'sky',
+                valueText: `${Math.round(live.cpu.totalPercent)}%`,
+                percent: live.cpu.totalPercent,
+                tooltip: `${cpu.name} (${cpu.topologyMode})`,
+              },
+              {
+                id: 'hw-ram',
+                label: 'RAM',
+                badge: memory.ddrType,
+                badgeTone: 'purple',
+                valueText: `${Math.round(live.memory.percent)}%`,
+                percent: live.memory.percent,
+                tooltip: `${formatBytes(memory.installedBytes, 1)} ${memory.ddrType} (${memory.populatedSlots}/${memory.totalSlots} Slots)`,
+              },
+              {
+                id: 'hw-disk',
+                label: 'Storage',
+                badge: physicalDisks[0]?.busType || 'SSD',
+                badgeTone: 'emerald',
+                valueText: formatBytes(physicalDisks[0]?.sizeBytes, 0),
+                percent: live.disk.volumes[0]?.usedPercent ?? 0,
+                tooltip: physicalDisks.map((d) => `${d.model} (${d.healthStatus})`).join(' · ') || 'Physical Storage',
+              },
+              {
+                id: 'hw-gpu',
+                label: 'GPU',
+                badge: `${graphics.length}`,
+                badgeTone: 'amber',
+                valueText: `${Math.round(live.gpu.utilizationPercent ?? 0)}%`,
+                percent: live.gpu.utilizationPercent ?? 0,
+                tooltip: graphics.map((g) => g.name).join(' · ') || 'Graphics Adapter',
+              },
+              {
+                id: 'hw-psu',
+                label: live.battery ? 'Battery/PSU' : 'PSU',
+                badge: live.battery?.powerPlugged ? 'AC' : 'DC',
+                badgeTone: 'emerald',
+                valueText: live.battery ? `${Math.round(live.battery.percent)}%` : 'AC',
+                percent: live.battery?.percent ?? 100,
+                tone: live.battery ? undefined : 'sky',
+                tooltip: `Power Plan: ${host.powerPlan}`,
+                onClick: () => onSelectTab?.('power-health'),
+              },
+              {
+                id: 'hw-cool',
+                label: 'Cooling',
+                badge: nvSensor?.fanPercent != null ? `${nvSensor.fanPercent}%` : 'Therm',
+                badgeTone: 'sky',
+                tone: nvSensor?.temperatureC != null && nvSensor.temperatureC >= 80 ? 'amber' : 'sky',
+                valueText: coolingVal,
+                percent: coolingPct,
+                tooltip: `Thermal / Cooling Posture: ${coolingVal}`,
+                onClick: () => onSelectTab?.('power-health'),
+              },
+              {
+                id: 'hw-nic',
+                label: 'NIC / Wi-Fi',
+                badge: live.connectedWifi ? 'RF' : 'LAN',
+                badgeTone: 'sky',
+                valueText: live.connectedWifi?.signalPercent != null ? `${live.connectedWifi.signalPercent}%` : `${activeNics} UP`,
+                percent: live.connectedWifi?.signalPercent ?? (activeNics > 0 ? 100 : 0),
+                tone: activeNics > 0 ? undefined : 'muted',
+                tooltip: `Active Network Adapters: ${activeNics}`,
+                onClick: () => onSelectTab?.('storage-network'),
+              },
+              {
+                id: 'hw-cmos',
+                label: 'CMOS/BIOS',
+                badge: host.secureBoot === 'Enabled' ? 'SEC' : 'EFI',
+                badgeTone: host.secureBoot === 'Enabled' ? 'emerald' : 'amber',
+                tone: host.secureBoot === 'Enabled' ? 'sky' : 'amber',
+                valueText: motherboard.biosVersion.slice(0, 7),
+                percent: 100,
+                tooltip: `BIOS ${motherboard.biosVersion} · Secure Boot: ${host.secureBoot} · CMOS RTC Active`,
+              },
+              {
+                id: 'hw-case',
+                label: 'Chassis',
+                badge: 'Case',
+                badgeTone: 'neutral',
+                tone: 'sky',
+                valueText: host.chassisType.split(' ')[0],
+                percent: 100,
+                tooltip: `${host.manufacturer} ${host.model} (${host.chassisType})`,
+              },
+            ]}
+          />
+        );
+      })()}
 
       {/* ── Visual Bento Row 1: CPU Silicon Pyramid + Motherboard & Security ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">

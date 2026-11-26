@@ -215,70 +215,119 @@ export default function PeripheralsDisplaysTab({ specs }: PeripheralsDisplaysTab
         </div>
       </div>
 
-      {/* ── Connected Devices & Display Matrix ── */}
-      <TelemetryTileGrid
-        title={`Displays & Peripherals Matrix (${displays.length} Display · ${graphics.length} GPU)`}
-        rightLabel={displays[0]?.nativeWidth ? `${displays[0].nativeWidth}×${displays[0].nativeHeight}` : 'Active'}
-        rightToneClass="text-sky-300"
-        columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
-        items={[
-          {
-            id: 'per-disp',
-            label: 'Displays',
-            badge: `${displays[0]?.refreshRateHz || 60}Hz`,
-            badgeTone: 'sky',
-            valueText: `${displays.length}`,
-            percent: Math.min(100, ((displays[0]?.refreshRateHz || 60) / 144) * 100),
-            tooltip: displays.map((d) => `${d.name}: ${d.nativeWidth}×${d.nativeHeight}`).join(' · '),
-          },
-          {
-            id: 'per-audio',
-            label: 'Audio',
-            badge: 'IO',
-            badgeTone: 'emerald',
-            valueText: `${peripherals.audio.length}`,
-            percent: Math.min(100, peripherals.audio.length * 20),
-            tooltip: peripherals.audio.map((a) => a.name).join(' · ') || 'No audio devices',
-          },
-          {
-            id: 'per-usb',
-            label: 'USB',
-            badge: 'xHCI',
-            badgeTone: 'purple',
-            valueText: `${usbDevices.length || peripherals.usbControllers.length}`,
-            percent: Math.min(100, ((usbDevices.length || peripherals.usbControllers.length) / 20) * 100),
-            tooltip: `${usbDevices.length} USB Devices · ${peripherals.usbControllers.length} Controllers`,
-          },
-          {
-            id: 'per-bt',
-            label: 'Bluetooth',
-            badge: `${btPaired.length} Pair`,
-            badgeTone: 'sky',
-            valueText: `${peripherals.bluetooth.length}`,
-            percent: Math.min(100, peripherals.bluetooth.length * 20),
-            muted: peripherals.bluetooth.length === 0,
-            tooltip: peripherals.bluetooth.map((b) => b.name).join(' · ') || 'No Bluetooth devices',
-          },
-          {
-            id: 'per-kbd',
-            label: 'Keyboards',
-            badge: 'HID',
-            badgeTone: 'amber',
-            valueText: `${keyboards.length}`,
-            percent: Math.min(100, keyboards.length * 25),
-            tooltip: keyboards.map((k) => k.name).join(' · ') || 'HID Keyboard',
-          },
-          {
-            id: 'per-ptr',
-            label: 'Pointing',
-            badge: 'HID',
-            badgeTone: 'emerald',
-            valueText: `${pointing.length}`,
-            percent: Math.min(100, pointing.length * 25),
-            tooltip: pointing.map((p) => p.name).join(' · ') || 'HID Pointing Device',
-          },
-        ]}
-      />
+      {/* ── 2 · External Peripherals (Input & Output Devices) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <TelemetryTileGrid
+          title="2A · Input Devices (Send Data In)"
+          rightLabel={`${keyboards.length + pointing.length + peripherals.cameras.length + peripherals.biometrics.length} Inputs`}
+          rightToneClass="text-sky-300"
+          columnsClass="grid-cols-2 sm:grid-cols-3"
+          items={[
+            {
+              id: 'in-kbd',
+              label: 'Keyboards',
+              badge: 'HID',
+              badgeTone: 'sky',
+              tone: 'sky',
+              valueText: `${keyboards.length}`,
+              percent: Math.min(100, keyboards.length * 35),
+              tooltip: keyboards.map((k) => k.name).join(' · ') || 'HID Keyboard',
+            },
+            {
+              id: 'in-ptr',
+              label: 'Mouse/Pad',
+              badge: 'HID',
+              badgeTone: 'emerald',
+              tone: 'sky',
+              valueText: `${pointing.length}`,
+              percent: Math.min(100, pointing.length * 35),
+              tooltip: pointing.map((p) => p.name).join(' · ') || 'Pointing / Trackpad',
+            },
+            {
+              id: 'in-cam',
+              label: 'Webcam',
+              badge: 'Opt',
+              badgeTone: 'purple',
+              tone: peripherals.cameras.length > 0 ? 'sky' : 'muted',
+              muted: peripherals.cameras.length === 0,
+              valueText: `${peripherals.cameras.length}`,
+              percent: peripherals.cameras.length > 0 ? 100 : 0,
+              tooltip: peripherals.cameras.map((c) => c.name).join(' · ') || 'No webcam detected',
+            },
+            {
+              id: 'in-bio',
+              label: 'Biometric',
+              badge: 'Auth',
+              badgeTone: 'amber',
+              tone: peripherals.biometrics.length > 0 ? 'sky' : 'muted',
+              muted: peripherals.biometrics.length === 0,
+              valueText: `${peripherals.biometrics.length}`,
+              percent: peripherals.biometrics.length > 0 ? 100 : 0,
+              tooltip: peripherals.biometrics.map((b) => b.name).join(' · ') || 'No biometric sensor detected',
+            },
+            {
+              id: 'in-usb',
+              label: 'USB / HID',
+              badge: 'xHCI',
+              badgeTone: 'purple',
+              tone: 'sky',
+              valueText: `${usbDevices.length || peripherals.usbControllers.length}`,
+              percent: Math.min(100, ((usbDevices.length || peripherals.usbControllers.length) / 20) * 100),
+              tooltip: `${usbDevices.length} USB Devices · ${peripherals.usbControllers.length} Controllers`,
+            },
+          ]}
+        />
+
+        <TelemetryTileGrid
+          title="2B · Output Devices (Receive Data Out)"
+          rightLabel={displays[0]?.nativeWidth ? `${displays[0].nativeWidth}×${displays[0].nativeHeight} @ ${displays[0].refreshRateHz || 60}Hz` : 'Ready'}
+          rightToneClass="text-amber-300"
+          columnsClass="grid-cols-2 sm:grid-cols-3"
+          items={[
+            {
+              id: 'out-disp',
+              label: 'Monitors',
+              badge: `${displays[0]?.refreshRateHz || 60}Hz`,
+              badgeTone: 'amber',
+              tone: 'sky',
+              valueText: `${displays.length}`,
+              percent: Math.min(100, ((displays[0]?.refreshRateHz || 60) / 144) * 100),
+              tooltip: displays.map((d) => `${d.name}: ${d.nativeWidth}×${d.nativeHeight}`).join(' · '),
+            },
+            {
+              id: 'out-audio',
+              label: 'Audio Out',
+              badge: 'Spk',
+              badgeTone: 'emerald',
+              tone: 'sky',
+              valueText: `${peripherals.audio.length}`,
+              percent: Math.min(100, peripherals.audio.length * 25),
+              tooltip: peripherals.audio.map((a) => a.name).join(' · ') || 'No audio devices',
+            },
+            {
+              id: 'out-bt',
+              label: 'Bluetooth',
+              badge: `${btPaired.length} Pair`,
+              badgeTone: 'sky',
+              tone: peripherals.bluetooth.length > 0 ? 'sky' : 'muted',
+              muted: peripherals.bluetooth.length === 0,
+              valueText: `${peripherals.bluetooth.length}`,
+              percent: Math.min(100, peripherals.bluetooth.length * 25),
+              tooltip: peripherals.bluetooth.map((b) => b.name).join(' · ') || 'No Bluetooth accessories',
+            },
+            {
+              id: 'out-gpu',
+              label: 'GPU Out',
+              badge: `${graphics.length}`,
+              badgeTone: 'amber',
+              tone: 'sky',
+              valueText: graphics[0]?.vendor || 'GPU',
+              percent: 100,
+              tooltip: graphics.map((g) => g.name).join(' · '),
+            },
+          ]}
+        />
+      </div>
 
       {/* ── Display Panels & Graphics Output Geometry (Full-Width when Single Display) ── */}
       <section className="p-5 rounded-2xl system-card flex flex-col gap-4">

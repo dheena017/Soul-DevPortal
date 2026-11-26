@@ -1,7 +1,7 @@
 {
   "name": "@soul-dev/portal",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Interactive developer portal, architecture specs, and live package explorer for the Soul Workspace monorepo.",
   "main": "electron/main.cjs",
   "type": "module",

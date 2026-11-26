@@ -376,142 +376,140 @@ export default function SystemHeaderCard({
         </button>
       </div>
 
-      {/* ── Integrated 8-Tab Icon + Pill Strip with Styled Left / Right Scroll Arrows ── */}
-      <div className="pt-3.5 border-t border-white/[0.06] flex items-center gap-2">
-        {(canScrollLeft || canScrollRight) && (
+      {/* ── Structured 3-Layer Computer Tab Dock ── */}
+      <div className="pt-3.5 border-t border-white/[0.06] flex flex-col gap-2.5">
+        {/* Overview Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <button
             type="button"
-            onClick={() => scrollTabs(-1)}
-            disabled={!canScrollLeft}
-            aria-label="Scroll tabs left"
-            title="Scroll tabs left"
-            className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-all ${
-              canScrollLeft
-                ? 'neu-btn bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 cursor-pointer'
-                : 'bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
+            role="tab"
+            aria-selected={activeTab === 'performance'}
+            onClick={(e) => handleTabClick('performance', e)}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer border ${
+              activeTab === 'performance'
+                ? 'bg-sky-500/15 text-white font-bold border-sky-400/45 shadow-[0_0_18px_rgba(56,189,248,0.18)]'
+                : 'bg-[#111218]/90 text-zinc-300 hover:text-white hover:border-white/20 border-white/[0.08] font-medium'
             }`}
           >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
-        )}
-
-        <div
-          ref={tabsRef}
-          role="tablist"
-          aria-label="Computer & Performance sections"
-          onScroll={updateScrollArrows}
-          className="neu-tray relative flex-1 min-w-0 flex items-center gap-1.5 p-1 rounded-xl border border-white/[0.06] overflow-x-auto system-tabs-scroller"
-        >
-          <button type="button" role="tab" aria-selected={activeTab === 'performance'} onClick={(e) => handleTabClick('performance', e)} className={tabClass(activeTab === 'performance')}>
-            <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'performance' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'performance' ? 'text-sky-300' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
             </svg>
-            <span>Live Performance</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'performance' ? 'bg-sky-500/25 text-sky-200 border border-sky-500/40 font-bold' : 'bg-sky-500/15 text-sky-300 border border-sky-500/30'}`}>
-              {Math.round(live.cpu.totalPercent)}%
+            <span>Live Performance Overview</span>
+            <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums bg-sky-500/20 text-sky-200 border border-sky-500/35 font-bold">
+              {Math.round(live.cpu.totalPercent)}% CPU
             </span>
           </button>
 
-          <button type="button" role="tab" aria-selected={activeTab === 'hardware'} onClick={(e) => handleTabClick('hardware', e)} className={tabClass(activeTab === 'hardware')}>
-            <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'hardware' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="4" y="4" width="16" height="16" rx="2" />
-              <rect x="9" y="9" width="6" height="6" />
-              <line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" />
-              <line x1="9" y1="20" x2="9" y2="23" /><line x1="15" y1="20" x2="15" y2="23" />
-            </svg>
-            <span>Hardware Specs</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'hardware' ? 'bg-purple-500/25 text-purple-200 border border-purple-500/40 font-bold' : 'bg-purple-500/15 text-purple-300 border border-purple-500/30'}`}>
-              {hardwareCount}
-            </span>
-          </button>
-
-          <button type="button" role="tab" aria-selected={activeTab === 'peripherals'} onClick={(e) => handleTabClick('peripherals', e)} className={tabClass(activeTab === 'peripherals')}>
-            <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'peripherals' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2" />
-              <line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" />
-            </svg>
-            <span>Displays &amp; Devices</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'peripherals' ? 'bg-indigo-500/25 text-indigo-200 border border-indigo-500/40 font-bold' : 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/30'}`}>
-              {devicesCount}
-            </span>
-          </button>
-
-          <button type="button" role="tab" aria-selected={activeTab === 'storage-network'} onClick={(e) => handleTabClick('storage-network', e)} className={tabClass(activeTab === 'storage-network')}>
-            <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'storage-network' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <ellipse cx="12" cy="5" rx="9" ry="3" />
-              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-            </svg>
-            <span>Storage &amp; Network</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'storage-network' ? 'bg-emerald-500/25 text-emerald-200 border border-emerald-500/40 font-bold' : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'}`}>
-              {storageNetCount}
-            </span>
-          </button>
-
-          <button type="button" role="tab" aria-selected={activeTab === 'power-health'} onClick={(e) => handleTabClick('power-health', e)} className={tabClass(activeTab === 'power-health')}>
-            <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'power-health' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            <span>Power &amp; Health</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'power-health' ? 'bg-rose-500/25 text-rose-200 border border-rose-500/40 font-bold' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}`}>
-              {battery ? `${Math.round(battery.percent)}%` : 'OK'}
-            </span>
-          </button>
-
-          <button type="button" role="tab" aria-selected={activeTab === 'startup-services'} onClick={(e) => handleTabClick('startup-services', e)} className={tabClass(activeTab === 'startup-services')}>
-            <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'startup-services' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-            </svg>
-            <span>Startup &amp; Services</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'startup-services' ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-500/40 font-bold' : 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'}`}>
-              {startupServicesCount}
-            </span>
-          </button>
-
-          <button type="button" role="tab" aria-selected={activeTab === 'processes'} onClick={(e) => handleTabClick('processes', e)} className={tabClass(activeTab === 'processes')}>
-            <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'processes' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="4 17 10 11 4 5" />
-              <line x1="12" y1="19" x2="20" y2="19" />
-            </svg>
-            <span>Processes &amp; Ports</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'processes' ? 'bg-amber-500/25 text-amber-200 border border-amber-500/40 font-bold' : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'}`}>
-              {live.totalProcessesCount || live.activePorts.length}
-            </span>
-          </button>
-
-          <button type="button" role="tab" aria-selected={activeTab === 'environment'} onClick={(e) => handleTabClick('environment', e)} className={tabClass(activeTab === 'environment')}>
-            <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'environment' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
-              <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
-              <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
-            </svg>
-            <span>Environment &amp; PATH</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'environment' ? 'bg-teal-500/25 text-teal-200 border border-teal-500/40 font-bold' : 'bg-teal-500/15 text-teal-300 border border-teal-500/30'}`}>
-              {envCount}
-            </span>
-          </button>
+          <span className="text-[10px] font-mono text-zinc-400 hidden sm:inline">
+            1 · Internal Hardware &nbsp;·&nbsp; 2 · External Peripherals &nbsp;·&nbsp; 3 · Software
+          </span>
         </div>
 
-        {(canScrollLeft || canScrollRight) && (
-          <button
-            type="button"
-            onClick={() => scrollTabs(1)}
-            disabled={!canScrollRight}
-            aria-label="Scroll tabs right"
-            title="Scroll tabs right"
-            className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-all ${
-              canScrollRight
-                ? 'neu-btn bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 cursor-pointer'
-                : 'bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
-            }`}
-          >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
-        )}
+        {/* 3-Layer Tab Groups */}
+        <div ref={tabsRef} role="tablist" aria-label="Computer & Performance sections" className="grid grid-cols-1 xl:grid-cols-12 gap-2.5">
+          {/* Layer 1: Internal Hardware */}
+          <div className="xl:col-span-5 p-2 rounded-xl bg-[#0e1118]/90 border border-sky-500/20 flex flex-col gap-1.5">
+            <span className="px-1.5 text-[10px] font-mono font-bold uppercase tracking-wider text-sky-300/90">
+              1 · Internal Hardware (Inside Case)
+            </span>
+            <div className="flex flex-wrap items-center gap-1">
+              <button type="button" role="tab" aria-selected={activeTab === 'hardware'} onClick={(e) => handleTabClick('hardware', e)} className={tabClass(activeTab === 'hardware')}>
+                <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'hardware' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="4" y="4" width="16" height="16" rx="2" />
+                  <rect x="9" y="9" width="6" height="6" />
+                  <line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" />
+                  <line x1="9" y1="20" x2="9" y2="23" /><line x1="15" y1="20" x2="15" y2="23" />
+                </svg>
+                <span>Internal Hardware</span>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'hardware' ? 'bg-purple-500/25 text-purple-200 border border-purple-500/40 font-bold' : 'bg-purple-500/15 text-purple-300 border border-purple-500/30'}`}>
+                  {hardwareCount}
+                </span>
+              </button>
+
+              <button type="button" role="tab" aria-selected={activeTab === 'storage-network'} onClick={(e) => handleTabClick('storage-network', e)} className={tabClass(activeTab === 'storage-network')}>
+                <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'storage-network' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <ellipse cx="12" cy="5" rx="9" ry="3" />
+                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                </svg>
+                <span>Storage &amp; NIC</span>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'storage-network' ? 'bg-emerald-500/25 text-emerald-200 border border-emerald-500/40 font-bold' : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'}`}>
+                  {storageNetCount}
+                </span>
+              </button>
+
+              <button type="button" role="tab" aria-selected={activeTab === 'power-health'} onClick={(e) => handleTabClick('power-health', e)} className={tabClass(activeTab === 'power-health')}>
+                <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'power-health' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                <span>PSU &amp; Firmware</span>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'power-health' ? 'bg-rose-500/25 text-rose-200 border border-rose-500/40 font-bold' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}`}>
+                  {battery ? `${Math.round(battery.percent)}%` : 'OK'}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Layer 2: External Peripherals */}
+          <div className="xl:col-span-2 p-2 rounded-xl bg-[#10101a]/90 border border-indigo-500/20 flex flex-col gap-1.5">
+            <span className="px-1.5 text-[10px] font-mono font-bold uppercase tracking-wider text-indigo-300/90">
+              2 · External Peripherals
+            </span>
+            <div className="flex flex-wrap items-center gap-1">
+              <button type="button" role="tab" aria-selected={activeTab === 'peripherals'} onClick={(e) => handleTabClick('peripherals', e)} className={tabClass(activeTab === 'peripherals')}>
+                <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'peripherals' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" />
+                  <line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" />
+                </svg>
+                <span>Input / Output</span>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'peripherals' ? 'bg-indigo-500/25 text-indigo-200 border border-indigo-500/40 font-bold' : 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/30'}`}>
+                  {devicesCount}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Layer 3: Software */}
+          <div className="xl:col-span-5 p-2 rounded-xl bg-[#0d1418]/90 border border-cyan-500/20 flex flex-col gap-1.5">
+            <span className="px-1.5 text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-300/90">
+              3 · Software (OS, Drivers &amp; Apps)
+            </span>
+            <div className="flex flex-wrap items-center gap-1">
+              <button type="button" role="tab" aria-selected={activeTab === 'startup-services'} onClick={(e) => handleTabClick('startup-services', e)} className={tabClass(activeTab === 'startup-services')}>
+                <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'startup-services' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
+                <span>OS &amp; Drivers</span>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'startup-services' ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-500/40 font-bold' : 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'}`}>
+                  {startupServicesCount}
+                </span>
+              </button>
+
+              <button type="button" role="tab" aria-selected={activeTab === 'processes'} onClick={(e) => handleTabClick('processes', e)} className={tabClass(activeTab === 'processes')}>
+                <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'processes' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="4 17 10 11 4 5" />
+                  <line x1="12" y1="19" x2="20" y2="19" />
+                </svg>
+                <span>Apps &amp; Ports</span>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'processes' ? 'bg-amber-500/25 text-amber-200 border border-amber-500/40 font-bold' : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'}`}>
+                  {live.totalProcessesCount || live.activePorts.length}
+                </span>
+              </button>
+
+              <button type="button" role="tab" aria-selected={activeTab === 'environment'} onClick={(e) => handleTabClick('environment', e)} className={tabClass(activeTab === 'environment')}>
+                <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'environment' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
+                  <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
+                </svg>
+                <span>Env &amp; SDKs</span>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${activeTab === 'environment' ? 'bg-teal-500/25 text-teal-200 border border-teal-500/40 font-bold' : 'bg-teal-500/15 text-teal-300 border border-teal-500/30'}`}>
+                  {envCount}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       </div>
     </header>

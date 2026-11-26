@@ -364,9 +364,9 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
         </button>
       </div>
 
-      {/* ── Process, Thread & Socket Structure Matrix ── */}
+      {/* ── 3 · Software Layer: Applications, Processes & Ports Matrix ── */}
       <TelemetryTileGrid
-        title={`Process & Socket Structure (${live.totalProcessesCount} Processes · ${procStats.totalThreads.toLocaleString()} Threads)`}
+        title={`3 · Software Layer — Applications & Ports (${live.totalProcessesCount} Processes · ${procStats.totalThreads.toLocaleString()} Threads)`}
         rightLabel={`${live.activePorts.length} Listening Ports`}
         rightToneClass="text-sky-300"
         columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"

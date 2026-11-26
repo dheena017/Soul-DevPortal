@@ -83,6 +83,49 @@ export const CHANGELOG_SURFACE_TABS: Array<{
 
 export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
+    id: 'rel-v0-0-2-computer-layers',
+    version: 'v0.0.2',
+    dateLabel: 'November 26, 2026',
+    headline: '3-Layer Computer Tab Architecture, Component Matrices & Instant Runner Hotkeys',
+    summary:
+      'Reorganized the Computer monitor into a structured 3-layer tab dock (1. Internal Hardware, 2. External Peripherals [Input / Output], 3. Software), added live TelemetryTileGrid matrices across every tab, and fixed single-keypress supervisor hotkeys in @workspace/runner.',
+    surfaces: ['computer', 'package', 'desktop'],
+    isLatest: true,
+    commitRef: 'v0.0.2',
+    ctaLabel: 'Open Computer Monitor',
+    ctaRoute: 'system',
+    features: [
+      {
+        title: 'Structured 3-Layer Computer Tab Dock',
+        description:
+          'Arranged all Computer sub-tabs into Overview, 1 · Internal Hardware (Inside Case), 2 · External Peripherals (Input / Output), and 3 · Software (OS, Drivers & Apps) without horizontal scrolling.',
+        route: 'system',
+      },
+      {
+        title: 'Complete Internal Hardware & Input/Output Matrices',
+        description:
+          'Expanded Internal Hardware to surface all 10 case components (Motherboard, CPU, RAM, Storage, GPU, Battery/PSU, Cooling, NIC/Wi-Fi, CMOS/BIOS, Chassis) and split Peripherals into Input vs Output devices.',
+        route: 'system',
+      },
+    ],
+    improvements: [
+      {
+        title: 'Unified TelemetryTileGrid across all Computer tabs',
+        description:
+          'Standardized component matrices with cohesive dark slate-cyan tiles, amber/rose load highlights, real-time progress bars, and click-to-filter navigation.',
+        route: 'system',
+      },
+    ],
+    fixes: [
+      {
+        title: 'Instant single-keypress hotkeys in @workspace/runner',
+        description:
+          'Prevented sys.stdin.readline() from consuming Windows console input on interactive TTYs and isolated child process stdin so supervisor hotkeys trigger immediately without pressing Enter.',
+        route: 'packages',
+      },
+    ],
+  },
+  {
     id: 'rel-v0-0-1-changelog',
     version: 'v0.0.1',
     dateLabel: 'November 25, 2026',
@@ -90,7 +133,7 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     summary:
       'Redesigned the ecosystem directory into an editorial Changelog timeline featuring surface filter tabs, collapsible Features/Improvements/Fixes drawers, a sticky On This Page version rail, and SQLite-backed custom release logging alongside Notes Studio v2.',
     surfaces: ['desktop', 'everyday', 'project'],
-    isLatest: true,
+    isLatest: false,
     commitRef: 'v0.0.1',
     ctaLabel: 'Open Everyday Utilities',
     ctaRoute: 'everyday/notes',

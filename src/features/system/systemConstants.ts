@@ -8,21 +8,24 @@ export type SystemSubTabId =
   | 'processes'
   | 'environment';
 
+export type SystemTabGroup = 'overview' | 'hardware' | 'peripherals' | 'software';
+
 export interface SystemSubTabConfig {
   id: SystemSubTabId;
   label: string;
   shortLabel: string;
+  group: SystemTabGroup;
 }
 
 export const SYSTEM_SUB_TABS: SystemSubTabConfig[] = [
-  { id: 'performance', label: 'Live Performance', shortLabel: 'Performance' },
-  { id: 'hardware', label: 'Hardware Specs', shortLabel: 'Hardware' },
-  { id: 'peripherals', label: 'Displays & Devices', shortLabel: 'Devices' },
-  { id: 'storage-network', label: 'Storage & Network', shortLabel: 'Storage & Net' },
-  { id: 'power-health', label: 'Power & Health', shortLabel: 'Power' },
-  { id: 'startup-services', label: 'Startup & Services', shortLabel: 'Startup' },
-  { id: 'processes', label: 'Processes & Ports', shortLabel: 'Processes' },
-  { id: 'environment', label: 'Environment & PATH', shortLabel: 'Env & PATH' },
+  { id: 'performance', label: 'Live Performance', shortLabel: 'Performance', group: 'overview' },
+  { id: 'hardware', label: 'Internal Hardware', shortLabel: 'Hardware', group: 'hardware' },
+  { id: 'storage-network', label: 'Storage & Network', shortLabel: 'Storage & Net', group: 'hardware' },
+  { id: 'power-health', label: 'Power & Firmware', shortLabel: 'Power', group: 'hardware' },
+  { id: 'peripherals', label: 'Peripherals (In / Out)', shortLabel: 'Peripherals', group: 'peripherals' },
+  { id: 'startup-services', label: 'OS, Drivers & Services', shortLabel: 'OS & Drivers', group: 'software' },
+  { id: 'processes', label: 'Applications & Ports', shortLabel: 'Apps & Ports', group: 'software' },
+  { id: 'environment', label: 'Runtimes & Environment', shortLabel: 'Env & PATH', group: 'software' },
 ];
 
 import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../types';
