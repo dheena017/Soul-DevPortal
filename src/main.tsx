@@ -68,7 +68,7 @@ class PortalErrorBoundary extends React.Component<
   render() {
     if (this.state.error) {
       return (
-        <div className="p-6 md:p-8 rounded-2xl bg-[#111115] border border-rose-500/35 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-6 md:p-8 rounded-2xl neu-card bg-[#111115] border border-rose-500/35 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400">
               VIEW RENDER INTERRUPTED
@@ -628,21 +628,25 @@ function App() {
                   ? 'Desktop Panel'
                   : 'Standalone Tab'}
               </span>
-              <div className="hidden sm:flex items-center gap-1 ml-2 p-0.5 rounded-lg bg-[#16161c] border border-white/[0.08]">
+              <div className="hidden sm:flex items-center gap-1 ml-2 p-0.5 rounded-lg neu-tray bg-[#16161c] border border-white/[0.08]" role="tablist" aria-label="Changelog views">
                 <button
                   type="button"
+                  role="tab"
+                  aria-selected={panelMode === 'changelog'}
                   onClick={() => navigate('changelog')}
-                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold cursor-pointer ${
-                    panelMode === 'changelog' ? 'bg-zinc-800 text-white font-bold' : 'text-zinc-400 hover:text-white'
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold border cursor-pointer ${
+                    panelMode === 'changelog' ? 'text-white font-bold border-white/20' : 'border-transparent text-zinc-400 hover:text-white'
                   }`}
                 >
                   Release Notes
                 </button>
                 <button
                   type="button"
+                  role="tab"
+                  aria-selected={panelMode === 'code-updates'}
                   onClick={() => navigate('code-updates')}
-                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold cursor-pointer ${
-                    panelMode === 'code-updates' ? 'bg-emerald-500/20 text-emerald-200 font-bold' : 'text-zinc-400 hover:text-white'
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold border cursor-pointer ${
+                    panelMode === 'code-updates' ? 'bg-emerald-500/20 border-emerald-500/35 text-emerald-200 font-bold' : 'border-transparent text-zinc-400 hover:text-white'
                   }`}
                 >
                   🧬 Code Updates by Date
@@ -747,6 +751,9 @@ function App() {
 
           {['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active) && (
             <CodeUpdatesView
+              projects={projectsList}
+              packages={packagesList}
+              externalQuery={query}
               onNavigate={navigate}
               onBack={() => navigate('changelog')}
             />

@@ -229,13 +229,13 @@ export default function Sidebar({
   return (
     <>
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-[min(86vw,20rem)] sm:w-[336px] h-screen h-[100dvh] bg-[#0d0d10] border-r border-white/[0.08] flex flex-col justify-between shadow-2xl shadow-black/80 portal-sidebar-drawer ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-[min(86vw,20rem)] sm:w-[336px] h-screen h-[100dvh] bg-[#0d0d10] border-r border-white/[0.08] flex flex-col justify-between portal-sidebar-drawer ${
           menuOpen ? 'translate-x-0 portal-sidebar-open' : '-translate-x-full'
         }`}
         aria-label="Monorepo navigation sidebar"
       >
         {/* ── Brand Header ── */}
-        <div className="h-14 px-4 flex items-center justify-between border-b border-white/[0.08] shrink-0 bg-[#09090c]">
+        <div className="h-14 px-4 flex items-center justify-between border-b border-white/[0.07] shrink-0 bg-[#09090c]">
           <a
             className="flex items-center gap-2 group"
             href="#overview"
@@ -250,7 +250,7 @@ export default function Sidebar({
 
           <button
             type="button"
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg neu-btn border border-white/[0.08] text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
             aria-label="Close sidebar (Esc or Ctrl+B)"
             title="Close sidebar (Esc or Ctrl+B)"
             onClick={onClose}
@@ -262,7 +262,7 @@ export default function Sidebar({
         </div>
 
         {/* ── Unified Workspace Search ── */}
-        <div className="px-3.5 py-3 border-b border-white/[0.08] shrink-0 bg-[#09090c]">
+        <div className="px-3.5 py-3 border-b border-white/[0.07] shrink-0 bg-[#09090c]">
           <div className="relative flex items-center">
             <svg
               className="absolute left-3.5 w-3.5 h-3.5 text-zinc-500 pointer-events-none"
@@ -308,7 +308,7 @@ export default function Sidebar({
         </div>
 
         {/* ── Scrollable Navigation ── */}
-        <nav className="flex-1 overflow-y-auto sidebar-scroll px-3 py-3 flex flex-col gap-4 text-xs font-medium" aria-label="Monorepo navigation">
+        <nav className="flex-1 overflow-y-auto overflow-x-hidden sidebar-scroll px-3 py-3 flex flex-col gap-4 text-xs font-medium" aria-label="Monorepo navigation">
           {/* Top Global Hubs & Tools */}
           <div className="flex flex-col gap-1">
             <button
@@ -316,7 +316,7 @@ export default function Sidebar({
               aria-current={isActive('overview') ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 isActive('overview')
-                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 neu-tile'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
               onClick={() => onNavigate('overview')}
@@ -339,7 +339,7 @@ export default function Sidebar({
               aria-current={['changelog', 'catalog', 'portfolio', 'showcase'].includes(active) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 ['changelog', 'catalog', 'portfolio', 'showcase'].includes(active)
-                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 neu-tile'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
               onClick={() => {
@@ -366,7 +366,7 @@ export default function Sidebar({
               aria-current={['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 ['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active)
-                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 neu-tile'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
               onClick={() => onNavigate('code-updates')}
@@ -390,7 +390,7 @@ export default function Sidebar({
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))
-                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 neu-tile'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
               onClick={() => onNavigate('scripts')}
@@ -413,7 +413,7 @@ export default function Sidebar({
               aria-current={(isActive('computer') || isActive('system')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 (isActive('computer') || isActive('system'))
-                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 neu-tile'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
               }`}
               onClick={() => onNavigate('computer')}
@@ -455,9 +455,9 @@ export default function Sidebar({
                 <button
                   type="button"
                   aria-current={isEverydayRoute(active) ? 'page' : undefined}
-                  className={`flex-1 flex items-center justify-between px-3 py-2 rounded-xl transition-colors ${
+                  className={`neu-btn flex-1 flex items-center justify-between px-3 py-2 rounded-xl transition-colors ${
                     isEverydayRoute(active)
-                      ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                      ? 'bg-white/[0.08] text-white font-semibold border border-white/15'
                       : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
                   }`}
                   onClick={() => onNavigate('everyday')}
@@ -517,7 +517,7 @@ export default function Sidebar({
             <div className="flex flex-col gap-1 pt-1">
               <button
                 type="button"
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-zinc-100 font-semibold bg-[#16161c] border border-white/[0.08]"
+                className="neu-btn w-full flex items-center justify-between px-3 py-2 rounded-xl text-zinc-100 font-semibold bg-[#16161c] border border-white/[0.08]"
                 onClick={() => onNavigate('scripts')}
               >
                 <div className="flex items-center gap-2.5">
@@ -567,7 +567,7 @@ export default function Sidebar({
                     aria-current={isProjectsMainActive ? 'page' : undefined}
                     className={`flex-1 flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                       isProjectsMainActive
-                        ? 'bg-white/[0.08] text-white font-bold border border-white/15 shadow-sm'
+                        ? 'bg-white/[0.08] text-white font-bold border border-white/15 neu-tile'
                         : isProjectsChildActive
                         ? 'text-white font-semibold bg-white/[0.03] border border-white/[0.08]'
                         : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
@@ -631,7 +631,7 @@ export default function Sidebar({
                           aria-current={isProjActive ? 'page' : undefined}
                           className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all text-left group ${
                             isProjActive
-                              ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                              ? 'neu-tile bg-white/[0.08] text-white font-semibold border border-white/15'
                               : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent'
                           }`}
                           onClick={() => onNavigate(`projects/${proj.id}`)}
@@ -694,7 +694,7 @@ export default function Sidebar({
                     aria-current={isPackagesMainActive ? 'page' : undefined}
                     className={`flex-1 flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                       isPackagesMainActive
-                        ? 'bg-white/[0.08] text-white font-bold border border-white/15 shadow-sm'
+                        ? 'neu-tile bg-white/[0.08] text-white font-bold border border-white/15'
                         : isPackagesChildActive
                         ? 'text-white font-semibold bg-white/[0.03] border border-white/[0.08]'
                         : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
@@ -761,7 +761,7 @@ export default function Sidebar({
                           aria-current={isPkgActive ? 'page' : undefined}
                           className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all text-left group ${
                             isPkgActive
-                              ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                              ? 'neu-tile bg-white/[0.08] text-white font-semibold border border-white/15'
                               : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent'
                           }`}
                           onClick={() => onNavigate(`packages/${pkg.id}`)}
@@ -818,7 +818,7 @@ export default function Sidebar({
                     aria-current={isDocsMainActive ? 'page' : undefined}
                     className={`flex-1 flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                       isDocsMainActive
-                        ? 'bg-white/[0.08] text-white font-bold border border-white/15 shadow-sm'
+                        ? 'neu-tile bg-white/[0.08] text-white font-bold border border-white/15'
                         : isDocsChildActive
                         ? 'text-white font-semibold bg-white/[0.03] border border-white/[0.08]'
                         : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
@@ -881,7 +881,7 @@ export default function Sidebar({
                           aria-current={isGuideActive ? 'page' : undefined}
                           className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-all text-left group ${
                             isGuideActive
-                              ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                              ? 'neu-tile bg-white/[0.08] text-white font-semibold border border-white/15'
                               : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent'
                           }`}
                           onClick={() => onNavigate(targetRoute)}
@@ -927,12 +927,12 @@ export default function Sidebar({
 
           {/* Empty Search Feedback */}
           {isFiltering && totalMatches === 0 && (
-            <div className="flex flex-col items-center justify-center p-6 text-center rounded-xl bg-[#0d0d10] border border-white/[0.08] gap-2 mt-2">
+            <div className="neu-inset flex flex-col items-center justify-center p-6 text-center rounded-xl bg-[#0d0d10] border border-white/[0.08] gap-2 mt-2">
               <span className="text-xl" aria-hidden="true">🔍</span>
               <p className="text-xs text-zinc-300">No matches found for &ldquo;{commonFilter}&rdquo;</p>
               <button
                 type="button"
-                className="mt-1 px-3 py-1.5 rounded-md text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-colors cursor-pointer"
+                className="neu-btn mt-1 px-3 py-1.5 rounded-md text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-colors cursor-pointer"
                 onClick={() => {
                   setCommonFilter('');
                   searchInputRef.current?.focus();
@@ -970,7 +970,7 @@ export default function Sidebar({
           </div>
 
           <div
-            className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-[11px] font-mono border shrink-0 transition-all ${
+            className={`neu-tile inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-[11px] font-mono border shrink-0 transition-all ${
               isBackendLive
                 ? 'bg-[#13151b] border-emerald-500/30 text-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.16)]'
                 : 'bg-[#13151b] border-white/[0.08] text-zinc-400'

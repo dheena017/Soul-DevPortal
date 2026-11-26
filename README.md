@@ -21,6 +21,7 @@
 ## 📑 Table of Contents
 
 - [Overview](#-overview)
+- [Website Screenshots](#-website-screenshots)
 - [System Architecture](#-system-architecture)
 - [Shared Packages Catalog](#-shared-packages-catalog)
 - [Monorepo Projects & Dedicated Ports](#-monorepo-projects--dedicated-ports)
@@ -33,6 +34,82 @@
 - [Core Architecture Guides](#-core-architecture-guides)
 - [Workspace Directory Structure](#-workspace-directory-structure)
 - [Engineering Standards & Conventions](#-engineering-standards--conventions)
+
+---
+
+## 🖼️ Website Screenshots
+
+A visual tour of the Soul DevPortal and its connected micro-applications.
+
+### 🗂️ Portal Overview
+
+<div align="center">
+  <img src="./docs/screenshots/portal-overview.png" alt="Portal Overview" width="100%"/>
+  <p><em>Portal Overview — Main dashboard</em></p>
+</div>
+
+---
+
+### 📁 Projects View
+
+<div align="center">
+  <img src="./docs/screenshots/portal-projects.png" alt="Projects View" width="100%"/>
+  <p><em>Projects View — All 8 monorepo micro-applications</em></p>
+</div>
+
+---
+
+### 📦 Packages View
+
+<div align="center">
+  <img src="./docs/screenshots/portal-packages.png" alt="Packages View" width="100%"/>
+  <p><em>Packages View — Shared polyglot libraries catalog</em></p>
+</div>
+
+---
+
+### 🖥️ System Monitor
+
+<div align="center">
+  <img src="./docs/screenshots/portal-system-monitor.png" alt="System Monitor" width="100%"/>
+  <p><em>System Monitor — Live process, port and hardware stats</em></p>
+</div>
+
+---
+
+### 📅 Everyday Utilities — Overview
+
+<div align="center">
+  <img src="./docs/screenshots/everyday-overview.png" alt="Everyday Overview" width="100%"/>
+  <p><em>Everyday Utilities — Overview panel</em></p>
+</div>
+
+---
+
+### 🕐 Everyday Utilities — Clock
+
+<div align="center">
+  <img src="./docs/screenshots/everyday-clock.png" alt="Everyday Clock" width="100%"/>
+  <p><em>Everyday Utilities — World clock</em></p>
+</div>
+
+---
+
+### 💰 Everyday Utilities — Finance
+
+<div align="center">
+  <img src="./docs/screenshots/everyday-finance.png" alt="Everyday Finance" width="100%"/>
+  <p><em>Everyday Utilities — Finance tracker</em></p>
+</div>
+
+---
+
+### 📝 Everyday Utilities — Notes
+
+<div align="center">
+  <img src="./docs/screenshots/everyday-notes.png" alt="Everyday Notes" width="100%"/>
+  <p><em>Everyday Utilities — Notes panel</em></p>
+</div>
 
 ---
 

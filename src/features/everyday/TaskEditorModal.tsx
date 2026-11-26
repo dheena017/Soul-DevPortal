@@ -97,7 +97,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
 
   const modalMarkup = (
     <div
-      className="fixed inset-0 z-[90] flex items-center justify-center p-2.5 sm:p-5 bg-black/80 backdrop-blur-md portal-backdrop-enter"
+      className="fixed inset-0 z-[90] flex items-center justify-center p-2.5 sm:p-5 bg-black/75 portal-backdrop-enter"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -106,10 +106,10 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
       <form
         onSubmit={handleSaveSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl max-h-[calc(100dvh-1.25rem)] sm:max-h-[min(90dvh,780px)] rounded-2xl bg-[#0e1017] border border-white/[0.12] shadow-[0_28px_90px_rgba(0,0,0,0.92)] flex flex-col overflow-hidden portal-header-sheen"
+        className="w-full max-w-2xl max-h-[calc(100dvh-1.25rem)] sm:max-h-[min(90dvh,780px)] rounded-2xl neu-modal bg-[#0e1017] border border-white/[0.1] flex flex-col overflow-hidden portal-header-sheen"
       >
         {/* Header */}
-        <div className="shrink-0 px-5 py-3.5 border-b border-white/[0.08] flex items-center justify-between gap-3 bg-[#12141c]">
+        <div className="shrink-0 px-5 py-3.5 border-b border-white/[0.07] flex items-center justify-between gap-3 bg-[#12141c]">
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
               Task Inspector
@@ -122,7 +122,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
             <button
               type="button"
               onClick={() => setDraft({ ...draft, starred: !draft.starred })}
-              className={`px-2.5 py-1 rounded-lg border text-xs cursor-pointer ${
+              className={`neu-btn px-2.5 py-1 rounded-lg border text-xs cursor-pointer ${
                 draft.starred
                   ? 'bg-amber-500/15 border-amber-400/40 text-amber-300'
                   : 'bg-[#16171e] border-white/[0.1] text-zinc-400 hover:text-white'
@@ -133,7 +133,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.1] text-xs font-mono text-zinc-300 hover:text-white cursor-pointer"
+              className="neu-btn px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.1] text-xs font-mono text-zinc-300 hover:text-white cursor-pointer"
             >
               Esc ✕
             </button>
@@ -326,7 +326,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
           </div>
 
           {/* Time Spent Tracker */}
-          <div className="p-3 rounded-xl bg-[#090a0e] border border-white/[0.08] flex flex-wrap items-center justify-between gap-2">
+          <div className="neu-inset p-3 rounded-xl bg-[#090a0e] border border-white/[0.08] flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2 font-mono">
               <span className="text-zinc-400">Time Logged:</span>
               <strong className="text-sky-300">{draft.spentMin || 0}m</strong>
@@ -337,7 +337,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
                   key={mins}
                   type="button"
                   onClick={() => setDraft({ ...draft, spentMin: (draft.spentMin || 0) + mins })}
-                  className="px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-sky-400/40 text-zinc-200 cursor-pointer"
+                  className="neu-btn px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-sky-400/40 text-zinc-200 cursor-pointer"
                 >
                   +{mins}m
                 </button>
@@ -346,7 +346,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setDraft({ ...draft, spentMin: 0 })}
-                  className="px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-zinc-400 hover:text-rose-300 cursor-pointer"
+                  className="neu-btn px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-zinc-400 hover:text-rose-300 cursor-pointer"
                 >
                   Reset
                 </button>
@@ -392,7 +392,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
               <button
                 type="button"
                 onClick={addTag}
-                className="h-7 px-2.5 rounded-lg bg-[#16171e] border border-white/[0.1] text-[11px] font-mono text-zinc-200 cursor-pointer"
+                className="neu-btn h-7 px-2.5 rounded-lg bg-[#16171e] border border-white/[0.1] text-[11px] font-mono text-zinc-200 cursor-pointer"
               >
                 + Tag
               </button>
@@ -414,7 +414,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
           </div>
 
           {/* Subtasks */}
-          <div className="p-3.5 rounded-xl bg-[#090a0e] border border-white/[0.08] flex flex-col gap-2.5">
+          <div className="neu-inset p-3.5 rounded-xl bg-[#090a0e] border border-white/[0.08] flex flex-col gap-2.5">
             <div className="flex items-center justify-between gap-2">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
                 Sub-Steps Checklist ({draft.subtasks.filter((s) => s.done).length}/{draft.subtasks.length})
@@ -489,7 +489,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
               <button
                 type="button"
                 onClick={addSubtask}
-                className="h-8 px-3 rounded-lg bg-sky-500/15 border border-sky-400/30 text-xs font-semibold text-sky-200 cursor-pointer"
+                className="neu-btn h-8 px-3 rounded-lg bg-sky-500/15 border border-sky-400/30 text-xs font-semibold text-sky-200 cursor-pointer"
               >
                 Add
               </button>
@@ -504,21 +504,21 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
                 onDuplicate(draft);
                 onClose();
               }}
-              className="px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-white/[0.2] text-zinc-200 cursor-pointer"
+              className="neu-btn px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-white/[0.2] text-zinc-200 cursor-pointer"
             >
               ⧉ Duplicate
             </button>
             <button
               type="button"
               onClick={() => onSaveTemplate(draft)}
-              className="px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-purple-400/35 text-purple-200 cursor-pointer"
+              className="neu-btn px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-purple-400/35 text-purple-200 cursor-pointer"
             >
               ⚡ Save as Template
             </button>
             <button
               type="button"
               onClick={() => onSendToNotes(draft)}
-              className="px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-sky-400/35 text-sky-200 cursor-pointer"
+              className="neu-btn px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-sky-400/35 text-sky-200 cursor-pointer"
             >
               📝 Copy to Notes
             </button>
@@ -528,7 +528,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
                 onSave({ ...draft, archived: !draft.archived });
                 onClose();
               }}
-              className="px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-amber-400/35 text-amber-200 cursor-pointer"
+              className="neu-btn px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-amber-400/35 text-amber-200 cursor-pointer"
             >
               {draft.archived ? '📤 Unarchive' : '📦 Archive'}
             </button>
@@ -543,7 +543,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
               onDelete(draft.id);
               onClose();
             }}
-            className="px-3.5 py-2 rounded-xl bg-rose-500/12 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold text-rose-300 cursor-pointer"
+            className="neu-btn px-3.5 py-2 rounded-xl bg-rose-500/12 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold text-rose-300 cursor-pointer"
           >
             Delete Task
           </button>
@@ -552,13 +552,13 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
+              className="neu-btn px-4 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-extrabold cursor-pointer"
+              className="neu-btn px-5 py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-extrabold cursor-pointer"
             >
               Save Changes
             </button>

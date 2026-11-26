@@ -124,7 +124,7 @@ function getMethodBadgeStyle(method: string) {
       };
     default:
       return {
-        badge: 'bg-zinc-800 text-zinc-300 border-zinc-700',
+        badge: 'bg-[#16161c] text-zinc-300 border-zinc-700',
         dot: 'bg-zinc-400',
         border: 'hover:border-zinc-500',
       };
@@ -342,7 +342,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
   }
 
   return (
-    <section className="w-full flex flex-col gap-5 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl animate-in fade-in duration-200 portal-stagger portal-header-sheen">
+    <section className="neu-card w-full flex flex-col gap-5 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] animate-in fade-in duration-200 portal-stagger portal-header-sheen">
       <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="REST API Pipeline Visual" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
       {/* ── Top Header Bar ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
@@ -390,7 +390,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
               href={`${beUrl}/docs`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1d1d26] border border-white/15 text-emerald-300 hover:text-emerald-200 hover:border-emerald-400/40 hover:bg-[#22222e] transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold neu-btn bg-[#1d1d26] border border-white/15 text-emerald-300 hover:text-emerald-200 hover:border-emerald-400/40 hover:bg-[#16161c] transition-all"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>Swagger UI</span>
@@ -412,7 +412,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
       />
 
       {/* ── Search & Filter Controls ── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3 rounded-xl bg-[#14141a] border border-white/[0.06]">
+      <div className="neu-tile flex flex-col md:flex-row md:items-center justify-between gap-3 p-3 rounded-xl bg-[#14141a] border border-white/[0.06]">
         {/* Method Chips */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
           {(['ALL', 'GET', 'POST', 'PUT', 'DELETE'] as const).map((m) => {
@@ -420,11 +420,11 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
             const isSelected = methodFilter === m;
             let badgeColor = 'text-zinc-400 hover:text-zinc-200 bg-[#191922] border-white/[0.08]';
             if (isSelected) {
-              if (m === 'GET') badgeColor = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold shadow-sm';
-              else if (m === 'POST') badgeColor = 'bg-blue-500/20 text-blue-300 border-blue-500/40 font-bold shadow-sm';
-              else if (m === 'PUT') badgeColor = 'bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold shadow-sm';
-              else if (m === 'DELETE') badgeColor = 'bg-rose-500/20 text-rose-300 border-rose-500/40 font-bold shadow-sm';
-              else badgeColor = 'bg-white/15 text-white border-white/30 font-bold shadow-sm';
+              if (m === 'GET') badgeColor = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold';
+              else if (m === 'POST') badgeColor = 'bg-blue-500/20 text-blue-300 border-blue-500/40 font-bold';
+              else if (m === 'PUT') badgeColor = 'bg-amber-500/20 text-amber-300 border-amber-500/40 font-bold';
+              else if (m === 'DELETE') badgeColor = 'bg-rose-500/20 text-rose-300 border-rose-500/40 font-bold';
+              else badgeColor = 'bg-white/15 text-white border-white/30 font-bold';
             }
 
             return (
@@ -432,7 +432,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
                 key={m}
                 type="button"
                 onClick={() => setMethodFilter(m)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono border transition-all shrink-0 ${badgeColor}`}
+                className={`neu-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono border transition-all shrink-0 ${badgeColor}`}
               >
                 <span>{m}</span>
                 <span className="text-[10px] opacity-75 font-sans font-semibold">({count})</span>
@@ -475,9 +475,9 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
           <button
             type="button"
             onClick={() => setActiveGroupFilter('ALL')}
-            className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold transition-all shrink-0 ${
+            className={`neu-btn px-2.5 py-0.5 rounded-full text-[11px] font-semibold transition-all shrink-0 ${
               activeGroupFilter === 'ALL'
-                ? 'bg-white text-zinc-950 font-bold shadow-sm'
+                ? 'bg-white text-zinc-950 font-bold'
                 : 'bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/20'
             }`}
           >
@@ -488,9 +488,9 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
               key={grp}
               type="button"
               onClick={() => setActiveGroupFilter(grp)}
-              className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold transition-all shrink-0 ${
+              className={`neu-btn px-2.5 py-0.5 rounded-full text-[11px] font-semibold transition-all shrink-0 ${
                 activeGroupFilter === grp
-                  ? 'bg-emerald-400 text-zinc-950 font-bold shadow-sm'
+                  ? 'bg-emerald-400 text-zinc-950 font-bold'
                   : 'bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/20'
               }`}
             >
@@ -514,7 +514,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
             return (
               <div
                 key={groupTitle}
-                className="flex flex-col rounded-2xl bg-[#121217]/95 border border-white/[0.08] hover:border-white/[0.16] overflow-hidden shadow-lg transition-all"
+                className="neu-card flex flex-col rounded-2xl bg-[#121217]/95 border border-white/[0.08] hover:border-white/[0.16] overflow-hidden transition-all"
               >
                 {/* Group Header Banner */}
                 <button
@@ -585,13 +585,13 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
                       return (
                         <div
                           key={route.id}
-                          className={`flex flex-col p-3.5 rounded-xl hover:bg-[#181821] gap-2 border border-transparent portal-row-hover ${style.border}`}
+                          className={`neu-tile flex flex-col p-3.5 rounded-xl hover:bg-[#181821] gap-2 border border-transparent portal-row-hover ${style.border}`}
                         >
                           <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
                             {/* Route Path & Metadata */}
                             <div className="flex items-center gap-3 min-w-0 flex-1">
                               {/* Method Badge */}
-                              <span className={`w-20 justify-center px-2.5 py-1 rounded-md text-[11px] font-mono font-bold uppercase tracking-wider border shrink-0 flex items-center gap-1.5 shadow-sm ${style.badge}`}>
+                              <span className={`w-20 justify-center px-2.5 py-1 rounded-md text-[11px] font-mono font-bold uppercase tracking-wider border shrink-0 flex items-center gap-1.5 ${style.badge}`}>
                                 <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
                                 <span>{route.method}</span>
                               </span>
@@ -625,9 +625,9 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
                                     }
                                   }
                                 }}
-                                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
+                                className={`neu-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
                                   isTesting
-                                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-sm'
+                                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
                                     : 'bg-[#171720] border-white/[0.1] text-zinc-200 hover:text-white hover:border-emerald-400/40 hover:bg-emerald-500/10'
                                 }`}
                                 title="Open interactive test runner"
@@ -673,7 +673,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
 
                           {/* ── Interactive Test Drawer ── */}
                           {isTesting && (
-                            <div className="mt-2 p-4 rounded-xl bg-[#0c0c10] border border-emerald-500/30 flex flex-col gap-3 portal-drawer-enter">
+                            <div className="neu-inset mt-2 p-4 rounded-xl bg-[#0c0c10] border border-emerald-500/30 flex flex-col gap-3 portal-drawer-enter">
                               <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-white/[0.08]">
                                 <div className="flex items-center gap-2 min-w-0">
                                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded shrink-0">
@@ -687,7 +687,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
                                   type="button"
                                   disabled={isSending}
                                   onClick={() => handleExecuteLiveTest(route)}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 transition-all shadow-md disabled:opacity-50 cursor-pointer shrink-0"
+                                  className="neu-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-zinc-950 transition-all disabled:opacity-50 cursor-pointer shrink-0"
                                 >
                                   {isSending ? (
                                     <>

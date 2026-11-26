@@ -144,7 +144,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
           <div className="absolute -inset-8 rounded-full border border-indigo-500/15 animate-ping opacity-25" style={{ animationDuration: '3s' }} />
 
           {/* Core Pedestal */}
-          <div className="w-20 h-20 rounded-2xl bg-[#111116] border border-white/15 flex items-center justify-center shadow-2xl shadow-sky-500/20 backdrop-blur-xl relative overflow-hidden">
+          <div className="w-20 h-20 rounded-2xl neu-card bg-[#121216] border border-white/[0.09] flex items-center justify-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-sky-500/15 via-transparent to-indigo-500/20" />
             <SoulLogoIcon size={44} className="relative z-10 drop-shadow-[0_0_12px_rgba(56,189,248,0.6)]" />
           </div>
@@ -156,7 +156,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
             <h1 className="text-xl md:text-2xl font-black tracking-tight bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
               Soul DevPortal
             </h1>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/15 border border-sky-400/30 text-sky-300">
+            <span className="neu-tile px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/15 border border-sky-400/30 text-sky-300">
               v0.0.1
             </span>
           </div>
@@ -176,7 +176,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
           </div>
 
           {/* Progress Bar Container */}
-          <div className="w-full h-2 rounded-full bg-[#16161c] border border-white/[0.08] overflow-hidden p-0.5 shadow-inner">
+          <div className="w-full h-2.5 rounded-full neu-inset bg-[#16161c] border border-white/[0.06] overflow-hidden p-0.5">
             <div
               className="h-full rounded-full bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-400 transition-all duration-75 ease-out shadow-[0_0_10px_rgba(56,189,248,0.8)]"
               style={{ width: `${progress}%` }}
@@ -189,7 +189,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
         </div>
 
         {/* ── Subsystem Verification Checklist ── */}
-        <div className="w-full p-3.5 rounded-xl bg-[#111116]/80 border border-white/[0.06] backdrop-blur-md flex flex-col gap-2">
+        <div className="w-full p-3.5 rounded-2xl neu-card bg-[#121216] border border-white/[0.07] flex flex-col gap-2">
           {BOOT_STEPS.slice(0, 4).map((step) => {
             const isDone = progress >= step.threshold;
             const isCurrent = progress < step.threshold && progress >= (BOOT_STEPS[BOOT_STEPS.indexOf(step) - 1]?.threshold || 0);
@@ -222,7 +222,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
           <button
             type="button"
             onClick={handleSkip}
-            className="text-zinc-400 hover:text-white transition-colors underline cursor-pointer"
+            className="neu-btn px-2.5 py-1 rounded-lg bg-[#121216] border border-white/[0.08] text-zinc-400 hover:text-white transition-colors cursor-pointer"
             title="Skip loading screen (Press ESC)"
           >
             Skip (ESC) →

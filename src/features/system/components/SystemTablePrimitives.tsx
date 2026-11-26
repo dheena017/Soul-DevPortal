@@ -11,8 +11,8 @@ export function ExpandToggleCell({ isOpen, tone = 'sky' }: { isOpen: boolean; to
   };
   return (
     <span
-      className={`w-6 h-6 inline-flex items-center justify-center rounded-md border text-xs font-mono font-bold shrink-0 transition-all duration-200 ${
-        isOpen ? `${openMap[tone]} scale-105 shadow-sm` : 'bg-[#181820] border-white/[0.1] text-zinc-300 hover:border-white/25'
+      className={`neu-btn w-6 h-6 inline-flex items-center justify-center rounded-md border text-xs font-mono font-bold shrink-0 transition-all duration-200 ${
+        isOpen ? `${openMap[tone]} scale-105` : 'bg-[#181820] border-white/[0.1] text-zinc-300 hover:border-white/25'
       }`}
     >
       {isOpen ? '−' : '+'}
@@ -60,7 +60,7 @@ export function FilterPillBar({
               key={f.id}
               type="button"
               onClick={() => onSelect(f.id)}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.97] ${
+              className={`neu-btn px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.97] ${
                 isActive
                   ? f.danger
                     ? 'bg-rose-500/15 border-rose-500/40 text-rose-200 font-bold'
@@ -111,7 +111,7 @@ export function TableLoadAllFooter({
       <button
         type="button"
         onClick={onToggle}
-        className={`px-3 py-1 rounded-lg bg-[#181820] hover:bg-white/[0.08] border border-white/[0.1] font-mono cursor-pointer ${textTone}`}
+        className={`neu-btn px-3 py-1 rounded-lg bg-[#181820] hover:bg-white/[0.08] border border-white/[0.1] font-mono cursor-pointer ${textTone}`}
       >
         {showAll ? 'Show Compact 120' : `Load All ${totalCount} ${noun}`}
       </button>

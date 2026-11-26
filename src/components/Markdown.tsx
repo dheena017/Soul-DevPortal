@@ -55,7 +55,7 @@ function LinkedBadge({
           src={imgSrc}
           alt={alt || 'Badge'}
           loading="lazy"
-          className="h-6 w-auto rounded-[5px] border border-white/[0.08] shadow-sm"
+          className="h-6 w-auto rounded-[5px] neu-btn border border-white/[0.08]"
           onError={() => setImgFailed(true)}
         />
       ) : (
@@ -101,7 +101,7 @@ function MarkdownImage({
         alt={alt || 'Preview'}
         loading="lazy"
         style={maxWidthStyle}
-        className="w-auto max-w-full max-h-96 rounded-xl border border-white/[0.08] shadow-md object-contain"
+        className="w-auto max-w-full max-h-96 rounded-xl neu-card border border-white/[0.08] object-contain"
         onError={() => setFailed(true)}
       />
     </span>
@@ -264,7 +264,7 @@ function CodeBlock({ code, language = 'text' }: CodeBlockProps) {
   };
 
   return (
-    <div className={`my-4 w-full rounded-2xl border ${isMermaid ? 'border-purple-500/30 bg-[#0d0914]' : 'border-white/[0.08] bg-[#09090c]'} overflow-hidden shadow-md`}>
+    <div className={`my-4 w-full rounded-2xl neu-inset border ${isMermaid ? 'border-purple-500/30 bg-[#0d0914]' : 'border-white/[0.07] bg-[#09090c]'} overflow-hidden`}>
       <div className="flex items-center justify-between px-4 py-2 border-b border-white/[0.06] bg-[#121217]">
         <div className="flex items-center gap-2">
           {isMermaid && <span className="text-xs">📊</span>}
@@ -654,7 +654,7 @@ export default React.memo(function Markdown({ blocks = [], skipFirstHeading = fa
             return (
               <div
                 key={index}
-                className="my-2.5 p-3.5 rounded-xl bg-sky-500/[0.06] border border-sky-500/25 text-xs text-sky-200 flex items-start gap-2.5 shadow-sm"
+                className="my-2.5 p-3.5 rounded-xl neu-tile bg-sky-500/[0.06] border border-sky-500/25 text-xs text-sky-200 flex items-start gap-2.5"
               >
                 <span className="text-base shrink-0">🎯</span>
                 <div className="flex flex-col gap-0.5">
@@ -674,7 +674,7 @@ export default React.memo(function Markdown({ blocks = [], skipFirstHeading = fa
             return (
               <div
                 key={index}
-                className="my-2.5 p-3.5 rounded-xl bg-indigo-500/[0.06] border border-indigo-500/25 text-xs text-indigo-200 flex items-start gap-2.5 shadow-sm"
+                className="my-2.5 p-3.5 rounded-xl neu-tile bg-indigo-500/[0.06] border border-indigo-500/25 text-xs text-indigo-200 flex items-start gap-2.5"
               >
                 <span className="text-base shrink-0">🌐</span>
                 <div className="flex flex-col gap-0.5">
@@ -694,7 +694,7 @@ export default React.memo(function Markdown({ blocks = [], skipFirstHeading = fa
             return (
               <div
                 key={index}
-                className="my-2.5 p-3.5 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/25 text-xs text-emerald-200 flex items-start gap-2.5 shadow-sm"
+                className="my-2.5 p-3.5 rounded-xl neu-tile bg-emerald-500/[0.06] border border-emerald-500/25 text-xs text-emerald-200 flex items-start gap-2.5"
               >
                 <span className="text-base shrink-0">🛡️</span>
                 <div className="flex flex-col gap-0.5">
@@ -714,7 +714,7 @@ export default React.memo(function Markdown({ blocks = [], skipFirstHeading = fa
             return (
               <div
                 key={index}
-                className="my-2.5 p-3.5 rounded-xl bg-amber-500/[0.06] border border-amber-500/30 text-xs text-amber-200 flex items-start gap-2.5 shadow-sm"
+                className="my-2.5 p-3.5 rounded-xl neu-tile bg-amber-500/[0.06] border border-amber-500/30 text-xs text-amber-200 flex items-start gap-2.5"
               >
                 <span className="text-base shrink-0">⚠️</span>
                 <div className="flex flex-col gap-0.5">
@@ -748,7 +748,7 @@ export default React.memo(function Markdown({ blocks = [], skipFirstHeading = fa
           return (
             <div
               key={index}
-              className="my-5 w-full overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#09090c] shadow-md"
+              className="my-5 w-full overflow-x-auto rounded-2xl neu-inset border border-white/[0.07] bg-[#09090c]"
             >
               <table className="w-full text-left border-collapse text-xs">
                 <thead>

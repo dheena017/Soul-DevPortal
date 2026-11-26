@@ -3,9 +3,13 @@ import { usePersistedTab } from '../../utils/usePersistedTab';
 import TabLoadingState, { LoadingStepItem } from '../../components/TabLoadingState';
 import { fetchSystemLive, fetchSystemOverview, refreshSystemSpecs, subscribeSystemStream } from '../../services/api';
 import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../types';
-import { SystemSubTabId } from './systemConstants';
+import { formatBytes, formatNetRate, formatUptime, SystemSubTabId } from './systemConstants';
 import SystemHeaderCard from './components/SystemHeaderCard';
 import PerformanceOverviewTab from './components/PerformanceOverviewTab';
+import RadialGauge from './components/RadialGauge';
+
+let sessionSpecsCache: SystemSpecs | null = null;
+let sessionLiveCache: SystemLiveSnapshot | null = null;
 
 const HardwareSpecsTab = lazy(() => import('./components/HardwareSpecsTab'));
 const PeripheralsDisplaysTab = lazy(() => import('./components/PeripheralsDisplaysTab'));
@@ -27,10 +31,11 @@ const HARDWARE_PROBE_STEPS: LoadingStepItem[] = [
 ];
 
 export default function SystemView(_props: SystemViewProps) {
-  const [specs, setSpecs] = useState<SystemSpecs | null>(null);
-  const [live, setLive] = useState<SystemLiveSnapshot | null>(null);
+  const [specs, setSpecs] = useState<SystemSpecs | null>(() => sessionSpecsCache);
+  const [live, setLive] = useState<SystemLiveSnapshot | null>(() => sessionLiveCache);
+  const [previewLive, setPreviewLive] = useState<SystemLiveSnapshot | null>(() => sessionLiveCache);
   const [activeTab, setActiveTab] = usePersistedTab<SystemSubTabId>('soul-tab-system', 'performance');
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(() => !sessionSpecsCache || !sessionLiveCache);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isTabHidden, setIsTabHidden] = useState<boolean>(() =>
     typeof document !== 'undefined' ? document.hidden : false
@@ -42,14 +47,24 @@ export default function SystemView(_props: SystemViewProps) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const loadInitial = useCallback(async (attempt = 0) => {
-    if (attempt === 0) {
+    if (attempt === 0 && (!sessionSpecsCache || !sessionLiveCache)) {
       setIsLoading(true);
       setErrorMsg(null);
+      // Grab ultra-fast live telemetry (< 15ms) while full WMI hardware probe runs
+      void fetchSystemLive(60).then((fastSnap) => {
+        if (fastSnap) {
+          sessionLiveCache = fastSnap;
+          setPreviewLive(fastSnap);
+        }
+      });
     }
     const data = await fetchSystemOverview(60);
     if (data && data.specs && data.live) {
+      sessionSpecsCache = data.specs;
+      sessionLiveCache = data.live;
       setSpecs(data.specs);
       setLive(data.live);
+      setPreviewLive(data.live);
       setErrorMsg(null);
       setIsLoading(false);
       return;
@@ -95,6 +110,7 @@ export default function SystemView(_props: SystemViewProps) {
         pollIntervalMs,
         historyWindowSec,
         (nextLive) => {
+          sessionLiveCache = nextLive;
           setLive(nextLive);
         },
         () => {
@@ -107,6 +123,7 @@ export default function SystemView(_props: SystemViewProps) {
     const timer = window.setInterval(async () => {
       const nextLive = await fetchSystemLive(historyWindowSec);
       if (!cancelled && nextLive) {
+        sessionLiveCache = nextLive;
         setLive(nextLive);
       }
     }, pollIntervalMs);
@@ -121,22 +138,92 @@ export default function SystemView(_props: SystemViewProps) {
     setIsRescanning(true);
     const res = await refreshSystemSpecs();
     if (res?.success && res.specs) {
+      sessionSpecsCache = res.specs;
       setSpecs(res.specs);
     }
     const nextLive = await fetchSystemLive(historyWindowSec);
-    if (nextLive) setLive(nextLive);
+    if (nextLive) {
+      sessionLiveCache = nextLive;
+      setLive(nextLive);
+    }
     setIsRescanning(false);
   };
 
   if (isLoading) {
+    const primaryVol = previewLive?.disk?.volumes?.[0];
+    const previewHint = previewLive
+      ? `Live Telemetry Connected · CPU ${Math.round(previewLive.cpu.totalPercent)}% · RAM ${Math.round(previewLive.memory.percent)}% · Uptime ${formatUptime(previewLive.uptimeSeconds)}`
+      : null;
+
     return (
-      <div className="w-full py-2">
+      <div className="w-full py-1 flex flex-col gap-5">
         <TabLoadingState
           title="Scanning Host Hardware & Telemetry"
-          subtitle="Computer Monitor • Live Hardware Engine"
+          subtitle="Computer Monitor · Live Hardware Engine"
           steps={HARDWARE_PROBE_STEPS}
           backdropSrc="/visuals/pillar-computer-silicon.jpg"
+          liveHint={previewHint}
+          onRetry={() => void loadInitial(0)}
         />
+
+        {/* Balanced Live Telemetry / Skeleton Preview below probe card */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          {previewLive ? (
+            <>
+              <RadialGauge
+                title="Processor (CPU)"
+                value={previewLive.cpu.totalPercent}
+                centerCaption="LIVE PREVIEW"
+                subtitle="Streaming fast CPU usage..."
+                detailLine={`Peak ${previewLive.peaks.cpuPeakPercent}% · Avg ${previewLive.peaks.cpuAvgPercent}%`}
+                accent="sky"
+              />
+              <RadialGauge
+                title="Memory (RAM)"
+                value={previewLive.memory.percent}
+                centerCaption="IN USE"
+                subtitle={`${formatBytes(previewLive.memory.usedBytes)} / ${formatBytes(previewLive.memory.totalBytes)}`}
+                detailLine="Waiting on DIMM hardware table..."
+                accent="purple"
+              />
+              <RadialGauge
+                title="Primary Volume"
+                value={primaryVol ? primaryVol.usedPercent : null}
+                centerCaption={primaryVol ? `DISK ${primaryVol.mountpoint.replace('\\', '')}` : 'STORAGE'}
+                statusText="Online"
+                subtitle={primaryVol ? `${formatBytes(primaryVol.freeBytes)} free` : 'Inspecting physical disks...'}
+                detailLine={`Disk ↓ ${previewLive.disk.readMBps.toFixed(1)} MB/s · ↑ ${previewLive.disk.writeMBps.toFixed(1)} MB/s`}
+                accent="emerald"
+              />
+              <RadialGauge
+                title="Host Link & Health"
+                value={previewLive.battery?.percent ?? Math.min(100, previewLive.socketCounts.established)}
+                centerText={previewLive.battery ? `${Math.round(previewLive.battery.percent)}%` : previewLive.healthPosture.label}
+                centerCaption={previewLive.battery ? 'BATTERY' : 'POSTURE'}
+                statusText={previewLive.healthPosture.label}
+                subtitle={`Net ↓ ${formatNetRate(previewLive.network.rxKBps)} · ↑ ${formatNetRate(previewLive.network.txKBps)}`}
+                detailLine={`Up ${formatUptime(previewLive.uptimeSeconds)}`}
+                accent="amber"
+              />
+            </>
+          ) : (
+            ['CPU Load', 'Memory Footprint', 'Storage Volumes', 'Network & Power'].map((label) => (
+              <div
+                key={label}
+                className="p-5 rounded-2xl system-kpi-card flex flex-col justify-between gap-4 min-h-[190px]"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-bold text-zinc-400">{label}</span>
+                  <span className="px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-[10px] font-mono text-zinc-500">
+                    Probing
+                  </span>
+                </div>
+                <div className="w-24 h-24 rounded-full border-4 border-white/[0.05] border-t-sky-400/35 mx-auto animate-pulse" />
+                <div className="h-3 w-3/4 mx-auto rounded bg-white/[0.05] animate-pulse" />
+              </div>
+            ))
+          )}
+        </div>
       </div>
     );
   }

@@ -421,14 +421,14 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Filter hardware specs, vendor codes, DIMMs, GPU drivers, peripherals..."
-            className="w-full pl-9 pr-24 py-2 rounded-xl bg-[#16161c] border border-white/[0.08] text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-sky-400/50"
+            className="neu-inset w-full pl-9 pr-24 py-2 rounded-xl bg-[#16161c] border border-white/[0.08] text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-sky-400/50"
           />
           {searchQuery && (
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => tableAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                className="px-2 py-0.5 rounded-md bg-sky-500/15 border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300 hover:bg-sky-500/25 cursor-pointer"
+                className="neu-btn px-2 py-0.5 rounded-md bg-sky-500/15 border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300 hover:bg-sky-500/25 cursor-pointer"
                 title="Scroll to matching specification rows below"
               >
                 {masterRows.length} matched ↓
@@ -437,7 +437,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                 type="button"
                 onClick={() => setSearchQuery('')}
                 aria-label="Clear filter"
-                className="w-5 h-5 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.08] text-xs font-bold cursor-pointer flex items-center justify-center"
+                className="neu-btn w-5 h-5 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.08] text-xs font-bold cursor-pointer flex items-center justify-center"
               >
                 ×
               </button>
@@ -449,7 +449,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
           <button
             type="button"
             onClick={() => setShowHardwareCodes((v) => !v)}
-            className={`px-3 py-1.5 rounded-xl border text-[11px] font-mono font-bold transition-colors cursor-pointer ${
+            className={`neu-btn px-3 py-1.5 rounded-xl border text-[11px] font-mono font-bold transition-colors cursor-pointer ${
               showHardwareCodes
                 ? 'bg-sky-500/15 border-sky-400/35 text-sky-300'
                 : 'bg-[#16161c] border-white/[0.08] text-zinc-400 hover:text-white'
@@ -461,7 +461,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
           <button
             type="button"
             onClick={() => setRevealSerials((v) => !v)}
-            className={`px-3 py-1.5 rounded-xl border text-[11px] font-mono font-bold transition-colors cursor-pointer ${
+            className={`neu-btn px-3 py-1.5 rounded-xl border text-[11px] font-mono font-bold transition-colors cursor-pointer ${
               revealSerials
                 ? 'bg-amber-500/15 border-amber-400/35 text-amber-300'
                 : 'bg-[#16161c] border-white/[0.08] text-zinc-300 hover:text-white'
@@ -475,7 +475,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
           <button
             type="button"
             onClick={handleExportJson}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs font-semibold text-zinc-200 hover:text-white hover:border-white/[0.22] transition-colors cursor-pointer"
+            className="neu-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs font-semibold text-zinc-200 hover:text-white hover:border-white/[0.22] transition-colors cursor-pointer"
           >
             <span>Export JSON</span>
           </button>
@@ -550,7 +550,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
           </div>
 
           {/* Framed Visual Cache Pyramid Tiers */}
-          <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col items-center gap-2">
+          <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col items-center gap-2">
             {[
               { label: 'L1 Instruction + Data Cache', hint: 'Fastest Private Core SRAM', kb: cpu.l1CacheKB, cls: 'from-sky-500/30 to-sky-400/20 border-sky-400/40 text-sky-200', minW: 54 },
               { label: 'L2 Core Cache', hint: 'Dedicated Per-Cluster Cache', kb: cpu.l2CacheKB, cls: 'from-indigo-500/30 to-blue-500/20 border-indigo-400/40 text-indigo-200', minW: 76 },
@@ -571,7 +571,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
           </div>
 
           <div className="grid grid-cols-3 gap-2 text-[11px] font-mono tabular-nums">
-            <div className="px-3 py-2 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col">
+            <div className="neu-tile px-3 py-2 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col">
               <div className="flex items-center justify-between gap-1">
                 <span className="text-[10px] text-zinc-400">Live Clock</span>
                 {boostPct !== 0 && (
@@ -582,14 +582,14 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
               </div>
               <strong className="text-sky-300">{formatClock(live.cpu.currentClockMHz || cpu.maxClockMHz)}</strong>
             </div>
-            <div className="px-3 py-2 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col">
+            <div className="neu-tile px-3 py-2 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col">
               <span className="text-[10px] text-zinc-400">Base / BCLK</span>
               <strong className="text-white">
                 {formatClock(cpu.maxClockMHz)}
                 {cpu.extClockMHz ? <span className="text-[10px] text-zinc-400 font-normal"> · {cpu.extClockMHz}MHz</span> : ''}
               </strong>
             </div>
-            <div className="px-3 py-2 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col">
+            <div className="neu-tile px-3 py-2 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col">
               <span className="text-[10px] text-zinc-400">Cores / VCore</span>
               <strong className="text-zinc-200">
                 {cpu.physicalCores}C/{cpu.logicalThreads}T
@@ -662,7 +662,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs">
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] font-mono text-zinc-400">BIOS / EC Firmware</span>
               <strong className="text-white font-mono">
                 {motherboard.biosVersion || 'UEFI'}
@@ -672,12 +672,12 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                 <span className="block text-[10px] font-mono text-zinc-500 mt-0.5">{motherboard.biosReleaseDate}</span>
               )}
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] font-mono text-zinc-400">Chassis &amp; SKU</span>
               <strong className="text-white truncate block">{host.chassisType}</strong>
               {host.sku && <span className="block text-[10px] font-mono text-zinc-500 mt-0.5">SKU {host.sku}</span>}
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex items-start justify-between gap-1.5">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex items-start justify-between gap-1.5">
               <div className="min-w-0">
                 <span className="block text-[10px] font-mono text-zinc-400">Service Tag</span>
                 <strong className="text-white font-mono truncate block">{maskSerialValue(host.serialNumber, revealSerials)}</strong>
@@ -691,24 +691,24 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
               </div>
               {host.serialNumber && <CopyButton text={host.serialNumber} variant="icon-only" className="shrink-0" title="Copy Service Tag" />}
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] font-mono text-zinc-400">Power Plan</span>
               <strong className="text-amber-300 truncate block">{host.powerPlan}</strong>
               <span className="block text-[10px] font-mono text-zinc-500 mt-0.5">{live.battery ? (live.battery.powerPlugged ? 'AC Connected' : 'On Battery') : 'AC Mains'}</span>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] font-mono text-zinc-400">Session Uptime</span>
               <strong className="text-sky-300 font-mono tabular-nums">{formatUptime(live.uptimeSeconds)}</strong>
               <span className="block text-[10px] font-mono text-zinc-500 mt-0.5 truncate">{host.hostname}</span>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] font-mono text-zinc-400">OS Build &amp; Install</span>
               <strong className="text-white font-mono">Build {host.osBuild}</strong>
               <span className="block text-[10px] font-mono text-zinc-500 mt-0.5">{host.osInstallDate || host.architecture}</span>
             </div>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-wrap items-center justify-between gap-2">
+          <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap items-center gap-2">
               {motherboard.tpm && (
                 <span className="px-2.5 py-1 rounded-lg border border-emerald-500/35 bg-emerald-500/15 text-[11px] font-mono font-bold text-emerald-300">
@@ -719,7 +719,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                 className={`px-2.5 py-1 rounded-lg border text-[11px] font-mono font-bold ${
                   host.secureBoot === 'Enabled'
                     ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300'
-                    : 'bg-zinc-800 border-white/[0.1] text-zinc-300'
+                    : 'bg-[#16161c] border-white/[0.1] text-zinc-300'
                 }`}
               >
                 Secure Boot: {host.secureBoot}
@@ -783,7 +783,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
         </div>
 
         {/* Live RAM Allocation Context Strip */}
-        <div className="px-3.5 py-2.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono tabular-nums">
+        <div className="neu-tile px-3.5 py-2.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono tabular-nums">
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
             <span className="text-zinc-400">Live OS Usage:</span>
             <strong className="text-purple-300">
@@ -812,7 +812,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
           {memory.modules.map((mod) => (
             <div
               key={mod.slotIndex}
-              className="relative overflow-hidden p-4 rounded-xl bg-[#16161c] border border-purple-500/25 hover:border-purple-400/45 flex flex-col justify-between gap-3 transition-colors"
+              className="neu-tile relative overflow-hidden p-4 rounded-xl bg-[#16161c] border border-purple-500/25 hover:border-purple-400/45 flex flex-col justify-between gap-3 transition-colors"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex flex-col gap-0.5 min-w-0">
@@ -856,7 +856,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
           {Array.from({ length: emptySlots }).map((_, idx) => (
             <div
               key={`empty-${idx}`}
-              className="p-4 rounded-xl bg-[#0e0e12] border border-dashed border-white/[0.12] flex flex-col items-center justify-center text-center gap-1 min-h-[112px]"
+              className="neu-inset p-4 rounded-xl bg-[#0e0e12] border border-dashed border-white/[0.12] flex flex-col items-center justify-center text-center gap-1 min-h-[112px]"
             >
               <span className="text-xs font-mono font-bold text-zinc-500">Memory Slot {memory.modules.length + idx + 1}</span>
               <span className="text-[11px] text-zinc-500">Empty Expansion Slot</span>
@@ -912,9 +912,9 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
               </div>
 
               {primaryDisplay ? (
-                <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col items-center justify-center gap-2 text-center flex-1">
+                <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col items-center justify-center gap-2 text-center flex-1">
                   <div className="flex flex-col items-center">
-                    <div className="w-32 aspect-video rounded-lg border-2 border-sky-400/55 bg-gradient-to-br from-sky-500/18 via-[#0b0b0f] to-purple-500/18 flex flex-col items-center justify-center gap-0.5 shadow-inner sys-screen-bezel">
+                    <div className="neu-inset w-32 aspect-video rounded-lg border-2 border-sky-400/55 bg-gradient-to-br from-sky-500/18 via-[#0b0b0f] to-purple-500/18 flex flex-col items-center justify-center gap-0.5 sys-screen-bezel">
                       <span className="text-[11px] font-mono font-extrabold text-sky-200">
                         {primaryDisplay.aspectRatio || 'Display'}
                       </span>
@@ -946,7 +946,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                   </div>
                 </div>
               ) : (
-                <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] text-xs text-zinc-400 flex-1 flex items-center justify-center">
+                <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] text-xs text-zinc-400 flex-1 flex items-center justify-center">
                   No attached monitor geometry reported
                 </div>
               )}
@@ -996,20 +996,20 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                   <button
                     type="button"
                     onClick={() => onSelectTab('storage-network')}
-                    className="px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/35 text-[10px] font-mono font-bold text-emerald-300 hover:bg-emerald-500/25 transition-colors cursor-pointer shrink-0"
+                    className="neu-btn px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/35 text-[10px] font-mono font-bold text-emerald-300 hover:bg-emerald-500/25 transition-colors cursor-pointer shrink-0"
                   >
                     Drives →
                   </button>
                 ) : (
                   primaryDisk && (
-                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/35 text-[10px] font-mono font-bold text-emerald-300 shrink-0">
+                    <span className="neu-tile px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/35 text-[10px] font-mono font-bold text-emerald-300 shrink-0">
                       {primaryDisk.healthStatus}
                     </span>
                   )
                 )}
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col justify-center gap-2.5 flex-1">
+              <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col justify-center gap-2.5 flex-1">
                 {primaryVol ? (
                   <>
                     <div className="flex items-center justify-between gap-2 text-xs font-mono tabular-nums">
@@ -1021,7 +1021,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                         {primaryDisk?.healthStatus || 'Healthy'} · {primaryVol.usedPercent}%
                       </span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-[#0a0a0e] border border-white/[0.06] overflow-hidden">
+                    <div className="neu-inset w-full h-2 rounded-full bg-[#0a0a0e] border border-white/[0.06] overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all duration-300 ${
                           primaryVol.usedPercent >= 90 ? 'bg-rose-500' : primaryVol.usedPercent >= 75 ? 'bg-amber-400' : 'soul-gradient-bar'
@@ -1053,11 +1053,11 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
 
               {primaryDisk && (
                 <div className="flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-200">
-                  <span className="px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{primaryDisk.busType}</span>
-                  <span className="px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{primaryDisk.mediaType}</span>
-                  <span className="px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{primaryDisk.partitionStyle}</span>
-                  <span className="px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{primaryDisk.sectorAlignment}</span>
-                  <span className="px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{formatBytes(primaryDisk.sizeBytes, 1)}</span>
+                  <span className="neu-tile px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{primaryDisk.busType}</span>
+                  <span className="neu-tile px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{primaryDisk.mediaType}</span>
+                  <span className="neu-tile px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{primaryDisk.partitionStyle}</span>
+                  <span className="neu-tile px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{primaryDisk.sectorAlignment}</span>
+                  <span className="neu-tile px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08]">{formatBytes(primaryDisk.sizeBytes, 1)}</span>
                 </div>
               )}
             </section>
@@ -1107,7 +1107,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                 )}
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col justify-center gap-2.5 flex-1">
+              <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col justify-center gap-2.5 flex-1">
                 {battery ? (
                   <div className="flex flex-col gap-1.5 text-[11px] font-mono tabular-nums">
                     <div className="flex items-center justify-between gap-2">
@@ -1121,7 +1121,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                       </strong>
                     </div>
                     {live.battery && (
-                      <div className="w-full h-1.5 rounded-full bg-[#0a0a0e] border border-white/[0.06] overflow-hidden">
+                      <div className="neu-inset w-full h-1.5 rounded-full bg-[#0a0a0e] border border-white/[0.06] overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-300 ${
                             live.battery.percent <= 20 ? 'bg-rose-500' : 'bg-emerald-400'
@@ -1141,16 +1141,16 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                 )}
 
                 <div className="pt-2 border-t border-white/[0.06] flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-300">
-                  <span className="px-2 py-0.5 rounded bg-[#0a0a0e] border border-white/[0.08]">
+                  <span className="neu-inset px-2 py-0.5 rounded bg-[#0a0a0e] border border-white/[0.08]">
                     {peripherals.audio.length} Audio
                   </span>
-                  <span className="px-2 py-0.5 rounded bg-[#0a0a0e] border border-white/[0.08]">
+                  <span className="neu-inset px-2 py-0.5 rounded bg-[#0a0a0e] border border-white/[0.08]">
                     {peripherals.usbDevices?.length || peripherals.usbControllers.length} USB
                   </span>
-                  <span className="px-2 py-0.5 rounded bg-[#0a0a0e] border border-white/[0.08]">
+                  <span className="neu-inset px-2 py-0.5 rounded bg-[#0a0a0e] border border-white/[0.08]">
                     {peripherals.cameras.length} Camera
                   </span>
-                  <span className="px-2 py-0.5 rounded bg-[#0a0a0e] border border-white/[0.08]">
+                  <span className="neu-inset px-2 py-0.5 rounded bg-[#0a0a0e] border border-white/[0.08]">
                     {peripherals.bluetooth.length} Bluetooth
                   </span>
                 </div>
@@ -1160,7 +1160,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                 {runtimes.map((rt) => (
                   <span
                     key={rt.name}
-                    className="px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/35 text-[10px] font-mono font-bold text-emerald-300"
+                    className="neu-tile px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/35 text-[10px] font-mono font-bold text-emerald-300"
                     title={rt.path}
                   >
                     {rt.name} {rt.version}
@@ -1194,14 +1194,14 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="px-2.5 py-0.5 rounded-md bg-sky-500/15 border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
+                <span className="neu-tile px-2.5 py-0.5 rounded-md bg-sky-500/15 border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
                   {pcieDevices.length} PCIe Functions
                 </span>
                 {pcieDevices.length > 12 && (
                   <button
                     type="button"
                     onClick={() => setShowAllPcie((v) => !v)}
-                    className="px-2 py-0.5 rounded-md bg-[#16161c] border border-white/[0.1] text-[10px] font-mono font-bold text-zinc-300 hover:text-white cursor-pointer"
+                    className="neu-btn px-2 py-0.5 rounded-md bg-[#16161c] border border-white/[0.1] text-[10px] font-mono font-bold text-zinc-300 hover:text-white cursor-pointer"
                   >
                     {showAllPcie ? 'Show Compact' : `Show All (${pcieDevices.length})`}
                   </button>
@@ -1231,7 +1231,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
               {(showAllPcie ? pcieDevices : pcieDevices.slice(0, 12)).map((dev, idx) => (
                 <div
                   key={`${dev.pnpId}-${idx}`}
-                  className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] hover:border-white/[0.14] flex flex-col justify-between gap-2 transition-colors min-w-0"
+                  className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] hover:border-white/[0.14] flex flex-col justify-between gap-2 transition-colors min-w-0"
                 >
                   <span className="text-xs font-semibold text-white leading-snug line-clamp-2" title={dev.name}>
                     {dev.name}
@@ -1285,7 +1285,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
 
             {/* Expansion Slots 2-Column Compact Grid */}
             {expansionSlots.length > 0 && (
-              <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2">
+              <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">PCIe Expansion &amp; M.2 Slots</span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[10px] font-mono">
                   {expansionSlots.map((sl, idx) => (
@@ -1306,7 +1306,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
 
             {/* GPT Disk Partitions */}
             {diskPartitions.length > 0 && (
-              <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2">
+              <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Low-Level GPT Partitions</span>
                 <div className="flex flex-col gap-1.5 text-[11px] font-mono tabular-nums">
                   {diskPartitions.map((pt) => {
@@ -1333,7 +1333,7 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
 
             {/* Physical Network Silicon */}
             {physicalNetworkHw.length > 0 && (
-              <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2">
+              <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Physical Network Silicon</span>
                 <div className="flex flex-col gap-2">
                   {physicalNetworkHw.map((nic, idx) => (

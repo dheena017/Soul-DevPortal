@@ -20,7 +20,7 @@ export default function DocSnippetsTab({ codeBlocks, isLoading = false }: DocSni
     );
   }
   return (
-    <section className="w-full p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6 portal-stagger portal-header-sheen">
+    <section className="w-full p-6 md:p-8 rounded-2xl neu-card bg-[#111115] border border-white/[0.08] flex flex-col gap-6 portal-stagger portal-header-sheen">
       <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Code Snippets Synthesis Visual" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
         <div className="flex flex-col gap-1">
@@ -42,7 +42,7 @@ export default function DocSnippetsTab({ codeBlocks, isLoading = false }: DocSni
           <Markdown blocks={codeBlocks} />
         </div>
       ) : (
-        <div className="p-12 rounded-xl bg-white/[0.02] border border-white/[0.06] text-center">
+        <div className="neu-inset p-12 rounded-xl bg-white/[0.02] border border-white/[0.06] text-center">
           <p className="text-xs text-zinc-400 font-mono">
             No dedicated code snippets found in this documentation specification.
           </p>

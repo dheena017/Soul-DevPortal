@@ -40,7 +40,7 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
   return (
     <div className="flex flex-col gap-5 sys-stagger">
       {/* Live Bottleneck & System Posture Diagnostics */}
-      <section className={`p-5 rounded-2xl border flex flex-col gap-4 ${postureStyle}`}>
+      <section className={`neu-card p-5 rounded-2xl border flex flex-col gap-4 ${postureStyle}`}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-col gap-1">
             <span className="text-[10px] font-mono uppercase tracking-wider opacity-80">Live Diagnostic Posture</span>
@@ -183,7 +183,7 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
                     )}
                   </div>
                   {batStatic?.healthPercent !== null && batStatic?.healthPercent !== undefined && (
-                    <div className="w-full h-2 rounded-full bg-[#0a0a0e] border border-white/[0.06] overflow-hidden">
+                    <div className="neu-inset w-full h-2 rounded-full bg-[#0a0a0e] border border-white/[0.06] overflow-hidden">
                       <div
                         className={`h-full rounded-full sys-bar-shimmer transition-all duration-500 ${
                           batStatic.healthPercent >= 80 ? 'bg-emerald-400' : batStatic.healthPercent >= 60 ? 'bg-amber-400' : 'bg-rose-500'
@@ -196,38 +196,38 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
               </div>
 
               <div className="grid grid-cols-2 gap-2.5 text-xs font-mono tabular-nums mt-auto">
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Charge Cycles</span>
                   <strong className="text-white">
                     {batStatic?.cycleCount !== null && batStatic?.cycleCount !== undefined ? `${batStatic.cycleCount} Cycles` : 'N/A'}
                   </strong>
                 </div>
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Design Voltage</span>
                   <strong className="text-sky-300">{batStatic?.designVoltageV ? `${batStatic.designVoltageV} V` : 'Nominal'}</strong>
                 </div>
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Manufactured</span>
                   <strong className="text-white">{batStatic?.manufactureDate || 'OEM Sealed'}</strong>
                 </div>
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Battery Chemistry</span>
                   <strong className="text-zinc-200 truncate block">{batStatic?.chemistry || 'Li-Ion Pack'}</strong>
                 </div>
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">BIOS / EC Control</span>
                   <strong className="text-amber-300 truncate block">
                     {motherboard.biosVersion}{motherboard.ecVersion ? ` · EC ${motherboard.ecVersion}` : ''}
                   </strong>
                 </div>
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Charging Mode</span>
                   <strong className="text-emerald-300 truncate block">{batLive.powerPlugged ? 'AC Connected' : 'Discharging'}</strong>
                 </div>
               </div>
             </>
           ) : (
-            <div className="p-4 rounded-xl bg-[#16161c] border border-white/[0.06] text-xs text-zinc-300">
+            <div className="neu-tile p-4 rounded-xl bg-[#16161c] border border-white/[0.06] text-xs text-zinc-300">
               No internal battery detected. Running on continuous AC power under plan <strong className="text-amber-300">{host.powerPlan}</strong>.
             </div>
           )}
@@ -252,7 +252,7 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
             <span className="text-[11px] font-mono text-sky-300">CPU vs Memory Load</span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+          <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
             <TelemetrySparkline
               data={live.history}
               fixedMax={100}
@@ -265,19 +265,19 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
           </div>
 
           <div className="grid grid-cols-2 xl:grid-cols-4 gap-2.5 text-xs">
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] font-mono text-zinc-400">UEFI Secure Boot</span>
               <strong className={host.secureBoot === 'Enabled' ? 'text-emerald-300' : 'text-zinc-200'}>
                 {host.secureBoot}
               </strong>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] font-mono text-zinc-400">TPM 2.0 Silicon</span>
               <strong className={motherboard.tpm ? 'text-emerald-300' : 'text-zinc-400'}>
                 {motherboard.tpm ? `Active (${motherboard.tpm.status})` : 'Not Reported'}
               </strong>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] font-mono text-zinc-400">Defender Engine</span>
               <strong className={host.defenderRealTime ? 'text-emerald-300' : 'text-amber-300'}>
                 {host.defenderRealTime === true ? 'Active' : host.defenderRealTime === false ? 'Off' : 'Not Reported'}
@@ -288,7 +288,7 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
                 </span>
               )}
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] font-mono text-zinc-400">HW Virtualization</span>
               <strong className={specs.cpu.virtualizationEnabled ? 'text-emerald-300' : 'text-amber-300'}>
                 {specs.cpu.hypervisorPresent
@@ -301,19 +301,19 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-mono tabular-nums">
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">CPU Peak / Avg</span>
               <strong className="text-sky-300">{live.peaks.cpuPeakPercent}% / {live.peaks.cpuAvgPercent}%</strong>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">RAM 60s Peak</span>
               <strong className="text-purple-300">{live.peaks.ramPeakPercent}%</strong>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">Disk Peak R / W</span>
               <strong className="text-emerald-300">{live.peaks.diskReadPeakMBps} / {live.peaks.diskWritePeakMBps} MB/s</strong>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">Session Disk Read</span>
               <strong className="text-amber-300">{formatBytes(live.disk.totalReadBytes, 1)}</strong>
             </div>
@@ -322,13 +322,13 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
           {(host.sleepStates?.length || host.pagefile) && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono mt-auto">
               {host.sleepStates && host.sleepStates.length > 0 && (
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Supported Sleep States</span>
                   <strong className="text-zinc-200 text-[11px]">{host.sleepStates.join(' · ')}</strong>
                 </div>
               )}
               {host.pagefile && (
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Pagefile ({host.pagefile.path})</span>
                   <strong className="text-purple-300 text-[11px]">
                     {host.pagefile.currentMB} / {host.pagefile.allocatedMB} MB (Peak {host.pagefile.peakMB} MB)
@@ -366,7 +366,7 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
                 key={f}
                 type="button"
                 onClick={() => setEventFilter(f)}
-                className={`px-2.5 py-1 rounded-lg border cursor-pointer capitalize ${
+                className={`neu-btn px-2.5 py-1 rounded-lg border cursor-pointer capitalize ${
                   eventFilter === f
                     ? 'bg-sky-500/15 border-sky-500/40 text-sky-200 font-bold'
                     : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
@@ -382,7 +382,7 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
           {filteredEvents.slice(0, 15).map((ev, idx) => (
             <div
               key={`${ev.id}-${ev.timestamp}-${idx}`}
-              className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col sm:flex-row sm:items-start justify-between gap-2 text-xs"
+              className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col sm:flex-row sm:items-start justify-between gap-2 text-xs"
             >
               <div className="flex flex-col gap-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 font-mono text-[10px]">
@@ -405,7 +405,7 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
             </div>
           ))}
           {filteredEvents.length === 0 && (
-            <div className="p-6 text-center text-xs font-mono text-emerald-300 bg-[#16161c] rounded-xl border border-emerald-500/20">
+            <div className="neu-tile p-6 text-center text-xs font-mono text-emerald-300 bg-[#16161c] rounded-xl border border-emerald-500/20">
               No matching Critical, Error, or Warning hardware/kernel events logged in the last 7 days.
             </div>
           )}

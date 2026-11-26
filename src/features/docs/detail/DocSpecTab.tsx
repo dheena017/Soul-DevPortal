@@ -46,7 +46,7 @@ export default function DocSpecTab({
       {hasHeadings && (
         <TableOfContents headings={headings} title="On this page" className="w-full" />
       )}
-      <section className="w-full p-4 sm:p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-5 sm:gap-6 min-w-0 portal-header-sheen">
+      <section className="neu-card w-full p-4 sm:p-6 md:p-8 rounded-2xl bg-[#111115] border border-white/[0.08] flex flex-col gap-5 sm:gap-6 min-w-0 portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
           <div className="flex flex-col gap-1">

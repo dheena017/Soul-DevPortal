@@ -62,7 +62,7 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
   }
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6 portal-stagger portal-header-sheen">
+    <section className="w-full p-5 md:p-6 rounded-2xl neu-card bg-[#151519] border border-white/[0.08] flex flex-col gap-6 portal-stagger portal-header-sheen">
       <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="Package Exports Pipeline Visual" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
         <div className="flex flex-col gap-0.5">
@@ -109,12 +109,12 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="neu-inset px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
                 NPM
               </span>
               <h3 className="text-xs font-bold text-neutral-200">npm import paths</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
+            <span className="neu-tile px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
               {filteredNpm.length} paths
             </span>
           </div>
@@ -123,10 +123,10 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
             {filteredNpm.map(({ exportPath, importPath }) => (
               <div
                 key={exportPath}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-3 portal-row-hover"
+                className="neu-tile flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-3 portal-row-hover"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-400">
+                  <span className="neu-inset px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-400">
                     import
                   </span>
                   <code className="text-xs font-mono text-neutral-300 font-bold truncate">{importPath}</code>
@@ -145,12 +145,12 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="neu-inset px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
                 TS
               </span>
               <h3 className="text-xs font-bold text-neutral-200">TypeScript Exported Symbols</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
+            <span className="neu-tile px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
               {filteredTs.length} symbols
             </span>
           </div>
@@ -159,7 +159,7 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
             {filteredTs.map((name) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover"
+                className="neu-tile flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover"
                 title={`TypeScript symbol: ${name}`}
               >
                 <code className="text-xs font-mono text-neutral-200 truncate">{name}</code>
@@ -174,12 +174,12 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="neu-inset px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
                 PY
               </span>
               <h3 className="text-xs font-bold text-neutral-200">Python Public API Symbols</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
+            <span className="neu-tile px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
               {filteredPy.length} symbols
             </span>
           </div>
@@ -188,7 +188,7 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
             {filteredPy.map((name) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover"
+                className="neu-tile flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover"
                 title={`from ${pkg.pythonModule || pkg.pythonName} import ${name}`}
               >
                 <div className="flex items-center gap-1.5 min-w-0">
@@ -210,12 +210,12 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between pb-1">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
+              <span className="neu-inset px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#151519] border border-[#212126] text-neutral-300">
                 RUN
               </span>
               <h3 className="text-xs font-bold text-neutral-200">Package Scripts</h3>
             </div>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
+            <span className="neu-tile px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#151519] border border-[#212126] text-neutral-300">
               {filteredScripts.length} scripts
             </span>
           </div>
@@ -224,7 +224,7 @@ export default function PackageApiTab({ pkg, isLoading = false }: PackageApiTabP
             {filteredScripts.map(([name, command]) => (
               <div
                 key={name}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-3 portal-card-hover"
+                className="neu-tile flex items-center justify-between p-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-3 portal-card-hover"
               >
                 <div className="flex flex-col min-w-0">
                   <code className="text-xs font-mono font-bold text-neutral-300 truncate">{name}</code>

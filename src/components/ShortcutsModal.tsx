@@ -147,20 +147,20 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({
 
   const modalMarkup = (
     <div
-      className="fixed inset-0 z-[90] flex items-center justify-center p-2.5 sm:p-5 bg-black/80 backdrop-blur-md portal-backdrop-enter"
+      className="fixed inset-0 z-[90] flex items-center justify-center p-2.5 sm:p-5 bg-black/75 portal-backdrop-enter"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="soul-shortcuts-modal-title"
     >
       <div
-        className="relative w-full max-w-4xl max-h-[calc(100dvh-1.25rem)] sm:max-h-[min(90dvh,740px)] rounded-2xl bg-[#0e1017] border border-white/[0.12] shadow-[0_28px_90px_rgba(0,0,0,0.92)] flex flex-col overflow-hidden portal-header-sheen"
+        className="relative w-full max-w-4xl max-h-[calc(100dvh-1.25rem)] sm:max-h-[min(90dvh,740px)] rounded-2xl neu-modal bg-[#0e1017] border border-white/[0.12] flex flex-col overflow-hidden portal-header-sheen"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ── Pinned Modal Header ── */}
         <div className="shrink-0 bg-[#12141c] border-b border-white/[0.08] px-4 py-3.5 sm:px-6 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#181b25] border border-white/[0.12] flex items-center justify-center shrink-0 shadow-inner">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl neu-tile bg-[#181b25] border border-white/[0.12] flex items-center justify-center shrink-0">
               <SoulLogoIcon size={22} />
             </div>
             <div className="flex flex-col min-w-0">
@@ -210,7 +210,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({
           className="flex-1 min-h-0 overflow-y-auto sidebar-scroll overscroll-contain p-4 sm:p-5 flex flex-col gap-4 focus:outline-none"
         >
           {/* ── Standalone Desktop App Card ── */}
-          <section className="relative rounded-xl bg-gradient-to-br from-[#161924] via-[#12141d] to-[#0f1016] border border-sky-400/25 p-4 sm:p-5 flex flex-col gap-3.5 overflow-hidden shrink-0">
+          <section className="relative rounded-2xl neu-card bg-gradient-to-br from-[#161924] via-[#12141d] to-[#0f1016] border border-sky-400/25 p-4 sm:p-5 flex flex-col gap-3.5 overflow-hidden shrink-0">
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(56,189,248,0.10),transparent_58%)]"
               aria-hidden="true"
@@ -252,7 +252,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({
                       <a
                         href={primaryInstaller.downloadUrl}
                         download={primaryInstaller.name}
-                        className="inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 text-xs font-extrabold shadow-lg shadow-sky-500/15 transition-all whitespace-nowrap"
+                        className="neu-btn inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 text-xs font-extrabold transition-all whitespace-nowrap"
                       >
                         <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -267,7 +267,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({
                         href={releasesUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 text-xs font-extrabold shadow-lg shadow-sky-500/15 transition-all whitespace-nowrap"
+                        className="neu-btn inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 text-xs font-extrabold transition-all whitespace-nowrap"
                       >
                         <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -284,7 +284,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({
                           type="button"
                           disabled={shortcutBusy}
                           onClick={handleInstallShortcut}
-                          className="inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-[#1a1d28] border border-white/[0.14] hover:border-sky-400/45 text-white text-xs font-extrabold transition-all cursor-pointer disabled:opacity-60 whitespace-nowrap"
+                          className="neu-btn inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-[#1a1d28] border border-white/[0.14] hover:border-sky-400/45 text-white text-xs font-extrabold transition-all cursor-pointer disabled:opacity-60 whitespace-nowrap"
                         >
                           <span>{shortcutBusy ? 'Creating Shortcut...' : 'Desktop Shortcut'}</span>
                         </button>
@@ -293,7 +293,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({
                           type="button"
                           disabled={launchingApp}
                           onClick={handleLaunchDesktop}
-                          className="inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-emerald-400 text-zinc-950 hover:bg-emerald-300 text-xs font-extrabold shadow-lg shadow-emerald-500/20 transition-all cursor-pointer disabled:opacity-60 whitespace-nowrap"
+                          className="neu-btn inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-emerald-400 text-zinc-950 hover:bg-emerald-300 text-xs font-extrabold transition-all cursor-pointer disabled:opacity-60 whitespace-nowrap"
                         >
                           <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                             <polygon points="5 3 19 12 5 21 5 3" />
@@ -320,7 +320,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({
                               setPwaInstalling(false);
                             }
                           }}
-                          className="inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-[#1a1d28] border border-white/[0.14] hover:border-sky-400/45 text-white text-xs font-extrabold transition-all cursor-pointer disabled:opacity-60 whitespace-nowrap"
+                          className="neu-btn inline-flex items-center gap-2 h-9 px-3.5 rounded-xl bg-[#1a1d28] border border-white/[0.14] hover:border-sky-400/45 text-white text-xs font-extrabold transition-all cursor-pointer disabled:opacity-60 whitespace-nowrap"
                         >
                           <span>{pwaInstalling ? 'Installing...' : 'Install Desktop App'}</span>
                         </button>
@@ -370,7 +370,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({
           {/* ── Balanced Keyboard Shortcuts & Quick Navigation Matrix ── */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch shrink-0">
             {/* Left Column: Global Controls + Hash Links */}
-            <section className="lg:col-span-5 rounded-xl bg-[#13151d] border border-white/[0.08] p-4 flex flex-col justify-between gap-3 text-xs">
+            <section className="lg:col-span-5 rounded-2xl neu-card bg-[#13151d] border border-white/[0.08] p-4 flex flex-col justify-between gap-3 text-xs">
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
@@ -464,7 +464,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({
             </section>
 
             {/* Right Column: Quick View Shortcuts (Ctrl + 1..9 in balanced 2-col subgrid) */}
-            <section className="lg:col-span-7 rounded-xl bg-[#13151d] border border-white/[0.08] p-4 flex flex-col gap-3 text-xs">
+            <section className="lg:col-span-7 rounded-2xl neu-card bg-[#13151d] border border-white/[0.08] p-4 flex flex-col gap-3 text-xs">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
                   Quick View Shortcuts (Ctrl + 1–9)

@@ -130,7 +130,7 @@ export default function RadialGauge({
             }
           : undefined
       }
-      className={`group flex flex-col justify-between p-4 sm:p-5 rounded-2xl system-kpi-card shadow-xl ${
+      className={`group flex flex-col justify-between p-4 sm:p-5 rounded-2xl system-kpi-card ${
         onClick ? 'cursor-pointer hover:-translate-y-0.5' : ''
       }`}
     >
@@ -221,7 +221,7 @@ export default function RadialGauge({
       </div>
 
       {/* Structured Inset Footer Readout */}
-      <div className="w-full px-3 py-2 rounded-xl bg-[#16161c]/90 border border-white/[0.06] flex flex-col gap-0.5 text-center group-hover:border-white/[0.12] transition-colors">
+      <div className="w-full px-3 py-2 rounded-xl neu-inset bg-[#16161c]/90 border border-white/[0.06] flex flex-col gap-0.5 text-center group-hover:border-white/[0.11] transition-colors">
         <span className="text-[11px] font-medium text-zinc-200 truncate">{subtitle}</span>
         {detailLine && (
           <div className="flex items-center justify-center gap-1.5 min-w-0">

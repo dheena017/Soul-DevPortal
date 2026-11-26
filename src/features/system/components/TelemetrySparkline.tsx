@@ -217,13 +217,13 @@ export default function TelemetrySparkline({
 
   return (
     <div
-      className={`relative w-full select-none rounded-xl bg-[#0a0a0e] border border-white/[0.06] ${
+      className={`neu-inset relative w-full select-none rounded-xl bg-[#0a0a0e] border border-white/[0.06] ${
         compact ? 'p-2.5' : 'p-3.5'
       }`}
     >
       {/* Interactive Hover Tooltip Card */}
       {activePoint && (
-        <div className="absolute top-2 right-2 z-10 pointer-events-none flex flex-wrap items-center gap-2 px-2.5 py-1 rounded-lg bg-[#0d0d13]/95 border border-white/[0.16] shadow-xl text-[10px] font-mono tabular-nums">
+        <div className="neu-card absolute top-2 right-2 z-10 pointer-events-none flex flex-wrap items-center gap-2 px-2.5 py-1 rounded-lg bg-[#0d0d13]/95 border border-white/[0.16] text-[10px] font-mono tabular-nums">
           <span className="text-zinc-400">{activePoint.timeLabel}</span>
           {series.map((s) => {
             const val = Number(activePoint[s.key] ?? 0);

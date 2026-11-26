@@ -159,7 +159,7 @@ export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }
           <div className="flex flex-col gap-3 flex-1">
             {specs.physicalDisks.length > 0 ? (
               specs.physicalDisks.map((disk, idx) => (
-                <div key={idx} className="p-4 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2.5">
+                <div key={idx} className="neu-tile p-4 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2.5">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex flex-col gap-0.5 min-w-0">
                       <strong className="text-sm font-bold text-white truncate">{disk.model}</strong>
@@ -198,7 +198,7 @@ export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }
             )}
 
             {specs.diskPartitions && specs.diskPartitions.length > 0 && (
-              <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-1.5 text-[11px] font-mono tabular-nums">
+              <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-1.5 text-[11px] font-mono tabular-nums">
                 <span className="text-[10px] uppercase tracking-wider text-zinc-400">GPT Partition Map</span>
                 {specs.diskPartitions.map((pt) => (
                   <div key={`${pt.diskNumber}-${pt.partitionNumber}`} className="flex items-center justify-between gap-2">
@@ -213,7 +213,7 @@ export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }
             )}
 
             {specs.host.pagefile && (
-              <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-wrap items-center justify-between gap-2 text-xs font-mono tabular-nums mt-auto">
+              <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-wrap items-center justify-between gap-2 text-xs font-mono tabular-nums mt-auto">
                 <div>
                   <span className="block text-[10px] text-zinc-400">OS Pagefile ({specs.host.pagefile.path})</span>
                   <strong className="text-purple-300">{specs.host.pagefile.currentMB} MB Used</strong>
@@ -251,7 +251,7 @@ export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }
 
           <div className="flex flex-col gap-3">
             {live.disk.volumes.map((vol) => (
-              <div key={vol.mountpoint} className="p-4 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2">
+              <div key={vol.mountpoint} className="neu-tile p-4 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2">
                 <div className="flex items-center justify-between gap-2 text-xs">
                   <div className="flex items-center gap-2 min-w-0">
                     <strong className="font-mono text-white">{vol.mountpoint}</strong>
@@ -263,7 +263,7 @@ export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }
                     {formatBytes(vol.usedBytes, 1)} / {formatBytes(vol.totalBytes, 1)} ({vol.usedPercent}%)
                   </span>
                 </div>
-                <div className="w-full h-2.5 rounded-full bg-[#0c0c10] overflow-hidden border border-white/[0.06]">
+                <div className="neu-inset w-full h-2.5 rounded-full bg-[#0c0c10] overflow-hidden border border-white/[0.06]">
                   <div
                     className={`h-full rounded-full sys-bar-shimmer transition-all duration-300 ${
                       vol.usedPercent >= 90 ? 'bg-rose-500' : vol.usedPercent >= 75 ? 'bg-amber-400' : 'soul-gradient-bar'
@@ -281,25 +281,25 @@ export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }
 
           {/* Live Storage Metrics Grid matching height of Left Card cleanly */}
           <div className="grid grid-cols-2 gap-2.5 text-xs font-mono tabular-nums mt-auto">
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">Session Read / Write</span>
               <strong className="text-emerald-300">
                 {formatBytes(live.disk.totalReadBytes, 1)} / {formatBytes(live.disk.totalWriteBytes, 1)}
               </strong>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">60s Peak Read / Write</span>
               <strong className="text-amber-300">
                 {live.peaks.diskReadPeakMBps} / {live.peaks.diskWritePeakMBps} MB/s
               </strong>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">Active Disk IOPS</span>
               <strong className="text-white">
                 {live.disk.readIops.toFixed(0)} R · {live.disk.writeIops.toFixed(0)} W
               </strong>
             </div>
-            <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">Sector Geometry</span>
               <strong className="text-sky-300 truncate block">
                 {primaryDisk ? `${primaryDisk.logicalSectorSize}B / ${primaryDisk.physicalSectorSize}B` : '4K Aligned'}
@@ -371,7 +371,7 @@ export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }
       <section className="p-5 rounded-2xl system-card flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="flex items-end gap-1 h-7 px-2.5 py-1.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+            <div className="neu-tile flex items-end gap-1 h-7 px-2.5 py-1.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
               {[1, 2, 3, 4, 5].map((bar) => (
                 <span
                   key={bar}
@@ -405,31 +405,31 @@ export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs font-mono tabular-nums">
-          <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+          <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
             <span className="block text-[10px] text-zinc-400">Signal Quality</span>
             <strong className="text-emerald-300">{wifi?.signalPercent !== undefined && wifi?.signalPercent !== null ? `${wifi.signalPercent}%` : 'Wired / N/A'}</strong>
           </div>
-          <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+          <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
             <span className="block text-[10px] text-zinc-400">PHY Rx / Tx Link</span>
             <strong className="text-white">
               {wifi?.rxRateMbps ? `${wifi.rxRateMbps}/${wifi.txRateMbps || wifi.rxRateMbps} Mbps` : '—'}
             </strong>
           </div>
-          <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+          <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
             <span className="block text-[10px] text-zinc-400">Channel / Security</span>
             <strong className="text-sky-300 truncate block">{wifi?.channel ? `Ch ${wifi.channel} · ${wifi.authentication || 'WPA'}` : 'Ethernet / Local'}</strong>
           </div>
-          <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+          <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
             <span className="block text-[10px] text-zinc-400">Live Speed ↓ / ↑</span>
             <strong className="text-white">{formatNetRate(live.network.rxKBps)} / {formatNetRate(live.network.txKBps)}</strong>
           </div>
-          <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+          <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
             <span className="block text-[10px] text-zinc-400">Session Data / Drops</span>
             <strong className="text-purple-300 block truncate">
               {formatBytes(live.network.totalRecvBytes, 1)} ↓ · {live.network.dropsIn + live.network.dropsOut} drp
             </strong>
           </div>
-          <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
+          <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06]">
             <span className="block text-[10px] text-zinc-400">Gateway, DNS &amp; Sockets</span>
             <strong className="text-amber-300 block truncate">
               {primaryGateway?.ipv4Gateway ? `GW ${primaryGateway.ipv4Gateway}` : `${live.socketCounts.established} Est / ${live.socketCounts.listening} Lsn`}

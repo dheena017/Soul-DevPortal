@@ -241,11 +241,11 @@ export default function PeripheralsDisplaysTab({ specs }: PeripheralsDisplaysTab
           {displays.map((disp) => (
             <div
               key={disp.deviceName}
-              className="p-4 rounded-xl bg-[#16161c] border border-white/[0.08] flex flex-col lg:flex-row items-center gap-5"
+              className="neu-tile p-4 rounded-xl bg-[#16161c] border border-white/[0.08] flex flex-col lg:flex-row items-center gap-5"
             >
               {/* Stylized Physical Screen & Stand Visual */}
               <div className="flex flex-col items-center shrink-0">
-                <div className="w-44 aspect-video rounded-xl border-2 border-sky-400/55 bg-gradient-to-br from-sky-500/18 via-[#09090d] to-purple-500/18 flex flex-col items-center justify-center p-2 text-center shadow-inner sys-screen-bezel">
+                <div className="neu-inset w-44 aspect-video rounded-xl border-2 border-sky-400/55 bg-gradient-to-br from-sky-500/18 via-[#09090d] to-purple-500/18 flex flex-col items-center justify-center p-2 text-center sys-screen-bezel">
                   <span className="text-sm font-mono font-extrabold text-white">
                     {disp.nativeWidth}×{disp.nativeHeight}
                   </span>
@@ -271,29 +271,29 @@ export default function PeripheralsDisplaysTab({ specs }: PeripheralsDisplaysTab
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-[11px] font-mono tabular-nums">
-                  <div className="p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
+                  <div className="neu-inset p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
                     <span className="block text-[9.5px] text-zinc-400">Native Matrix</span>
                     <strong className="text-white">{disp.nativeWidth}×{disp.nativeHeight}</strong>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
+                  <div className="neu-inset p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
                     <span className="block text-[9.5px] text-zinc-400">Scaled Desktop</span>
                     <strong className="text-zinc-200">{disp.logicalWidth}×{disp.logicalHeight}</strong>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
+                  <div className="neu-inset p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
                     <span className="block text-[9.5px] text-zinc-400">DPI Scale</span>
                     <strong className="text-sky-300">{disp.scalePercent ?? 100}%</strong>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
+                  <div className="neu-inset p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
                     <span className="block text-[9.5px] text-zinc-400">Panel Diagonal</span>
                     <strong className="text-white">{disp.diagonalInches ? `${disp.diagonalInches}" (~${disp.ppi} PPI)` : 'External'}</strong>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
+                  <div className="neu-inset p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
                     <span className="block text-[9.5px] text-zinc-400">EDID Panel ID</span>
                     <strong className="text-purple-300 truncate block">
                       {disp.panelModel ? `${disp.panelManufacturer || ''} ${disp.panelModel}`.trim() : 'Generic EDID'}
                     </strong>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
+                  <div className="neu-inset p-2.5 rounded-lg bg-[#0d0d12] border border-white/[0.06]">
                     <span className="block text-[9.5px] text-zinc-400">Color &amp; Year</span>
                     <strong className="text-emerald-300">
                       {disp.bitsPerPixel ?? 32}-bit{disp.manufactureYear ? ` · ${disp.manufactureYear}` : ''}
@@ -310,7 +310,7 @@ export default function PeripheralsDisplaysTab({ specs }: PeripheralsDisplaysTab
           {graphics.map((gpu, idx) => (
             <div
               key={idx}
-              className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-wrap items-center justify-between gap-2 text-xs"
+              className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-wrap items-center justify-between gap-2 text-xs"
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <span className="px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 text-[10px] font-mono font-bold text-amber-300 shrink-0">

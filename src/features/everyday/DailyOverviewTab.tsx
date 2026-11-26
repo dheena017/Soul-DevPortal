@@ -202,7 +202,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
   return (
     <div className="flex flex-col gap-5">
       {/* Greeting + Quick Capture Strip */}
-      <section className="relative overflow-hidden rounded-2xl bg-[#111218] border border-white/[0.09] p-5 shadow-xl portal-header-sheen">
+      <section className="neu-card relative overflow-hidden rounded-2xl bg-[#111218] border border-white/[0.09] p-5 portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="" opacityClass="opacity-75 sm:opacity-92" />
         <div className="relative z-10 flex flex-col gap-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -215,16 +215,18 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
               </h2>
             </div>
             {captureNotice && (
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/15 border border-emerald-500/35 text-emerald-300">
+              <span className="neu-tile px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/15 border border-emerald-500/35 text-emerald-300">
                 ✓ {captureNotice}
               </span>
             )}
           </div>
 
           <form onSubmit={handleQuickCapture} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-            <div className="flex items-center p-0.5 rounded-xl bg-[#08090c] border border-white/[0.08] shrink-0">
+            <div className="neu-tray flex items-center p-0.5 rounded-xl bg-[#08090c] border border-white/[0.08] shrink-0" role="tablist" aria-label="Quick capture mode">
               <button
                 type="button"
+                role="tab"
+                aria-selected={captureKind === 'task'}
                 onClick={() => setCaptureKind('task')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
                   captureKind === 'task' ? 'bg-emerald-500/20 text-emerald-200 font-bold' : 'text-zinc-400 hover:text-white'
@@ -234,6 +236,8 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
               </button>
               <button
                 type="button"
+                role="tab"
+                aria-selected={captureKind === 'note'}
                 onClick={() => setCaptureKind('note')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
                   captureKind === 'note' ? 'bg-sky-500/20 text-sky-200 font-bold' : 'text-zinc-400 hover:text-white'
@@ -253,11 +257,11 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
                   : 'Jot down a quick note, thought, or snippet...'
               }
               aria-label="Quick capture input"
-              className="flex-1 h-10 px-3.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
+              className="neu-inset flex-1 h-10 px-3.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
             />
             <button
               type="submit"
-              className="h-10 px-5 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-extrabold cursor-pointer shrink-0"
+              className="neu-btn h-10 px-5 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-extrabold cursor-pointer shrink-0"
             >
               + Save {captureKind === 'task' ? 'Task' : 'Note'}
             </button>
@@ -270,7 +274,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
         <button
           type="button"
           onClick={() => onSelectTab('tasks')}
-          className="text-left p-4 rounded-2xl bg-[#111218] border border-emerald-500/25 hover:border-emerald-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
+          className="neu-card neu-card-interactive text-left p-4 rounded-2xl bg-[#111218] border border-emerald-500/25 hover:border-emerald-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
         >
           <div className="min-w-0">
             <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">Open Tasks</div>
@@ -287,7 +291,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
         <button
           type="button"
           onClick={() => onSelectTab('habits')}
-          className="text-left p-4 rounded-2xl bg-[#111218] border border-sky-400/25 hover:border-sky-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
+          className="neu-card neu-card-interactive text-left p-4 rounded-2xl bg-[#111218] border border-sky-400/25 hover:border-sky-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
         >
           <div className="min-w-0">
             <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">Habits Today</div>
@@ -304,7 +308,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
         <button
           type="button"
           onClick={() => onSelectTab('focus')}
-          className="text-left p-4 rounded-2xl bg-[#111218] border border-amber-400/25 hover:border-amber-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
+          className="neu-card neu-card-interactive text-left p-4 rounded-2xl bg-[#111218] border border-amber-400/25 hover:border-amber-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
         >
           <div className="min-w-0">
             <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">Focus Logged</div>
@@ -321,7 +325,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
         <button
           type="button"
           onClick={() => onSelectTab('budget')}
-          className="text-left p-4 rounded-2xl bg-[#111218] border border-purple-400/25 hover:border-purple-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
+          className="neu-card neu-card-interactive text-left p-4 rounded-2xl bg-[#111218] border border-purple-400/25 hover:border-purple-400/50 transition-colors cursor-pointer flex items-center justify-between gap-3"
         >
           <div className="min-w-0">
             <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">Budget Left</div>
@@ -341,7 +345,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
       {/* Interactive Today's Priorities & Habit Quick Check */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 items-stretch">
         {/* Tasks Glance */}
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col justify-between">
+        <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col justify-between">
           <div className="relative overflow-hidden px-5 pt-4 pb-3.5 border-b border-white/[0.07] shrink-0 flex items-center justify-between gap-2">
             <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="" opacityClass="opacity-65 sm:opacity-80" />
             <div className="relative z-10 min-w-0">
@@ -351,7 +355,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
             <button
               type="button"
               onClick={() => onSelectTab('tasks')}
-              className="relative z-10 px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 text-xs font-bold text-emerald-200 cursor-pointer shrink-0"
+              className="neu-btn relative z-10 px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 text-xs font-bold text-emerald-200 cursor-pointer shrink-0"
             >
               Open Tasks →
             </button>
@@ -359,7 +363,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
 
           <div className="flex-1 p-5 flex flex-col gap-2">
             {priorityTasks.length === 0 ? (
-              <div className="flex-1 min-h-[140px] p-5 rounded-xl bg-[#08090c] border border-dashed border-white/[0.07] flex items-center justify-center text-xs text-zinc-400 text-center">
+              <div className="neu-inset flex-1 min-h-[140px] p-5 rounded-xl bg-[#08090c] border border-dashed border-white/[0.07] flex items-center justify-center text-xs text-zinc-400 text-center">
                 All clear! No pending tasks in your queue.
               </div>
             ) : (
@@ -369,7 +373,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
                 return (
                   <div
                     key={t.id}
-                    className="flex items-center justify-between gap-2.5 px-3 py-2.5 rounded-xl bg-[#16171e] border border-white/[0.07]"
+                    className="neu-tile flex items-center justify-between gap-2.5 px-3 py-2.5 rounded-xl bg-[#16171e] border border-white/[0.07]"
                   >
                     <button
                       type="button"
@@ -408,7 +412,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
 
         {/* Habits + Notes Preview */}
         <div className="flex flex-col gap-5">
-          <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col justify-between flex-1">
+          <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col justify-between flex-1">
             <div className="relative overflow-hidden px-5 pt-4 pb-3.5 border-b border-white/[0.07] shrink-0 flex items-center justify-between gap-2">
               <HeroArtworkBackdrop src="/visuals/checklists-workspace.jpg" alt="" opacityClass="opacity-65 sm:opacity-80" />
               <div className="relative z-10 min-w-0">
@@ -418,7 +422,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
               <button
                 type="button"
                 onClick={() => onSelectTab('habits')}
-                className="relative z-10 px-3 py-1.5 rounded-xl bg-sky-500/15 border border-sky-400/35 hover:bg-sky-500/25 text-xs font-bold text-sky-200 cursor-pointer shrink-0"
+                className="neu-btn relative z-10 px-3 py-1.5 rounded-xl bg-sky-500/15 border border-sky-400/35 hover:bg-sky-500/25 text-xs font-bold text-sky-200 cursor-pointer shrink-0"
               >
                 7-Day Grid →
               </button>
@@ -426,7 +430,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
 
             <div className="flex-1 p-5 flex flex-col justify-center">
               {habitsState.habits.length === 0 ? (
-                <div className="p-5 rounded-xl bg-[#08090c] border border-dashed border-white/[0.08] flex flex-col items-center justify-center gap-2 text-center">
+                <div className="neu-inset p-5 rounded-xl bg-[#08090c] border border-dashed border-white/[0.08] flex flex-col items-center justify-center gap-2 text-center">
                   <span className="text-xs font-semibold text-zinc-300">No habits tracked yet</span>
                   <span className="text-[11px] text-zinc-500 max-w-xs">
                     Add daily routines in the 7-Day Grid to check off streaks directly from your morning overview.
@@ -441,7 +445,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
                         key={h.id}
                         type="button"
                         onClick={() => toggleHabitToday(h.id)}
-                        className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border text-left transition-colors cursor-pointer ${
+                        className={`neu-tile flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border text-left transition-colors cursor-pointer ${
                           doneToday
                             ? 'bg-emerald-500/15 border-emerald-400/40 text-emerald-100'
                             : 'bg-[#16171e] border-white/[0.07] text-zinc-300 hover:border-white/[0.2]'
@@ -466,7 +470,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
             </div>
           </section>
 
-          <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col justify-between">
+          <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col justify-between">
             <div className="relative overflow-hidden px-5 pt-4 pb-3.5 border-b border-white/[0.07] shrink-0 flex items-center justify-between gap-2">
               <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-65 sm:opacity-80" />
               <div className="relative z-10 min-w-0">
@@ -476,7 +480,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
               <button
                 type="button"
                 onClick={() => onSelectTab('notes')}
-                className="relative z-10 px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.1] hover:border-sky-400/40 text-xs font-bold text-zinc-200 cursor-pointer shrink-0"
+                className="neu-btn relative z-10 px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.1] hover:border-sky-400/40 text-xs font-bold text-zinc-200 cursor-pointer shrink-0"
               >
                 Open Notes →
               </button>
@@ -484,7 +488,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
 
             <div className="p-5">
               {featuredNotes.length === 0 ? (
-                <div className="p-4 rounded-xl bg-[#08090c] border border-dashed border-white/[0.07] text-xs text-zinc-500 text-center">
+                <div className="neu-inset p-4 rounded-xl bg-[#08090c] border border-dashed border-white/[0.07] text-xs text-zinc-500 text-center">
                   No notes yet. Create one via Quick Capture above!
                 </div>
               ) : (
@@ -494,7 +498,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
                       key={n.id}
                       type="button"
                       onClick={() => onSelectTab('notes')}
-                      className="p-3 rounded-xl bg-[#16171e] border border-white/[0.07] hover:border-sky-400/40 text-left cursor-pointer"
+                      className="neu-tile p-3 rounded-xl bg-[#16171e] border border-white/[0.07] hover:border-sky-400/40 text-left cursor-pointer"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-xs font-bold text-white truncate">
@@ -521,7 +525,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
 
       {/* Goals Progress Glance if goals exist */}
       {goals.length > 0 && (
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3">
+        <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-white">Active Personal Goals</h3>
             <button
@@ -536,7 +540,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
             {goals.slice(0, 3).map((g) => {
               const pct = Math.min(100, Math.round((g.current / Math.max(1, g.target)) * 100));
               return (
-                <div key={g.id} className="p-3 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-1.5">
+                <div key={g.id} className="neu-tile p-3 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-1.5">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-semibold text-white truncate">{g.title}</span>
                     <span className="font-mono text-sky-300 font-bold">{pct}%</span>
@@ -555,7 +559,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
       )}
 
       {/* Full Tab Directory inside Everyday Utilities */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
         <div>
           <h3 className="text-base font-bold text-white">All Tools Inside Everyday Utilities</h3>
           <p className="text-xs text-zinc-400">
@@ -577,7 +581,7 @@ export const DailyOverviewTab: React.FC<DailyOverviewTabProps> = ({ onSelectTab 
                       key={tab.id}
                       type="button"
                       onClick={() => onSelectTab(tab.id)}
-                      className="flex items-start gap-3 p-3.5 rounded-xl bg-[#16171e] border border-white/[0.08] hover:border-white/[0.22] hover:bg-[#181a24] text-left transition-colors cursor-pointer"
+                      className="neu-tile flex items-start gap-3 p-3.5 rounded-xl bg-[#16171e] border border-white/[0.08] hover:border-white/[0.22] hover:bg-[#181a24] text-left transition-colors cursor-pointer"
                     >
                       <span className="text-xl shrink-0 mt-0.5">{tab.icon}</span>
                       <div className="flex flex-col gap-0.5 min-w-0">

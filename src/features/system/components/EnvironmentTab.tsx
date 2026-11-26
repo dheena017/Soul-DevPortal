@@ -171,7 +171,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
         <div className="p-4 rounded-2xl system-kpi-card flex flex-col gap-1.5">
           <div className="flex items-center justify-between gap-2">
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Developer Runtimes</span>
-            <span className="w-6 h-6 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
+            <span className="neu-tile w-6 h-6 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
               <SectionIcon kind="runtime" className="w-3.5 h-3.5" />
             </span>
           </div>
@@ -190,13 +190,13 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
             setSection('path');
             setPathFilter('all');
           }}
-          className={`p-4 rounded-2xl system-kpi-card text-left flex flex-col gap-1.5 cursor-pointer transition-all ${
+          className={`neu-btn p-4 rounded-2xl system-kpi-card text-left flex flex-col gap-1.5 cursor-pointer transition-all ${
             section === 'path' && pathFilter !== 'missing' ? 'ring-1 ring-sky-400/50 border-sky-500/40' : ''
           }`}
         >
           <div className="flex items-center justify-between gap-2">
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Verified PATH Folders</span>
-            <span className="w-6 h-6 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-300">
+            <span className="neu-tile w-6 h-6 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-300">
               <SectionIcon kind="path" className="w-3.5 h-3.5" />
             </span>
           </div>
@@ -215,13 +215,13 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
             setSection('path');
             setPathFilter('missing');
           }}
-          className={`p-4 rounded-2xl system-kpi-card text-left flex flex-col gap-1.5 cursor-pointer transition-all ${
+          className={`neu-btn p-4 rounded-2xl system-kpi-card text-left flex flex-col gap-1.5 cursor-pointer transition-all ${
             section === 'path' && pathFilter === 'missing' ? 'ring-1 ring-rose-400/50 border-rose-500/40' : ''
           }`}
         >
           <div className="flex items-center justify-between gap-2">
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">PATH Hygiene Audit</span>
-            <span className="w-6 h-6 rounded-lg bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-300">
+            <span className="neu-tile w-6 h-6 rounded-lg bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-300">
               <SectionIcon kind="missing" className="w-3.5 h-3.5" />
             </span>
           </div>
@@ -230,7 +230,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
               {pathStats.missing} Missing
             </strong>
             {env?.duplicatePathCount ? (
-              <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-mono">
+              <span className="neu-tile px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-mono">
                 {env.duplicatePathCount} Dupes Deduped
               </span>
             ) : null}
@@ -244,13 +244,13 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
             setSection('env');
             setEnvFilter('all');
           }}
-          className={`p-4 rounded-2xl system-kpi-card text-left flex flex-col gap-1.5 cursor-pointer transition-all ${
+          className={`neu-btn p-4 rounded-2xl system-kpi-card text-left flex flex-col gap-1.5 cursor-pointer transition-all ${
             section === 'env' ? 'ring-1 ring-purple-400/50 border-purple-500/40' : ''
           }`}
         >
           <div className="flex items-center justify-between gap-2">
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Env Variables</span>
-            <span className="w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-300">
+            <span className="neu-tile w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-300">
               <SectionIcon kind="env" className="w-3.5 h-3.5" />
             </span>
           </div>
@@ -268,7 +268,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
       <section className="p-4 rounded-2xl system-card flex flex-col gap-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="w-6 h-6 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
+            <span className="neu-tile w-6 h-6 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
               <SectionIcon kind="runtime" className="w-3.5 h-3.5" />
             </span>
             <span className="text-xs font-bold text-white">Detected CLI Runtimes, SDKs &amp; Build Toolchains</span>
@@ -280,7 +280,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
                 key={cat}
                 type="button"
                 onClick={() => setRtFilter(cat)}
-                className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border cursor-pointer transition-colors ${
+                className={`neu-btn px-2 py-0.5 rounded-lg text-[10px] font-mono border cursor-pointer transition-colors ${
                   rtFilter === cat
                     ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200 font-bold'
                     : 'bg-[#16161c] border-white/[0.06] text-zinc-400 hover:text-zinc-200'
@@ -294,7 +294,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
           {filteredRuntimes.map((rt) => (
-            <div key={rt.name} className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex items-center justify-between gap-2">
+            <div key={rt.name} className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex items-center justify-between gap-2">
               <div className="flex flex-col min-w-0 gap-0.5">
                 <div className="flex items-center gap-2 flex-wrap">
                   <strong className="text-xs font-bold text-white">{rt.name}</strong>
@@ -319,7 +319,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
       {/* Toolbar */}
       <div className="p-4 rounded-2xl system-card flex flex-col gap-3">
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
-          <div className="inline-flex flex-wrap items-center gap-1 rounded-xl bg-[#16161c] border border-white/[0.08] p-1">
+          <div className="inline-flex flex-wrap items-center gap-1 rounded-xl neu-tray bg-[#16161c] border border-white/[0.06] p-1" role="tablist" aria-label="Environment sections">
             {(
               [
                 { id: 'path', label: 'PATH Folders', count: pathEntries.length, badge: 'bg-sky-500/25 text-sky-200 border-sky-500/40' },
@@ -335,7 +335,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
                   onClick={() => setSection(tab.id)}
                   className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all cursor-pointer ${
                     active
-                      ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                      ? 'text-white font-bold border border-white/20'
                       : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
                   }`}
                 >
@@ -380,7 +380,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
               <button
                 type="button"
                 onClick={toggleAllVisible}
-                className="px-3 py-2 rounded-xl bg-[#16161c] hover:bg-white/[0.06] border border-white/[0.08] text-xs font-mono font-bold text-zinc-200 cursor-pointer shrink-0 transition-colors"
+                className="neu-btn px-3 py-2 rounded-xl bg-[#16161c] hover:bg-white/[0.06] border border-white/[0.08] text-xs font-mono font-bold text-zinc-200 cursor-pointer shrink-0 transition-colors"
               >
                 {allExpanded ? '− Collapse All' : '+ Expand Visible'}
               </button>
@@ -479,7 +479,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
                   {isOpen && (
                     <div className="px-5 py-3.5 bg-[#0b0b0f] border-t border-sky-400/15">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs sys-drawer-open">
-                        <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                        <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                           <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                             Registry Provenance &amp; Scope
                           </span>
@@ -489,7 +489,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
                           </span>
                         </div>
 
-                        <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1.5 md:col-span-2">
+                        <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1.5 md:col-span-2">
                           <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                             Executables Discovered Inside Directory ({entry.executableCount || 0})
                           </span>
@@ -597,7 +597,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
                   {isOpen && (
                     <div className="px-5 py-3.5 bg-[#0b0b0f] border-t border-purple-400/15">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                        <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                        <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                           <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                             Origin &amp; Security Policy
                           </span>
@@ -606,7 +606,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
                             {item.isSensitive ? 'Auto-masked server-side (zero secret leak)' : `${item.value.length} characters · ${item.category}`}
                           </span>
                         </div>
-                        <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1.5 md:col-span-2">
+                        <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1.5 md:col-span-2">
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                               {multiParts.length > 1 ? `Multi-Segment Breakdown (${multiParts.length} items)` : 'Exact Variable Expression'}
@@ -650,12 +650,12 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
             </div>
 
             <div className="grid grid-cols-1 gap-2.5 text-xs">
-              <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-1">
+              <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-1">
                 <span className="text-[10px] font-mono uppercase text-zinc-400">Command Interpreter (COMSPEC)</span>
                 <code className="font-mono text-white break-all">{shellProfile?.comspec || 'C:\\WINDOWS\\system32\\cmd.exe'}</code>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-1.5">
+              <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-1.5">
                 <span className="text-[10px] font-mono uppercase text-zinc-400">
                   Executable Extension Precedence (PATHEXT)
                 </span>
@@ -672,13 +672,13 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-0.5">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-0.5">
                   <span className="text-[10px] font-mono uppercase text-zinc-400">OS / FS Encoding</span>
                   <strong className="text-xs font-mono text-emerald-300">
                     {shellProfile?.preferredEncoding || 'cp1252'} / {shellProfile?.fsEncoding || 'utf-8'}
                   </strong>
                 </div>
-                <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-0.5">
+                <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-0.5">
                   <span className="text-[10px] font-mono uppercase text-zinc-400">Registry Env Keys</span>
                   <strong className="text-xs font-mono text-purple-300">
                     {shellProfile?.machineRegistryCount ?? 0} HKLM · {shellProfile?.userRegistryCount ?? 0} HKCU
@@ -686,7 +686,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-1">
+              <div className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-1">
                 <span className="text-[10px] font-mono uppercase text-zinc-400">Active Virtual Environment / Temp Root</span>
                 <code className="font-mono text-zinc-200 break-all">
                   {shellProfile?.virtualEnv ? `Active VEnv: ${shellProfile.virtualEnv}` : `Temp: ${shellProfile?.tempDir || 'Default'}`}
@@ -703,7 +703,7 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {sdkHomeVars.map((item) => (
-                <div key={item.key} className="p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex items-center justify-between gap-2">
+                <div key={item.key} className="neu-tile p-3 rounded-xl bg-[#16161c] border border-white/[0.06] flex items-center justify-between gap-2">
                   <div className="flex flex-col gap-0.5 min-w-0">
                     <div className="flex items-center gap-1.5">
                       <strong className="text-xs font-mono text-sky-300">{item.key}</strong>

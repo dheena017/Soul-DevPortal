@@ -267,7 +267,7 @@ export default {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl portal-header-sheen portal-stagger">
+    <div className="w-full flex flex-col gap-6 p-5 md:p-6 rounded-2xl neu-card bg-[#111115] border border-white/[0.08] portal-header-sheen portal-stagger">
       <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Interactive Code Playground Visual" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
       {/* ── Header Row with Metadata and Dynamic Dates ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
@@ -291,17 +291,17 @@ export default {
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-300">
+          <span className="neu-tile px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-300">
             v{pkgVersion}
           </span>
-          <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#16161c] border border-white/[0.08] text-purple-300">
+          <span className="neu-tile px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#16161c] border border-white/[0.08] text-purple-300">
             {pkgName}
           </span>
         </div>
       </div>
 
       {/* ── Live Parameter Customizer Strip ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
+      <div className="neu-tile grid grid-cols-1 md:grid-cols-2 gap-3 p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08]">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="custom-tag-input" className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
             Log Action Tag / Category
@@ -332,7 +332,7 @@ export default {
       </div>
 
       {/* ── Framework & Target Environment Tabs ── */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#09090c] border border-white/[0.08] rounded-xl" role="tablist" aria-label="Snippet frameworks">
+      <div className="neu-tray flex flex-wrap items-center gap-1.5 p-1 bg-[#09090c] border border-white/[0.08] rounded-xl" role="tablist" aria-label="Snippet frameworks">
         {snippets.map((snippet) => {
           const isSelected = snippet.id === activeSnippet.id;
           return (
@@ -343,7 +343,7 @@ export default {
               aria-selected={isSelected}
               className={`px-3 py-2 rounded-lg text-xs transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                  ? 'text-white font-bold border border-white/20'
                   : 'text-zinc-400 hover:text-white hover:bg-white/[0.04] border border-transparent font-medium'
               }`}
               onClick={() => setSelectedId(snippet.id)}
@@ -355,11 +355,11 @@ export default {
       </div>
 
       {/* ── Generated Code Block Box ── */}
-      <div className="rounded-xl bg-[#070709] border border-white/[0.08] overflow-hidden shadow-2xl flex flex-col">
+      <div className="rounded-xl neu-inset bg-[#070709] border border-white/[0.07] overflow-hidden flex flex-col">
         {/* Code Bar Top */}
         <div className="flex items-center justify-between px-4 py-2.5 bg-[#16161c] border-b border-white/[0.06] text-xs">
           <div className="flex items-center gap-2.5">
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#09090c] text-purple-300 border border-purple-500/25">
+            <span className="neu-inset px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[#09090c] text-purple-300 border border-purple-500/25">
               {activeSnippet.language}
             </span>
             <code className="text-[11px] font-mono text-zinc-300 font-medium">{activeSnippet.filename}</code>
@@ -370,7 +370,7 @@ export default {
               type="button"
               onClick={handleRunSnippet}
               disabled={isRunning}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all shadow-sm cursor-pointer ${
+              className={`neu-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 isRunning
                   ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30 animate-pulse'
                   : 'bg-purple-600 hover:bg-purple-500 text-white border border-purple-400/30'
@@ -395,7 +395,7 @@ export default {
 
       {/* ── Interactive Live Execution Console Terminal ── */}
       {runOutput && (
-        <div className="rounded-xl bg-[#070709] border border-emerald-500/25 overflow-hidden shadow-2xl flex flex-col portal-drawer-enter">
+        <div className="rounded-xl neu-inset bg-[#070709] border border-emerald-500/25 overflow-hidden flex flex-col portal-drawer-enter">
           <div className="flex items-center justify-between px-4 py-2 bg-[#16161c] border-b border-white/[0.06] text-xs">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -409,13 +409,13 @@ export default {
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded">
+              <span className="neu-tile text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded">
                 ⚡ {runOutput.durationMs}ms latency · Exit 0
               </span>
               <button
                 type="button"
                 onClick={() => setRunOutput(null)}
-                className="text-[10px] font-mono text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                className="neu-btn px-2 py-0.5 rounded-md bg-[#09090c] border border-white/[0.08] text-[10px] font-mono text-zinc-400 hover:text-white transition-colors cursor-pointer"
               >
                 Clear
               </button>

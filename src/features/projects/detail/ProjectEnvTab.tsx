@@ -87,7 +87,7 @@ export default function ProjectEnvTab({
   }
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-5 portal-stagger portal-header-sheen">
+    <section className="w-full p-5 md:p-6 rounded-2xl neu-card bg-[#151519] border border-white/[0.08] flex flex-col gap-5 portal-stagger portal-header-sheen">
       <HeroArtworkBackdrop src="/visuals/tab-env-security.jpg" alt="Environment Secrets & Vault Visual" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
       {/* Top Header Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#19191d]">
@@ -152,15 +152,15 @@ export default function ProjectEnvTab({
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5" role="tablist" aria-label="Filter variables">
+            <div className="flex items-center gap-1.5 p-1 rounded-xl neu-tray border border-white/[0.06]" role="tablist" aria-label="Filter variables">
               <button
                 type="button"
                 role="tab"
                 aria-selected={filterType === 'all'}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
                   filterType === 'all'
-                    ? 'bg-zinc-800 text-neutral-100 font-bold shadow-sm border border-white/20'
-                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500'
+                    ? 'text-white font-bold border border-white/20'
+                    : 'text-neutral-400 hover:text-neutral-200 hover:bg-white/[0.05] border border-transparent'
                 }`}
                 onClick={() => setFilterType('all')}
               >
@@ -172,8 +172,8 @@ export default function ProjectEnvTab({
                 aria-selected={filterType === 'secrets'}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
                   filterType === 'secrets'
-                    ? 'bg-zinc-800 text-neutral-100 font-bold shadow-sm border border-white/20'
-                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500'
+                    ? 'text-white font-bold border border-white/20'
+                    : 'text-neutral-400 hover:text-neutral-200 hover:bg-white/[0.05] border border-transparent'
                 }`}
                 onClick={() => setFilterType('secrets')}
               >
@@ -185,8 +185,8 @@ export default function ProjectEnvTab({
                 aria-selected={filterType === 'active'}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
                   filterType === 'active'
-                    ? 'bg-zinc-800 text-neutral-100 font-bold shadow-sm border border-white/20'
-                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500'
+                    ? 'text-white font-bold border border-white/20'
+                    : 'text-neutral-400 hover:text-neutral-200 hover:bg-white/[0.05] border border-transparent'
                 }`}
                 onClick={() => setFilterType('active')}
               >
@@ -201,7 +201,7 @@ export default function ProjectEnvTab({
               return (
                 <div
                   key={item.key}
-                  className="flex items-center justify-between p-2.5 px-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2 portal-row-hover"
+                  className="neu-tile flex items-center justify-between p-2.5 px-3 rounded-xl bg-[#151519] border border-[#212126] hover:border-neutral-500 gap-2 portal-row-hover"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <span className="text-xs shrink-0">{item.isSecret ? '🔒' : '⚙️'}</span>
@@ -231,12 +231,12 @@ export default function ProjectEnvTab({
           </div>
 
           {filteredItems.length === 0 && (
-            <div className="py-8 flex flex-col items-center justify-center text-center gap-2 bg-[#151519] border border-[#212126] rounded-xl">
+            <div className="neu-inset py-8 flex flex-col items-center justify-center text-center gap-2 bg-[#151519] border border-[#212126] rounded-xl">
               <span className="text-2xl">🔍</span>
               <p className="text-xs text-neutral-300 font-semibold">No environment variables match &ldquo;{filter}&rdquo;</p>
               <button
                 type="button"
-                className="px-3 py-1 text-xs rounded-md bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500"
+                className="neu-btn px-3 py-1 text-xs rounded-md bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500"
                 onClick={() => {
                   setFilter('');
                   setFilterType('all');
@@ -253,7 +253,7 @@ export default function ProjectEnvTab({
 
       {/* Dependencies Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-[#19191d] portal-grid-stagger">
-        <div className="flex flex-col gap-3 p-4 rounded-xl bg-[#151519] border border-[#212126] portal-card-hover">
+        <div className="neu-tile flex flex-col gap-3 p-4 rounded-xl bg-[#151519] border border-[#212126] portal-card-hover">
           <div className="flex items-center justify-between pb-2 border-b border-[#19191d]">
             <span className="text-xs font-bold text-neutral-300 flex items-center gap-1.5">
               <span>📦</span>
@@ -277,7 +277,7 @@ export default function ProjectEnvTab({
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 p-4 rounded-xl bg-[#151519] border border-[#212126]">
+        <div className="neu-tile flex flex-col gap-3 p-4 rounded-xl bg-[#151519] border border-[#212126]">
           <div className="flex items-center justify-between pb-2 border-b border-[#19191d]">
             <span className="text-xs font-bold text-neutral-300 flex items-center gap-1.5">
               <span>🛠️</span>

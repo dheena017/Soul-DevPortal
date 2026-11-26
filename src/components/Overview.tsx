@@ -79,17 +79,17 @@ export default function Overview({
   return (
     <article className="w-full flex flex-col gap-8 pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* ── Standardized Hero Header matching Pillar Dashboards ── */}
-      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-6 portal-header-sheen">
+      <header className="neu-card w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 flex flex-col gap-6 portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="Soul Monorepo Mesh Visual" />
         <div className="relative z-10 flex flex-col gap-6">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
             <div className="flex items-center gap-2 text-xs">
-              <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 font-medium">Soul Workspace</span>
+              <span className="neu-tile inline-flex items-center px-3 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 font-medium">Soul Workspace</span>
               <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
-              <strong className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm">Overview Dashboard</strong>
+              <strong className="neu-tile inline-flex items-center px-3 py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold">Overview Dashboard</strong>
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.1] text-xs font-semibold text-zinc-200 select-none shadow-sm">
+            <div className="neu-tile inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.1] text-xs font-semibold text-zinc-200 select-none">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
@@ -110,7 +110,7 @@ export default function Overview({
                 <button
                   type="button"
                   onClick={() => onNavigate('code-updates')}
-                  className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#16161c] border border-emerald-500/30 text-emerald-200 hover:bg-emerald-500/15 hover:text-white hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-sm cursor-pointer"
+                  className="neu-btn group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#16161c] border border-emerald-500/30 text-emerald-200 hover:bg-emerald-500/15 hover:text-white hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
                   title="Open Automatic Codebase Updates by Date (#code-updates)"
                 >
                   <span>🧬 Code Updates</span>
@@ -118,7 +118,7 @@ export default function Overview({
                 <button
                   type="button"
                   onClick={() => openChangelogPanel()}
-                  className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#16161c] border border-sky-400/35 text-sky-200 hover:bg-sky-500/15 hover:text-white hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-sm cursor-pointer"
+                  className="neu-btn group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#16161c] border border-sky-400/35 text-sky-200 hover:bg-sky-500/15 hover:text-white hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
                   title="Open Workspace Changelog in New Tab / Desktop Panel"
                 >
                   <span>Changelog</span>
@@ -127,7 +127,7 @@ export default function Overview({
                 <button
                   type="button"
                   onClick={() => onNavigate('portal')}
-                  className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-md shadow-white/10 shrink-0 cursor-pointer"
+                  className="neu-btn group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 hover:-translate-y-0.5 active:translate-y-0 transition-all shrink-0 cursor-pointer"
                   title="Open full Developer Portal Hub with GitHub links & live endpoints"
                 >
                   <span>Developer Hub &amp; GitHub Links</span>
@@ -142,23 +142,23 @@ export default function Overview({
 
           {/* Dashboard Key Metrics Banner */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1 portal-grid-stagger">
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+            <div className="neu-tile flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-white font-mono">3</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Core Pillars</span>
             </div>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+            <div className="neu-tile flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-emerald-400 font-mono">{projects.length || 8}</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Integrated Apps</span>
             </div>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+            <div className="neu-tile flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-purple-300 font-mono">{packages.length || 3}</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Shared Packages</span>
             </div>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+            <div className="neu-tile flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-sky-300 font-mono">5</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Architecture Specs</span>
             </div>
-            <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c]/95 border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+            <div className="neu-tile flex flex-col p-3.5 rounded-xl bg-[#16161c]/95 border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
               <span className="text-xl font-extrabold text-emerald-400 font-mono">0</span>
               <span className="text-xs font-semibold text-zinc-300 mt-0.5">Port Collisions</span>
             </div>
@@ -175,7 +175,7 @@ export default function Overview({
       <section className="w-full flex flex-col gap-4" aria-label="Monorepo 3 Pillars Navigation">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 portal-grid-stagger">
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 h-full portal-card-hover portal-header-sheen"
+            className="group flex flex-col justify-between p-6 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.08] cursor-pointer gap-4 h-full portal-card-hover portal-header-sheen"
             onClick={() => onNavigate('projects')}
             role="button"
             tabIndex={0}
@@ -184,7 +184,7 @@ export default function Overview({
             <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
             <div className="relative z-10 flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner portal-emblem-hover">
+                <span className="w-12 h-12 rounded-xl neu-inset bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl portal-emblem-hover">
                   💻
                 </span>
                 <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider bg-[#181820]/90 border border-white/[0.1] text-zinc-200">
@@ -205,7 +205,7 @@ export default function Overview({
           </div>
 
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 h-full portal-card-hover portal-header-sheen"
+            className="group flex flex-col justify-between p-6 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.08] cursor-pointer gap-4 h-full portal-card-hover portal-header-sheen"
             onClick={() => onNavigate('packages')}
             role="button"
             tabIndex={0}
@@ -214,7 +214,7 @@ export default function Overview({
             <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
             <div className="relative z-10 flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner portal-emblem-hover">
+                <span className="w-12 h-12 rounded-xl neu-inset bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl portal-emblem-hover">
                   📦
                 </span>
                 <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider bg-[#181820]/90 border border-white/[0.1] text-zinc-200">
@@ -235,7 +235,7 @@ export default function Overview({
           </div>
 
           <div
-            className="group flex flex-col justify-between p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 h-full portal-card-hover portal-header-sheen"
+            className="group flex flex-col justify-between p-6 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.08] cursor-pointer gap-4 h-full portal-card-hover portal-header-sheen"
             onClick={() => onNavigate('docs')}
             role="button"
             tabIndex={0}
@@ -244,7 +244,7 @@ export default function Overview({
             <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
             <div className="relative z-10 flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="w-12 h-12 rounded-xl bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner portal-emblem-hover">
+                <span className="w-12 h-12 rounded-xl neu-inset bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl portal-emblem-hover">
                   📚
                 </span>
                 <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider bg-[#181820]/90 border border-white/[0.1] text-zinc-200">
@@ -270,14 +270,14 @@ export default function Overview({
       <StatsCards stats={stats} packagesCount={packages.length || 3} projectsCount={projects?.length || 8} />
 
       {/* ── Ecosystem Tabs Navigation ── */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#09090c] border border-white/[0.08] rounded-xl shadow-[inset_0_1px_3px_rgba(0,0,0,0.6)] self-start" role="tablist" aria-label="Ecosystem overview sections">
+      <div className="flex flex-wrap items-center gap-1.5 p-1.5 neu-tray bg-[#09090c] border border-white/[0.08] rounded-xl self-start" role="tablist" aria-label="Ecosystem overview sections">
         <button
           type="button"
           role="tab"
           aria-selected={activeTab === 'apps'}
-          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
+          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all cursor-pointer ${
             activeTab === 'apps'
-              ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+              ? 'text-white font-bold border border-white/20'
               : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('apps')}
@@ -295,9 +295,9 @@ export default function Overview({
           type="button"
           role="tab"
           aria-selected={activeTab === 'packages'}
-          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
+          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all cursor-pointer ${
             activeTab === 'packages'
-              ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+              ? 'text-white font-bold border border-white/20'
               : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('packages')}
@@ -314,9 +314,9 @@ export default function Overview({
           type="button"
           role="tab"
           aria-selected={activeTab === 'docs'}
-          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all ${
+          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs transition-all cursor-pointer ${
             activeTab === 'docs'
-              ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+              ? 'text-white font-bold border border-white/20'
               : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
           }`}
           onClick={() => setActiveTab('docs')}
@@ -340,7 +340,7 @@ export default function Overview({
             </div>
             <button
               type="button"
-              className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#16161c] border border-white/[0.1] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
+              className="neu-btn group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#16161c] border border-white/[0.1] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
               onClick={() => onNavigate('projects')}
             >
               <span>View all {projects.length} apps &amp; ports</span>
@@ -359,7 +359,7 @@ export default function Overview({
               return (
                 <div
                   key={p.id}
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 h-full portal-card-hover"
+                  className="group flex flex-col justify-between p-5 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.08] cursor-pointer gap-4 h-full portal-card-hover"
                   onClick={() => onNavigate(`projects/${p.id}`)}
                   role="button"
                   tabIndex={0}
@@ -369,7 +369,7 @@ export default function Overview({
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0">
                         <div
-                          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden shadow-inner portal-emblem-hover"
+                          className="neu-inset w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden portal-emblem-hover"
                           style={{
                             borderColor: brand ? `${brand.themeColor}33` : undefined,
                             background: brand ? brand.accentBg : undefined,
@@ -416,7 +416,7 @@ export default function Overview({
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2 p-3 rounded-xl bg-[#09090c] border border-white/[0.08] text-xs">
+                    <div className="neu-inset flex flex-col gap-2 p-3 rounded-xl bg-[#09090c] border border-white/[0.08] text-xs">
                       <div className="flex items-center gap-2 text-zinc-300">
                         <span className="text-zinc-500">⚡</span>
                         <span className="truncate">{p.framework || 'React 19 + Vite 8 + Tailwind v4'}</span>
@@ -455,7 +455,7 @@ export default function Overview({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <div className="flex flex-wrap items-center gap-1 p-1 bg-[#151519] border border-[#212126] rounded-xl text-xs">
+              <div className="neu-tray flex flex-wrap items-center gap-1 p-1 bg-[#151519] border border-[#212126] rounded-xl text-xs" role="tablist" aria-label="Filter packages by ecosystem">
                 {(['all', 'npm', 'python', 'config'] as const).map((eco) => {
                   const label = eco === 'all' ? `All (${packages.length})` : eco === 'npm' ? 'TypeScript / Node' : eco === 'python' ? 'Python Modules' : 'Config';
                   const isActive = ecosystemFilter === eco;
@@ -463,8 +463,10 @@ export default function Overview({
                     <button
                       key={eco}
                       type="button"
-                      className={`px-3 py-1 rounded-lg font-semibold transition-all ${
-                        isActive ? 'bg-[#151519] text-neutral-200 shadow-sm border border-[#212126]' : 'text-neutral-400 hover:text-neutral-200 border border-transparent'
+                      role="tab"
+                      aria-selected={isActive}
+                      className={`px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                        isActive ? 'text-neutral-200 border border-[#212126]' : 'text-neutral-400 hover:text-neutral-200 border border-transparent'
                       }`}
                       onClick={() => setEcosystemFilter(eco)}
                     >
@@ -502,12 +504,12 @@ export default function Overview({
               return (
                 <article
                   key={pkg.id}
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] gap-4 portal-card-hover"
+                  className="group flex flex-col justify-between p-5 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.08] gap-4 portal-card-hover"
                 >
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.08] bg-[#09090c] text-xl portal-emblem-hover">
+                        <div className="neu-inset w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.08] bg-[#09090c] text-xl portal-emblem-hover">
                           {meta.icon}
                         </div>
                         <div className="flex flex-col">
@@ -548,7 +550,7 @@ export default function Overview({
                       )}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 p-2 rounded-xl bg-[#09090c] border border-white/[0.08] text-center font-mono text-xs">
+                    <div className="neu-inset grid grid-cols-3 gap-2 p-2 rounded-xl bg-[#09090c] border border-white/[0.08] text-center font-mono text-xs">
                       <div>
                         <span className="text-[10px] text-zinc-500 uppercase">EXPORTS</span>
                         <strong className="block text-xs font-bold text-white mt-0.5">{exportsCount} APIs</strong>
@@ -563,7 +565,7 @@ export default function Overview({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-[#09090c] border border-white/[0.08] font-mono text-xs">
+                    <div className="neu-inset flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-[#09090c] border border-white/[0.08] font-mono text-xs">
                       <code className="text-[11px] text-zinc-200 truncate">$ {installCmd}</code>
                       <CopyButton text={installCmd} variant="compact" label="" copiedLabel="Copied!" />
                     </div>
@@ -572,7 +574,7 @@ export default function Overview({
                   <div className="pt-2 border-t border-white/[0.06]">
                     <button
                       type="button"
-                      className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 shadow-md shadow-white/10 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      className="neu-btn w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
                       onClick={() => onNavigate(`packages/${pkg.id}`)}
                     >
                       <span>Inspect Package API</span>
@@ -596,7 +598,7 @@ export default function Overview({
             </div>
             <button
               type="button"
-              className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
+              className="neu-btn group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all cursor-pointer"
               onClick={() => onNavigate('docs')}
             >
               <span>Open Docs Dashboard</span>
@@ -607,7 +609,7 @@ export default function Overview({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 portal-grid-stagger">
             {DOCUMENTATION_GUIDES_REGISTRY.map((guide) => (
               <div
-                className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] cursor-pointer gap-4 portal-card-hover"
+                className="group flex flex-col justify-between p-5 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.08] cursor-pointer gap-4 portal-card-hover"
                 key={guide.id}
                 onClick={() => onNavigate(`docs/${guide.slug || guide.id}`)}
                 role="button"
@@ -657,14 +659,14 @@ export default function Overview({
           </button>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#121216] border border-emerald-500/20 hover:border-emerald-400/35 transition-colors flex flex-col gap-4 portal-card-hover">
+        <div className="p-5 rounded-2xl neu-card bg-[#121216] border border-emerald-500/25 hover:border-emerald-400/40 transition-colors flex flex-col gap-4 portal-card-hover">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5">
             {EVERYDAY_TABS.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => onNavigate(tab.id === 'overview' ? 'everyday' : `everyday/${tab.id}`)}
-                className="p-3 rounded-xl bg-[#0b0c10] border border-white/[0.08] hover:border-white/[0.24] hover:bg-[#14151c] text-left transition-colors cursor-pointer flex flex-col gap-1"
+                className="p-3 rounded-xl neu-tile bg-[#0b0c10] border border-white/[0.07] hover:border-emerald-400/35 text-left transition-all cursor-pointer flex flex-col gap-1"
               >
                 <span className="text-lg">{tab.icon}</span>
                 <span className="text-xs font-bold text-white leading-snug">{tab.label}</span>
@@ -677,7 +679,7 @@ export default function Overview({
 
       {/* ── Command Runners & Computer Monitor Gateway Banners ── */}
       <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-5 portal-grid-stagger">
-        <section className="group w-full p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] flex flex-col justify-between gap-5 shadow-2xl portal-card-hover portal-header-sheen">
+        <section className="group w-full p-6 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.08] flex flex-col justify-between gap-5 portal-card-hover portal-header-sheen">
           <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
           <div className="relative z-10 flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-[#09090c]/90 border border-white/[0.08] flex items-center justify-center text-2xl shrink-0 portal-emblem-hover">
@@ -699,7 +701,7 @@ export default function Overview({
 
           <button
             type="button"
-            className="relative z-10 w-full sm:w-auto self-start inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 shadow-md shadow-white/10 transition-all cursor-pointer"
+            className="neu-btn relative z-10 w-full sm:w-auto self-start inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all cursor-pointer"
             onClick={() => onNavigate('scripts')}
           >
             <span>Open Scripts &amp; Runners Center</span>
@@ -707,7 +709,7 @@ export default function Overview({
           </button>
         </section>
 
-        <section className="group w-full p-6 rounded-2xl bg-[#121216] border border-sky-400/20 hover:border-sky-400/40 flex flex-col justify-between gap-5 shadow-2xl portal-card-hover portal-header-sheen">
+        <section className="group w-full p-6 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-sky-400/25 hover:border-sky-400/45 flex flex-col justify-between gap-5 portal-card-hover portal-header-sheen">
           <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
           <div className="relative z-10 flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-sky-500/12 border border-sky-400/30 flex items-center justify-center text-sky-400 shrink-0 portal-emblem-hover">

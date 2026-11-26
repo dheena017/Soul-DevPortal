@@ -12,8 +12,8 @@ interface CalloutConfig {
 const CALLOUT_CONFIGS: Record<CalloutType, CalloutConfig> = {
   note: {
     title: 'Note',
-    badgeClass: 'text-neutral-300 bg-[#151519] border border-[#212126]',
-    containerClass: 'bg-[#151519] border border-[#212126] text-neutral-200',
+    badgeClass: 'text-neutral-300 bg-[#151519] border border-white/[0.08]',
+    containerClass: 'neu-card bg-[#151519] border border-white/[0.08] text-neutral-200',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10" />
@@ -84,7 +84,7 @@ export default function Callout({ type = 'note', title, children }: CalloutProps
 
   return (
     <div
-      className={`my-3 p-4 rounded-xl border flex flex-col gap-2 text-xs md:text-sm fade-in-up portal-card-hover ${config.containerClass}`}
+      className={`my-3 p-4 rounded-xl neu-tile border flex flex-col gap-2 text-xs md:text-sm fade-in-up portal-card-hover ${config.containerClass}`}
       role="note"
     >
       <div className="flex items-center gap-2 font-semibold">

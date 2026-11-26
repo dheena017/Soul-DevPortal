@@ -95,7 +95,7 @@ export const HealthWellnessTab: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
       {/* BMI & Ideal Weight */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1015] shrink-0">
           <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="BMI Health Reference Visual" opacityClass="opacity-72 sm:opacity-88" />
           <div className="relative z-10 flex items-center justify-between gap-2">
@@ -103,18 +103,22 @@ export const HealthWellnessTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">BMI &amp; Weight Range</h2>
               <p className="text-xs text-zinc-300/90">Healthy body mass &amp; weight reference.</p>
             </div>
-            <div className="flex p-0.5 rounded-lg bg-[#08090c]/90 border border-white/[0.1] text-[11px] font-mono shrink-0">
+            <div className="flex p-0.5 rounded-lg neu-tray bg-[#08090c]/90 border border-white/[0.1] text-[11px] font-mono shrink-0" role="tablist" aria-label="BMI unit system">
               <button
                 type="button"
+                role="tab"
+                aria-selected={unitMode === 'metric'}
                 onClick={() => setUnitMode('metric')}
-                className={`px-2 py-1 rounded cursor-pointer ${unitMode === 'metric' ? 'bg-zinc-800 text-white font-bold' : 'text-zinc-400'}`}
+                className={`px-2 py-1 rounded border cursor-pointer ${unitMode === 'metric' ? 'text-white font-bold border-white/20' : 'border-transparent text-zinc-400'}`}
               >
                 cm/kg
               </button>
               <button
                 type="button"
+                role="tab"
+                aria-selected={unitMode === 'imperial'}
                 onClick={() => setUnitMode('imperial')}
-                className={`px-2 py-1 rounded cursor-pointer ${unitMode === 'imperial' ? 'bg-zinc-800 text-white font-bold' : 'text-zinc-400'}`}
+                className={`px-2 py-1 rounded border cursor-pointer ${unitMode === 'imperial' ? 'text-white font-bold border-white/20' : 'border-transparent text-zinc-400'}`}
               >
                 ft/lb
               </button>
@@ -176,14 +180,14 @@ export const HealthWellnessTab: React.FC = () => {
             </div>
           )}
 
-          <div className="p-4 rounded-xl bg-[#08090c] border border-white/[0.08] flex flex-col gap-2.5">
+          <div className="neu-inset p-4 rounded-xl bg-[#08090c] border border-white/[0.08] flex flex-col gap-2.5">
             <div className="flex items-center justify-between">
               <span className="text-3xl font-extrabold font-mono text-white tabular-nums">{bmiStats.bmi}</span>
-              <span className={`px-2.5 py-1 rounded-lg border text-xs font-mono font-bold ${bmiStats.tone}`}>
+              <span className={`neu-tile px-2.5 py-1 rounded-lg border text-xs font-mono font-bold ${bmiStats.tone}`}>
                 {bmiStats.label}
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden flex">
+            <div className="neu-inset w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden flex">
               <div className="w-[24%] h-full bg-sky-400/75" />
               <div className="w-[33%] h-full bg-emerald-400" />
               <div className="w-[23%] h-full bg-amber-400" />
@@ -202,7 +206,7 @@ export const HealthWellnessTab: React.FC = () => {
       </section>
 
       {/* Calorie BMR / TDEE & Macros */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1210] shrink-0">
           <HeroArtworkBackdrop src="/visuals/tab-database-wal.jpg" alt="Daily Calorie TDEE Visual" opacityClass="opacity-72 sm:opacity-88" />
           <div className="relative z-10 flex items-center justify-between gap-2">
@@ -210,7 +214,7 @@ export const HealthWellnessTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">Daily Calorie &amp; Macro Planner</h2>
               <p className="text-xs text-zinc-300/90">Mifflin-St Jeor TDEE &amp; macro breakdown.</p>
             </div>
-            <div className="shrink-0 flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[#080b0a]/90 border border-emerald-400/25">
+            <div className="neu-tile shrink-0 flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[#080b0a]/90 border border-emerald-400/25">
               <MiniRadialRing percent={Math.min(100, Math.round((calorieStats.maintenance / 3500) * 100))} color="#34d399" size={26} />
               <span className="text-[11px] font-mono font-bold text-white tabular-nums">{calorieStats.maintenance}</span>
             </div>
@@ -257,21 +261,21 @@ export const HealthWellnessTab: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-3 gap-2 text-center font-mono">
-            <div className="p-2.5 rounded-xl bg-[#08090c] border border-white/[0.08]">
+            <div className="neu-inset p-2.5 rounded-xl bg-[#08090c] border border-white/[0.08]">
               <div className="text-[10px] text-zinc-400">Gentle Cut</div>
               <strong className="text-sm text-sky-300 tabular-nums">{calorieStats.cut}</strong>
             </div>
-            <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+            <div className="neu-tile p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
               <div className="text-[10px] text-emerald-300">Maintain</div>
               <strong className="text-sm text-white tabular-nums">{calorieStats.maintenance}</strong>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#08090c] border border-white/[0.08]">
+            <div className="neu-inset p-2.5 rounded-xl bg-[#08090c] border border-white/[0.08]">
               <div className="text-[10px] text-zinc-400">Lean Gain</div>
               <strong className="text-sm text-amber-300 tabular-nums">{calorieStats.gain}</strong>
             </div>
           </div>
 
-          <div className="px-3 py-2.5 rounded-xl bg-[#16171e] border border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-zinc-300">
+          <div className="neu-tile px-3 py-2.5 rounded-xl bg-[#16171e] border border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-zinc-300">
             <span>P: <strong className="text-emerald-300">{calorieStats.proteinGrams}g</strong></span>
             <span>C: <strong className="text-sky-300">{calorieStats.carbGrams}g</strong></span>
             <span>F: <strong className="text-amber-300">{calorieStats.fatGrams}g</strong></span>
@@ -285,7 +289,7 @@ export const HealthWellnessTab: React.FC = () => {
       </section>
 
       {/* Sleep Cycle Planner */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0f0d17] shrink-0">
           <HeroArtworkBackdrop src="/visuals/world-clock-globe.jpg" alt="Sleep Cycle REM Planner Visual" opacityClass="opacity-75 sm:opacity-90" />
           <div className="relative z-10 flex items-center justify-between gap-2">
@@ -293,7 +297,7 @@ export const HealthWellnessTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">90-Min Sleep Cycle Planner</h2>
               <p className="text-xs text-zinc-300/90">Wake between REM cycles (+15m fall-asleep buffer).</p>
             </div>
-            <span className="shrink-0 px-2.5 py-1 rounded-md bg-[#0a0914]/85 backdrop-blur-sm border border-indigo-400/35 text-[10px] font-mono font-bold text-indigo-300">
+            <span className="shrink-0 px-2.5 py-1 rounded-md neu-inset bg-[#0a0914]/90 border border-indigo-400/35 text-[10px] font-mono font-bold text-indigo-300">
               REM 90m
             </span>
           </div>
@@ -393,7 +397,7 @@ export const MoneyFinanceLabTab: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
       {/* Loan EMI */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1210] shrink-0">
           <HeroArtworkBackdrop src="/visuals/tab-env-security.jpg" alt="Loan EMI Calculator Visual" opacityClass="opacity-72 sm:opacity-88" />
           <div className="relative z-10 flex items-center justify-between gap-2">
@@ -453,14 +457,14 @@ export const MoneyFinanceLabTab: React.FC = () => {
             </label>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#08090c] border border-white/[0.08] flex flex-col gap-2">
+          <div className="neu-inset p-3.5 rounded-xl bg-[#08090c] border border-white/[0.08] flex flex-col gap-2">
             <div className="flex items-baseline justify-between">
               <span className="text-xs text-zinc-400 font-mono">Monthly EMI</span>
               <strong className="text-xl font-extrabold font-mono text-emerald-300 tabular-nums">
                 {currency}{Math.round(emiStats.emi).toLocaleString()}
               </strong>
             </div>
-            <div className="w-full h-2 rounded-full bg-amber-500/35 overflow-hidden">
+            <div className="neu-inset w-full h-2 rounded-full bg-amber-500/35 overflow-hidden">
               <div className="h-full bg-emerald-400" style={{ width: `${emiStats.principalShare}%` }} />
             </div>
             <div className="flex justify-between text-[11px] font-mono text-zinc-400">
@@ -477,7 +481,7 @@ export const MoneyFinanceLabTab: React.FC = () => {
       </section>
 
       {/* Compound SIP Savings */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1017] shrink-0">
           <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="Compound SIP Growth Visual" opacityClass="opacity-72 sm:opacity-88" />
           <div className="relative z-10 flex items-center justify-between gap-2">
@@ -485,7 +489,7 @@ export const MoneyFinanceLabTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">SIP &amp; Compound Savings</h2>
               <p className="text-xs text-zinc-300/90">Project compounded wealth growth over time.</p>
             </div>
-            <div className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#080b10]/90 border border-sky-400/25">
+            <div className="neu-tile shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#080b10]/90 border border-sky-400/25">
               <MiniRadialRing percent={sipStats.gainShare} color="#38bdf8" size={24} />
               <span className="text-[10.5px] font-mono font-bold text-white tabular-nums">+{sipStats.gainShare}%</span>
             </div>
@@ -525,14 +529,14 @@ export const MoneyFinanceLabTab: React.FC = () => {
             </label>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#08090c] border border-sky-400/25 flex flex-col gap-2">
+          <div className="neu-inset p-3.5 rounded-xl bg-[#08090c] border border-sky-400/25 flex flex-col gap-2">
             <div className="flex items-baseline justify-between">
               <span className="text-xs text-zinc-400 font-mono">Projected Corpus</span>
               <strong className="text-xl font-extrabold font-mono text-sky-300 tabular-nums">
                 {currency}{Math.round(sipStats.futureVal).toLocaleString()}
               </strong>
             </div>
-            <div className="w-full h-2 rounded-full bg-white/[0.06] overflow-hidden flex">
+            <div className="neu-inset w-full h-2 rounded-full bg-white/[0.06] overflow-hidden flex">
               <div className="h-full bg-sky-400" style={{ width: `${Math.max(0, 100 - sipStats.gainShare)}%` }} />
               <div className="h-full bg-emerald-400" style={{ width: `${sipStats.gainShare}%` }} />
             </div>
@@ -550,7 +554,7 @@ export const MoneyFinanceLabTab: React.FC = () => {
       </section>
 
       {/* 50 / 30 / 20 Paycheck Rule */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0e1017] shrink-0">
           <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="Income Split Visual" opacityClass="opacity-72 sm:opacity-88" />
           <div className="relative z-10 flex items-center justify-between gap-2">
@@ -558,7 +562,7 @@ export const MoneyFinanceLabTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">50 / 30 / 20 Income Allocator</h2>
               <p className="text-xs text-zinc-300/90">Balance needs, wants &amp; savings targets.</p>
             </div>
-            <div className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#080a0e]/90 border border-sky-400/25">
+            <div className="neu-inset shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#080a0e]/90 border border-sky-400/25">
               <MiniRadialRing percent={20} color="#34d399" size={24} />
               <span className="text-[10.5px] font-mono font-bold text-emerald-300">20% save</span>
             </div>
@@ -586,15 +590,15 @@ export const MoneyFinanceLabTab: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-3 gap-2 text-center font-mono">
-            <div className="p-3 rounded-xl bg-sky-500/12 border border-sky-400/30">
+            <div className="neu-tile p-3 rounded-xl bg-sky-500/12 border border-sky-400/30">
               <div className="text-[10px] text-sky-300">50% Needs</div>
               <strong className="text-sm text-white tabular-nums">{currency}{Math.round(incNum * 0.5).toLocaleString()}</strong>
             </div>
-            <div className="p-3 rounded-xl bg-amber-500/12 border border-amber-400/30">
+            <div className="neu-tile p-3 rounded-xl bg-amber-500/12 border border-amber-400/30">
               <div className="text-[10px] text-amber-300">30% Wants</div>
               <strong className="text-sm text-white tabular-nums">{currency}{Math.round(incNum * 0.3).toLocaleString()}</strong>
             </div>
-            <div className="p-3 rounded-xl bg-emerald-500/12 border border-emerald-400/30">
+            <div className="neu-tile p-3 rounded-xl bg-emerald-500/12 border border-emerald-400/30">
               <div className="text-[10px] text-emerald-300">20% Save</div>
               <strong className="text-sm text-emerald-300 tabular-nums">{currency}{Math.round(incNum * 0.2).toLocaleString()}</strong>
             </div>

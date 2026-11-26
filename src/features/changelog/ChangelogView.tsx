@@ -313,13 +313,13 @@ export default function ChangelogView({
       {/* ══════════════════════════════════════════════════════════════════════
           TOP HEADER CARD (Soul DevPortal Signature Theme + Visual Artwork)
       ══════════════════════════════════════════════════════════════════════ */}
-      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-2xl flex flex-col gap-5 portal-header-sheen">
+      <header className="neu-card w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 flex flex-col gap-5 portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="Soul Workspace Changelog Backdrop" />
         <div className="relative z-10 flex flex-col gap-5">
           {/* Top Badges + Quick Actions Row */}
           <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-5">
             <div className="flex items-start gap-4 min-w-0">
-              <div className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.1] flex items-center justify-center text-xl shrink-0 shadow-inner">
+              <div className="neu-inset w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.1] flex items-center justify-center text-xl shrink-0">
                 🧾
               </div>
               <div className="flex flex-col gap-2 min-w-0">
@@ -328,7 +328,7 @@ export default function ChangelogView({
                     <button
                       type="button"
                       onClick={onBack}
-                      className="px-2.5 py-0.5 rounded-full bg-[#16161c] border border-white/[0.1] text-zinc-300 hover:text-white cursor-pointer"
+                      className="neu-btn px-2.5 py-0.5 rounded-full bg-[#16161c] border border-white/[0.1] text-zinc-300 hover:text-white cursor-pointer"
                     >
                       ← Overview
                     </button>
@@ -357,20 +357,20 @@ export default function ChangelogView({
                 </p>
 
                 <div className="flex flex-wrap items-center gap-2 pt-0.5">
-                  <span className="px-2.5 py-1 rounded-lg bg-[#09090c] border border-white/[0.08] text-[11px] font-mono text-zinc-400">
+                  <span className="neu-inset px-2.5 py-1 rounded-lg bg-[#09090c] border border-white/[0.08] text-[11px] font-mono text-zinc-400">
                     soul-devportal/releases · git + sqlite-wal
                   </span>
                   <button
                     type="button"
                     onClick={() => onNavigate('code-updates')}
-                    className="px-3 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 text-xs font-bold text-emerald-200 cursor-pointer transition-colors"
+                    className="neu-btn px-3 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 text-xs font-bold text-emerald-200 cursor-pointer transition-colors"
                   >
                     🧬 Codebase Updates by Date →
                   </button>
                   <button
                     type="button"
                     onClick={() => downloadMarkdown('CHANGELOG.md', changelogMarkdown)}
-                    className="px-3 py-1 rounded-lg bg-[#16161c] border border-white/[0.1] hover:border-white/[0.22] text-xs font-semibold text-zinc-200 hover:text-white cursor-pointer"
+                    className="neu-btn px-3 py-1 rounded-lg bg-[#16161c] border border-white/[0.1] hover:border-white/[0.22] text-xs font-semibold text-zinc-200 hover:text-white cursor-pointer"
                   >
                     ⬇ Export .md
                   </button>
@@ -381,7 +381,7 @@ export default function ChangelogView({
 
             {/* Right 2x2 Stats Tiles (matching DocsView style) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2.5 lg:w-[320px] shrink-0">
-              <div className="p-3 rounded-xl bg-[#09090c]/90 border border-white/[0.08] flex flex-col gap-0.5">
+              <div className="p-3 rounded-xl neu-inset bg-[#09090c]/90 border border-white/[0.06] flex flex-col gap-0.5">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                   RELEASES
                 </span>
@@ -389,7 +389,7 @@ export default function ChangelogView({
                   {allReleases.length} milestones
                 </strong>
               </div>
-              <div className="p-3 rounded-xl bg-[#09090c]/90 border border-white/[0.08] flex flex-col gap-0.5">
+              <div className="p-3 rounded-xl neu-inset bg-[#09090c]/90 border border-white/[0.06] flex flex-col gap-0.5">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                   LATEST BUILD
                 </span>
@@ -397,7 +397,7 @@ export default function ChangelogView({
                   {allReleases[0]?.version || 'v0.0.1'}
                 </strong>
               </div>
-              <div className="p-3 rounded-xl bg-[#09090c]/90 border border-white/[0.08] flex flex-col gap-0.5">
+              <div className="p-3 rounded-xl neu-inset bg-[#09090c]/90 border border-white/[0.06] flex flex-col gap-0.5">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                   NEW FEATURES
                 </span>
@@ -405,7 +405,7 @@ export default function ChangelogView({
                   {statsTotals.features} shipped
                 </strong>
               </div>
-              <div className="p-3 rounded-xl bg-[#09090c]/90 border border-white/[0.08] flex flex-col gap-0.5">
+              <div className="p-3 rounded-xl neu-inset bg-[#09090c]/90 border border-white/[0.06] flex flex-col gap-0.5">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                   IMPROVEMENTS &amp; FIXES
                 </span>
@@ -448,7 +448,7 @@ export default function ChangelogView({
           />
 
           {/* Segmented Surface Filter Tab Bar */}
-          <div className="rounded-xl bg-[#09090c] border border-white/[0.08] p-1 flex flex-wrap items-center justify-between gap-2">
+          <div className="neu-tray rounded-xl bg-[#09090c] border border-white/[0.08] p-1 flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label="Changelog surface tabs">
               {CHANGELOG_SURFACE_TABS.map((tab) => {
                 const isSelected = surface === tab.id;
@@ -462,7 +462,7 @@ export default function ChangelogView({
                     onClick={() => setSurface(tab.id)}
                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                        ? 'text-white font-bold border border-white/20'
                         : 'text-zinc-400 hover:text-white hover:bg-white/[0.05] border border-transparent font-medium'
                     }`}
                   >
@@ -484,7 +484,7 @@ export default function ChangelogView({
             <button
               type="button"
               onClick={() => setBookmarkedOnly((p) => !p)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono border cursor-pointer transition-colors ${
+              className={`neu-btn px-3 py-1.5 rounded-lg text-xs font-mono border cursor-pointer transition-colors ${
                 bookmarkedOnly
                   ? 'bg-amber-500/20 border-amber-400/45 text-amber-300 font-bold'
                   : 'bg-[#16161c] border-white/[0.08] text-zinc-400 hover:text-white'
@@ -501,7 +501,7 @@ export default function ChangelogView({
       ══════════════════════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-6 items-start">
         {/* Main Changelog Release Panel */}
-        <article className="min-w-0 rounded-2xl bg-[#111115] border border-white/[0.08] p-5 sm:p-6 md:p-7 shadow-xl flex flex-col gap-5 portal-header-sheen">
+        <article className="min-w-0 rounded-2xl neu-card bg-[#111115] border border-white/[0.08] p-5 sm:p-6 md:p-7 flex flex-col gap-5 portal-header-sheen">
           {/* Panel Header + Callout Strip matching DocsView */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
             <div className="flex flex-col gap-0.5">
@@ -518,7 +518,7 @@ export default function ChangelogView({
                 type="button"
                 onClick={toggleExpandAll}
                 disabled={allAccordionKeys.length === 0}
-                className="px-3 py-1.5 rounded-xl bg-[#16161c] border border-white/[0.1] hover:border-sky-400/40 text-xs font-mono font-semibold text-zinc-200 hover:text-white disabled:opacity-40 cursor-pointer transition-colors"
+                className="neu-btn px-3 py-1.5 rounded-xl bg-[#16161c] border border-white/[0.1] hover:border-sky-400/40 text-xs font-mono font-semibold text-zinc-200 hover:text-white disabled:opacity-40 cursor-pointer transition-colors"
               >
                 {areAllExpanded ? '− Collapse All' : '+ Expand All'}
               </button>
@@ -526,9 +526,12 @@ export default function ChangelogView({
           </div>
 
           {/* Subtle Callout / Search Filter Strip (exact Docs SCOPE style!) */}
-          <div className="rounded-xl bg-[#0e141c] border border-sky-400/25 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
+          <div className="neu-inset rounded-xl bg-[#0b0d13] border border-sky-400/25 px-3.5 py-2 flex flex-wrap items-center justify-between gap-3 focus-within:border-sky-400/50 transition-colors">
             <div className="flex items-center gap-2.5 flex-1 min-w-[200px]">
-              <span className="text-sky-300 text-xs font-mono font-bold shrink-0">FILTER</span>
+              <svg className="w-3.5 h-3.5 text-sky-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
               <input
                 ref={searchRef}
                 type="text"
@@ -542,13 +545,13 @@ export default function ChangelogView({
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="text-zinc-400 hover:text-white text-xs cursor-pointer"
+                  className="px-1.5 py-0.5 rounded bg-white/[0.06] hover:bg-white/[0.12] text-zinc-300 hover:text-white text-[10px] font-mono cursor-pointer shrink-0"
                 >
-                  ✕
+                  ✕ Clear
                 </button>
               )}
             </div>
-            <span className="text-[11px] font-mono text-zinc-400 shrink-0">
+            <span className="text-[11px] font-mono text-zinc-400 shrink-0 tabular-nums">
               {filteredReleases.length} of {allReleases.length} shown
             </span>
           </div>
@@ -556,7 +559,7 @@ export default function ChangelogView({
           {/* Chronological Release Entries (Version/Date Gutter + Right Timeline Column) */}
           <div className="flex flex-col pt-1">
             {filteredReleases.length === 0 ? (
-              <div className="rounded-xl bg-[#09090c] border border-white/[0.08] p-10 text-center flex flex-col items-center gap-2.5">
+              <div className="neu-inset rounded-xl bg-[#09090c] border border-white/[0.08] p-10 text-center flex flex-col items-center gap-2.5">
                 <p className="text-sm font-bold text-white">No releases matched your filter</p>
                 <p className="text-xs text-zinc-400">
                   Reset your search term or surface filter to view all workspace milestones.
@@ -568,7 +571,7 @@ export default function ChangelogView({
                     setBookmarkedOnly(false);
                     setSearchQuery('');
                   }}
-                  className="mt-1 px-4 py-1.5 rounded-xl bg-white text-zinc-950 text-xs font-bold cursor-pointer"
+                  className="neu-btn mt-1 px-4 py-1.5 rounded-xl bg-white text-zinc-950 text-xs font-bold cursor-pointer"
                 >
                   Show All Releases
                 </button>
@@ -603,7 +606,7 @@ export default function ChangelogView({
 
                     {/* Right Entry Content */}
                     {rel.isAnnouncement ? (
-                      <div className="rounded-2xl bg-[#14131c] border border-purple-500/35 p-5 flex flex-col gap-3 portal-header-sheen">
+                      <div className="neu-card rounded-2xl bg-[#14131c] border border-purple-500/35 p-5 flex flex-col gap-3 portal-header-sheen">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-500/15 border border-purple-500/30 text-[10px] font-mono font-bold uppercase tracking-wider text-purple-300">
                             <span aria-hidden="true">✦</span>
@@ -654,7 +657,7 @@ export default function ChangelogView({
                             <button
                               type="button"
                               onClick={() => onNavigate(rel.ctaRoute!)}
-                              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-400/35 hover:bg-purple-500/30 text-xs font-semibold text-purple-200 cursor-pointer"
+                              className="neu-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-400/35 hover:bg-purple-500/30 text-xs font-semibold text-purple-200 cursor-pointer"
                             >
                               <span>{rel.ctaLabel || 'Open Surface'} →</span>
                             </button>
@@ -678,7 +681,7 @@ export default function ChangelogView({
                                 </span>
                               ))}
                               {rel.commitRef && (
-                                <code className="px-2 py-0.5 rounded bg-[#09090c] border border-white/[0.08] text-[10px] font-mono text-zinc-400">
+                                <code className="neu-inset px-2 py-0.5 rounded bg-[#09090c] border border-white/[0.08] text-[10px] font-mono text-zinc-400">
                                   {rel.commitRef}
                                 </code>
                               )}
@@ -689,7 +692,7 @@ export default function ChangelogView({
                             <button
                               type="button"
                               onClick={() => toggleStarRelease(rel.id)}
-                              className={`w-7 h-7 rounded-lg border flex items-center justify-center text-xs cursor-pointer transition-colors ${
+                              className={`neu-btn w-7 h-7 rounded-lg border flex items-center justify-center text-xs cursor-pointer transition-colors ${
                                 isStarred
                                   ? 'bg-amber-500/15 border-amber-400/40 text-amber-300'
                                   : 'bg-[#16161c] border-white/[0.08] text-zinc-400 hover:text-white'
@@ -734,13 +737,20 @@ export default function ChangelogView({
 
         {/* Right Sticky "ON THIS PAGE" Panel matching DocsView Card Style */}
         <aside
-          className="rounded-2xl bg-[#111115] border border-white/[0.08] p-3.5 shadow-xl hidden lg:flex flex-col gap-3 sticky top-4 max-h-[calc(100vh-140px)]"
+          className="rounded-2xl neu-card bg-[#111115] border border-white/[0.08] p-3.5 hidden lg:flex flex-col gap-3 sticky top-4 max-h-[calc(100dvh-7.75rem)]"
           aria-label="Changelog versions on this page"
         >
           <div className="flex items-center justify-between gap-2 pb-2 border-b border-white/[0.08]">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-[#16161c] border border-white/[0.1] flex items-center justify-center text-[11px]">
-                📑
+              <span className="neu-inset w-6 h-6 rounded-lg bg-[#16161c] border border-white/[0.1] flex items-center justify-center text-sky-300">
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <line x1="8" y1="6" x2="21" y2="6" />
+                  <line x1="8" y1="12" x2="21" y2="12" />
+                  <line x1="8" y1="18" x2="21" y2="18" />
+                  <line x1="3" y1="6" x2="3.01" y2="6" />
+                  <line x1="3" y1="12" x2="3.01" y2="12" />
+                  <line x1="3" y1="18" x2="3.01" y2="18" />
+                </svg>
               </span>
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-200">
                 ON THIS PAGE
@@ -760,7 +770,7 @@ export default function ChangelogView({
             className="h-8 px-2.5 rounded-lg bg-[#09090c] border border-white/[0.08] text-[11px] font-mono text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
           />
 
-          <nav className="flex-1 min-h-0 overflow-y-auto custom-scrollbar flex flex-col gap-1 pr-0.5">
+          <nav className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden sidebar-scroll flex flex-col gap-1 px-1 py-1">
             {visibleRailReleases.map((rel) => {
               const isActive = activeAnchorId === rel.id;
               return (
@@ -795,28 +805,28 @@ export default function ChangelogView({
               <button
                 type="button"
                 onClick={() => onNavigate('projects')}
-                className="px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-emerald-400/35 text-zinc-300 hover:text-white text-left font-mono cursor-pointer truncate"
+                className="neu-btn px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-emerald-400/35 text-zinc-300 hover:text-white text-left font-mono cursor-pointer truncate"
               >
                 Apps ({projects.length})
               </button>
               <button
                 type="button"
                 onClick={() => onNavigate('packages')}
-                className="px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-purple-400/35 text-zinc-300 hover:text-white text-left font-mono cursor-pointer truncate"
+                className="neu-btn px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-purple-400/35 text-zinc-300 hover:text-white text-left font-mono cursor-pointer truncate"
               >
                 SDKs ({packages.length})
               </button>
               <button
                 type="button"
                 onClick={() => onNavigate('code-updates')}
-                className="col-span-2 px-2 py-1.5 rounded-lg bg-sky-500/12 border border-sky-400/30 hover:border-sky-400/50 text-sky-200 hover:text-white text-left font-mono cursor-pointer truncate"
+                className="neu-btn col-span-2 px-2 py-1.5 rounded-lg bg-sky-500/12 border border-sky-400/30 hover:border-sky-400/50 text-sky-200 hover:text-white text-left font-mono cursor-pointer truncate"
               >
                 🧬 Codebase Updates by Date →
               </button>
               <button
                 type="button"
                 onClick={() => onNavigate('everyday')}
-                className="col-span-2 px-2 py-1.5 rounded-lg bg-emerald-500/12 border border-emerald-500/30 hover:border-emerald-400/50 text-emerald-200 hover:text-white text-left font-mono cursor-pointer truncate"
+                className="neu-btn col-span-2 px-2 py-1.5 rounded-lg bg-emerald-500/12 border border-emerald-500/30 hover:border-emerald-400/50 text-emerald-200 hover:text-white text-left font-mono cursor-pointer truncate"
               >
                 Everyday Utilities →
               </button>

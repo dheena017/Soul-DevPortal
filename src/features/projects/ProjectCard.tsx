@@ -49,7 +49,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] gap-4 h-full portal-card-hover">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.07] gap-4 h-full">
       {/* Card Header: Brand, Meta, Ports */}
         <div
           className="flex flex-col gap-3.5"
@@ -59,7 +59,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
               <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden shadow-inner portal-emblem-hover"
+                className="neu-inset w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border overflow-hidden portal-emblem-hover"
                 style={{
                   borderColor: `${brand.themeColor}40`,
                   background: `${brand.themeColor}15`,
@@ -181,7 +181,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
               href={`http://localhost:${project.frontendPort}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 hover:bg-emerald-500/25 transition-all shadow-[0_0_10px_rgba(16,185,129,0.12)]"
+              className="neu-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 hover:bg-emerald-500/25 transition-all shadow-[0_0_10px_rgba(16,185,129,0.12)]"
               title={`Launch on http://localhost:${project.frontendPort}`}
               onClick={(e) => e.stopPropagation()}
             >
@@ -192,7 +192,7 @@ export default function ProjectCard({ project, onSelectProject }: ProjectCardPro
           {onSelectProject && (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all shadow-md shadow-white/10"
+              className="neu-btn inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all"
               onClick={handleCardClick}
               title={`Open deep detail view for ${formattedTitle}`}
             >

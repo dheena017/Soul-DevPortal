@@ -14,8 +14,8 @@ export default function EmptyState({
   onAction,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-[#111115] border border-white/[0.08] text-center gap-4 shadow-2xl fade-in-up portal-header-sheen portal-stagger" role="status">
-      <div className="w-12 h-12 rounded-xl bg-[#09090c] border border-white/[0.08] flex items-center justify-center text-zinc-300 portal-emblem-hover" aria-hidden="true">
+    <div className="flex flex-col items-center justify-center p-12 rounded-2xl neu-card bg-[#111115] border border-white/[0.08] text-center gap-4 fade-in-up portal-header-sheen portal-stagger" role="status">
+      <div className="w-12 h-12 rounded-xl neu-inset bg-[#09090c] border border-white/[0.07] flex items-center justify-center text-zinc-300 portal-emblem-hover" aria-hidden="true">
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -27,7 +27,7 @@ export default function EmptyState({
       {onAction && (
         <button
           type="button"
-          className="px-4 py-2 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all shadow-md shadow-white/10 cursor-pointer"
+          className="neu-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all cursor-pointer"
           onClick={onAction}
         >
           {actionLabel}

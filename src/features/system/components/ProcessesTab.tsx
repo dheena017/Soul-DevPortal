@@ -366,7 +366,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
       {/* Unified 3-Section Switcher, Filter Strip & Search */}
       <div className="p-4 rounded-2xl system-card flex flex-col gap-3">
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
-          <div className="inline-flex flex-wrap items-center gap-1 rounded-xl bg-[#16161c] border border-white/[0.08] p-1">
+          <div className="inline-flex flex-wrap items-center gap-1 rounded-xl neu-tray bg-[#16161c] border border-white/[0.06] p-1" role="tablist" aria-label="Process sections">
             {(
               [
                 { id: 'processes', label: 'All Processes', count: live.processes.length, badge: 'bg-sky-500/25 text-sky-200 border-sky-500/40' },
@@ -382,7 +382,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                   onClick={() => switchSection(tab.id)}
                   className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all cursor-pointer ${
                     active
-                      ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                      ? 'text-white font-bold border border-white/20'
                       : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
                   }`}
                 >
@@ -443,7 +443,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
             <button
               type="button"
               onClick={toggleAllVisible}
-              className="px-3 py-2 rounded-xl bg-[#16161c] hover:bg-white/[0.06] border border-white/[0.08] text-xs font-mono font-bold text-zinc-200 cursor-pointer shrink-0 transition-colors"
+              className="neu-btn px-3 py-2 rounded-xl bg-[#16161c] hover:bg-white/[0.06] border border-white/[0.08] text-xs font-mono font-bold text-zinc-200 cursor-pointer shrink-0 transition-colors"
             >
               {allVisibleExpanded ? '− Collapse All' : '+ Expand Visible'}
             </button>
@@ -611,7 +611,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                           <td colSpan={9} className="p-4 border-t border-sky-400/15">
                             <div className="flex flex-col gap-3 text-xs sys-drawer-open">
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Identity &amp; Process Tree
                                   </span>
@@ -627,7 +627,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                                   )}
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Listeners &amp; Disk I/O Footprint
                                   </span>
@@ -650,7 +650,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                                   </span>
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <div className="flex items-center justify-between gap-2">
                                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                       Command Line (Redacted)
@@ -663,7 +663,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                                 </div>
                               </div>
 
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div className="flex flex-col gap-0.5 min-w-0">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Executable Image Path
@@ -812,7 +812,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                         <tr className="bg-[#0b0b0f]">
                           <td colSpan={7} className="p-4 border-t border-emerald-400/15">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                   Owning Process &amp; Memory
                                 </span>
@@ -824,7 +824,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                                 </span>
                               </div>
 
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                   Binding &amp; Exposure Posture
                                 </span>
@@ -840,7 +840,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                                 </span>
                               </div>
 
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                 <div className="flex items-center justify-between gap-2">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Owning Image Path
@@ -936,7 +936,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                               conn.status === 'ESTABLISHED'
                                 ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300'
                                 : conn.status === 'TIME_WAIT'
-                                  ? 'bg-zinc-800 border-white/[0.1] text-zinc-400'
+                                  ? 'bg-[#16161c] border-white/[0.1] text-zinc-400'
                                   : 'bg-amber-500/15 border-amber-500/35 text-amber-300'
                             }`}
                           >
@@ -948,13 +948,13 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                         <tr className="bg-[#0b0b0f]">
                           <td colSpan={6} className="p-4 border-t border-amber-400/15">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Local Socket</span>
                                 <code className="font-mono text-white">
                                   {conn.localAddress}:{conn.localPort} ({conn.protocol})
                                 </code>
                               </div>
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                 <div className="flex items-center justify-between gap-2">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Remote Endpoint</span>
                                   <CopyButton text={`${conn.remoteAddress}:${conn.remotePort}`} label="Copy" copiedLabel="Copied" />
@@ -963,7 +963,7 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
                                   {conn.remoteAddress}:{conn.remotePort} · {conn.remoteScope}
                                 </code>
                               </div>
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">Process Binary</span>
                                 <code className="font-mono text-zinc-200 break-all">
                                   {conn.exePath || 'Closed PID / Kernel Socket Tear-Down'}

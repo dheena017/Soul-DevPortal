@@ -420,7 +420,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
       {/* Unified 4-Section Switcher, Filter & Search Bar */}
       <div className="p-4 rounded-2xl system-card flex flex-col gap-3">
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
-          <div className="inline-flex flex-wrap items-center gap-1 rounded-xl bg-[#16161c] border border-white/[0.08] p-1">
+          <div className="inline-flex flex-wrap items-center gap-1 rounded-xl neu-tray bg-[#16161c] border border-white/[0.06] p-1" role="tablist" aria-label="Startup and services sections">
             {(
               [
                 { id: 'startup', label: 'Boot Startup Apps', count: startupApps.length, badge: 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40' },
@@ -437,7 +437,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                   onClick={() => switchSection(tab.id)}
                   className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all cursor-pointer ${
                     active
-                      ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                      ? 'text-white font-bold border border-white/20'
                       : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
                   }`}
                 >
@@ -483,7 +483,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
             <button
               type="button"
               onClick={toggleAllVisible}
-              className="px-3 py-2 rounded-xl bg-[#16161c] hover:bg-white/[0.06] border border-white/[0.08] text-xs font-mono font-bold text-zinc-200 cursor-pointer shrink-0 transition-colors"
+              className="neu-btn px-3 py-2 rounded-xl bg-[#16161c] hover:bg-white/[0.06] border border-white/[0.08] text-xs font-mono font-bold text-zinc-200 cursor-pointer shrink-0 transition-colors"
             >
               {allVisibleExpanded ? '− Collapse All' : '+ Expand Visible'}
             </button>
@@ -654,7 +654,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                           <td colSpan={5} className="p-4 border-t border-cyan-400/15">
                             <div className="flex flex-col gap-3">
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Publisher &amp; File Signature
                                   </span>
@@ -667,7 +667,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                   </span>
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Task Manager StartupApproved
                                   </span>
@@ -683,7 +683,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                   </span>
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Registry Key &amp; CLI Flags
                                   </span>
@@ -694,7 +694,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                 </div>
                               </div>
 
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div className="flex flex-col gap-0.5 min-w-0">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Full Launch Command &amp; Resolved Target
@@ -806,7 +806,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                         <td className="py-2.5 px-3">
                           <span
                             className={`px-2 py-0.5 rounded-md border text-[10px] font-mono font-bold capitalize ${
-                              isRunning ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300' : 'bg-zinc-800 border-white/[0.1] text-zinc-400'
+                              isRunning ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300' : 'bg-[#16161c] border-white/[0.1] text-zinc-400'
                             }`}
                           >
                             {svc.status}
@@ -833,7 +833,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                           <td colSpan={6} className="p-4 border-t border-emerald-400/15">
                             <div className="flex flex-col gap-3">
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Description &amp; Publisher
                                   </span>
@@ -843,7 +843,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                   </p>
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Security Context &amp; Process
                                   </span>
@@ -857,7 +857,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                   </span>
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1.5">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1.5">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Dependencies &amp; Load Group
                                   </span>
@@ -878,7 +878,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                 </div>
                               </div>
 
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div className="flex flex-col gap-0.5 min-w-0">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Service Binary Command &amp; Host Arguments
@@ -1010,7 +1010,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                           <td colSpan={5} className="p-4 border-t border-violet-400/15">
                             <div className="flex flex-col gap-3">
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Task Author &amp; Origin
                                   </span>
@@ -1018,7 +1018,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                   <span className="text-[11px] font-mono text-zinc-400">Folder: {task.taskPath}</span>
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Configured Triggers
                                   </span>
@@ -1026,7 +1026,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                   <span className="text-[11px] font-mono text-zinc-400">State: {task.state}</span>
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Task Description
                                   </span>
@@ -1036,7 +1036,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                 </div>
                               </div>
 
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div className="flex flex-col gap-0.5 min-w-0">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Scheduled Action / Handler
@@ -1149,7 +1149,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                         <td className="py-2.5 pl-3 pr-5 text-right">
                           <span
                             className={`px-2 py-0.5 rounded-md border text-[10px] font-mono font-bold ${
-                              isRunning ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300' : 'bg-zinc-800 border-white/[0.1] text-zinc-400'
+                              isRunning ? 'bg-emerald-500/15 border-emerald-500/35 text-emerald-300' : 'bg-[#16161c] border-white/[0.1] text-zinc-400'
                             }`}
                           >
                             {drv.state}
@@ -1161,7 +1161,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                           <td colSpan={5} className="p-4 border-t border-amber-400/15">
                             <div className="flex flex-col gap-3">
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Load Stage Semantics
                                   </span>
@@ -1169,7 +1169,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                   <span className="text-[11px] text-zinc-400">{driverStageDescription(drv.startMode)}</span>
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Driver Architecture
                                   </span>
@@ -1179,7 +1179,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                   </span>
                                 </div>
 
-                                <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
+                                <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col gap-1">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Runtime Status
                                   </span>
@@ -1190,7 +1190,7 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
                                 </div>
                               </div>
 
-                              <div className="p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                              <div className="neu-tile p-3 rounded-xl bg-[#14141a] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div className="flex flex-col gap-0.5 min-w-0">
                                   <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                                     Kernel Driver SYS Path

@@ -16,7 +16,7 @@ export interface PackageDetailHeaderProps {
 export function PackageIconSvg({ pkg }: { pkg: PackageData }) {
   if (pkg.pythonModule || pkg.hasPythonManifest) {
     return (
-      <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner portal-emblem-hover" title="Python Package">
+      <div className="neu-inset w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 portal-emblem-hover" title="Python Package">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
           <path
             d="M11.91 2C6.91 2 7.23 4.17 7.23 4.17L7.24 6.42H12V7.1H5.16S2 6.74 2 11.75c0 5 2.76 4.83 2.76 4.83H6.4v-2.31s-.15-2.76 2.71-2.76h4.63s2.59.04 2.59-2.52V4.56S16.92 2 11.91 2zm-2.07 1.54a.88.88 0 1 1 0 1.76.88.88 0 0 1 0-1.76z"
@@ -43,7 +43,7 @@ export function PackageIconSvg({ pkg }: { pkg: PackageData }) {
 
   if (pkg.name?.includes('config')) {
     return (
-      <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner text-zinc-300 portal-emblem-hover" title="Configuration Package">
+      <div className="neu-inset w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 text-zinc-300 portal-emblem-hover" title="Configuration Package">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="3" />
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
@@ -53,7 +53,7 @@ export function PackageIconSvg({ pkg }: { pkg: PackageData }) {
   }
 
   return (
-    <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner text-zinc-300 portal-emblem-hover" title="NPM Workspace Package">
+    <div className="neu-inset w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 text-zinc-300 portal-emblem-hover" title="NPM Workspace Package">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55L16.5 14.6a1.78 1.78 0 0 0 0-3.2z" />
         <polyline points="3.29 7 12 12 20.71 7" />
@@ -71,7 +71,7 @@ export default function PackageDetailHeader({
   onBack,
 }: PackageDetailHeaderProps) {
   return (
-    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6 portal-header-sheen">
+    <header className="w-full neu-card bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col gap-4 sm:gap-6 portal-header-sheen">
       <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="Package Module Visual" opacityClass="opacity-80 sm:opacity-95" />
       <div className="relative z-10 flex flex-col gap-4 sm:gap-6">
       {/* ── Navigation Breadcrumb Row ── */}
@@ -80,7 +80,7 @@ export default function PackageDetailHeader({
           {onBack ? (
             <button
               type="button"
-              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="neu-btn group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold cursor-pointer"
               onClick={onBack}
               title="Return to packages dashboard"
             >
@@ -93,7 +93,7 @@ export default function PackageDetailHeader({
           ) : (
             <a
               href="#packages"
-              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="neu-btn group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold cursor-pointer"
               title="Return to packages dashboard"
             >
               <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -118,8 +118,8 @@ export default function PackageDetailHeader({
             Pillar 2: Packages Dashboard
           </a>
           <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
-          <strong className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-[175px] sm:max-w-sm">{pkg.name || `@workspace/${pkg.id}`}</strong>
-          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-500/10 border border-purple-500/25 text-purple-400 shadow-sm inline-flex items-center gap-1.5">
+          <strong className="neu-tile inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#1a1a22] border border-white/15 text-white font-semibold truncate max-w-[175px] sm:max-w-sm">{pkg.name || `@workspace/${pkg.id}`}</strong>
+          <span className="neu-tile px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-500/10 border border-purple-500/25 text-purple-400 inline-flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
             <span className="sm:hidden">INSPECTOR</span>
             <span className="hidden sm:inline">SUB-PAGE: PACKAGE INSPECTOR</span>
@@ -127,7 +127,7 @@ export default function PackageDetailHeader({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-300 select-none shadow-sm" title={`Last updated: ${pkg.updatedAt || pkg.relativeTime || 'recently'}`}>
+          <div className="neu-tile inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-300 select-none" title={`Last updated: ${pkg.updatedAt || pkg.relativeTime || 'recently'}`}>
             <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
             <span>Active Package · {totalExports} Symbols</span>
             {pkg.relativeTime && (
@@ -227,7 +227,7 @@ export default function PackageDetailHeader({
             aria-selected={activeTab === 'docs'}
             className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'docs'
-                ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                ? 'text-white font-bold border border-white/20'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('docs')}
@@ -245,7 +245,7 @@ export default function PackageDetailHeader({
             aria-selected={activeTab === 'api'}
             className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'api'
-                ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                ? 'text-white font-bold border border-white/20'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('api')}
@@ -266,7 +266,7 @@ export default function PackageDetailHeader({
             aria-selected={activeTab === 'playground'}
             className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'playground'
-                ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                ? 'text-white font-bold border border-white/20'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('playground')}
@@ -283,7 +283,7 @@ export default function PackageDetailHeader({
             aria-selected={activeTab === 'manifest'}
             className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'manifest'
-                ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                ? 'text-white font-bold border border-white/20'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('manifest')}

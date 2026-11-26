@@ -125,7 +125,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
   return (
     <div className="w-full flex flex-col gap-6 pb-12 animate-in fade-in duration-300 portal-stagger">
       {/* ── Modern Hero Header ── */}
-      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5 portal-header-sheen">
+      <header className="w-full neu-card bg-[#111115] border border-white/[0.08] rounded-2xl p-5 md:p-6 flex flex-col gap-5 portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="Scripts & Command Runners Visual" />
         <div className="relative z-10 flex flex-col gap-5">
         {/* Breadcrumb & Top Actions Row */}
@@ -133,7 +133,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              className="group inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="neu-btn group inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold cursor-pointer"
               onClick={() => onNavigate('overview')}
               title="Return to Overview"
             >
@@ -144,11 +144,11 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
             </button>
             <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 font-medium">Soul Workspace</span>
             <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
-            <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e28] border border-white/15 text-white font-semibold shadow-sm">Scripts &amp; Automation Runners</strong>
+            <strong className="neu-tile inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e28] border border-white/15 text-white font-semibold">Scripts &amp; Automation Runners</strong>
           </div>
 
           <div className="flex items-center gap-2.5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-200 select-none shadow-sm">
+            <div className="neu-tile inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-200 select-none">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></span>
@@ -165,7 +165,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
         {/* Title & Subtitle */}
         <div className="flex items-start sm:items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-amber-400 shrink-0 shadow-lg">
+          <div className="neu-inset w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-amber-400 shrink-0">
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="4 17 10 11 4 5" />
               <line x1="12" y1="19" x2="20" y2="19" />
@@ -188,25 +188,25 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
         {/* ── KPI Metric Cards Ribbon ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 portal-grid-stagger">
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+          <div className="flex flex-col p-3.5 rounded-xl neu-tile bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-xl font-extrabold text-amber-400 font-mono">19</span>
             <span className="text-xs font-semibold text-white mt-1">Canonical Commands</span>
             <span className="text-[11px] text-zinc-400">0 redundant aliases</span>
           </div>
 
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+          <div className="flex flex-col p-3.5 rounded-xl neu-tile bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-xl font-extrabold text-emerald-400 font-mono">8</span>
             <span className="text-xs font-semibold text-white mt-1">Target Applications</span>
             <span className="text-[11px] text-zinc-400">Dual frontend &amp; backend</span>
           </div>
 
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+          <div className="flex flex-col p-3.5 rounded-xl neu-tile bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-xl font-extrabold text-indigo-400 font-mono">4</span>
             <span className="text-xs font-semibold text-white mt-1">Core Orchestrators</span>
             <span className="text-[11px] text-zinc-400">All / Client / Server / Project</span>
           </div>
 
-          <div className="flex flex-col p-3.5 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+          <div className="flex flex-col p-3.5 rounded-xl neu-tile bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
             <span className="text-xl font-extrabold text-sky-400 font-mono">100%</span>
             <span className="text-xs font-semibold text-white mt-1">Port Protected</span>
             <span className="text-[11px] text-zinc-400">Automated --kill-port</span>
@@ -225,7 +225,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
       </header>
 
       {/* ── Search & View Mode Toolbar ── */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 bg-[#111115] border border-white/[0.08] rounded-xl shadow-lg">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 neu-card bg-[#111115] border border-white/[0.08] rounded-xl">
         {/* Search Box */}
         <div className="relative flex-1 min-w-[260px] flex items-center">
           <svg className="absolute left-3 w-4 h-4 text-zinc-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -259,13 +259,15 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
         </div>
 
         {/* View Mode Segmented Controls */}
-        <div className="inline-flex p-1 bg-[#09090c] border border-white/[0.08] rounded-lg gap-1">
+        <div className="neu-tray inline-flex p-1 bg-[#09090c] border border-white/[0.08] rounded-lg gap-1" role="tablist" aria-label="View mode">
           <button
             type="button"
+            role="tab"
+            aria-selected={viewMode === 'grid'}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer ${
               viewMode === 'grid'
-                ? 'bg-zinc-800 text-white shadow-sm border border-white/20 font-bold'
-                : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
+                ? 'text-white border border-white/20 font-bold'
+                : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => {
               consoleLogger.action('SCRIPTS', 'Switched view mode to Deck Grid');
@@ -276,10 +278,12 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected={viewMode === 'table'}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer ${
               viewMode === 'table'
-                ? 'bg-zinc-800 text-white shadow-sm border border-white/20 font-bold'
-                : 'text-zinc-400 hover:text-white hover:bg-white/[0.06]'
+                ? 'text-white border border-white/20 font-bold'
+                : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
             }`}
             onClick={() => {
               consoleLogger.action('SCRIPTS', 'Switched view mode to Dense Table');
@@ -293,7 +297,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
       {/* ── Category Filter Pills & Runtime Selector Row ── */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#09090c] border border-white/[0.08] rounded-xl" role="tablist" aria-label="Filter scripts by category">
+        <div className="neu-tray flex flex-wrap items-center gap-1.5 p-1 bg-[#09090c] border border-white/[0.08] rounded-xl" role="tablist" aria-label="Filter scripts by category">
           {categories.map((cat) => {
             const isActive = filterCategory === cat.id;
             return (
@@ -304,7 +308,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                    ? 'text-white font-bold border border-white/20'
                     : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
                 }`}
                 onClick={() => setFilterCategory(cat.id)}
@@ -345,12 +349,12 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
             return (
               <div
                 key={script.id}
-                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] gap-3.5 portal-card-hover"
+                className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.08] gap-3.5 portal-card-hover"
               >
                 {/* Card Top: Code Pill, Category Badge, Copy Button */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-wrap min-w-0">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#09090c] border border-white/[0.08] min-w-0">
+                    <div className="neu-inset inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#09090c] border border-white/[0.08] min-w-0">
                       <span className="text-amber-400 font-mono font-bold text-xs select-none">$</span>
                       <code className="text-xs font-mono font-bold text-white truncate max-w-[190px]">
                         {formattedRunCmd}
@@ -423,12 +427,12 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
 
                 {/* Drawer with full raw command and copy option */}
                 {isExpanded && (
-                  <div className="flex flex-col gap-2.5 p-3 rounded-xl bg-[#09090c] border border-white/[0.08] text-xs font-mono animate-in fade-in duration-150">
+                  <div className="neu-inset flex flex-col gap-2.5 p-3 rounded-xl bg-[#09090c] border border-white/[0.08] text-xs font-mono animate-in fade-in duration-150">
                     <div className="flex flex-col gap-1">
                       <span className="text-zinc-400 font-semibold text-[10px] uppercase tracking-wider">
                         Raw Execution String:
                       </span>
-                      <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#16161c] border border-white/[0.08]">
+                      <div className="neu-tile flex items-center justify-between gap-2 p-2 rounded-lg bg-[#16161c] border border-white/[0.08]">
                         <code className="text-zinc-200 text-[11px] break-all">
                           {rootScripts[script.id] || script.command}
                         </code>
@@ -447,7 +451,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
         </div>
       ) : (
         /* ── Dense Table View ── */
-        <div className="w-full bg-[#121216] border border-white/[0.08] rounded-2xl overflow-x-auto shadow-2xl">
+        <div className="w-full neu-inset bg-[#121216] border border-white/[0.08] rounded-2xl overflow-x-auto">
           <table className="w-full border-collapse text-left text-xs font-sans">
             <thead>
               <tr className="border-b border-white/[0.08] bg-[#09090c] text-zinc-400">

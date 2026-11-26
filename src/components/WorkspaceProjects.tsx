@@ -41,12 +41,12 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
 
   return (
     <article className="w-full flex flex-col gap-6 pb-12">
-      <header className="w-full bg-[#151519] border border-[#212126] rounded-2xl p-5 md:p-6 shadow-2xl flex flex-col gap-5">
+      <header className="w-full neu-card bg-[#151519] border border-[#212126] rounded-2xl p-5 md:p-6 flex flex-col gap-5">
         <div className="flex items-center gap-3 text-xs">
           {onBack && (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#151519] transition-all font-semibold"
+              className="neu-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#151519] border border-[#212126] text-neutral-300 hover:text-neutral-200 hover:border-neutral-500 hover:bg-[#151519] transition-all font-semibold cursor-pointer"
               onClick={onBack}
             >
               ← Back to Overview
@@ -86,15 +86,17 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5 p-1 neu-tray bg-[#09090c] border border-[#212126] rounded-xl" role="tablist" aria-label="Filter by framework">
             {frameworksList.map((fw) => (
               <button
                 key={fw}
                 type="button"
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                role="tab"
+                aria-selected={filterFramework === fw}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   filterFramework === fw
-                    ? 'bg-[#151519] text-neutral-200 font-bold shadow-sm border border-[#212126]'
-                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:bg-[#151519]'
+                    ? 'text-neutral-200 font-bold border border-[#212126]'
+                    : 'bg-transparent border border-transparent text-neutral-400 hover:text-neutral-200'
                 }`}
                 onClick={() => setFilterFramework(fw)}
               >
@@ -107,7 +109,7 @@ export default function WorkspaceProjects({ projects = [], onBack }: WorkspacePr
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredProjects.map((p) => (
-          <div key={p.id} className="p-5 rounded-2xl bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] shadow-2xl transition-all duration-200 flex flex-col gap-4">
+          <div key={p.id} className="p-5 rounded-2xl neu-card neu-card-interactive bg-[#151519] border border-[#212126] hover:border-neutral-500 transition-all duration-200 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-neutral-200">{p.title}</h3>
               <CopyButton text={`http://localhost:${p.frontendPort || 5173}`} label="Copy URL" variant="compact" />

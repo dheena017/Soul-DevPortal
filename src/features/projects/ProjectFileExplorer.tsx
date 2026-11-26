@@ -515,7 +515,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
 
             <button
               type="button"
-              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500 transition-all ${
+              className={`neu-btn inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-sans font-medium bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500 transition-all ${
                 isCopied ? 'text-neutral-200 border-neutral-500 bg-[#151519]' : ''
               }`}
               onClick={(e) => handleCopyPath(node.path, e)}
@@ -553,11 +553,11 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
   };
 
   return (
-    <div className="w-full bg-[#151519] border border-[#212126] rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-all duration-200">
+    <div className="neu-card w-full bg-[#151519] border border-[#212126] rounded-2xl overflow-hidden flex flex-col transition-all duration-200">
       {/* Top Banner Toolbar */}
       <div className="p-4 md:px-5 md:py-3.5 border-b border-[#19191d] bg-[#151519] flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#070708] border border-[#212126] text-xs font-mono text-neutral-300">
+          <div className="neu-inset inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#070708] border border-[#212126] text-xs font-mono text-neutral-300">
             <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
             </svg>
@@ -566,13 +566,13 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="px-2.5 py-1 rounded-md bg-[#151519] border border-[#212126] text-neutral-300">
+            <span className="neu-tile px-2.5 py-1 rounded-md bg-[#151519] border border-[#212126] text-neutral-300">
               <strong className="text-neutral-200 font-bold">{totalDirs}</strong> directories
             </span>
-            <span className="px-2.5 py-1 rounded-md bg-[#151519] border border-[#212126] text-neutral-300">
+            <span className="neu-tile px-2.5 py-1 rounded-md bg-[#151519] border border-[#212126] text-neutral-300">
               <strong className="text-neutral-200 font-bold">{totalFiles}</strong> source files
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#151519] border border-[#212126] text-neutral-300 font-semibold shadow-sm">
+            <span className="neu-tile inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#151519] border border-[#212126] text-neutral-300 font-semibold">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
               <span><strong className="font-bold">{fileTree.length}</strong> items indexed</span>
             </span>
@@ -581,11 +581,13 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
 
         {/* View Mode & Controls */}
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="inline-flex p-1 bg-[#070708] border border-[#212126] rounded-lg gap-1">
+          <div className="inline-flex p-1 neu-tray bg-[#070708] border border-[#212126] rounded-lg gap-1" role="tablist" aria-label="File explorer views">
             <button
               type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
-                viewMode === 'tree' ? 'bg-[#151519] text-neutral-200 shadow-sm border border-[#212126]' : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#151519]'
+              role="tab"
+              aria-selected={viewMode === 'tree'}
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                viewMode === 'tree' ? 'text-neutral-200 border border-[#212126]' : 'border border-transparent text-neutral-400 hover:text-neutral-200 hover:bg-[#151519]'
               }`}
               onClick={() => setViewMode('tree')}
               title="Tree Explorer View"
@@ -600,8 +602,10 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             </button>
             <button
               type="button"
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
-                viewMode === 'flat' ? 'bg-[#151519] text-neutral-200 shadow-sm border border-[#212126]' : 'text-neutral-400 hover:text-neutral-200 hover:bg-[#151519]'
+              role="tab"
+              aria-selected={viewMode === 'flat'}
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                viewMode === 'flat' ? 'text-neutral-200 border border-[#212126]' : 'border border-transparent text-neutral-400 hover:text-neutral-200 hover:bg-[#151519]'
               }`}
               onClick={() => setViewMode('flat')}
               title="Categorized List View"
@@ -622,7 +626,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                className="px-2.5 py-1 text-xs font-medium rounded-md bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500 transition-all"
+                className="neu-btn px-2.5 py-1 text-xs font-medium rounded-md bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500 transition-all"
                 onClick={expandAll}
                 title="Expand all folders"
               >
@@ -630,7 +634,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
               </button>
               <button
                 type="button"
-                className="px-2.5 py-1 text-xs font-medium rounded-md bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500 transition-all"
+                className="neu-btn px-2.5 py-1 text-xs font-medium rounded-md bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500 transition-all"
                 onClick={collapseAll}
                 title="Collapse all folders"
               >
@@ -641,7 +645,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
 
           <button
             type="button"
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md border transition-all ${
+            className={`neu-btn inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md border transition-all ${
               isFullHeight
                 ? 'bg-[#151519] border-[#212126] text-neutral-200 font-bold'
                 : 'bg-[#151519] border-[#212126] text-neutral-400 hover:text-neutral-200 hover:border-neutral-500'
@@ -701,7 +705,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
         </div>
 
         {/* Quick Filter Scopes */}
-        <div className="flex flex-wrap items-center gap-1.5" role="radiogroup" aria-label="Scope filter">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 neu-tray bg-[#09090c] border border-[#212126] rounded-xl" role="tablist" aria-label="Scope filter">
           {(['all', 'client', 'server', 'public', 'root'] as const).map((scope) => {
             const label = scope === 'all' ? 'All' : scope === 'client' ? 'Client / UI' : scope === 'server' ? 'Server / API' : scope === 'public' ? 'Assets' : 'Root Configs';
             const isActive = filterScope === scope;
@@ -709,10 +713,12 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
               <button
                 key={scope}
                 type="button"
-                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+                role="tab"
+                aria-selected={isActive}
+                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[#151519] text-neutral-200 font-bold shadow-sm border border-[#212126]'
-                    : 'bg-[#151519] border border-[#212126] text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-neutral-500'
+                    ? 'text-neutral-200 font-bold border border-[#212126]'
+                    : 'bg-transparent border border-transparent text-neutral-400 hover:text-neutral-200'
                 }`}
                 onClick={() => setFilterScope(scope)}
               >
@@ -736,7 +742,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
                 <p className="text-xs text-neutral-400 max-w-sm">No results found for &ldquo;{searchQuery}&rdquo; in current scope.</p>
                 <button
                   type="button"
-                  className="px-3 py-1.5 rounded-lg bg-[#151519] border border-[#212126] text-xs font-medium text-neutral-200 hover:text-neutral-200 hover:border-neutral-500 transition-all"
+                  className="neu-btn px-3 py-1.5 rounded-lg bg-[#151519] border border-[#212126] text-xs font-medium text-neutral-200 hover:text-neutral-200 hover:border-neutral-500 transition-all"
                   onClick={() => {
                     setSearchQuery('');
                     setFilterScope('all');
@@ -757,7 +763,7 @@ export default function ProjectFileExplorer({ fileTree, projectId }: ProjectFile
                   return (
                     <div
                       key={item.path}
-                      className="group flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all"
+                      className="neu-tile group flex items-center justify-between p-2.5 rounded-lg bg-[#151519] border border-[#212126] hover:border-neutral-500 hover:bg-[#151519] transition-all"
                     >
                       <div className="flex items-center gap-2.5 min-w-0 flex-1">
                         <FileOrFolderIcon isDir={item.isDir} isOpen={false} meta={item.meta} />

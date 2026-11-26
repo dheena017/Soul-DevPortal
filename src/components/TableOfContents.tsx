@@ -945,7 +945,7 @@ export default function TableOfContents({
                 <button
                   type="button"
                   onClick={toggleAllSections}
-                  className="hidden lg:flex w-6 h-6 rounded-[6px] items-center justify-center text-zinc-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.07] hover:border-white/[0.16] transition-colors cursor-pointer"
+                  className="neu-btn hidden lg:flex w-6 h-6 rounded-[6px] items-center justify-center text-zinc-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.07] hover:border-white/[0.16] transition-colors cursor-pointer"
                   title={allCollapsed ? 'Expand all subtopics' : 'Collapse all subtopics'}
                   aria-label={allCollapsed ? 'Expand all subtopics' : 'Collapse all subtopics'}
                   aria-pressed={allCollapsed}
@@ -967,7 +967,7 @@ export default function TableOfContents({
               <button
                 type="button"
                 onClick={() => setMobileExpanded((prev) => !prev)}
-                className="flex lg:hidden w-7 h-6 rounded-[6px] items-center justify-center text-zinc-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] transition-colors cursor-pointer"
+                className="neu-btn flex lg:hidden w-7 h-6 rounded-[6px] items-center justify-center text-zinc-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.09] transition-colors cursor-pointer"
                 aria-expanded={mobileExpanded}
                 aria-label={mobileExpanded ? 'Collapse table of contents' : 'Expand table of contents'}
               >
@@ -1090,7 +1090,7 @@ export default function TableOfContents({
       {(() => {
         const mobileDock = (
           <div className="fixed bottom-12 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md z-[60] lg:hidden">
-            <div className="toc-mobile-dock relative overflow-hidden rounded-2xl p-1.5 flex items-center gap-1.5">
+            <div className="toc-mobile-dock neu-card relative overflow-hidden rounded-2xl p-1.5 flex items-center gap-1.5">
               {/* Thin top progress line */}
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.05]">
                 <div
@@ -1128,7 +1128,7 @@ export default function TableOfContents({
                 </svg>
               </button>
 
-              <span className="px-2 py-1 rounded-[8px] bg-white/[0.05] border border-white/[0.08] text-[10.5px] font-mono font-semibold text-zinc-300 tabular-nums shrink-0">
+              <span className="neu-inset px-2 py-1 rounded-[8px] bg-white/[0.05] border border-white/[0.08] text-[10.5px] font-mono font-semibold text-zinc-300 tabular-nums shrink-0">
                 {roundedProgress}%
               </span>
 
@@ -1136,7 +1136,7 @@ export default function TableOfContents({
                 <button
                   type="button"
                   onClick={scrollToTop}
-                  className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 hover:bg-sky-500/25 flex items-center justify-center shrink-0 transition-colors cursor-pointer"
+                  className="neu-btn w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 hover:bg-sky-500/25 flex items-center justify-center shrink-0 transition-colors cursor-pointer"
                   title="Back to top"
                   aria-label="Scroll to top of document"
                 >
@@ -1166,11 +1166,11 @@ export default function TableOfContents({
             aria-label="Document outline drawer"
           >
             <div
-              className="toc-sheet-backdrop absolute inset-0 bg-black/75 backdrop-blur-sm"
+              className="toc-sheet-backdrop absolute inset-0 bg-black/75"
               onClick={() => setMobileDrawerOpen(false)}
             />
 
-            <div className="toc-mobile-sheet relative z-10 w-full max-w-lg mx-auto rounded-t-2xl max-h-[82dvh] flex flex-col gap-3 p-4 pb-5">
+            <div className="toc-mobile-sheet neu-modal relative z-10 w-full max-w-lg mx-auto rounded-t-2xl max-h-[82dvh] flex flex-col gap-3 p-4 pb-5">
               <div className="w-10 h-1 rounded-full bg-white/20 mx-auto shrink-0" aria-hidden="true" />
 
               {/* Sheet Header */}

@@ -142,7 +142,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
       {/* Unit Converter */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1017] shrink-0">
           <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="Unit Converter Precision Visual" opacityClass="opacity-72 sm:opacity-88" />
           <div className="relative z-10 flex items-start justify-between gap-2">
@@ -150,7 +150,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">Everyday Unit Converter</h2>
               <p className="text-xs text-zinc-300/90">Length, weight, volume, temp, storage &amp; time.</p>
             </div>
-            <span className="shrink-0 px-2.5 py-1 rounded-md bg-[#080b12]/85 backdrop-blur-sm border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
+            <span className="shrink-0 px-2.5 py-1 rounded-md neu-inset bg-[#080b12]/90 border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
               {fromUnit} → {toUnit}
             </span>
           </div>
@@ -169,7 +169,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
                 key={c.id}
                 type="button"
                 onClick={() => switchUnitCategory(c.id)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold border cursor-pointer transition-colors ${
+                className={`neu-btn px-2.5 py-1 rounded-lg text-xs font-semibold border cursor-pointer transition-colors ${
                   unitCat === c.id
                     ? 'bg-sky-500/20 border-sky-400/45 text-white font-bold'
                     : 'bg-[#11141d]/90 border-white/[0.08] text-zinc-400 hover:text-white'
@@ -191,13 +191,13 @@ export const CalculatorsUnitsTab: React.FC = () => {
                   value={unitValue}
                   onChange={(e) => setUnitValue(e.target.value)}
                   aria-label="Unit input value"
-                  className="w-28 h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm font-mono text-white focus:outline-none focus:border-sky-400/45"
+                  className="neu-inset w-28 h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm font-mono text-white focus:outline-none focus:border-sky-400/45"
                 />
                 <select
                   value={fromUnit}
                   onChange={(e) => setFromUnit(e.target.value)}
                   aria-label="From unit"
-                  className="flex-1 h-9 px-2.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none"
+                  className="neu-inset flex-1 h-9 px-2.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none"
                 >
                   {unitOptions.map((u) => (
                     <option key={u.key} value={u.key}>{u.label}</option>
@@ -214,7 +214,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
                   setFromUnit(toUnit);
                   setToUnit(prevFrom);
                 }}
-                className="px-3 py-1 rounded-lg bg-[#181922] border border-white/[0.1] hover:border-sky-400/35 text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
+                className="neu-btn px-3 py-1 rounded-lg bg-[#181922] border border-white/[0.1] hover:border-sky-400/35 text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
               >
                 ⇅ Swap Units
               </button>
@@ -228,7 +228,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
                     }
                   });
                 }}
-                className="px-2.5 py-1 rounded-lg bg-[#181922] border border-white/[0.08] text-[10.5px] font-mono text-zinc-300 hover:text-white cursor-pointer"
+                className="neu-btn px-2.5 py-1 rounded-lg bg-[#181922] border border-white/[0.08] text-[10.5px] font-mono text-zinc-300 hover:text-white cursor-pointer"
               >
                 {unitCopied ? '✓ Copied' : 'Copy Result'}
               </button>
@@ -237,14 +237,14 @@ export const CalculatorsUnitsTab: React.FC = () => {
             <div className="flex flex-col gap-1.5">
               <label className="text-[11px] font-mono text-zinc-400">Result</label>
               <div className="flex gap-2">
-                <div className="w-28 h-9 px-3 rounded-xl bg-[#08090c] border border-sky-400/30 flex items-center text-sm font-mono font-extrabold text-sky-300 tabular-nums overflow-hidden">
+                <div className="neu-inset w-28 h-9 px-3 rounded-xl bg-[#08090c] border border-sky-400/30 flex items-center text-sm font-mono font-extrabold text-sky-300 tabular-nums overflow-hidden">
                   {convertedValue}
                 </div>
                 <select
                   value={toUnit}
                   onChange={(e) => setToUnit(e.target.value)}
                   aria-label="To unit"
-                  className="flex-1 h-9 px-2.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none"
+                  className="neu-inset flex-1 h-9 px-2.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none"
                 >
                   {unitOptions.map((u) => (
                     <option key={u.key} value={u.key}>{u.label}</option>
@@ -254,7 +254,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-[#0c0d12] border border-white/[0.06] flex items-center justify-between text-[11px] font-mono">
+          <div className="neu-inset p-2.5 rounded-xl bg-[#0c0d12] border border-white/[0.06] flex items-center justify-between text-[11px] font-mono">
             <span className="text-zinc-400 truncate">
               {unitValue || '0'} {fromUnit}
             </span>
@@ -269,7 +269,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
       </section>
 
       {/* Split Bill & Tip */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1210] shrink-0">
           <HeroArtworkBackdrop src="/visuals/tab-database-wal.jpg" alt="Split Bill and Tip Visual" opacityClass="opacity-72 sm:opacity-88" />
           <div className="relative z-10 flex items-center justify-between gap-3">
@@ -277,7 +277,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">Split Bill &amp; Tip Calculator</h2>
               <p className="text-xs text-zinc-300/90">Split group bills fairly with per-person breakdown.</p>
             </div>
-            <div className="shrink-0 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#080b0a]/90 border border-emerald-400/25">
+            <div className="neu-inset shrink-0 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#080b0a]/90 border border-emerald-400/25">
               <MiniRadialRing percent={Math.min(100, Math.round((tipPct / 30) * 100))} color="#34d399" size={32} />
               <div className="flex flex-col">
                 <span className="text-xs font-extrabold font-mono text-white tabular-nums">{tipPct}%</span>
@@ -344,22 +344,22 @@ export const CalculatorsUnitsTab: React.FC = () => {
             </div>
 
             {/* Base vs Tip Spectrum Bar */}
-            <div className="w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden flex">
+            <div className="neu-inset w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden flex">
               <div className="h-full bg-sky-400/75" style={{ width: `${Math.max(0, 100 - tipSharePct)}%` }} />
               <div className="h-full bg-amber-400" style={{ width: `${tipSharePct}%` }} />
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
-            <div className="p-2.5 rounded-xl bg-[#16171e] border border-white/[0.06]">
+            <div className="neu-tile p-2.5 rounded-xl bg-[#16171e] border border-white/[0.06]">
               <div className="text-[10px] text-zinc-400">Tip</div>
               <div className="text-sm font-bold font-mono text-amber-300 tabular-nums">{tipAmount.toFixed(2)}</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#16171e] border border-white/[0.06]">
+            <div className="neu-tile p-2.5 rounded-xl bg-[#16171e] border border-white/[0.06]">
               <div className="text-[10px] text-zinc-400">Total</div>
               <div className="text-sm font-bold font-mono text-white tabular-nums">{grandTotal.toFixed(2)}</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+            <div className="neu-tile p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
               <div className="text-[10px] text-emerald-300">Each</div>
               <div className="text-sm font-extrabold font-mono text-emerald-300 tabular-nums">{perPerson.toFixed(2)}</div>
             </div>
@@ -390,7 +390,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
       </section>
 
       {/* Discount Calculator */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#110f17] shrink-0">
           <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="Discount Calculator Visual" opacityClass="opacity-72 sm:opacity-88" />
           <div className="relative z-10 flex items-center justify-between gap-3">
@@ -398,7 +398,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">Discount &amp; Final Price</h2>
               <p className="text-xs text-zinc-300/90">Check sale savings and net payable price.</p>
             </div>
-            <div className="shrink-0 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#09080e]/90 border border-amber-400/25">
+            <div className="neu-tile shrink-0 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#09080e]/90 border border-amber-400/25">
               <MiniRadialRing percent={discNum} color="#fbbf24" size={32} />
               <div className="flex flex-col">
                 <span className="text-xs font-extrabold font-mono text-white tabular-nums">{Math.round(discNum)}%</span>
@@ -417,7 +417,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
                 min={0}
                 value={origPrice}
                 onChange={(e) => setOrigPrice(e.target.value)}
-                className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm font-mono text-white focus:outline-none focus:border-sky-400/45"
+                className="neu-inset h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm font-mono text-white focus:outline-none focus:border-sky-400/45"
               />
             </label>
             <div className="flex flex-col gap-1.5">
@@ -429,7 +429,7 @@ export const CalculatorsUnitsTab: React.FC = () => {
                       key={pct}
                       type="button"
                       onClick={() => setDiscountPct(String(pct))}
-                      className={`px-1.5 py-0.5 rounded text-[10px] border cursor-pointer ${
+                      className={`neu-btn px-1.5 py-0.5 rounded text-[10px] border cursor-pointer ${
                         Math.round(discNum) === pct
                           ? 'bg-amber-500/20 border-amber-400/40 text-amber-200 font-bold'
                           : 'bg-[#16171e] border-white/[0.07] text-zinc-400 hover:text-white'
@@ -446,23 +446,23 @@ export const CalculatorsUnitsTab: React.FC = () => {
                 max={100}
                 value={discountPct}
                 onChange={(e) => setDiscountPct(e.target.value)}
-                className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm font-mono text-white focus:outline-none focus:border-amber-400/45"
+                className="neu-inset h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm font-mono text-white focus:outline-none focus:border-amber-400/45"
               />
             </div>
 
             {/* Savings vs Payable Bar */}
-            <div className="w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden flex">
+            <div className="neu-inset w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden flex">
               <div className="h-full bg-sky-400" style={{ width: `${Math.max(0, 100 - discNum)}%` }} />
               <div className="h-full bg-amber-400" style={{ width: `${discNum}%` }} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-2.5">
-            <div className="p-3 rounded-xl bg-[#16171e] border border-white/[0.06]">
+            <div className="neu-tile p-3 rounded-xl bg-[#16171e] border border-white/[0.06]">
               <div className="text-[11px] text-zinc-400">You Save</div>
               <div className="text-base font-bold font-mono text-amber-300 tabular-nums">{savedAmt.toFixed(2)}</div>
             </div>
-            <div className="p-3 rounded-xl bg-sky-500/10 border border-sky-400/30">
+            <div className="neu-tile p-3 rounded-xl bg-sky-500/10 border border-sky-400/30">
               <div className="text-[11px] text-sky-300">Final Price</div>
               <div className="text-base font-extrabold font-mono text-white tabular-nums">{finalPrice.toFixed(2)}</div>
             </div>
@@ -673,7 +673,7 @@ export const WorldClockTab: React.FC = () => {
   };
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
+    <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.07]">
         <div>
           <h2 className="text-base font-bold text-white">World Clock &amp; Time Zones</h2>
@@ -682,21 +682,25 @@ export const WorldClockTab: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center p-0.5 rounded-xl bg-[#0a0b0f] border border-white/[0.08] text-[11px] font-mono">
+          <div className="flex items-center p-0.5 rounded-xl neu-tray bg-[#0a0b0f] border border-white/[0.08] text-[11px] font-mono" role="tablist" aria-label="Clock format">
             <button
               type="button"
+              role="tab"
+              aria-selected={!hour24}
               onClick={() => setHour24(false)}
-              className={`px-2.5 py-1 rounded-lg cursor-pointer ${
-                !hour24 ? 'bg-zinc-800 text-white font-bold' : 'text-zinc-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg border cursor-pointer ${
+                !hour24 ? 'text-white font-bold border-white/20' : 'border-transparent text-zinc-400 hover:text-white'
               }`}
             >
               12h
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={hour24}
               onClick={() => setHour24(true)}
-              className={`px-2.5 py-1 rounded-lg cursor-pointer ${
-                hour24 ? 'bg-zinc-800 text-white font-bold' : 'text-zinc-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg border cursor-pointer ${
+                hour24 ? 'text-white font-bold border-white/20' : 'border-transparent text-zinc-400 hover:text-white'
               }`}
             >
               24h
@@ -705,7 +709,7 @@ export const WorldClockTab: React.FC = () => {
           <button
             type="button"
             onClick={copyMeetingSummary}
-            className="px-3 py-1.5 rounded-xl bg-indigo-500/15 border border-indigo-400/35 hover:bg-indigo-500/25 text-xs font-semibold text-indigo-200 cursor-pointer"
+            className="neu-btn px-3 py-1.5 rounded-xl bg-indigo-500/15 border border-indigo-400/35 hover:bg-indigo-500/25 text-xs font-semibold text-indigo-200 cursor-pointer"
           >
             {copiedSchedule ? '✓ Copied All' : '📋 Copy Summary'}
           </button>
@@ -713,7 +717,7 @@ export const WorldClockTab: React.FC = () => {
       </div>
 
       {/* Featured Local Time Hero Banner */}
-      <div className="relative overflow-hidden p-4 sm:p-5 rounded-xl bg-[#0c0f16] border border-sky-400/30 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="neu-inset relative overflow-hidden p-4 sm:p-5 rounded-xl bg-[#0c0f16] border border-sky-400/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <HeroArtworkBackdrop src="/visuals/world-clock-globe.jpg" alt="Global Timezones Orbital Backdrop" opacityClass="opacity-85 sm:opacity-95" />
         <div className="relative z-10 flex flex-col gap-1.5">
           <div className="flex items-center gap-2 flex-wrap">
@@ -721,7 +725,7 @@ export const WorldClockTab: React.FC = () => {
             <span className="text-xs font-mono uppercase tracking-wider font-bold text-sky-300">
               Your Local System Clock
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-white/[0.07] border border-white/[0.1] text-[10px] font-mono text-zinc-200">
+            <span className="neu-inset px-2 py-0.5 rounded-md bg-white/[0.07] border border-white/[0.1] text-[10px] font-mono text-zinc-200">
               {localTimeZone}
             </span>
           </div>
@@ -755,7 +759,7 @@ export const WorldClockTab: React.FC = () => {
           return (
             <div
               key={city.label}
-              className={`p-3.5 rounded-xl border flex flex-col justify-between gap-2.5 transition-all portal-card-hover ${
+              className={`neu-tile p-3.5 rounded-xl border flex flex-col justify-between gap-2.5 transition-all portal-card-hover ${
                 isSameAsLocal
                   ? 'bg-gradient-to-br from-[#121a28] to-[#0d1017] border-sky-400/35'
                   : 'bg-[#0d0e13] border-white/[0.07] hover:border-white/[0.16]'
@@ -764,7 +768,7 @@ export const WorldClockTab: React.FC = () => {
               <div className="flex items-start justify-between gap-2">
                 <div className="flex flex-col gap-1 min-w-0">
                   <span className="text-xs font-bold text-white truncate">{city.label}</span>
-                  <span className={`self-start px-1.5 py-px rounded text-[9.5px] font-mono border ${regionBadge}`}>
+                  <span className={`neu-inset self-start px-1.5 py-px rounded text-[9.5px] font-mono border ${regionBadge}`}>
                     {city.region}
                   </span>
                 </div>
@@ -924,7 +928,7 @@ export const BookmarksSecurityTab: React.FC = () => {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 items-stretch">
       {/* Bookmarks Vault */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1015] shrink-0">
           <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="Personal Quick Links Visual" opacityClass="opacity-75 sm:opacity-90" />
           <div className="relative z-10 flex items-start justify-between gap-2">
@@ -932,7 +936,7 @@ export const BookmarksSecurityTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">Personal Quick Links</h2>
               <p className="text-xs text-zinc-300/90">Pin favorite sites, docs &amp; destinations.</p>
             </div>
-            <span className="shrink-0 px-2.5 py-1 rounded-md bg-[#080b12]/85 backdrop-blur-sm border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
+            <span className="shrink-0 px-2.5 py-1 rounded-md neu-inset bg-[#080b12]/90 border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
               {bookmarks.length} pinned
             </span>
           </div>
@@ -1050,7 +1054,7 @@ export const BookmarksSecurityTab: React.FC = () => {
       </section>
 
       {/* Password Generator */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1210] shrink-0">
           <HeroArtworkBackdrop src="/visuals/tab-env-security.jpg" alt="Password Security Studio Visual" opacityClass="opacity-75 sm:opacity-90" />
           <div className="relative z-10 flex items-center justify-between gap-3">
@@ -1060,7 +1064,7 @@ export const BookmarksSecurityTab: React.FC = () => {
                 Offline CSPRNG (<code className="font-mono text-emerald-300">crypto.getRandomValues</code>).
               </p>
             </div>
-            <div className="shrink-0 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#080b0a]/90 border border-emerald-400/25">
+            <div className="neu-inset shrink-0 flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#080b0a]/90 border border-emerald-400/25">
               <MiniRadialRing percent={entropyStats.pct} color="#34d399" size={34} />
               <div className="flex flex-col">
                 <span className="text-xs font-extrabold font-mono text-white tabular-nums">
@@ -1074,7 +1078,7 @@ export const BookmarksSecurityTab: React.FC = () => {
 
         <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col justify-between gap-4">
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 p-3 rounded-xl bg-[#08090c] border border-emerald-500/25">
+            <div className="neu-inset flex items-center gap-2 p-3 rounded-xl bg-[#08090c] border border-emerald-500/25">
               <input
                 type="text"
                 readOnly
@@ -1092,7 +1096,7 @@ export const BookmarksSecurityTab: React.FC = () => {
                     }
                   });
                 }}
-                className="px-3 py-1 rounded-lg bg-[#16171e] border border-white/[0.1] hover:border-emerald-400/40 text-xs font-mono text-zinc-200 cursor-pointer shrink-0"
+                className="neu-btn px-3 py-1 rounded-lg bg-[#16171e] border border-white/[0.1] hover:border-emerald-400/40 text-xs font-mono text-zinc-200 cursor-pointer shrink-0"
               >
                 {pwCopied ? '✓ Copied' : 'Copy'}
               </button>
@@ -1112,7 +1116,7 @@ export const BookmarksSecurityTab: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#0c0d12] border border-white/[0.06] flex flex-wrap items-center justify-between gap-3 text-xs text-zinc-300">
+            <div className="neu-inset p-3 rounded-xl bg-[#0c0d12] border border-white/[0.06] flex flex-wrap items-center justify-between gap-3 text-xs text-zinc-300">
               <label className="flex items-center gap-2 flex-1 min-w-[160px]">
                 <span className="font-mono text-zinc-400 shrink-0">Length: {pwLength}</span>
                 <input
@@ -1124,7 +1128,7 @@ export const BookmarksSecurityTab: React.FC = () => {
                   className="flex-1 accent-emerald-400 cursor-pointer"
                 />
               </label>
-              <label className="inline-flex items-center gap-1.5 cursor-pointer font-mono text-[11px] px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.08]">
+              <label className="neu-tile inline-flex items-center gap-1.5 cursor-pointer font-mono text-[11px] px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.08]">
                 <input
                   type="checkbox"
                   checked={pwSymbols}
@@ -1140,14 +1144,14 @@ export const BookmarksSecurityTab: React.FC = () => {
             <button
               type="button"
               onClick={() => generatePassword('random')}
-              className="py-2.5 rounded-xl bg-white hover:bg-emerald-100 text-zinc-950 text-xs font-extrabold cursor-pointer transition-colors"
+              className="neu-btn py-2.5 rounded-xl bg-white hover:bg-emerald-100 text-zinc-950 text-xs font-extrabold cursor-pointer transition-colors"
             >
               🔑 Random Password
             </button>
             <button
               type="button"
               onClick={() => generatePassword('passphrase')}
-              className="py-2.5 rounded-xl bg-sky-500/20 border border-sky-400/40 hover:bg-sky-500/30 text-xs font-bold text-sky-200 cursor-pointer transition-colors"
+              className="neu-btn py-2.5 rounded-xl bg-sky-500/20 border border-sky-400/40 hover:bg-sky-500/30 text-xs font-bold text-sky-200 cursor-pointer transition-colors"
             >
               📖 Passphrase
             </button>
@@ -1161,7 +1165,7 @@ export const BookmarksSecurityTab: React.FC = () => {
       </section>
 
       {/* Decision Picker, Tally & Scratchpad */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#100e17] shrink-0">
           <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Picker and Scratchpad Visual" opacityClass="opacity-75 sm:opacity-90" />
           <div className="relative z-10 flex items-center justify-between gap-2">
@@ -1169,12 +1173,12 @@ export const BookmarksSecurityTab: React.FC = () => {
               <h2 className="text-base font-extrabold text-white">Picker, Tally &amp; Scratchpad</h2>
               <p className="text-xs text-zinc-300/90">Quick decision wheel, click tally &amp; synced note pad.</p>
             </div>
-            <div className="shrink-0 flex items-center gap-1 p-1 rounded-xl bg-[#08090c]/90 border border-amber-400/30">
+            <div className="neu-inset shrink-0 flex items-center gap-1 p-1 rounded-xl bg-[#08090c]/90 border border-amber-400/30">
               <button
                 type="button"
                 onClick={() => setScratchpad((s) => ({ text: s?.text ?? '', counter: Math.max(0, counterVal - 1) }))}
                 aria-label="Decrease tally"
-                className="w-7 h-7 rounded-lg bg-[#16171e] border border-white/[0.1] hover:border-white/[0.25] text-white font-bold cursor-pointer"
+                className="neu-btn w-7 h-7 rounded-lg bg-[#16171e] border border-white/[0.1] hover:border-white/[0.25] text-white font-bold cursor-pointer"
               >
                 -
               </button>
@@ -1185,7 +1189,7 @@ export const BookmarksSecurityTab: React.FC = () => {
                 type="button"
                 onClick={() => setScratchpad((s) => ({ text: s?.text ?? '', counter: counterVal + 1 }))}
                 aria-label="Increase tally"
-                className="w-7 h-7 rounded-lg bg-[#16171e] border border-white/[0.1] hover:border-white/[0.25] text-white font-bold cursor-pointer"
+                className="neu-btn w-7 h-7 rounded-lg bg-[#16171e] border border-white/[0.1] hover:border-white/[0.25] text-white font-bold cursor-pointer"
               >
                 +
               </button>
@@ -1204,7 +1208,7 @@ export const BookmarksSecurityTab: React.FC = () => {
               value={decisionInput}
               onChange={(e) => setDecisionInput(e.target.value)}
               aria-label="Decision options"
-              className="w-full p-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] focus:border-amber-400/45 focus:outline-none text-xs text-zinc-200 custom-scrollbar resize-none"
+              className="neu-inset w-full p-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] focus:border-amber-400/45 focus:outline-none text-xs text-zinc-200 custom-scrollbar resize-none"
             />
           </div>
 
@@ -1212,12 +1216,12 @@ export const BookmarksSecurityTab: React.FC = () => {
             <button
               type="button"
               onClick={rollDecision}
-              className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 border border-amber-400/40 hover:bg-amber-500/30 text-xs font-bold text-amber-200 cursor-pointer shrink-0 transition-colors"
+              className="neu-btn px-3.5 py-1.5 rounded-xl bg-amber-500/20 border border-amber-400/40 hover:bg-amber-500/30 text-xs font-bold text-amber-200 cursor-pointer shrink-0 transition-colors"
             >
               🎲 Pick One
             </button>
             {pickedOption && (
-              <div className="px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-400/35 text-xs font-bold text-emerald-200 truncate">
+              <div className="neu-tile px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-400/35 text-xs font-bold text-emerald-200 truncate">
                 Winner: {pickedOption}
               </div>
             )}

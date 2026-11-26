@@ -31,7 +31,7 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
   }
 
   return (
-    <section className="w-full p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl flex flex-col gap-6 portal-stagger portal-header-sheen">
+    <section className="w-full p-5 md:p-6 rounded-2xl neu-card bg-[#111115] border border-white/[0.08] flex flex-col gap-6 portal-stagger portal-header-sheen">
       <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
         <div className="flex flex-col gap-0.5">
@@ -40,11 +40,11 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
         </div>
         <div className="flex items-center gap-2">
           {pkg.relativeTime && (
-            <span className="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-300">
+            <span className="neu-tile px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-[#16161c] border border-white/[0.08] text-zinc-300">
               Updated {pkg.relativeTime}
             </span>
           )}
-          <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#16161c] border border-white/[0.08] text-white">
+          <span className="neu-tile px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#16161c] border border-white/[0.08] text-white">
             {pkg.name || `@workspace/${pkg.id}`}
           </span>
         </div>
@@ -62,7 +62,7 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
         />
         {/* 2-Card Summary Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 portal-grid-stagger">
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] gap-3 portal-card-hover">
+          <div className="neu-tile flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] gap-3 portal-card-hover">
             <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Package Information</h4>
             <div className="flex flex-col gap-2 text-xs">
               <div className="flex justify-between py-1 border-b border-white/[0.06]">
@@ -100,7 +100,7 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
             </div>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] gap-3 portal-card-hover">
+          <div className="neu-tile flex flex-col p-4 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.18] gap-3 portal-card-hover">
             <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Ecosystem Status</h4>
             <div className="flex flex-col gap-2 text-xs">
               <div className="flex justify-between py-1 border-b border-white/[0.06]">
@@ -127,7 +127,7 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
             <h3 className="text-xs font-bold text-zinc-300">Runtime Dependencies ({deps.length})</h3>
             <div className="flex flex-wrap items-center gap-2 portal-grid-stagger">
               {deps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
+                <span key={dep} className="neu-tile inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
                   <strong className="text-white">{dep}</strong>
                   <code className="text-zinc-400 text-[11px]">{ver}</code>
                 </span>
@@ -142,7 +142,7 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
             <h3 className="text-xs font-bold text-zinc-300">Development Dependencies ({devDeps.length})</h3>
             <div className="flex flex-wrap items-center gap-2 portal-grid-stagger">
               {devDeps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
+                <span key={dep} className="neu-tile inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
                   <strong className="text-white">{dep}</strong>
                   <code className="text-zinc-400 text-[11px]">{ver}</code>
                 </span>
@@ -157,7 +157,7 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
             <h3 className="text-xs font-bold text-zinc-300">Peer Dependencies ({peerDeps.length})</h3>
             <div className="flex flex-wrap items-center gap-2 portal-grid-stagger">
               {peerDeps.map(([dep, ver]) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
+                <span key={dep} className="neu-tile inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
                   <strong className="text-white">{dep}</strong>
                   <code className="text-zinc-400 text-[11px]">{ver}</code>
                 </span>
@@ -172,7 +172,7 @@ export default function PackageManifestTab({ pkg, isLoading = false }: PackageMa
             <h3 className="text-xs font-bold text-zinc-300">Python Dependencies ({pyDeps.length})</h3>
             <div className="flex flex-wrap items-center gap-2 portal-grid-stagger">
               {pyDeps.map((dep) => (
-                <span key={dep} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
+                <span key={dep} className="neu-tile inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] text-xs font-mono portal-card-hover">
                   <strong className="text-white">{dep}</strong>
                 </span>
               ))}

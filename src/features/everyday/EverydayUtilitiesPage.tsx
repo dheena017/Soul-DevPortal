@@ -325,7 +325,7 @@ export default function EverydayUtilitiesPage({
   const tabClass = (isActive: boolean) =>
     `inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all whitespace-nowrap cursor-pointer shrink-0 ${
       isActive
-        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+        ? 'text-white font-bold border border-white/20'
         : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
     }`;
 
@@ -334,7 +334,7 @@ export default function EverydayUtilitiesPage({
       {/* ══════════════════════════════════════════════════════════════════════
           UNIFIED SINGLE HERO HEADER CARD (Matched to SystemHeaderCard layout)
       ══════════════════════════════════════════════════════════════════════ */}
-      <header className="relative overflow-hidden w-full p-4 sm:p-5 md:p-6 rounded-2xl system-card shadow-2xl flex flex-col gap-4 sm:gap-5">
+      <header className="relative overflow-hidden w-full p-4 sm:p-5 md:p-6 rounded-2xl neu-card system-card flex flex-col gap-4 sm:gap-5">
         <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="Everyday Utilities Backdrop" opacityClass="opacity-80 sm:opacity-95" />
         <div className="relative z-10 flex flex-col gap-4 sm:gap-5">
           {/* Row 1: Identity + Compact Controls */}
@@ -348,10 +348,10 @@ export default function EverydayUtilitiesPage({
                   <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight truncate">
                     Everyday Utilities
                   </h1>
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#181820] border border-white/[0.1] text-zinc-300">
+                  <span className="neu-tile px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#181820] border border-white/[0.1] text-zinc-300">
                     {EVERYDAY_TABS.length} Tools
                   </span>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md border text-[10px] font-mono font-bold bg-emerald-500/15 border-emerald-500/35 text-emerald-300">
+                  <span className="neu-tile inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md border text-[10px] font-mono font-bold bg-emerald-500/15 border-emerald-500/35 text-emerald-300">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     <span>SQLite WAL Synced</span>
                   </span>
@@ -365,7 +365,7 @@ export default function EverydayUtilitiesPage({
 
             {/* Right Controls: Group Selector + Tab Filter + Overview Reset */}
             <div className="flex flex-wrap items-center gap-2 shrink-0">
-              <div className="inline-flex items-center rounded-lg bg-[#16161c] border border-white/[0.08] p-0.5" title="Filter tab category">
+              <div className="inline-flex items-center rounded-lg neu-tray bg-[#16161c] border border-white/[0.08] p-0.5" title="Filter tab category">
                 <button
                   type="button"
                   onClick={() => setActiveGroup('all')}
@@ -400,7 +400,7 @@ export default function EverydayUtilitiesPage({
                   onChange={(e) => setTabSearch(e.target.value)}
                   placeholder="Find tool..."
                   aria-label="Filter Everyday Utilities tabs"
-                  className="h-8 w-28 sm:w-36 px-2.5 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
+                  className="neu-inset h-8 w-28 sm:w-36 px-2.5 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
                 />
                 {tabSearch && (
                   <button
@@ -419,7 +419,7 @@ export default function EverydayUtilitiesPage({
                   type="button"
                   onClick={() => selectTab('focus')}
                   title="Jump to active Focus Timer / Stopwatch"
-                  className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-[11px] font-mono font-bold text-amber-200 hover:bg-amber-500/25 cursor-pointer"
+                  className="neu-btn inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-[11px] font-mono font-bold text-amber-200 hover:bg-amber-500/25 cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                   <span>
@@ -434,7 +434,7 @@ export default function EverydayUtilitiesPage({
                 <button
                   type="button"
                   onClick={() => selectTab('overview')}
-                  className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs font-semibold text-zinc-200 hover:text-white hover:border-white/[0.22] transition-all cursor-pointer"
+                  className="neu-btn inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs font-semibold text-zinc-200 hover:text-white hover:border-white/[0.22] transition-all cursor-pointer"
                 >
                   <span>🧭</span>
                   <span>Overview</span>
@@ -448,7 +448,7 @@ export default function EverydayUtilitiesPage({
             <button
               type="button"
               onClick={() => selectTab('tasks')}
-              className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-sky-400/35 text-left cursor-pointer portal-card-hover"
+              className="flex items-center justify-between p-2.5 rounded-xl neu-inset bg-[#0e0e13]/90 border border-white/[0.07] hover:border-sky-400/35 text-left cursor-pointer portal-card-hover"
             >
               <div className="flex flex-col min-w-0">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">TASKS PLANNER</span>
@@ -462,7 +462,7 @@ export default function EverydayUtilitiesPage({
             <button
               type="button"
               onClick={() => selectTab('notes')}
-              className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-purple-400/35 text-left cursor-pointer portal-card-hover"
+              className="flex items-center justify-between p-2.5 rounded-xl neu-inset bg-[#0e0e13]/90 border border-white/[0.07] hover:border-purple-400/35 text-left cursor-pointer portal-card-hover"
             >
               <div className="flex flex-col min-w-0">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">NOTES &amp; LISTS</span>
@@ -476,7 +476,7 @@ export default function EverydayUtilitiesPage({
             <button
               type="button"
               onClick={() => selectTab('habits')}
-              className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-emerald-400/35 text-left cursor-pointer portal-card-hover"
+              className="flex items-center justify-between p-2.5 rounded-xl neu-inset bg-[#0e0e13]/90 border border-white/[0.07] hover:border-emerald-400/35 text-left cursor-pointer portal-card-hover"
             >
               <div className="flex flex-col min-w-0">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">HABITS TODAY</span>
@@ -490,7 +490,7 @@ export default function EverydayUtilitiesPage({
             <button
               type="button"
               onClick={() => selectTab(focusMinToday > 0 ? 'focus' : 'budget')}
-              className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-amber-400/35 text-left cursor-pointer portal-card-hover"
+              className="flex items-center justify-between p-2.5 rounded-xl neu-inset bg-[#0e0e13]/90 border border-white/[0.07] hover:border-amber-400/35 text-left cursor-pointer portal-card-hover"
             >
               <div className="flex flex-col min-w-0">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">FOCUS &amp; BUDGET</span>
@@ -517,8 +517,8 @@ export default function EverydayUtilitiesPage({
                 title="Scroll tabs left"
                 className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-all ${
                   canScrollLeft
-                    ? 'bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 shadow-sm cursor-pointer'
-                    : 'bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
+                    ? 'neu-btn bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 cursor-pointer'
+                    : 'neu-inset bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
                 }`}
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
@@ -532,7 +532,7 @@ export default function EverydayUtilitiesPage({
               role="tablist"
               aria-label="Everyday Utilities sections"
               onScroll={updateScrollArrows}
-              className="relative flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto system-tabs-scroller"
+              className="neu-tray relative flex-1 min-w-0 flex items-center gap-1.5 p-1 rounded-xl border border-white/[0.06] overflow-x-auto system-tabs-scroller"
             >
               {visibleTabs.length === 0 ? (
                 <span className="text-xs text-zinc-400 px-2 py-1">
@@ -578,8 +578,8 @@ export default function EverydayUtilitiesPage({
                 title="Scroll tabs right"
                 className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-all ${
                   canScrollRight
-                    ? 'bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 shadow-sm cursor-pointer'
-                    : 'bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
+                    ? 'neu-btn bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 cursor-pointer'
+                    : 'neu-inset bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
                 }`}
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">

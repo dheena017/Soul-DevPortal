@@ -299,7 +299,7 @@ export const GuidedBreathingCard: React.FC = () => {
   const ringDashOffset = active ? ringCirc * (1 - phaseInfo.progress) : ringCirc;
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+    <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
       <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0d1018] shrink-0">
         <HeroArtworkBackdrop src="/visuals/world-clock-globe.jpg" alt="Calm Breathing Visual" opacityClass="opacity-75 sm:opacity-90" />
         <div className="relative z-10 w-full flex flex-wrap items-start justify-between gap-2">
@@ -375,7 +375,7 @@ export const GuidedBreathingCard: React.FC = () => {
         {/* Smooth SVG Breathing Visualizer */}
         <div className="relative flex items-center justify-center my-1 w-40 h-40">
           <div
-            className="relative w-36 h-36 rounded-full bg-[#0d1018] border border-white/[0.09] flex flex-col items-center justify-center transition-transform duration-150 ease-linear shadow-inner"
+            className="neu-inset relative w-36 h-36 rounded-full bg-[#0d1018] border border-white/[0.09] flex flex-col items-center justify-center transition-transform duration-150 ease-linear"
             style={{
               transform: `scale(${active ? phaseInfo.scaleNum.toFixed(3) : 1})`,
             }}
@@ -744,7 +744,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
         {/* Pomodoro Focus Timer */}
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+        <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
           <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#12100d] shrink-0">
             <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="Pomodoro Focus Timer Visual" opacityClass="opacity-72 sm:opacity-88" />
             <div className="relative z-10 flex items-center justify-between gap-2 flex-wrap">
@@ -763,11 +763,11 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                   type="button"
                   onClick={() => playGentleChime('complete')}
                   title="Test completion chime"
-                  className="px-2 py-1 rounded-lg bg-[#16171e]/95 border border-white/[0.1] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
+                  className="neu-btn px-2 py-1 rounded-lg bg-[#16171e]/95 border border-white/[0.1] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
                 >
                   🔔 Test
                 </button>
-                <label className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#08090c]/90 border border-white/[0.1] text-[11px] text-zinc-300 cursor-pointer">
+                <label className="neu-inset inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#08090c]/90 border border-white/[0.1] text-[11px] text-zinc-300 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={pomo.chimeEnabled}
@@ -782,7 +782,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
 
           <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col justify-between gap-3.5">
             {/* Phase Selector: Focus / Short Break / Long Break */}
-            <div className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#08090c] border border-white/[0.08] text-[11px] font-mono">
+            <div className="neu-tray grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#08090c] border border-white/[0.08] text-[11px] font-mono">
               {(
                 [
                   { id: 'focus', label: 'Focus (25m)', mins: 25, hint: 'Deep Focus Session' },
@@ -797,8 +797,8 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                   className={`py-1.5 rounded-lg transition-colors cursor-pointer ${
                     pomo.mode === m.id
                       ? m.id === 'focus'
-                        ? 'bg-amber-500/20 text-amber-200 font-bold'
-                        : 'bg-emerald-500/20 text-emerald-200 font-bold'
+                        ? 'neu-btn bg-amber-500/20 text-amber-200 font-bold'
+                        : 'neu-btn bg-emerald-500/20 text-emerald-200 font-bold'
                       : 'text-zinc-400 hover:text-white'
                   }`}
                 >
@@ -815,7 +815,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                 onChange={(e) => setPomo((p) => ({ ...p, label: e.target.value }))}
                 placeholder="Session intention (e.g., Reading, Deep Coding, Study)..."
                 aria-label="Focus session label"
-                className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400/50"
+                className="neu-inset h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400/50"
               />
               <div className="flex items-center gap-1.5">
                 <select
@@ -830,7 +830,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                     }));
                   }}
                   aria-label="Link task to focus timer"
-                  className="flex-1 min-w-0 h-8 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.09] text-[11px] text-zinc-200"
+                  className="neu-inset flex-1 min-w-0 h-8 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.09] text-[11px] text-zinc-200"
                 >
                   <option value="">Link an open task (optional)...</option>
                   {openTasks.slice(0, 25).map((t) => (
@@ -851,7 +851,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                       setPomo((p) => ({ ...p, linkedTaskId: '' }));
                     }}
                     title="Mark linked task complete"
-                    className="h-8 px-2.5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-[11px] font-bold text-emerald-200 hover:bg-emerald-500/30 cursor-pointer shrink-0"
+                    className="neu-btn h-8 px-2.5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-[11px] font-bold text-emerald-200 hover:bg-emerald-500/30 cursor-pointer shrink-0"
                   >
                     ✓ Done
                   </button>
@@ -859,11 +859,11 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center py-4 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-2.5">
+            <div className="neu-inset flex flex-col items-center justify-center py-4 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-2.5">
               <div className="text-5xl font-extrabold font-mono tracking-wider text-white tabular-nums">
                 {pad2(Math.floor(secondsLeft / 60))}:{pad2(secondsLeft % 60)}
               </div>
-              <div className="w-4/5 h-2 rounded-full bg-white/[0.06] overflow-hidden">
+              <div className="neu-inset w-4/5 h-2 rounded-full bg-white/[0.06] overflow-hidden">
                 <div
                   className={`h-full transition-all duration-300 ${
                     pomo.mode === 'focus'
@@ -875,7 +875,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
               </div>
 
               {completionBanner && (
-                <div className="px-3 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/35 text-[11px] font-mono text-emerald-200">
+                <div className="neu-tile px-3 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/35 text-[11px] font-mono text-emerald-200">
                   {completionBanner}
                 </div>
               )}
@@ -884,7 +884,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                 <button
                   type="button"
                   onClick={togglePomodoro}
-                  className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
+                  className={`neu-btn px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
                     pomo.running
                       ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
                       : 'bg-amber-400/90 border-amber-300 text-zinc-950 hover:bg-amber-300'
@@ -895,7 +895,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                 <button
                   type="button"
                   onClick={resetPomodoro}
-                  className="px-3 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
+                  className="neu-btn px-3 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
                 >
                   ↺ Reset
                 </button>
@@ -903,14 +903,14 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                   type="button"
                   onClick={() => adjustPomodoroMinutes(1)}
                   title="Add 1 minute"
-                  className="px-2.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-mono text-sky-300 hover:text-white cursor-pointer"
+                  className="neu-btn px-2.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-mono text-sky-300 hover:text-white cursor-pointer"
                 >
                   +1m
                 </button>
                 <button
                   type="button"
                   onClick={() => onSelectTab('tasks')}
-                  className="px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/25 cursor-pointer"
+                  className="neu-btn px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/25 cursor-pointer"
                 >
                   Tasks →
                 </button>
@@ -931,7 +931,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                     key={p.mins}
                     type="button"
                     onClick={() => applyModeOrPreset(p.mode, p.mins)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer ${
+                    className={`neu-btn px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer ${
                       pomo.totalSec === p.mins * 60
                         ? 'bg-amber-500/20 border-amber-400/45 text-amber-200 font-bold'
                         : 'bg-[#16171e] border-white/[0.08] text-zinc-300 hover:text-white'
@@ -956,11 +956,11 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                   value={customMinInput}
                   onChange={(e) => setCustomMinInput(e.target.value)}
                   aria-label="Custom focus minutes"
-                  className="w-12 h-7 px-1.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-[11px] font-mono text-white text-center"
+                  className="neu-inset w-12 h-7 px-1.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-[11px] font-mono text-white text-center"
                 />
                 <button
                   type="submit"
-                  className="h-7 px-2 rounded-lg bg-[#16171e] border border-white/[0.1] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
+                  className="neu-btn h-7 px-2 rounded-lg bg-[#16171e] border border-white/[0.1] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
                 >
                   Set m
                 </button>
@@ -988,7 +988,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
         </section>
 
         {/* Precision Stopwatch & Split Laps */}
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+        <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
           <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1017] shrink-0">
             <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="Precision Stopwatch Visual" opacityClass="opacity-72 sm:opacity-88" />
             <div className="relative z-10 flex items-start justify-between gap-2">
@@ -1017,7 +1017,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                         }
                       });
                     }}
-                    className="px-2 py-1 rounded-lg bg-[#16171e]/95 border border-white/[0.1] text-[11px] font-mono text-sky-300 cursor-pointer"
+                    className="neu-btn px-2 py-1 rounded-lg bg-[#16171e]/95 border border-white/[0.1] text-[11px] font-mono text-sky-300 cursor-pointer"
                   >
                     {copiedLaps ? '✓ Copied' : 'Copy'}
                   </button>
@@ -1027,7 +1027,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
           </div>
 
           <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col justify-between gap-4">
-            <div className="flex flex-col items-center justify-center py-6 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-3">
+            <div className="neu-inset flex flex-col items-center justify-center py-6 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-3">
               <div className="text-5xl font-extrabold font-mono tracking-wider text-sky-300 tabular-nums">
                 {formatStopwatch(swDisplayMs)}
               </div>
@@ -1035,7 +1035,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                 <button
                   type="button"
                   onClick={toggleStopwatch}
-                  className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
+                  className={`neu-btn px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
                     sw.running
                       ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
                       : 'bg-sky-500/25 border-sky-400/45 text-white hover:bg-sky-500/35'
@@ -1048,7 +1048,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                   onClick={recordStopwatchLap}
                   disabled={!sw.running}
                   title={sw.running ? 'Record lap split' : 'Start stopwatch to record a lap'}
-                  className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
+                  className="neu-btn px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
                 >
                   🏁 Lap
                 </button>
@@ -1056,7 +1056,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                   type="button"
                   onClick={() => setSw({ running: false, startedAtMs: null, accumulatedMs: 0, laps: [] })}
                   disabled={!sw.running && swDisplayMs === 0 && sw.laps.length === 0}
-                  className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
+                  className="neu-btn px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
                 >
                   Reset
                 </button>
@@ -1065,7 +1065,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
 
             <div className="flex-1 flex flex-col gap-1.5 min-h-[110px]">
               {sw.laps.length === 0 ? (
-                <div className="flex-1 flex items-center justify-center rounded-xl bg-[#0b0c11] border border-dashed border-white/[0.07] text-[11px] font-mono text-zinc-500 p-4 text-center">
+                <div className="neu-inset flex-1 flex items-center justify-center rounded-xl bg-[#0b0c11] border border-dashed border-white/[0.07] text-[11px] font-mono text-zinc-500 p-4 text-center">
                   Press Start, then click Lap to capture split intervals.
                 </div>
               ) : (
@@ -1076,7 +1076,7 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                     return (
                       <div
                         key={lap.id}
-                        className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.06] text-xs font-mono"
+                        className="neu-tile grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.06] text-xs font-mono"
                       >
                         <span className="text-zinc-400">Lap #{lap.index}</span>
                         <span
@@ -1185,14 +1185,14 @@ const AmbientFocusSoundscapeCard: React.FC<{
   };
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+    <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
       <div className="relative overflow-hidden px-5 py-4 border-b border-white/[0.07] bg-[#0d0f16] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Ambient Soundscapes Visual" opacityClass="opacity-72 sm:opacity-88" />
         <div className="relative z-10 flex flex-col gap-0.5">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-base font-extrabold text-white">Offline Ambient Focus Soundscapes</h2>
             {audioStatus === 'playing' && soundMode !== 'off' && (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/35 text-[10px] font-mono font-bold text-emerald-300">
+              <span className="neu-tile inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/35 text-[10px] font-mono font-bold text-emerald-300">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span>Playing Audio</span>
               </span>
@@ -1201,7 +1201,7 @@ const AmbientFocusSoundscapeCard: React.FC<{
               <button
                 type="button"
                 onClick={() => void handleSelectMode(soundMode)}
-                className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/45 text-[10px] font-mono font-bold text-amber-200 cursor-pointer"
+                className="neu-btn px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/45 text-[10px] font-mono font-bold text-amber-200 cursor-pointer"
               >
                 Click to Unlock Audio Output
               </button>
@@ -1212,7 +1212,7 @@ const AmbientFocusSoundscapeCard: React.FC<{
           </p>
         </div>
 
-        <label className="relative z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#08090c]/90 border border-white/[0.1] text-xs text-zinc-300 cursor-pointer shrink-0">
+        <label className="neu-inset relative z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#08090c]/90 border border-white/[0.1] text-xs text-zinc-300 cursor-pointer shrink-0">
           <input
             type="checkbox"
             checked={autoStopWithTimer}
@@ -1238,10 +1238,10 @@ const AmbientFocusSoundscapeCard: React.FC<{
             key={m.id}
             type="button"
             onClick={() => void handleSelectMode(m.id)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border cursor-pointer transition-colors ${
+            className={`neu-btn px-3 py-1.5 rounded-xl text-xs font-semibold border cursor-pointer transition-all ${
               soundMode === m.id
                 ? m.id === 'off'
-                  ? 'bg-zinc-800 border-white/25 text-white font-bold'
+                  ? 'bg-[#1c1d26] border-white/25 text-white font-bold'
                   : 'bg-emerald-500/20 border-emerald-400/45 text-emerald-200 font-bold'
                 : 'bg-[#16171e] border-white/[0.08] text-zinc-300 hover:text-white'
             }`}
@@ -1250,7 +1250,7 @@ const AmbientFocusSoundscapeCard: React.FC<{
           </button>
         ))}
 
-        <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#08090c] border border-white/[0.08] text-xs font-mono text-zinc-300 ml-auto">
+        <label className="neu-inset inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#08090c] border border-white/[0.08] text-xs font-mono text-zinc-300 ml-auto">
           <span>Vol {Math.round(volume * 100)}%</span>
           <input
             type="range"
@@ -1379,14 +1379,14 @@ export const HabitsMoodTab: React.FC = () => {
   return (
     <div className="flex flex-col gap-5">
       {/* 7-Day Habit Grid */}
-      <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1110] flex flex-wrap items-center justify-between gap-3">
           <HeroArtworkBackdrop src="/visuals/checklists-workspace.jpg" alt="Daily Habit Tracker Visual" opacityClass="opacity-75 sm:opacity-90" />
           <div className="relative z-10">
             <h2 className="text-base font-extrabold text-white">7-Day Daily Habit Streak Tracker</h2>
             <p className="text-xs text-zinc-300/90">Build consistent routines across the past 7 days.</p>
           </div>
-          <div className="relative z-10 flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#080b0a]/90 border border-emerald-400/25 shrink-0">
+          <div className="neu-tile relative z-10 flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#080b0a]/90 border border-emerald-400/25 shrink-0">
             <MiniRadialRing percent={weeklyCompletionPct} color="#34d399" size={26} />
             <span className="text-xs font-mono font-bold text-emerald-300 tabular-nums">
               Weekly Consistency: {weeklyCompletionPct}%
@@ -1400,7 +1400,7 @@ export const HabitsMoodTab: React.FC = () => {
               value={newHabitEmoji}
               onChange={(e) => setNewHabitEmoji(e.target.value)}
               aria-label="Habit icon"
-              className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm text-white"
+              className="neu-inset h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-sm text-white"
             >
               {['✨', '💧', '🏃', '📖', '🧘', '🥗', '💤', '🧹', '💻', '🎸'].map((ic) => (
                 <option key={ic} value={ic}>{ic}</option>
@@ -1412,11 +1412,11 @@ export const HabitsMoodTab: React.FC = () => {
               onChange={(e) => setNewHabitName(e.target.value)}
               placeholder="Add new daily habit (e.g., 10k steps, Evening walk)..."
               aria-label="New habit name"
-              className="flex-1 min-w-[200px] h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-emerald-400/45"
+              className="neu-inset flex-1 min-w-[200px] h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-emerald-400/45"
             />
             <button
               type="submit"
-              className="h-9 px-4 rounded-xl bg-white hover:bg-emerald-100 text-zinc-950 text-xs font-extrabold cursor-pointer"
+              className="neu-btn h-9 px-4 rounded-xl bg-white hover:bg-emerald-100 text-zinc-950 text-xs font-extrabold cursor-pointer"
             >
               + Add Habit
             </button>
@@ -1455,7 +1455,7 @@ export const HabitsMoodTab: React.FC = () => {
                               type="button"
                               onClick={() => toggleHabitDay(h.id, d.iso)}
                               aria-label={`Toggle ${h.name} for ${d.iso}`}
-                              className={`w-7 h-7 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                              className={`neu-btn w-7 h-7 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
                                 done
                                   ? 'bg-emerald-500/25 border-emerald-400/50 text-emerald-200'
                                   : 'bg-[#08090c] border-white/[0.08] text-zinc-600 hover:border-white/[0.22]'
@@ -1489,7 +1489,7 @@ export const HabitsMoodTab: React.FC = () => {
       </section>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 items-stretch">
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+        <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
           <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#100e17] shrink-0">
             <HeroArtworkBackdrop src="/visuals/tab-code-playground.jpg" alt="Daily Mood Check-In Visual" opacityClass="opacity-72 sm:opacity-88" />
             <div className="relative z-10 flex items-center justify-between gap-2">
@@ -1538,7 +1538,7 @@ export const HabitsMoodTab: React.FC = () => {
           </div>
         </section>
 
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+        <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
           <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1015] shrink-0">
             <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="Daily Hydration Visual" opacityClass="opacity-72 sm:opacity-88" />
             <div className="relative z-10 flex items-center justify-between gap-2">
@@ -1546,7 +1546,7 @@ export const HabitsMoodTab: React.FC = () => {
                 <h2 className="text-base font-extrabold text-white">Daily Hydration Tracker</h2>
                 <p className="text-xs text-zinc-300/90">Tap glasses or use quick controls to log water intake.</p>
               </div>
-              <div className="shrink-0 flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[#080b0e]/90 border border-sky-400/25">
+              <div className="neu-tile shrink-0 flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[#080b0e]/90 border border-sky-400/25">
                 <MiniRadialRing percent={Math.min(100, Math.round((glassesToday / 8) * 100))} color="#38bdf8" size={26} />
                 <span className="text-xs font-mono text-sky-300 font-bold tabular-nums">
                   {glassesToday * 250} ml
@@ -1564,7 +1564,7 @@ export const HabitsMoodTab: React.FC = () => {
                     key={idx}
                     type="button"
                     onClick={() => setGlasses(filled && idx === glassesToday - 1 ? idx : idx + 1)}
-                    className={`h-12 rounded-xl border flex flex-col items-center justify-center text-sm cursor-pointer transition-colors ${
+                    className={`neu-btn h-12 rounded-xl border flex flex-col items-center justify-center text-sm cursor-pointer transition-colors ${
                       filled
                         ? 'bg-sky-500/20 border-sky-400/45 text-sky-200'
                         : 'bg-[#16171e] border-white/[0.08] text-zinc-600 hover:border-sky-400/30'
@@ -1582,21 +1582,21 @@ export const HabitsMoodTab: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setGlasses(glassesToday + 1)}
-                  className="px-3.5 py-1.5 rounded-xl bg-sky-500/20 border border-sky-400/40 hover:bg-sky-500/30 text-xs font-bold text-sky-200 cursor-pointer"
+                  className="neu-btn px-3.5 py-1.5 rounded-xl bg-sky-500/20 border border-sky-400/40 hover:bg-sky-500/30 text-xs font-bold text-sky-200 cursor-pointer"
                 >
                   +1 Glass (250ml)
                 </button>
                 <button
                   type="button"
                   onClick={() => setGlasses(Math.max(0, glassesToday - 1))}
-                  className="px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs font-mono text-zinc-300 cursor-pointer"
+                  className="neu-btn px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs font-mono text-zinc-300 cursor-pointer"
                 >
                   -1
                 </button>
                 <button
                   type="button"
                   onClick={() => setGlasses(0)}
-                  className="px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs text-zinc-400 hover:text-white cursor-pointer"
+                  className="neu-btn px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.08] text-xs text-zinc-400 hover:text-white cursor-pointer"
                 >
                   Reset Today
                 </button>
@@ -1647,14 +1647,14 @@ export const PersonalGoalsCard: React.FC = () => {
   }, [goals]);
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+    <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
       <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1017] flex flex-wrap items-center justify-between gap-3">
         <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="Personal Goals Visual" opacityClass="opacity-75 sm:opacity-90" />
         <div className="relative z-10">
           <h2 className="text-base font-extrabold text-white">Personal Goals &amp; Milestones</h2>
           <p className="text-xs text-zinc-300/90">Track measurable life targets like books, savings, fitness, or projects.</p>
         </div>
-        <div className="relative z-10 shrink-0 flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#080b10]/90 border border-sky-400/25">
+        <div className="neu-tile relative z-10 shrink-0 flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#080b10]/90 border border-sky-400/25">
           <MiniRadialRing percent={avgPct} color="#38bdf8" size={26} />
           <span className="text-xs font-mono font-bold text-sky-300 tabular-nums">
             {goals.length} active · {avgPct}% avg
@@ -1670,7 +1670,7 @@ export const PersonalGoalsCard: React.FC = () => {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="New goal (e.g., Save emergency fund, Learn Spanish)..."
             aria-label="Goal title"
-            className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-sky-400/45"
+            className="neu-inset h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-sky-400/45"
           />
           <input
             type="number"
@@ -1678,7 +1678,7 @@ export const PersonalGoalsCard: React.FC = () => {
             value={target}
             onChange={(e) => setTarget(e.target.value)}
             aria-label="Goal target"
-            className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
+            className="neu-inset h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
           />
           <input
             type="text"
@@ -1686,11 +1686,11 @@ export const PersonalGoalsCard: React.FC = () => {
             onChange={(e) => setUnit(e.target.value)}
             placeholder="unit"
             aria-label="Goal unit"
-            className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white"
+            className="neu-inset h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white"
           />
           <button
             type="submit"
-            className="h-9 px-4 rounded-xl bg-white hover:bg-sky-100 text-zinc-950 text-xs font-extrabold cursor-pointer"
+            className="neu-btn h-9 px-4 rounded-xl bg-white hover:bg-sky-100 text-zinc-950 text-xs font-extrabold cursor-pointer"
           >
             + Goal
           </button>
@@ -1700,7 +1700,7 @@ export const PersonalGoalsCard: React.FC = () => {
           {goals.map((g) => {
             const pct = Math.min(100, Math.round((g.current / Math.max(1, g.target)) * 100));
             return (
-              <div key={g.id} className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
+              <div key={g.id} className="neu-tile p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-xs font-bold text-white truncate">{g.title}</span>
                   <button
@@ -1724,7 +1724,7 @@ export const PersonalGoalsCard: React.FC = () => {
                           prev.map((x) => (x.id === g.id ? { ...x, current: Math.max(0, x.current - 1) } : x))
                         )
                       }
-                      className="w-6 h-6 rounded bg-[#0c0d12] border border-white/[0.1] text-white cursor-pointer"
+                      className="neu-btn w-6 h-6 rounded bg-[#0c0d12] border border-white/[0.1] text-white cursor-pointer"
                     >
                       -
                     </button>
@@ -1735,7 +1735,7 @@ export const PersonalGoalsCard: React.FC = () => {
                           prev.map((x) => (x.id === g.id ? { ...x, current: x.current + 1 } : x))
                         )
                       }
-                      className="w-6 h-6 rounded bg-emerald-500/20 border border-emerald-400/35 text-emerald-200 font-bold cursor-pointer"
+                      className="neu-btn w-6 h-6 rounded bg-emerald-500/20 border border-emerald-400/35 text-emerald-200 font-bold cursor-pointer"
                     >
                       +1
                     </button>
@@ -1746,13 +1746,13 @@ export const PersonalGoalsCard: React.FC = () => {
                           prev.map((x) => (x.id === g.id ? { ...x, current: x.current + 5 } : x))
                         )
                       }
-                      className="px-1.5 h-6 rounded bg-sky-500/15 border border-sky-400/30 text-[10px] text-sky-200 font-bold cursor-pointer"
+                      className="neu-btn px-1.5 h-6 rounded bg-sky-500/15 border border-sky-400/30 text-[10px] text-sky-200 font-bold cursor-pointer"
                     >
                       +5
                     </button>
                   </div>
                 </div>
-                <div className="w-full h-1.5 rounded-full bg-black/50 overflow-hidden">
+                <div className="neu-inset w-full h-1.5 rounded-full bg-black/50 overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-sky-400 to-emerald-400 transition-all" style={{ width: `${pct}%` }} />
                 </div>
               </div>
@@ -1795,7 +1795,7 @@ export const DateCountdownCalculatorCard: React.FC = () => {
   }, [targetDate, birthDate]);
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+    <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
       <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c1015] shrink-0">
         <HeroArtworkBackdrop src="/visuals/world-clock-globe.jpg" alt="Date Countdown Calculator Visual" opacityClass="opacity-75 sm:opacity-90" />
         <div className="relative z-10 flex items-center justify-between gap-2">
@@ -1803,7 +1803,7 @@ export const DateCountdownCalculatorCard: React.FC = () => {
             <h2 className="text-base font-extrabold text-white">Countdown &amp; Exact Age Calculator</h2>
             <p className="text-xs text-zinc-300/90">Compute exact days left until deadlines or elapsed life duration.</p>
           </div>
-          <span className="shrink-0 px-2.5 py-1 rounded-md bg-[#080b12]/85 backdrop-blur-sm border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
+          <span className="shrink-0 px-2.5 py-1 rounded-md neu-inset bg-[#080b12]/90 border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
             Exact Diff
           </span>
         </div>
@@ -1811,14 +1811,14 @@ export const DateCountdownCalculatorCard: React.FC = () => {
 
       <div className="flex-1 px-4 sm:px-5 py-4 flex flex-col justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
+          <div className="neu-tile p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
             <label className="text-xs text-zinc-400 flex flex-col gap-1">
               Event / Deadline Date
               <input
                 type="date"
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
-                className="h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
+                className="neu-inset h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
               />
             </label>
             <div className="text-sm font-mono font-extrabold text-sky-300">
@@ -1830,14 +1830,14 @@ export const DateCountdownCalculatorCard: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
+          <div className="neu-tile p-3.5 rounded-xl bg-[#16171e] border border-white/[0.07] flex flex-col gap-2">
             <label className="text-xs text-zinc-400 flex flex-col gap-1">
               Start / Birth Date
               <input
                 type="date"
                 value={birthDate}
                 onChange={(e) => setBirthDate(e.target.value)}
-                className="h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
+                className="neu-inset h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
               />
             </label>
             <div className="text-sm font-mono font-extrabold text-emerald-300">
@@ -1903,7 +1903,7 @@ export const GoalsCountdownTab: React.FC = () => {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 items-stretch">
         <DateCountdownCalculatorCard />
 
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+        <section className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
           <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#100e17] shrink-0">
             <HeroArtworkBackdrop src="/visuals/reading-queue.jpg" alt="Event Countdowns Visual" opacityClass="opacity-75 sm:opacity-90" />
             <div className="relative z-10 flex items-center justify-between gap-2">
@@ -1911,7 +1911,7 @@ export const GoalsCountdownTab: React.FC = () => {
                 <h2 className="text-base font-extrabold text-white">Saved Event Countdowns</h2>
                 <p className="text-xs text-zinc-300/90">Pin important launches, birthdays, exams, or holidays.</p>
               </div>
-              <span className="shrink-0 px-2.5 py-1 rounded-md bg-[#0c0a14]/85 backdrop-blur-sm border border-purple-400/35 text-[10px] font-mono font-bold text-purple-300">
+              <span className="shrink-0 px-2.5 py-1 rounded-md neu-inset bg-[#0c0a14]/90 border border-purple-400/35 text-[10px] font-mono font-bold text-purple-300">
                 {events.length} pinned
               </span>
             </div>
@@ -1925,18 +1925,18 @@ export const GoalsCountdownTab: React.FC = () => {
                 onChange={(e) => setEvLabel(e.target.value)}
                 placeholder="Event title (e.g., Product Launch)..."
                 aria-label="Event countdown label"
-                className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-purple-400/45"
+                className="neu-inset h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-purple-400/45"
               />
               <input
                 type="date"
                 value={evDate}
                 onChange={(e) => setEvDate(e.target.value)}
                 aria-label="Event countdown date"
-                className="h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
+                className="neu-inset h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
               />
               <button
                 type="submit"
-                className="h-9 px-4 rounded-xl bg-white hover:bg-purple-100 text-zinc-950 text-xs font-extrabold cursor-pointer"
+                className="neu-btn h-9 px-4 rounded-xl bg-white hover:bg-purple-100 text-zinc-950 text-xs font-extrabold cursor-pointer"
               >
                 + Pin
               </button>
@@ -1952,7 +1952,7 @@ export const GoalsCountdownTab: React.FC = () => {
                     ? `D-${diffDays} days`
                     : `${Math.abs(diffDays)}d ago`;
                 return (
-                  <div key={ev.id} className="p-3 rounded-xl bg-[#16171e] border border-white/[0.07] flex items-center justify-between gap-2">
+                  <div key={ev.id} className="neu-tile p-3 rounded-xl bg-[#16171e] border border-white/[0.07] flex items-center justify-between gap-2">
                     <div className="min-w-0">
                       <div className="text-xs font-bold text-white truncate">{ev.label}</div>
                       <div className="text-[11px] font-mono text-zinc-400">{ev.date}</div>
@@ -1961,8 +1961,8 @@ export const GoalsCountdownTab: React.FC = () => {
                       <span
                         className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
                           diffDays >= 0
-                            ? 'bg-purple-500/15 border-purple-400/35 text-purple-200'
-                            : 'bg-zinc-800 border-white/[0.08] text-zinc-400'
+                            ? 'neu-tile bg-purple-500/15 border-purple-400/35 text-purple-200'
+                            : 'neu-inset bg-[#16171e] border-white/[0.08] text-zinc-400'
                         }`}
                       >
                         {badge}

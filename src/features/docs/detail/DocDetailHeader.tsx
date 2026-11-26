@@ -43,7 +43,7 @@ export default function DocDetailHeader({
   const displayFilename = activeFilename || guideMeta.filename;
 
   return (
-    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-6 portal-header-sheen">
+    <header className="w-full neu-card bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col gap-4 sm:gap-6 portal-header-sheen">
       <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="Documentation Specification Visual" opacityClass="opacity-80 sm:opacity-95" />
       <div className="relative z-10 flex flex-col gap-4 sm:gap-6">
       {/* ── Top Row: Breadcrumb & Actions ── */}
@@ -52,7 +52,7 @@ export default function DocDetailHeader({
           {onBack ? (
             <button
               type="button"
-              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="neu-btn group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold cursor-pointer"
               onClick={onBack}
               title="Return to docs dashboard"
             >
@@ -65,7 +65,7 @@ export default function DocDetailHeader({
           ) : (
             <a
               href="#docs"
-              className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="neu-btn group inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold cursor-pointer"
               title="Return to docs dashboard"
             >
               <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -94,10 +94,10 @@ export default function DocDetailHeader({
           {activeTitle && activeTitle !== guideMeta.title && (
             <>
               <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
-              <strong className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#1e1e28] border border-white/20 text-white font-semibold shadow-sm truncate max-w-[180px] sm:max-w-sm">{displayTitle}</strong>
+              <strong className="neu-tile inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#1e1e28] border border-white/20 text-white font-semibold truncate max-w-[180px] sm:max-w-sm">{displayTitle}</strong>
             </>
           )}
-          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/10 border border-sky-500/25 text-sky-400 shadow-sm inline-flex items-center gap-1.5">
+          <span className="neu-tile px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/10 border border-sky-500/25 text-sky-400 inline-flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
             <span className="sm:hidden">INSPECTOR</span>
             <span className="hidden sm:inline">SPECIFICATION INSPECTOR</span>
@@ -105,7 +105,7 @@ export default function DocDetailHeader({
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-300 select-none shadow-sm">
+          <div className="neu-tile inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-300 select-none">
             <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
             <span>Official Specification · 100% Compliant (9/9 Apps)</span>
           </div>
@@ -121,7 +121,7 @@ export default function DocDetailHeader({
       {/* ── Hero Title & 2x2 Balanced Cards Row ── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="flex items-start gap-4 min-w-0">
-          <div className="w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 text-2xl shadow-inner portal-emblem-hover">
+          <div className="neu-inset w-14 h-14 rounded-2xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center shrink-0 text-2xl portal-emblem-hover">
             {displayIcon}
           </div>
 
@@ -216,7 +216,7 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'spec'}
             className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'spec'
-                ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                ? 'text-white font-bold border border-white/20'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('spec')}
@@ -237,7 +237,7 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'highlights'}
             className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'highlights'
-                ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                ? 'text-white font-bold border border-white/20'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('highlights')}
@@ -257,7 +257,7 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'snippets'}
             className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'snippets'
-                ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                ? 'text-white font-bold border border-white/20'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('snippets')}
@@ -278,7 +278,7 @@ export default function DocDetailHeader({
             aria-selected={activeTab === 'tables'}
             className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 ${
               activeTab === 'tables'
-                ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                ? 'text-white font-bold border border-white/20'
                 : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
             }`}
             onClick={() => onTabChange('tables')}

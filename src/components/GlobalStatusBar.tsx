@@ -468,7 +468,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
           ref={popoverRef}
           role="dialog"
           aria-label="Date, Time and Quick Utilities"
-          className="fixed bottom-11 right-3 sm:right-5 z-50 w-[340px] sm:w-[376px] max-w-[calc(100vw-1.5rem)] max-h-[calc(100dvh-4.5rem)] overflow-y-auto custom-scrollbar rounded-2xl bg-[#101118] border border-white/[0.14] shadow-[0_24px_64px_rgba(0,0,0,0.95)] portal-page-enter"
+          className="fixed bottom-11 right-3 sm:right-5 z-50 w-[340px] sm:w-[376px] max-w-[calc(100vw-1.5rem)] max-h-[calc(100dvh-4.5rem)] overflow-y-auto custom-scrollbar rounded-2xl neu-modal bg-[#101118] border border-white/[0.14] portal-page-enter"
         >
           <div className="relative p-3.5 sm:p-4 flex flex-col gap-3 text-xs portal-header-sheen">
             {/* 1. Clock Hero + Time Controls */}
@@ -486,7 +486,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
                 <button
                   type="button"
                   onClick={toggle24Hour}
-                  className="h-7 px-2 rounded-lg bg-[#181a24] border border-white/[0.1] hover:border-sky-400/45 text-[10px] font-mono font-bold text-sky-300 cursor-pointer transition-colors"
+                  className="neu-btn h-7 px-2 rounded-lg bg-[#181a24] border border-white/[0.1] hover:border-sky-400/45 text-[10px] font-mono font-bold text-sky-300 cursor-pointer transition-colors"
                   title="Switch between 24-hour and 12-hour clock"
                 >
                   {use24Hour ? '24H' : '12H'}
@@ -494,7 +494,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
                 <button
                   type="button"
                   onClick={() => navigateFromPopover('everyday/worldtime')}
-                  className="inline-flex items-center gap-1 h-7 px-2 rounded-lg bg-[#181a24] border border-white/[0.1] hover:border-indigo-400/45 text-[10px] font-mono font-semibold text-indigo-300 hover:text-white cursor-pointer transition-colors"
+                  className="neu-btn inline-flex items-center gap-1 h-7 px-2 rounded-lg bg-[#181a24] border border-white/[0.1] hover:border-indigo-400/45 text-[10px] font-mono font-semibold text-indigo-300 hover:text-white cursor-pointer transition-colors"
                   title="Open World Clock & Time Zones"
                 >
                   <StatusSvg className="w-3 h-3">
@@ -512,7 +512,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
               <button
                 type="button"
                 onClick={() => handleCopy(`${fullDate} ${formattedTime}`, 'local')}
-                className="inline-flex items-center justify-center gap-1.5 h-8 px-2 rounded-lg bg-[#161822] border border-white/[0.08] hover:border-white/[0.2] text-[11px] font-mono text-zinc-200 hover:text-white transition-colors cursor-pointer whitespace-nowrap"
+                className="neu-btn inline-flex items-center justify-center gap-1.5 h-8 px-2 rounded-lg bg-[#161822] border border-white/[0.08] hover:border-white/[0.2] text-[11px] font-mono text-zinc-200 hover:text-white transition-colors cursor-pointer whitespace-nowrap"
               >
                 <StatusSvg className="w-3 h-3 text-sky-300">
                   <rect width="14" height="14" x="8" y="8" rx="2" />
@@ -523,7 +523,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
               <button
                 type="button"
                 onClick={() => handleCopy(now.toISOString(), 'iso')}
-                className="inline-flex items-center justify-center gap-1.5 h-8 px-2 rounded-lg bg-[#161822] border border-white/[0.08] hover:border-white/[0.2] text-[11px] font-mono text-zinc-200 hover:text-white transition-colors cursor-pointer whitespace-nowrap"
+                className="neu-btn inline-flex items-center justify-center gap-1.5 h-8 px-2 rounded-lg bg-[#161822] border border-white/[0.08] hover:border-white/[0.2] text-[11px] font-mono text-zinc-200 hover:text-white transition-colors cursor-pointer whitespace-nowrap"
               >
                 <StatusSvg className="w-3 h-3 text-emerald-300">
                   <polyline points="16 18 22 12 16 6" />
@@ -534,7 +534,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
               <button
                 type="button"
                 onClick={() => handleCopy(String(Math.floor(now.getTime() / 1000)), 'unix')}
-                className="inline-flex items-center justify-center gap-1.5 h-8 px-2 rounded-lg bg-[#161822] border border-white/[0.08] hover:border-white/[0.2] text-[11px] font-mono text-zinc-200 hover:text-white transition-colors cursor-pointer whitespace-nowrap"
+                className="neu-btn inline-flex items-center justify-center gap-1.5 h-8 px-2 rounded-lg bg-[#161822] border border-white/[0.08] hover:border-white/[0.2] text-[11px] font-mono text-zinc-200 hover:text-white transition-colors cursor-pointer whitespace-nowrap"
               >
                 <StatusSvg className="w-3 h-3 text-purple-300">
                   <circle cx="12" cy="12" r="10" />
@@ -545,7 +545,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
             </div>
 
             {/* 3. Connected Interactive Monthly Calendar + Selected Day Agenda */}
-            <div className="rounded-xl bg-[#0a0b10] border border-white/[0.08] p-2.5 flex flex-col gap-2">
+            <div className="rounded-xl neu-inset bg-[#0a0b10] border border-white/[0.08] p-2.5 flex flex-col gap-2">
               <div className="flex items-center justify-between gap-1">
                 <button
                   type="button"
@@ -778,7 +778,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
                 />
                 <button
                   type="submit"
-                  className="h-8 px-2.5 rounded-lg bg-white text-zinc-950 hover:bg-sky-100 text-[11px] font-extrabold cursor-pointer shrink-0"
+                  className="neu-btn h-8 px-2.5 rounded-lg bg-white text-zinc-950 hover:bg-sky-100 text-[11px] font-extrabold cursor-pointer shrink-0"
                 >
                   Add
                 </button>
@@ -844,7 +844,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
                   key={hub.route}
                   type="button"
                   onClick={() => navigateFromPopover(hub.route)}
-                  className={`p-2 rounded-xl bg-[#151721] border border-white/[0.08] ${hub.tone} text-left cursor-pointer transition-colors`}
+                  className={`neu-tile neu-btn p-2 rounded-xl bg-[#151721] border border-white/[0.08] ${hub.tone} text-left cursor-pointer transition-colors`}
                 >
                   <div className="text-[10px] font-mono text-zinc-400">{hub.label}</div>
                   <div className={`text-[11px] font-mono font-bold tabular-nums truncate ${hub.valueCls}`}>
@@ -904,7 +904,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
             <button
               type="button"
               onClick={onOpenShortcuts}
-              className="inline-flex items-center gap-1.5 h-6 px-2 rounded-md bg-[#13151d] hover:bg-[#191c27] border border-white/[0.09] text-zinc-200 transition-colors cursor-pointer shrink-0"
+              className="neu-btn inline-flex items-center gap-1.5 h-6 px-2 rounded-md bg-[#13151d] hover:bg-[#191c27] border border-white/[0.09] text-zinc-200 transition-colors cursor-pointer shrink-0"
               title="Soul DevPortal v0.0.1 · Click for Desktop App & Keyboard Shortcuts"
             >
               <span
@@ -937,7 +937,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
 
             <span className="hidden sm:block h-3.5 w-px bg-white/[0.1] mx-0.5 shrink-0" aria-hidden="true" />
 
-            <div className="hidden sm:inline-flex items-center gap-0.5 h-6 p-0.5 rounded-md bg-[#12131a] border border-white/[0.08] shrink-0">
+            <div className="hidden sm:inline-flex items-center gap-0.5 h-6 p-0.5 rounded-md neu-tray bg-[#12131a] border border-white/[0.08] shrink-0">
               <button
                 type="button"
                 onClick={() => onNavigate('everyday')}
@@ -981,7 +981,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
 
           {/* Center: Unified Hardware Uptime, Power/Battery & Network Telemetry Strip */}
           {liveTelemetry && (
-            <div className="hidden lg:inline-flex items-center h-6 px-2.5 gap-2 rounded-md bg-[#12131a] border border-white/[0.08] text-zinc-300 min-w-0">
+            <div className="hidden lg:inline-flex items-center h-6 px-2.5 gap-2 rounded-md neu-tray bg-[#12131a] border border-white/[0.08] text-zinc-300 min-w-0">
               <button
                 type="button"
                 onClick={() => onNavigate('computer')}
@@ -1066,7 +1066,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
               aria-expanded={calendarOpen}
               aria-label="Current date and time — click for calendar and timezone tools"
               title={`${fullDate} · ${timeZoneInfo.name} (${timeZoneInfo.utcOffset}) · Click for calendar & copy tools`}
-              className={`inline-flex items-center gap-2 h-6 px-2.5 rounded-md border tabular-nums transition-all cursor-pointer ${
+              className={`neu-btn inline-flex items-center gap-2 h-6 px-2.5 rounded-md border tabular-nums transition-all cursor-pointer ${
                 calendarOpen
                   ? 'bg-sky-500/20 border-sky-400/50 text-white'
                   : 'bg-[#13151d] border-white/[0.1] hover:border-sky-400/40 text-zinc-100 hover:text-white'

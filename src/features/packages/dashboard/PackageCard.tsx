@@ -47,12 +47,12 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
   };
 
   return (
-    <article className="group flex flex-col justify-between p-5 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151b] gap-4 h-full portal-card-hover">
+    <article className="group flex flex-col justify-between p-5 rounded-2xl neu-card neu-card-interactive bg-[#121216] border border-white/[0.07] gap-4 h-full">
       {/* ── Top Row: Icon, Version, Ecosystem Pills ── */}
         <div className="flex flex-col gap-3.5" onClick={handleCardClick} style={{ cursor: onSelectPackage ? 'pointer' : 'default' }}>
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.1] bg-[#16161c] text-xl shadow-inner portal-emblem-hover">
+              <div className="neu-inset w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/[0.1] bg-[#16161c] text-xl portal-emblem-hover">
                 {meta.icon}
               </div>
 
@@ -98,7 +98,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
         </div>
 
         {/* ── 3-Metric Specs Row ── */}
-        <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-[#09090c] border border-white/[0.08] text-center font-mono text-xs">
+        <div className="neu-inset grid grid-cols-3 gap-2 p-3 rounded-xl bg-[#09090c] border border-white/[0.08] text-center font-mono text-xs">
           <div className="flex flex-col items-center">
             <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">TOTAL EXPORTS</span>
             <strong className="text-xs font-bold text-white mt-0.5">{exportsCount} APIs</strong>
@@ -115,7 +115,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
 
         {/* ── Terminal Commands Strip (Zero Truncation) ── */}
         <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-[#09090c] border border-white/[0.08] font-mono text-xs text-zinc-300">
+          <div className="neu-inset flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-[#09090c] border border-white/[0.08] font-mono text-xs text-zinc-300">
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <span className="text-zinc-500 select-none font-bold">$</span>
               <code className="text-[11px] text-zinc-100 truncate select-all font-semibold">{installCmd}</code>
@@ -124,7 +124,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
           </div>
 
           {pyInstallCmd && (
-            <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-[#09090c] border border-white/[0.08] font-mono text-xs text-zinc-300">
+            <div className="neu-inset flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-[#09090c] border border-white/[0.08] font-mono text-xs text-zinc-300">
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <span className="text-zinc-500 select-none font-bold">$</span>
                 <code className="text-[11px] text-zinc-100 truncate select-all font-semibold">{pyInstallCmd}</code>
@@ -138,7 +138,7 @@ export default function PackageCard({ pkg, onSelectPackage }: PackageCardProps) 
         <div className="pt-3 border-t border-white/[0.06]">
           <button
             type="button"
-            className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all shadow-md shadow-white/10 flex items-center justify-center gap-2"
+            className="neu-btn w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-white text-zinc-950 hover:bg-zinc-200 transition-all flex items-center justify-center gap-2"
             onClick={handleCardClick}
             title={`Inspect @workspace/${pkg.id}`}
           >

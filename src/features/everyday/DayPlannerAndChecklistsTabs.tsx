@@ -35,7 +35,7 @@ const CATEGORY_STYLES: Record<ScheduleCategory, string> = {
   Study: 'bg-indigo-500/15 border-indigo-400/35 text-indigo-200',
   Health: 'bg-emerald-500/15 border-emerald-400/35 text-emerald-200',
   Meals: 'bg-amber-500/15 border-amber-400/35 text-amber-200',
-  Rest: 'bg-zinc-800/80 border-white/[0.12] text-zinc-300',
+  Rest: 'bg-[#16171e]/90 border-white/[0.12] text-zinc-300',
 };
 
 const DEFAULT_SCHEDULE_STATE: ScheduleWorkspaceState = {
@@ -194,7 +194,7 @@ export const SchedulePlannerTab: React.FC = () => {
                 type="button"
                 onClick={copyMarkdownAgenda}
                 disabled={dayBlocks.length === 0}
-                className="h-8 px-3 rounded-lg bg-[#16171e] border border-white/[0.1] disabled:opacity-40 text-xs font-mono text-sky-300 cursor-pointer"
+                className="neu-btn h-8 px-3 rounded-lg bg-[#16171e] border border-white/[0.1] disabled:opacity-40 text-xs font-mono text-sky-300 cursor-pointer"
               >
                 {copiedSchedule ? '✓ Copied .md' : 'Copy .md'}
               </button>
@@ -208,21 +208,21 @@ export const SchedulePlannerTab: React.FC = () => {
               <button
                 type="button"
                 onClick={() => applyPresetDay('workday')}
-                className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-sky-400/40 text-zinc-200 cursor-pointer"
+                className="neu-btn px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-sky-400/40 text-zinc-200 cursor-pointer"
               >
                 ⚡ Focused Workday
               </button>
               <button
                 type="button"
                 onClick={() => applyPresetDay('study')}
-                className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-indigo-400/40 text-zinc-200 cursor-pointer"
+                className="neu-btn px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-indigo-400/40 text-zinc-200 cursor-pointer"
               >
                 📖 Deep Study
               </button>
               <button
                 type="button"
                 onClick={() => applyPresetDay('weekend')}
-                className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-emerald-400/40 text-zinc-200 cursor-pointer"
+                className="neu-btn px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-emerald-400/40 text-zinc-200 cursor-pointer"
               >
                 🌿 Weekend Recharge
               </button>
@@ -233,7 +233,7 @@ export const SchedulePlannerTab: React.FC = () => {
                 value={startHour}
                 onChange={(e) => setStartHour(Number(e.target.value))}
                 aria-label="Block start hour"
-                className="h-9 px-2 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
+                className="neu-inset h-9 px-2 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-white"
               >
                 {Array.from({ length: 17 }, (_, idx) => idx + 6).map((hr) => (
                   <option key={hr} value={hr}>{formatHourLabel(hr)}</option>
@@ -243,7 +243,7 @@ export const SchedulePlannerTab: React.FC = () => {
                 value={durationHrs}
                 onChange={(e) => setDurationHrs(Number(e.target.value))}
                 aria-label="Block duration"
-                className="h-9 px-2 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-zinc-200"
+                className="neu-inset h-9 px-2 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-zinc-200"
               >
                 {[1, 2, 3, 4].map((d) => (
                   <option key={d} value={d}>{d}h</option>
@@ -253,7 +253,7 @@ export const SchedulePlannerTab: React.FC = () => {
                 value={category}
                 onChange={(e) => setCategory(e.target.value as ScheduleCategory)}
                 aria-label="Block category"
-                className="h-9 px-2 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-zinc-200"
+                className="neu-inset h-9 px-2 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-zinc-200"
               >
                 {Object.keys(CATEGORY_STYLES).map((cat) => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -265,18 +265,18 @@ export const SchedulePlannerTab: React.FC = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Time block activity..."
                 aria-label="Time block title"
-                className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white"
+                className="neu-inset h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white"
               />
               <button
                 type="submit"
-                className="h-9 px-4 rounded-xl bg-white text-zinc-950 text-xs font-extrabold cursor-pointer"
+                className="neu-btn h-9 px-4 rounded-xl bg-white text-zinc-950 text-xs font-extrabold cursor-pointer"
               >
                 + Block
               </button>
             </form>
 
             {dayBlocks.length === 0 ? (
-              <div className="flex-1 min-h-[180px] p-8 rounded-xl bg-[#08090c] border border-dashed border-white/[0.08] flex flex-col items-center justify-center gap-2 text-center text-xs text-zinc-400">
+              <div className="neu-inset flex-1 min-h-[180px] p-8 rounded-xl bg-[#08090c] border border-dashed border-white/[0.08] flex flex-col items-center justify-center gap-2 text-center text-xs text-zinc-400">
                 <span className="text-zinc-300 font-semibold">No time blocks scheduled for {selectedDate}</span>
                 <span className="text-[11px] text-zinc-500 max-w-sm">
                   Add a custom block above or load a day template like Focused Workday or Deep Study.
@@ -352,7 +352,7 @@ export const SchedulePlannerTab: React.FC = () => {
                 Edit daily focus themes, meal ideas, and workouts across Monday–Sunday.
               </p>
             </div>
-            <span className="relative z-10 shrink-0 px-2.5 py-1 rounded-md bg-[#080b12]/85 backdrop-blur-sm border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
+            <span className="relative z-10 shrink-0 px-2.5 py-1 rounded-md neu-inset bg-[#080b12]/90 border border-sky-400/35 text-[10px] font-mono font-bold text-sky-300">
               Today: {todayWeekday}
             </span>
           </div>
@@ -674,7 +674,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch">
       {/* Left: Shopping, Packing & Reusable Checklists */}
-      <section className="xl:col-span-7 rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card xl:col-span-7 rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         {/* Hero Artwork Header Banner */}
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#0c0f15] shrink-0">
           <HeroArtworkBackdrop
@@ -723,14 +723,14 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                       ],
                     })
                   }
-                  className="px-2.5 py-1 rounded-lg bg-[#11151d]/90 border border-white/[0.1] hover:border-sky-400/45 text-zinc-200 cursor-pointer transition-colors"
+                  className="neu-btn px-2.5 py-1 rounded-lg bg-[#11151d]/90 border border-white/[0.1] hover:border-sky-400/45 text-zinc-200 cursor-pointer transition-colors"
                 >
                   + Day Trip Bag
                 </button>
               </div>
             </div>
 
-            <div className="shrink-0 flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#090b10]/90 border border-emerald-400/25">
+            <div className="neu-inset shrink-0 flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#090b10]/90 border border-emerald-400/25">
               <MiniRadialRing percent={listStats.pct} color="#34d399" size={40} />
               <div className="flex flex-col">
                 <span className="text-xs font-extrabold font-mono text-white tabular-nums">
@@ -748,7 +748,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
         <div className="px-4 sm:px-5 pt-3.5 pb-3.5 border-b border-white/[0.06] bg-[#111218] flex flex-col gap-3 shrink-0">
           {/* Row 1: Segmented List Tabs + Compact New List Form */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-            <div className="flex items-center gap-1 p-1 rounded-xl bg-[#090b10] border border-white/[0.07] overflow-x-auto scrollbar-none min-w-0">
+            <div className="neu-tray flex items-center gap-1 p-1 rounded-xl bg-[#090b10] border border-white/[0.07] overflow-x-auto scrollbar-none min-w-0" role="tablist" aria-label="Checklists">
               {lists.map((l) => {
                 const done = l.items.filter((i) => i.checked).length;
                 const active = selectedList?.id === l.id;
@@ -756,10 +756,12 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                   <button
                     key={l.id}
                     type="button"
+                    role="tab"
+                    aria-selected={active}
                     onClick={() => selectList(l.id)}
                     className={`shrink-0 px-2.5 py-1.5 rounded-lg text-xs border flex items-center gap-1.5 cursor-pointer transition-colors ${
                       active
-                        ? 'bg-sky-500/20 border-sky-400/45 text-white font-bold shadow-sm'
+                        ? 'bg-sky-500/20 border-sky-400/45 text-white font-bold'
                         : 'bg-transparent border-transparent text-zinc-400 hover:text-white hover:bg-white/[0.04]'
                     }`}
                   >
@@ -782,7 +784,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                 value={newListIcon}
                 onChange={(e) => setNewListIcon(e.target.value)}
                 aria-label="New list icon"
-                className="h-8 px-1.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none"
+                className="neu-inset h-8 px-1.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none"
               >
                 {['📋', '🛒', '✈️', '🎒', '🧹', '🏠', '💻', '🎁'].map((ic) => (
                   <option key={ic} value={ic}>{ic}</option>
@@ -794,12 +796,12 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                 onChange={(e) => setNewListName(e.target.value)}
                 placeholder="Create new list..."
                 aria-label="New checklist name"
-                className="h-8 w-36 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/45"
+                className="neu-inset h-8 w-36 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/45"
               />
               <button
                 type="submit"
                 disabled={!newListName.trim()}
-                className="h-8 px-3 rounded-lg bg-sky-500/20 border border-sky-400/45 hover:bg-sky-500/30 disabled:opacity-45 disabled:cursor-not-allowed text-sky-100 text-xs font-bold cursor-pointer whitespace-nowrap"
+                className="neu-btn h-8 px-3 rounded-lg bg-sky-500/20 border border-sky-400/45 hover:bg-sky-500/30 disabled:opacity-45 disabled:cursor-not-allowed text-sky-100 text-xs font-bold cursor-pointer whitespace-nowrap"
               >
                 + List
               </button>
@@ -808,14 +810,14 @@ export const ChecklistsAndReadingTab: React.FC = () => {
 
           {/* Row 2: Active List Progress Meter + Clean Action Bar + Add Item Input */}
           {selectedList && (
-            <div className="p-3 rounded-xl bg-[#0a0c11] border border-white/[0.07] flex flex-col gap-2.5">
+            <div className="neu-inset p-3 rounded-xl bg-[#0a0c11] border border-white/[0.07] flex flex-col gap-2.5">
               <div className="flex flex-wrap items-center justify-between gap-2.5">
                 <div className="flex items-center gap-2.5 flex-1 min-w-[180px]">
                   <span className="text-[11px] font-mono text-zinc-400 whitespace-nowrap">
                     Progress:{' '}
                     <strong className="text-emerald-300 tabular-nums">{listStats.pct}%</strong>
                   </span>
-                  <div className="flex-1 max-w-[220px] h-2 rounded-full bg-[#151822] overflow-hidden border border-white/[0.06]">
+                  <div className="neu-inset flex-1 max-w-[220px] h-2 rounded-full bg-[#151822] overflow-hidden border border-white/[0.06]">
                     <div
                       className="h-full bg-gradient-to-r from-emerald-500 to-sky-400 transition-all duration-300"
                       style={{ width: `${listStats.pct}%` }}
@@ -828,7 +830,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                     type="button"
                     onClick={copyActiveChecklist}
                     disabled={selectedList.items.length === 0}
-                    className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] font-mono text-sky-300 hover:border-sky-400/35 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    className="neu-btn px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] font-mono text-sky-300 hover:border-sky-400/35 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
                     {copiedChecklist ? '✓ Copied' : 'Copy .md'}
                   </button>
@@ -837,7 +839,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                     onClick={() => uncheckAll(selectedList.id)}
                     disabled={listStats.done === 0}
                     title="Reset all checkmarks to reuse this list"
-                    className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] text-zinc-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    className="neu-btn px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] text-zinc-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
                     ↺ Uncheck All
                   </button>
@@ -845,7 +847,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                     type="button"
                     onClick={() => clearChecked(selectedList.id)}
                     disabled={listStats.done === 0}
-                    className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] text-zinc-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    className="neu-btn px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] text-zinc-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
                     Clear Checked ({listStats.done})
                   </button>
@@ -857,7 +859,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                         updateLists(() => nextRemaining);
                         if (nextRemaining[0]) selectList(nextRemaining[0].id);
                       }}
-                      className="px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/30 hover:bg-rose-500/25 text-[11px] text-rose-300 cursor-pointer"
+                      className="neu-btn px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/30 hover:bg-rose-500/25 text-[11px] text-rose-300 cursor-pointer"
                     >
                       Delete
                     </button>
@@ -872,12 +874,12 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                   onChange={(e) => setNewItemText(e.target.value)}
                   placeholder={`Add item to ${selectedList.title}...`}
                   aria-label="New checklist item"
-                  className="flex-1 h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-400/45"
+                  className="neu-inset flex-1 h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-400/45"
                 />
                 <button
                   type="submit"
                   disabled={!newItemText.trim()}
-                  className="h-9 px-4 rounded-xl bg-emerald-500/20 border border-emerald-400/45 hover:bg-emerald-500/30 disabled:opacity-45 disabled:cursor-not-allowed text-emerald-100 text-xs font-extrabold cursor-pointer shrink-0"
+                  className="neu-btn h-9 px-4 rounded-xl bg-emerald-500/20 border border-emerald-400/45 hover:bg-emerald-500/30 disabled:opacity-45 disabled:cursor-not-allowed text-emerald-100 text-xs font-extrabold cursor-pointer shrink-0"
                 >
                   + Add Item
                 </button>
@@ -889,7 +891,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
         {/* Checklist Items Body */}
         <div className="flex-1 min-h-0 px-4 sm:px-5 py-3.5 bg-[#0b0c11]/60 flex flex-col">
           {!selectedList || selectedList.items.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center py-10 text-center text-xs text-zinc-500 rounded-xl bg-[#08090c] border border-dashed border-white/[0.08]">
+            <div className="neu-inset flex-1 flex flex-col items-center justify-center py-10 text-center text-xs text-zinc-500 rounded-xl bg-[#08090c] border border-dashed border-white/[0.08]">
               <span>No items in {selectedList?.title || 'this list'} yet.</span>
               <span className="text-[11px] text-zinc-600 mt-1">Add your first item above.</span>
             </div>
@@ -902,7 +904,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
               {selectedList.items.map((it) => (
                 <div
                   key={it.id}
-                  className={`flex items-center justify-between gap-2 px-3 py-2 rounded-xl border transition-colors ${
+                  className={`neu-tile flex items-center justify-between gap-2 px-3 py-2 rounded-xl border transition-colors ${
                     it.checked
                       ? 'bg-emerald-500/[0.06] border-emerald-500/20'
                       : 'bg-[#12141c] border-white/[0.06] hover:border-white/[0.14]'
@@ -914,7 +916,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                     className="flex items-center gap-2.5 flex-1 min-w-0 text-left cursor-pointer"
                   >
                     <span
-                      className={`w-5 h-5 rounded border flex items-center justify-center text-[11px] shrink-0 transition-colors ${
+                      className={`neu-btn w-5 h-5 rounded border flex items-center justify-center text-[11px] shrink-0 transition-colors ${
                         it.checked
                           ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200'
                           : 'bg-[#08090c] border-white/20 text-transparent'
@@ -957,7 +959,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
       </section>
 
       {/* Right: Books, Movies & Courses Queue */}
-      <section className="xl:col-span-5 rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
+      <section className="neu-card xl:col-span-5 rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col">
         {/* Hero Artwork Header Banner */}
         <div className="relative overflow-hidden p-4 sm:p-5 border-b border-white/[0.07] bg-[#100e17] shrink-0">
           <HeroArtworkBackdrop
@@ -980,7 +982,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
               </div>
             </div>
 
-            <div className="shrink-0 flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#090910]/90 border border-purple-400/25">
+            <div className="neu-tile shrink-0 flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#090910]/90 border border-purple-400/25">
               <MiniRadialRing percent={mediaStats.finishedPct} color="#c084fc" size={40} />
               <div className="flex flex-col">
                 <span className="text-xs font-extrabold font-mono text-white tabular-nums">
@@ -995,7 +997,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
 
           {/* Spectrum Completion Strip */}
           {mediaStats.total > 0 && (
-            <div className="relative z-10 mt-3 w-full h-1.5 rounded-full bg-black/50 overflow-hidden flex">
+            <div className="neu-inset relative z-10 mt-3 w-full h-1.5 rounded-full bg-black/50 overflow-hidden flex">
               {mediaStats.finished > 0 && (
                 <div className="h-full bg-emerald-400" style={{ width: `${mediaStats.finishedPct}%` }} />
               )}
@@ -1011,7 +1013,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
         <div className="px-4 sm:px-5 pt-3.5 pb-3.5 border-b border-white/[0.06] bg-[#111218] flex flex-col gap-3 shrink-0">
           {/* Row 1: Segmented Status Filter Bar + Kind Filter */}
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-1 p-1 rounded-xl bg-[#090b10] border border-white/[0.07] overflow-x-auto scrollbar-none text-[11px] font-mono">
+            <div className="neu-tray flex items-center gap-1 p-1 rounded-xl bg-[#090b10] border border-white/[0.07] overflow-x-auto scrollbar-none text-[11px] font-mono" role="tablist" aria-label="Media queue filter">
               {(
                 [
                   { key: 'All', count: mediaStats.total },
@@ -1023,10 +1025,12 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                 <button
                   key={status}
                   type="button"
+                  role="tab"
+                  aria-selected={mediaFilter === status}
                   onClick={() => setMediaFilter(status)}
                   className={`shrink-0 px-2.5 py-1 rounded-lg border cursor-pointer transition-colors inline-flex items-center gap-1.5 ${
                     mediaFilter === status
-                      ? 'bg-purple-500/20 border-purple-400/45 text-white font-bold shadow-sm'
+                      ? 'bg-purple-500/20 border-purple-400/45 text-white font-bold'
                       : 'bg-transparent border-transparent text-zinc-400 hover:text-white hover:bg-white/[0.04]'
                   }`}
                 >
@@ -1059,7 +1063,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
           {/* Row 2: Structured Add Entry Box */}
           <form
             onSubmit={addMedia}
-            className="p-3 rounded-xl bg-[#0a0c11] border border-white/[0.07] flex flex-col gap-2.5"
+            className="neu-inset p-3 rounded-xl bg-[#0a0c11] border border-white/[0.07] flex flex-col gap-2.5"
           >
             <div className="flex flex-wrap items-center gap-1.5">
               {(['Book', 'Course', 'Movie', 'Podcast'] as const).map((k) => {
@@ -1070,9 +1074,9 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                     key={k}
                     type="button"
                     onClick={() => setMediaKind(k)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
+                    className={`neu-btn px-2.5 py-1 rounded-lg text-[11px] font-mono border inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
                       selected
-                        ? `${km.badge} font-bold shadow-sm`
+                        ? `${km.badge} font-bold`
                         : 'bg-[#12141c] border-white/[0.07] text-zinc-400 hover:text-white'
                     }`}
                   >
@@ -1098,12 +1102,12 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                 onChange={(e) => setMediaNote(e.target.value)}
                 placeholder="Page, chapter or author..."
                 aria-label="Media note"
-                className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-purple-400/45 min-w-0"
+                className="neu-inset h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-purple-400/45 min-w-0"
               />
               <button
                 type="submit"
                 disabled={!mediaTitle.trim()}
-                className="h-9 px-4 rounded-xl bg-purple-500/20 border border-purple-400/45 hover:bg-purple-500/30 disabled:opacity-45 disabled:cursor-not-allowed text-purple-100 text-xs font-extrabold cursor-pointer whitespace-nowrap"
+                className="neu-btn h-9 px-4 rounded-xl bg-purple-500/20 border border-purple-400/45 hover:bg-purple-500/30 disabled:opacity-45 disabled:cursor-not-allowed text-purple-100 text-xs font-extrabold cursor-pointer whitespace-nowrap"
               >
                 + Save
               </button>
@@ -1114,7 +1118,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
         {/* Media Queue Cards */}
         <div className="flex-1 min-h-0 px-4 sm:px-5 py-3.5 bg-[#0b0c11]/60 flex flex-col">
           {visibleMedia.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center py-10 text-center text-xs text-zinc-500 rounded-xl bg-[#08090c] border border-dashed border-white/[0.08]">
+            <div className="neu-inset flex-1 flex flex-col items-center justify-center py-10 text-center text-xs text-zinc-500 rounded-xl bg-[#08090c] border border-dashed border-white/[0.08]">
               <span>No entries matching &ldquo;{mediaFilter}&rdquo;.</span>
             </div>
           ) : (
@@ -1128,11 +1132,11 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                 return (
                   <div
                     key={m.id}
-                    className="p-3 rounded-xl bg-[#12141c] border border-white/[0.07] hover:border-white/[0.15] flex items-start justify-between gap-2.5 transition-colors"
+                    className="neu-tile p-3 rounded-xl bg-[#12141c] border border-white/[0.07] hover:border-white/[0.15] flex items-start justify-between gap-2.5 transition-colors"
                   >
                     <div className="flex flex-col gap-1 min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono border inline-flex items-center gap-1 ${kindMeta.badge}`}>
+                        <span className={`neu-tile px-1.5 py-0.5 rounded text-[10px] font-mono border inline-flex items-center gap-1 ${kindMeta.badge}`}>
                           <span>{kindMeta.icon}</span>
                           <span>{m.kind}</span>
                         </span>
@@ -1160,7 +1164,7 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                             }),
                           }))
                         }
-                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border cursor-pointer transition-colors ${
+                        className={`neu-btn px-2 py-0.5 rounded-lg text-[10px] font-mono border cursor-pointer transition-colors ${
                           m.status === 'Finished'
                             ? 'bg-emerald-500/15 border-emerald-400/35 text-emerald-300'
                             : m.status === 'In Progress'

@@ -964,9 +964,9 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
           setDraggedTaskId(null);
           setDragOverCol(null);
         }}
-        className={`rounded-2xl border p-4 transition-colors ${
+        className={`neu-card rounded-2xl border p-4 transition-colors ${
           isFocusing
-            ? 'bg-[#131622] border-emerald-400/45 shadow-lg'
+            ? 'bg-[#131622] border-emerald-400/45'
             : isSelected
             ? 'bg-[#131622] border-sky-400/50'
             : task.done
@@ -1243,8 +1243,8 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
       <header
         className={
           embedded
-            ? 'relative overflow-hidden w-full bg-[#111218] border border-white/[0.09] rounded-2xl p-4 sm:p-5 shadow-xl portal-header-sheen'
-            : 'relative overflow-hidden w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-2xl portal-header-sheen'
+            ? 'neu-card relative overflow-hidden w-full bg-[#111218] border border-white/[0.09] rounded-2xl p-4 sm:p-5 portal-header-sheen'
+            : 'neu-card relative overflow-hidden w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 portal-header-sheen'
         }
       >
         <HeroArtworkBackdrop
@@ -1255,7 +1255,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
         <div className="relative z-10 flex flex-col gap-4">
           <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
             <div className="flex items-start gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-xl bg-[#161722] border border-white/[0.09] flex items-center justify-center text-emerald-300 shrink-0 shadow-sm">
+              <div className="neu-inset w-10 h-10 rounded-xl bg-[#161722] border border-white/[0.09] flex items-center justify-center text-emerald-300 shrink-0">
                 <TaskSvg className="w-5 h-5">
                   <path d="m9 11 3 3L22 4" />
                   <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
@@ -1296,8 +1296,8 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
 
             <div className="flex flex-wrap items-center gap-2 shrink-0">
               <div
-                className="inline-flex items-center h-9 p-1 rounded-xl bg-[#09090c] border border-white/[0.08] gap-0.5"
-                role="group"
+                className="inline-flex items-center h-9 p-1 rounded-xl neu-tray bg-[#09090c] border border-white/[0.08] gap-0.5"
+                role="tablist"
                 aria-label="Task layout views"
               >
                 {(
@@ -1311,11 +1311,12 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                   <button
                     key={v.id}
                     type="button"
-                    aria-pressed={layout === v.id}
+                    role="tab"
+                    aria-selected={layout === v.id}
                     onClick={() => setLayout(v.id)}
                     className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-xs transition-all cursor-pointer whitespace-nowrap ${
                       layout === v.id
-                        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                        ? 'text-white font-bold border border-white/20'
                         : 'text-zinc-400 hover:text-white hover:bg-white/[0.05] border border-transparent font-medium'
                     }`}
                   >
@@ -1497,7 +1498,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
       {/* Live Active Task Focus Timer Banner */}
       {focusedTask && (
         <section
-          className="w-full rounded-2xl bg-[#131622] border border-emerald-400/40 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl"
+          className="neu-card w-full rounded-2xl bg-[#131622] border border-emerald-400/40 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4"
           aria-label="Active task focus timer"
         >
           <div className="flex flex-col gap-1 min-w-0 flex-1">
@@ -1519,14 +1520,14 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
           </div>
 
           <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <span className="px-3 py-1.5 rounded-xl bg-[#08090c] border border-white/[0.12] font-mono text-lg font-extrabold text-sky-300 tabular-nums">
+            <span className="neu-inset px-3 py-1.5 rounded-xl bg-[#08090c] border border-white/[0.12] font-mono text-lg font-extrabold text-sky-300 tabular-nums">
               {String(Math.floor(focusSecLeft / 60)).padStart(2, '0')}:
               {String(focusSecLeft % 60).padStart(2, '0')}
             </span>
             <button
               type="button"
               onClick={() => setFocusRunning((r) => !r)}
-              className="px-3.5 py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-extrabold cursor-pointer"
+              className="neu-btn px-3.5 py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-extrabold cursor-pointer"
             >
               {focusRunning ? 'Pause' : 'Resume'}
             </button>
@@ -1536,7 +1537,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                 setFocusSecLeft((s) => s + 300);
                 setFocusTotalSec((s) => s + 300);
               }}
-              className="px-3 py-2 rounded-xl bg-[#181922] border border-white/[0.1] text-xs font-mono text-zinc-200 cursor-pointer"
+              className="neu-btn px-3 py-2 rounded-xl bg-[#181922] border border-white/[0.1] text-xs font-mono text-zinc-200 cursor-pointer"
             >
               +5m
             </button>
@@ -1546,14 +1547,14 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                 stopFocusTimer(true);
                 toggleTask(focusedTask.id);
               }}
-              className="px-3.5 py-2 rounded-xl bg-emerald-500/20 border border-emerald-400/45 text-xs font-bold text-emerald-200 cursor-pointer"
+              className="neu-btn px-3.5 py-2 rounded-xl bg-emerald-500/20 border border-emerald-400/45 text-xs font-bold text-emerald-200 cursor-pointer"
             >
               Complete Task ✓
             </button>
             <button
               type="button"
               onClick={() => stopFocusTimer(true)}
-              className="px-3 py-2 rounded-xl bg-[#181922] border border-white/[0.1] text-xs text-zinc-400 hover:text-white cursor-pointer"
+              className="neu-btn px-3 py-2 rounded-xl bg-[#181922] border border-white/[0.1] text-xs text-zinc-400 hover:text-white cursor-pointer"
             >
               Exit
             </button>
@@ -1564,7 +1565,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
       {/* Smart Quick Add Task Form */}
       <form
         onSubmit={handleAddTask}
-        className="w-full rounded-2xl bg-[#111218] border border-white/[0.08] p-4 sm:p-5 flex flex-col gap-3 shadow-lg"
+        className="neu-card w-full rounded-2xl bg-[#111218] border border-white/[0.08] p-4 sm:p-5 flex flex-col gap-3"
       >
         <div className="flex flex-col lg:flex-row gap-2.5">
           <div className="relative flex-1 flex items-center">
@@ -1681,7 +1682,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
 
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 font-extrabold text-xs transition-colors shadow-sm cursor-pointer shrink-0 whitespace-nowrap"
+              className="neu-btn inline-flex items-center gap-1.5 h-10 px-4 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 font-extrabold text-xs transition-colors cursor-pointer shrink-0 whitespace-nowrap"
             >
               <TaskSvg className="w-3.5 h-3.5 stroke-[2.5]">
                 <path d="M5 12h14" />
@@ -1701,7 +1702,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
           smartPreview.repeat ||
           smartPreview.energy ||
           smartPreview.tags.length > 0) && (
-          <div className="flex flex-wrap items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#090a0e] border border-sky-400/25 text-[11px] font-mono">
+          <div className="neu-inset flex flex-wrap items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#090a0e] border border-sky-400/25 text-[11px] font-mono">
             <span className="text-sky-300 font-bold">Smart Parsed:</span>
             {smartPreview.priority && <span className="text-rose-300">!{smartPreview.priority}</span>}
             {smartPreview.dueDate && <span className="text-emerald-300">@{smartPreview.dueDate}</span>}
@@ -1728,7 +1729,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
             className="flex-1 h-9 px-3.5 rounded-xl bg-[#08090c] border border-white/[0.08] focus:border-white/[0.2] focus:outline-none text-xs text-zinc-300 placeholder-zinc-600"
           />
           <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono shrink-0">
-            <div className="inline-flex items-center h-9 p-0.5 rounded-xl bg-[#09090c] border border-white/[0.08] gap-0.5">
+            <div className="neu-tray inline-flex items-center h-9 p-0.5 rounded-xl bg-[#09090c] border border-white/[0.08] gap-0.5">
               {[
                 { label: 'Today', val: todayIso() },
                 { label: 'Tomorrow', val: offsetDateIso(1) },
@@ -1752,9 +1753,9 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
             <button
               type="button"
               onClick={() => setShowAdvancedAdd((v) => !v)}
-              className={`h-9 px-3 rounded-xl border transition-colors cursor-pointer whitespace-nowrap ${
+              className={`neu-btn h-9 px-3 rounded-xl border transition-all cursor-pointer whitespace-nowrap ${
                 showAdvancedAdd
-                  ? 'bg-zinc-800 border-white/20 text-white font-bold'
+                  ? 'bg-[#1c1d26] border-white/20 text-white font-bold'
                   : 'bg-[#161821] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2]'
               }`}
             >
@@ -1828,7 +1829,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
       </form>
 
       {/* Unified Filter, Search, Sort & Bulk Toolbar */}
-      <div className="rounded-2xl bg-[#111218] border border-white/[0.08] p-3.5 sm:px-4 sm:py-3 flex flex-col gap-3 shadow-sm">
+      <div className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] p-3.5 sm:px-4 sm:py-3 flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Task views">
           {(
             [
@@ -1860,11 +1861,11 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => setFilter(tab.id)}
-                className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs border transition-all cursor-pointer whitespace-nowrap ${
+                className={`neu-btn inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs border transition-all cursor-pointer whitespace-nowrap ${
                   isActive
                     ? tab.warn
-                      ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 font-bold shadow-sm'
-                      : 'bg-sky-500/15 border-sky-400/45 text-white font-bold shadow-sm'
+                      ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 font-bold'
+                      : 'bg-sky-500/15 border-sky-400/45 text-white font-bold'
                     : 'bg-[#161821] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] font-medium'
                 }`}
               >
@@ -2009,7 +2010,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                 setSelectMode((m) => !m);
                 setSelectedIds([]);
               }}
-              className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+              className={`neu-btn inline-flex items-center gap-1.5 h-8 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                 selectMode
                   ? 'bg-sky-500/20 border-sky-400/45 text-sky-200 font-bold'
                   : 'bg-[#161821] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2]'
@@ -2030,7 +2031,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                     prev.filter((t) => !t.done || t.archived)
                   )
                 }
-                className="inline-flex items-center gap-1.5 h-8 px-3 rounded-xl bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold text-rose-300 transition-colors cursor-pointer whitespace-nowrap"
+                className="neu-btn inline-flex items-center gap-1.5 h-8 px-3 rounded-xl bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold text-rose-300 transition-colors cursor-pointer whitespace-nowrap"
               >
                 Clear Done ({stats.completed})
               </button>
@@ -2040,13 +2041,13 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
 
         {/* Multi-Select Bulk Action Bar */}
         {selectMode && (
-          <div className="p-3 rounded-xl bg-[#131622] border border-sky-400/35 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="neu-card p-3 rounded-xl bg-[#131622] border border-sky-400/35 flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2 font-mono">
               <strong className="text-sky-200">{selectedIds.length} Selected</strong>
               <button
                 type="button"
                 onClick={() => setSelectedIds(visibleTasks.map((t) => t.id))}
-                className="px-2 py-1 rounded bg-[#181922] border border-white/[0.1] text-zinc-200 cursor-pointer"
+                className="neu-btn px-2 py-1 rounded bg-[#181922] border border-white/[0.1] text-zinc-200 cursor-pointer"
               >
                 Select All ({visibleTasks.length})
               </button>
@@ -2054,7 +2055,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                 <button
                   type="button"
                   onClick={() => setSelectedIds([])}
-                  className="px-2 py-1 rounded bg-[#181922] border border-white/[0.1] text-zinc-400 cursor-pointer"
+                  className="neu-btn px-2 py-1 rounded bg-[#181922] border border-white/[0.1] text-zinc-400 cursor-pointer"
                 >
                   None
                 </button>
@@ -2062,22 +2063,22 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5">
-              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('done')} className="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold disabled:opacity-40 cursor-pointer">
+              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('done')} className="neu-btn px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold disabled:opacity-40 cursor-pointer">
                 ✓ Complete
               </button>
-              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('today')} className="px-2.5 py-1 rounded-lg bg-sky-500/15 border border-sky-400/30 text-sky-200 font-semibold disabled:opacity-40 cursor-pointer">
+              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('today')} className="neu-btn px-2.5 py-1 rounded-lg bg-sky-500/15 border border-sky-400/30 text-sky-200 font-semibold disabled:opacity-40 cursor-pointer">
                 → Today
               </button>
-              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('tomorrow')} className="px-2.5 py-1 rounded-lg bg-[#181922] border border-white/[0.1] text-zinc-200 disabled:opacity-40 cursor-pointer">
+              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('tomorrow')} className="neu-btn px-2.5 py-1 rounded-lg bg-[#181922] border border-white/[0.1] text-zinc-200 disabled:opacity-40 cursor-pointer">
                 → Tomorrow
               </button>
-              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('high')} className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-400/30 text-amber-200 disabled:opacity-40 cursor-pointer">
+              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('high')} className="neu-btn px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-400/30 text-amber-200 disabled:opacity-40 cursor-pointer">
                 ★ High
               </button>
-              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('archive')} className="px-2.5 py-1 rounded-lg bg-[#181922] border border-white/[0.1] text-zinc-300 disabled:opacity-40 cursor-pointer">
+              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('archive')} className="neu-btn px-2.5 py-1 rounded-lg bg-[#181922] border border-white/[0.1] text-zinc-300 disabled:opacity-40 cursor-pointer">
                 Archive
               </button>
-              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('delete')} className="px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-300 disabled:opacity-40 cursor-pointer">
+              <button type="button" disabled={selectedIds.length === 0} onClick={() => runBulkAction('delete')} className="neu-btn px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-300 disabled:opacity-40 cursor-pointer">
                 Delete
               </button>
             </div>
@@ -2087,7 +2088,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
 
       {/* Main Content Area across 4 Views */}
       {tasks.length === 0 ? (
-        <div className="rounded-2xl bg-[#111218] border border-white/[0.08] p-10 text-center flex flex-col items-center gap-3">
+        <div className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] p-10 text-center flex flex-col items-center gap-3">
           <span className="text-3xl">✨</span>
           <h2 className="text-base font-bold text-white">No tasks yet — add your first one above!</h2>
           <p className="text-xs text-zinc-400">
@@ -2096,7 +2097,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
           <button
             type="button"
             onClick={() => setTasks(buildStarterTasks())}
-            className="px-4 py-2 rounded-xl bg-[#181922] border border-white/[0.12] hover:border-sky-400/40 text-xs font-semibold text-zinc-200 cursor-pointer"
+            className="neu-btn px-4 py-2 rounded-xl bg-[#181922] border border-white/[0.12] hover:border-sky-400/40 text-xs font-semibold text-zinc-200 cursor-pointer"
           >
             Load Sample Tasks
           </button>
@@ -2129,13 +2130,13 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                   setDraggedTaskId(null);
                   setDragOverCol(null);
                 }}
-                className={`rounded-2xl bg-[#101116] border p-4 flex flex-col gap-3 min-h-[280px] transition-colors ${
+                className={`neu-card rounded-2xl bg-[#101116] border p-4 flex flex-col gap-3 min-h-[280px] transition-colors ${
                   isOver ? 'border-sky-400/70 bg-[#131622]' : col.accent
                 }`}
               >
                 <div className="flex items-center justify-between text-xs font-bold text-white pb-2 border-b border-white/[0.06]">
                   <span>{col.title}</span>
-                  <span className="px-2 py-0.5 rounded-full bg-white/[0.06] font-mono text-[11px] text-zinc-300">
+                  <span className="neu-inset px-2 py-0.5 rounded-full bg-white/[0.06] font-mono text-[11px] text-zinc-300">
                     {colItems.length}
                   </span>
                 </div>
@@ -2162,12 +2163,12 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                         }
                       }}
                       placeholder={`+ Add to ${col.status === 'todo' ? 'To Do' : 'Doing'}...`}
-                      className="flex-1 h-8 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.08] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
+                      className="neu-inset flex-1 h-8 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.08] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
                     />
                     <button
                       type="button"
                       onClick={() => handleBoardQuickAdd(col.status as 'todo' | 'doing')}
-                      className="h-8 px-2.5 rounded-lg bg-[#181922] border border-white/[0.1] text-xs font-bold text-zinc-200 cursor-pointer"
+                      className="neu-btn h-8 px-2.5 rounded-lg bg-[#181922] border border-white/[0.1] text-xs font-bold text-zinc-200 cursor-pointer"
                     >
                       +
                     </button>
@@ -2216,14 +2217,14 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
             return (
               <section
                 key={q.id}
-                className={`rounded-2xl bg-[#101116] border ${q.border} p-4 flex flex-col gap-3 min-h-[240px]`}
+                className={`neu-card rounded-2xl bg-[#101116] border ${q.border} p-4 flex flex-col gap-3 min-h-[240px]`}
               >
                 <div className="flex items-start justify-between gap-2 pb-2 border-b border-white/[0.06]">
                   <div>
                     <h2 className={`text-sm font-extrabold ${q.pill}`}>{q.title}</h2>
                     <p className="text-[11px] text-zinc-400">{q.sub}</p>
                   </div>
-                  <span className="px-2 py-0.5 rounded-full bg-white/[0.06] font-mono text-[11px] text-zinc-200">
+                  <span className="neu-inset px-2 py-0.5 rounded-full bg-white/[0.06] font-mono text-[11px] text-zinc-200">
                     {qItems.length}
                   </span>
                 </div>
@@ -2242,12 +2243,12 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
           {timelineBuckets.map((bucket) => (
             <section
               key={bucket.id}
-              className={`rounded-2xl bg-[#101116] border ${bucket.tone} p-4 flex flex-col gap-3`}
+              className={`neu-card rounded-2xl bg-[#101116] border ${bucket.tone} p-4 flex flex-col gap-3`}
             >
               <div className="flex items-center justify-between gap-2 pb-2 border-b border-white/[0.06]">
                 <div className="flex items-center gap-2">
                   <h2 className="text-sm font-extrabold text-white">{bucket.title}</h2>
-                  <span className="px-2 py-0.5 rounded-full bg-white/[0.06] font-mono text-[11px] text-zinc-300">
+                  <span className="neu-inset px-2 py-0.5 rounded-full bg-white/[0.06] font-mono text-[11px] text-zinc-300">
                     {bucket.items.length}
                   </span>
                 </div>
@@ -2259,7 +2260,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                         prev.map((t) => (!t.done && t.dueDate && t.dueDate < today ? { ...t, dueDate: today } : t))
                       )
                     }
-                    className="px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/35 text-[11px] font-bold text-rose-200 cursor-pointer"
+                    className="neu-btn px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/35 text-[11px] font-bold text-rose-200 cursor-pointer"
                   >
                     Move All → Today
                   </button>
@@ -2274,7 +2275,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
           ))}
         </div>
       ) : visibleTasks.length === 0 ? (
-        <div className="rounded-2xl bg-[#111218] border border-white/[0.08] p-10 text-center flex flex-col items-center gap-2">
+        <div className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] p-10 text-center flex flex-col items-center gap-2">
           <span className="text-3xl">🔍</span>
           <h2 className="text-base font-bold text-white">No tasks match this filter</h2>
           <button
@@ -2286,7 +2287,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
               setTagFilter('All');
               setSearch('');
             }}
-            className="mt-1 px-4 py-1.5 rounded-xl bg-white text-zinc-950 text-xs font-bold cursor-pointer"
+            className="neu-btn mt-1 px-4 py-1.5 rounded-xl bg-white text-zinc-950 text-xs font-bold cursor-pointer"
           >
             Show All Tasks
           </button>
@@ -2339,7 +2340,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
       {/* Non-blocking Undo & Status Toast */}
       {(undoSnap || toastMsg) && (() => {
         const toastNode = (
-          <div className="fixed bottom-12 right-4 z-[85] flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#16171e] border border-white/[0.15] shadow-2xl text-xs font-mono text-zinc-100 portal-page-enter">
+          <div className="neu-modal fixed bottom-12 right-4 z-[85] flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#16171e] border border-white/[0.15] text-xs font-mono text-zinc-100 portal-page-enter">
             <span>{toastMsg || undoSnap?.label}</span>
             {undoSnap && (
               <button
@@ -2349,7 +2350,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                   setUndoSnap(null);
                   showToast('Restored previous tasks ✓');
                 }}
-                className="px-2.5 py-1 rounded-lg bg-sky-500/20 border border-sky-400/40 text-sky-200 font-bold hover:bg-sky-500/30 cursor-pointer"
+                className="neu-btn px-2.5 py-1 rounded-lg bg-sky-500/20 border border-sky-400/40 text-sky-200 font-bold hover:bg-sky-500/30 cursor-pointer"
               >
                 Undo
               </button>

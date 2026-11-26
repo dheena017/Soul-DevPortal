@@ -112,7 +112,7 @@ export const NoteMarkdownPreview: React.FC<NoteMarkdownPreviewProps> = ({
       elements.push(
         <div
           key={blockKey}
-          className="rounded-xl bg-[#07080b] border border-white/[0.09] overflow-hidden my-1"
+          className="neu-inset rounded-xl bg-[#07080b] border border-white/[0.09] overflow-hidden my-1"
         >
           <div className="px-3 py-1.5 bg-[#12141c] border-b border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-zinc-400">
             <span>{lang}</span>
@@ -159,7 +159,7 @@ export const NoteMarkdownPreview: React.FC<NoteMarkdownPreviewProps> = ({
         i += 1;
       }
       elements.push(
-        <div key={`tbl-${startRow}`} className="overflow-x-auto rounded-xl border border-white/[0.09] my-1">
+        <div key={`tbl-${startRow}`} className="neu-inset overflow-x-auto rounded-xl border border-white/[0.09] my-1">
           <table className="w-full text-left border-collapse text-xs">
             <thead className="bg-[#161822] text-zinc-200 font-mono">
               <tr>

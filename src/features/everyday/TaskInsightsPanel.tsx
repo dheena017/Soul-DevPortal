@@ -40,7 +40,7 @@ export const TaskInsightsPanel: React.FC<TaskInsightsPanelProps> = ({
 
   return (
     <section
-      className="w-full rounded-2xl bg-[#111218] border border-white/[0.08] p-4 sm:p-5 flex flex-col gap-4 shadow-xl portal-drawer-enter"
+      className="neu-card w-full rounded-2xl bg-[#111218] border border-white/[0.08] p-4 sm:p-5 flex flex-col gap-4 portal-drawer-enter"
       aria-label="Productivity insights and capacity"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -69,7 +69,7 @@ export const TaskInsightsPanel: React.FC<TaskInsightsPanelProps> = ({
             <button
               type="button"
               onClick={onRescheduleOverdueToToday}
-              className="px-3 py-1.5 rounded-lg bg-rose-500/15 border border-rose-500/35 hover:bg-rose-500/25 text-xs font-bold text-rose-200 cursor-pointer"
+              className="neu-btn px-3 py-1.5 rounded-lg bg-rose-500/15 border border-rose-500/35 hover:bg-rose-500/25 text-xs font-bold text-rose-200 cursor-pointer"
             >
               Reschedule {overdueTasks.length} Overdue → Today
             </button>
@@ -78,7 +78,7 @@ export const TaskInsightsPanel: React.FC<TaskInsightsPanelProps> = ({
             <button
               type="button"
               onClick={onArchiveCompleted}
-              className="px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.1] hover:border-amber-400/40 text-xs font-semibold text-amber-200 cursor-pointer"
+              className="neu-btn px-3 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.1] hover:border-amber-400/40 text-xs font-semibold text-amber-200 cursor-pointer"
             >
               Archive Done Tasks
             </button>
@@ -88,7 +88,7 @@ export const TaskInsightsPanel: React.FC<TaskInsightsPanelProps> = ({
 
       {/* Capacity Bar + Summary Tiles */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-        <div className="lg:col-span-5 p-3.5 rounded-xl bg-[#090a0e] border border-white/[0.08] flex flex-col gap-2">
+        <div className="neu-inset lg:col-span-5 p-3.5 rounded-xl bg-[#090a0e] border border-white/[0.08] flex flex-col gap-2">
           <div className="flex items-center justify-between text-xs font-mono">
             <span className="text-zinc-400">Today&apos;s Planned Workload</span>
             <strong className={overloaded ? 'text-rose-300' : 'text-emerald-300'}>
@@ -111,21 +111,21 @@ export const TaskInsightsPanel: React.FC<TaskInsightsPanelProps> = ({
         </div>
 
         <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-mono">
-          <div className="p-3 rounded-xl bg-[#090a0e] border border-white/[0.08]">
+          <div className="neu-inset p-3 rounded-xl bg-[#090a0e] border border-white/[0.08]">
             <div className="text-[10px] text-zinc-500 uppercase">Done Today</div>
             <strong className="text-lg font-extrabold text-emerald-300">{completedToday}</strong>
           </div>
-          <div className="p-3 rounded-xl bg-[#090a0e] border border-white/[0.08]">
+          <div className="neu-inset p-3 rounded-xl bg-[#090a0e] border border-white/[0.08]">
             <div className="text-[10px] text-zinc-500 uppercase">Overdue</div>
             <strong className={`text-lg font-extrabold ${overdueTasks.length > 0 ? 'text-rose-300' : 'text-zinc-200'}`}>
               {overdueTasks.length}
             </strong>
           </div>
-          <div className="p-3 rounded-xl bg-[#090a0e] border border-white/[0.08]">
+          <div className="neu-inset p-3 rounded-xl bg-[#090a0e] border border-white/[0.08]">
             <div className="text-[10px] text-zinc-500 uppercase">Focus Logged</div>
             <strong className="text-lg font-extrabold text-sky-300">{formatMinutes(totalSpent)}</strong>
           </div>
-          <div className="p-3 rounded-xl bg-[#090a0e] border border-white/[0.08]">
+          <div className="neu-inset p-3 rounded-xl bg-[#090a0e] border border-white/[0.08]">
             <div className="text-[10px] text-zinc-500 uppercase">Routines</div>
             <strong className="text-lg font-extrabold text-purple-300">{recurringCount}</strong>
           </div>
@@ -447,7 +447,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
 
   return (
     <section
-      className="w-full rounded-2xl bg-[#111218] border border-purple-500/25 p-4 sm:p-5 flex flex-col gap-4 shadow-xl portal-drawer-enter"
+      className="neu-card w-full rounded-2xl bg-[#111218] border border-purple-500/25 p-4 sm:p-5 flex flex-col gap-4 portal-drawer-enter"
       aria-labelledby="task-toolbox-title"
     >
       {/* Panel Header */}
@@ -463,14 +463,14 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
         <button
           type="button"
           onClick={onClose}
-          className="px-3 py-1 rounded-lg bg-[#16171e] border border-white/[0.12] hover:border-white/[0.25] text-xs font-mono text-zinc-200 hover:text-white cursor-pointer"
+          className="neu-btn px-3 py-1 rounded-lg bg-[#16171e] border border-white/[0.12] hover:border-white/[0.25] text-xs font-mono text-zinc-200 hover:text-white cursor-pointer"
         >
           Close ✕
         </button>
       </div>
 
       {/* Sub-Tabs Strip */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-[#090a0e] border border-white/[0.08] self-start">
+      <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl neu-tray bg-[#090a0e] border border-white/[0.08] self-start" role="tablist" aria-label="Power toolbox tools">
         {(
           [
             { id: 'templates', label: `⚡ Templates (${allTemplates.length})` },
@@ -482,10 +482,12 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
           <button
             key={t.id}
             type="button"
+            role="tab"
+            aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer transition-colors ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer transition-all ${
               tab === t.id
-                ? 'bg-zinc-800 text-white border-white/20 font-bold shadow-sm'
+                ? 'text-white border-white/20 font-bold'
                 : 'bg-transparent border-transparent text-zinc-400 hover:text-white hover:bg-white/[0.04]'
             }`}
           >
@@ -501,7 +503,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
             {allTemplates.map((tpl) => (
               <div
                 key={tpl.id}
-                className="p-4 rounded-xl bg-[#0b0c10] border border-white/[0.09] hover:border-white/[0.18] flex flex-col justify-between gap-3 transition-colors"
+                className="neu-tile p-4 rounded-xl bg-[#0b0c10] border border-white/[0.09] hover:border-white/[0.18] flex flex-col justify-between gap-3 transition-colors"
               >
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between gap-2">
@@ -538,7 +540,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                     onApplyTemplate(tpl);
                     onClose();
                   }}
-                  className="w-full py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
+                  className="neu-btn w-full py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
                 >
                   + Launch into Tasks
                 </button>
@@ -564,7 +566,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                 value={dumpText}
                 onChange={(e) => setDumpText(e.target.value)}
                 placeholder="One task per line..."
-                className="w-full p-3.5 rounded-xl bg-[#08090c] border border-white/[0.12] font-mono text-xs text-white focus:outline-none focus:border-sky-400/50"
+                className="neu-inset w-full p-3.5 rounded-xl bg-[#08090c] border border-white/[0.12] font-mono text-xs text-white focus:outline-none focus:border-sky-400/50"
               />
               <div className="flex items-center justify-between gap-2">
                 <span className="font-mono text-zinc-300">
@@ -574,14 +576,14 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                   type="button"
                   onClick={handleCommitBrainDump}
                   disabled={parsedDumpLines.length === 0}
-                  className="px-4 py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-extrabold disabled:opacity-40 cursor-pointer"
+                  className="neu-btn px-4 py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-extrabold disabled:opacity-40 cursor-pointer"
                 >
                   + Import {parsedDumpLines.length} Tasks
                 </button>
               </div>
             </div>
 
-            <div className="lg:col-span-5 rounded-xl bg-[#0b0c10] border border-white/[0.08] p-3.5 flex flex-col gap-2 max-h-64 overflow-y-auto custom-scrollbar">
+            <div className="neu-inset lg:col-span-5 rounded-xl bg-[#0b0c10] border border-white/[0.08] p-3.5 flex flex-col gap-2 max-h-64 overflow-y-auto custom-scrollbar">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
                 Live Parsed Preview
               </span>
@@ -589,7 +591,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                 <span className="text-zinc-500">Type lines on the left to preview parsed priorities &amp; dates.</span>
               ) : (
                 parsedDumpLines.map((p, i) => (
-                  <div key={i} className="p-2 rounded-lg bg-[#16171e] border border-white/[0.06] flex flex-col gap-1">
+                  <div key={i} className="neu-tile p-2 rounded-lg bg-[#16171e] border border-white/[0.06] flex flex-col gap-1">
                     <span className="font-semibold text-white truncate">{p.cleanTitle || 'Untitled'}</span>
                     <div className="flex flex-wrap gap-1 text-[10px] font-mono text-zinc-300">
                       <span className="px-1.5 rounded bg-white/[0.06]">{p.priority}</span>
@@ -622,7 +624,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                   }
                 }}
                 placeholder="New category name (e.g. SideProject, Finance)..."
-                className="flex-1 min-w-[220px] h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.12] text-white"
+                className="neu-inset flex-1 min-w-[220px] h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.12] text-white"
               />
               <button
                 type="button"
@@ -631,7 +633,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                   onAddCategory(newCategoryName.trim());
                   setNewCategoryName('');
                 }}
-                className="h-9 px-4 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
+                className="neu-btn h-9 px-4 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
               >
                 + Add Category
               </button>
@@ -644,7 +646,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                 return (
                   <span
                     key={cat}
-                    className="px-3 py-1.5 rounded-xl bg-[#0b0c10] border border-white/[0.1] font-mono text-zinc-200 flex items-center gap-2"
+                    className="neu-tile px-3 py-1.5 rounded-xl bg-[#0b0c10] border border-white/[0.1] font-mono text-zinc-200 flex items-center gap-2"
                   >
                     <span>{cat}</span>
                     <span className="text-zinc-400">({count})</span>
@@ -704,7 +706,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
               ].map((card) => (
                 <div
                   key={card.id}
-                  className={`p-4 rounded-xl bg-[#0b0c10] border ${card.borderCls} flex flex-col justify-between gap-3 transition-colors`}
+                  className={`neu-tile p-4 rounded-xl bg-[#0b0c10] border ${card.borderCls} flex flex-col justify-between gap-3 transition-colors`}
                 >
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center justify-between gap-2">
@@ -723,7 +725,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                     <button
                       type="button"
                       onClick={card.onDownload}
-                      className="flex-1 py-1.5 px-3 rounded-lg bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
+                      className="neu-btn flex-1 py-1.5 px-3 rounded-lg bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
                     >
                       ⬇ Download {card.ext}
                     </button>
@@ -731,7 +733,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                       <button
                         type="button"
                         onClick={() => triggerCopy(card.id)}
-                        className="py-1.5 px-3 rounded-lg bg-[#16171e] border border-white/[0.12] hover:border-white/[0.25] font-mono text-zinc-200 hover:text-white cursor-pointer"
+                        className="neu-btn py-1.5 px-3 rounded-lg bg-[#16171e] border border-white/[0.12] hover:border-white/[0.25] font-mono text-zinc-200 hover:text-white cursor-pointer"
                       >
                         {copiedKey === card.id ? '✓ Copied' : 'Copy'}
                       </button>
@@ -742,7 +744,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
             </div>
 
             {/* Multi-Format Import & Restore Panel */}
-            <div className="p-4 rounded-xl bg-[#0b0c10] border border-white/[0.1] flex flex-col gap-3.5">
+            <div className="neu-inset p-4 rounded-xl bg-[#0b0c10] border border-white/[0.1] flex flex-col gap-3.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <strong className="text-sm text-white">Restore or Import Tasks</strong>
@@ -751,9 +753,11 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                   </p>
                 </div>
 
-                <div className="flex items-center p-0.5 rounded-lg bg-[#16171e] border border-white/[0.1]">
+                <div className="neu-tray flex items-center p-0.5 rounded-lg bg-[#16171e] border border-white/[0.1]" role="tablist" aria-label="Import merge mode">
                   <button
                     type="button"
+                    role="tab"
+                    aria-selected={importMode === 'merge'}
                     onClick={() => setImportMode('merge')}
                     className={`px-2.5 py-1 rounded-md text-[11px] font-mono cursor-pointer ${
                       importMode === 'merge' ? 'bg-sky-500/20 text-sky-200 font-bold' : 'text-zinc-400 hover:text-white'
@@ -763,6 +767,8 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                   </button>
                   <button
                     type="button"
+                    role="tab"
+                    aria-selected={importMode === 'replace'}
                     onClick={() => setImportMode('replace')}
                     className={`px-2.5 py-1 rounded-md text-[11px] font-mono cursor-pointer ${
                       importMode === 'replace' ? 'bg-rose-500/20 text-rose-200 font-bold' : 'text-zinc-400 hover:text-white'
@@ -785,7 +791,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="px-4 py-3 rounded-xl bg-sky-500/15 border border-sky-400/40 hover:bg-sky-500/25 text-sky-100 font-bold cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
+                  className="neu-btn px-4 py-3 rounded-xl bg-sky-500/15 border border-sky-400/40 hover:bg-sky-500/25 text-sky-100 font-bold cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
                 >
                   <span>📂 Choose .json / .csv / .md File</span>
                 </button>
@@ -803,7 +809,7 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                     type="button"
                     onClick={handlePasteImport}
                     disabled={!pasteImportText.trim()}
-                    className="px-4 rounded-xl bg-[#16171e] border border-white/[0.12] hover:border-emerald-400/45 text-emerald-200 font-bold disabled:opacity-40 cursor-pointer shrink-0"
+                    className="neu-btn px-4 rounded-xl bg-[#16171e] border border-white/[0.12] hover:border-emerald-400/45 text-emerald-200 font-bold disabled:opacity-40 cursor-pointer shrink-0"
                   >
                     Import Pasted
                   </button>

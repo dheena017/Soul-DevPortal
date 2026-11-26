@@ -183,7 +183,7 @@ export function ProjectLogoFleetStrip({
               type="button"
               onClick={() => onSelectProject(proj.id)}
               title={`${label} (FE :${proj.frontendPort || '—'}${proj.backendPort ? ` / BE :${proj.backendPort}` : ''})`}
-              className="group inline-flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full bg-[#16161c]/90 border border-white/[0.1] hover:border-white/[0.3] hover:bg-[#1e1e26] hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer shadow-sm"
+              className="neu-btn group inline-flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full bg-[#16161c]/90 border border-white/[0.1] hover:border-white/[0.3] hover:bg-[#1e1e26] hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
             >
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden border shrink-0 bg-[#0d0d12]"
@@ -229,7 +229,7 @@ export function ProportionalSpectrumBar({
   if (total === 0) return null;
 
   return (
-    <div className="flex flex-col gap-2 p-3 rounded-xl bg-[#131318]/90 border border-white/[0.08]">
+    <div className="flex flex-col gap-2 p-3 rounded-xl neu-tile bg-[#131318]/90 border border-white/[0.07]">
       <div className="flex flex-wrap items-center justify-between gap-2">
         {title && (
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
@@ -248,7 +248,7 @@ export function ProportionalSpectrumBar({
             ))}
         </div>
       </div>
-      <div className="w-full h-2 rounded-full bg-[#09090c] border border-white/[0.06] overflow-hidden flex gap-0.5 p-[1px]">
+      <div className="w-full h-2.5 rounded-full neu-inset bg-[#09090c] border border-white/[0.05] overflow-hidden flex gap-0.5 p-[1px]">
         {segments
           .filter((s) => s.value > 0)
           .map((seg) => {
@@ -317,11 +317,11 @@ export function ArchitectureFlowDiagram({
   ];
 
   return (
-    <div className={`w-full rounded-xl bg-[#0b0b0f]/95 border border-white/[0.08] ${compact ? 'p-2.5' : 'p-4'} overflow-x-auto`}>
+    <div className={`w-full rounded-xl neu-inset bg-[#0b0b0f]/95 border border-white/[0.06] ${compact ? 'p-2.5' : 'p-4'} overflow-x-auto`}>
       <div className="flex items-center justify-between gap-2 min-w-[540px]">
         {nodes.map((node, idx) => (
           <React.Fragment key={node.title}>
-            <div className={`flex-1 flex items-center gap-2.5 ${compact ? 'px-2.5 py-2' : 'px-3 py-2.5'} rounded-xl border ${node.accent} portal-card-hover min-w-0`}>
+            <div className={`flex-1 flex items-center gap-2.5 ${compact ? 'px-2.5 py-2' : 'px-3 py-2.5'} rounded-xl neu-btn border ${node.accent} portal-card-hover min-w-0`}>
               <span className="text-base shrink-0 portal-emblem-hover">{node.icon}</span>
               <div className="flex flex-col min-w-0">
                 <span className="text-[11px] font-bold text-white truncate flex items-center gap-1.5">

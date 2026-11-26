@@ -76,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0 overflow-hidden">
           <button
             type="button"
-            className="w-8 h-8 rounded-lg bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] active:scale-95 transition-all flex items-center justify-center shrink-0 shadow-sm cursor-pointer"
+            className="neu-btn w-8 h-8 rounded-lg bg-[#16161c] border border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] active:scale-95 transition-all flex items-center justify-center shrink-0 cursor-pointer"
             onClick={() => {
               consoleLogger.action('UI', menuOpen ? 'Closing sidebar navigation' : 'Opening sidebar navigation');
               onToggleSidebar();
@@ -101,7 +101,7 @@ export const Header: React.FC<HeaderProps> = ({
           <nav className="flex items-center gap-1 text-xs flex-1 min-w-0 overflow-hidden" aria-label="Breadcrumb navigation">
             <button
               type="button"
-              className="group inline-flex items-center gap-1.5 h-8 px-2 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-sky-400/35 hover:bg-white/[0.06] font-mono text-zinc-200 hover:text-white transition-all shrink-0 shadow-sm cursor-pointer"
+              className="neu-btn group inline-flex items-center gap-1.5 h-8 px-2 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-sky-400/35 hover:bg-white/[0.06] font-mono text-zinc-200 hover:text-white transition-all shrink-0 cursor-pointer"
               onClick={() => onNavigate('overview')}
               title="Go to Overview Dashboard"
             >
@@ -131,7 +131,7 @@ export const Header: React.FC<HeaderProps> = ({
                     </button>
                   ) : (
                     <span
-                      className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm min-w-0 max-w-full overflow-hidden"
+                      className="neu-tile inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-[#1a1a22] border border-white/15 text-white font-semibold min-w-0 max-w-full overflow-hidden"
                       title={crumb.label}
                     >
                       {breadcrumbs.length > 2 && (
@@ -178,13 +178,13 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* ── Right: Navigation Tabs, Telemetry & Unified App Button ── */}
         <div className="flex items-center gap-1.5 shrink-0">
-          <nav className="h-9 p-0.5 bg-[#09090c] border border-white/[0.08] rounded-xl hidden md:flex items-center gap-0.5" role="tablist" aria-label="Portal Dashboards">
+          <nav className="h-9 p-0.5 neu-tray bg-[#09090c] border border-white/[0.08] rounded-xl hidden md:flex items-center gap-0.5" role="tablist" aria-label="Portal Dashboards">
             <button
               type="button"
               role="tab"
               aria-selected={isProjectsActive}
               className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                isProjectsActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                isProjectsActive ? 'text-white font-bold border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
               }`}
               onClick={() => onNavigate('projects')}
               title={`Pillar 1: Applications (${projectsCount})`}
@@ -205,7 +205,7 @@ export const Header: React.FC<HeaderProps> = ({
               role="tab"
               aria-selected={isPackagesActive}
               className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                isPackagesActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                isPackagesActive ? 'text-white font-bold border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
               }`}
               onClick={() => onNavigate('packages')}
               title={`Pillar 2: Shared Libraries (${packagesCount})`}
@@ -226,7 +226,7 @@ export const Header: React.FC<HeaderProps> = ({
               role="tab"
               aria-selected={isDocsActive}
               className={`inline-flex items-center gap-1.5 h-7 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                isDocsActive ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                isDocsActive ? 'text-white font-bold border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
               }`}
               onClick={() => onNavigate('docs')}
               title={`Pillar 3: Documentation Hub (${docsCount} Guides)`}
@@ -248,7 +248,7 @@ export const Header: React.FC<HeaderProps> = ({
               role="tab"
               aria-selected={isEverydayRoute(active)}
               className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                isEverydayRoute(active) ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                isEverydayRoute(active) ? 'text-white font-bold border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
               }`}
               onClick={() => onNavigate('everyday')}
               title="Everyday Utilities — Tasks, Notes, Focus, Habits, Budget, Converters & Checklists (Ctrl+7)"
@@ -278,7 +278,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'Open Workspace Changelog in a New Browser Tab'
             }
             aria-label="Open Changelog in new tab or panel"
-            className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs font-semibold border transition-all active:scale-[0.98] cursor-pointer shadow-sm whitespace-nowrap shrink-0 ${
+            className={`neu-btn inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs font-semibold border transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap shrink-0 ${
               isChangelogActive
                 ? 'bg-sky-500/20 border-sky-400/45 text-white font-bold'
                 : 'bg-[#16161c] border-sky-400/30 text-sky-200 hover:text-white hover:border-sky-400/55 hover:bg-sky-500/12'
@@ -299,7 +299,7 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             onClick={() => onNavigate('computer')}
             title={quickTelemetry ? `Computer Monitor · CPU ${quickTelemetry.cpu}% · RAM ${quickTelemetry.ram}%` : 'Open Computer & Performance Monitor'}
-            className={`hidden md:inline-flex items-center gap-1.5 h-8 px-2 rounded-lg text-[11px] font-mono tabular-nums border transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap ${
+            className={`neu-btn hidden md:inline-flex items-center gap-1.5 h-8 px-2 rounded-lg text-[11px] font-mono tabular-nums border transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap ${
               active === 'computer' || active === 'system'
                 ? 'bg-sky-500/20 border-sky-400/40 text-sky-200 font-bold shadow-[0_0_16px_rgba(56,189,248,0.18)]'
                 : 'bg-[#16161c] border-white/[0.08] text-zinc-300 hover:text-white hover:border-sky-400/30 hover:bg-sky-500/10'
@@ -320,7 +320,7 @@ export const Header: React.FC<HeaderProps> = ({
           {onTriggerReload && (
             <button
               type="button"
-              className="hidden sm:inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#16161c] border border-white/[0.08] text-zinc-400 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] active:scale-95 transition-all cursor-pointer shadow-sm shrink-0"
+              className="neu-btn hidden sm:inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#16161c] border border-white/[0.08] text-zinc-400 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] active:scale-95 transition-all cursor-pointer shrink-0"
               onClick={() => {
                 consoleLogger.action('UI', 'Triggered full workspace reload & sync');
                 onTriggerReload();
@@ -349,7 +349,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'Desktop App Download, Shortcut & Commands (?)'
             }
             aria-label="Open desktop app installer and keyboard shortcuts"
-            className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs font-semibold border transition-all active:scale-[0.98] cursor-pointer shadow-sm whitespace-nowrap shrink-0 ${
+            className={`neu-btn inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs font-semibold border transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap shrink-0 ${
               typeof window !== 'undefined' && window.soulDesktop?.isDesktop
                 ? 'bg-emerald-500/12 border-emerald-500/35 text-emerald-200 hover:bg-emerald-500/20'
                 : 'bg-[#16161c] border-sky-400/30 text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/12'

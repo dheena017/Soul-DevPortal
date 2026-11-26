@@ -90,13 +90,13 @@ export default function HardwareDetailsTable({
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span className="px-2 py-1 rounded-md bg-[#181820] border border-white/[0.08] text-[10px] font-mono tabular-nums text-zinc-400">
+          <span className="px-2 py-1 rounded-md neu-inset bg-[#181820] border border-white/[0.07] text-[10px] font-mono tabular-nums text-zinc-400">
             {expandedCount}/{rows.length} Open
           </span>
           <button
             type="button"
             onClick={toggleAll}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-mono font-bold bg-[#181820] border border-white/[0.1] text-zinc-200 hover:text-white hover:border-sky-400/40 hover:bg-sky-500/10 transition-colors cursor-pointer"
+            className="neu-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-mono font-bold bg-[#181820] border border-white/[0.09] text-zinc-200 hover:text-white hover:border-sky-400/40 hover:bg-sky-500/10 transition-all cursor-pointer"
           >
             <span className="w-4 h-4 rounded flex items-center justify-center bg-white/[0.08] text-sky-300 text-xs font-extrabold">
               {allExpanded ? '−' : '+'}
@@ -154,7 +154,7 @@ export default function HardwareDetailsTable({
                           e.stopPropagation();
                           toggleRow(row.id);
                         }}
-                        className={`w-6 h-6 inline-flex items-center justify-center rounded-md border text-xs font-mono font-extrabold transition-all cursor-pointer ${
+                        className={`neu-btn w-6 h-6 inline-flex items-center justify-center rounded-md border text-xs font-mono font-extrabold transition-all cursor-pointer ${
                           isOpen
                             ? 'bg-sky-500/20 border-sky-400/50 text-sky-300'
                             : 'bg-[#181820] border-white/[0.12] text-zinc-300 hover:border-sky-400/40 hover:text-white'
@@ -175,7 +175,7 @@ export default function HardwareDetailsTable({
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-xs text-zinc-200">{row.summary}</span>
                         {row.hardwareCode && (
-                          <code className="px-1.5 py-0.5 rounded bg-[#09090c] border border-white/[0.1] text-[10px] font-mono text-zinc-300">
+                          <code className="neu-inset px-1.5 py-0.5 rounded bg-[#09090c] border border-white/[0.1] text-[10px] font-mono text-zinc-300">
                             {row.hardwareCode}
                           </code>
                         )}
@@ -203,7 +203,7 @@ export default function HardwareDetailsTable({
                           {row.details.map((item, idx) => (
                             <div
                               key={`${row.id}-d-${idx}`}
-                              className="group flex items-start justify-between gap-2 p-2.5 rounded-xl bg-[#15151b] border border-white/[0.06] hover:border-white/[0.14] transition-colors"
+                              className="neu-tile group flex items-start justify-between gap-2 p-2.5 rounded-xl bg-[#15151b] border border-white/[0.06] hover:border-white/[0.14] transition-colors"
                             >
                               <div className="flex flex-col gap-0.5 min-w-0">
                                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
@@ -220,7 +220,7 @@ export default function HardwareDetailsTable({
                                     {item.value}
                                   </span>
                                   {item.code && (
-                                    <code className="px-1.5 py-0.5 rounded bg-[#09090c] border border-white/[0.1] text-[10px] font-mono text-zinc-300">
+                                    <code className="neu-inset px-1.5 py-0.5 rounded bg-[#09090c] border border-white/[0.1] text-[10px] font-mono text-zinc-300">
                                       {item.code}
                                     </code>
                                   )}
@@ -252,7 +252,7 @@ export default function HardwareDetailsTable({
                     <button
                       type="button"
                       onClick={onClearFilter}
-                      className="ml-2 px-2.5 py-1 rounded-md bg-white/[0.06] border border-white/[0.1] text-sky-300 hover:text-white cursor-pointer"
+                      className="neu-btn ml-2 px-2.5 py-1 rounded-md bg-white/[0.06] border border-white/[0.1] text-sky-300 hover:text-white cursor-pointer"
                     >
                       Reset Filter
                     </button>
@@ -280,7 +280,7 @@ export default function HardwareDetailsTable({
               >
                 <div className="flex items-start gap-2.5 min-w-0">
                   <span
-                    className={`w-6 h-6 mt-0.5 shrink-0 inline-flex items-center justify-center rounded-md border text-xs font-mono font-extrabold ${
+                    className={`neu-btn w-6 h-6 mt-0.5 shrink-0 inline-flex items-center justify-center rounded-md border text-xs font-mono font-extrabold ${
                       isOpen
                         ? 'bg-sky-500/20 border-sky-400/50 text-sky-300'
                         : 'bg-[#181820] border-white/[0.12] text-zinc-300'
@@ -311,7 +311,7 @@ export default function HardwareDetailsTable({
               {isOpen && (
                 <div className="pl-2 flex flex-col gap-2 pt-2 border-t border-white/[0.06]">
                   {row.details.map((item, idx) => (
-                    <div key={`${row.id}-md-${idx}`} className="flex items-center justify-between gap-2 p-2.5 rounded-lg bg-[#16161c] border border-white/[0.06]">
+                    <div key={`${row.id}-md-${idx}`} className="neu-tile flex items-center justify-between gap-2 p-2.5 rounded-lg bg-[#16161c] border border-white/[0.06]">
                       <div className="flex flex-col gap-0.5 min-w-0">
                         <span className="text-[10px] font-mono uppercase text-zinc-400">{item.label}</span>
                         <span className="text-xs text-white break-all">{item.value}</span>

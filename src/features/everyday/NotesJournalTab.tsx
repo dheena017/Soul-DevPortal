@@ -747,8 +747,8 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
         <header
           className={
             embedded
-              ? 'relative overflow-hidden w-full bg-[#111218] border border-white/[0.09] rounded-2xl p-4 sm:p-5 shadow-xl portal-header-sheen'
-              : 'relative overflow-hidden w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-2xl portal-header-sheen'
+              ? 'neu-card relative overflow-hidden w-full bg-[#111218] border border-white/[0.09] rounded-2xl p-4 sm:p-5 portal-header-sheen'
+              : 'neu-card relative overflow-hidden w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 portal-header-sheen'
           }
         >
           <HeroArtworkBackdrop
@@ -759,7 +759,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
           <div className="relative z-10 flex flex-col gap-3.5">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-start gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-xl bg-[#161722] border border-white/[0.09] flex items-center justify-center text-sky-300 shrink-0 shadow-sm">
+                <div className="neu-inset w-10 h-10 rounded-xl bg-[#161722] border border-white/[0.09] flex items-center justify-center text-sky-300 shrink-0">
                   <SvgIcon className="w-5 h-5">
                     <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                     <path d="M8 7h6" />
@@ -797,17 +797,18 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
 
               <div className="flex flex-wrap items-center gap-2 shrink-0">
                 <div
-                  className="inline-flex items-center h-9 p-1 rounded-xl bg-[#09090c] border border-white/[0.08] gap-0.5"
-                  role="group"
+                  className="inline-flex items-center h-9 p-1 rounded-xl neu-tray bg-[#09090c] border border-white/[0.08] gap-0.5"
+                  role="tablist"
                   aria-label="Notes layout view"
                 >
                   <button
                     type="button"
-                    aria-pressed={layoutView === 'workspace'}
+                    role="tab"
+                    aria-selected={layoutView === 'workspace'}
                     onClick={() => setLayoutView('workspace')}
                     className={`inline-flex items-center gap-1.5 h-7 px-3 rounded-lg text-xs transition-all cursor-pointer whitespace-nowrap ${
                       layoutView === 'workspace'
-                        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                        ? 'text-white font-bold border border-white/20'
                         : 'text-zinc-400 hover:text-white hover:bg-white/[0.05] border border-transparent font-medium'
                     }`}
                   >
@@ -819,11 +820,12 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                   </button>
                   <button
                     type="button"
-                    aria-pressed={layoutView === 'cards'}
+                    role="tab"
+                    aria-selected={layoutView === 'cards'}
                     onClick={() => setLayoutView('cards')}
                     className={`inline-flex items-center gap-1.5 h-7 px-3 rounded-lg text-xs transition-all cursor-pointer whitespace-nowrap ${
                       layoutView === 'cards'
-                        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                        ? 'text-white font-bold border border-white/20'
                         : 'text-zinc-400 hover:text-white hover:bg-white/[0.05] border border-transparent font-medium'
                     }`}
                   >
@@ -840,7 +842,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                 <button
                   type="button"
                   onClick={openDailyJournal}
-                  className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 hover:border-emerald-400/50 text-xs font-bold text-emerald-200 transition-all cursor-pointer whitespace-nowrap"
+                  className="neu-btn inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 hover:border-emerald-400/50 text-xs font-bold text-emerald-200 transition-all cursor-pointer whitespace-nowrap"
                 >
                   <SvgIcon className="w-3.5 h-3.5 text-emerald-300">
                     <rect width="18" height="18" x="3" y="4" rx="2" />
@@ -853,7 +855,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                 <button
                   type="button"
                   onClick={() => createNewNote()}
-                  className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 text-xs font-extrabold transition-all shadow-sm cursor-pointer whitespace-nowrap"
+                  className="neu-btn inline-flex items-center gap-1.5 h-9 px-4 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 text-xs font-extrabold transition-all cursor-pointer whitespace-nowrap"
                 >
                   <PlusIcon />
                   <span>New Note</span>
@@ -862,7 +864,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                   <button
                     type="button"
                     onClick={() => onNavigate('tasks')}
-                    className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-[#181922] border border-white/[0.1] hover:border-white/[0.25] text-xs font-semibold text-zinc-200 transition-all cursor-pointer whitespace-nowrap"
+                    className="neu-btn inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-[#181922] border border-white/[0.1] hover:border-white/[0.25] text-xs font-semibold text-zinc-200 transition-all cursor-pointer whitespace-nowrap"
                   >
                     <SvgIcon className="w-3.5 h-3.5 text-emerald-400">
                       <path d="m9 11 3 3L22 4" />
@@ -893,7 +895,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                         content: tpl.content,
                       })
                     }
-                    className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-[#161821] border border-white/[0.08] hover:border-white/[0.22] hover:bg-[#1c1f2b] text-xs font-medium text-zinc-200 hover:text-white transition-all cursor-pointer whitespace-nowrap"
+                    className="neu-btn inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-[#161821] border border-white/[0.08] hover:border-white/[0.22] hover:bg-[#1c1f2b] text-xs font-medium text-zinc-200 hover:text-white transition-all cursor-pointer whitespace-nowrap"
                   >
                     {renderTemplateIcon(tpl.id)}
                     <span>{tpl.label}</span>
@@ -901,7 +903,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                 ))}
               </div>
 
-              <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#090b10]/85 backdrop-blur-sm border border-white/[0.08] text-[11px] font-mono text-zinc-300">
+              <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-lg neu-inset bg-[#090b10]/90 border border-white/[0.08] text-[11px] font-mono text-zinc-300">
                 <span>{scopeCounts.starred} favorites</span>
                 <span className="text-zinc-600">·</span>
                 <span>{scopeCounts.pinned} pinned</span>
@@ -914,13 +916,15 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2.5 pt-3.5 border-t border-white/[0.07]">
               <div className="flex flex-wrap items-center gap-1.5">
                 {/* Smart Views Group */}
-                <div className="inline-flex items-center h-8 p-0.5 rounded-xl bg-[#09090c] border border-white/[0.08] gap-0.5">
+                <div className="inline-flex items-center h-8 p-0.5 rounded-xl neu-tray bg-[#09090c] border border-white/[0.08] gap-0.5" role="tablist" aria-label="Note scopes">
                   <button
                     type="button"
+                    role="tab"
+                    aria-selected={scopeFilter === 'All'}
                     onClick={() => setScopeFilter('All')}
                     className={`inline-flex items-center gap-1.5 h-full px-2.5 rounded-lg text-xs transition-all cursor-pointer whitespace-nowrap ${
                       scopeFilter === 'All'
-                        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                        ? 'text-white font-bold border border-white/20'
                         : 'text-zinc-400 hover:text-white hover:bg-white/[0.05] border border-transparent font-medium'
                     }`}
                   >
@@ -941,10 +945,12 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
 
                   <button
                     type="button"
+                    role="tab"
+                    aria-selected={scopeFilter === 'Starred'}
                     onClick={() => setScopeFilter('Starred')}
                     className={`inline-flex items-center gap-1.5 h-full px-2.5 rounded-lg text-xs transition-all cursor-pointer whitespace-nowrap ${
                       scopeFilter === 'Starred'
-                        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                        ? 'text-white font-bold border border-white/20'
                         : 'text-zinc-400 hover:text-white hover:bg-white/[0.05] border border-transparent font-medium'
                     }`}
                   >
@@ -961,10 +967,12 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
 
                   <button
                     type="button"
+                    role="tab"
+                    aria-selected={scopeFilter === 'Pinned'}
                     onClick={() => setScopeFilter('Pinned')}
                     className={`inline-flex items-center gap-1.5 h-full px-2.5 rounded-lg text-xs transition-all cursor-pointer whitespace-nowrap ${
                       scopeFilter === 'Pinned'
-                        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                        ? 'text-white font-bold border border-white/20'
                         : 'text-zinc-400 hover:text-white hover:bg-white/[0.05] border border-transparent font-medium'
                     }`}
                   >
@@ -991,9 +999,9 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                       key={nb}
                       type="button"
                       onClick={() => setScopeFilter(nb)}
-                      className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs border transition-all cursor-pointer whitespace-nowrap ${
+                      className={`neu-btn inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs border transition-all cursor-pointer whitespace-nowrap ${
                         isActive
-                          ? 'bg-sky-500/15 border-sky-400/45 text-white font-bold shadow-sm'
+                          ? 'bg-sky-500/15 border-sky-400/45 text-white font-bold'
                           : 'bg-[#161821] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] font-medium'
                       }`}
                     >
@@ -1019,9 +1027,9 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                 <button
                   type="button"
                   onClick={() => setScopeFilter('Trash')}
-                  className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs border transition-all cursor-pointer whitespace-nowrap ${
+                  className={`neu-btn inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs border transition-all cursor-pointer whitespace-nowrap ${
                     scopeFilter === 'Trash'
-                      ? 'bg-rose-500/20 border-rose-400/45 text-rose-200 font-bold shadow-sm'
+                      ? 'bg-rose-500/20 border-rose-400/45 text-rose-200 font-bold'
                       : 'bg-[#161821] border-white/[0.08] text-zinc-400 hover:text-rose-200 hover:border-rose-400/30 font-medium'
                   }`}
                 >
@@ -1084,7 +1092,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
             />
           </div>
           {visibleNotes.length === 0 ? (
-            <div className="rounded-2xl bg-[#111218] border border-white/[0.08] p-12 text-center text-xs text-zinc-400">
+            <div className="neu-card rounded-2xl bg-[#111218] border border-white/[0.08] p-12 text-center text-xs text-zinc-400">
               {scopeFilter === 'Trash' ? 'Trash is empty.' : 'No notes found in this notebook view.'}
             </div>
           ) : (
@@ -1095,7 +1103,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                 return (
                   <div
                     key={note.id}
-                    className={`rounded-2xl border p-4 flex flex-col justify-between gap-3 cursor-pointer hover:brightness-110 transition-all ${acc.cardBg}`}
+                    className={`neu-card neu-card-interactive rounded-2xl border p-4 flex flex-col justify-between gap-3 cursor-pointer hover:brightness-110 transition-all ${acc.cardBg}`}
                     onClick={() => {
                       setSelectedId(note.id);
                       setLayoutView('workspace');
@@ -1131,7 +1139,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           {/* Left Notes Sidebar */}
           {!zenMode && (
-            <aside className="lg:col-span-4 xl:col-span-3 lg:sticky lg:top-3 rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col lg:h-[calc(100vh-8rem)] lg:min-h-[460px] lg:max-h-[820px]">
+            <aside className="neu-card lg:col-span-4 xl:col-span-3 lg:sticky lg:top-3 rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col lg:h-[calc(100vh-8rem)] lg:min-h-[460px] lg:max-h-[820px]">
               <div className="p-3.5 pb-3 border-b border-white/[0.07] bg-[#111218] shrink-0 flex flex-col gap-2.5">
                 <div className="relative flex items-center">
                   <input
@@ -1281,7 +1289,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
 
           {/* Right Editor & Preview */}
           <section
-            className={`${
+            className={`neu-card ${
               zenMode
                 ? 'lg:col-span-12 min-h-[calc(100vh-8rem)]'
                 : 'lg:col-span-8 xl:col-span-9 lg:sticky lg:top-3 lg:h-[calc(100vh-8rem)] lg:min-h-[460px] lg:max-h-[820px]'
@@ -1289,7 +1297,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
           >
             {!activeNote ? (
               <div className="flex-1 py-20 px-6 text-center flex flex-col items-center justify-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#161722] border border-white/[0.09] flex items-center justify-center text-sky-300">
+                <div className="neu-inset w-12 h-12 rounded-2xl bg-[#161722] border border-white/[0.09] flex items-center justify-center text-sky-300">
                   <SvgIcon className="w-6 h-6">
                     <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
                   </SvgIcon>
@@ -1306,7 +1314,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                         setTagFilter('All');
                         setSearch('');
                       }}
-                      className="h-9 px-3.5 rounded-xl bg-[#161821] border border-white/[0.1] hover:border-white/[0.22] text-xs font-semibold text-zinc-200 cursor-pointer"
+                      className="neu-btn h-9 px-3.5 rounded-xl bg-[#161821] border border-white/[0.1] hover:border-white/[0.22] text-xs font-semibold text-zinc-200 cursor-pointer"
                     >
                       Show All Notes
                     </button>
@@ -1315,7 +1323,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                     <button
                       type="button"
                       onClick={() => createNewNote()}
-                      className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 text-xs font-extrabold cursor-pointer"
+                      className="neu-btn inline-flex items-center gap-1.5 h-9 px-4 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 text-xs font-extrabold cursor-pointer"
                     >
                       <PlusIcon />
                       <span>Create New Note</span>
@@ -1328,20 +1336,20 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                 {/* Zone A: Pinned Note Header & Compact Controls */}
                 <div className="px-4 pt-3.5 pb-2.5 border-b border-white/[0.07] bg-[#111218] shrink-0 flex flex-col gap-2">
                   {activeNote.trashed && (
-                    <div className="rounded-xl bg-rose-500/12 border border-rose-500/35 px-3 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div className="neu-card rounded-xl bg-rose-500/12 border border-rose-500/35 px-3 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
                       <span className="text-rose-200 font-semibold">This note is in Trash. Restore it to move back into active notebooks.</span>
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
                           onClick={() => restoreNoteFromTrash(activeNote.id)}
-                          className="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 font-bold cursor-pointer"
+                          className="neu-btn px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 font-bold cursor-pointer"
                         >
                           Restore Note
                         </button>
                         <button
                           type="button"
                           onClick={() => deleteForever(activeNote.id)}
-                          className="px-2.5 py-1 rounded-lg bg-rose-500/25 border border-rose-400/45 text-rose-100 font-bold cursor-pointer"
+                          className="neu-btn px-2.5 py-1 rounded-lg bg-rose-500/25 border border-rose-400/45 text-rose-100 font-bold cursor-pointer"
                         >
                           Delete Forever
                         </button>
@@ -1373,7 +1381,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                     </div>
 
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <div className="relative inline-flex items-center h-7 rounded-lg bg-[#0a0b0f] border border-white/[0.08] hover:border-white/[0.18]">
+                      <div className="neu-inset relative inline-flex items-center h-7 rounded-lg bg-[#0a0b0f] border border-white/[0.08] hover:border-white/[0.18]">
                         <select
                           value={activeNote.notebook || 'Personal'}
                           onChange={(e) => updateActiveNote({ notebook: e.target.value })}
@@ -1389,7 +1397,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                         <ChevronDownIcon className="w-3 h-3 text-zinc-400 absolute right-1.5 pointer-events-none" />
                       </div>
 
-                      <div className="flex items-center gap-1 h-7 px-2 rounded-lg bg-[#0a0b0f] border border-white/[0.08]">
+                      <div className="neu-inset flex items-center gap-1 h-7 px-2 rounded-lg bg-[#0a0b0f] border border-white/[0.08]">
                         {(Object.keys(ACCENT_MAP) as NoteAccent[]).map((accent) => (
                           <button
                             key={accent}
@@ -1403,14 +1411,16 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                         ))}
                       </div>
 
-                      <div className="flex items-center h-7 p-0.5 rounded-lg bg-[#0a0b0f] border border-white/[0.08]">
+                      <div className="flex items-center h-7 p-0.5 rounded-lg neu-tray bg-[#0a0b0f] border border-white/[0.08]" role="tablist" aria-label="Editor mode">
                         {(['edit', 'split', 'preview'] as NoteEditorMode[]).map((m) => (
                           <button
                             key={m}
                             type="button"
+                            role="tab"
+                            aria-selected={mode === m}
                             onClick={() => setMode(m)}
                             className={`px-2 py-0.5 rounded-md text-[11px] font-mono capitalize cursor-pointer ${
-                              mode === m ? 'bg-zinc-800 text-white font-bold' : 'text-zinc-400 hover:text-white'
+                              mode === m ? 'text-white font-bold' : 'text-zinc-400 hover:text-white'
                             }`}
                           >
                             {m}
@@ -1497,7 +1507,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                       <button
                         type="button"
                         onClick={saveSnapshot}
-                        className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-white/[0.2] text-zinc-300 hover:text-white cursor-pointer"
+                        className="neu-btn inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-white/[0.2] text-zinc-300 hover:text-white cursor-pointer"
                       >
                         <SvgIcon className="w-3 h-3">
                           <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
@@ -1510,7 +1520,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                         <button
                           type="button"
                           onClick={() => setSnapshotsOpen((s) => !s)}
-                          className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-violet-500/15 border border-violet-400/35 text-violet-200 cursor-pointer"
+                          className="neu-btn inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-violet-500/15 border border-violet-400/35 text-violet-200 cursor-pointer"
                         >
                           <span>History ({activeNote.snapshots?.length})</span>
                         </button>
@@ -1518,7 +1528,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                       <button
                         type="button"
                         onClick={duplicateActiveNote}
-                        className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] text-zinc-300 hover:text-white cursor-pointer"
+                        className="neu-btn inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] text-zinc-300 hover:text-white cursor-pointer"
                       >
                         <span>Duplicate</span>
                       </button>
@@ -1531,7 +1541,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                           void navigator.clipboard.writeText(`${activeNote.title}\n\n${activeNote.content}`);
                           showToast('Copied note ✓');
                         }}
-                        className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-white/[0.2] text-zinc-200 cursor-pointer"
+                        className="neu-btn inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-white/[0.2] text-zinc-200 cursor-pointer"
                       >
                         <SvgIcon className="w-3 h-3">
                           <rect width="14" height="14" x="8" y="8" rx="2" />
@@ -1543,7 +1553,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                         type="button"
                         onClick={() => exportFile('md')}
                         title="Download note as Markdown (.md)"
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-sky-400/35 text-zinc-200 cursor-pointer"
+                        className="neu-btn inline-flex items-center gap-1 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-sky-400/35 text-zinc-200 cursor-pointer"
                       >
                         <DownloadIcon className="w-3 h-3 text-sky-300" />
                         <span>.md</span>
@@ -1552,7 +1562,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                         type="button"
                         onClick={() => exportFile('txt')}
                         title="Download note as Plain Text (.txt)"
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-emerald-400/35 text-zinc-200 cursor-pointer"
+                        className="neu-btn inline-flex items-center gap-1 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-emerald-400/35 text-zinc-200 cursor-pointer"
                       >
                         <DownloadIcon className="w-3 h-3 text-emerald-300" />
                         <span>.txt</span>
@@ -1560,7 +1570,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                       <button
                         type="button"
                         onClick={() => window.print()}
-                        className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-white/[0.2] text-zinc-200 cursor-pointer"
+                        className="neu-btn inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#171820] border border-white/[0.08] hover:border-white/[0.2] text-zinc-200 cursor-pointer"
                       >
                         <SvgIcon className="w-3 h-3">
                           <polyline points="6 9 6 2 18 2 18 9" />
@@ -1574,27 +1584,27 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
 
                   {/* Find & Replace Drawer */}
                   {findOpen && (
-                    <div className="rounded-xl bg-[#0b0c11] border border-sky-400/30 p-2.5 flex flex-wrap items-center gap-2 text-xs">
+                    <div className="neu-inset rounded-xl bg-[#0b0c11] border border-sky-400/30 p-2.5 flex flex-wrap items-center gap-2 text-xs">
                       <input
                         type="text"
                         value={findQuery}
                         onChange={(e) => setFindQuery(e.target.value)}
                         placeholder="Find text..."
-                        className="h-7 px-2.5 rounded-lg bg-[#07080b] border border-white/[0.1] text-white"
+                        className="neu-inset h-7 px-2.5 rounded-lg bg-[#07080b] border border-white/[0.1] text-white"
                       />
                       <input
                         type="text"
                         value={replaceQuery}
                         onChange={(e) => setReplaceQuery(e.target.value)}
                         placeholder="Replace with..."
-                        className="h-7 px-2.5 rounded-lg bg-[#07080b] border border-white/[0.1] text-white"
+                        className="neu-inset h-7 px-2.5 rounded-lg bg-[#07080b] border border-white/[0.1] text-white"
                       />
                       <span className="font-mono text-zinc-400">{findMatchCount} matches</span>
                       <button
                         type="button"
                         disabled={findMatchCount === 0}
                         onClick={handleReplaceAll}
-                        className="h-7 px-2.5 rounded-lg bg-sky-500/20 border border-sky-400/40 text-sky-200 font-bold disabled:opacity-40 cursor-pointer"
+                        className="neu-btn h-7 px-2.5 rounded-lg bg-sky-500/20 border border-sky-400/40 text-sky-200 font-bold disabled:opacity-40 cursor-pointer"
                       >
                         Replace All
                       </button>
@@ -1603,7 +1613,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
 
                   {/* Snapshots History Panel */}
                   {snapshotsOpen && (activeNote.snapshots?.length || 0) > 0 && (
-                    <div className="rounded-xl bg-[#0b0c11] border border-violet-400/30 p-2.5 flex flex-col gap-1.5 text-xs max-h-36 overflow-y-auto custom-scrollbar overscroll-contain">
+                    <div className="neu-inset rounded-xl bg-[#0b0c11] border border-violet-400/30 p-2.5 flex flex-col gap-1.5 text-xs max-h-36 overflow-y-auto custom-scrollbar overscroll-contain">
                       <div className="flex items-center justify-between text-violet-200 font-bold">
                         <span>Saved Version Snapshots</span>
                         <button
@@ -1626,7 +1636,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                               setSnapshotsOpen(false);
                               showToast('Restored snapshot ✓');
                             }}
-                            className="px-2.5 py-0.5 rounded bg-violet-500/20 border border-violet-400/35 text-violet-200 cursor-pointer"
+                            className="neu-btn px-2.5 py-0.5 rounded bg-violet-500/20 border border-violet-400/35 text-violet-200 cursor-pointer"
                           >
                             Restore
                           </button>
@@ -1641,7 +1651,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                       {activeNote.tags.map((tag) => (
                         <span
                           key={tag}
-                          className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono border ${
+                          className={`neu-tile inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono border ${
                             (ACCENT_MAP[activeNote.accent] || ACCENT_MAP.sky).pill
                           }`}
                         >
@@ -1673,7 +1683,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                           }}
                           placeholder="New tag..."
                           aria-label="Add tag"
-                          className="w-24 h-6 px-2 rounded-md bg-[#090a0e] border border-white/[0.08] text-[11px] font-mono text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-sky-400/45"
+                          className="neu-inset w-24 h-6 px-2 rounded-md bg-[#090a0e] border border-white/[0.08] text-[11px] font-mono text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-sky-400/45"
                         />
                         <button
                           type="button"
@@ -1685,7 +1695,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                             }
                             setNewTagInput('');
                           }}
-                          className="h-6 px-2 rounded-md bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.1] text-[10px] font-mono font-bold text-zinc-200 cursor-pointer"
+                          className="neu-btn h-6 px-2 rounded-md bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.1] text-[10px] font-mono font-bold text-zinc-200 cursor-pointer"
                         >
                           + Tag
                         </button>
@@ -1693,11 +1703,11 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                     </div>
 
                     {noteAnalytics.checks.total > 0 && (
-                      <div className="flex flex-wrap items-center gap-2 px-2.5 py-1 rounded-lg bg-[#0c0e14] border border-emerald-500/25 text-[11px] font-mono">
+                      <div className="neu-inset flex flex-wrap items-center gap-2 px-2.5 py-1 rounded-lg bg-[#0c0e14] border border-emerald-500/25 text-[11px] font-mono">
                         <span className="text-emerald-300 font-bold">
                           Checklist {noteAnalytics.checks.done}/{noteAnalytics.checks.total}
                         </span>
-                        <div className="w-16 h-1.5 rounded-full bg-black/60 overflow-hidden">
+                        <div className="neu-inset w-16 h-1.5 rounded-full bg-black/60 overflow-hidden">
                           <div
                             className="h-full bg-emerald-400"
                             style={{ width: `${Math.round((noteAnalytics.checks.done / noteAnalytics.checks.total) * 100)}%` }}
@@ -1707,7 +1717,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                           <button
                             type="button"
                             onClick={sendChecklistToTasks}
-                            className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-400/35 text-emerald-200 hover:bg-emerald-500/25 cursor-pointer"
+                            className="neu-btn px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-400/35 text-emerald-200 hover:bg-emerald-500/25 cursor-pointer"
                           >
                             ➜ Send {noteAnalytics.checks.uncheckedLines.length} to Tasks
                           </button>
@@ -1716,7 +1726,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                           <button
                             type="button"
                             onClick={clearCheckedItems}
-                            className="px-2 py-0.5 rounded bg-[#171820] border border-white/[0.1] text-zinc-300 hover:text-white cursor-pointer"
+                            className="neu-btn px-2 py-0.5 rounded bg-[#171820] border border-white/[0.1] text-zinc-300 hover:text-white cursor-pointer"
                           >
                             Clear Checked
                           </button>
@@ -1748,7 +1758,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                             key={tool.label}
                             type="button"
                             onClick={() => applyFormatOrSnippet(tool.b, tool.a)}
-                            className="px-1.5 py-0.5 rounded bg-[#181922] border border-white/[0.08] hover:border-white/[0.22] text-zinc-300 hover:text-white cursor-pointer"
+                            className="neu-btn px-1.5 py-0.5 rounded bg-[#181922] border border-white/[0.08] hover:border-white/[0.22] text-zinc-300 hover:text-white cursor-pointer"
                           >
                             {tool.label}
                           </button>
@@ -1771,7 +1781,7 @@ export default function NotesJournalTab({ onNavigate, embedded = false }: NotesJ
                               );
                               target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                             }}
-                            className="shrink-0 px-2 py-0.5 rounded bg-white/[0.04] hover:bg-sky-500/15 border border-white/[0.07] text-zinc-300 hover:text-sky-200 cursor-pointer"
+                            className="neu-btn shrink-0 px-2 py-0.5 rounded bg-white/[0.04] hover:bg-sky-500/15 border border-white/[0.07] text-zinc-300 hover:text-sky-200 cursor-pointer"
                           >
                             {h.text}
                           </button>

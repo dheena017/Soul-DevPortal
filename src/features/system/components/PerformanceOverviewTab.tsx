@@ -248,13 +248,13 @@ export default function PerformanceOverviewTab({
             const eAvg = eCores.length ? eCores.reduce((a, b) => a + b, 0) / eCores.length : null;
             return (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px] font-mono tabular-nums">
-                <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">
                     {eCores.length > 0 ? `P-Core Mean (${specs.cpu.performanceCores}P)` : 'Core Mean'}
                   </span>
                   <strong className="text-sky-300">{pAvg.toFixed(1)}%</strong>
                 </div>
-                <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">
                     {eCores.length > 0 ? `E-Core Mean (${specs.cpu.efficientCores}E)` : 'Peak Thread'}
                   </span>
@@ -262,11 +262,11 @@ export default function PerformanceOverviewTab({
                     {eAvg !== null ? `${eAvg.toFixed(1)}%` : `${Math.max(...(live.cpu.perCorePercent.length ? live.cpu.perCorePercent : [0])).toFixed(0)}%`}
                   </strong>
                 </div>
-                <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Processes Live</span>
                   <strong className="text-white">{live.totalProcessesCount} Active</strong>
                 </div>
-                <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Nominal Base</span>
                   <strong className="text-purple-300">{formatClock(specs.cpu.maxClockMHz)}</strong>
                 </div>
@@ -275,7 +275,7 @@ export default function PerformanceOverviewTab({
           })()}
 
           {/* Framed Per-Logical-Core Heatmap Grid */}
-          <div className="p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2.5 mt-auto">
+          <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2.5 mt-auto">
             <div className="flex items-center justify-between text-[11px] text-zinc-400">
               <span className="font-semibold text-zinc-200">Per-Core Utilization ({live.cpu.perCorePercent.length} Threads)</span>
               <span className="font-mono tabular-nums text-sky-300">
@@ -291,7 +291,7 @@ export default function PerformanceOverviewTab({
                   <div
                     key={idx}
                     title={`Logical Core ${idx}${coreKind ? ` (${coreKind}-Core Thread)` : ''}: ${pct.toFixed(1)}%`}
-                    className={`px-2.5 py-2 rounded-xl border flex flex-col gap-1.5 font-mono tabular-nums text-[11px] transition-colors ${tone.tileBg}`}
+                    className={`neu-tile px-2.5 py-2 rounded-xl border flex flex-col gap-1.5 font-mono tabular-nums text-[11px] transition-colors ${tone.tileBg}`}
                   >
                     <div className="flex items-center justify-between gap-1">
                       <span className="flex items-center gap-1">
@@ -421,13 +421,15 @@ export default function PerformanceOverviewTab({
           <div className="flex flex-col gap-2 pt-1">
             <div className="flex items-center justify-between gap-2">
               <span className="text-xs font-bold text-white">Top Resource Consumers</span>
-              <div className="inline-flex items-center gap-1 rounded-xl bg-[#16161c] border border-white/[0.08] p-0.5 text-[10px] font-mono font-bold">
+              <div className="inline-flex items-center gap-1 rounded-xl neu-tray bg-[#16161c] border border-white/[0.06] p-0.5 text-[10px] font-mono font-bold" role="tablist" aria-label="Resource consumer metric">
                 <button
                   type="button"
+                  role="tab"
+                  aria-selected={consumerMode === 'cpu'}
                   onClick={() => setConsumerMode('cpu')}
                   className={`px-2 py-1 rounded-lg cursor-pointer transition-all ${
                     consumerMode === 'cpu'
-                      ? 'bg-zinc-800 text-sky-300 border border-white/20 shadow-sm'
+                      ? 'text-sky-300 border border-white/20'
                       : 'text-zinc-400 hover:text-white border border-transparent'
                   }`}
                 >
@@ -435,10 +437,12 @@ export default function PerformanceOverviewTab({
                 </button>
                 <button
                   type="button"
+                  role="tab"
+                  aria-selected={consumerMode === 'ram'}
                   onClick={() => setConsumerMode('ram')}
                   className={`px-2 py-1 rounded-lg cursor-pointer transition-all ${
                     consumerMode === 'ram'
-                      ? 'bg-zinc-800 text-purple-300 border border-white/20 shadow-sm'
+                      ? 'text-purple-300 border border-white/20'
                       : 'text-zinc-400 hover:text-white border border-transparent'
                   }`}
                 >
@@ -446,10 +450,12 @@ export default function PerformanceOverviewTab({
                 </button>
                 <button
                   type="button"
+                  role="tab"
+                  aria-selected={consumerMode === 'disk'}
                   onClick={() => setConsumerMode('disk')}
                   className={`px-2 py-1 rounded-lg cursor-pointer transition-all ${
                     consumerMode === 'disk'
-                      ? 'bg-zinc-800 text-emerald-300 border border-white/20 shadow-sm'
+                      ? 'text-emerald-300 border border-white/20'
                       : 'text-zinc-400 hover:text-white border border-transparent'
                   }`}
                 >
@@ -473,11 +479,11 @@ export default function PerformanceOverviewTab({
                     key={proc.pid}
                     type="button"
                     onClick={() => onSelectTab('processes')}
-                    className="w-full p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06] hover:border-white/[0.16] flex flex-col gap-1.5 text-left transition-colors cursor-pointer"
+                    className="neu-tile neu-btn w-full p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06] hover:border-white/[0.16] flex flex-col gap-1.5 text-left transition-colors cursor-pointer"
                   >
                     <div className="flex items-center justify-between gap-2 text-xs">
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="w-5 h-5 rounded-md bg-[#0e0e13] border border-white/[0.08] flex items-center justify-center text-[10px] font-mono font-bold text-zinc-400 shrink-0">
+                        <span className="neu-inset w-5 h-5 rounded-md bg-[#0e0e13] border border-white/[0.08] flex items-center justify-center text-[10px] font-mono font-bold text-zinc-400 shrink-0">
                           {rankIdx + 1}
                         </span>
                         <span className="font-semibold text-white truncate">
@@ -541,7 +547,7 @@ export default function PerformanceOverviewTab({
             series={[{ key: 'ramPercent', label: 'RAM', color: '#a855f7', unit: '%', decimals: 1 }]}
           />
 
-          <div className="w-full h-2.5 rounded-full bg-[#181820] overflow-hidden flex border border-white/[0.06]">
+          <div className="neu-inset w-full h-2.5 rounded-full bg-[#181820] overflow-hidden flex border border-white/[0.06]">
             <div
               className="h-full soul-gradient-bar sys-bar-shimmer transition-all duration-300"
               style={{ width: `${Math.min(100, live.memory.percent)}%` }}
@@ -549,19 +555,19 @@ export default function PerformanceOverviewTab({
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px] font-mono tabular-nums">
-            <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">Used RAM</span>
               <strong className="text-white">{formatBytes(live.memory.usedBytes)}</strong>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">Available</span>
               <strong className="text-emerald-300">{formatBytes(live.memory.availableBytes)}</strong>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">Pagefile / Swap</span>
               <strong className="text-amber-300">{formatBytes(live.swap.usedBytes)} / {formatBytes(live.swap.totalBytes)}</strong>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+            <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
               <span className="block text-[10px] text-zinc-400">DIMM Speed</span>
               <strong className="text-sky-300">{specs.memory.configuredSpeedMTs ? `${specs.memory.configuredSpeedMTs} MT/s` : specs.memory.ddrType}</strong>
             </div>
@@ -589,22 +595,22 @@ export default function PerformanceOverviewTab({
 
           {nvidiaSensor ? (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px] font-mono tabular-nums">
-              <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                 <span className="block text-[10px] text-zinc-400">GPU Core</span>
                 <strong className="text-amber-300">{nvidiaSensor.utilizationPercent ?? '—'}%</strong>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                 <span className="block text-[10px] text-zinc-400">VRAM</span>
                 <strong className="text-white">{nvidiaSensor.vramUsedMB ?? '—'} / {nvidiaSensor.vramTotalMB ?? '—'} MB</strong>
               </div>
               {nvidiaSensor.temperatureC !== null && (
-                <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Temperature</span>
                   <strong className="text-rose-300">{nvidiaSensor.temperatureC}°C</strong>
                 </div>
               )}
               {nvidiaSensor.powerWatts !== null && (
-                <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+                <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                   <span className="block text-[10px] text-zinc-400">Power Draw</span>
                   <strong className="text-emerald-300">{nvidiaSensor.powerWatts} W</strong>
                 </div>
@@ -612,19 +618,19 @@ export default function PerformanceOverviewTab({
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px] font-mono tabular-nums">
-              <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                 <span className="block text-[10px] text-zinc-400">3D Render</span>
                 <strong className="text-amber-300">{live.gpu.engines?.['3D'] !== undefined ? `${live.gpu.engines['3D']}%` : '—'}</strong>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                 <span className="block text-[10px] text-zinc-400">Video Decode</span>
                 <strong className="text-sky-300">{live.gpu.engines?.VideoDecode !== undefined ? `${live.gpu.engines.VideoDecode}%` : '—'}</strong>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                 <span className="block text-[10px] text-zinc-400">Shared GPU Mem</span>
                 <strong className="text-purple-300">{formatBytes(live.gpu.sharedUsedBytes)}</strong>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
+              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
                 <span className="block text-[10px] text-zinc-400">Display Mode</span>
                 <strong className="text-white">
                   {primaryDisplay?.nativeWidth ? `${primaryDisplay.nativeWidth}×${primaryDisplay.nativeHeight}` : 'Active'}

@@ -31,7 +31,7 @@ export default function DocHighlightsTab({
   return (
     <div className="w-full flex flex-col gap-6 portal-stagger">
       {/* ── Key Rules & Highlights Card: Compliance & Authoritative Mandates ── */}
-      <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6 portal-header-sheen">
+      <section className="w-full p-5 md:p-6 rounded-2xl neu-card bg-[#151519] border border-white/[0.08] flex flex-col gap-6 portal-stagger portal-header-sheen">
         <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
           <div className="flex flex-col gap-0.5">
@@ -40,7 +40,7 @@ export default function DocHighlightsTab({
             </span>
             <h2 className="text-lg font-bold text-neutral-200">Mandatory Standards Checklist</h2>
           </div>
-          <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#151519] border border-[#212126] text-amber-300">
+          <span className="neu-tile px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-[#151519] border border-[#212126] text-amber-300">
             {guideMeta.keyHighlights.length} core rules active
           </span>
         </div>
@@ -56,7 +56,7 @@ export default function DocHighlightsTab({
 
         {/* Top Audience & Compliance Card */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 portal-grid-stagger">
-          <div className="flex flex-col p-4 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover">
+          <div className="neu-inset flex flex-col p-4 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover">
             <div className="flex items-center gap-2">
               <span className="text-base">🎯</span>
               <h3 className="text-xs font-bold text-neutral-200">Target Audience</h3>
@@ -66,7 +66,7 @@ export default function DocHighlightsTab({
             </p>
           </div>
 
-          <div className="flex flex-col p-4 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover">
+          <div className="neu-inset flex flex-col p-4 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-neutral-500 gap-2 portal-card-hover">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-base">🛡️</span>
@@ -91,7 +91,7 @@ export default function DocHighlightsTab({
             {guideMeta.keyHighlights.map((hl, idx) => (
               <div
                 key={idx}
-                className="flex items-start gap-3 p-3.5 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-amber-500/40 portal-card-hover"
+                className="neu-inset flex items-start gap-3 p-3.5 rounded-xl bg-[#0d0d10] border border-[#212126] hover:border-amber-500/40 portal-card-hover"
               >
                 <span className="w-5 h-5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 flex items-center justify-center text-xs shrink-0 mt-0.5">
                   ✓
@@ -123,7 +123,7 @@ export default function DocHighlightsTab({
           {hasHeadings && (
             <TableOfContents headings={headings} title="Golden Invariants" className="w-full" />
           )}
-          <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-4 min-w-0 portal-header-sheen">
+          <section className="neu-card w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] flex flex-col gap-4 min-w-0 portal-header-sheen">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#19191d]">
               <div className="flex flex-col gap-0.5">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400">

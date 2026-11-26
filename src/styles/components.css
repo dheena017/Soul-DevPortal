@@ -587,7 +587,7 @@ header[role="banner"] input:focus {
   box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.18), 0 8px 22px rgba(0, 0, 0, 0.45);
 }
 
-aside {
+aside[aria-label="Monorepo navigation sidebar"] {
   transition:
     transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.32s ease !important;
@@ -603,8 +603,8 @@ aside nav a {
     box-shadow 0.2s ease;
 }
 
-aside nav button:hover,
-aside nav a:hover {
+aside[aria-label="Monorepo navigation sidebar"] nav button:hover,
+aside[aria-label="Monorepo navigation sidebar"] nav a:hover {
   transform: translateX(3px);
 }
 
@@ -667,6 +667,11 @@ aside svg.-rotate-90 {
 
 /* ── Clean Flat Card & Surface Elevation ── */
 .card-flat {
+  background-image: linear-gradient(155deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.14) 100%);
+  box-shadow:
+    5px 5px 14px rgba(0, 0, 0, 0.9),
+    -3px -3px 10px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
   transition: border-color 0.2s ease,
               background-color 0.2s ease,
               box-shadow 0.2s ease;

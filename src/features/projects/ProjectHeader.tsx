@@ -34,7 +34,7 @@ export default function ProjectHeader({
   searchInputRef,
 }: ProjectHeaderProps) {
   return (
-    <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 shadow-2xl flex flex-col gap-4 sm:gap-5 portal-header-sheen">
+    <header className="neu-card w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col gap-4 sm:gap-5 portal-header-sheen">
       <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="Projects Microservice Topology Visual" />
       <div className="relative z-10 flex flex-col gap-4 sm:gap-5">
       {/* Breadcrumb Navigation Row */}
@@ -43,7 +43,7 @@ export default function ProjectHeader({
           {onBack ? (
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm cursor-pointer"
+              className="neu-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold cursor-pointer"
               onClick={onBack}
               title="Back to Soul Workspace"
             >
@@ -55,7 +55,7 @@ export default function ProjectHeader({
           ) : (
             <a
               href="#overview"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold shadow-sm"
+              className="neu-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all font-semibold"
               title="Back to Soul Workspace"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -66,10 +66,10 @@ export default function ProjectHeader({
           )}
           <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full bg-[#16161c] border border-white/[0.08] text-zinc-400 font-medium">Soul Workspace</span>
           <span className="text-zinc-600 font-bold px-0.5" aria-hidden="true">›</span>
-          <strong className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e28] border border-white/15 text-white font-semibold shadow-sm truncate">Pillar 1: Projects</strong>
+          <strong className="neu-tile inline-flex items-center px-2.5 py-1 rounded-full bg-[#1e1e28] border border-white/15 text-white font-semibold truncate">Pillar 1: Projects</strong>
         </div>
 
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-200 select-none shadow-sm">
+        <div className="neu-tile inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-200 select-none">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
@@ -80,7 +80,7 @@ export default function ProjectHeader({
 
       {/* Hero Title & Identity Row */}
       <div className="flex items-start sm:items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-emerald-400 shrink-0 shadow-lg portal-emblem-hover">
+        <div className="neu-inset w-12 h-12 rounded-xl bg-[#16161c] border border-white/[0.08] flex items-center justify-center text-emerald-400 shrink-0 portal-emblem-hover">
           <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
@@ -102,7 +102,7 @@ export default function ProjectHeader({
 
       {/* 5-Metric Quick Stats Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 portal-grid-stagger" role="region" aria-label="Project metrics">
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+        <div className="neu-tile flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="7" height="7" />
@@ -115,7 +115,7 @@ export default function ProjectHeader({
           <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{totalCount} Active</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+        <div className="neu-tile flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
@@ -128,7 +128,7 @@ export default function ProjectHeader({
           <strong className="text-xl font-extrabold text-indigo-400 font-mono mt-1.5">{fullstackCount} Fullstack</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+        <div className="neu-tile flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
@@ -140,7 +140,7 @@ export default function ProjectHeader({
           <strong className="text-xl font-extrabold text-sky-400 font-mono mt-1.5">{standaloneCount} Apps</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+        <div className="neu-tile flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -150,7 +150,7 @@ export default function ProjectHeader({
           <strong className="text-xl font-extrabold text-emerald-400 font-mono mt-1.5">{collisionsCount} Conflicts</strong>
         </div>
 
-        <div className="flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
+        <div className="neu-tile flex flex-col p-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
           <div className="flex items-center gap-1.5 text-xs text-zinc-400">
             <svg className="w-3.5 h-3.5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <ellipse cx="12" cy="5" rx="9" ry="3" />
@@ -210,7 +210,7 @@ export default function ProjectHeader({
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                    ? 'text-white font-bold border border-white/20'
                     : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
                 }`}
                 onClick={() => onFilterFrameworkChange(fw)}

@@ -142,13 +142,13 @@ export default function SystemHeaderCard({
   const tabClass = (isActive: boolean) =>
     `inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all whitespace-nowrap cursor-pointer shrink-0 ${
       isActive
-        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+        ? 'text-white font-bold border border-white/20'
         : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
     }`;
 
   return (
-    <header className="relative overflow-hidden w-full p-4 sm:p-5 md:p-6 rounded-2xl system-card shadow-2xl flex flex-col gap-4 sm:gap-5">
-      <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="Hardware Silicon Die Architecture" opacityClass="opacity-80 sm:opacity-95" />
+    <header className="relative overflow-hidden w-full p-4 sm:p-5 md:p-6 rounded-2xl system-card flex flex-col gap-4 sm:gap-5">
+      <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="Hardware Silicon Die Architecture" opacityClass="opacity-52 sm:opacity-68" />
       <div className="relative z-10 flex flex-col gap-4 sm:gap-5">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Host Identity */}
@@ -316,7 +316,7 @@ export default function SystemHeaderCard({
         <button
           type="button"
           onClick={() => onSelectTab('performance')}
-          className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-sky-400/35 text-left cursor-pointer portal-card-hover"
+          className="flex items-center justify-between p-2.5 rounded-xl neu-inset bg-[#0e0e13]/90 border border-white/[0.07] hover:border-sky-400/35 text-left cursor-pointer portal-card-hover"
         >
           <div className="flex flex-col min-w-0">
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">CPU LOAD</span>
@@ -328,7 +328,7 @@ export default function SystemHeaderCard({
         <button
           type="button"
           onClick={() => onSelectTab('performance')}
-          className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-purple-400/35 text-left cursor-pointer portal-card-hover"
+          className="flex items-center justify-between p-2.5 rounded-xl neu-inset bg-[#0e0e13]/90 border border-white/[0.07] hover:border-purple-400/35 text-left cursor-pointer portal-card-hover"
         >
           <div className="flex flex-col min-w-0">
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">MEMORY</span>
@@ -340,7 +340,7 @@ export default function SystemHeaderCard({
         <button
           type="button"
           onClick={() => onSelectTab('storage-network')}
-          className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-emerald-400/35 text-left cursor-pointer portal-card-hover"
+          className="flex items-center justify-between p-2.5 rounded-xl neu-inset bg-[#0e0e13]/90 border border-white/[0.07] hover:border-emerald-400/35 text-left cursor-pointer portal-card-hover"
         >
           <div className="flex flex-col min-w-0">
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">VOLUMES</span>
@@ -354,7 +354,7 @@ export default function SystemHeaderCard({
         <button
           type="button"
           onClick={() => onSelectTab('power-health')}
-          className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-amber-400/35 text-left cursor-pointer portal-card-hover"
+          className="flex items-center justify-between p-2.5 rounded-xl neu-inset bg-[#0e0e13]/90 border border-white/[0.07] hover:border-amber-400/35 text-left cursor-pointer portal-card-hover"
         >
           <div className="flex flex-col min-w-0">
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
@@ -387,7 +387,7 @@ export default function SystemHeaderCard({
             title="Scroll tabs left"
             className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-all ${
               canScrollLeft
-                ? 'bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 shadow-sm cursor-pointer'
+                ? 'neu-btn bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 cursor-pointer'
                 : 'bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
             }`}
           >
@@ -402,7 +402,7 @@ export default function SystemHeaderCard({
           role="tablist"
           aria-label="Computer & Performance sections"
           onScroll={updateScrollArrows}
-          className="relative flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto system-tabs-scroller"
+          className="neu-tray relative flex-1 min-w-0 flex items-center gap-1.5 p-1 rounded-xl border border-white/[0.06] overflow-x-auto system-tabs-scroller"
         >
           <button type="button" role="tab" aria-selected={activeTab === 'performance'} onClick={(e) => handleTabClick('performance', e)} className={tabClass(activeTab === 'performance')}>
             <svg className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'performance' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -503,7 +503,7 @@ export default function SystemHeaderCard({
             title="Scroll tabs right"
             className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-all ${
               canScrollRight
-                ? 'bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 shadow-sm cursor-pointer'
+                ? 'neu-btn bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 cursor-pointer'
                 : 'bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
             }`}
           >

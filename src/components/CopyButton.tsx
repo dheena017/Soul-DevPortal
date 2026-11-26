@@ -1,5 +1,6 @@
 import React, { useState, MouseEvent } from 'react';
 import { consoleLogger } from '@workspace/logger';
+import { copyTextSafe } from '../utils/clipboard';
 
 export interface CopyButtonProps {
   text?: string;
@@ -22,16 +23,15 @@ export default function CopyButton({
 
   async function handleCopy(e: MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
-    try {
-      await navigator.clipboard.writeText(text);
+    const ok = await copyTextSafe(text);
+    if (ok) {
       setCopied(true);
       consoleLogger.action('CLIPBOARD', `Copied text to clipboard (${text.length} chars)`, {
         preview: text.slice(0, 100),
       });
       window.setTimeout(() => setCopied(false), 1400);
-    } catch (err) {
+    } else {
       setCopied(false);
-      consoleLogger.error('CLIPBOARD', 'Failed to copy to clipboard', err);
     }
   }
 
@@ -41,13 +41,13 @@ export default function CopyButton({
   const variantStyles = {
     default: copied
       ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
-      : 'bg-[#151519] border-[#212126] text-neutral-300 hover:text-neutral-200 hover:bg-[#151519] hover:border-neutral-500',
+      : 'neu-btn bg-[#151519] border-white/[0.08] text-neutral-300 hover:text-neutral-100 hover:border-white/[0.16]',
     compact: copied
       ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
-      : 'bg-[#151519] border-[#212126] text-neutral-300 hover:text-neutral-200 hover:bg-[#151519] hover:border-neutral-500',
+      : 'neu-btn bg-[#151519] border-white/[0.08] text-neutral-300 hover:text-neutral-100 hover:border-white/[0.16]',
     'icon-only': copied
       ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
-      : 'bg-[#151519] border-[#212126] text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] hover:border-neutral-500',
+      : 'neu-btn bg-[#151519] border-white/[0.08] text-neutral-400 hover:text-neutral-100 hover:border-white/[0.16]',
     ghost: copied
       ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
       : 'bg-transparent text-neutral-400 hover:text-neutral-200 hover:bg-[#151519] border-transparent',
@@ -64,7 +64,7 @@ export default function CopyButton({
     <button
       type="button"
       className={`inline-flex items-center justify-center border font-sans transition-all active:scale-95 cursor-pointer select-none shrink-0 group ${
-        copied ? 'shadow-[0_0_14px_rgba(16,185,129,0.28)]' : 'shadow-sm'
+        copied ? 'shadow-[0_0_14px_rgba(16,185,129,0.28)]' : ''
       } ${sizeStyles[variant] || sizeStyles.default} ${variantStyles[variant] || variantStyles.default} ${className}`.trim()}
       onClick={handleCopy}
       aria-label={copied ? copiedLabel : title}
