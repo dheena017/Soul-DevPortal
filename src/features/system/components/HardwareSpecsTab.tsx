@@ -3,6 +3,7 @@ import CopyButton from '../../../components/CopyButton';
 import { SystemLiveSnapshot, SystemSpecs } from '../../../types';
 import { formatBytes, formatCacheSize, formatClock, formatUptime, maskSerialValue, SystemSubTabId } from '../systemConstants';
 import HardwareDetailsTable, { HardwareDetailTableRow } from './HardwareDetailsTable';
+import TelemetryTileGrid from './TelemetryTileGrid';
 
 export interface HardwareSpecsTabProps {
   specs: SystemSpecs;
@@ -481,6 +482,72 @@ export default function HardwareSpecsTab({ specs, live, onSelectTab }: HardwareS
           </button>
         </div>
       </div>
+
+      {/* ── Hardware Architecture Matrix ── */}
+      <TelemetryTileGrid
+        title={`Hardware Architecture Matrix (${host.manufacturer} ${host.model})`}
+        rightLabel={`${cpu.physicalCores}C/${cpu.logicalThreads}T · ${formatBytes(memory.installedBytes, 0)}`}
+        rightToneClass="text-sky-300"
+        columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
+        items={[
+          {
+            id: 'hw-cpu',
+            label: 'CPU',
+            badge: `${cpu.physicalCores}C/${cpu.logicalThreads}T`,
+            badgeTone: 'sky',
+            valueText: `${Math.round(live.cpu.totalPercent)}%`,
+            percent: live.cpu.totalPercent,
+            tooltip: `${cpu.name} (${cpu.topologyMode})`,
+          },
+          {
+            id: 'hw-ram',
+            label: 'Memory',
+            badge: memory.ddrType,
+            badgeTone: 'purple',
+            valueText: `${Math.round(live.memory.percent)}%`,
+            percent: live.memory.percent,
+            tooltip: `${formatBytes(memory.installedBytes, 1)} ${memory.ddrType} (${memory.populatedSlots}/${memory.totalSlots} Slots)`,
+          },
+          {
+            id: 'hw-gpu',
+            label: 'Graphics',
+            badge: `${graphics.length} GPU`,
+            badgeTone: 'amber',
+            valueText: `${Math.round(live.gpu.utilizationPercent ?? 0)}%`,
+            percent: live.gpu.utilizationPercent ?? 0,
+            tooltip: graphics.map((g) => g.name).join(' · ') || 'Graphics Adapter',
+          },
+          {
+            id: 'hw-disk',
+            label: 'Storage',
+            badge: physicalDisks[0]?.busType || 'Disk',
+            badgeTone: 'emerald',
+            valueText: formatBytes(physicalDisks[0]?.sizeBytes, 0),
+            percent: live.disk.volumes[0]?.usedPercent ?? 0,
+            tooltip: physicalDisks.map((d) => `${d.model} (${d.healthStatus})`).join(' · ') || 'Physical Storage',
+          },
+          {
+            id: 'hw-pcie',
+            label: 'PCIe',
+            badge: 'Bus',
+            badgeTone: 'sky',
+            tone: 'sky',
+            valueText: `${pcieDevices.length}`,
+            percent: Math.min(100, (pcieDevices.length / 24) * 100),
+            tooltip: `${pcieDevices.length} PCIe Devices · ${expansionSlots.length} Expansion Slots`,
+          },
+          {
+            id: 'hw-bios',
+            label: 'BIOS',
+            badge: host.secureBoot === 'Enabled' ? 'Secure' : 'UEFI',
+            badgeTone: host.secureBoot === 'Enabled' ? 'emerald' : 'amber',
+            tone: host.secureBoot === 'Enabled' ? 'sky' : 'amber',
+            valueText: motherboard.biosVersion.slice(0, 7),
+            percent: 100,
+            tooltip: `${motherboard.manufacturer} ${motherboard.product} · BIOS ${motherboard.biosVersion}`,
+          },
+        ]}
+      />
 
       {/* ── Visual Bento Row 1: CPU Silicon Pyramid + Motherboard & Security ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">

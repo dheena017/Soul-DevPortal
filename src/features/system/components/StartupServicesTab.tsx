@@ -9,6 +9,7 @@ import {
 } from '../../../types';
 import { formatBytes } from '../systemConstants';
 import { FilterPillBar, TableLoadAllFooter } from './SystemTablePrimitives';
+import TelemetryTileGrid from './TelemetryTileGrid';
 
 export interface StartupServicesTabProps {
   specs: SystemSpecs;
@@ -373,6 +374,82 @@ export default function StartupServicesTab({ specs }: StartupServicesTabProps) {
           </div>
         </button>
       </div>
+
+      {/* ── Boot, Services & Driver Structure Matrix ── */}
+      <TelemetryTileGrid
+        title="Startup, Services & Kernel Structure Matrix"
+        rightLabel={`${serviceStats.running} Active Services · ${driverStats.running} Drivers`}
+        rightToneClass="text-emerald-300"
+        columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
+        items={[
+          {
+            id: 'ss-startup',
+            label: 'Startup',
+            badge: 'On',
+            badgeTone: 'sky',
+            valueText: `${startupStats.enabled}/${startupApps.length}`,
+            percent: startupApps.length ? (startupStats.enabled / startupApps.length) * 100 : 0,
+            onClick: () => switchSection('startup'),
+            tooltip: `${startupStats.enabled} Enabled Startup Apps`,
+          },
+          {
+            id: 'ss-svc',
+            label: 'Services',
+            badge: 'Run',
+            badgeTone: 'emerald',
+            valueText: `${serviceStats.running}`,
+            percent: services.length ? (serviceStats.running / services.length) * 100 : 0,
+            onClick: () => switchSection('services'),
+            tooltip: `${serviceStats.running} Running of ${services.length} OS Services`,
+          },
+          {
+            id: 'ss-3p',
+            label: '3rd Party',
+            badge: 'Svc',
+            badgeTone: 'purple',
+            valueText: `${serviceStats.thirdPartyRunning}`,
+            percent: serviceStats.thirdParty ? (serviceStats.thirdPartyRunning / serviceStats.thirdParty) * 100 : 0,
+            onClick: () => {
+              switchSection('services');
+              setSvcFilter('third_party');
+            },
+            tooltip: `${serviceStats.thirdPartyRunning} Running 3rd-Party Services`,
+          },
+          {
+            id: 'ss-tasks',
+            label: 'Tasks',
+            badge: 'On',
+            badgeTone: 'sky',
+            valueText: `${taskStats.active}`,
+            percent: scheduledTasks.length ? (taskStats.active / scheduledTasks.length) * 100 : 0,
+            onClick: () => switchSection('tasks'),
+            tooltip: `${taskStats.active} Active Scheduled Tasks`,
+          },
+          {
+            id: 'ss-drv',
+            label: 'Drivers',
+            badge: 'Run',
+            badgeTone: 'amber',
+            valueText: `${driverStats.running}`,
+            percent: systemDrivers.length ? (driverStats.running / systemDrivers.length) * 100 : 0,
+            onClick: () => switchSection('drivers'),
+            tooltip: `${driverStats.running} Running Kernel Drivers`,
+          },
+          {
+            id: 'ss-boot',
+            label: 'Boot/Sys',
+            badge: 'Drv',
+            badgeTone: 'amber',
+            valueText: `${driverStats.bootSystem}`,
+            percent: systemDrivers.length ? (driverStats.bootSystem / systemDrivers.length) * 100 : 0,
+            onClick: () => {
+              switchSection('drivers');
+              setDriverFilter('boot_system');
+            },
+            tooltip: `${driverStats.bootSystem} Boot & System-Start Drivers`,
+          },
+        ]}
+      />
 
       {/* Alert Strip when Automatic Services are Stopped or Startup Binaries are Missing */}
       {(serviceStats.autoStopped > 0 || startupStats.missing > 0) && (

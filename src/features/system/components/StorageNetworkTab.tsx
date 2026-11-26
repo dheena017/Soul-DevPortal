@@ -3,6 +3,7 @@ import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../../type
 import { formatBytes, formatNetRate } from '../systemConstants';
 import HardwareDetailsTable, { HardwareDetailTableRow } from './HardwareDetailsTable';
 import TelemetrySparkline from './TelemetrySparkline';
+import TelemetryTileGrid, { TelemetryTileItem } from './TelemetryTileGrid';
 
 export interface StorageNetworkTabProps {
   specs: SystemSpecs;
@@ -133,6 +134,70 @@ export default function StorageNetworkTab({ specs, live, historyWindowSec = 60 }
           </span>
         </div>
       </div>
+
+      {/* ── Storage & Network Structure Matrix ── */}
+      {(() => {
+        const items: TelemetryTileItem[] = [
+          ...live.disk.volumes.slice(0, 3).map((vol, idx): TelemetryTileItem => ({
+            id: `sn-vol-${idx}`,
+            label: vol.mountpoint.replace(/\\+$/, '') || `Vol ${idx}`,
+            badge: vol.fstype || 'FS',
+            badgeTone: 'emerald',
+            valueText: `${Math.round(vol.usedPercent)}%`,
+            percent: vol.usedPercent,
+            tooltip: `${vol.mountpoint}: ${formatBytes(vol.usedBytes, 1)} / ${formatBytes(vol.totalBytes, 1)}`,
+          })),
+          {
+            id: 'sn-read',
+            label: 'Read',
+            badge: 'Disk',
+            badgeTone: 'emerald',
+            valueText: `${live.disk.readMBps.toFixed(1)}M`,
+            percent: Math.min(100, (live.disk.readMBps / 250) * 100),
+            tooltip: `Disk Read: ${live.disk.readMBps.toFixed(2)} MB/s`,
+          },
+          {
+            id: 'sn-write',
+            label: 'Write',
+            badge: 'Disk',
+            badgeTone: 'amber',
+            valueText: `${live.disk.writeMBps.toFixed(1)}M`,
+            percent: Math.min(100, (live.disk.writeMBps / 250) * 100),
+            tooltip: `Disk Write: ${live.disk.writeMBps.toFixed(2)} MB/s`,
+          },
+          ...(wifi
+            ? [
+                {
+                  id: 'sn-wifi',
+                  label: 'Wi-Fi',
+                  badge: wifi.band || 'RF',
+                  badgeTone: 'sky' as const,
+                  valueText: `${wifi.signalPercent ?? 0}%`,
+                  percent: wifi.signalPercent ?? 0,
+                  tooltip: `${wifi.ssid || 'Wi-Fi'}: ${wifi.signalPercent ?? 0}%`,
+                },
+              ]
+            : []),
+          {
+            id: 'sn-tcp',
+            label: 'TCP',
+            badge: 'Estab',
+            badgeTone: 'purple',
+            valueText: `${live.socketCounts.established}`,
+            percent: Math.min(100, (live.socketCounts.established / 120) * 100),
+            tooltip: `Established TCP Sockets: ${live.socketCounts.established}`,
+          },
+        ];
+        return (
+          <TelemetryTileGrid
+            title={`Storage & Network Structure (${live.disk.volumes.length} Volumes · ${sortedAdapters.filter((a) => a.isUp).length} Active NICs)`}
+            rightLabel={`↓ ${formatNetRate(live.network.rxKBps)} · ↑ ${formatNetRate(live.network.txKBps)}`}
+            rightToneClass="text-sky-300"
+            columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
+            items={items}
+          />
+        );
+      })()}
 
       {/* ── Storage Physical Drives + Logical Volumes ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">

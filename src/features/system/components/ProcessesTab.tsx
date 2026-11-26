@@ -3,6 +3,7 @@ import CopyButton from '../../../components/CopyButton';
 import { ActiveConnectionMetric, ActivePortMetric, ProcessMetric, SystemLiveSnapshot } from '../../../types';
 import { formatBytes } from '../systemConstants';
 import { ExpandToggleCell, FilterPillBar, TableLoadAllFooter } from './SystemTablePrimitives';
+import TelemetryTileGrid from './TelemetryTileGrid';
 
 export interface ProcessesTabProps {
   live: SystemLiveSnapshot;
@@ -362,6 +363,88 @@ export default function ProcessesTab({ live }: ProcessesTabProps) {
           </div>
         </button>
       </div>
+
+      {/* ── Process, Thread & Socket Structure Matrix ── */}
+      <TelemetryTileGrid
+        title={`Process & Socket Structure (${live.totalProcessesCount} Processes · ${procStats.totalThreads.toLocaleString()} Threads)`}
+        rightLabel={`${live.activePorts.length} Listening Ports`}
+        rightToneClass="text-sky-300"
+        columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
+        items={[
+          {
+            id: 'pr-cpu',
+            label: 'CPU Act',
+            badge: 'Proc',
+            badgeTone: 'sky',
+            valueText: `${procStats.activeCpu}`,
+            percent: live.processes.length ? (procStats.activeCpu / live.processes.length) * 100 : 0,
+            onClick: () => {
+              switchSection('processes');
+              setProcFilter('active_cpu');
+            },
+            tooltip: `${procStats.activeCpu} Processes Using CPU`,
+          },
+          {
+            id: 'pr-ram',
+            label: 'Heavy RAM',
+            badge: '100M+',
+            badgeTone: 'purple',
+            valueText: `${procStats.heavyRam}`,
+            percent: live.processes.length ? (procStats.heavyRam / live.processes.length) * 100 : 0,
+            onClick: () => {
+              switchSection('processes');
+              setProcFilter('heavy_ram');
+            },
+            tooltip: `${procStats.heavyRam} Processes >= 100 MB RAM`,
+          },
+          {
+            id: 'pr-io',
+            label: 'Disk I/O',
+            badge: 'Act',
+            badgeTone: 'emerald',
+            valueText: `${procStats.diskActive}`,
+            percent: live.processes.length ? (procStats.diskActive / live.processes.length) * 100 : 0,
+            onClick: () => {
+              switchSection('processes');
+              setProcFilter('disk_io');
+            },
+            tooltip: `${procStats.diskActive} Processes with Active Disk I/O`,
+          },
+          {
+            id: 'pr-ports',
+            label: 'Ports',
+            badge: 'TCP/UDP',
+            badgeTone: 'emerald',
+            valueText: `${live.activePorts.length}`,
+            percent: Math.min(100, (live.activePorts.length / 80) * 100),
+            onClick: () => switchSection('ports'),
+            tooltip: `${portStats.tcp} TCP · ${portStats.udp} UDP Listening Ports`,
+          },
+          {
+            id: 'pr-exp',
+            label: 'Exposed',
+            badge: 'LAN',
+            badgeTone: 'amber',
+            valueText: `${portStats.exposed}`,
+            percent: live.activePorts.length ? (portStats.exposed / live.activePorts.length) * 100 : 0,
+            onClick: () => {
+              switchSection('ports');
+              setPortFilter('exposed');
+            },
+            tooltip: `${portStats.exposed} Ports Exposed on LAN / All Interfaces`,
+          },
+          {
+            id: 'pr-est',
+            label: 'Sockets',
+            badge: 'Estab',
+            badgeTone: 'sky',
+            valueText: `${live.socketCounts.established}`,
+            percent: live.socketCounts.total ? (live.socketCounts.established / live.socketCounts.total) * 100 : 0,
+            onClick: () => switchSection('connections'),
+            tooltip: `${live.socketCounts.established} Established / ${live.socketCounts.total} Total Sockets`,
+          },
+        ]}
+      />
 
       {/* Unified 3-Section Switcher, Filter Strip & Search */}
       <div className="p-4 rounded-2xl system-card flex flex-col gap-3">

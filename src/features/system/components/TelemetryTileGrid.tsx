@@ -5,6 +5,7 @@ export interface TelemetryTileItem {
   label: string;
   badge?: string | null;
   badgeTone?: 'sky' | 'purple' | 'emerald' | 'amber' | 'rose' | 'neutral';
+  tone?: 'sky' | 'amber' | 'rose' | 'muted';
   valueText: string;
   percent: number;
   tooltip?: string;
@@ -30,22 +31,22 @@ const BADGE_CLASSES: Record<NonNullable<TelemetryTileItem['badgeTone']>, string>
   neutral: 'bg-white/[0.07] text-zinc-300 border border-white/[0.08]',
 };
 
-function getMatrixTileStyle(percent: number, muted?: boolean) {
-  if (muted) {
+function getMatrixTileStyle(percent: number, muted?: boolean, explicitTone?: TelemetryTileItem['tone']) {
+  if (muted || explicitTone === 'muted') {
     return {
       surface: 'bg-[#111318] border-white/[0.06] text-zinc-500',
       valueClass: 'text-zinc-400',
       stroke: '#3f3f46',
     };
   }
-  if (percent >= 85) {
+  if (explicitTone === 'rose' || (!explicitTone && percent >= 85)) {
     return {
       surface: 'bg-rose-950/35 border-rose-500/40 text-rose-100',
       valueClass: 'text-rose-300',
       stroke: '#f43f5e',
     };
   }
-  if (percent >= 65) {
+  if (explicitTone === 'amber' || (!explicitTone && percent >= 65)) {
     return {
       surface: 'bg-amber-950/35 border-amber-500/45 text-amber-100',
       valueClass: 'text-amber-300',
@@ -83,7 +84,7 @@ export default function TelemetryTileGrid({
       <div className={`grid ${columnsClass} gap-2.5`}>
         {items.map((item) => {
           const pct = Math.max(0, Math.min(100, item.percent));
-          const style = getMatrixTileStyle(pct, item.muted);
+          const style = getMatrixTileStyle(pct, item.muted, item.tone);
           const badgeCls = BADGE_CLASSES[item.badgeTone || 'neutral'];
           const Tag = item.onClick ? 'button' : 'div';
 

@@ -4,6 +4,7 @@ import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../../type
 import { formatBytes, formatUptime } from '../systemConstants';
 import RadialGauge from './RadialGauge';
 import TelemetrySparkline from './TelemetrySparkline';
+import TelemetryTileGrid from './TelemetryTileGrid';
 
 export interface PowerHealthTabProps {
   specs: SystemSpecs;
@@ -110,6 +111,73 @@ export default function PowerHealthTab({ specs, live, historyWindowSec = 60 }: P
           </span>
         </div>
       </div>
+
+      {/* ── Power, Security & Telemetry Posture Matrix ── */}
+      <TelemetryTileGrid
+        title="Power, Security & Telemetry Posture Matrix"
+        rightLabel={posture.label}
+        rightToneClass={posture.severity === 'critical' ? 'text-rose-300' : posture.severity === 'warn' ? 'text-amber-300' : 'text-emerald-300'}
+        columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
+        items={[
+          {
+            id: 'ph-bat',
+            label: 'Battery',
+            badge: batLive?.powerPlugged ? 'AC' : 'DC',
+            badgeTone: batLive?.powerPlugged ? 'emerald' : 'amber',
+            valueText: batLive ? `${Math.round(batLive.percent)}%` : 'AC',
+            percent: batLive?.percent ?? 100,
+            tooltip: batLive ? `${Math.round(batLive.percent)}% (${batLive.statusLabel})` : 'AC Mains Power',
+          },
+          {
+            id: 'ph-health',
+            label: 'Health',
+            badge: 'Cell',
+            badgeTone: 'sky',
+            valueText: `${batStatic?.healthPercent ?? 100}%`,
+            percent: batStatic?.healthPercent ?? 100,
+            tooltip: `Battery Health: ${batStatic?.healthPercent ?? 100}% (${batStatic?.wearPercent ?? 0}% Wear)`,
+          },
+          {
+            id: 'ph-tpm',
+            label: 'TPM',
+            badge: 'Sec',
+            badgeTone: motherboard.tpm ? 'emerald' : 'amber',
+            tone: motherboard.tpm ? 'sky' : 'amber',
+            valueText: motherboard.tpm ? '2.0' : 'Off',
+            percent: motherboard.tpm ? 100 : 0,
+            tooltip: motherboard.tpm ? 'TPM 2.0 Hardware Security Ready' : 'TPM Not Reported',
+          },
+          {
+            id: 'ph-boot',
+            label: 'Secure',
+            badge: 'Boot',
+            badgeTone: host.secureBoot === 'Enabled' ? 'emerald' : 'amber',
+            tone: host.secureBoot === 'Enabled' ? 'sky' : 'amber',
+            valueText: host.secureBoot === 'Enabled' ? 'On' : 'Off',
+            percent: host.secureBoot === 'Enabled' ? 100 : 0,
+            tooltip: `Secure Boot: ${host.secureBoot}`,
+          },
+          {
+            id: 'ph-av',
+            label: 'Defender',
+            badge: 'AV',
+            badgeTone: host.defenderRealTime ? 'emerald' : 'rose',
+            tone: host.defenderRealTime ? 'sky' : 'rose',
+            valueText: host.defenderRealTime ? 'On' : 'Off',
+            percent: host.defenderRealTime ? 100 : 0,
+            tooltip: `Windows Defender Real-Time Protection: ${host.defenderRealTime ? 'Active' : 'Off'}`,
+          },
+          {
+            id: 'ph-events',
+            label: 'Events',
+            badge: 'Log',
+            badgeTone: systemEvents.length > 0 ? 'amber' : 'emerald',
+            valueText: `${systemEvents.length}`,
+            percent: Math.min(100, systemEvents.length * 5),
+            tooltip: `${systemEvents.length} Recent System Events`,
+          },
+        ]}
+      />
 
       {/* Battery Health + Security & 60s Live Load Graph */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">

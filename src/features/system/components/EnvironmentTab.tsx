@@ -3,6 +3,7 @@ import CopyButton from '../../../components/CopyButton';
 import { EnvVarSpec, PathEntrySpec, RuntimeToolSpec, SystemSpecs } from '../../../types';
 import { formatBytes } from '../systemConstants';
 import { ExpandToggleCell, FilterPillBar } from './SystemTablePrimitives';
+import TelemetryTileGrid from './TelemetryTileGrid';
 
 export interface EnvironmentTabProps {
   specs: SystemSpecs;
@@ -263,6 +264,90 @@ export default function EnvironmentTab({ specs }: EnvironmentTabProps) {
           </span>
         </button>
       </div>
+
+      {/* ── Environment & Toolchain Structure Matrix ── */}
+      <TelemetryTileGrid
+        title={`Environment & PATH Structure (${runtimes.length} Runtimes · ${pathEntries.length} PATHs)`}
+        rightLabel={`${pathStats.executables.toLocaleString()} Executables`}
+        rightToneClass="text-sky-300"
+        columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
+        items={[
+          {
+            id: 'env-rt',
+            label: 'Runtimes',
+            badge: 'SDK',
+            badgeTone: 'emerald',
+            valueText: `${runtimes.length}`,
+            percent: Math.min(100, (runtimes.length / 15) * 100),
+            tooltip: runtimes.map((r) => `${r.name} ${r.version}`).join(' · '),
+          },
+          {
+            id: 'env-path-ok',
+            label: 'PATH OK',
+            badge: 'Dir',
+            badgeTone: 'sky',
+            valueText: `${pathStats.verified}`,
+            percent: pathEntries.length ? (pathStats.verified / pathEntries.length) * 100 : 0,
+            onClick: () => {
+              setSection('path');
+              setPathFilter('verified');
+            },
+            tooltip: `${pathStats.verified} Verified PATH Directories`,
+          },
+          {
+            id: 'env-path-miss',
+            label: 'Missing',
+            badge: 'Dead',
+            badgeTone: pathStats.missing > 0 ? 'rose' : 'emerald',
+            valueText: `${pathStats.missing}`,
+            percent: pathStats.missing > 0 ? Math.max(70, (pathStats.missing / Math.max(1, pathEntries.length)) * 100) : 15,
+            onClick: () => {
+              setSection('path');
+              setPathFilter('missing');
+            },
+            tooltip: `${pathStats.missing} Missing PATH Directories`,
+          },
+          {
+            id: 'env-vars',
+            label: 'Env Vars',
+            badge: 'Keys',
+            badgeTone: 'purple',
+            valueText: `${envVars.length}`,
+            percent: Math.min(100, (envVars.length / 120) * 100),
+            onClick: () => {
+              setSection('env');
+              setEnvFilter('all');
+            },
+            tooltip: `${envVars.length} Active Environment Variables`,
+          },
+          {
+            id: 'env-sdk',
+            label: 'SDK Keys',
+            badge: 'Dev',
+            badgeTone: 'sky',
+            valueText: `${envStats.sdk}`,
+            percent: envVars.length ? (envStats.sdk / envVars.length) * 100 : 0,
+            onClick: () => {
+              setSection('env');
+              setEnvFilter('sdk');
+            },
+            tooltip: `${envStats.sdk} Developer / SDK Environment Variables`,
+          },
+          {
+            id: 'env-sec',
+            label: 'Secrets',
+            badge: 'Mask',
+            badgeTone: 'amber',
+            valueText: `${envStats.redacted}`,
+            percent: envVars.length ? (envStats.redacted / envVars.length) * 100 : 0,
+            onClick: () => {
+              setSection('env');
+              setEnvFilter('sensitive');
+            },
+            tooltip: `${envStats.redacted} Masked Sensitive Keys`,
+          },
+        ]}
+      />
 
       {/* Detected CLI Runtimes & Toolchains Matrix */}
       <section className="p-4 rounded-2xl system-card flex flex-col gap-3">

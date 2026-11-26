@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { SystemSpecs } from '../../../types';
 import { formatBytes } from '../systemConstants';
 import HardwareDetailsTable, { HardwareDetailTableRow } from './HardwareDetailsTable';
+import TelemetryTileGrid from './TelemetryTileGrid';
 
 export interface PeripheralsDisplaysTabProps {
   specs: SystemSpecs;
@@ -213,6 +214,71 @@ export default function PeripheralsDisplaysTab({ specs }: PeripheralsDisplaysTab
           </span>
         </div>
       </div>
+
+      {/* ── Connected Devices & Display Matrix ── */}
+      <TelemetryTileGrid
+        title={`Displays & Peripherals Matrix (${displays.length} Display · ${graphics.length} GPU)`}
+        rightLabel={displays[0]?.nativeWidth ? `${displays[0].nativeWidth}×${displays[0].nativeHeight}` : 'Active'}
+        rightToneClass="text-sky-300"
+        columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
+        items={[
+          {
+            id: 'per-disp',
+            label: 'Displays',
+            badge: `${displays[0]?.refreshRateHz || 60}Hz`,
+            badgeTone: 'sky',
+            valueText: `${displays.length}`,
+            percent: Math.min(100, ((displays[0]?.refreshRateHz || 60) / 144) * 100),
+            tooltip: displays.map((d) => `${d.name}: ${d.nativeWidth}×${d.nativeHeight}`).join(' · '),
+          },
+          {
+            id: 'per-audio',
+            label: 'Audio',
+            badge: 'IO',
+            badgeTone: 'emerald',
+            valueText: `${peripherals.audio.length}`,
+            percent: Math.min(100, peripherals.audio.length * 20),
+            tooltip: peripherals.audio.map((a) => a.name).join(' · ') || 'No audio devices',
+          },
+          {
+            id: 'per-usb',
+            label: 'USB',
+            badge: 'xHCI',
+            badgeTone: 'purple',
+            valueText: `${usbDevices.length || peripherals.usbControllers.length}`,
+            percent: Math.min(100, ((usbDevices.length || peripherals.usbControllers.length) / 20) * 100),
+            tooltip: `${usbDevices.length} USB Devices · ${peripherals.usbControllers.length} Controllers`,
+          },
+          {
+            id: 'per-bt',
+            label: 'Bluetooth',
+            badge: `${btPaired.length} Pair`,
+            badgeTone: 'sky',
+            valueText: `${peripherals.bluetooth.length}`,
+            percent: Math.min(100, peripherals.bluetooth.length * 20),
+            muted: peripherals.bluetooth.length === 0,
+            tooltip: peripherals.bluetooth.map((b) => b.name).join(' · ') || 'No Bluetooth devices',
+          },
+          {
+            id: 'per-kbd',
+            label: 'Keyboards',
+            badge: 'HID',
+            badgeTone: 'amber',
+            valueText: `${keyboards.length}`,
+            percent: Math.min(100, keyboards.length * 25),
+            tooltip: keyboards.map((k) => k.name).join(' · ') || 'HID Keyboard',
+          },
+          {
+            id: 'per-ptr',
+            label: 'Pointing',
+            badge: 'HID',
+            badgeTone: 'emerald',
+            valueText: `${pointing.length}`,
+            percent: Math.min(100, pointing.length * 25),
+            tooltip: pointing.map((p) => p.name).join(' · ') || 'HID Pointing Device',
+          },
+        ]}
+      />
 
       {/* ── Display Panels & Graphics Output Geometry (Full-Width when Single Display) ── */}
       <section className="p-5 rounded-2xl system-card flex flex-col gap-4">
