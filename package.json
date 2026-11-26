@@ -74,11 +74,13 @@
     "install:packages": "npm install && npm run install:python"
   },
   "dependencies": {
+    "@types/three": "^0.187.0",
     "@workspace/config": "*",
     "@workspace/logger": "*",
     "@workspace/runner": "*",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.5",
