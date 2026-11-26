@@ -196,10 +196,36 @@ export interface TaskToolboxModalProps {
   onDeleteCustomTemplate: (id: string) => void;
   onBulkBrainDump: (newTasks: HumanTask[]) => void;
   onAddCategory: (cat: string) => void;
+  onRemoveCustomCategory?: (cat: string) => void;
   onImportJson: (imported: HumanTask[], mode: 'merge' | 'replace') => void;
   onExportCsv: () => void;
   onExportJson: () => void;
   onExportMarkdown: () => void;
+  onCopyFormat?: (format: 'md' | 'csv' | 'json') => void;
+}
+
+function parseCsvRow(line: string): string[] {
+  const cols: string[] = [];
+  let cur = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i += 1) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        cur += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === ',' && !inQuotes) {
+      cols.push(cur);
+      cur = '';
+    } else {
+      cur += ch;
+    }
+  }
+  cols.push(cur);
+  return cols;
 }
 
 export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
@@ -213,16 +239,21 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
   onDeleteCustomTemplate,
   onBulkBrainDump,
   onAddCategory,
+  onRemoveCustomCategory,
   onImportJson,
   onExportCsv,
   onExportJson,
   onExportMarkdown,
+  onCopyFormat,
 }) => {
   const [tab, setTab] = useState<'templates' | 'braindump' | 'categories' | 'portability'>('templates');
   const [dumpText, setDumpText] = useState<string>(
     '- Review weekly schedule !high @today ~20m\n- Reply to pending messages @today ~15m #Work\n- Grocery & essentials restock @tomorrow ^low #Errands'
   );
   const [newCategoryName, setNewCategoryName] = useState<string>('');
+  const [importMode, setImportMode] = useState<'merge' | 'replace'>('merge');
+  const [pasteImportText, setPasteImportText] = useState<string>('');
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [importNotice, setImportNotice] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -271,15 +302,15 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
     onClose();
   };
 
-  const handleJsonFile = async (e: React.ChangeEvent<HTMLInputElement>, mode: 'merge' | 'replace') => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try {
-      const txt = await file.text();
-      const parsed = JSON.parse(txt);
+  const parseTextToTasks = (txt: string, filename = ''): { items: HumanTask[]; format: string } => {
+    const trimmed = txt.trim();
+    const ext = filename.toLowerCase();
+    const now = new Date().toISOString();
+
+    if (ext.endsWith('.json') || trimmed.startsWith('[')) {
+      const parsed = JSON.parse(trimmed);
       if (!Array.isArray(parsed)) {
-        setImportNotice('Invalid JSON: expected an array of task objects.');
-        return;
+        throw new Error('JSON must be an array of task objects.');
       }
       const normalized: HumanTask[] = parsed
         .filter((x) => x && typeof x.title === 'string')
@@ -301,141 +332,243 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
           projectId: x.projectId ? String(x.projectId) : undefined,
           notes: String(x.notes || ''),
           subtasks: Array.isArray(x.subtasks) ? x.subtasks : [],
-          createdAt: String(x.createdAt || new Date().toISOString()),
+          createdAt: String(x.createdAt || now),
         }));
-      onImportJson(normalized, mode);
-      setImportNotice(`Imported ${normalized.length} tasks (${mode}).`);
-    } catch {
-      setImportNotice('Failed to parse JSON file.');
+      return { items: normalized, format: 'JSON' };
+    }
+
+    if (ext.endsWith('.csv') || (/^title\s*,/i.test(trimmed))) {
+      const lines = trimmed.split(/\r?\n/).filter((l) => l.trim().length > 0);
+      if (lines.length < 2) throw new Error('CSV needs a header row and at least one task row.');
+      const header = parseCsvRow(lines[0]).map((h) => h.trim().toLowerCase());
+      const idxOf = (name: string) => header.indexOf(name);
+      const tIdx = Math.max(0, idxOf('title'));
+      const items: HumanTask[] = lines.slice(1).map((line, i) => {
+        const cols = parseCsvRow(line);
+        const stRaw = (cols[idxOf('status')] || 'todo').toLowerCase();
+        const isDone = stRaw === 'done' || stRaw === 'completed';
+        const prioRaw = (cols[idxOf('priority')] || 'medium').toLowerCase();
+        const estRaw = Number(cols[idxOf('estimatemin')]);
+        const spentRaw = Number(cols[idxOf('spentmin')]);
+        const tagsRaw = (cols[idxOf('tags')] || '').split(';').map((s) => s.trim()).filter(Boolean);
+        return {
+          id: `csv-${Date.now()}-${i}`,
+          title: (cols[tIdx] || 'Imported Task').trim(),
+          done: isDone,
+          status: isDone ? 'done' : stRaw === 'doing' ? 'doing' : 'todo',
+          priority: (['high', 'medium', 'low'].includes(prioRaw) ? prioRaw : 'medium') as HumanTask['priority'],
+          category: (cols[idxOf('category')] || 'Personal').trim() || 'Personal',
+          dueDate: (cols[idxOf('duedate')] || '').trim(),
+          dueTime: (cols[idxOf('duetime')] || '').trim() || undefined,
+          repeat: (['daily', 'weekly', 'monthly'].includes((cols[idxOf('repeat')] || '').toLowerCase())
+            ? cols[idxOf('repeat')].toLowerCase()
+            : 'none') as HumanTask['repeat'],
+          starred: prioRaw === 'high',
+          estimateMin: !Number.isNaN(estRaw) && estRaw > 0 ? estRaw : 20,
+          spentMin: !Number.isNaN(spentRaw) && spentRaw > 0 ? spentRaw : 0,
+          energy: 'normal',
+          tags: tagsRaw,
+          notes: '',
+          subtasks: [],
+          createdAt: now,
+        };
+      });
+      return { items: items.filter((t) => t.title.length > 0), format: 'CSV' };
+    }
+
+    // Fallback: Markdown checklist / plain lines
+    const lines = trimmed.split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+    const items: HumanTask[] = lines.map((line, idx) => {
+      const doneMatch = /^[-*•]?\s*\[[xX]\]\s*/.test(line);
+      const cleaned = line.replace(/^[-*•]?\s*\[[ xX]\]\s*/, '').replace(/^[-*•\d.)]+\s*/, '').trim();
+      const parsed = parseSmartTaskInput(cleaned, categories);
+      return {
+        id: `md-${Date.now()}-${idx}`,
+        title: parsed.cleanTitle || cleaned || 'Imported Task',
+        done: doneMatch,
+        status: doneMatch ? 'done' : 'todo',
+        priority: parsed.priority || 'medium',
+        category: parsed.category || 'Personal',
+        dueDate: parsed.dueDate ?? '',
+        dueTime: parsed.dueTime,
+        repeat: parsed.repeat || 'none',
+        starred: parsed.priority === 'high',
+        estimateMin: parsed.estimateMin ?? 20,
+        energy: parsed.energy || 'normal',
+        tags: parsed.tags,
+        notes: '',
+        subtasks: [],
+        createdAt: now,
+      };
+    });
+    return { items: items.filter((t) => t.title.length > 0), format: 'Markdown / Text' };
+  };
+
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const txt = await file.text();
+      const { items, format } = parseTextToTasks(txt, file.name);
+      if (items.length === 0) {
+        setImportNotice(`No valid tasks found inside ${file.name}.`);
+        return;
+      }
+      onImportJson(items, importMode);
+      setImportNotice(`✓ Imported ${items.length} tasks from ${format} (${importMode}).`);
+    } catch (err) {
+      setImportNotice(err instanceof Error ? err.message : 'Failed to parse selected file.');
     } finally {
       e.target.value = '';
     }
   };
 
+  const handlePasteImport = () => {
+    if (!pasteImportText.trim()) return;
+    try {
+      const { items, format } = parseTextToTasks(pasteImportText);
+      if (items.length === 0) {
+        setImportNotice('No valid tasks detected in pasted content.');
+        return;
+      }
+      onImportJson(items, importMode);
+      setPasteImportText('');
+      setImportNotice(`✓ Imported ${items.length} tasks from pasted ${format} (${importMode}).`);
+    } catch (err) {
+      setImportNotice(err instanceof Error ? err.message : 'Could not parse pasted text.');
+    }
+  };
+
+  const triggerCopy = (format: 'md' | 'csv' | 'json') => {
+    onCopyFormat?.(format);
+    setCopiedKey(format);
+    window.setTimeout(() => setCopiedKey(null), 1600);
+  };
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
+    <section
+      className="w-full rounded-2xl bg-[#111218] border border-purple-500/25 p-4 sm:p-5 flex flex-col gap-4 shadow-xl portal-drawer-enter"
       aria-labelledby="task-toolbox-title"
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-3xl max-h-[88vh] rounded-2xl bg-[#111115] border border-white/[0.12] shadow-[0_24px_80px_rgba(0,0,0,0.88)] flex flex-col overflow-hidden portal-header-sheen portal-page-enter"
-      >
-        <div className="shrink-0 px-5 py-4 border-b border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase bg-purple-500/15 border border-purple-500/30 text-purple-300">
-              Power Toolbox
-            </span>
-            <h2 id="task-toolbox-title" className="text-base font-extrabold text-white">
-              Templates, Multi-Line Brain Dump &amp; Data Tools
-            </h2>
-          </div>
+      {/* Panel Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase bg-purple-500/15 border border-purple-500/35 text-purple-200">
+            Power Toolbox
+          </span>
+          <h2 id="task-toolbox-title" className="text-base font-extrabold text-white">
+            Templates, Multi-Line Brain Dump &amp; Data Tools
+          </h2>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-3 py-1 rounded-lg bg-[#16171e] border border-white/[0.12] hover:border-white/[0.25] text-xs font-mono text-zinc-200 hover:text-white cursor-pointer"
+        >
+          Close ✕
+        </button>
+      </div>
+
+      {/* Sub-Tabs Strip */}
+      <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-[#090a0e] border border-white/[0.08] self-start">
+        {(
+          [
+            { id: 'templates', label: `⚡ Templates (${allTemplates.length})` },
+            { id: 'braindump', label: '🧠 Multi-Line Brain Dump' },
+            { id: 'categories', label: `🏷️ Categories (${categories.length})` },
+            { id: 'portability', label: '💾 Export & Import' },
+          ] as const
+        ).map((t) => (
           <button
+            key={t.id}
             type="button"
-            onClick={onClose}
-            className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.1] text-xs font-mono text-zinc-300 hover:text-white cursor-pointer"
+            onClick={() => setTab(t.id)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer transition-colors ${
+              tab === t.id
+                ? 'bg-zinc-800 text-white border-white/20 font-bold shadow-sm'
+                : 'bg-transparent border-transparent text-zinc-400 hover:text-white hover:bg-white/[0.04]'
+            }`}
           >
-            Esc ✕
+            {t.label}
           </button>
-        </div>
+        ))}
+      </div>
 
-        <div className="shrink-0 px-5 pt-3 pb-2 border-b border-white/[0.06] flex flex-wrap gap-1.5 bg-[#090a0e]">
-          {(
-            [
-              { id: 'templates', label: `⚡ Templates (${allTemplates.length})` },
-              { id: 'braindump', label: '🧠 Multi-Line Brain Dump' },
-              { id: 'categories', label: `🏷️ Categories (${categories.length})` },
-              { id: 'portability', label: '💾 Export & Import' },
-            ] as const
-          ).map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => setTab(t.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border cursor-pointer ${
-                tab === t.id
-                  ? 'bg-zinc-800 text-white border-white/20 font-bold'
-                  : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex-1 min-h-0 overflow-y-auto p-5 flex flex-col gap-4 custom-scrollbar text-xs">
-          {tab === 'templates' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {allTemplates.map((tpl) => (
-                <div
-                  key={tpl.id}
-                  className="p-4 rounded-xl bg-[#090a0e] border border-white/[0.08] flex flex-col justify-between gap-3"
-                >
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center justify-between gap-2">
-                      <strong className="text-sm text-white flex items-center gap-2">
-                        <span>{tpl.icon}</span>
-                        <span>{tpl.name}</span>
-                      </strong>
-                      {tpl.isCustom && (
-                        <button
-                          type="button"
-                          onClick={() => onDeleteCustomTemplate(tpl.id)}
-                          className="text-zinc-500 hover:text-rose-300 cursor-pointer"
-                          title="Delete custom template"
-                        >
-                          ✕
-                        </button>
-                      )}
-                    </div>
-                    <p className="text-zinc-300 font-medium">{tpl.title}</p>
-                    <div className="flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-400">
-                      <span className="px-1.5 py-0.5 rounded bg-[#16171e] border border-white/[0.06]">{tpl.category}</span>
-                      <span className="px-1.5 py-0.5 rounded bg-[#16171e] border border-white/[0.06]">~{tpl.estimateMin}m</span>
-                      <span className="px-1.5 py-0.5 rounded bg-[#16171e] border border-white/[0.06]">{tpl.subtasks.length} steps</span>
-                      {tpl.repeat !== 'none' && (
-                        <span className="px-1.5 py-0.5 rounded bg-purple-500/15 border border-purple-500/30 text-purple-300">
-                          🔁 {tpl.repeat}
-                        </span>
-                      )}
-                    </div>
+      {/* Panel Body */}
+      <div className="text-xs flex flex-col gap-4">
+        {tab === 'templates' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+            {allTemplates.map((tpl) => (
+              <div
+                key={tpl.id}
+                className="p-4 rounded-xl bg-[#0b0c10] border border-white/[0.09] hover:border-white/[0.18] flex flex-col justify-between gap-3 transition-colors"
+              >
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <strong className="text-sm text-white flex items-center gap-2">
+                      <span>{tpl.icon}</span>
+                      <span>{tpl.name}</span>
+                    </strong>
+                    {tpl.isCustom && (
+                      <button
+                        type="button"
+                        onClick={() => onDeleteCustomTemplate(tpl.id)}
+                        className="text-zinc-400 hover:text-rose-300 cursor-pointer"
+                        title="Delete custom template"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onApplyTemplate(tpl);
-                      onClose();
-                    }}
-                    className="w-full py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
-                  >
-                    + Launch into Tasks
-                  </button>
+                  <p className="text-zinc-300 font-medium">{tpl.title}</p>
+                  <div className="flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-300">
+                    <span className="px-1.5 py-0.5 rounded bg-[#16171e] border border-white/[0.08]">{tpl.category}</span>
+                    <span className="px-1.5 py-0.5 rounded bg-[#16171e] border border-white/[0.08]">~{tpl.estimateMin}m</span>
+                    <span className="px-1.5 py-0.5 rounded bg-[#16171e] border border-white/[0.08]">{tpl.subtasks.length} steps</span>
+                    {tpl.repeat !== 'none' && (
+                      <span className="px-1.5 py-0.5 rounded bg-purple-500/15 border border-purple-500/30 text-purple-200">
+                        🔁 {tpl.repeat}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              ))}
-            </div>
-          )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onApplyTemplate(tpl);
+                    onClose();
+                  }}
+                  className="w-full py-2 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
+                >
+                  + Launch into Tasks
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
-          {tab === 'braindump' && (
-            <div className="flex flex-col gap-3">
-              <p className="text-zinc-300">
-                Paste multiple lines to create tasks at once. Supports inline smart tokens:
-                <code className="text-sky-300 ml-1">!high</code>, <code className="text-emerald-300">@tomorrow</code>,{' '}
-                <code className="text-amber-300">~25m</code>, <code className="text-purple-300">*daily</code>,{' '}
-                <code className="text-rose-300">^deep</code>, <code className="text-zinc-200">#Work</code>.
+        {tab === 'braindump' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <div className="lg:col-span-7 flex flex-col gap-3">
+              <p className="text-zinc-300 leading-relaxed">
+                Paste multiple lines to create tasks at once. Smart tokens supported:{' '}
+                <code className="px-1 py-0.5 rounded bg-[#16171e] text-sky-300">!high</code>{' '}
+                <code className="px-1 py-0.5 rounded bg-[#16171e] text-emerald-300">@tomorrow</code>{' '}
+                <code className="px-1 py-0.5 rounded bg-[#16171e] text-amber-300">~25m</code>{' '}
+                <code className="px-1 py-0.5 rounded bg-[#16171e] text-purple-300">*daily</code>{' '}
+                <code className="px-1 py-0.5 rounded bg-[#16171e] text-rose-300">^deep</code>{' '}
+                <code className="px-1 py-0.5 rounded bg-[#16171e] text-zinc-200">#Work</code>
               </p>
               <textarea
-                rows={7}
+                rows={6}
                 value={dumpText}
                 onChange={(e) => setDumpText(e.target.value)}
                 placeholder="One task per line..."
-                className="w-full p-3.5 rounded-xl bg-[#08090c] border border-white/[0.1] font-mono text-xs text-white focus:outline-none focus:border-sky-400/50"
+                className="w-full p-3.5 rounded-xl bg-[#08090c] border border-white/[0.12] font-mono text-xs text-white focus:outline-none focus:border-sky-400/50"
               />
               <div className="flex items-center justify-between gap-2">
-                <span className="font-mono text-zinc-400">
-                  Detected {parsedDumpLines.length} tasks ready to import
+                <span className="font-mono text-zinc-300">
+                  Detected <strong className="text-emerald-300">{parsedDumpLines.length}</strong> tasks ready to import
                 </span>
                 <button
                   type="button"
@@ -447,113 +580,245 @@ export const TaskToolboxModal: React.FC<TaskToolboxModalProps> = ({
                 </button>
               </div>
             </div>
-          )}
 
-          {tab === 'categories' && (
-            <div className="flex flex-col gap-3">
-              <p className="text-zinc-300">
-                Add custom categories for your personal projects, study modules, or household areas.
-              </p>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newCategoryName}
-                  onChange={(e) => setNewCategoryName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && newCategoryName.trim()) {
-                      e.preventDefault();
-                      onAddCategory(newCategoryName.trim());
-                      setNewCategoryName('');
-                    }
-                  }}
-                  placeholder="New category name (e.g. SideProject, Finance)..."
-                  className="flex-1 h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-white"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!newCategoryName.trim()) return;
+            <div className="lg:col-span-5 rounded-xl bg-[#0b0c10] border border-white/[0.08] p-3.5 flex flex-col gap-2 max-h-64 overflow-y-auto custom-scrollbar">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
+                Live Parsed Preview
+              </span>
+              {parsedDumpLines.length === 0 ? (
+                <span className="text-zinc-500">Type lines on the left to preview parsed priorities &amp; dates.</span>
+              ) : (
+                parsedDumpLines.map((p, i) => (
+                  <div key={i} className="p-2 rounded-lg bg-[#16171e] border border-white/[0.06] flex flex-col gap-1">
+                    <span className="font-semibold text-white truncate">{p.cleanTitle || 'Untitled'}</span>
+                    <div className="flex flex-wrap gap-1 text-[10px] font-mono text-zinc-300">
+                      <span className="px-1.5 rounded bg-white/[0.06]">{p.priority}</span>
+                      <span className="px-1.5 rounded bg-white/[0.06]">{p.category}</span>
+                      {p.dueDate && <span className="px-1.5 rounded bg-sky-500/15 text-sky-200">{p.dueDate}</span>}
+                      {p.estimateMin && <span className="px-1.5 rounded bg-amber-500/15 text-amber-200">~{p.estimateMin}m</span>}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {tab === 'categories' && (
+          <div className="flex flex-col gap-3">
+            <p className="text-zinc-300">
+              Add custom categories for your personal projects, study modules, or household workflows.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <input
+                type="text"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newCategoryName.trim()) {
+                    e.preventDefault();
                     onAddCategory(newCategoryName.trim());
                     setNewCategoryName('');
-                  }}
-                  className="h-9 px-4 rounded-xl bg-white text-zinc-950 font-bold cursor-pointer"
-                >
-                  + Add Category
-                </button>
-              </div>
-
-              <div className="flex flex-wrap gap-2 pt-1">
-                {categories.map((cat) => {
-                  const isCustom = customCategories.includes(cat);
-                  const count = tasks.filter((t) => t.category === cat && !t.archived).length;
-                  return (
-                    <span
-                      key={cat}
-                      className="px-3 py-1.5 rounded-xl bg-[#090a0e] border border-white/[0.08] font-mono text-zinc-200 flex items-center gap-2"
-                    >
-                      <span>{cat}</span>
-                      <span className="text-zinc-500">({count})</span>
-                      {isCustom && <span className="text-[10px] text-sky-300">custom</span>}
-                    </span>
-                  );
-                })}
-              </div>
+                  }
+                }}
+                placeholder="New category name (e.g. SideProject, Finance)..."
+                className="flex-1 min-w-[220px] h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.12] text-white"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  if (!newCategoryName.trim()) return;
+                  onAddCategory(newCategoryName.trim());
+                  setNewCategoryName('');
+                }}
+                className="h-9 px-4 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
+              >
+                + Add Category
+              </button>
             </div>
-          )}
 
-          {tab === 'portability' && (
-            <div className="flex flex-col gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <button
-                  type="button"
-                  onClick={onExportMarkdown}
-                  className="p-4 rounded-xl bg-[#090a0e] border border-white/[0.08] hover:border-sky-400/40 text-left flex flex-col gap-1 cursor-pointer"
-                >
-                  <strong className="text-white">📝 Export Markdown</strong>
-                  <span className="text-zinc-400">Download checklist as `.md`</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={onExportCsv}
-                  className="p-4 rounded-xl bg-[#090a0e] border border-white/[0.08] hover:border-emerald-400/40 text-left flex flex-col gap-1 cursor-pointer"
-                >
-                  <strong className="text-white">📊 Export Spreadsheet</strong>
-                  <span className="text-zinc-400">Download full table as `.csv`</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={onExportJson}
-                  className="p-4 rounded-xl bg-[#090a0e] border border-white/[0.08] hover:border-purple-400/40 text-left flex flex-col gap-1 cursor-pointer"
-                >
-                  <strong className="text-white">💾 Full JSON Backup</strong>
-                  <span className="text-zinc-400">Download lossless `.json`</span>
-                </button>
-              </div>
+            <div className="flex flex-wrap gap-2 pt-1">
+              {categories.map((cat) => {
+                const isCustom = customCategories.includes(cat);
+                const count = tasks.filter((t) => t.category === cat && !t.archived).length;
+                return (
+                  <span
+                    key={cat}
+                    className="px-3 py-1.5 rounded-xl bg-[#0b0c10] border border-white/[0.1] font-mono text-zinc-200 flex items-center gap-2"
+                  >
+                    <span>{cat}</span>
+                    <span className="text-zinc-400">({count})</span>
+                    {isCustom && <span className="text-[10px] text-sky-300">custom</span>}
+                    {isCustom && onRemoveCustomCategory && (
+                      <button
+                        type="button"
+                        onClick={() => onRemoveCustomCategory(cat)}
+                        className="text-zinc-400 hover:text-rose-300 cursor-pointer"
+                        title={`Remove ${cat}`}
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
-              <div className="p-4 rounded-xl bg-[#090a0e] border border-white/[0.08] flex flex-col gap-3">
-                <strong className="text-white">Restore / Import Tasks JSON</strong>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="application/json,.json"
-                  onChange={(e) => void handleJsonFile(e, 'merge')}
-                  className="hidden"
-                />
-                <div className="flex flex-wrap items-center gap-2">
+        {tab === 'portability' && (
+          <div className="flex flex-col gap-4">
+            {/* Export Formats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {[
+                {
+                  id: 'md' as const,
+                  icon: '📝',
+                  title: 'Markdown Checklist',
+                  ext: '.md',
+                  desc: `Export ${tasks.length} tasks as clickable Markdown check-items.`,
+                  badgeCls: 'bg-sky-500/15 border-sky-400/30 text-sky-200',
+                  borderCls: 'border-sky-400/25 hover:border-sky-400/50',
+                  onDownload: onExportMarkdown,
+                },
+                {
+                  id: 'csv' as const,
+                  icon: '📊',
+                  title: 'Spreadsheet Table',
+                  ext: '.csv',
+                  desc: `Export ${tasks.length} rows with status, dates, tags & estimates.`,
+                  badgeCls: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-200',
+                  borderCls: 'border-emerald-500/25 hover:border-emerald-400/50',
+                  onDownload: onExportCsv,
+                },
+                {
+                  id: 'json' as const,
+                  icon: '💾',
+                  title: 'Full Lossless Backup',
+                  ext: '.json',
+                  desc: `Export all ${tasks.length} tasks with subtasks, notes & metadata.`,
+                  badgeCls: 'bg-purple-500/15 border-purple-500/30 text-purple-200',
+                  borderCls: 'border-purple-500/25 hover:border-purple-400/50',
+                  onDownload: onExportJson,
+                },
+              ].map((card) => (
+                <div
+                  key={card.id}
+                  className={`p-4 rounded-xl bg-[#0b0c10] border ${card.borderCls} flex flex-col justify-between gap-3 transition-colors`}
+                >
+                  <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <strong className="text-sm text-white flex items-center gap-1.5">
+                        <span>{card.icon}</span>
+                        <span>{card.title}</span>
+                      </strong>
+                      <code className={`px-1.5 py-0.5 rounded border text-[10px] font-mono font-bold ${card.badgeCls}`}>
+                        {card.ext}
+                      </code>
+                    </div>
+                    <p className="text-zinc-300 leading-relaxed">{card.desc}</p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={card.onDownload}
+                      className="flex-1 py-1.5 px-3 rounded-lg bg-white text-zinc-950 hover:bg-zinc-200 font-bold cursor-pointer"
+                    >
+                      ⬇ Download {card.ext}
+                    </button>
+                    {onCopyFormat && (
+                      <button
+                        type="button"
+                        onClick={() => triggerCopy(card.id)}
+                        className="py-1.5 px-3 rounded-lg bg-[#16171e] border border-white/[0.12] hover:border-white/[0.25] font-mono text-zinc-200 hover:text-white cursor-pointer"
+                      >
+                        {copiedKey === card.id ? '✓ Copied' : 'Copy'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Multi-Format Import & Restore Panel */}
+            <div className="p-4 rounded-xl bg-[#0b0c10] border border-white/[0.1] flex flex-col gap-3.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <strong className="text-sm text-white">Restore or Import Tasks</strong>
+                  <p className="text-zinc-300 mt-0.5">
+                    Supports JSON backups, CSV spreadsheets, or Markdown checklist files &amp; pasted text.
+                  </p>
+                </div>
+
+                <div className="flex items-center p-0.5 rounded-lg bg-[#16171e] border border-white/[0.1]">
                   <button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="px-4 py-2 rounded-xl bg-sky-500/15 border border-sky-400/35 text-sky-200 font-bold cursor-pointer"
+                    onClick={() => setImportMode('merge')}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-mono cursor-pointer ${
+                      importMode === 'merge' ? 'bg-sky-500/20 text-sky-200 font-bold' : 'text-zinc-400 hover:text-white'
+                    }`}
                   >
-                    Choose JSON File (Merge into Current)
+                    Merge with Existing
                   </button>
-                  {importNotice && <span className="font-mono text-emerald-300">{importNotice}</span>}
+                  <button
+                    type="button"
+                    onClick={() => setImportMode('replace')}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-mono cursor-pointer ${
+                      importMode === 'replace' ? 'bg-rose-500/20 text-rose-200 font-bold' : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    Replace All (Undoable)
+                  </button>
                 </div>
               </div>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json,.csv,.md,.txt,application/json,text/csv,text/markdown,text/plain"
+                onChange={(e) => void handleImportFile(e)}
+                className="hidden"
+              />
+
+              <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-3 items-stretch">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-4 py-3 rounded-xl bg-sky-500/15 border border-sky-400/40 hover:bg-sky-500/25 text-sky-100 font-bold cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  <span>📂 Choose .json / .csv / .md File</span>
+                </button>
+
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={pasteImportText}
+                    onChange={(e) => setPasteImportText(e.target.value)}
+                    placeholder="Or paste JSON array, CSV rows, or Markdown lines here..."
+                    aria-label="Paste JSON, CSV, or Markdown tasks"
+                    className="flex-1 px-3 rounded-xl bg-[#08090c] border border-white/[0.12] font-mono text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
+                  />
+                  <button
+                    type="button"
+                    onClick={handlePasteImport}
+                    disabled={!pasteImportText.trim()}
+                    className="px-4 rounded-xl bg-[#16171e] border border-white/[0.12] hover:border-emerald-400/45 text-emerald-200 font-bold disabled:opacity-40 cursor-pointer shrink-0"
+                  >
+                    Import Pasted
+                  </button>
+                </div>
+              </div>
+
+              {importNotice && (
+                <div className="px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 font-mono text-emerald-200">
+                  {importNotice}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    </div>
+    </section>
   );
 };

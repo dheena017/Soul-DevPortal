@@ -22,6 +22,7 @@ all_endpoints = [
     ("GET", "/api/soul-dev-portal/commands"),
     ("GET", "/api/soul-dev-portal/overview"),
     ("GET", "/api/soul-dev-portal/desktop-info"),
+    ("GET", "/api/soul-dev-portal/code-updates"),
     
     # Dashboard
     ("GET", "/api/dashboard/overview"),

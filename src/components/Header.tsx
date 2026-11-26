@@ -1,7 +1,7 @@
 import React from 'react';
 import { consoleLogger } from '@workspace/logger';
 import { SoulLogoIcon } from './SoulLogo';
-import { HeaderEqualizerBars, MiniRadialRing } from './PortalVisuals';
+import { MiniRadialRing } from './PortalVisuals';
 import { useSharedTelemetry } from '../services/telemetryStore';
 import { SystemLiveSnapshot } from '../types';
 import { EVERYDAY_TABS, isEverydayRoute } from '../features/everyday/everydayTabsRegistry';
@@ -101,13 +101,11 @@ export const Header: React.FC<HeaderProps> = ({
           <nav className="flex items-center gap-1 text-xs min-w-0" aria-label="Breadcrumb navigation">
             <button
               type="button"
-              className="group inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-sky-400/35 hover:bg-white/[0.06] font-mono text-zinc-200 hover:text-white transition-all shrink-0 shadow-sm cursor-pointer"
+              className="group inline-flex items-center gap-1.5 h-8 px-2 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-sky-400/35 hover:bg-white/[0.06] font-mono text-zinc-200 hover:text-white transition-all shrink-0 shadow-sm cursor-pointer"
               onClick={() => onNavigate('overview')}
               title="Go to Overview Dashboard"
             >
               <SoulLogoIcon size={18} className="group-hover:scale-110 transition-transform" />
-              <span className="font-semibold text-zinc-300 hidden 2xl:inline">soul</span>
-              <span className="text-zinc-600 font-bold hidden 2xl:inline">/</span>
               <strong className="text-zinc-100 font-bold text-[11px] sm:text-xs">dev-portal</strong>
             </button>
 
@@ -117,13 +115,13 @@ export const Header: React.FC<HeaderProps> = ({
                 <div
                   key={`${active}-${idx}`}
                   style={{ animationDelay: `${idx * 45}ms` }}
-                  className={`${isLast ? 'flex min-w-0' : 'hidden 2xl:flex shrink-0'} items-center gap-1 portal-crumb-enter`}
+                  className={`${isLast ? 'flex min-w-0 shrink-0' : 'hidden 2xl:flex shrink-0'} items-center gap-1 portal-crumb-enter`}
                 >
                   <span className="text-zinc-600 font-bold px-0.5 shrink-0">/</span>
                   {crumb.id ? (
                     <button
                       type="button"
-                      className="inline-flex items-center h-8 px-2 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] text-zinc-200 hover:text-white transition-all truncate font-medium max-w-[115px] 2xl:max-w-[140px]"
+                      className="inline-flex items-center h-8 px-2 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] hover:bg-white/[0.06] text-zinc-200 hover:text-white transition-all truncate font-medium max-w-[125px] 2xl:max-w-[155px]"
                       onClick={() => onNavigate(crumb.id!)}
                       title={`Go to ${crumb.label}`}
                     >
@@ -131,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
                     </button>
                   ) : (
                     <span
-                      className="inline-flex items-center gap-1.5 h-8 px-2 rounded-lg bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm truncate max-w-[110px] xl:max-w-[135px] 2xl:max-w-[165px]"
+                      className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-[#1a1a22] border border-white/15 text-white font-semibold shadow-sm min-w-[72px] max-w-[140px] xl:max-w-[175px] 2xl:max-w-[210px]"
                       title={crumb.label}
                     >
                       {breadcrumbs.length > 2 && (
@@ -147,7 +145,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* ── Center: Omni Command Search ── */}
-        <div className="relative w-32 xl:w-40 2xl:w-52 shrink-0 hidden lg:flex items-center" role="search">
+        <div className="relative w-28 xl:w-36 2xl:w-44 shrink hidden lg:flex items-center" role="search">
           <svg className="absolute left-2.5 w-3.5 h-3.5 text-zinc-500 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -179,25 +177,6 @@ export const Header: React.FC<HeaderProps> = ({
         {/* ── Right: Navigation Tabs, Telemetry & Unified App Button ── */}
         <div className="flex items-center gap-1.5 shrink-0">
           <nav className="h-9 p-0.5 bg-[#09090c] border border-white/[0.08] rounded-xl hidden md:flex items-center gap-0.5" role="tablist" aria-label="Portal Dashboards">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={active === 'overview'}
-              className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                active === 'overview' ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
-              }`}
-              onClick={() => onNavigate('overview')}
-              title="Overview Dashboard"
-            >
-              <svg className={`w-3.5 h-3.5 shrink-0 ${active === 'overview' ? 'text-sky-300' : 'text-zinc-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <rect x="3" y="3" width="7" height="9" rx="1" />
-                <rect x="14" y="3" width="7" height="5" rx="1" />
-                <rect x="14" y="12" width="7" height="9" rx="1" />
-                <rect x="3" y="16" width="7" height="5" rx="1" />
-              </svg>
-              <span>Overview</span>
-            </button>
-
             <button
               type="button"
               role="tab"
@@ -270,7 +249,7 @@ export const Header: React.FC<HeaderProps> = ({
                 isEverydayRoute(active) ? 'bg-zinc-800 text-white font-bold shadow-sm border border-white/20' : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent'
               }`}
               onClick={() => onNavigate('everyday')}
-              title="Everyday Utilities — Tasks, Notes, Focus, Habits, Budget, Converters & Dev Tools (Ctrl+7)"
+              title="Everyday Utilities — Tasks, Notes, Focus, Habits, Budget, Converters & Checklists (Ctrl+7)"
             >
               <svg className={`w-3.5 h-3.5 shrink-0 ${isEverydayRoute(active) ? 'text-emerald-400' : 'text-zinc-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <rect x="3" y="3" width="7" height="7" rx="1.5" />
@@ -284,17 +263,6 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </button>
           </nav>
-
-          <div
-            className="hidden sm:inline-flex items-center gap-1.5 h-8 px-2 rounded-lg text-[11px] font-mono border bg-[#16161c] border-white/[0.08] hover:border-emerald-400/25 transition-all whitespace-nowrap"
-            title={isBackendLive ? `Workspace service is active (port ${backendPort})` : `Connecting to workspace service (port ${backendPort})`}
-          >
-            <span className={`w-2 h-2 rounded-full ${isBackendLive ? 'bg-emerald-400 status-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bg-neutral-600'}`} />
-            <HeaderEqualizerBars active={isBackendLive} tone="emerald" />
-            <span className={isBackendLive ? 'text-emerald-400 font-semibold' : 'text-zinc-500'}>
-              {isBackendLive ? 'Live' : 'Sync'}
-            </span>
-          </div>
 
           <button
             type="button"

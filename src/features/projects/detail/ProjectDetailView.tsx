@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { usePersistedTab } from '../../../utils/usePersistedTab';
 import { ProjectData } from '../../../types';
 import { PROJECT_FEATURES_MAP, PROJECT_LOGOS } from '../projectsConstants';
 import { fetchProjectHealth, fetchProjectTab } from '../../../services/api';
@@ -18,7 +19,11 @@ export interface ProjectDetailViewProps {
 }
 
 export default function ProjectDetailView({ project, onBack }: ProjectDetailViewProps) {
-  const [activeTab, setActiveTab] = useState<ProjectDetailTab>('overview');
+  const [activeTab, setActiveTab] = usePersistedTab<ProjectDetailTab>(
+    `soul-tab-project-${project.id}`,
+    'overview',
+    ['overview', 'files', 'api', 'database', 'scripts', 'env', 'readme']
+  );
   const [portTesting, setPortTesting] = useState<boolean>(false);
   const [portStatus, setPortStatus] = useState<{ fe: string; be: string; latency: number } | null>(null);
   const [showSecretPlaceholders, setShowSecretPlaceholders] = useState<boolean>(false);

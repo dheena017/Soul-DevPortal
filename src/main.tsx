@@ -22,6 +22,7 @@ import GlobalStatusBar from './components/GlobalStatusBar';
 // Lazy-loaded Pillar Feature Views (code-split cleanly)
 const PortalHubView = lazy(() => import('./components/PortalHubView'));
 const ChangelogView = lazy(() => import('./features/changelog/ChangelogView'));
+const CodeUpdatesView = lazy(() => import('./features/changelog/CodeUpdatesView'));
 const ProjectsView = lazy(() => import('./features/projects/ProjectsView'));
 const ProjectDetailView = lazy(() => import('./features/projects/ProjectDetailView'));
 const PackagesView = lazy(() => import('./features/packages/PackagesView'));
@@ -248,6 +249,7 @@ function App() {
     const timer = window.setTimeout(() => {
       prefetch(() => import('./components/PortalHubView'));
       prefetch(() => import('./features/changelog/ChangelogView'));
+      prefetch(() => import('./features/changelog/CodeUpdatesView'));
       prefetch(() => import('./features/projects/ProjectsView'));
       prefetch(() => import('./features/packages/PackagesView'));
       prefetch(() => import('./features/docs/DocsView'));
@@ -394,18 +396,44 @@ function App() {
 
   const mainRef = useRef<HTMLElement>(null);
 
+  const EVERYDAY_LAST_TAB_KEY = 'soul-everyday-last-tab-v1';
+
   const navigate = (id: string) => {
-    if (panelMode && id !== panelMode) {
-      setPanelMode(null);
-      if (typeof window !== 'undefined') {
-        window.history.replaceState({}, '', `${window.location.pathname}#${id}`);
+    let targetId = id;
+    if (targetId === 'everyday') {
+      if (isEverydayRoute(active)) {
+        // Already inside Everyday Utilities: keep the current active utility tab instead of snapping to Overview
+        targetId = active;
+      } else {
+        try {
+          const savedTab = window.sessionStorage.getItem(EVERYDAY_LAST_TAB_KEY);
+          if (savedTab && savedTab !== 'overview') {
+            targetId = `everyday/${savedTab}`;
+          }
+        } catch {
+          // ignore storage errors
+        }
       }
     }
-    setActive(id);
-    window.location.hash = id;
+
+    if (panelMode) {
+      if (targetId === 'changelog' || targetId === 'code-updates') {
+        setPanelMode(targetId);
+        if (typeof window !== 'undefined') {
+          window.history.replaceState({}, '', `${window.location.pathname}?panel=${targetId}#${targetId}`);
+        }
+      } else if (targetId !== panelMode) {
+        setPanelMode(null);
+        if (typeof window !== 'undefined') {
+          window.history.replaceState({}, '', `${window.location.pathname}#${targetId}`);
+        }
+      }
+    }
+    setActive(targetId);
+    window.location.hash = targetId;
     setMenuOpen(false);
     mainRef.current?.scrollTo({ top: 0, behavior: 'instant' });
-    consoleLogger.action('UI', `Selected package navigation: ${id}`);
+    consoleLogger.action('UI', `Selected package navigation: ${targetId}`);
   };
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -447,6 +475,7 @@ function App() {
       return tab.id === 'overview' ? 'Everyday Utilities' : `Everyday Utilities — ${tab.label}`;
     }
     if (['changelog', 'catalog', 'portfolio', 'showcase'].includes(active)) return 'Changelog';
+    if (['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active)) return 'Codebase Updates by Date';
     if (active === 'portal' || active === 'hub') return 'Developer Hub & GitHub Links';
     if (active === 'computer' || active === 'system') return 'Computer & Performance';
     if (active === 'projects') return 'Projects & Applications';
@@ -485,6 +514,22 @@ function App() {
       document.title = 'Soul Workspace Developer Portal';
     }
   }, [activeTitle]);
+
+  const routeViewKey = useMemo(() => {
+    if (isEverydayRoute(active)) return 'everyday';
+    if (active === 'computer' || active === 'system') return 'computer';
+    if (active.startsWith('projects/') || active.startsWith('project/')) {
+      return `project/${active.replace(/^projects?\//, '')}`;
+    }
+    if (active.startsWith('packages/') || active.startsWith('package/')) {
+      return `package/${active.replace(/^packages?\//, '')}`;
+    }
+    if (active.startsWith('docs/') || active.startsWith('doc/')) {
+      const primaryPath = active.replace(/^docs?\//, '').split('/')[0];
+      return `docs/${findGuideMeta(primaryPath)?.id || primaryPath}`;
+    }
+    return active;
+  }, [active]);
 
   const breadcrumbs = useMemo(() => {
     const crumbs: { label: string; id?: string }[] = [{ label: 'soul', id: 'overview' }];
@@ -532,6 +577,8 @@ function App() {
       }
     } else if (['changelog', 'catalog', 'portfolio', 'showcase'].includes(active)) {
       crumbs.push({ label: 'changelog' });
+    } else if (['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active)) {
+      crumbs.push({ label: 'codebase updates' });
     } else if (active === 'portal' || active === 'hub') {
       crumbs.push({ label: 'developer hub & github' });
     } else {
@@ -571,13 +618,33 @@ function App() {
             <div className="flex items-center gap-2.5 min-w-0">
               <SoulLogoIcon className="w-6 h-6 shrink-0" />
               <span className="text-sm font-extrabold text-white tracking-tight truncate">
-                Workspace Changelog
+                {panelMode === 'code-updates' ? 'Codebase Updates by Date' : 'Workspace Changelog'}
               </span>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-sky-500/15 border border-sky-400/30 text-sky-300 shrink-0">
                 {typeof window !== 'undefined' && window.soulDesktop?.isDesktop
                   ? 'Desktop Panel'
                   : 'Standalone Tab'}
               </span>
+              <div className="hidden sm:flex items-center gap-1 ml-2 p-0.5 rounded-lg bg-[#16161c] border border-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={() => navigate('changelog')}
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold cursor-pointer ${
+                    panelMode === 'changelog' ? 'bg-zinc-800 text-white font-bold' : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  Release Notes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('code-updates')}
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold cursor-pointer ${
+                    panelMode === 'code-updates' ? 'bg-emerald-500/20 text-emerald-200 font-bold' : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  🧬 Code Updates by Date
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
@@ -628,7 +695,7 @@ function App() {
         }}
         className="main w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden flex flex-col"
       >
-        <div className="w-full max-w-[1800px] mx-auto px-3 sm:px-5 lg:px-6 py-5 pb-12 box-border">
+        <div className="w-full max-w-[1800px] mx-auto px-3 sm:px-5 lg:px-6 py-4 pb-5 box-border">
           <PortalErrorBoundary routeKey={active} onRecover={() => navigate('overview')}>
             <Suspense
               fallback={
@@ -640,7 +707,7 @@ function App() {
                 />
               }
             >
-              <div key={active === 'system' ? 'computer' : active} className="portal-page-enter">
+              <div key={routeViewKey} className="portal-page-enter">
               {active === 'overview' && (
             <Overview
               packages={filteredPackages}
@@ -672,6 +739,13 @@ function App() {
               externalQuery={query}
               onNavigate={navigate}
               onBack={() => navigate('overview')}
+            />
+          )}
+
+          {['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active) && (
+            <CodeUpdatesView
+              onNavigate={navigate}
+              onBack={() => navigate('changelog')}
             />
           )}
 
@@ -816,7 +890,7 @@ function App() {
             {isEverydayRoute(active) && (
               <EverydayUtilitiesPage
                 initialTab={resolveEverydayRouteToTab(active)}
-                onSelectTab={(tab) => navigate(tab === 'overview' ? 'everyday' : `everyday/${tab}`)}
+                onSelectTab={(tab) => navigate(`everyday/${tab}`)}
                 onNavigate={navigate}
               />
             )}

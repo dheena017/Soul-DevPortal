@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
+import { usePersistedTab } from '../../utils/usePersistedTab';
 import TabLoadingState, { LoadingStepItem } from '../../components/TabLoadingState';
 import { fetchSystemLive, fetchSystemOverview, refreshSystemSpecs, subscribeSystemStream } from '../../services/api';
 import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../types';
@@ -28,7 +29,7 @@ const HARDWARE_PROBE_STEPS: LoadingStepItem[] = [
 export default function SystemView(_props: SystemViewProps) {
   const [specs, setSpecs] = useState<SystemSpecs | null>(null);
   const [live, setLive] = useState<SystemLiveSnapshot | null>(null);
-  const [activeTab, setActiveTab] = useState<SystemSubTabId>('performance');
+  const [activeTab, setActiveTab] = usePersistedTab<SystemSubTabId>('soul-tab-system', 'performance');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isTabHidden, setIsTabHidden] = useState<boolean>(() =>

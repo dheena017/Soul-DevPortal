@@ -65,9 +65,9 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
   );
   const [use24Hour, setUse24Hour] = useState<boolean>(() => {
     try {
-      return localStorage.getItem('soul-clock-24h') !== 'false';
+      return localStorage.getItem('soul-clock-format') === '24h';
     } catch {
-      return true;
+      return false;
     }
   });
   const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
@@ -123,7 +123,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
     setUse24Hour((prev) => {
       const next = !prev;
       try {
-        localStorage.setItem('soul-clock-24h', String(next));
+        localStorage.setItem('soul-clock-format', next ? '24h' : '12h');
       } catch {
         // ignore storage error
       }
@@ -133,7 +133,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
 
   const formattedTime = useMemo(
     () =>
-      now.toLocaleTimeString(undefined, {
+      now.toLocaleTimeString('en-US', {
         hour12: !use24Hour,
         hour: '2-digit',
         minute: '2-digit',
@@ -144,14 +144,14 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
 
   const formattedUtcTime = useMemo(
     () =>
-      now.toLocaleTimeString(undefined, {
+      now.toLocaleTimeString('en-US', {
         timeZone: 'UTC',
-        hour12: false,
+        hour12: !use24Hour,
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
       }),
-    [now]
+    [now, use24Hour]
   );
 
   const shortDate = useMemo(
@@ -420,7 +420,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
                 ? 'bg-emerald-500/15 text-emerald-300 font-semibold'
                 : 'text-zinc-300 hover:text-white hover:bg-white/[0.06]'
             }`}
-            title="Open Everyday Utilities — Tasks, Notes, Focus, Habits, Budget & Dev Tools (Ctrl+7)"
+            title="Open Everyday Utilities — Tasks, Notes, Focus, Habits, Budget & Checklists (Ctrl+7)"
           >
             <span>Everyday Utilities</span>
           </button>

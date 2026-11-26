@@ -29,6 +29,12 @@ def get_portal_overview():
     return SoulDevPortalService.get_overview()
 
 
+@router.get("/code-updates")
+def get_code_updates(limit: int = Query(default=80, ge=10, le=200)):
+    """Returns live workspace file modifications and git commit updates grouped by date."""
+    return SoulDevPortalService.get_code_updates(limit=limit)
+
+
 @router.get("/desktop-info")
 def get_desktop_info():
     """Lists available standalone Windows Electron installers built under release/."""

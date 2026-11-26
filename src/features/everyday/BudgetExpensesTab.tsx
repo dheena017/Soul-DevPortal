@@ -258,7 +258,7 @@ export const BudgetExpensesTab: React.FC = () => {
               No expenses logged yet. Add one above to see live spending analytics.
             </div>
           ) : (
-            <div className="flex flex-col gap-1.5 max-h-64 overflow-y-auto">
+            <div className="flex flex-col gap-1.5 max-h-64 overflow-y-auto overflow-x-hidden custom-scrollbar pr-1.5">
               {visibleEntries.map((item) => (
                 <div
                   key={item.id}

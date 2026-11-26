@@ -507,3 +507,67 @@ export async function launchDesktopApp(): Promise<{ launched: boolean; error?: s
     return null;
   }
 }
+
+export interface CodeUpdateFileEntry {
+  path: string;
+  additions: number;
+  deletions: number;
+  surface: string;
+}
+
+export interface CodeUpdateCommitEntry {
+  hash: string;
+  shortHash: string;
+  isoDate: string;
+  dateKey: string;
+  dateLabel: string;
+  timeLabel: string;
+  author: string;
+  subject: string;
+  surfaces: string[];
+  files: CodeUpdateFileEntry[];
+  totalFiles: number;
+  totalAdditions: number;
+  totalDeletions: number;
+}
+
+export interface CodeUpdateWorkingFile {
+  path: string;
+  status: string;
+  dateKey: string;
+  timeLabel: string;
+  surface: string;
+}
+
+export interface CodeUpdateDateGroup {
+  dateKey: string;
+  dateLabel: string;
+  isToday: boolean;
+  surfaces: string[];
+  commits: CodeUpdateCommitEntry[];
+  workingFiles: CodeUpdateWorkingFile[];
+}
+
+export interface CodeUpdatesResponse {
+  source: 'git' | 'filesystem';
+  generatedAt: string;
+  generatedTimeLabel: string;
+  todayKey: string;
+  totalDates: number;
+  totalCommits: number;
+  totalWorkingFiles: number;
+  dateGroups: CodeUpdateDateGroup[];
+}
+
+export async function fetchCodeUpdates(limit = 80): Promise<CodeUpdatesResponse | null> {
+  try {
+    const res = await fetch(`${API_BASE}/soul-dev-portal/code-updates?limit=${limit}`, {
+      headers: { Accept: 'application/json' },
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as CodeUpdatesResponse;
+  } catch {
+    return null;
+  }
+}

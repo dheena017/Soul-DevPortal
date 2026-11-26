@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { usePersistedTab } from '../../../utils/usePersistedTab';
 import workspaceData from 'virtual:workspace-packages';
 import { MarkdownBlock } from '../../../types';
 import { findGuideMeta, GuideMeta } from '../docsConstants';
@@ -37,7 +38,11 @@ export default function DocDetailView({
   onBack,
 }: DocDetailViewProps) {
   const guideMeta: GuideMeta = findGuideMeta(guideId);
-  const [activeTab, setActiveTab] = useState<DocDetailTab>('spec');
+  const [activeTab, setActiveTab] = usePersistedTab<DocDetailTab>(
+    `soul-tab-doc-${guideMeta.id}`,
+    'spec',
+    ['spec', 'highlights', 'snippets', 'tables']
+  );
 
   // Merge virtual workspace blocksMap with prop blocksMap
   const effectiveBlocksMap: Record<string, MarkdownBlock[]> = useMemo(() => {

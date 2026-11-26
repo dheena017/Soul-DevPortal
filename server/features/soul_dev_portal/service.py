@@ -275,3 +275,278 @@ class SoulDevPortalService:
         if variant == "portable":
             return portable_file
         return setup_file or portable_file
+
+    @staticmethod
+    def _infer_update_surface(rel_path: str) -> str:
+        """Maps a workspace-relative file path to its Changelog/Portal surface key."""
+        norm = rel_path.replace("\\", "/").lower().lstrip("./")
+        if (
+            "features/everyday/" in norm
+            or "features/productivity/" in norm
+            or "workspace_tools" in norm
+        ):
+            return "everyday"
+        if (
+            "features/system/" in norm
+            or "server/features/system/" in norm
+            or "system_inspector" in norm
+            or "system_decoders" in norm
+        ):
+            return "computer"
+        if (
+            norm.startswith("soul-devportal-projects/")
+            or "features/projects/" in norm
+            or norm == "projects.json"
+        ):
+            return "project"
+        if (
+            norm.startswith("soul-devportal-packages/")
+            or "features/packages/" in norm
+        ):
+            return "package"
+        if (
+            norm.startswith("soul-devportal-docs/")
+            or "features/docs/" in norm
+            or norm.endswith(".md")
+        ):
+            return "documentation"
+        return "desktop"
+
+    @staticmethod
+    def _format_date_label(date_key: str) -> str:
+        """Converts YYYY-MM-DD into e.g. 'November 25, 2026'."""
+        try:
+            dt = datetime.strptime(date_key, "%Y-%m-%d")
+            return f"{dt.strftime('%B')} {dt.day}, {dt.year}"
+        except Exception:
+            return date_key
+
+    @staticmethod
+    def _format_time_12h(dt: datetime) -> str:
+        """Formats a datetime in 12-hour clock format (e.g. '10:15 PM')."""
+        hour = dt.hour % 12 or 12
+        ampm = "AM" if dt.hour < 12 else "PM"
+        return f"{hour:02d}:{dt.minute:02d} {ampm}"
+
+    @classmethod
+    def get_code_updates(cls, limit: int = 80) -> Dict[str, Any]:
+        """Discovers live working-tree modifications and git commit history grouped by date."""
+        safe_limit = max(10, min(200, int(limit or 80)))
+        repo_root = cls._resolve_repo_root()
+        git_bin = shutil.which("git")
+        today_key = datetime.now().strftime("%Y-%m-%d")
+
+        commits_list: List[Dict[str, Any]] = []
+        working_files: List[Dict[str, Any]] = []
+        source_mode = "git"
+
+        if git_bin and (repo_root / ".git").exists():
+            # 1. Read git commit history with per-file numstat
+            log_fmt = "@@@COMMIT@@@%H|%h|%aI|%an|%s"
+            try:
+                log_proc = subprocess.run(
+                    [
+                        git_bin,
+                        "-c",
+                        "core.quotepath=false",
+                        "log",
+                        f"-n{safe_limit}",
+                        "--date=iso-strict",
+                        "--numstat",
+                        f"--format={log_fmt}",
+                    ],
+                    cwd=str(repo_root),
+                    capture_output=True,
+                    text=True,
+                    encoding="utf-8",
+                    errors="replace",
+                    timeout=8,
+                    check=False,
+                )
+                if log_proc.returncode == 0 and log_proc.stdout:
+                    current_commit: Optional[Dict[str, Any]] = None
+                    for raw_line in log_proc.stdout.splitlines():
+                        line = raw_line.strip()
+                        if not line:
+                            continue
+                        if line.startswith("@@@COMMIT@@@"):
+                            if current_commit is not None:
+                                commits_list.append(current_commit)
+                            meta = line[len("@@@COMMIT@@@") :].split("|", 4)
+                            full_hash = meta[0] if len(meta) > 0 else ""
+                            short_hash = meta[1] if len(meta) > 1 else full_hash[:7]
+                            iso_date = meta[2] if len(meta) > 2 else ""
+                            author = meta[3] if len(meta) > 3 else "developer"
+                            subject = meta[4] if len(meta) > 4 else ""
+                            date_key = iso_date[:10] if len(iso_date) >= 10 else today_key
+                            time_12h = ""
+                            try:
+                                parsed_dt = datetime.fromisoformat(iso_date).astimezone()
+                                date_key = parsed_dt.strftime("%Y-%m-%d")
+                                time_12h = cls._format_time_12h(parsed_dt)
+                            except Exception:
+                                time_12h = ""
+                            current_commit = {
+                                "hash": full_hash,
+                                "shortHash": short_hash,
+                                "isoDate": iso_date,
+                                "dateKey": date_key,
+                                "dateLabel": cls._format_date_label(date_key),
+                                "timeLabel": time_12h,
+                                "author": author,
+                                "subject": subject,
+                                "surfaces": [],
+                                "files": [],
+                                "totalFiles": 0,
+                                "totalAdditions": 0,
+                                "totalDeletions": 0,
+                            }
+                        elif current_commit is not None:
+                            parts = raw_line.split("\t")
+                            if len(parts) == 3:
+                                add_str, del_str, file_path = parts
+                                adds = int(add_str) if add_str.isdigit() else 0
+                                dels = int(del_str) if del_str.isdigit() else 0
+                                surf = cls._infer_update_surface(file_path)
+                                if surf not in current_commit["surfaces"]:
+                                    current_commit["surfaces"].append(surf)
+                                current_commit["files"].append({
+                                    "path": file_path.strip(),
+                                    "additions": adds,
+                                    "deletions": dels,
+                                    "surface": surf,
+                                })
+                                current_commit["totalFiles"] += 1
+                                current_commit["totalAdditions"] += adds
+                                current_commit["totalDeletions"] += dels
+                    if current_commit is not None:
+                        commits_list.append(current_commit)
+            except Exception:
+                source_mode = "filesystem"
+
+            # 2. Read live working-tree status (modified/added/untracked workspace files)
+            try:
+                status_proc = subprocess.run(
+                    [git_bin, "-c", "core.quotepath=false", "status", "--porcelain"],
+                    cwd=str(repo_root),
+                    capture_output=True,
+                    text=True,
+                    encoding="utf-8",
+                    errors="replace",
+                    timeout=6,
+                    check=False,
+                )
+                if status_proc.returncode == 0 and status_proc.stdout:
+                    for raw_line in status_proc.stdout.splitlines():
+                        if len(raw_line) < 4:
+                            continue
+                        code = raw_line[:2]
+                        rel_path = raw_line[3:].strip().strip('"')
+                        if " -> " in rel_path:
+                            rel_path = rel_path.split(" -> ", 1)[1].strip()
+                        if not rel_path or rel_path.startswith("server/data/"):
+                            continue
+                        if "?" in code:
+                            change_kind = "New File"
+                        elif "A" in code:
+                            change_kind = "Added"
+                        elif "D" in code:
+                            change_kind = "Deleted"
+                        elif "R" in code:
+                            change_kind = "Renamed"
+                        else:
+                            change_kind = "Modified"
+
+                        full_p = repo_root / rel_path
+                        file_date_key = today_key
+                        file_time_12h = cls._format_time_12h(datetime.now())
+                        try:
+                            if full_p.exists():
+                                mtime_dt = datetime.fromtimestamp(full_p.stat().st_mtime)
+                                file_date_key = mtime_dt.strftime("%Y-%m-%d")
+                                file_time_12h = cls._format_time_12h(mtime_dt)
+                        except Exception:
+                            pass
+                        working_files.append({
+                            "path": rel_path.replace("\\", "/"),
+                            "status": change_kind,
+                            "dateKey": file_date_key,
+                            "timeLabel": file_time_12h,
+                            "surface": cls._infer_update_surface(rel_path),
+                        })
+            except Exception:
+                pass
+        else:
+            source_mode = "filesystem"
+
+        # Fallback mtime scan when running outside a .git repository
+        if source_mode == "filesystem" and not commits_list and not working_files:
+            scan_roots = ["src", "server", "electron"]
+            candidates: List[tuple[float, str]] = []
+            for sub in scan_roots:
+                base = repo_root / sub
+                if not base.is_dir():
+                    continue
+                for fpath in base.rglob("*"):
+                    if not fpath.is_file():
+                        continue
+                    norm = fpath.as_posix()
+                    if any(skip in norm for skip in ("/node_modules/", "/__pycache__/", "/dist/", "/data/")):
+                        continue
+                    try:
+                        candidates.append((fpath.stat().st_mtime, fpath.relative_to(repo_root).as_posix()))
+                    except Exception:
+                        continue
+            candidates.sort(key=lambda pair: pair[0], reverse=True)
+            for mtime, rel in candidates[:60]:
+                dt = datetime.fromtimestamp(mtime)
+                working_files.append({
+                    "path": rel,
+                    "status": "Updated",
+                    "dateKey": dt.strftime("%Y-%m-%d"),
+                    "timeLabel": cls._format_time_12h(dt),
+                    "surface": cls._infer_update_surface(rel),
+                })
+
+        # Group both working-tree changes & commits cleanly by dateKey (descending)
+        grouped: Dict[str, Dict[str, Any]] = {}
+
+        def ensure_group(dkey: str) -> Dict[str, Any]:
+            if dkey not in grouped:
+                grouped[dkey] = {
+                    "dateKey": dkey,
+                    "dateLabel": cls._format_date_label(dkey),
+                    "isToday": dkey == today_key,
+                    "surfaces": [],
+                    "commits": [],
+                    "workingFiles": [],
+                }
+            return grouped[dkey]
+
+        for wf in working_files:
+            grp = ensure_group(wf["dateKey"])
+            grp["workingFiles"].append(wf)
+            if wf["surface"] not in grp["surfaces"]:
+                grp["surfaces"].append(wf["surface"])
+
+        for c in commits_list:
+            grp = ensure_group(c["dateKey"])
+            grp["commits"].append(c)
+            for surf in c["surfaces"]:
+                if surf not in grp["surfaces"]:
+                    grp["surfaces"].append(surf)
+
+        date_groups = sorted(grouped.values(), key=lambda g: g["dateKey"], reverse=True)
+        for g in date_groups:
+            g["workingFiles"].sort(key=lambda f: f["path"])
+
+        return {
+            "source": source_mode,
+            "generatedAt": datetime.now(timezone.utc).isoformat(),
+            "generatedTimeLabel": cls._format_time_12h(datetime.now()),
+            "todayKey": today_key,
+            "totalDates": len(date_groups),
+            "totalCommits": len(commits_list),
+            "totalWorkingFiles": len(working_files),
+            "dateGroups": date_groups,
+        }

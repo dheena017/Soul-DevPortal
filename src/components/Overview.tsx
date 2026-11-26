@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { usePersistedTab } from '../utils/usePersistedTab';
 import { consoleLogger } from '@workspace/logger';
 import CopyButton from './CopyButton';
 import StatsCards from './StatsCards';
@@ -43,7 +44,11 @@ export default function Overview({
   onNavigate,
   onClearSearch,
 }: OverviewProps) {
-  const [activeTab, setActiveTab] = useState<'apps' | 'packages' | 'docs'>('apps');
+  const [activeTab, setActiveTab] = usePersistedTab<'apps' | 'packages' | 'docs'>(
+    'soul-tab-overview',
+    'apps',
+    ['apps', 'packages', 'docs']
+  );
   const [ecosystemFilter, setEcosystemFilter] = useState<'all' | 'npm' | 'python' | 'config'>('all');
   const [sortBy, setSortBy] = useState<'name' | 'exports' | 'version'>('name');
 
@@ -102,6 +107,14 @@ export default function Overview({
                 </span>
               </div>
               <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => onNavigate('code-updates')}
+                  className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#16161c] border border-emerald-500/30 text-emerald-200 hover:bg-emerald-500/15 hover:text-white hover:-translate-y-0.5 active:translate-y-0 transition-all shadow-sm cursor-pointer"
+                  title="Open Automatic Codebase Updates by Date (#code-updates)"
+                >
+                  <span>🧬 Code Updates</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => openChangelogPanel()}

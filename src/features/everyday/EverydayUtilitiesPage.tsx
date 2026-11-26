@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { HeroArtworkBackdrop } from '../../components/PortalVisuals';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { HeroArtworkBackdrop, MiniRadialRing } from '../../components/PortalVisuals';
 import { useSyncedWorkspaceState } from '../../services/workspaceStateStore';
 import { BudgetExpensesTab, type ExpensesWorkspaceState } from './BudgetExpensesTab';
 import {
@@ -18,12 +18,15 @@ import {
   FocusBreathingTab,
   GoalsCountdownTab,
   HabitsMoodTab,
+  LIVE_POMODORO_STORAGE_KEY,
+  LIVE_STOPWATCH_STORAGE_KEY,
+  type LivePomodoroState,
+  type LiveStopwatchState,
   type PersonalGoal,
 } from './FocusHabitsGoalsTabs';
 import NotesJournalTab, { type HumanNote } from './NotesJournalTab';
 import TasksPlannerTab from './TasksPlannerTab';
 import type { HumanTask } from './taskTypes';
-import { TextAndDevLabTab } from './TextAndDevLabTab';
 import { HealthWellnessTab, MoneyFinanceLabTab } from './WellnessAndFinanceTabs';
 import {
   DEFAULT_HABITS_STATE,
@@ -32,7 +35,6 @@ import {
   EverydayTabGroupId,
   EverydayTabId,
   FocusState,
-  getEverydayTabMeta,
   getLocalDateIso,
   HabitsState,
 } from './everydayTabsRegistry';
@@ -51,18 +53,92 @@ export default function EverydayUtilitiesPage({
   const [activeTab, setActiveTab] = useState<EverydayTabId>(initialTab);
   const [activeGroup, setActiveGroup] = useState<'all' | EverydayTabGroupId>('all');
   const [tabSearch, setTabSearch] = useState<string>('');
+  const EVERYDAY_LAST_TAB_KEY = 'soul-everyday-last-tab-v1';
+
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const [liveClockTick, setLiveClockTick] = useState<number>(() => Date.now());
+  const readLiveTimers = useCallback(() => {
+    let pomoStr = '';
+    let swStr = '';
+    try {
+      const pRaw = window.localStorage.getItem(LIVE_POMODORO_STORAGE_KEY);
+      if (pRaw) {
+        const p = JSON.parse(pRaw) as Partial<LivePomodoroState>;
+        if (p.running && p.targetEndMs && p.targetEndMs > Date.now()) {
+          const sec = Math.max(0, Math.ceil((p.targetEndMs - Date.now()) / 1000));
+          const mm = String(Math.floor(sec / 60)).padStart(2, '0');
+          const ss = String(sec % 60).padStart(2, '0');
+          pomoStr = `${mm}:${ss}`;
+        }
+      }
+      const sRaw = window.localStorage.getItem(LIVE_STOPWATCH_STORAGE_KEY);
+      if (sRaw) {
+        const sw = JSON.parse(sRaw) as Partial<LiveStopwatchState>;
+        if (sw.running && sw.startedAtMs) {
+          const ms = (sw.accumulatedMs || 0) + Math.max(0, Date.now() - sw.startedAtMs);
+          const mm = String(Math.floor(ms / 60000)).padStart(2, '0');
+          const ss = String(Math.floor((ms % 60000) / 1000)).padStart(2, '0');
+          swStr = `${mm}:${ss}`;
+        }
+      }
+    } catch {
+      // ignore storage errors
+    }
+    return { pomoStr, swStr };
+  }, []);
+
+  const liveTimers = useMemo(
+    () => readLiveTimers(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [readLiveTimers, liveClockTick]
+  );
+
+  useEffect(() => {
+    const refresh = () => setLiveClockTick(Date.now());
+    window.addEventListener('soul-everyday-timer-sync', refresh);
+    const id = window.setInterval(refresh, 1000);
+    return () => {
+      window.removeEventListener('soul-everyday-timer-sync', refresh);
+      window.clearInterval(id);
+    };
+  }, []);
 
   useEffect(() => {
     setActiveTab(initialTab);
+    try {
+      window.sessionStorage.setItem(EVERYDAY_LAST_TAB_KEY, initialTab);
+    } catch {
+      // ignore storage errors
+    }
+    const meta = EVERYDAY_TABS.find((t) => t.id === initialTab);
+    if (meta && activeGroup !== 'all' && meta.group !== activeGroup) {
+      setActiveGroup('all');
+    }
+    if (tabSearch.trim()) {
+      setTabSearch('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialTab]);
 
-  const selectTab = (tab: EverydayTabId) => {
-    setActiveTab(tab);
-    if (onSelectTab) {
-      onSelectTab(tab);
-    }
-  };
+  const selectTab = useCallback(
+    (tab: EverydayTabId) => {
+      setActiveTab(tab);
+      try {
+        window.sessionStorage.setItem(EVERYDAY_LAST_TAB_KEY, tab);
+      } catch {
+        // ignore storage errors
+      }
+      if (onSelectTab) {
+        onSelectTab(tab);
+      }
+    },
+    [onSelectTab]
+  );
 
+  // Keyboard Alt+[ and Alt+] to cycle smoothly across Everyday Utility tabs
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = document.activeElement?.tagName || '';
@@ -80,9 +156,10 @@ export default function EverydayUtilitiesPage({
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [activeTab]);
+  }, [activeTab, selectTab]);
 
   const today = getLocalDateIso(0);
+  const monthPrefix = today.slice(0, 7);
   const [tasks] = useSyncedWorkspaceState<HumanTask[]>('tasks', []);
   const [notes] = useSyncedWorkspaceState<HumanNote[]>('notes', []);
   const [habitsState] = useSyncedWorkspaceState<HabitsState>('habits', DEFAULT_HABITS_STATE);
@@ -106,31 +183,68 @@ export default function EverydayUtilitiesPage({
     mediaQueue: [],
   });
 
-  const openTaskCount = useMemo(
-    () => (Array.isArray(tasks) ? tasks.filter((t) => !t.archived && !t.done).length : 0),
+  const nonArchivedTasks = useMemo(
+    () => (Array.isArray(tasks) ? tasks.filter((t) => !t.archived) : []),
     [tasks]
   );
+  const openTaskCount = useMemo(
+    () => nonArchivedTasks.filter((t) => !t.done).length,
+    [nonArchivedTasks]
+  );
+  const taskCompletionPct = useMemo(() => {
+    if (nonArchivedTasks.length === 0) return 0;
+    const doneCount = nonArchivedTasks.length - openTaskCount;
+    return Math.round((doneCount / nonArchivedTasks.length) * 100);
+  }, [nonArchivedTasks.length, openTaskCount]);
+
   const activeNoteCount = useMemo(
     () => (Array.isArray(notes) ? notes.filter((n) => !n.trashed).length : 0),
     [notes]
   );
+
   const habitsDoneToday = useMemo(
     () => habitsState.habits.filter((h) => h.completedDates.includes(today)).length,
     [habitsState.habits, today]
   );
+  const habitsPct = useMemo(() => {
+    if (habitsState.habits.length === 0) return 0;
+    return Math.round((habitsDoneToday / habitsState.habits.length) * 100);
+  }, [habitsDoneToday, habitsState.habits.length]);
+
   const focusMinToday = focusStats.lastDate === today ? focusStats.minutesToday : 0;
+  const focusGoalPct = useMemo(
+    () => Math.min(100, Math.round((focusMinToday / 120) * 100)),
+    [focusMinToday]
+  );
+
   const openScheduleBlocksToday = useMemo(
     () => (schedule.blocksByDate?.[today] || []).filter((b) => !b.done).length,
     [schedule.blocksByDate, today]
   );
-  const uncheckedChecklistCount = useMemo(
+
+  const checklistStats = useMemo(() => {
+    const lists = checklists.lists || [];
+    let total = 0;
+    let checked = 0;
+    for (const l of lists) {
+      total += l.items.length;
+      checked += l.items.filter((i) => i.checked).length;
+    }
+    return { unchecked: total - checked, total, pct: total > 0 ? Math.round((checked / total) * 100) : 0 };
+  }, [checklists.lists]);
+
+  const spentThisMonth = useMemo(
     () =>
-      (checklists.lists || []).reduce(
-        (acc, list) => acc + list.items.filter((it) => !it.checked).length,
-        0
-      ),
-    [checklists.lists]
+      (expenses.entries || [])
+        .filter((e) => e.date?.startsWith(monthPrefix))
+        .reduce((acc, e) => acc + (Number(e.amount) || 0), 0),
+    [expenses.entries, monthPrefix]
   );
+
+  const budgetUsedPct = useMemo(() => {
+    const cap = Math.max(1, expenses.monthlyBudget || 15000);
+    return Math.min(100, Math.round((spentThisMonth / cap) * 100));
+  }, [spentThisMonth, expenses.monthlyBudget]);
 
   const badgeByTab: Partial<Record<EverydayTabId, string>> = useMemo(
     () => ({
@@ -141,7 +255,7 @@ export default function EverydayUtilitiesPage({
       focus: focusMinToday > 0 ? `${focusMinToday}m` : undefined,
       goals: goals.length > 0 ? String(goals.length) : undefined,
       budget: expenses.entries.length > 0 ? String(expenses.entries.length) : undefined,
-      checklists: uncheckedChecklistCount > 0 ? String(uncheckedChecklistCount) : undefined,
+      checklists: checklistStats.unchecked > 0 ? String(checklistStats.unchecked) : undefined,
     }),
     [
       openTaskCount,
@@ -152,7 +266,7 @@ export default function EverydayUtilitiesPage({
       focusMinToday,
       goals.length,
       expenses.entries.length,
-      uncheckedChecklistCount,
+      checklistStats.unchecked,
     ]
   );
 
@@ -169,203 +283,316 @@ export default function EverydayUtilitiesPage({
     });
   }, [activeGroup, tabSearch]);
 
-  const currentMeta = getEverydayTabMeta(activeTab);
-  const currentIdx = EVERYDAY_TABS.findIndex((t) => t.id === activeTab);
-  const prevTab = currentIdx > 0 ? EVERYDAY_TABS[currentIdx - 1] : null;
-  const nextTab = currentIdx >= 0 && currentIdx < EVERYDAY_TABS.length - 1 ? EVERYDAY_TABS[currentIdx + 1] : null;
+  const updateScrollArrows = useCallback(() => {
+    const el = tabsRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    updateScrollArrows();
+    const el = tabsRef.current;
+    if (!el) return;
+    const raf = window.requestAnimationFrame(() => {
+      const selectedBtn = el.querySelector<HTMLButtonElement>('[aria-selected="true"]');
+      if (selectedBtn) {
+        selectedBtn.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+      }
+      updateScrollArrows();
+    });
+    const ro = new ResizeObserver(updateScrollArrows);
+    ro.observe(el);
+    window.addEventListener('resize', updateScrollArrows);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      ro.disconnect();
+      window.removeEventListener('resize', updateScrollArrows);
+    };
+  }, [updateScrollArrows, visibleTabs.length, activeTab]);
+
+  const scrollTabs = (dir: -1 | 1) => {
+    const el = tabsRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * 280, behavior: 'smooth' });
+  };
+
+  const handleTabClick = (tabId: EverydayTabId, e: React.MouseEvent<HTMLButtonElement>) => {
+    selectTab(tabId);
+    e.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+  };
+
+  const tabClass = (isActive: boolean) =>
+    `inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all whitespace-nowrap cursor-pointer shrink-0 ${
+      isActive
+        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+        : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
+    }`;
 
   return (
-    <article className="w-full flex flex-col gap-5 pb-10">
-      {/* Unified Full-Width Hero Banner */}
-      <header className="w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-2xl portal-header-sheen">
-        <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="" opacityClass="opacity-28 sm:opacity-42" />
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex flex-col gap-1.5">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-sky-300">
-                Personal Productivity &amp; Daily Workspace
-              </span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
-                {EVERYDAY_TABS.length} Horizontal Tabs · Synced SQLite WAL
-              </span>
+    <div className="w-full py-1 flex flex-col gap-5 pb-10 fade-in-up">
+      {/* ══════════════════════════════════════════════════════════════════════
+          UNIFIED SINGLE HERO HEADER CARD (Matched to SystemHeaderCard layout)
+      ══════════════════════════════════════════════════════════════════════ */}
+      <header className="relative overflow-hidden w-full p-4 sm:p-5 md:p-6 rounded-2xl system-card shadow-2xl flex flex-col gap-4 sm:gap-5">
+        <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="Everyday Utilities Backdrop" opacityClass="opacity-35 sm:opacity-50" />
+        <div className="relative z-10 flex flex-col gap-4 sm:gap-5">
+          {/* Row 1: Identity + Compact Controls */}
+          <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+            <div className="flex items-start gap-3.5 min-w-0">
+              <div className="w-11 h-11 rounded-xl soul-emblem-box flex items-center justify-center text-emerald-300 text-lg shrink-0 portal-emblem-hover">
+                🧰
+              </div>
+              <div className="flex flex-col gap-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight truncate">
+                    Everyday Utilities
+                  </h1>
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#181820] border border-white/[0.1] text-zinc-300">
+                    {EVERYDAY_TABS.length} Tools
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md border text-[10px] font-mono font-bold bg-emerald-500/15 border-emerald-500/35 text-emerald-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span>SQLite WAL Synced</span>
+                  </span>
+                </div>
+
+                <p className="text-xs text-zinc-400 truncate">
+                  Tasks, Notes, Day Schedule, Focus Audio, Habits, Health, Budget, Finance Lab, Converters, Clock &amp; Checklists
+                </p>
+              </div>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-              Everyday Utilities
-            </h1>
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-3xl">
-              Full-width tabbed toolkit combining Daily Overview, Tasks, Notes, Time-Block Day
-              Planner, Focus &amp; Breathing, Habits, Goals, Health BMI/Calorie/Sleep, Budget &amp;
-              EMI/SIP Finance, Unit Converters, World Clock, Bookmarks &amp; Passwords, Checklists
-              &amp; Reading Queue, and Text, Regex &amp; Diff Developer Tools.
-            </p>
+
+            {/* Right Controls: Group Selector + Tab Filter + Overview Reset */}
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <div className="inline-flex items-center rounded-lg bg-[#16161c] border border-white/[0.08] p-0.5" title="Filter tab category">
+                <button
+                  type="button"
+                  onClick={() => setActiveGroup('all')}
+                  className={`px-2 py-1 rounded-md text-[11px] font-mono font-bold transition-colors cursor-pointer ${
+                    activeGroup === 'all'
+                      ? 'bg-sky-500/20 text-sky-300 border border-sky-400/30'
+                      : 'text-zinc-400 hover:text-white border border-transparent'
+                  }`}
+                >
+                  All
+                </button>
+                {EVERYDAY_TAB_GROUPS.map((grp) => (
+                  <button
+                    key={grp.id}
+                    type="button"
+                    onClick={() => setActiveGroup(activeGroup === grp.id ? 'all' : grp.id)}
+                    className={`hidden sm:inline-flex px-2 py-1 rounded-md text-[11px] font-medium transition-colors cursor-pointer ${
+                      activeGroup === grp.id
+                        ? 'bg-purple-500/20 text-purple-200 border border-purple-400/35 font-bold'
+                        : 'text-zinc-400 hover:text-white border border-transparent'
+                    }`}
+                  >
+                    {grp.label.split(',')[0].split('&')[0].trim()}
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  value={tabSearch}
+                  onChange={(e) => setTabSearch(e.target.value)}
+                  placeholder="Find tool..."
+                  aria-label="Filter Everyday Utilities tabs"
+                  className="h-8 w-28 sm:w-36 px-2.5 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
+                />
+                {tabSearch && (
+                  <button
+                    type="button"
+                    onClick={() => setTabSearch('')}
+                    className="absolute right-2 text-[10px] text-zinc-400 hover:text-white cursor-pointer"
+                    aria-label="Clear tool filter"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {(liveTimers.pomoStr || liveTimers.swStr) && activeTab !== 'focus' && (
+                <button
+                  type="button"
+                  onClick={() => selectTab('focus')}
+                  title="Jump to active Focus Timer / Stopwatch"
+                  className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-[11px] font-mono font-bold text-amber-200 hover:bg-amber-500/25 cursor-pointer"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  <span>
+                    {liveTimers.pomoStr ? `Focus ${liveTimers.pomoStr}` : ''}
+                    {liveTimers.pomoStr && liveTimers.swStr ? ' · ' : ''}
+                    {liveTimers.swStr ? `SW ${liveTimers.swStr}` : ''}
+                  </span>
+                </button>
+              )}
+
+              {activeTab !== 'overview' && (
+                <button
+                  type="button"
+                  onClick={() => selectTab('overview')}
+                  className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-[#16161c] border border-white/[0.1] text-xs font-semibold text-zinc-200 hover:text-white hover:border-white/[0.22] transition-all cursor-pointer"
+                >
+                  <span>🧭</span>
+                  <span>Overview</span>
+                </button>
+              )}
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <div className="px-3.5 py-2 rounded-xl bg-[#09090c] border border-white/[0.08] flex items-center gap-3 text-xs font-mono">
-              <span className="text-emerald-300 font-bold">{openTaskCount} Tasks</span>
-              <span className="text-zinc-600">·</span>
-              <span className="text-sky-300 font-bold">{activeNoteCount} Notes</span>
-              <span className="text-zinc-600">·</span>
-              <span className="text-amber-300 font-bold">{focusMinToday}m Focus</span>
+          {/* Row 2: 4-Metric Live Ring Summary Bar (Matched to CPU / Memory / Volumes / Battery) */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 portal-grid-stagger">
+            <button
+              type="button"
+              onClick={() => selectTab('tasks')}
+              className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-sky-400/35 text-left cursor-pointer portal-card-hover"
+            >
+              <div className="flex flex-col min-w-0">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">TASKS PLANNER</span>
+                <strong className="text-sm font-mono font-bold text-sky-300 tabular-nums truncate">
+                  {openTaskCount} Open · {taskCompletionPct}%
+                </strong>
+              </div>
+              <MiniRadialRing percent={taskCompletionPct} color="#38bdf8" size={26} />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => selectTab('notes')}
+              className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-purple-400/35 text-left cursor-pointer portal-card-hover"
+            >
+              <div className="flex flex-col min-w-0">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">NOTES &amp; LISTS</span>
+                <strong className="text-sm font-mono font-bold text-purple-300 tabular-nums truncate">
+                  {activeNoteCount} Notes · {checklistStats.pct}%
+                </strong>
+              </div>
+              <MiniRadialRing percent={checklistStats.pct || Math.min(100, activeNoteCount * 10)} color="#c084fc" size={26} />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => selectTab('habits')}
+              className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-emerald-400/35 text-left cursor-pointer portal-card-hover"
+            >
+              <div className="flex flex-col min-w-0">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">HABITS TODAY</span>
+                <strong className="text-sm font-mono font-bold text-emerald-300 tabular-nums truncate">
+                  {habitsDoneToday}/{habitsState.habits.length} ({habitsPct}%)
+                </strong>
+              </div>
+              <MiniRadialRing percent={habitsPct} color="#34d399" size={26} />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => selectTab(focusMinToday > 0 ? 'focus' : 'budget')}
+              className="flex items-center justify-between p-2.5 rounded-xl bg-[#0e0e13]/90 border border-white/[0.07] hover:border-amber-400/35 text-left cursor-pointer portal-card-hover"
+            >
+              <div className="flex flex-col min-w-0">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">FOCUS &amp; BUDGET</span>
+                <strong className="text-sm font-mono font-bold text-amber-300 tabular-nums truncate">
+                  {focusMinToday}m · {expenses.currency}{spentThisMonth.toLocaleString()}
+                </strong>
+              </div>
+              <MiniRadialRing
+                percent={focusMinToday > 0 ? focusGoalPct : budgetUsedPct}
+                color="#fbbf24"
+                size={26}
+              />
+            </button>
+          </div>
+
+          {/* Row 3: Integrated Single-Row Icon + Pill Strip with Left / Right Scroll Arrows */}
+          <div className="pt-3.5 border-t border-white/[0.06] flex items-center gap-2">
+            {(canScrollLeft || canScrollRight) && (
+              <button
+                type="button"
+                onClick={() => scrollTabs(-1)}
+                disabled={!canScrollLeft}
+                aria-label="Scroll tabs left"
+                title="Scroll tabs left"
+                className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-all ${
+                  canScrollLeft
+                    ? 'bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 shadow-sm cursor-pointer'
+                    : 'bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
+                }`}
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+            )}
+
+            <div
+              ref={tabsRef}
+              role="tablist"
+              aria-label="Everyday Utilities sections"
+              onScroll={updateScrollArrows}
+              className="relative flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto system-tabs-scroller"
+            >
+              {visibleTabs.length === 0 ? (
+                <span className="text-xs text-zinc-400 px-2 py-1">
+                  No tabs match &ldquo;{tabSearch}&rdquo;
+                </span>
+              ) : (
+                visibleTabs.map((tab) => {
+                  const isActive = activeTab === tab.id;
+                  const badge = badgeByTab[tab.id];
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      title={tab.subtitle}
+                      onClick={(e) => handleTabClick(tab.id, e)}
+                      className={tabClass(isActive)}
+                    >
+                      <span aria-hidden="true">{tab.icon}</span>
+                      <span>{tab.shortLabel}</span>
+                      {badge && (
+                        <span
+                          className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono tabular-nums ${
+                            tab.accentBadge
+                          }`}
+                        >
+                          {badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })
+              )}
             </div>
+
+            {(canScrollLeft || canScrollRight) && (
+              <button
+                type="button"
+                onClick={() => scrollTabs(1)}
+                disabled={!canScrollRight}
+                aria-label="Scroll tabs right"
+                title="Scroll tabs right"
+                className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-all ${
+                  canScrollRight
+                    ? 'bg-[#16161c] border-white/[0.14] text-zinc-200 hover:text-white hover:border-sky-400/50 hover:bg-sky-500/15 shadow-sm cursor-pointer'
+                    : 'bg-[#111115] border-white/[0.05] text-zinc-600 opacity-45 cursor-not-allowed'
+                }`}
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </header>
 
-      {/* Full-Width Horizontal Tabs Bar */}
-      <section
-        aria-label="Everyday Utilities Navigation Tabs"
-        className="w-full rounded-2xl bg-[#111218] border border-white/[0.08] p-3.5 flex flex-col gap-3 shadow-xl"
-      >
-        <div className="flex flex-wrap items-center justify-between gap-2.5 pb-2.5 border-b border-white/[0.06]">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => setActiveGroup('all')}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer transition-colors ${
-                activeGroup === 'all'
-                  ? 'bg-sky-500/20 border-sky-400/45 text-sky-200 font-bold'
-                  : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
-              }`}
-            >
-              All Tools ({EVERYDAY_TABS.length})
-            </button>
-            {EVERYDAY_TAB_GROUPS.map((grp) => {
-              const count = EVERYDAY_TABS.filter((t) => t.group === grp.id).length;
-              const isGrp = activeGroup === grp.id;
-              return (
-                <button
-                  key={grp.id}
-                  type="button"
-                  onClick={() => setActiveGroup(isGrp ? 'all' : grp.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border cursor-pointer transition-colors ${
-                    isGrp
-                      ? 'bg-zinc-800 border-white/25 text-white font-semibold'
-                      : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  {grp.label} ({count})
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="relative flex items-center">
-              <input
-                type="text"
-                value={tabSearch}
-                onChange={(e) => setTabSearch(e.target.value)}
-                placeholder="Filter tabs..."
-                aria-label="Filter Everyday Utilities tabs"
-                className="h-8 w-36 sm:w-44 px-3 rounded-lg bg-[#08090c] border border-white/[0.09] text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-sky-400/50"
-              />
-              {tabSearch && (
-                <button
-                  type="button"
-                  onClick={() => setTabSearch('')}
-                  className="absolute right-2 text-[11px] text-zinc-400 hover:text-white cursor-pointer"
-                  aria-label="Clear tab search"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                disabled={!prevTab}
-                onClick={() => prevTab && selectTab(prevTab.id)}
-                title={prevTab ? `Previous: ${prevTab.label} (Alt+[)` : 'At first tab'}
-                className="h-8 px-2.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-white/[0.2] disabled:opacity-35 text-[11px] font-mono text-zinc-300 cursor-pointer"
-              >
-                ← Prev
-              </button>
-              <button
-                type="button"
-                disabled={!nextTab}
-                onClick={() => nextTab && selectTab(nextTab.id)}
-                title={nextTab ? `Next: ${nextTab.label} (Alt+])` : 'At last tab'}
-                className="h-8 px-2.5 rounded-lg bg-[#16171e] border border-white/[0.08] hover:border-white/[0.2] disabled:opacity-35 text-[11px] font-mono text-zinc-300 cursor-pointer"
-              >
-                Next →
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <nav
-          role="tablist"
-          aria-label="Everyday Utilities Horizontal Tabs"
-          className="flex flex-wrap items-center gap-1.5"
-        >
-          {visibleTabs.length === 0 ? (
-            <span className="text-xs text-zinc-500 px-2 py-1">
-              No tabs matched &ldquo;{tabSearch}&rdquo; — clear search to see all tools.
-            </span>
-          ) : (
-            visibleTabs.map((tab) => {
-              const isActive = activeTab === tab.id;
-              const badge = badgeByTab[tab.id];
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={isActive}
-                  title={tab.subtitle}
-                  onClick={() => selectTab(tab.id)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs border transition-all cursor-pointer ${
-                    isActive
-                      ? `${tab.activeBorder} text-white font-extrabold shadow-sm`
-                      : 'bg-[#16171e] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] font-medium'
-                  }`}
-                >
-                  <span aria-hidden="true">{tab.icon}</span>
-                  <span>{tab.shortLabel}</span>
-                  {badge && (
-                    <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono border ${tab.accentBadge}`}>
-                      {badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })
-          )}
-        </nav>
-      </section>
-
-      {/* Active Tab Context Banner */}
-      <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-3 rounded-2xl bg-[#111218] border border-white/[0.08]">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <span className="text-lg shrink-0">{currentMeta.icon}</span>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className={`text-sm font-extrabold ${currentMeta.accentText}`}>
-                {currentMeta.label}
-              </span>
-              <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/[0.05] text-zinc-400">
-                {EVERYDAY_TAB_GROUPS.find((g) => g.id === currentMeta.group)?.label}
-              </span>
-            </div>
-            <p className="text-xs text-zinc-400 truncate">{currentMeta.subtitle}</p>
-          </div>
-        </div>
-
-        {activeTab !== 'overview' && (
-          <button
-            type="button"
-            onClick={() => selectTab('overview')}
-            className="px-3 py-1.5 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-extrabold cursor-pointer shrink-0"
-          >
-            🧭 Daily Overview
-          </button>
-        )}
-      </div>
-
-      {/* 100% Full-Width Active Tool Workspace */}
-      <div className="w-full min-w-0">
+      {/* Straight Into Full-Width Active Tool Content (Matched to SystemView) */}
+      <div key={activeTab} className="tab-content-animate w-full min-w-0">
         {activeTab === 'overview' && <DailyOverviewTab onSelectTab={selectTab} />}
         {activeTab === 'tasks' && <TasksPlannerTab embedded onNavigate={onNavigate} />}
         {activeTab === 'notes' && <NotesJournalTab embedded onNavigate={onNavigate} />}
@@ -380,8 +607,7 @@ export default function EverydayUtilitiesPage({
         {activeTab === 'worldtime' && <WorldClockTab />}
         {activeTab === 'vault' && <BookmarksSecurityTab />}
         {activeTab === 'checklists' && <ChecklistsAndReadingTab />}
-        {activeTab === 'textlab' && <TextAndDevLabTab />}
       </div>
-    </article>
+    </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { usePersistedTab } from '../utils/usePersistedTab';
 import CopyButton from './CopyButton';
 import {
   ArchitectureFlowDiagram,
@@ -45,7 +46,11 @@ export default function PortalHubView({
   onBack,
   onOpenShortcuts,
 }: PortalHubViewProps) {
-  const [activeTab, setActiveTab] = useState<PortalHubTab>('endpoints');
+  const [activeTab, setActiveTab] = usePersistedTab<PortalHubTab>(
+    'soul-tab-hub',
+    'endpoints',
+    ['endpoints', 'repositories', 'api', 'blueprint']
+  );
   const [filterText, setFilterText] = useState<string>('');
 
   const { fullstackCount, liveFeCount, liveBeCount } = useMemo(() => {

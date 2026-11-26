@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { HeroArtworkBackdrop } from '../../components/PortalVisuals';
 import { useSyncedWorkspaceState } from '../../services/workspaceStateStore';
+import { copyTextSafe } from '../../utils/clipboard';
+import { getSharedAudioContext, playGentleChime } from '../../utils/focusAudio';
 import { PROJECT_BRAND_MAP } from '../projects/projectsConstants';
 import type { HumanNote } from './NotesJournalTab';
 import {
@@ -69,29 +71,170 @@ function loadPrefs(): TaskPreferences {
   }
 }
 
-function playTaskChime(): void {
-  try {
-    const AudioCtx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-    [523.25, 659.25, 783.99].forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      const start = ctx.currentTime + idx * 0.12;
-      gain.gain.setValueAtTime(0.001, start);
-      gain.gain.exponentialRampToValueAtTime(0.08, start + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.45);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(start);
-      osc.stop(start + 0.5);
-    });
-  } catch {
-    // ignore audio block
+const TaskSvg: React.FC<{ children: React.ReactNode; className?: string }> = ({
+  children,
+  className = 'w-3.5 h-3.5 shrink-0',
+}) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    {children}
+  </svg>
+);
+
+const TaskChevronDown: React.FC<{ className?: string }> = ({ className = 'w-3.5 h-3.5 text-zinc-400 shrink-0' }) => (
+  <TaskSvg className={className}>
+    <path d="m6 9 6 6 6-6" />
+  </TaskSvg>
+);
+
+const TaskSelectBox: React.FC<{
+  value: string | number;
+  onChange: (value: string) => void;
+  ariaLabel: string;
+  prefix?: string;
+  leading?: React.ReactNode;
+  className?: string;
+  selectClassName?: string;
+  children: React.ReactNode;
+}> = ({
+  value,
+  onChange,
+  ariaLabel,
+  prefix,
+  leading,
+  className = 'h-8 rounded-xl bg-[#09090c] border border-white/[0.09] hover:border-white/[0.2]',
+  selectClassName = 'text-xs font-medium text-zinc-100',
+  children,
+}) => (
+  <div className={`relative inline-flex items-center transition-colors ${className}`}>
+    {leading && <span className="ml-2.5 pointer-events-none shrink-0 flex items-center">{leading}</span>}
+    {prefix && (
+      <span
+        className={`text-[11px] font-mono text-zinc-400 pointer-events-none select-none ${
+          leading ? 'pl-1.5' : 'pl-2.5'
+        }`}
+      >
+        {prefix}
+      </span>
+    )}
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      aria-label={ariaLabel}
+      className={`appearance-none bg-transparent h-full ${
+        prefix ? 'pl-1' : leading ? 'pl-1.5' : 'pl-3'
+      } pr-7 focus:outline-none cursor-pointer ${selectClassName}`}
+    >
+      {children}
+    </select>
+    <TaskChevronDown className="w-3.5 h-3.5 text-zinc-400 absolute right-2 pointer-events-none" />
+  </div>
+);
+
+function renderTaskLayoutIcon(id: TaskLayout, isActive: boolean) {
+  const cls = `w-3.5 h-3.5 shrink-0 ${isActive ? 'text-emerald-300' : 'text-zinc-500'}`;
+  switch (id) {
+    case 'list':
+      return (
+        <TaskSvg className={cls}>
+          <line x1="8" x2="21" y1="6" y2="6" />
+          <line x1="8" x2="21" y1="12" y2="12" />
+          <line x1="8" x2="21" y1="18" y2="18" />
+          <line x1="3" x2="3.01" y1="6" y2="6" />
+          <line x1="3" x2="3.01" y1="12" y2="12" />
+          <line x1="3" x2="3.01" y1="18" y2="18" />
+        </TaskSvg>
+      );
+    case 'board':
+      return (
+        <TaskSvg className={cls}>
+          <rect width="18" height="18" x="3" y="3" rx="2" />
+          <path d="M9 3v18" />
+          <path d="M15 3v18" />
+        </TaskSvg>
+      );
+    case 'matrix':
+      return (
+        <TaskSvg className={cls}>
+          <rect width="7" height="7" x="3" y="3" rx="1.5" />
+          <rect width="7" height="7" x="14" y="3" rx="1.5" />
+          <rect width="7" height="7" x="14" y="14" rx="1.5" />
+          <rect width="7" height="7" x="3" y="14" rx="1.5" />
+        </TaskSvg>
+      );
+    case 'timeline':
+      return (
+        <TaskSvg className={cls}>
+          <rect width="18" height="18" x="3" y="4" rx="2" />
+          <path d="M16 2v4" />
+          <path d="M8 2v4" />
+          <path d="M3 10h18" />
+        </TaskSvg>
+      );
+  }
+}
+
+function renderStarterTplIcon(tplId: string) {
+  switch (tplId) {
+    case 'tpl-morning':
+      return (
+        <TaskSvg className="w-3.5 h-3.5 text-amber-400">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="m4.93 4.93 1.41 1.41" />
+          <path d="m17.66 17.66 1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="m6.34 17.66-1.41 1.41" />
+          <path d="m19.07 4.93-1.41 1.41" />
+        </TaskSvg>
+      );
+    case 'tpl-deep-work':
+      return (
+        <TaskSvg className="w-3.5 h-3.5 text-rose-400">
+          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+        </TaskSvg>
+      );
+    case 'tpl-weekly-review':
+      return (
+        <TaskSvg className="w-3.5 h-3.5 text-violet-400">
+          <rect width="18" height="18" x="3" y="4" rx="2" />
+          <path d="M16 2v4" />
+          <path d="M8 2v4" />
+          <path d="M3 10h18" />
+          <path d="m9 16 2 2 4-4" />
+        </TaskSvg>
+      );
+    case 'tpl-errands':
+      return (
+        <TaskSvg className="w-3.5 h-3.5 text-emerald-400">
+          <circle cx="8" cy="21" r="1" />
+          <circle cx="19" cy="21" r="1" />
+          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+        </TaskSvg>
+      );
+    case 'tpl-ship-release':
+      return (
+        <TaskSvg className="w-3.5 h-3.5 text-sky-400">
+          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+          <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+        </TaskSvg>
+      );
+    default:
+      return (
+        <TaskSvg className="w-3.5 h-3.5 text-purple-400">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        </TaskSvg>
+      );
   }
 }
 
@@ -145,6 +288,8 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
   const [focusSecLeft, setFocusSecLeft] = useState<number>(1500);
   const [focusRunning, setFocusRunning] = useState<boolean>(false);
   const [focusElapsedSec, setFocusElapsedSec] = useState<number>(0);
+  const focusEndMsRef = useRef<number | null>(null);
+  const focusCompletedStampRef = useRef<number | null>(null);
 
   // Undo & Toast state
   const [undoSnap, setUndoSnap] = useState<{ label: string; prevTasks: HumanTask[] } | null>(null);
@@ -194,27 +339,38 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
     return () => window.removeEventListener('keydown', onKey);
   }, [editingTaskId, toolboxOpen]);
 
-  // Live Active Task Focus Timer Tick
+  // Live Active Task Focus Timer Tick (StrictMode-safe & drift-free)
   useEffect(() => {
-    if (!focusRunning || !focusTaskId) return;
+    if (!focusRunning || !focusTaskId) {
+      focusEndMsRef.current = null;
+      return;
+    }
+    const endMs = Date.now() + Math.max(1, focusSecLeft) * 1000;
+    focusEndMsRef.current = endMs;
     const id = window.setInterval(() => {
-      setFocusElapsedSec((s) => s + 1);
-      setFocusSecLeft((prev) => {
-        if (prev <= 1) {
-          setFocusRunning(false);
-          playTaskChime();
-          const loggedMins = Math.max(1, Math.round(focusTotalSec / 60));
-          setTasks((cur) =>
-            cur.map((t) => (t.id === focusTaskId ? { ...t, spentMin: (t.spentMin || 0) + loggedMins } : t))
-          );
-          showToast(`Focus sprint finished (+${loggedMins}m logged)!`);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+      const rem = Math.max(0, Math.ceil((endMs - Date.now()) / 1000));
+      setFocusSecLeft(rem);
+      setFocusElapsedSec(Math.max(0, focusTotalSec - rem));
+    }, 250);
     return () => window.clearInterval(id);
-  }, [focusRunning, focusTaskId, focusTotalSec, setTasks]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusRunning, focusTaskId, focusTotalSec]);
+
+  // Complete task focus sprint cleanly outside state updaters
+  useEffect(() => {
+    if (!focusRunning || !focusTaskId || focusSecLeft > 0) return;
+    const stamp = focusEndMsRef.current ?? Date.now();
+    if (focusCompletedStampRef.current === stamp) return;
+    focusCompletedStampRef.current = stamp;
+
+    setFocusRunning(false);
+    playGentleChime('complete');
+    const loggedMins = Math.max(1, Math.round(focusTotalSec / 60));
+    setTasks((cur) =>
+      cur.map((t) => (t.id === focusTaskId ? { ...t, spentMin: (t.spentMin || 0) + loggedMins } : t))
+    );
+    showToast(`Focus sprint finished (+${loggedMins}m logged)!`);
+  }, [focusRunning, focusTaskId, focusSecLeft, focusTotalSec, setTasks]);
 
   const categories = useMemo(
     () => Array.from(new Set([...DEFAULT_CATEGORIES, ...prefs.customCategories])),
@@ -242,6 +398,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
     const dueToday = nonArchived.filter((t) => !t.done && t.dueDate === today).length;
     const overdue = nonArchived.filter((t) => !t.done && Boolean(t.dueDate) && t.dueDate < today).length;
     const doingCount = nonArchived.filter((t) => !t.done && resolveStatus(t) === 'doing').length;
+    const upcomingCount = nonArchived.filter((t) => !t.done && Boolean(t.dueDate) && t.dueDate > today).length;
     const starredOpen = nonArchived.filter((t) => !t.done && Boolean(t.starred)).length;
     const highOpen = nonArchived.filter((t) => !t.done && t.priority === 'high').length;
     const quickCount = nonArchived.filter((t) => !t.done && (t.estimateMin ?? 25) <= 15).length;
@@ -259,6 +416,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
       dueToday,
       overdue,
       doingCount,
+      upcomingCount,
       starredOpen,
       highOpen,
       quickCount,
@@ -536,6 +694,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
   };
 
   const startFocusOnTask = (task: HumanTask) => {
+    getSharedAudioContext();
     const mins = Math.max(5, task.estimateMin || 25);
     setFocusTaskId(task.id);
     setFocusTotalSec(mins * 60);
@@ -649,8 +808,8 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
     URL.revokeObjectURL(url);
   };
 
-  const handleExportMarkdown = () => {
-    const md = [
+  const buildMarkdownExport = () =>
+    [
       `# Soul DevPortal Tasks (${today})`,
       '',
       ...tasks.map(
@@ -660,12 +819,10 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
           })`
       ),
     ].join('\n');
-    downloadBlob(md, 'text/markdown;charset=utf-8', `tasks-${today}.md`);
-  };
 
-  const handleExportCsv = () => {
+  const buildCsvExport = () => {
     const esc = (v: string) => `"${String(v).replace(/"/g, '""')}"`;
-    const rows = [
+    return [
       ['Title', 'Status', 'Priority', 'Category', 'DueDate', 'DueTime', 'EstimateMin', 'SpentMin', 'Repeat', 'Tags'].join(','),
       ...tasks.map((t) =>
         [
@@ -682,11 +839,30 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
         ].join(',')
       ),
     ].join('\n');
-    downloadBlob(rows, 'text/csv;charset=utf-8', `tasks-${today}.csv`);
+  };
+
+  const handleExportMarkdown = () => {
+    downloadBlob(buildMarkdownExport(), 'text/markdown;charset=utf-8', `tasks-${today}.md`);
+  };
+
+  const handleExportCsv = () => {
+    downloadBlob(buildCsvExport(), 'text/csv;charset=utf-8', `tasks-${today}.csv`);
   };
 
   const handleExportJson = () => {
     downloadBlob(JSON.stringify(tasks, null, 2), 'application/json;charset=utf-8', `tasks-backup-${today}.json`);
+  };
+
+  const handleCopyExport = (format: 'md' | 'csv' | 'json') => {
+    const payload =
+      format === 'md'
+        ? buildMarkdownExport()
+        : format === 'csv'
+        ? buildCsvExport()
+        : JSON.stringify(tasks, null, 2);
+    void copyTextSafe(payload).then((ok) => {
+      showToast(ok ? `Copied ${format.toUpperCase()} export to clipboard ✓` : 'Clipboard unavailable');
+    });
   };
 
   // Bulk Actions
@@ -1066,68 +1242,82 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
       <header
         className={
           embedded
-            ? 'w-full bg-[#111218] border border-white/[0.08] rounded-2xl p-4 sm:p-5'
-            : 'w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-2xl portal-header-sheen'
+            ? 'relative overflow-hidden w-full bg-[#111218] border border-white/[0.08] rounded-2xl p-4 sm:p-5 shadow-lg'
+            : 'relative overflow-hidden w-full bg-[#111115] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-2xl portal-header-sheen'
         }
       >
         {!embedded && (
           <HeroArtworkBackdrop src="/visuals/hero-overview-mesh.jpg" alt="" opacityClass="opacity-30 sm:opacity-45" />
         )}
-        <div className="relative z-10 flex flex-col gap-5">
+        <div className="relative z-10 flex flex-col gap-4">
           <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-            <div className="flex flex-col gap-1.5">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-300">
-                  Personal Action Planner
-                </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
-                  {sync.saving ? 'Saving...' : 'Synced SQLite WAL'}
-                </span>
-                {stats.overdue > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => setFilter('overdue')}
-                    className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/15 border border-rose-500/35 text-rose-300 cursor-pointer"
-                  >
-                    {stats.overdue} Overdue
-                  </button>
+            <div className="flex items-start gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-[#161722] border border-white/[0.09] flex items-center justify-center text-emerald-300 shrink-0 shadow-sm">
+                <TaskSvg className="w-5 h-5">
+                  <path d="m9 11 3 3L22 4" />
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </TaskSvg>
+              </div>
+              <div className="flex flex-col gap-0.5 min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-300">
+                    Personal Action Planner
+                  </span>
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                    {sync.saving ? 'Saving...' : 'Synced SQLite WAL'}
+                  </span>
+                  {stats.overdue > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setFilter('overdue')}
+                      className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-rose-500/15 border border-rose-500/35 text-rose-300 hover:bg-rose-500/25 cursor-pointer tabular-nums"
+                    >
+                      {stats.overdue} Overdue
+                    </button>
+                  )}
+                </div>
+                {embedded ? (
+                  <h2 className="text-lg sm:text-xl font-extrabold tracking-tight text-white">Tasks &amp; Planner</h2>
+                ) : (
+                  <>
+                    <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                      Tasks &amp; Planner
+                    </h1>
+                    <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl mt-0.5">
+                      Plan with List, Drag-and-Drop Board, Eisenhower 2×2 Matrix, or Timeline — complete with live Focus Timer, smart syntax capture, templates, and dependencies.
+                    </p>
+                  </>
                 )}
               </div>
-              {embedded ? (
-                <h2 className="text-lg font-extrabold tracking-tight text-white">Tasks &amp; Planner</h2>
-              ) : (
-                <>
-                  <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                    Tasks &amp; Planner
-                  </h1>
-                  <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl">
-                    Plan with List, Drag-and-Drop Board, Eisenhower 2×2 Matrix, or Timeline — complete with live Focus Timer, smart syntax capture, templates, and dependencies.
-                  </p>
-                </>
-              )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="flex items-center p-0.5 rounded-xl bg-[#0b0c10] border border-white/[0.08]" role="tablist" aria-label="Task layout views">
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <div
+                className="inline-flex items-center h-9 p-1 rounded-xl bg-[#09090c] border border-white/[0.08] gap-0.5"
+                role="group"
+                aria-label="Task layout views"
+              >
                 {(
                   [
-                    { id: 'list', label: '☰ List' },
-                    { id: 'board', label: '▦ Board' },
-                    { id: 'matrix', label: '⊞ Matrix' },
-                    { id: 'timeline', label: '📅 Timeline' },
+                    { id: 'list', label: 'List' },
+                    { id: 'board', label: 'Board' },
+                    { id: 'matrix', label: 'Matrix' },
+                    { id: 'timeline', label: 'Timeline' },
                   ] as const
                 ).map((v) => (
                   <button
                     key={v.id}
                     type="button"
-                    role="tab"
-                    aria-selected={layout === v.id}
+                    aria-pressed={layout === v.id}
                     onClick={() => setLayout(v.id)}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-mono cursor-pointer ${
-                      layout === v.id ? 'bg-zinc-800 text-white font-bold' : 'text-zinc-400 hover:text-white'
+                    className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-xs transition-all cursor-pointer whitespace-nowrap ${
+                      layout === v.id
+                        ? 'bg-zinc-800 text-white font-bold border border-white/20 shadow-sm'
+                        : 'text-zinc-400 hover:text-white hover:bg-white/[0.05] border border-transparent font-medium'
                     }`}
                   >
-                    {v.label}
+                    {renderTaskLayoutIcon(v.id, layout === v.id)}
+                    <span>{v.label}</span>
                   </button>
                 ))}
               </div>
@@ -1135,36 +1325,56 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
               <button
                 type="button"
                 onClick={() => setShowInsights((v) => !v)}
-                className={`px-3 py-2 rounded-xl border text-xs font-semibold cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                   showInsights
                     ? 'bg-sky-500/20 border-sky-400/45 text-sky-200 font-bold'
-                    : 'bg-[#181922] border-white/[0.1] hover:border-sky-400/40 text-zinc-200'
+                    : 'bg-[#161821] border-white/[0.1] hover:border-sky-400/40 text-zinc-200 hover:text-white'
                 }`}
               >
-                📊 Insights
+                <TaskSvg className="w-3.5 h-3.5 text-sky-300">
+                  <path d="M3 3v18h18" />
+                  <path d="M18 17V9" />
+                  <path d="M13 17V5" />
+                  <path d="M8 17v-3" />
+                </TaskSvg>
+                <span>Insights</span>
               </button>
               <button
                 type="button"
-                onClick={() => setToolboxOpen(true)}
-                className="px-3 py-2 rounded-xl bg-purple-500/15 border border-purple-500/35 hover:bg-purple-500/25 text-xs font-semibold text-purple-200 cursor-pointer"
+                onClick={() => setToolboxOpen((v) => !v)}
+                className={`inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                  toolboxOpen
+                    ? 'bg-purple-500/25 border-purple-400/50 text-white font-bold'
+                    : 'bg-purple-500/15 border-purple-500/35 hover:bg-purple-500/25 text-purple-200'
+                }`}
               >
-                ⚡ Templates &amp; Dump
+                <TaskSvg className="w-3.5 h-3.5 text-purple-300">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </TaskSvg>
+                <span>Templates &amp; Data</span>
               </button>
               {!embedded && (
                 <>
                   <button
                     type="button"
                     onClick={() => onNavigate('notes')}
-                    className="px-3 py-2 rounded-xl bg-[#181922] border border-white/[0.1] hover:border-sky-400/40 text-xs font-semibold text-zinc-200 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-[#161821] border border-white/[0.1] hover:border-sky-400/40 text-xs font-semibold text-zinc-200 cursor-pointer whitespace-nowrap"
                   >
-                    📝 Notes
+                    <TaskSvg className="w-3.5 h-3.5 text-sky-300">
+                      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                    </TaskSvg>
+                    <span>Notes</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => onNavigate('tools')}
-                    className="px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 text-xs font-semibold text-emerald-200 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 text-xs font-semibold text-emerald-200 cursor-pointer whitespace-nowrap"
                   >
-                    ⏱ Toolkit
+                    <TaskSvg className="w-3.5 h-3.5 text-emerald-300">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </TaskSvg>
+                    <span>Toolkit</span>
                   </button>
                 </>
               )}
@@ -1172,40 +1382,48 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
           </div>
 
           {/* KPI Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.08] flex flex-col">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-3.5 border-t border-white/[0.07]">
+            <div className="p-3 rounded-xl bg-[#0b0c10]/90 border border-white/[0.08] flex flex-col justify-between gap-1">
+              <span className="text-[11px] font-mono text-zinc-400">Active Tasks</span>
               <span className="text-xl font-extrabold font-mono text-white tabular-nums">{stats.pending}</span>
-              <span className="text-xs text-zinc-400">Active Tasks</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.08] flex flex-col">
+            <div className="p-3 rounded-xl bg-[#0b0c10]/90 border border-white/[0.08] flex flex-col justify-between gap-1">
+              <span className="inline-flex items-center gap-1 text-[11px] font-mono text-zinc-400">
+                <TaskSvg className="w-3 h-3 text-amber-300 fill-amber-300">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </TaskSvg>
+                <span>Focus Starred</span>
+              </span>
               <span className="text-xl font-extrabold font-mono text-amber-300 tabular-nums">{stats.starredOpen}</span>
-              <span className="text-xs text-zinc-400">★ Focus Starred</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.08] flex flex-col">
+            <div className="p-3 rounded-xl bg-[#0b0c10]/90 border border-white/[0.08] flex flex-col justify-between gap-1">
+              <span className="text-[11px] font-mono text-zinc-400">Due Today</span>
               <span className="text-xl font-extrabold font-mono text-sky-300 tabular-nums">{stats.dueToday}</span>
-              <span className="text-xs text-zinc-400">Due Today</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.08] flex flex-col">
+            <div className="p-3 rounded-xl bg-[#0b0c10]/90 border border-white/[0.08] flex flex-col justify-between gap-1">
+              <span className="text-[11px] font-mono text-zinc-400">Overdue</span>
               <span className={`text-xl font-extrabold font-mono tabular-nums ${stats.overdue > 0 ? 'text-rose-300' : 'text-zinc-300'}`}>
                 {stats.overdue}
               </span>
-              <span className="text-xs text-zinc-400">Overdue</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.08] flex flex-col">
+            <div className="p-3 rounded-xl bg-[#0b0c10]/90 border border-white/[0.08] flex flex-col justify-between gap-1">
+              <span className="text-[11px] font-mono text-zinc-400">Est. Queue Left</span>
               <span className="text-xl font-extrabold font-mono text-purple-300 tabular-nums">
                 {formatMinutes(stats.focusMinsLeft)}
               </span>
-              <span className="text-xs text-zinc-400">Est. Queue Left</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-[#16171e] border border-white/[0.08] flex flex-col gap-1.5">
-              <div className="flex items-baseline justify-between">
-                <span className="text-xl font-extrabold font-mono text-emerald-400 tabular-nums">{stats.pct}%</span>
-                <span className="text-[11px] font-mono text-zinc-400">
+            <div className="p-3 rounded-xl bg-[#0b0c10]/90 border border-white/[0.08] flex flex-col justify-between gap-1.5">
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                <span className="text-zinc-400">Completion</span>
+                <span className="text-zinc-400 tabular-nums">
                   {stats.completed}/{stats.total}
                 </span>
               </div>
-              <div className="w-full h-1.5 rounded-full bg-black/50 overflow-hidden">
-                <div className="h-full bg-emerald-400 transition-all duration-200" style={{ width: `${stats.pct}%` }} />
+              <div className="flex items-center gap-2.5">
+                <span className="text-xl font-extrabold font-mono text-emerald-400 tabular-nums leading-none">{stats.pct}%</span>
+                <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+                  <div className="h-full bg-emerald-400 transition-all duration-200" style={{ width: `${stats.pct}%` }} />
+                </div>
               </div>
             </div>
           </div>
@@ -1230,6 +1448,48 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
           }}
         />
       )}
+
+      {/* Collapsible Power Toolbox Drawer (Inline — Templates, Brain Dump, Categories & Data Tools) */}
+      <TaskToolboxModal
+        open={toolboxOpen}
+        tasks={tasks}
+        customTemplates={prefs.customTemplates}
+        customCategories={prefs.customCategories}
+        categories={categories}
+        onClose={() => setToolboxOpen(false)}
+        onApplyTemplate={handleApplyTemplate}
+        onDeleteCustomTemplate={(id) =>
+          setPrefs((p) => ({ ...p, customTemplates: p.customTemplates.filter((t) => t.id !== id) }))
+        }
+        onBulkBrainDump={(newItems) => {
+          setTasks((prev) => [...newItems, ...prev]);
+          setFilter('all');
+          showToast(`Imported ${newItems.length} tasks ✓`);
+        }}
+        onAddCategory={(cat) => {
+          if (!categories.includes(cat)) {
+            setPrefs((p) => ({ ...p, customCategories: [...p.customCategories, cat] }));
+          }
+        }}
+        onRemoveCustomCategory={(cat) => {
+          setPrefs((p) => ({ ...p, customCategories: p.customCategories.filter((c) => c !== cat) }));
+        }}
+        onImportJson={(imported, mode) => {
+          if (mode === 'replace') {
+            commitWithUndo('Replaced tasks via import', () => imported);
+          } else {
+            setTasks((prev) => {
+              const existingIds = new Set(prev.map((t) => t.id));
+              const fresh = imported.filter((t) => !existingIds.has(t.id));
+              return [...fresh, ...prev];
+            });
+          }
+        }}
+        onExportCsv={handleExportCsv}
+        onExportJson={handleExportJson}
+        onExportMarkdown={handleExportMarkdown}
+        onCopyFormat={handleCopyExport}
+      />
 
       {/* Live Active Task Focus Timer Banner */}
       {focusedTask && (
@@ -1303,7 +1563,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
         onSubmit={handleAddTask}
         className="w-full rounded-2xl bg-[#111218] border border-white/[0.08] p-4 sm:p-5 flex flex-col gap-3 shadow-lg"
       >
-        <div className="flex flex-col lg:flex-row gap-3">
+        <div className="flex flex-col lg:flex-row gap-2.5">
           <div className="relative flex-1 flex items-center">
             <input
               ref={titleInputRef}
@@ -1319,79 +1579,112 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                   : 'Add task (Press N · supports !high, @tomorrow, ~30m, *daily, ^deep, #Tag)...'
               }
               aria-label="New task title"
-              className={`w-full h-11 pl-4 pr-9 rounded-xl bg-[#08090c] border focus:outline-none text-sm text-white placeholder-zinc-500 ${
+              className={`w-full h-10 pl-3.5 pr-9 rounded-xl bg-[#08090c] border focus:outline-none text-sm text-white placeholder-zinc-500 ${
                 addWarning ? 'border-amber-400/70' : 'border-white/[0.1] focus:border-sky-400/50'
               }`}
             />
-            <kbd className="hidden sm:inline-block absolute right-3 px-1.5 py-0.5 rounded bg-[#16171e] border border-white/[0.08] text-[10px] font-mono text-zinc-400 pointer-events-none">
+            <kbd className="hidden sm:inline-block absolute right-2.5 px-1.5 py-0.5 rounded bg-[#16171e] border border-white/[0.08] text-[10px] font-mono text-zinc-400 pointer-events-none">
               N
             </kbd>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <select
+            <TaskSelectBox
               value={newPriority}
-              onChange={(e) => setNewPriority(e.target.value as TaskPriority)}
-              aria-label="Task priority"
-              className="h-11 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-zinc-200 focus:outline-none"
+              onChange={(val) => setNewPriority(val as TaskPriority)}
+              ariaLabel="Task priority"
+              className="h-10 rounded-xl bg-[#08090c] border border-white/[0.1] hover:border-white/[0.2]"
+              selectClassName="text-xs font-mono text-zinc-100"
+              leading={
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    newPriority === 'high'
+                      ? 'bg-rose-400'
+                      : newPriority === 'medium'
+                      ? 'bg-amber-400'
+                      : 'bg-zinc-400'
+                  }`}
+                />
+              }
             >
-              <option value="high">🔴 High</option>
-              <option value="medium">🟡 Medium</option>
-              <option value="low">⚪ Low</option>
-            </select>
+              <option value="high" className="bg-[#111218] text-zinc-100">High</option>
+              <option value="medium" className="bg-[#111218] text-zinc-100">Medium</option>
+              <option value="low" className="bg-[#111218] text-zinc-100">Low</option>
+            </TaskSelectBox>
 
-            <select
+            <TaskSelectBox
               value={newCategory}
-              onChange={(e) => setNewCategory(e.target.value)}
-              aria-label="Task category"
-              className="h-11 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-zinc-200 focus:outline-none"
+              onChange={(val) => setNewCategory(val)}
+              ariaLabel="Task category"
+              className="h-10 rounded-xl bg-[#08090c] border border-white/[0.1] hover:border-white/[0.2]"
+              selectClassName="text-xs font-mono text-zinc-100"
             >
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
+                <option key={cat} value={cat} className="bg-[#111218] text-zinc-100">
                   {cat}
                 </option>
               ))}
-            </select>
+            </TaskSelectBox>
 
-            <select
+            <TaskSelectBox
               value={newRepeat}
-              onChange={(e) => setNewRepeat(e.target.value as TaskRepeat)}
-              aria-label="Repeat cadence"
-              className="h-11 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-zinc-200 focus:outline-none"
+              onChange={(val) => setNewRepeat(val as TaskRepeat)}
+              ariaLabel="Repeat cadence"
+              className="h-10 rounded-xl bg-[#08090c] border border-white/[0.1] hover:border-white/[0.2]"
+              selectClassName="text-xs font-mono text-zinc-100"
+              leading={
+                <TaskSvg className="w-3.5 h-3.5 text-zinc-400">
+                  <path d="m17 2 4 4-4 4" />
+                  <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+                  <path d="m7 22-4-4 4-4" />
+                  <path d="M21 13v1a4 4 0 0 1-4 4H3" />
+                </TaskSvg>
+              }
             >
-              <option value="none">Once</option>
-              <option value="daily">🔁 Daily</option>
-              <option value="weekly">🔁 Weekly</option>
-              <option value="monthly">🔁 Monthly</option>
-            </select>
+              <option value="none" className="bg-[#111218] text-zinc-100">Once</option>
+              <option value="daily" className="bg-[#111218] text-zinc-100">Daily</option>
+              <option value="weekly" className="bg-[#111218] text-zinc-100">Weekly</option>
+              <option value="monthly" className="bg-[#111218] text-zinc-100">Monthly</option>
+            </TaskSelectBox>
 
-            <select
+            <TaskSelectBox
               value={newEstimate}
-              onChange={(e) => setNewEstimate(Number(e.target.value))}
-              aria-label="Estimated duration"
-              className="h-11 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-zinc-200 focus:outline-none"
+              onChange={(val) => setNewEstimate(Number(val))}
+              ariaLabel="Estimated duration"
+              className="h-10 rounded-xl bg-[#08090c] border border-white/[0.1] hover:border-white/[0.2]"
+              selectClassName="text-xs font-mono text-zinc-100"
+              leading={
+                <TaskSvg className="w-3.5 h-3.5 text-zinc-400">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </TaskSvg>
+              }
             >
-              <option value={10}>10m</option>
-              <option value={15}>15m</option>
-              <option value={25}>25m</option>
-              <option value={45}>45m</option>
-              <option value={60}>1h</option>
-              <option value={120}>2h</option>
-            </select>
+              <option value={10} className="bg-[#111218] text-zinc-100">10m</option>
+              <option value={15} className="bg-[#111218] text-zinc-100">15m</option>
+              <option value={25} className="bg-[#111218] text-zinc-100">25m</option>
+              <option value={45} className="bg-[#111218] text-zinc-100">45m</option>
+              <option value={60} className="bg-[#111218] text-zinc-100">1h</option>
+              <option value={120} className="bg-[#111218] text-zinc-100">2h</option>
+            </TaskSelectBox>
 
             <input
               type="date"
               value={newDueDate}
               onChange={(e) => setNewDueDate(e.target.value)}
               aria-label="Due date"
-              className="h-11 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs font-mono text-zinc-200 focus:outline-none"
+              className="h-10 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] hover:border-white/[0.2] text-xs font-mono text-zinc-200 focus:outline-none focus:border-sky-400/50"
             />
 
             <button
               type="submit"
-              className="h-11 px-5 rounded-xl bg-white text-zinc-950 hover:bg-zinc-200 font-bold text-xs transition-colors cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 font-extrabold text-xs transition-colors shadow-sm cursor-pointer shrink-0 whitespace-nowrap"
             >
-              + Add Task
+              <TaskSvg className="w-3.5 h-3.5 stroke-[2.5]">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+              </TaskSvg>
+              <span>Add Task</span>
             </button>
           </div>
         </div>
@@ -1429,32 +1722,38 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
             onChange={(e) => setNewNotes(e.target.value)}
             placeholder="Optional details or reminder note..."
             aria-label="Optional task note"
-            className="flex-1 h-9 px-3.5 rounded-lg bg-[#090a0e] border border-white/[0.06] focus:border-white/[0.2] focus:outline-none text-xs text-zinc-300 placeholder-zinc-600"
+            className="flex-1 h-9 px-3.5 rounded-xl bg-[#08090c] border border-white/[0.08] focus:border-white/[0.2] focus:outline-none text-xs text-zinc-300 placeholder-zinc-600"
           />
-          <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono">
-            {[
-              { label: 'Today', val: todayIso() },
-              { label: 'Tomorrow', val: offsetDateIso(1) },
-              { label: '+7d', val: offsetDateIso(7) },
-              { label: 'No Date', val: '' },
-            ].map((p) => (
-              <button
-                key={p.label}
-                type="button"
-                onClick={() => setNewDueDate(p.val)}
-                className={`px-2.5 py-1.5 rounded-lg border cursor-pointer ${
-                  newDueDate === p.val
-                    ? 'bg-sky-500/15 border-sky-400/35 text-sky-200'
-                    : 'bg-[#090a0e] border-white/[0.08] text-zinc-400 hover:text-white'
-                }`}
-              >
-                {p.label}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono shrink-0">
+            <div className="inline-flex items-center h-9 p-0.5 rounded-xl bg-[#09090c] border border-white/[0.08] gap-0.5">
+              {[
+                { label: 'Today', val: todayIso() },
+                { label: 'Tomorrow', val: offsetDateIso(1) },
+                { label: '+7d', val: offsetDateIso(7) },
+                { label: 'No Date', val: '' },
+              ].map((p) => (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => setNewDueDate(p.val)}
+                  className={`h-full px-2.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
+                    newDueDate === p.val
+                      ? 'bg-sky-500/20 border-sky-400/40 text-sky-200 font-bold'
+                      : 'border-transparent text-zinc-400 hover:text-white hover:bg-white/[0.05]'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
             <button
               type="button"
               onClick={() => setShowAdvancedAdd((v) => !v)}
-              className="px-2.5 py-1.5 rounded-lg bg-[#16171e] border border-white/[0.08] text-zinc-300 hover:text-white cursor-pointer"
+              className={`h-9 px-3 rounded-xl border transition-colors cursor-pointer whitespace-nowrap ${
+                showAdvancedAdd
+                  ? 'bg-zinc-800 border-white/20 text-white font-bold'
+                  : 'bg-[#161821] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2]'
+              }`}
             >
               {showAdvancedAdd ? 'Less −' : 'More +'}
             </button>
@@ -1462,181 +1761,244 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
         </div>
 
         {showAdvancedAdd && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-white/[0.06] text-xs font-mono">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-white/[0.07] text-xs font-mono">
             <label className="flex items-center gap-2">
               <span className="text-zinc-400 shrink-0">Time:</span>
               <input
                 type="time"
                 value={newDueTime}
                 onChange={(e) => setNewDueTime(e.target.value)}
-                className="flex-1 h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-zinc-200"
+                className="flex-1 h-9 px-2.5 rounded-xl bg-[#08090c] border border-white/[0.1] text-zinc-200 focus:outline-none"
               />
             </label>
-            <label className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <span className="text-zinc-400 shrink-0">Energy:</span>
-              <select
+              <TaskSelectBox
                 value={newEnergy}
-                onChange={(e) => setNewEnergy(e.target.value as TaskEnergy)}
-                className="flex-1 h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-zinc-200"
+                onChange={(val) => setNewEnergy(val as TaskEnergy)}
+                ariaLabel="Task energy"
+                className="flex-1 h-9 rounded-xl bg-[#08090c] border border-white/[0.1] hover:border-white/[0.2]"
+                selectClassName="w-full text-xs font-mono text-zinc-200"
               >
-                <option value="deep">🔥 Deep Focus</option>
-                <option value="normal">⚡ Normal</option>
-                <option value="low">🔋 Low Energy</option>
-              </select>
-            </label>
-            <label className="flex items-center gap-2">
+                <option value="deep" className="bg-[#111218] text-zinc-100">Deep Focus</option>
+                <option value="normal" className="bg-[#111218] text-zinc-100">Normal</option>
+                <option value="low" className="bg-[#111218] text-zinc-100">Low Energy</option>
+              </TaskSelectBox>
+            </div>
+            <div className="flex items-center gap-2">
               <span className="text-zinc-400 shrink-0">Project:</span>
-              <select
+              <TaskSelectBox
                 value={newProjectId}
-                onChange={(e) => setNewProjectId(e.target.value)}
-                className="flex-1 h-9 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-zinc-200"
+                onChange={(val) => setNewProjectId(val)}
+                ariaLabel="Linked project"
+                className="flex-1 h-9 rounded-xl bg-[#08090c] border border-white/[0.1] hover:border-white/[0.2]"
+                selectClassName="w-full text-xs font-mono text-zinc-200"
               >
-                <option value="">None</option>
+                <option value="" className="bg-[#111218] text-zinc-100">None</option>
                 {Object.entries(PROJECT_BRAND_MAP).map(([id, brand]) => (
-                  <option key={id} value={id}>
-                    {brand.icon} {brand.shortName}
+                  <option key={id} value={id} className="bg-[#111218] text-zinc-100">
+                    {brand.shortName}
                   </option>
                 ))}
-              </select>
-            </label>
+              </TaskSelectBox>
+            </div>
           </div>
         )}
 
         {/* One-Click Starter Template Chips */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-white/[0.06] text-[11px]">
-          <span className="font-mono text-zinc-500 mr-1">Quick Templates:</span>
+        <div className="flex flex-wrap items-center gap-1.5 pt-3 border-t border-white/[0.07]">
+          <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-zinc-400 mr-1">
+            Templates:
+          </span>
           {[...prefs.customTemplates, ...STARTER_TASK_TEMPLATES].slice(0, 5).map((tpl) => (
             <button
               key={tpl.id}
               type="button"
               onClick={() => handleApplyTemplate(tpl)}
-              className="px-2.5 py-1 rounded-lg bg-[#090a0e] border border-white/[0.08] hover:border-purple-400/40 text-zinc-300 hover:text-white cursor-pointer transition-colors"
+              className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg bg-[#161821] border border-white/[0.08] hover:border-white/[0.22] hover:bg-[#1c1f2b] text-xs font-medium text-zinc-200 hover:text-white cursor-pointer transition-all whitespace-nowrap"
             >
-              {tpl.icon} {tpl.name}
+              {renderStarterTplIcon(tpl.id)}
+              <span>{tpl.name}</span>
             </button>
           ))}
         </div>
       </form>
 
-      {/* Filter, Search, Sort & Bulk Toolbar */}
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Task views">
+      {/* Unified Filter, Search, Sort & Bulk Toolbar */}
+      <div className="rounded-2xl bg-[#111218] border border-white/[0.08] p-3.5 sm:px-4 sm:py-3 flex flex-col gap-3 shadow-sm">
+        <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Task views">
           {(
             [
-              { id: 'all', label: 'All Tasks' },
-              { id: 'starred', label: `★ Focus (${stats.starredOpen})` },
-              { id: 'today', label: `Today (${stats.dueToday})` },
-              { id: 'overdue', label: `Overdue (${stats.overdue})` },
-              { id: 'doing', label: `Doing (${stats.doingCount})` },
-              { id: 'upcoming', label: 'Upcoming' },
-              { id: 'high', label: `High (${stats.highOpen})` },
-              { id: 'quick', label: `Quick ≤15m (${stats.quickCount})` },
-              { id: 'recurring', label: `Repeating (${stats.recurringCount})` },
-              { id: 'completed', label: `Completed (${stats.completed})` },
-              ...(stats.archivedCount > 0 ? [{ id: 'archived' as const, label: `Archived (${stats.archivedCount})` }] : []),
-            ] as const
-          ).map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              aria-selected={filter === tab.id}
-              onClick={() => setFilter(tab.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors cursor-pointer ${
-                filter === tab.id
-                  ? 'bg-sky-500/20 border-sky-400/45 text-sky-200 font-bold'
-                  : 'bg-[#121319] border-white/[0.08] text-zinc-400 hover:text-white'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+              { id: 'all', label: 'All', count: stats.total },
+              { id: 'starred', label: 'Focus', count: stats.starredOpen, star: true },
+              { id: 'today', label: 'Today', count: stats.dueToday },
+              { id: 'overdue', label: 'Overdue', count: stats.overdue, warn: stats.overdue > 0 },
+              { id: 'doing', label: 'Doing', count: stats.doingCount },
+              { id: 'upcoming', label: 'Upcoming', count: stats.upcomingCount },
+              { id: 'high', label: 'High', count: stats.highOpen },
+              { id: 'quick', label: 'Quick ≤15m', count: stats.quickCount },
+              { id: 'recurring', label: 'Repeating', count: stats.recurringCount },
+              { id: 'completed', label: 'Completed', count: stats.completed },
+              ...(stats.archivedCount > 0
+                ? [{ id: 'archived' as const, label: 'Archived', count: stats.archivedCount }]
+                : []),
+            ] as Array<{
+              id: TaskFilter;
+              label: string;
+              count: number;
+              star?: boolean;
+              warn?: boolean;
+            }>
+          ).map((tab) => {
+            const isActive = filter === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => setFilter(tab.id)}
+                className={`inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs border transition-all cursor-pointer whitespace-nowrap ${
+                  isActive
+                    ? tab.warn
+                      ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 font-bold shadow-sm'
+                      : 'bg-sky-500/15 border-sky-400/45 text-white font-bold shadow-sm'
+                    : 'bg-[#161821] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2] font-medium'
+                }`}
+              >
+                {tab.star && (
+                  <TaskSvg className={isActive ? 'w-3.5 h-3.5 text-amber-300 fill-amber-300' : 'w-3.5 h-3.5 text-amber-400/80'}>
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </TaskSvg>
+                )}
+                <span>{tab.label}</span>
+                <span
+                  className={`px-1.5 py-0.5 rounded-md text-[10px] font-mono leading-none tabular-nums ${
+                    isActive
+                      ? tab.warn
+                        ? 'bg-rose-400/25 text-rose-100'
+                        : 'bg-sky-400/20 text-sky-200'
+                      : tab.warn
+                      ? 'bg-rose-500/15 text-rose-300'
+                      : tab.count > 0
+                      ? 'bg-white/[0.06] text-zinc-300'
+                      : 'bg-white/[0.03] text-zinc-500'
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2.5 pt-3 border-t border-white/[0.07]">
           <div className="flex flex-wrap items-center gap-2">
-            <select
+            <TaskSelectBox
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              aria-label="Filter by category"
-              className="h-9 px-3 rounded-xl bg-[#121319] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none"
+              onChange={(val) => setCategoryFilter(val)}
+              ariaLabel="Filter by category"
+              prefix="Category:"
+              selectClassName="text-xs font-semibold text-zinc-100"
             >
-              <option value="All">All Categories</option>
+              <option value="All" className="bg-[#111218] text-zinc-100">All</option>
               {categories.map((c) => (
-                <option key={c} value={c}>
+                <option key={c} value={c} className="bg-[#111218] text-zinc-100">
                   {c}
                 </option>
               ))}
-            </select>
+            </TaskSelectBox>
 
-            <select
+            <TaskSelectBox
               value={energyFilter}
-              onChange={(e) => setEnergyFilter(e.target.value as 'all' | TaskEnergy)}
-              aria-label="Filter by energy"
-              className="h-9 px-3 rounded-xl bg-[#121319] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none"
+              onChange={(val) => setEnergyFilter(val as 'all' | TaskEnergy)}
+              ariaLabel="Filter by energy"
+              prefix="Energy:"
+              selectClassName="text-xs font-semibold text-zinc-100"
             >
-              <option value="all">All Energy</option>
-              <option value="deep">🔥 Deep Focus</option>
-              <option value="normal">⚡ Normal</option>
-              <option value="low">🔋 Low Energy</option>
-            </select>
+              <option value="all" className="bg-[#111218] text-zinc-100">All</option>
+              <option value="deep" className="bg-[#111218] text-zinc-100">Deep Focus</option>
+              <option value="normal" className="bg-[#111218] text-zinc-100">Normal</option>
+              <option value="low" className="bg-[#111218] text-zinc-100">Low Energy</option>
+            </TaskSelectBox>
 
             {allTags.length > 0 && (
-              <select
+              <TaskSelectBox
                 value={tagFilter}
-                onChange={(e) => setTagFilter(e.target.value)}
-                aria-label="Filter by tag"
-                className="h-9 px-3 rounded-xl bg-[#121319] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none"
+                onChange={(val) => setTagFilter(val)}
+                ariaLabel="Filter by tag"
+                prefix="Tag:"
+                selectClassName="text-xs font-semibold text-zinc-100"
               >
-                <option value="All">All Tags</option>
+                <option value="All" className="bg-[#111218] text-zinc-100">All</option>
                 {allTags.map((t) => (
-                  <option key={t} value={t}>
+                  <option key={t} value={t} className="bg-[#111218] text-zinc-100">
                     #{t}
                   </option>
                 ))}
-              </select>
+              </TaskSelectBox>
             )}
 
-            <select
+            <TaskSelectBox
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as TaskSort)}
-              aria-label="Sort tasks"
-              className="h-9 px-3 rounded-xl bg-[#121319] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none"
+              onChange={(val) => setSortBy(val as TaskSort)}
+              ariaLabel="Sort tasks"
+              prefix="Sort:"
+              selectClassName="text-xs font-semibold text-zinc-100"
+              leading={
+                <TaskSvg className="w-3.5 h-3.5 text-zinc-400">
+                  <path d="m3 16 4 4 4-4" />
+                  <path d="M7 20V4" />
+                  <path d="m21 8-4-4-4 4" />
+                  <path d="M17 4v16" />
+                </TaskSvg>
+              }
             >
-              <option value="smart">Sort: Smart Rank</option>
-              <option value="due">Sort: Due Date</option>
-              <option value="priority">Sort: Priority</option>
-              <option value="shortest">Sort: Shortest (~m)</option>
-              <option value="longest">Sort: Longest (~m)</option>
-              <option value="newest">Sort: Newest</option>
-              <option value="title">Sort: A–Z</option>
-            </select>
+              <option value="smart" className="bg-[#111218] text-zinc-100">Smart Rank</option>
+              <option value="due" className="bg-[#111218] text-zinc-100">Due Date</option>
+              <option value="priority" className="bg-[#111218] text-zinc-100">Priority</option>
+              <option value="shortest" className="bg-[#111218] text-zinc-100">Shortest</option>
+              <option value="longest" className="bg-[#111218] text-zinc-100">Longest</option>
+              <option value="newest" className="bg-[#111218] text-zinc-100">Newest</option>
+              <option value="title" className="bg-[#111218] text-zinc-100">A–Z</option>
+            </TaskSelectBox>
 
             {layout === 'list' && (
-              <select
+              <TaskSelectBox
                 value={groupBy}
-                onChange={(e) => setGroupBy(e.target.value as TaskGroupBy)}
-                aria-label="Group tasks"
-                className="h-9 px-3 rounded-xl bg-[#121319] border border-white/[0.08] text-xs text-zinc-200 focus:outline-none"
+                onChange={(val) => setGroupBy(val as TaskGroupBy)}
+                ariaLabel="Group tasks"
+                prefix="Group:"
+                selectClassName="text-xs font-semibold text-zinc-100"
               >
-                <option value="none">Group: Flat</option>
-                <option value="category">Group: Category</option>
-                <option value="priority">Group: Priority</option>
-                <option value="due">Group: Schedule</option>
-              </select>
+                <option value="none" className="bg-[#111218] text-zinc-100">Flat</option>
+                <option value="category" className="bg-[#111218] text-zinc-100">Category</option>
+                <option value="priority" className="bg-[#111218] text-zinc-100">Priority</option>
+                <option value="due" className="bg-[#111218] text-zinc-100">Schedule</option>
+              </TaskSelectBox>
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <input
-              ref={searchInputRef}
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Filter tasks (/) ..."
-              aria-label="Filter tasks"
-              className="h-9 px-3 rounded-xl bg-[#121319] border border-white/[0.08] text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-sky-400/45"
-            />
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <div className="relative flex items-center">
+              <TaskSvg className="w-3.5 h-3.5 text-zinc-500 absolute left-2.5 pointer-events-none">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </TaskSvg>
+              <input
+                ref={searchInputRef}
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Filter tasks..."
+                aria-label="Filter tasks"
+                className="h-8 w-44 sm:w-52 pl-8 pr-7 rounded-xl bg-[#09090c] border border-white/[0.09] text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-sky-400/45"
+              />
+              {!search && (
+                <kbd className="absolute right-2 px-1.5 py-0.5 rounded bg-[#16171e] border border-white/[0.08] text-[10px] font-mono text-zinc-400 pointer-events-none">
+                  /
+                </kbd>
+              )}
+            </div>
 
             <button
               type="button"
@@ -1644,13 +2006,17 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                 setSelectMode((m) => !m);
                 setSelectedIds([]);
               }}
-              className={`h-9 px-3 rounded-xl border text-xs font-semibold cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                 selectMode
                   ? 'bg-sky-500/20 border-sky-400/45 text-sky-200 font-bold'
-                  : 'bg-[#121319] border-white/[0.08] text-zinc-300 hover:text-white'
+                  : 'bg-[#161821] border-white/[0.08] text-zinc-300 hover:text-white hover:border-white/[0.2]'
               }`}
             >
-              ☑ Select
+              <TaskSvg className={selectMode ? 'w-3.5 h-3.5 text-sky-300' : 'w-3.5 h-3.5 text-zinc-400'}>
+                <path d="m9 11 3 3L22 4" />
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+              </TaskSvg>
+              <span>Select</span>
             </button>
 
             {stats.completed > 0 && (
@@ -1661,7 +2027,7 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
                     prev.filter((t) => !t.done || t.archived)
                   )
                 }
-                className="h-9 px-3 rounded-xl bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold text-rose-300 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 h-8 px-3 rounded-xl bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold text-rose-300 transition-colors cursor-pointer whitespace-nowrap"
               >
                 Clear Done ({stats.completed})
               </button>
@@ -1965,44 +2331,6 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
         onSendToNotes={handleSendTaskToNotes}
         onDelete={deleteTask}
         onClose={() => setEditingTaskId(null)}
-      />
-
-      {/* Power Toolbox Modal (Templates, Brain Dump, Categories, Portability) */}
-      <TaskToolboxModal
-        open={toolboxOpen}
-        tasks={tasks}
-        customTemplates={prefs.customTemplates}
-        customCategories={prefs.customCategories}
-        categories={categories}
-        onClose={() => setToolboxOpen(false)}
-        onApplyTemplate={handleApplyTemplate}
-        onDeleteCustomTemplate={(id) =>
-          setPrefs((p) => ({ ...p, customTemplates: p.customTemplates.filter((t) => t.id !== id) }))
-        }
-        onBulkBrainDump={(newItems) => {
-          setTasks((prev) => [...newItems, ...prev]);
-          setFilter('all');
-          showToast(`Imported ${newItems.length} tasks ✓`);
-        }}
-        onAddCategory={(cat) => {
-          if (!categories.includes(cat)) {
-            setPrefs((p) => ({ ...p, customCategories: [...p.customCategories, cat] }));
-          }
-        }}
-        onImportJson={(imported, mode) => {
-          if (mode === 'replace') {
-            commitWithUndo('Replaced tasks via JSON import', () => imported);
-          } else {
-            setTasks((prev) => {
-              const existingIds = new Set(prev.map((t) => t.id));
-              const fresh = imported.filter((t) => !existingIds.has(t.id));
-              return [...fresh, ...prev];
-            });
-          }
-        }}
-        onExportCsv={handleExportCsv}
-        onExportJson={handleExportJson}
-        onExportMarkdown={handleExportMarkdown}
       />
 
       {/* Non-blocking Undo & Status Toast */}

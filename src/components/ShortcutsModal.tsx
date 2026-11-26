@@ -25,6 +25,7 @@ const GITHUB_RELEASE_EXE_URL = 'https://github.com/dheena017/Soul-DevPortal/rele
 const ROUTE_SHORTCUTS = [
   { keys: 'Ctrl + 1', label: 'Workspace Overview', route: 'overview' },
   { keys: '#changelog', label: 'Workspace Changelog', route: 'changelog' },
+  { keys: '#code-updates', label: 'Codebase Updates by Date', route: 'code-updates' },
   { keys: 'Ctrl + 2', label: 'Projects & Apps', route: 'projects' },
   { keys: 'Ctrl + 3', label: 'Shared Packages', route: 'packages' },
   { keys: 'Ctrl + 4', label: 'Architecture & Docs', route: 'docs' },

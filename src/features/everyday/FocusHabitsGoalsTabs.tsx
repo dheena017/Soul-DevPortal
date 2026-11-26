@@ -1,5 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSyncedWorkspaceState } from '../../services/workspaceStateStore';
+import { copyTextSafe } from '../../utils/clipboard';
+import {
+  AmbientSoundMode,
+  getSharedAudioContext,
+  playGentleChime,
+  setAmbientSoundscapeVolume,
+  startAmbientSoundscape,
+  stopAmbientSoundscape,
+} from '../../utils/focusAudio';
 import {
   DEFAULT_HABITS_STATE,
   EverydayTabId,
@@ -7,6 +16,7 @@ import {
   getLocalDateIso,
   HabitsState,
 } from './everydayTabsRegistry';
+import type { HumanTask } from './taskTypes';
 
 export interface PersonalGoal {
   id: string;
@@ -21,138 +31,424 @@ const DEFAULT_GOALS: PersonalGoal[] = [
   { id: 'g-km', title: 'Walk / Run Distance', current: 28, target: 100, unit: 'km' },
 ];
 
+export const LIVE_POMODORO_STORAGE_KEY = 'soul-everyday-live-pomodoro-v1';
+export const LIVE_STOPWATCH_STORAGE_KEY = 'soul-everyday-live-stopwatch-v1';
+const FOCUS_SESSION_LOG_KEY = 'soul-everyday-focus-log-v1';
+const AMBIENT_PREFS_KEY = 'soul-everyday-ambient-prefs-v1';
+
+export type PomodoroMode = 'focus' | 'shortBreak' | 'longBreak';
+
+export interface LivePomodoroState {
+  mode: PomodoroMode;
+  totalSec: number;
+  remainingSec: number;
+  running: boolean;
+  targetEndMs: number | null;
+  label: string;
+  linkedTaskId: string;
+  chimeEnabled: boolean;
+  autoStopSound: boolean;
+}
+
+export interface StopwatchLap {
+  id: string;
+  index: number;
+  splitMs: number;
+  totalMs: number;
+}
+
+export interface LiveStopwatchState {
+  running: boolean;
+  startedAtMs: number | null;
+  accumulatedMs: number;
+  laps: StopwatchLap[];
+}
+
+interface FocusLogEntry {
+  id: string;
+  date: string;
+  timeLabel: string;
+  minutes: number;
+  label: string;
+  mode: PomodoroMode;
+}
+
 function pad2(n: number): string {
   return String(Math.floor(Math.max(0, n))).padStart(2, '0');
 }
 
-function playGentleChime(): void {
+function formatStopwatch(ms: number): string {
+  const safe = Math.max(0, ms);
+  const mins = Math.floor(safe / 60000);
+  const secs = Math.floor((safe % 60000) / 1000);
+  const tenths = Math.floor((safe % 1000) / 100);
+  return `${pad2(mins)}:${pad2(secs)}.${tenths}`;
+}
+
+function loadLivePomodoro(): LivePomodoroState {
+  const fallback: LivePomodoroState = {
+    mode: 'focus',
+    totalSec: 25 * 60,
+    remainingSec: 25 * 60,
+    running: false,
+    targetEndMs: null,
+    label: 'Deep Focus Session',
+    linkedTaskId: '',
+    chimeEnabled: true,
+    autoStopSound: false,
+  };
   try {
-    const AudioCtx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-    [523.25, 659.25, 783.99].forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      const start = ctx.currentTime + idx * 0.14;
-      gain.gain.setValueAtTime(0.001, start);
-      gain.gain.exponentialRampToValueAtTime(0.08, start + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.55);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(start);
-      osc.stop(start + 0.6);
-    });
+    const raw = window.localStorage.getItem(LIVE_POMODORO_STORAGE_KEY);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw) as Partial<LivePomodoroState>;
+    const mode: PomodoroMode =
+      parsed.mode === 'shortBreak' || parsed.mode === 'longBreak' ? parsed.mode : 'focus';
+    const totalSec = typeof parsed.totalSec === 'number' && parsed.totalSec >= 60 ? parsed.totalSec : 1500;
+    const targetEndMs = typeof parsed.targetEndMs === 'number' ? parsed.targetEndMs : null;
+    const running = Boolean(parsed.running && targetEndMs && targetEndMs > Date.now());
+    const remainingSec = running && targetEndMs
+      ? Math.max(1, Math.ceil((targetEndMs - Date.now()) / 1000))
+      : typeof parsed.remainingSec === 'number' && parsed.remainingSec >= 0
+      ? parsed.remainingSec
+      : totalSec;
+    return {
+      mode,
+      totalSec,
+      remainingSec,
+      running,
+      targetEndMs: running ? targetEndMs : null,
+      label: typeof parsed.label === 'string' ? parsed.label : 'Deep Focus Session',
+      linkedTaskId: typeof parsed.linkedTaskId === 'string' ? parsed.linkedTaskId : '',
+      chimeEnabled: parsed.chimeEnabled !== false,
+      autoStopSound: Boolean(parsed.autoStopSound),
+    };
   } catch {
-    // ignore audio restrictions
+    return fallback;
   }
 }
 
+function loadLiveStopwatch(): LiveStopwatchState {
+  const fallback: LiveStopwatchState = {
+    running: false,
+    startedAtMs: null,
+    accumulatedMs: 0,
+    laps: [],
+  };
+  try {
+    const raw = window.localStorage.getItem(LIVE_STOPWATCH_STORAGE_KEY);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw) as Partial<LiveStopwatchState>;
+    const running = Boolean(parsed.running && typeof parsed.startedAtMs === 'number');
+    return {
+      running,
+      startedAtMs: running && typeof parsed.startedAtMs === 'number' ? parsed.startedAtMs : null,
+      accumulatedMs: typeof parsed.accumulatedMs === 'number' ? Math.max(0, parsed.accumulatedMs) : 0,
+      laps: Array.isArray(parsed.laps) ? parsed.laps : [],
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+function dispatchTimerSync(): void {
+  window.dispatchEvent(new Event('soul-everyday-timer-sync'));
+}
+
+// ── Guided Calm Breathing Card ──
+
+type BreathPatternId = 'box' | '478' | 'coherent' | 'calm426';
+
+interface BreathPatternMeta {
+  id: BreathPatternId;
+  shortLabel: string;
+  spec: string;
+  durations: [number, number, number, number]; // Inhale, Hold1, Exhale, Hold2
+}
+
+const BREATH_PATTERNS: BreathPatternMeta[] = [
+  { id: 'box', shortLabel: 'Box 4-4-4-4', spec: 'Inhale 4s · Hold 4s · Exhale 4s · Hold 4s', durations: [4, 4, 4, 4] },
+  { id: '478', shortLabel: '4-7-8', spec: 'Inhale 4s · Hold 7s · Exhale 8s', durations: [4, 7, 8, 0] },
+  { id: 'coherent', shortLabel: 'Coherent 5-5', spec: 'Inhale 5s · Exhale 5s', durations: [5, 0, 5, 0] },
+  { id: 'calm426', shortLabel: '4-2-6', spec: 'Inhale 4s · Hold 2s · Exhale 6s', durations: [4, 2, 6, 0] },
+];
+
 export const GuidedBreathingCard: React.FC = () => {
   const [active, setActive] = useState<boolean>(false);
-  const [pattern, setPattern] = useState<'box' | '478'>('box');
-  const [tick, setTick] = useState<number>(0);
+  const [patternId, setPatternId] = useState<BreathPatternId>('box');
+  const [sessionMin, setSessionMin] = useState<number>(1); // 0 = continuous
+  const [phaseCueSound, setPhaseCueSound] = useState<boolean>(false);
+  const [elapsedMs, setElapsedMs] = useState<number>(0);
+  const [completedMsg, setCompletedMsg] = useState<string | null>(null);
+
+  const startedAtRef = useRef<number | null>(null);
+  const lastPhaseIndexRef = useRef<number>(-1);
+  const finishedOnceRef = useRef<boolean>(false);
+
+  const patternMeta = useMemo(
+    () => BREATH_PATTERNS.find((p) => p.id === patternId) || BREATH_PATTERNS[0],
+    [patternId]
+  );
+
+  const targetSessionMs = sessionMin > 0 ? sessionMin * 60 * 1000 : 0;
 
   useEffect(() => {
-    if (!active) return;
-    const id = window.setInterval(() => setTick((t) => t + 1), 1000);
+    if (!active) {
+      startedAtRef.current = null;
+      lastPhaseIndexRef.current = -1;
+      return;
+    }
+    finishedOnceRef.current = false;
+    startedAtRef.current = Date.now() - elapsedMs;
+    const id = window.setInterval(() => {
+      if (!startedAtRef.current) return;
+      setElapsedMs(Date.now() - startedAtRef.current);
+    }, 100);
     return () => window.clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
 
+  // Auto-stop accurately when timed breather reaches target duration (e.g., 1-Min Breather stops at 60s)
+  useEffect(() => {
+    if (!active || targetSessionMs <= 0) return;
+    if (elapsedMs >= targetSessionMs && !finishedOnceRef.current) {
+      finishedOnceRef.current = true;
+      setActive(false);
+      setElapsedMs(0);
+      playGentleChime('break');
+      setCompletedMsg(`${sessionMin}-min calmer breathing complete`);
+      window.setTimeout(() => setCompletedMsg(null), 4000);
+    }
+  }, [active, elapsedMs, targetSessionMs, sessionMin]);
+
   const phaseInfo = useMemo(() => {
-    const cycle = pattern === 'box' ? [4, 4, 4, 4] : [4, 7, 8, 0];
-    const total = cycle[0] + cycle[1] + cycle[2] + cycle[3];
-    const pos = tick % total;
-    if (pos < cycle[0]) {
+    const [inS, h1S, outS, h2S] = patternMeta.durations;
+    const cycleSec = inS + h1S + outS + h2S;
+    const elapsedSec = elapsedMs / 1000;
+    const pos = elapsedSec % cycleSec;
+    const cycleCount = Math.floor(elapsedSec / cycleSec) + 1;
+
+    if (pos < inS) {
+      const progress = pos / inS;
       return {
+        phaseIdx: 0,
         label: 'Breathe In',
-        secLeft: cycle[0] - pos,
-        scale: 'scale-105 border-emerald-400/60 text-emerald-300',
+        secLeft: Math.max(1, Math.ceil(inS - pos)),
+        progress,
+        scaleNum: 0.88 + progress * 0.24,
+        ringColor: '#34d399',
+        textClass: 'text-emerald-300',
+        cycleCount,
       };
     }
-    if (pos < cycle[0] + cycle[1]) {
+    if (pos < inS + h1S) {
+      const phasePos = pos - inS;
+      const progress = h1S > 0 ? phasePos / h1S : 1;
       return {
+        phaseIdx: 1,
         label: 'Hold',
-        secLeft: cycle[0] + cycle[1] - pos,
-        scale: 'scale-105 border-sky-400/60 text-sky-300',
+        secLeft: Math.max(1, Math.ceil(inS + h1S - pos)),
+        progress,
+        scaleNum: 1.12,
+        ringColor: '#38bdf8',
+        textClass: 'text-sky-300',
+        cycleCount,
       };
     }
-    if (pos < cycle[0] + cycle[1] + cycle[2]) {
+    if (pos < inS + h1S + outS) {
+      const phasePos = pos - (inS + h1S);
+      const progress = outS > 0 ? phasePos / outS : 1;
       return {
+        phaseIdx: 2,
         label: 'Breathe Out',
-        secLeft: cycle[0] + cycle[1] + cycle[2] - pos,
-        scale: 'scale-95 border-violet-400/50 text-violet-300',
+        secLeft: Math.max(1, Math.ceil(inS + h1S + outS - pos)),
+        progress,
+        scaleNum: 1.12 - progress * 0.24,
+        ringColor: '#a78bfa',
+        textClass: 'text-violet-300',
+        cycleCount,
       };
     }
+    const phasePos = pos - (inS + h1S + outS);
+    const progress = h2S > 0 ? phasePos / h2S : 1;
     return {
-      label: 'Pause',
-      secLeft: total - pos,
-      scale: 'scale-95 border-white/25 text-zinc-300',
+      phaseIdx: 3,
+      label: 'Hold Empty',
+      secLeft: Math.max(1, Math.ceil(cycleSec - pos)),
+      progress,
+      scaleNum: 0.88,
+      ringColor: '#94a3b8',
+      textClass: 'text-zinc-300',
+      cycleCount,
     };
-  }, [pattern, tick]);
+  }, [elapsedMs, patternMeta]);
+
+  useEffect(() => {
+    if (!active || !phaseCueSound) return;
+    if (lastPhaseIndexRef.current !== -1 && lastPhaseIndexRef.current !== phaseInfo.phaseIdx) {
+      playGentleChime('tick');
+    }
+    lastPhaseIndexRef.current = phaseInfo.phaseIdx;
+  }, [active, phaseCueSound, phaseInfo.phaseIdx]);
+
+  const remainingSessionSec =
+    targetSessionMs > 0 ? Math.max(0, Math.ceil((targetSessionMs - elapsedMs) / 1000)) : 0;
+
+  const ringRadius = 60;
+  const ringCirc = 2 * Math.PI * ringRadius;
+  const ringDashOffset = active ? ringCirc * (1 - phaseInfo.progress) : ringCirc;
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col justify-between items-center gap-4">
-      <div className="w-full flex flex-wrap items-center justify-between gap-2">
+    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col justify-between items-center gap-3.5">
+      <div className="w-full flex flex-wrap items-start justify-between gap-2">
         <div>
           <h2 className="text-base font-bold text-white">Guided Calm Breathing</h2>
           <p className="text-xs text-zinc-400">Reset focus &amp; lower stress.</p>
         </div>
-        <div className="flex items-center gap-1 text-[11px] font-mono">
-          <button
-            type="button"
-            onClick={() => {
-              setPattern('box');
-              setTick(0);
+
+        <label className="inline-flex items-center gap-1.5 text-[11px] text-zinc-400 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={phaseCueSound}
+            onChange={(e) => {
+              getSharedAudioContext();
+              setPhaseCueSound(e.target.checked);
             }}
-            className={`px-2 py-1 rounded-lg border cursor-pointer ${
-              pattern === 'box'
-                ? 'bg-sky-500/20 border-sky-400/40 text-sky-200'
-                : 'bg-[#171820] border-white/[0.08] text-zinc-400'
-            }`}
-          >
-            Box 4-4-4-4
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setPattern('478');
-              setTick(0);
-            }}
-            className={`px-2 py-1 rounded-lg border cursor-pointer ${
-              pattern === '478'
-                ? 'bg-sky-500/20 border-sky-400/40 text-sky-200'
-                : 'bg-[#171820] border-white/[0.08] text-zinc-400'
-            }`}
-          >
-            4-7-8
-          </button>
+            className="accent-sky-400"
+          />
+          Phase cue
+        </label>
+      </div>
+
+      {/* Pattern selector pills */}
+      <div className="w-full flex flex-wrap items-center justify-between gap-1.5 text-[11px] font-mono">
+        <div className="flex flex-wrap items-center gap-1">
+          {BREATH_PATTERNS.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => {
+                setPatternId(p.id);
+                setElapsedMs(0);
+                if (active) startedAtRef.current = Date.now();
+              }}
+              className={`px-2 py-1 rounded-lg border cursor-pointer transition-colors ${
+                patternId === p.id
+                  ? 'bg-sky-500/20 border-sky-400/45 text-sky-200 font-bold'
+                  : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
+              }`}
+            >
+              {p.shortLabel}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-1">
+          {[1, 2, 3, 5, 0].map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => {
+                setSessionMin(m);
+                if (active) {
+                  setElapsedMs(0);
+                  startedAtRef.current = Date.now();
+                }
+              }}
+              title={m === 0 ? 'Continuous loop until stopped' : `Stop automatically after ${m} min`}
+              className={`px-1.5 py-0.5 rounded border text-[10px] cursor-pointer ${
+                sessionMin === m
+                  ? 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200 font-bold'
+                  : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
+              }`}
+            >
+              {m === 0 ? '∞' : `${m}m`}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div
-        className={`w-36 h-36 rounded-full border-2 bg-[#141722] flex flex-col items-center justify-center transition-transform duration-700 ${
-          active ? phaseInfo.scale : 'border-white/15 text-zinc-300'
-        }`}
-      >
-        <span className="text-sm font-bold">{active ? phaseInfo.label : 'Ready'}</span>
-        <span className="text-2xl font-mono font-extrabold tabular-nums">
-          {active ? `${phaseInfo.secLeft}s` : '—'}
-        </span>
+      {/* Smooth SVG Breathing Visualizer */}
+      <div className="relative flex items-center justify-center my-1 w-40 h-40">
+        <div
+          className="relative w-36 h-36 rounded-full bg-[#0d1018] border border-white/[0.09] flex flex-col items-center justify-center transition-transform duration-150 ease-linear shadow-inner"
+          style={{
+            transform: `scale(${active ? phaseInfo.scaleNum.toFixed(3) : 1})`,
+          }}
+        >
+          <svg
+            className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none"
+            viewBox="0 0 136 136"
+            aria-hidden="true"
+          >
+            <circle
+              cx="68"
+              cy="68"
+              r={ringRadius}
+              fill="none"
+              stroke="rgba(255,255,255,0.06)"
+              strokeWidth="4"
+            />
+            <circle
+              cx="68"
+              cy="68"
+              r={ringRadius}
+              fill="none"
+              stroke={active ? phaseInfo.ringColor : '#475569'}
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeDasharray={ringCirc}
+              strokeDashoffset={ringDashOffset}
+            />
+          </svg>
+
+          <span className={`text-xs font-bold ${active ? phaseInfo.textClass : 'text-zinc-300'}`}>
+            {active ? phaseInfo.label : 'Ready'}
+          </span>
+          <span className="text-2xl font-mono font-extrabold text-white tabular-nums mt-0.5">
+            {active ? `${phaseInfo.secLeft}s` : '—'}
+          </span>
+          <span className="text-[10px] font-mono text-zinc-400 tabular-nums mt-0.5">
+            {active
+              ? sessionMin > 0
+                ? `${pad2(Math.floor(remainingSessionSec / 60))}:${pad2(remainingSessionSec % 60)} left`
+                : `Cycle #${phaseInfo.cycleCount}`
+              : patternMeta.shortLabel}
+          </span>
+        </div>
+      </div>
+
+      <div className="text-[11px] font-mono text-zinc-400 text-center min-h-[16px]">
+        {completedMsg ? (
+          <span className="text-emerald-300 font-semibold">✓ {completedMsg}</span>
+        ) : (
+          <span>{patternMeta.spec}</span>
+        )}
       </div>
 
       <button
         type="button"
         onClick={() => {
-          setTick(0);
-          setActive((a) => !a);
+          getSharedAudioContext();
+          setCompletedMsg(null);
+          if (active) {
+            setActive(false);
+            setElapsedMs(0);
+          } else {
+            setElapsedMs(0);
+            setActive(true);
+          }
         }}
-        className="w-full py-2 rounded-xl bg-white text-zinc-950 hover:bg-sky-100 text-xs font-extrabold cursor-pointer"
+        className={`w-full py-2.5 rounded-xl text-xs font-extrabold border transition-colors cursor-pointer ${
+          active
+            ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
+            : 'bg-sky-500/20 border-sky-400/45 text-sky-100 hover:bg-sky-500/30'
+        }`}
       >
-        {active ? 'Stop Session' : 'Start 1-Min Breather'}
+        {active
+          ? '⏹ Stop Breathing Session'
+          : sessionMin === 0
+          ? '▶ Start Guided Breathing'
+          : `▶ Start ${sessionMin}-Min Breather`}
       </button>
     </section>
   );
@@ -169,62 +465,275 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
     minutesToday: 0,
     lastDate: today,
   });
+  const [tasks, setTasks] = useSyncedWorkspaceState<HumanTask[]>('tasks', []);
 
-  const [presetMinutes, setPresetMinutes] = useState<number>(25);
-  const [secondsLeft, setSecondsLeft] = useState<number>(25 * 60);
-  const [timerRunning, setTimerRunning] = useState<boolean>(false);
-  const [focusLabel, setFocusLabel] = useState<string>('Deep Focus Session');
-  const [chimeEnabled, setChimeEnabled] = useState<boolean>(true);
+  const [pomo, setPomo] = useState<LivePomodoroState>(loadLivePomodoro);
+  const [secondsLeft, setSecondsLeft] = useState<number>(() => {
+    const init = loadLivePomodoro();
+    return init.running && init.targetEndMs
+      ? Math.max(0, Math.ceil((init.targetEndMs - Date.now()) / 1000))
+      : init.remainingSec;
+  });
+  const [customMinInput, setCustomMinInput] = useState<string>('25');
+  const [completionBanner, setCompletionBanner] = useState<string | null>(null);
+  const completedStampRef = useRef<number | null>(null);
 
-  const [swMs, setSwMs] = useState<number>(0);
-  const [swRunning, setSwRunning] = useState<boolean>(false);
-  const [swLaps, setSwLaps] = useState<number[]>([]);
+  const [sessionLog, setSessionLog] = useState<FocusLogEntry[]>(() => {
+    try {
+      const raw = window.localStorage.getItem(FOCUS_SESSION_LOG_KEY);
+      const list = raw ? (JSON.parse(raw) as FocusLogEntry[]) : [];
+      return Array.isArray(list) ? list.filter((x) => x.date === getLocalDateIso(0)) : [];
+    } catch {
+      return [];
+    }
+  });
 
+  const [sw, setSw] = useState<LiveStopwatchState>(loadLiveStopwatch);
+  const [swDisplayMs, setSwDisplayMs] = useState<number>(() => {
+    const init = loadLiveStopwatch();
+    return init.running && init.startedAtMs
+      ? init.accumulatedMs + Math.max(0, Date.now() - init.startedAtMs)
+      : init.accumulatedMs;
+  });
+  const [copiedLaps, setCopiedLaps] = useState<boolean>(false);
+
+  // Persist live Pomodoro state + broadcast sync event
   useEffect(() => {
-    if (!timerRunning) return;
-    const id = window.setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev <= 1) {
-          setTimerRunning(false);
-          if (chimeEnabled) playGentleChime();
-          const currentDate = getLocalDateIso(0);
-          setFocusStats((f) => ({
-            lastDate: currentDate,
-            sessionsToday: f.lastDate === currentDate ? f.sessionsToday + 1 : 1,
-            minutesToday: (f.lastDate === currentDate ? f.minutesToday : 0) + presetMinutes,
-          }));
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => window.clearInterval(id);
-  }, [timerRunning, chimeEnabled, presetMinutes, setFocusStats]);
+    try {
+      window.localStorage.setItem(LIVE_POMODORO_STORAGE_KEY, JSON.stringify(pomo));
+    } catch {
+      // ignore quota errors
+    }
+    dispatchTimerSync();
+  }, [pomo]);
 
+  // Persist live Stopwatch state + broadcast sync event
   useEffect(() => {
-    if (!swRunning) return;
-    const id = window.setInterval(() => setSwMs((ms) => ms + 100), 100);
-    return () => window.clearInterval(id);
-  }, [swRunning]);
+    try {
+      window.localStorage.setItem(LIVE_STOPWATCH_STORAGE_KEY, JSON.stringify(sw));
+    } catch {
+      // ignore quota errors
+    }
+    dispatchTimerSync();
+  }, [sw]);
 
-  const applyPreset = (mins: number) => {
-    setTimerRunning(false);
-    setPresetMinutes(mins);
-    setSecondsLeft(mins * 60);
+  // Drift-free Pomodoro countdown using wall-clock targetEndMs
+  useEffect(() => {
+    if (!pomo.running || !pomo.targetEndMs) {
+      setSecondsLeft(pomo.remainingSec);
+      return;
+    }
+    const tick = () => {
+      const rem = Math.max(0, Math.ceil((pomo.targetEndMs! - Date.now()) / 1000));
+      setSecondsLeft(rem);
+    };
+    tick();
+    const id = window.setInterval(tick, 250);
+    return () => window.clearInterval(id);
+  }, [pomo.running, pomo.targetEndMs, pomo.remainingSec]);
+
+  // Idempotent Pomodoro completion handler (StrictMode-safe: never runs inside a setState callback)
+  useEffect(() => {
+    if (!pomo.running || !pomo.targetEndMs || secondsLeft > 0) return;
+    if (completedStampRef.current === pomo.targetEndMs) return;
+    completedStampRef.current = pomo.targetEndMs;
+
+    const doneMins = Math.max(1, Math.round(pomo.totalSec / 60));
+    if (pomo.chimeEnabled) {
+      playGentleChime(pomo.mode === 'focus' ? 'complete' : 'break');
+    }
+    if (pomo.autoStopSound) {
+      stopAmbientSoundscape();
+      window.dispatchEvent(new CustomEvent('soul-everyday-ambient-stop'));
+    }
+
+    const currentDate = getLocalDateIso(0);
+    if (pomo.mode === 'focus') {
+      setFocusStats((f) => ({
+        lastDate: currentDate,
+        sessionsToday: f.lastDate === currentDate ? f.sessionsToday + 1 : 1,
+        minutesToday: (f.lastDate === currentDate ? f.minutesToday : 0) + doneMins,
+      }));
+      if (pomo.linkedTaskId) {
+        setTasks((prev) =>
+          prev.map((t) =>
+            t.id === pomo.linkedTaskId ? { ...t, spentMin: (t.spentMin || 0) + doneMins } : t
+          )
+        );
+      }
+    }
+
+    const timeLabel = new Date().toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+    const entry: FocusLogEntry = {
+      id: `fl-${Date.now()}`,
+      date: currentDate,
+      timeLabel,
+      minutes: doneMins,
+      label: pomo.label.trim() || (pomo.mode === 'focus' ? 'Focus Session' : 'Break'),
+      mode: pomo.mode,
+    };
+    setSessionLog((prev) => {
+      const next = [entry, ...prev.filter((x) => x.date === currentDate)].slice(0, 12);
+      try {
+        window.localStorage.setItem(FOCUS_SESSION_LOG_KEY, JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+
+    setCompletionBanner(
+      pomo.mode === 'focus'
+        ? `✓ ${doneMins}m Focus complete! Ready for a quick break.`
+        : `✓ ${doneMins}m Break finished — back to focus!`
+    );
+    setPomo((prev) => ({
+      ...prev,
+      running: false,
+      targetEndMs: null,
+      remainingSec: prev.totalSec,
+    }));
+  }, [pomo, secondsLeft, setFocusStats, setTasks]);
+
+  // Drift-free Stopwatch ticker using wall-clock delta
+  useEffect(() => {
+    if (!sw.running || !sw.startedAtMs) {
+      setSwDisplayMs(sw.accumulatedMs);
+      return;
+    }
+    const tick = () => {
+      setSwDisplayMs(sw.accumulatedMs + Math.max(0, Date.now() - sw.startedAtMs!));
+    };
+    tick();
+    const id = window.setInterval(tick, 50);
+    return () => window.clearInterval(id);
+  }, [sw.running, sw.startedAtMs, sw.accumulatedMs]);
+
+  const applyModeOrPreset = (mode: PomodoroMode, mins: number, labelHint?: string) => {
+    const clampedMins = Math.max(1, Math.min(180, Math.round(mins)));
+    const sec = clampedMins * 60;
+    setCompletionBanner(null);
+    setCustomMinInput(String(clampedMins));
+    setPomo((prev) => ({
+      ...prev,
+      mode,
+      totalSec: sec,
+      remainingSec: sec,
+      running: false,
+      targetEndMs: null,
+      label: labelHint ?? prev.label,
+    }));
   };
+
+  const togglePomodoro = () => {
+    getSharedAudioContext();
+    setCompletionBanner(null);
+    setPomo((prev) => {
+      if (prev.running && prev.targetEndMs) {
+        const rem = Math.max(1, Math.ceil((prev.targetEndMs - Date.now()) / 1000));
+        return { ...prev, running: false, targetEndMs: null, remainingSec: rem };
+      }
+      const startFrom = prev.remainingSec > 0 ? prev.remainingSec : prev.totalSec;
+      return {
+        ...prev,
+        running: true,
+        remainingSec: startFrom,
+        targetEndMs: Date.now() + startFrom * 1000,
+      };
+    });
+  };
+
+  const resetPomodoro = () => {
+    setCompletionBanner(null);
+    setPomo((prev) => ({
+      ...prev,
+      running: false,
+      targetEndMs: null,
+      remainingSec: prev.totalSec,
+    }));
+  };
+
+  const adjustPomodoroMinutes = (deltaMins: number) => {
+    const deltaSec = deltaMins * 60;
+    setPomo((prev) => {
+      if (prev.running && prev.targetEndMs) {
+        const curRem = Math.max(1, Math.ceil((prev.targetEndMs - Date.now()) / 1000));
+        const nextRem = Math.max(60, Math.min(180 * 60, curRem + deltaSec));
+        return {
+          ...prev,
+          totalSec: Math.max(prev.totalSec, nextRem),
+          remainingSec: nextRem,
+          targetEndMs: Date.now() + nextRem * 1000,
+        };
+      }
+      const nextRem = Math.max(60, Math.min(180 * 60, prev.remainingSec + deltaSec));
+      return { ...prev, totalSec: nextRem, remainingSec: nextRem };
+    });
+  };
+
+  const toggleStopwatch = () => {
+    setSw((prev) => {
+      if (prev.running && prev.startedAtMs) {
+        const elapsed = prev.accumulatedMs + Math.max(0, Date.now() - prev.startedAtMs);
+        return { ...prev, running: false, startedAtMs: null, accumulatedMs: elapsed };
+      }
+      return { ...prev, running: true, startedAtMs: Date.now() };
+    });
+  };
+
+  const recordStopwatchLap = () => {
+    if (!sw.running || !sw.startedAtMs) return;
+    const totalMs = sw.accumulatedMs + Math.max(0, Date.now() - sw.startedAtMs);
+    setSw((prev) => {
+      const prevTotal = prev.laps.length > 0 ? prev.laps[0].totalMs : 0;
+      const splitMs = Math.max(0, totalMs - prevTotal);
+      const lap: StopwatchLap = {
+        id: `lap-${Date.now()}-${prev.laps.length + 1}`,
+        index: prev.laps.length + 1,
+        splitMs,
+        totalMs,
+      };
+      return { ...prev, laps: [lap, ...prev.laps] };
+    });
+  };
+
+  const openTasks = useMemo(
+    () => (Array.isArray(tasks) ? tasks.filter((t) => !t.archived && !t.done) : []),
+    [tasks]
+  );
+
+  const linkedTask = useMemo(
+    () => openTasks.find((t) => t.id === pomo.linkedTaskId) || null,
+    [openTasks, pomo.linkedTaskId]
+  );
+
+  const lapExtremes = useMemo(() => {
+    if (sw.laps.length < 2) return { fastestId: '', slowestId: '' };
+    let fast = sw.laps[0];
+    let slow = sw.laps[0];
+    sw.laps.forEach((l) => {
+      if (l.splitMs < fast.splitMs) fast = l;
+      if (l.splitMs > slow.splitMs) slow = l;
+    });
+    return { fastestId: fast.id, slowestId: slow.id };
+  }, [sw.laps]);
 
   const todaySessions = focusStats.lastDate === today ? focusStats.sessionsToday : 0;
   const todayFocusMins = focusStats.lastDate === today ? focusStats.minutesToday : 0;
   const pct = Math.max(
     0,
-    Math.min(100, Math.round(((presetMinutes * 60 - secondsLeft) / (presetMinutes * 60 || 1)) * 100))
+    Math.min(100, Math.round(((pomo.totalSec - secondsLeft) / (pomo.totalSec || 1)) * 100))
   );
 
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Pomodoro Focus Timer */}
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
+        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3.5">
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <div>
               <h2 className="text-base font-bold text-white">Pomodoro Focus Timer</h2>
@@ -235,159 +744,331 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
                 </span>
               </p>
             </div>
-            <label className="inline-flex items-center gap-1.5 text-xs text-zinc-300 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={chimeEnabled}
-                onChange={(e) => setChimeEnabled(e.target.checked)}
-                className="accent-amber-400"
-              />
-              Chime
-            </label>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => playGentleChime('complete')}
+                title="Test completion chime"
+                className="px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
+              >
+                🔔 Test
+              </button>
+              <label className="inline-flex items-center gap-1.5 text-xs text-zinc-300 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={pomo.chimeEnabled}
+                  onChange={(e) => setPomo((p) => ({ ...p, chimeEnabled: e.target.checked }))}
+                  className="accent-amber-400"
+                />
+                Chime
+              </label>
+            </div>
           </div>
 
-          <input
-            type="text"
-            value={focusLabel}
-            onChange={(e) => setFocusLabel(e.target.value)}
-            placeholder="Session intention (e.g., Reading, Deep Coding, Study)..."
-            aria-label="Focus session label"
-            className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400/50"
-          />
+          {/* Phase Selector: Focus / Short Break / Long Break */}
+          <div className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#08090c] border border-white/[0.08] text-[11px] font-mono">
+            {(
+              [
+                { id: 'focus', label: 'Focus (25m)', mins: 25, hint: 'Deep Focus Session' },
+                { id: 'shortBreak', label: 'Break (5m)', mins: 5, hint: 'Short Recharge Break' },
+                { id: 'longBreak', label: 'Long (15m)', mins: 15, hint: 'Long Recovery Break' },
+              ] as const
+            ).map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => applyModeOrPreset(m.id, m.mins, m.hint)}
+                className={`py-1.5 rounded-lg transition-colors cursor-pointer ${
+                  pomo.mode === m.id
+                    ? m.id === 'focus'
+                      ? 'bg-amber-500/20 text-amber-200 font-bold'
+                      : 'bg-emerald-500/20 text-emerald-200 font-bold'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
 
-          <div className="flex flex-col items-center justify-center py-5 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-3">
+          {/* Session label + Linked Task */}
+          <div className="flex flex-col gap-2">
+            <input
+              type="text"
+              value={pomo.label}
+              onChange={(e) => setPomo((p) => ({ ...p, label: e.target.value }))}
+              placeholder="Session intention (e.g., Reading, Deep Coding, Study)..."
+              aria-label="Focus session label"
+              className="h-9 px-3 rounded-xl bg-[#08090c] border border-white/[0.1] text-xs text-white focus:outline-none focus:border-amber-400/50"
+            />
+            <div className="flex items-center gap-1.5">
+              <select
+                value={pomo.linkedTaskId}
+                onChange={(e) => {
+                  const id = e.target.value;
+                  const picked = openTasks.find((t) => t.id === id);
+                  setPomo((p) => ({
+                    ...p,
+                    linkedTaskId: id,
+                    label: picked ? picked.title : p.label,
+                  }));
+                }}
+                aria-label="Link task to focus timer"
+                className="flex-1 min-w-0 h-8 px-2.5 rounded-lg bg-[#08090c] border border-white/[0.09] text-[11px] text-zinc-200"
+              >
+                <option value="">Link an open task (optional)...</option>
+                {openTasks.slice(0, 25).map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.title} ({t.spentMin || 0}m)
+                  </option>
+                ))}
+              </select>
+              {linkedTask && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTasks((prev) =>
+                      prev.map((t) =>
+                        t.id === linkedTask.id ? { ...t, done: true, status: 'done' } : t
+                      )
+                    );
+                    setPomo((p) => ({ ...p, linkedTaskId: '' }));
+                  }}
+                  title="Mark linked task complete"
+                  className="h-8 px-2.5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-[11px] font-bold text-emerald-200 hover:bg-emerald-500/30 cursor-pointer shrink-0"
+                >
+                  ✓ Done
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center justify-center py-4 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-2.5">
             <div className="text-5xl font-extrabold font-mono tracking-wider text-white tabular-nums">
               {pad2(Math.floor(secondsLeft / 60))}:{pad2(secondsLeft % 60)}
             </div>
             <div className="w-4/5 h-2 rounded-full bg-white/[0.06] overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-amber-400 to-emerald-400 transition-all duration-300"
+                className={`h-full transition-all duration-300 ${
+                  pomo.mode === 'focus'
+                    ? 'bg-gradient-to-r from-amber-400 to-emerald-400'
+                    : 'bg-gradient-to-r from-sky-400 to-emerald-400'
+                }`}
                 style={{ width: `${pct}%` }}
               />
             </div>
+
+            {completionBanner && (
+              <div className="px-3 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/35 text-[11px] font-mono text-emerald-200">
+                {completionBanner}
+              </div>
+            )}
+
             <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
               <button
                 type="button"
-                onClick={() => {
-                  if (secondsLeft === 0) setSecondsLeft(presetMinutes * 60);
-                  setTimerRunning((r) => !r);
-                }}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer ${
-                  timerRunning
-                    ? 'bg-rose-500/20 border border-rose-400/40 text-rose-200'
-                    : 'bg-white text-zinc-950 hover:bg-amber-100'
+                onClick={togglePomodoro}
+                className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
+                  pomo.running
+                    ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
+                    : 'bg-amber-400/90 border-amber-300 text-zinc-950 hover:bg-amber-300'
                 }`}
               >
-                {timerRunning ? '⏸ Pause' : '▶ Start Focus'}
+                {pomo.running ? '⏸ Pause' : secondsLeft < pomo.totalSec ? '▶ Resume' : '▶ Start Focus'}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setTimerRunning(false);
-                  setSecondsLeft(presetMinutes * 60);
-                }}
-                className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
+                onClick={resetPomodoro}
+                className="px-3 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
               >
                 ↺ Reset
               </button>
               <button
                 type="button"
+                onClick={() => adjustPomodoroMinutes(1)}
+                title="Add 1 minute"
+                className="px-2.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-mono text-sky-300 hover:text-white cursor-pointer"
+              >
+                +1m
+              </button>
+              <button
+                type="button"
                 onClick={() => onSelectTab('tasks')}
-                className="px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-xs font-semibold text-emerald-200 cursor-pointer"
+                className="px-3 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/25 cursor-pointer"
               >
                 Tasks →
               </button>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-1.5">
-            {[
-              { mins: 5, label: '5m Break' },
-              { mins: 15, label: '15m Short' },
-              { mins: 25, label: '25m Pomodoro' },
-              { mins: 45, label: '45m Deep' },
-              { mins: 60, label: '60m Sprint' },
-            ].map((p) => (
+          {/* Presets + Custom Minutes */}
+          <div className="flex flex-wrap items-center justify-between gap-1.5">
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                { mins: 5, label: '5m', mode: 'shortBreak' as PomodoroMode },
+                { mins: 15, label: '15m', mode: 'focus' as PomodoroMode },
+                { mins: 25, label: '25m', mode: 'focus' as PomodoroMode },
+                { mins: 45, label: '45m', mode: 'focus' as PomodoroMode },
+                { mins: 60, label: '60m', mode: 'focus' as PomodoroMode },
+              ].map((p) => (
+                <button
+                  key={p.mins}
+                  type="button"
+                  onClick={() => applyModeOrPreset(p.mode, p.mins)}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer ${
+                    pomo.totalSec === p.mins * 60
+                      ? 'bg-amber-500/20 border-amber-400/45 text-amber-200 font-bold'
+                      : 'bg-[#16171e] border-white/[0.08] text-zinc-300 hover:text-white'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const val = parseInt(customMinInput, 10);
+                if (val > 0) applyModeOrPreset('focus', val);
+              }}
+              className="flex items-center gap-1"
+            >
+              <input
+                type="number"
+                min={1}
+                max={180}
+                value={customMinInput}
+                onChange={(e) => setCustomMinInput(e.target.value)}
+                aria-label="Custom focus minutes"
+                className="w-12 h-7 px-1.5 rounded-lg bg-[#08090c] border border-white/[0.1] text-[11px] font-mono text-white text-center"
+              />
               <button
-                key={p.mins}
-                type="button"
-                onClick={() => applyPreset(p.mins)}
-                className={`px-2.5 py-1 rounded-xl text-[11px] font-mono border cursor-pointer ${
-                  presetMinutes === p.mins
-                    ? 'bg-amber-500/20 border-amber-400/45 text-amber-200 font-bold'
-                    : 'bg-[#16171e] border-white/[0.08] text-zinc-400 hover:text-white'
-                }`}
+                type="submit"
+                className="h-7 px-2 rounded-lg bg-[#16171e] border border-white/[0.1] text-[11px] font-mono text-zinc-300 hover:text-white cursor-pointer"
               >
-                {p.label}
+                Set m
               </button>
-            ))}
+            </form>
           </div>
+
+          {sessionLog.length > 0 && (
+            <div className="pt-2 border-t border-white/[0.06] flex flex-col gap-1 max-h-24 overflow-y-auto custom-scrollbar">
+              {sessionLog.slice(0, 4).map((s) => (
+                <div key={s.id} className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
+                  <span className="truncate">
+                    ✓ {s.label} ({s.minutes}m)
+                  </span>
+                  <span className="shrink-0 text-zinc-500">{s.timeLabel}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
-        {/* Precision Stopwatch */}
-        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
-          <div>
-            <h2 className="text-base font-bold text-white">Stopwatch &amp; Lap Recorder</h2>
-            <p className="text-xs text-zinc-400">
-              Measure workouts, sprints, or build timings with laps.
-            </p>
+        {/* Precision Stopwatch & Split Laps */}
+        <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col justify-between gap-4">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <h2 className="text-base font-bold text-white">Stopwatch &amp; Lap Recorder</h2>
+              <p className="text-xs text-zinc-400">
+                Drift-free precision timer with split deltas &amp; tab persistence.
+              </p>
+            </div>
+            {sw.laps.length > 0 && (
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const text = [...sw.laps]
+                      .reverse()
+                      .map((l) => `Lap #${l.index}\tSplit +${formatStopwatch(l.splitMs)}\tTotal ${formatStopwatch(l.totalMs)}`)
+                      .join('\n');
+                    void copyTextSafe(text).then((ok) => {
+                      if (ok) {
+                        setCopiedLaps(true);
+                        window.setTimeout(() => setCopiedLaps(false), 1600);
+                      }
+                    });
+                  }}
+                  className="px-2 py-1 rounded-lg bg-[#16171e] border border-white/[0.09] text-[11px] font-mono text-sky-300 cursor-pointer"
+                >
+                  {copiedLaps ? '✓ Copied' : 'Copy Laps'}
+                </button>
+              </div>
+            )}
           </div>
 
-          <div className="flex flex-col items-center justify-center py-7 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-3">
+          <div className="flex flex-col items-center justify-center py-6 rounded-2xl bg-[#08090c] border border-white/[0.08] gap-3">
             <div className="text-5xl font-extrabold font-mono tracking-wider text-sky-300 tabular-nums">
-              {pad2(Math.floor(swMs / 60000))}:{pad2(Math.floor((swMs % 60000) / 1000))}.
-              {Math.floor((swMs % 1000) / 100)}
+              {formatStopwatch(swDisplayMs)}
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2">
               <button
                 type="button"
-                onClick={() => setSwRunning((r) => !r)}
-                className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer ${
-                  swRunning
-                    ? 'bg-rose-500/20 border border-rose-400/40 text-rose-200'
-                    : 'bg-sky-500/25 border border-sky-400/45 text-white'
+                onClick={toggleStopwatch}
+                className={`px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer border ${
+                  sw.running
+                    ? 'bg-rose-500/20 border-rose-400/45 text-rose-100 hover:bg-rose-500/30'
+                    : 'bg-sky-500/25 border-sky-400/45 text-white hover:bg-sky-500/35'
                 }`}
               >
-                {swRunning ? '⏸ Pause' : '▶ Start'}
+                {sw.running ? '⏸ Pause' : swDisplayMs > 0 ? '▶ Resume' : '▶ Start'}
               </button>
               <button
                 type="button"
-                onClick={() => setSwLaps((prev) => [swMs, ...prev])}
-                disabled={swMs === 0}
-                className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-200 disabled:opacity-40 cursor-pointer"
+                onClick={recordStopwatchLap}
+                disabled={!sw.running}
+                title={sw.running ? 'Record lap split' : 'Start stopwatch to record a lap'}
+                className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
               >
                 🏁 Lap
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setSwRunning(false);
-                  setSwMs(0);
-                  setSwLaps([]);
-                }}
-                className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 cursor-pointer"
+                onClick={() => setSw({ running: false, startedAtMs: null, accumulatedMs: 0, laps: [] })}
+                disabled={!sw.running && swDisplayMs === 0 && sw.laps.length === 0}
+                className="px-3.5 py-2 rounded-xl bg-[#16171e] border border-white/[0.1] text-xs font-semibold text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed hover:text-white cursor-pointer"
               >
                 Reset
               </button>
             </div>
           </div>
 
-          {swLaps.length > 0 && (
-            <div className="max-h-40 overflow-y-auto flex flex-col gap-1.5 pr-1 custom-scrollbar">
-              {swLaps.map((lap, idx) => (
-                <div
-                  key={`${lap}-${idx}`}
-                  className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.06] text-xs font-mono"
-                >
-                  <span className="text-zinc-400">Lap #{swLaps.length - idx}</span>
-                  <span className="text-white font-bold">
-                    {pad2(Math.floor(lap / 60000))}:{pad2(Math.floor((lap % 60000) / 1000))}.
-                    {Math.floor((lap % 1000) / 100)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="flex-1 flex flex-col gap-1.5 min-h-[92px]">
+            {sw.laps.length === 0 ? (
+              <div className="flex-1 flex items-center justify-center rounded-xl bg-[#0b0c11] border border-white/[0.05] text-[11px] font-mono text-zinc-500 p-4 text-center">
+                Press Start, then click Lap to capture split intervals.
+              </div>
+            ) : (
+              <div className="max-h-44 overflow-y-auto flex flex-col gap-1.5 pr-1 custom-scrollbar">
+                {sw.laps.map((lap) => {
+                  const isFastest = lap.id === lapExtremes.fastestId;
+                  const isSlowest = lap.id === lapExtremes.slowestId;
+                  return (
+                    <div
+                      key={lap.id}
+                      className="grid grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-1.5 rounded-xl bg-[#16171e] border border-white/[0.06] text-xs font-mono"
+                    >
+                      <span className="text-zinc-400">Lap #{lap.index}</span>
+                      <span
+                        className={`text-right ${
+                          isFastest
+                            ? 'text-emerald-300 font-bold'
+                            : isSlowest
+                            ? 'text-amber-300'
+                            : 'text-sky-300'
+                        }`}
+                      >
+                        +{formatStopwatch(lap.splitMs)}
+                        {isFastest ? ' ★' : ''}
+                      </span>
+                      <span className="text-white font-bold tabular-nums">{formatStopwatch(lap.totalMs)}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </section>
 
         {/* Guided Breathing side-by-side on Desktop */}
@@ -395,103 +1076,115 @@ export const FocusBreathingTab: React.FC<{ onSelectTab: (tab: EverydayTabId) => 
       </div>
 
       {/* Offline Web Audio Ambient Focus Soundscapes */}
-      <AmbientFocusSoundscapeCard />
+      <AmbientFocusSoundscapeCard
+        autoStopWithTimer={pomo.autoStopSound}
+        onToggleAutoStop={(next) => setPomo((p) => ({ ...p, autoStopSound: next }))}
+      />
     </div>
   );
 };
 
-type SoundMode = 'off' | 'brown' | 'rain' | 'gamma40';
-
-const AmbientFocusSoundscapeCard: React.FC = () => {
-  const [soundMode, setSoundMode] = useState<SoundMode>('off');
-  const [volume, setVolume] = useState<number>(0.25);
-  const ctxRef = useRef<AudioContext | null>(null);
-  const gainRef = useRef<GainNode | null>(null);
-
-  useEffect(() => {
-    if (gainRef.current) {
-      gainRef.current.gain.value = volume;
-    }
-  }, [volume]);
-
-  useEffect(() => {
-    if (ctxRef.current) {
-      void ctxRef.current.close().catch(() => {});
-      ctxRef.current = null;
-      gainRef.current = null;
-    }
-    if (soundMode === 'off') return;
-
-    const AudioCtx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioCtx) return;
-
-    const ctx = new AudioCtx();
-    ctxRef.current = ctx;
-    const masterGain = ctx.createGain();
-    masterGain.gain.value = volume;
-    masterGain.connect(ctx.destination);
-    gainRef.current = masterGain;
-
-    if (soundMode === 'gamma40') {
-      const merger = ctx.createChannelMerger(2);
-      const oscLeft = ctx.createOscillator();
-      const oscRight = ctx.createOscillator();
-      oscLeft.type = 'sine';
-      oscRight.type = 'sine';
-      oscLeft.frequency.value = 200;
-      oscRight.frequency.value = 240;
-      oscLeft.connect(merger, 0, 0);
-      oscRight.connect(merger, 0, 1);
-      merger.connect(masterGain);
-      oscLeft.start();
-      oscRight.start();
-    } else {
-      const sampleRate = ctx.sampleRate;
-      const length = sampleRate * 2;
-      const buffer = ctx.createBuffer(1, length, sampleRate);
-      const data = buffer.getChannelData(0);
-      let lastOut = 0;
-      for (let i = 0; i < length; i += 1) {
-        const white = Math.random() * 2 - 1;
-        if (soundMode === 'brown') {
-          data[i] = (lastOut + 0.02 * white) / 1.02;
-          lastOut = data[i];
-          data[i] *= 2.8;
-        } else {
-          data[i] = white * 0.45;
-        }
+const AmbientFocusSoundscapeCard: React.FC<{
+  autoStopWithTimer: boolean;
+  onToggleAutoStop: (next: boolean) => void;
+}> = ({ autoStopWithTimer, onToggleAutoStop }) => {
+  const [soundMode, setSoundMode] = useState<AmbientSoundMode>(() => {
+    try {
+      const raw = window.localStorage.getItem(AMBIENT_PREFS_KEY);
+      if (raw) {
+        const p = JSON.parse(raw) as { mode?: AmbientSoundMode };
+        if (p.mode) return p.mode;
       }
-      const src = ctx.createBufferSource();
-      src.buffer = buffer;
-      src.loop = true;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = soundMode === 'rain' ? 'bandpass' : 'lowpass';
-      filter.frequency.value = soundMode === 'rain' ? 900 : 320;
-      filter.Q.value = soundMode === 'rain' ? 0.6 : 0.7;
-
-      src.connect(filter);
-      filter.connect(masterGain);
-      src.start();
+    } catch {
+      // ignore
     }
+    return 'off';
+  });
+  const [volume, setVolume] = useState<number>(() => {
+    try {
+      const raw = window.localStorage.getItem(AMBIENT_PREFS_KEY);
+      if (raw) {
+        const p = JSON.parse(raw) as { volume?: number };
+        if (typeof p.volume === 'number') return p.volume;
+      }
+    } catch {
+      // ignore
+    }
+    return 0.35;
+  });
+  const [audioStatus, setAudioStatus] = useState<'idle' | 'playing' | 'suspended' | 'unsupported'>('idle');
 
-    return () => {
-      void ctx.close().catch(() => {});
-      ctxRef.current = null;
-      gainRef.current = null;
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(AMBIENT_PREFS_KEY, JSON.stringify({ mode: soundMode, volume }));
+    } catch {
+      // ignore
+    }
+  }, [soundMode, volume]);
+
+  // Listen if focus timer auto-stop asks ambient sound to stop
+  useEffect(() => {
+    const onAutoStop = () => {
+      stopAmbientSoundscape();
+      setSoundMode('off');
+      setAudioStatus('idle');
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [soundMode]);
+    window.addEventListener('soul-everyday-ambient-stop', onAutoStop);
+    return () => window.removeEventListener('soul-everyday-ambient-stop', onAutoStop);
+  }, []);
+
+  const handleSelectMode = async (mode: AmbientSoundMode) => {
+    setSoundMode(mode);
+    if (mode === 'off') {
+      stopAmbientSoundscape();
+      setAudioStatus('idle');
+      return;
+    }
+    const status = await startAmbientSoundscape(mode, volume);
+    setAudioStatus(status === 'off' ? 'idle' : status);
+  };
+
+  const handleVolumeChange = (nextVol: number) => {
+    setVolume(nextVol);
+    setAmbientSoundscapeVolume(nextVol);
+  };
 
   return (
-    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div className="flex flex-col gap-0.5">
-        <h2 className="text-base font-bold text-white">Offline Ambient Focus Soundscapes</h2>
-        <p className="text-xs text-zinc-400">
-          Synthesized locally via Web Audio API — zero downloads or external audio streams needed.
-        </p>
+    <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-col gap-0.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="text-base font-bold text-white">Offline Ambient Focus Soundscapes</h2>
+            {audioStatus === 'playing' && soundMode !== 'off' && (
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/35 text-[10px] font-mono font-bold text-emerald-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Playing Audio</span>
+              </span>
+            )}
+            {audioStatus === 'suspended' && soundMode !== 'off' && (
+              <button
+                type="button"
+                onClick={() => void handleSelectMode(soundMode)}
+                className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/45 text-[10px] font-mono font-bold text-amber-200 cursor-pointer"
+              >
+                Click to Unlock Audio Output
+              </button>
+            )}
+          </div>
+          <p className="text-xs text-zinc-400">
+            Synthesized locally via Web Audio API — keeps playing while you switch tabs.
+          </p>
+        </div>
+
+        <label className="inline-flex items-center gap-1.5 text-xs text-zinc-300 cursor-pointer shrink-0">
+          <input
+            type="checkbox"
+            checked={autoStopWithTimer}
+            onChange={(e) => onToggleAutoStop(e.target.checked)}
+            className="accent-emerald-400"
+          />
+          Auto-stop when timer finishes
+        </label>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
@@ -500,16 +1193,20 @@ const AmbientFocusSoundscapeCard: React.FC = () => {
             { id: 'off', label: '🔇 Off' },
             { id: 'rain', label: '🌧️ Gentle Rain' },
             { id: 'brown', label: '🌊 Deep Brown Noise' },
-            { id: 'gamma40', label: '🧠 40Hz Binaural Focus' },
+            { id: 'pink', label: '🌫️ Warm Pink Noise' },
+            { id: 'gamma40', label: '🧠 40Hz Binaural (🎧)' },
+            { id: 'alpha10', label: '✨ 10Hz Alpha Calm (🎧)' },
           ] as const
         ).map((m) => (
           <button
             key={m.id}
             type="button"
-            onClick={() => setSoundMode(m.id)}
+            onClick={() => void handleSelectMode(m.id)}
             className={`px-3 py-1.5 rounded-xl text-xs font-semibold border cursor-pointer transition-colors ${
               soundMode === m.id
-                ? 'bg-emerald-500/20 border-emerald-400/45 text-emerald-200 font-bold'
+                ? m.id === 'off'
+                  ? 'bg-zinc-800 border-white/25 text-white font-bold'
+                  : 'bg-emerald-500/20 border-emerald-400/45 text-emerald-200 font-bold'
                 : 'bg-[#16171e] border-white/[0.08] text-zinc-300 hover:text-white'
             }`}
           >
@@ -517,17 +1214,17 @@ const AmbientFocusSoundscapeCard: React.FC = () => {
           </button>
         ))}
 
-        <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#08090c] border border-white/[0.08] text-xs font-mono text-zinc-300">
-          <span>Vol</span>
+        <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#08090c] border border-white/[0.08] text-xs font-mono text-zinc-300 ml-auto">
+          <span>Vol {Math.round(volume * 100)}%</span>
           <input
             type="range"
             min={0.05}
-            max={0.6}
+            max={1}
             step={0.05}
             value={volume}
-            onChange={(e) => setVolume(Number(e.target.value))}
+            onChange={(e) => handleVolumeChange(Number(e.target.value))}
             aria-label="Ambient sound volume"
-            className="w-20 accent-emerald-400 cursor-pointer"
+            className="w-24 accent-emerald-400 cursor-pointer"
           />
         </label>
       </div>
@@ -985,7 +1682,8 @@ export const DateCountdownCalculatorCard: React.FC = () => {
     let d = now.getDate() - b.getDate();
     if (d < 0) {
       months -= 1;
-      d += 30;
+      const daysInPrevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+      d += daysInPrevMonth;
     }
     if (months < 0) {
       years -= 1;

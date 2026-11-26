@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { usePersistedTab } from '../../../utils/usePersistedTab';
 import { PackageData } from '../../../types';
 import { fetchPackageTab } from '../../../services/api';
 import PackageDetailHeader, { PackageDetailTab } from './PackageDetailHeader';
@@ -16,7 +17,11 @@ export interface PackageDetailViewProps {
 }
 
 export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProps) {
-  const [activeTab, setActiveTab] = useState<PackageDetailTab>('docs');
+  const [activeTab, setActiveTab] = usePersistedTab<PackageDetailTab>(
+    `soul-tab-package-${pkg.id}`,
+    'docs',
+    ['docs', 'api', 'manifest', 'playground']
+  );
   const [tabData, setTabData] = useState<Record<string, any>>({});
   const [loadingTabs, setLoadingTabs] = useState<Record<PackageDetailTab, boolean>>({
     docs: true,

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSyncedWorkspaceState } from '../../services/workspaceStateStore';
+import { copyTextSafe } from '../../utils/clipboard';
 import { BookmarkItem, DEFAULT_BOOKMARKS } from './everydayTabsRegistry';
 
 type UnitCategory = 'length' | 'weight' | 'volume' | 'temp' | 'data' | 'time';
@@ -330,7 +331,6 @@ export const CalculatorsUnitsTab: React.FC = () => {
 
 export const WorldClockTab: React.FC = () => {
   const [nowTick, setNowTick] = useState<number>(() => Date.now());
-  const [hourShift, setHourShift] = useState<number>(0);
   const [copiedSchedule, setCopiedSchedule] = useState<boolean>(false);
 
   useEffect(() => {
@@ -338,14 +338,15 @@ export const WorldClockTab: React.FC = () => {
     return () => window.clearInterval(id);
   }, []);
 
-  const targetInstant = new Date(nowTick + hourShift * 3600 * 1000);
+  const targetInstant = useMemo(() => new Date(nowTick), [nowTick]);
 
   const cityRows = useMemo(
     () =>
       WORLD_CITIES.map((city) => ({
         ...city,
-        timeStr: targetInstant.toLocaleTimeString([], {
+        timeStr: targetInstant.toLocaleTimeString('en-US', {
           timeZone: city.zone,
+          hour12: true,
           hour: '2-digit',
           minute: '2-digit',
         }),
@@ -361,9 +362,12 @@ export const WorldClockTab: React.FC = () => {
 
   const copyMeetingSummary = () => {
     const lines = cityRows.map((c) => `${c.label}: ${c.timeStr} (${c.dayStr})`).join('\n');
-    navigator.clipboard?.writeText(lines);
-    setCopiedSchedule(true);
-    window.setTimeout(() => setCopiedSchedule(false), 1800);
+    void copyTextSafe(lines).then((ok) => {
+      if (ok) {
+        setCopiedSchedule(true);
+        window.setTimeout(() => setCopiedSchedule(false), 1800);
+      }
+    });
   };
 
   return (
@@ -372,7 +376,7 @@ export const WorldClockTab: React.FC = () => {
         <div>
           <h2 className="text-base font-bold text-white">World Clock &amp; Time Zones</h2>
           <p className="text-xs text-zinc-400">
-            Slide hours forward or backward to preview global meeting times across 10 cities.
+            Live local and global times synced across 10 major cities.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -383,39 +387,14 @@ export const WorldClockTab: React.FC = () => {
           >
             {copiedSchedule ? '✓ Copied All' : '📋 Copy Summary'}
           </button>
-          {hourShift !== 0 && (
-            <button
-              type="button"
-              onClick={() => setHourShift(0)}
-              className="px-3 py-1 rounded-xl bg-sky-500/15 border border-sky-400/30 text-xs font-mono text-sky-300 cursor-pointer"
-            >
-              Reset ({hourShift > 0 ? `+${hourShift}h` : `${hourShift}h`})
-            </button>
-          )}
         </div>
-      </div>
-
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#08090c] border border-white/[0.08]">
-        <span className="text-xs font-mono text-zinc-400 shrink-0">Shift Hours:</span>
-        <input
-          type="range"
-          min={-12}
-          max={12}
-          value={hourShift}
-          onChange={(e) => setHourShift(Number(e.target.value))}
-          aria-label="Time shift hours"
-          className="flex-1 accent-indigo-400 cursor-pointer"
-        />
-        <span className="text-xs font-mono font-bold text-indigo-300 w-16 text-right">
-          {hourShift === 0 ? 'Live' : `${hourShift > 0 ? '+' : ''}${hourShift}h`}
-        </span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         <div className="p-3.5 rounded-xl bg-sky-500/10 border border-sky-400/35 flex flex-col gap-1">
           <span className="text-xs font-bold text-sky-300">📍 Your Local Time</span>
           <span className="text-lg font-extrabold font-mono text-white tabular-nums">
-            {targetInstant.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {targetInstant.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' })}
           </span>
           <span className="text-[11px] text-zinc-400">
             {targetInstant.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
@@ -568,7 +547,7 @@ export const BookmarksSecurityTab: React.FC = () => {
           </button>
         </form>
 
-        <div className="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
+        <div className="flex flex-col gap-2 max-h-60 overflow-y-auto overflow-x-hidden pt-1 pr-1.5 custom-scrollbar">
           {visibleBookmarks.map((b) => (
             <div
               key={b.id}
@@ -602,7 +581,9 @@ export const BookmarksSecurityTab: React.FC = () => {
       <section className="rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col justify-between gap-3">
         <div>
           <h2 className="text-base font-bold text-white">Password &amp; Passphrase Studio</h2>
-          <p className="text-xs text-zinc-400">Generated offline via Web Crypto (`crypto.getRandomValues`).</p>
+          <p className="text-xs text-zinc-400">
+            Generated offline via Web Crypto (<code className="font-mono text-zinc-300">crypto.getRandomValues</code>).
+          </p>
         </div>
 
         <div className="flex items-center gap-2 p-3 rounded-xl bg-[#08090c] border border-white/[0.1]">
@@ -616,9 +597,12 @@ export const BookmarksSecurityTab: React.FC = () => {
           <button
             type="button"
             onClick={() => {
-              navigator.clipboard?.writeText(generatedPw);
-              setPwCopied(true);
-              window.setTimeout(() => setPwCopied(false), 1800);
+              void copyTextSafe(generatedPw).then((ok) => {
+                if (ok) {
+                  setPwCopied(true);
+                  window.setTimeout(() => setPwCopied(false), 1800);
+                }
+              });
             }}
             className="px-3 py-1 rounded-lg bg-[#16171e] border border-white/[0.1] text-xs font-mono text-zinc-200 cursor-pointer shrink-0"
           >

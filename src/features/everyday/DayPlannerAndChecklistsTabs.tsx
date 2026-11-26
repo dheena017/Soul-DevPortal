@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useSyncedWorkspaceState } from '../../services/workspaceStateStore';
+import { copyTextSafe } from '../../utils/clipboard';
+import { useScrollEdgeFade } from '../../utils/useScrollEdgeFade';
 import { getLocalDateIso } from './everydayTabsRegistry';
 
 export type ScheduleCategory = 'Deep Work' | 'Meetings' | 'Study' | 'Health' | 'Meals' | 'Rest';
@@ -49,8 +51,9 @@ const DEFAULT_SCHEDULE_STATE: ScheduleWorkspaceState = {
 };
 
 function formatHourLabel(hour: number): string {
-  const suffix = hour >= 12 ? 'PM' : 'AM';
-  const h12 = hour % 12 === 0 ? 12 : hour % 12;
+  const normHour = ((hour % 24) + 24) % 24;
+  const suffix = normHour >= 12 ? 'PM' : 'AM';
+  const h12 = normHour % 12 === 0 ? 12 : normHour % 12;
   return `${String(h12).padStart(2, '0')}:00 ${suffix}`;
 }
 
@@ -70,6 +73,13 @@ export const SchedulePlannerTab: React.FC = () => {
     const raw = state.blocksByDate?.[selectedDate] || [];
     return [...raw].sort((a, b) => a.startHour - b.startHour);
   }, [state.blocksByDate, selectedDate]);
+
+  const todayWeekday = useMemo(
+    () => (['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const)[new Date().getDay()],
+    []
+  );
+  const blocksScroll = useScrollEdgeFade([dayBlocks.length, selectedDate]);
+  const weeklyScroll = useScrollEdgeFade([state.weeklyRoutine]);
 
   const setDayBlocks = (updater: (prev: TimeBlockItem[]) => TimeBlockItem[]) => {
     setState((prev) => ({
@@ -132,9 +142,12 @@ export const SchedulePlannerTab: React.FC = () => {
           `- [${b.done ? 'x' : ' '}] **${formatHourLabel(b.startHour)} (${b.durationHrs}h)** — ${b.title} *(${b.category})*`
       ),
     ].join('\n');
-    navigator.clipboard?.writeText(lines);
-    setCopiedSchedule(true);
-    window.setTimeout(() => setCopiedSchedule(false), 1800);
+    void copyTextSafe(lines).then((ok) => {
+      if (ok) {
+        setCopiedSchedule(true);
+        window.setTimeout(() => setCopiedSchedule(false), 1800);
+      }
+    });
   };
 
   const updateWeeklyCell = (day: string, patch: Partial<WeeklyRoutineCell>) => {
@@ -152,9 +165,9 @@ export const SchedulePlannerTab: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
         {/* Daily Time-Block Agenda */}
-        <section className="xl:col-span-7 rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4">
+        <section className="xl:col-span-7 rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-4 self-start">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h2 className="text-base font-bold text-white">Daily Time-Block Planner</h2>
@@ -259,11 +272,15 @@ export const SchedulePlannerTab: React.FC = () => {
               No time blocks for {selectedDate} yet. Add a block above or load a template!
             </div>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div
+              ref={blocksScroll.ref}
+              onScroll={blocksScroll.onScroll}
+              className={`flex flex-col gap-2 max-h-[500px] overflow-y-auto overflow-x-hidden custom-scrollbar pt-2 border-t border-white/[0.06] pr-1.5 ${blocksScroll.fadeClass}`}
+            >
               {dayBlocks.map((b) => (
                 <div
                   key={b.id}
-                  className={`p-3 rounded-xl border flex items-center justify-between gap-3 transition-opacity ${
+                  className={`p-3 rounded-xl border flex items-center justify-between gap-3 shrink-0 transition-opacity ${
                     b.done ? 'bg-[#0b0c10] border-white/[0.05] opacity-60' : CATEGORY_STYLES[b.category]
                   }`}
                 >
@@ -307,30 +324,57 @@ export const SchedulePlannerTab: React.FC = () => {
         </section>
 
         {/* Weekly Blueprint (Meals, Theme, Movement) */}
-        <section className="xl:col-span-5 rounded-2xl bg-[#111218] border border-white/[0.08] p-5 flex flex-col gap-3">
-          <div>
-            <h2 className="text-base font-bold text-white">Weekly Routine &amp; Meal Matrix</h2>
-            <p className="text-xs text-zinc-400">
-              Edit daily focus themes, meal ideas, and workouts across Monday–Sunday.
-            </p>
+        <section className="xl:col-span-5 xl:sticky xl:top-3 rounded-2xl bg-[#111218] border border-white/[0.08] overflow-hidden flex flex-col xl:max-h-[calc(100vh-8rem)]">
+          <div className="px-5 pt-4 pb-3 border-b border-white/[0.07] bg-[#111218] shrink-0 flex items-start justify-between gap-2">
+            <div>
+              <h2 className="text-base font-bold text-white">Weekly Routine &amp; Meal Matrix</h2>
+              <p className="text-xs text-zinc-400">
+                Edit daily focus themes, meal ideas, and workouts across Monday–Sunday.
+              </p>
+            </div>
+            <span className="shrink-0 px-2 py-0.5 rounded-md bg-sky-500/15 border border-sky-400/30 text-[10px] font-mono font-bold text-sky-300">
+              Today: {todayWeekday}
+            </span>
           </div>
 
-          <div className="flex flex-col gap-2 max-h-[540px] overflow-y-auto pr-1 custom-scrollbar">
+          <div
+            ref={weeklyScroll.ref}
+            onScroll={weeklyScroll.onScroll}
+            className={`flex-1 min-h-[280px] max-h-[540px] xl:max-h-none overflow-y-auto overflow-x-hidden custom-scrollbar px-4 py-3 flex flex-col gap-2 ${weeklyScroll.fadeClass}`}
+          >
             {WEEKDAYS.map((day) => {
               const cell = state.weeklyRoutine?.[day] || {
                 focusTheme: '',
                 mealPlan: '',
                 movement: '',
               };
+              const isToday = day === todayWeekday;
               return (
                 <div
                   key={day}
-                  className="p-3 rounded-xl bg-[#08090c] border border-white/[0.07] flex flex-col gap-2"
+                  className={`p-2.5 rounded-xl border flex flex-col gap-1.5 shrink-0 transition-colors ${
+                    isToday
+                      ? 'bg-[#0c1018] border-sky-400/35'
+                      : 'bg-[#08090c] border-white/[0.07]'
+                  }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="px-2 py-0.5 rounded bg-sky-500/15 border border-sky-400/30 text-[11px] font-mono font-bold text-sky-300">
-                      {day}
-                    </span>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold border ${
+                          isToday
+                            ? 'bg-sky-500/25 border-sky-400/45 text-sky-200'
+                            : 'bg-sky-500/15 border-sky-400/30 text-sky-300'
+                        }`}
+                      >
+                        {day}
+                      </span>
+                      {isToday && (
+                        <span className="text-[9px] font-mono uppercase tracking-wider text-sky-400 font-bold">
+                          Today
+                        </span>
+                      )}
+                    </div>
                     <input
                       type="text"
                       value={cell.movement}
@@ -340,14 +384,14 @@ export const SchedulePlannerTab: React.FC = () => {
                       className="h-7 px-2 rounded-lg bg-[#16171e] border border-white/[0.06] text-[11px] text-emerald-300 w-36 focus:outline-none focus:border-emerald-400/40"
                     />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                     <input
                       type="text"
                       value={cell.focusTheme}
                       onChange={(e) => updateWeeklyCell(day, { focusTheme: e.target.value })}
                       placeholder="Focus theme..."
                       aria-label={`${day} focus theme`}
-                      className="h-8 px-2.5 rounded-lg bg-[#16171e] border border-white/[0.06] text-xs text-white focus:outline-none focus:border-sky-400/40"
+                      className="h-7 px-2.5 rounded-lg bg-[#16171e] border border-white/[0.06] text-xs text-white focus:outline-none focus:border-sky-400/40"
                     />
                     <input
                       type="text"
@@ -355,12 +399,17 @@ export const SchedulePlannerTab: React.FC = () => {
                       onChange={(e) => updateWeeklyCell(day, { mealPlan: e.target.value })}
                       placeholder="Meals / groceries..."
                       aria-label={`${day} meal plan`}
-                      className="h-8 px-2.5 rounded-lg bg-[#16171e] border border-white/[0.06] text-xs text-amber-200 focus:outline-none focus:border-amber-400/40"
+                      className="h-7 px-2.5 rounded-lg bg-[#16171e] border border-white/[0.06] text-xs text-amber-200 focus:outline-none focus:border-amber-400/40"
                     />
                   </div>
                 </div>
               );
             })}
+          </div>
+
+          <div className="px-4 py-2 border-t border-white/[0.06] bg-[#0c0d12]/80 flex items-center justify-between text-[10px] font-mono text-zinc-500 shrink-0">
+            <span>Mon – Sun · 7 days</span>
+            <span className="text-zinc-600">Synced live</span>
           </div>
         </section>
       </div>
@@ -442,6 +491,8 @@ export const ChecklistsAndReadingTab: React.FC = () => {
   const [mediaNote, setMediaNote] = useState('');
 
   const selectedList = lists.find((l) => l.id === activeListId) || lists[0] || null;
+  const checklistScroll = useScrollEdgeFade([selectedList?.id, selectedList?.items.length]);
+  const mediaScroll = useScrollEdgeFade([mediaQueue.length]);
 
   const updateLists = (updater: (prev: ChecklistGroup[]) => ChecklistGroup[]) => {
     setState((prev) => ({
@@ -602,7 +653,8 @@ export const ChecklistsAndReadingTab: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => clearChecked(selectedList.id)}
-                  className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] text-zinc-300 hover:text-white cursor-pointer"
+                  disabled={!selectedList.items.some((i) => i.checked)}
+                  className="px-2.5 py-1 rounded-lg bg-[#16171e] border border-white/[0.08] text-[11px] text-zinc-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   Clear Checked
                 </button>
@@ -635,7 +687,11 @@ export const ChecklistsAndReadingTab: React.FC = () => {
               </button>
             </form>
 
-            <div className="flex flex-col gap-1.5 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+            <div
+              ref={checklistScroll.ref}
+              onScroll={checklistScroll.onScroll}
+              className={`flex flex-col gap-1.5 max-h-72 overflow-y-auto overflow-x-hidden pt-2.5 border-t border-white/[0.06] pr-1.5 custom-scrollbar ${checklistScroll.fadeClass}`}
+            >
               {selectedList.items.map((it) => (
                 <div
                   key={it.id}
@@ -724,7 +780,11 @@ export const ChecklistsAndReadingTab: React.FC = () => {
           </button>
         </form>
 
-        <div className="flex flex-col gap-2 max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+        <div
+          ref={mediaScroll.ref}
+          onScroll={mediaScroll.onScroll}
+          className={`flex flex-col gap-2 max-h-80 overflow-y-auto overflow-x-hidden pt-3 border-t border-white/[0.06] pr-1.5 custom-scrollbar ${mediaScroll.fadeClass}`}
+        >
           {mediaQueue.map((m) => (
             <div
               key={m.id}

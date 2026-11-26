@@ -12,8 +12,7 @@ export type EverydayTabId =
   | 'calculators'
   | 'worldtime'
   | 'vault'
-  | 'checklists'
-  | 'textlab';
+  | 'checklists';
 
 export type EverydayTabGroupId = 'command' | 'wellness' | 'finance' | 'timedev';
 
@@ -34,7 +33,7 @@ export const EVERYDAY_TAB_GROUPS: Array<{ id: EverydayTabGroupId; label: string 
   { id: 'command', label: 'Daily Productivity' },
   { id: 'wellness', label: 'Focus, Habits & Health' },
   { id: 'finance', label: 'Budget, Finance & Math' },
-  { id: 'timedev', label: 'Time, Lists & Dev Tools' },
+  { id: 'timedev', label: 'Time, Lists & Vault' },
 ];
 
 export const EVERYDAY_TABS: EverydayTabMeta[] = [
@@ -206,18 +205,6 @@ export const EVERYDAY_TABS: EverydayTabMeta[] = [
     activeBorder: 'border-emerald-400/45 bg-emerald-500/10',
     keywords: ['shopping', 'groceries', 'packing', 'travel', 'books', 'movies', 'reading', 'courses'],
   },
-  {
-    id: 'textlab',
-    group: 'timedev',
-    icon: '🧪',
-    label: 'Text, Regex, Diff & Dev Lab',
-    shortLabel: 'Text & Dev Lab',
-    subtitle: 'Case converter, JSON formatter, Base64/URL, Epoch, UUID, Color, Regex & Diff',
-    accentText: 'text-purple-300',
-    accentBadge: 'bg-purple-500/15 border-purple-500/30 text-purple-300',
-    activeBorder: 'border-purple-400/45 bg-purple-500/10',
-    keywords: ['json', 'base64', 'url', 'uuid', 'timestamp', 'color', 'regex', 'diff', 'text'],
-  },
 ];
 
 export const EVERYDAY_TAB_ID_SET = new Set<string>(EVERYDAY_TABS.map((t) => t.id));
@@ -253,8 +240,6 @@ export const EVERYDAY_ROUTE_ALIASES = new Set<string>([
   'shopping',
   'packing',
   'reading',
-  'textlab',
-  'devlab',
 ]);
 
 export function isEverydayRoute(routeId: string): boolean {
@@ -312,9 +297,6 @@ export function resolveEverydayRouteToTab(routeId: string): EverydayTabId {
     case 'packing':
     case 'reading':
       return 'checklists';
-    case 'textlab':
-    case 'devlab':
-      return 'textlab';
     default:
       return 'overview';
   }

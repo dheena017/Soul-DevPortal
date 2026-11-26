@@ -16,7 +16,6 @@ import {
   ChangelogSurface,
   DEFAULT_CHANGELOG_PERSISTED_STATE,
 } from './changelogConstants';
-import ChangelogAddModal from './ChangelogAddModal';
 
 export interface ChangelogViewProps {
   projects?: ProjectData[];
@@ -32,18 +31,20 @@ type AccordionSectionKey = 'features' | 'improvements' | 'fixes';
 
 const SURFACE_BADGE_TONES: Record<Exclude<ChangelogSurface, 'all'>, string> = {
   desktop: 'bg-sky-500/15 border-sky-400/30 text-sky-300',
-  productivity: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300',
-  apps: 'bg-purple-500/15 border-purple-500/30 text-purple-300',
-  sdk: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-300',
-  architecture: 'bg-amber-500/15 border-amber-400/30 text-amber-300',
+  everyday: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300',
+  project: 'bg-purple-500/15 border-purple-500/30 text-purple-300',
+  package: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-300',
+  documentation: 'bg-amber-500/15 border-amber-400/30 text-amber-300',
+  computer: 'bg-rose-500/15 border-rose-400/30 text-rose-300',
 };
 
 const SURFACE_LABELS: Record<Exclude<ChangelogSurface, 'all'>, string> = {
   desktop: 'Desktop & UI',
-  productivity: 'Productivity',
-  apps: 'Apps & APIs',
-  sdk: 'Shared SDKs',
-  architecture: 'Architecture',
+  everyday: 'Everyday Utilities',
+  project: 'Project',
+  package: 'Package',
+  documentation: 'Documentation',
+  computer: 'Computer & Performance',
 };
 
 function accordionStorageId(releaseId: string, kind: AccordionSectionKey): string {
@@ -80,8 +81,6 @@ export default function ChangelogView({
   const [bookmarkedOnly, setBookmarkedOnly] = useState<boolean>(false);
   const [expandedAccordions, setExpandedAccordions] = useState<Record<string, boolean>>({});
   const [activeAnchorId, setActiveAnchorId] = useState<string>(BUILTIN_CHANGELOG_RELEASES[0].id);
-  const [addOpen, setAddOpen] = useState<boolean>(false);
-  const [editingRelease, setEditingRelease] = useState<ChangelogRelease | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -90,16 +89,9 @@ export default function ChangelogView({
     }
   }, [externalQuery]);
 
-  const customReleases = useMemo(
-    () => (Array.isArray(persisted.customReleases) ? persisted.customReleases : []),
-    [persisted.customReleases]
-  );
   const starredSet = useMemo(() => new Set(persisted.starredIds || []), [persisted.starredIds]);
 
-  const allReleases = useMemo(
-    () => [...customReleases, ...BUILTIN_CHANGELOG_RELEASES],
-    [customReleases]
-  );
+  const allReleases = useMemo(() => BUILTIN_CHANGELOG_RELEASES, []);
 
   const statsTotals = useMemo(() => {
     let features = 0;
@@ -119,10 +111,11 @@ export default function ChangelogView({
     const counts: Record<ChangelogSurface, number> = {
       all: allReleases.length,
       desktop: 0,
-      productivity: 0,
-      apps: 0,
-      sdk: 0,
-      architecture: 0,
+      everyday: 0,
+      project: 0,
+      package: 0,
+      documentation: 0,
+      computer: 0,
     };
     for (const rel of allReleases) {
       for (const s of rel.surfaces) {
@@ -204,18 +197,6 @@ export default function ChangelogView({
         starredIds: exists ? current.filter((id) => id !== releaseId) : [releaseId, ...current],
       };
     });
-  };
-
-  const handleSaveCustomRelease = (saved: ChangelogRelease) => {
-    setPersisted((prev) => {
-      const list = Array.isArray(prev.customReleases) ? prev.customReleases : [];
-      const exists = list.some((r) => r.id === saved.id);
-      return {
-        ...prev,
-        customReleases: exists ? list.map((r) => (r.id === saved.id ? saved : r)) : [saved, ...list],
-      };
-    });
-    setActiveAnchorId(saved.id);
   };
 
   const handleDeleteCustomRelease = (releaseId: string) => {
@@ -370,9 +351,9 @@ export default function ChangelogView({
                   Changelog
                 </h1>
                 <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed max-w-2xl">
-                  Track new features, improvements, and bug fixes across Soul Workspace surfaces,
-                  including Desktop Shell, Productivity Studio, {projects.length || 9} Micro-Apps,
-                  and {packages.length || 3} Shared SDKs.
+                  Track new features, improvements, and bug fixes across Desktop &amp; UI, Everyday
+                  Utilities, {projects.length || 9} Projects, {packages.length || 3} Packages,
+                  Documentation, and Computer &amp; Performance.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-2 pt-0.5">
@@ -381,13 +362,10 @@ export default function ChangelogView({
                   </span>
                   <button
                     type="button"
-                    onClick={() => {
-                      setEditingRelease(null);
-                      setAddOpen(true);
-                    }}
+                    onClick={() => onNavigate('code-updates')}
                     className="px-3 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/35 hover:bg-emerald-500/25 text-xs font-bold text-emerald-200 cursor-pointer transition-colors"
                   >
-                    + Log Release
+                    🧬 Codebase Updates by Date →
                   </button>
                   <button
                     type="button"
@@ -720,27 +698,6 @@ export default function ChangelogView({
                             >
                               {isStarred ? '★' : '☆'}
                             </button>
-                            {rel.isCustom && (
-                              <>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setEditingRelease(rel);
-                                    setAddOpen(true);
-                                  }}
-                                  className="px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-[10px] font-mono text-zinc-300 hover:text-white cursor-pointer"
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteCustomRelease(rel.id)}
-                                  className="px-2 py-1 rounded-lg bg-[#16161c] border border-white/[0.08] text-[10px] font-mono text-zinc-400 hover:text-rose-300 cursor-pointer"
-                                >
-                                  ✕
-                                </button>
-                              </>
-                            )}
                           </div>
                         </div>
 
@@ -851,6 +808,13 @@ export default function ChangelogView({
               </button>
               <button
                 type="button"
+                onClick={() => onNavigate('code-updates')}
+                className="col-span-2 px-2 py-1.5 rounded-lg bg-sky-500/12 border border-sky-400/30 hover:border-sky-400/50 text-sky-200 hover:text-white text-left font-mono cursor-pointer truncate"
+              >
+                🧬 Codebase Updates by Date →
+              </button>
+              <button
+                type="button"
                 onClick={() => onNavigate('everyday')}
                 className="col-span-2 px-2 py-1.5 rounded-lg bg-emerald-500/12 border border-emerald-500/30 hover:border-emerald-400/50 text-emerald-200 hover:text-white text-left font-mono cursor-pointer truncate"
               >
@@ -860,16 +824,6 @@ export default function ChangelogView({
           </div>
         </aside>
       </div>
-
-      <ChangelogAddModal
-        open={addOpen}
-        editingRelease={editingRelease}
-        onSave={handleSaveCustomRelease}
-        onClose={() => {
-          setAddOpen(false);
-          setEditingRelease(null);
-        }}
-      />
     </div>
   );
 }

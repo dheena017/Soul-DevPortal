@@ -1,10 +1,34 @@
 export type ChangelogSurface =
   | 'all'
   | 'desktop'
-  | 'productivity'
-  | 'apps'
-  | 'sdk'
-  | 'architecture';
+  | 'everyday'
+  | 'project'
+  | 'package'
+  | 'documentation'
+  | 'computer';
+
+export type ChangelogSurfaceTag = Exclude<ChangelogSurface, 'all'>;
+
+export function normalizeChangelogSurface(raw: string): ChangelogSurfaceTag {
+  switch (raw) {
+    case 'productivity':
+    case 'everyday':
+      return 'everyday';
+    case 'apps':
+    case 'project':
+      return 'project';
+    case 'sdk':
+    case 'package':
+      return 'package';
+    case 'architecture':
+    case 'documentation':
+      return 'documentation';
+    case 'computer':
+      return 'computer';
+    default:
+      return 'desktop';
+  }
+}
 
 export interface ChangelogDetailItem {
   title: string;
@@ -50,10 +74,11 @@ export const CHANGELOG_SURFACE_TABS: Array<{
 }> = [
   { id: 'all', label: 'All Surfaces' },
   { id: 'desktop', label: 'Desktop & UI' },
-  { id: 'productivity', label: 'Productivity' },
-  { id: 'apps', label: 'Apps & APIs' },
-  { id: 'sdk', label: 'Shared SDKs' },
-  { id: 'architecture', label: 'Architecture' },
+  { id: 'everyday', label: 'Everyday Utilities' },
+  { id: 'project', label: 'Project' },
+  { id: 'package', label: 'Package' },
+  { id: 'documentation', label: 'Documentation' },
+  { id: 'computer', label: 'Computer & Performance' },
 ];
 
 export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
@@ -64,11 +89,11 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     headline: 'Minimalist Changelog Hub, Notes Studio v2 & Custom Release Logging',
     summary:
       'Redesigned the ecosystem directory into an editorial Changelog timeline featuring surface filter tabs, collapsible Features/Improvements/Fixes drawers, a sticky On This Page version rail, and SQLite-backed custom release logging alongside Notes Studio v2.',
-    surfaces: ['desktop', 'productivity', 'apps'],
+    surfaces: ['desktop', 'everyday', 'project'],
     isLatest: true,
     commitRef: 'v0.0.1',
-    ctaLabel: 'Open Notes Studio',
-    ctaRoute: 'notes',
+    ctaLabel: 'Open Everyday Utilities',
+    ctaRoute: 'everyday/notes',
     features: [
       {
         title: 'Antigravity-style Changelog timeline',
@@ -128,12 +153,12 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     id: 'rel-v0-0-1-rc5',
     version: 'v0.0.1-rc5',
     dateLabel: 'November 25, 2026',
-    headline: 'Everyday Human Toolkit: Focus Timer, Habits, Budget & Utilities',
+    headline: 'Everyday Utilities: Unified Workspace for Tasks, Notes, Focus & Budget',
     summary:
-      'Introduced dedicated daily human workflow pages integrated inside the portal and Electron desktop app, backed by localStorage cache and FastAPI SQLite WAL persistence.',
-    surfaces: ['productivity'],
-    ctaLabel: 'Open Daily Toolkit',
-    ctaRoute: 'tools',
+      'Consolidated daily workflow tools into the unified Everyday Utilities page integrated inside the portal and Electron desktop app, backed by localStorage cache and FastAPI SQLite WAL persistence.',
+    surfaces: ['everyday'],
+    ctaLabel: 'Open Everyday Utilities',
+    ctaRoute: 'everyday',
     features: [
       {
         title: 'Focus Pomodoro & calm breathing',
@@ -181,7 +206,7 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     headline: 'Always-Visible Status Bar Clock, Calendar Popover & Smooth Scroll',
     summary:
       'Added a persistent bottom utility status bar with real-time seconds clock, interactive calendar popover, UTC comparison, and battery/network vitals, alongside a full UI responsiveness and scroll performance pass.',
-    surfaces: ['desktop'],
+    surfaces: ['desktop', 'computer'],
     ctaLabel: 'Inspect Computer Vitals',
     ctaRoute: 'computer',
     features: [
@@ -233,7 +258,7 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     headline: 'Soul DevPortal v0.0.1 Standalone Windows App',
     summary:
       'Electron 45.5.0 Windows desktop packaging is live with isolated client ports (5281+), dedicated backend ports (18008+), automatic FastAPI startup with crash recovery logs, frameless splash launch, and automated GitHub Releases.',
-    surfaces: ['desktop', 'architecture'],
+    surfaces: ['desktop', 'documentation'],
     isAnnouncement: true,
     announcementBadge: 'Release Announcement',
     ctaLabel: 'Open Developer Hub & Port Map',
@@ -246,7 +271,7 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     headline: 'Developer Hub, Visual Artwork Gallery & API Explorer Upgrades',
     summary:
       'Introduced bespoke dark visual artwork across Pillars, the #portal GitHub & live endpoints dashboard, interactive OpenAPI route filtering, and responsive top bar ergonomics.',
-    surfaces: ['apps', 'desktop'],
+    surfaces: ['project', 'desktop'],
     commitRef: 'fac070b · 1662b21',
     ctaLabel: 'Open Developer Hub',
     ctaRoute: 'portal',
@@ -282,7 +307,7 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     headline: 'Computer & Performance Monitor with Live SSE Hardware Telemetry',
     summary:
       'Added real-time OS, CPU per-core load, memory allocation, GPU thermals, disk throughput, network Wi-Fi signal, startup services, and process inspection powered by Python psutil and Server-Sent Events.',
-    surfaces: ['apps', 'desktop'],
+    surfaces: ['computer', 'desktop'],
     commitRef: 'bae1016 · b3ef477',
     ctaLabel: 'Open Computer Monitor',
     ctaRoute: 'computer',
@@ -318,7 +343,7 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     headline: 'Master Technical Blueprint, Golden Rules & Port Architecture Specs',
     summary:
       'Published comprehensive workspace architecture documentation with interactive block rendering, floating table-of-contents navigation, duplicate rule cleanup, and operational runbooks.',
-    surfaces: ['architecture'],
+    surfaces: ['documentation'],
     commitRef: '03b9ed0 · 62135a1 · d2d9dc2',
     ctaLabel: 'Read Documentation Hub',
     ctaRoute: 'docs',
@@ -350,7 +375,7 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     headline: 'Unified 9-App Micro-Workspace Fleet on Isolated SQLite WAL Datastores',
     summary:
       'Standardized nine full-stack React + FastAPI applications under Soul-DevPortal-Projects with live socket probing, OpenAPI endpoint discovery, and per-project SQLite WAL isolation.',
-    surfaces: ['apps', 'architecture'],
+    surfaces: ['project', 'documentation'],
     commitRef: '318b779 · 292bd1e',
     ctaLabel: 'Browse Projects Hub',
     ctaRoute: 'projects',
@@ -405,7 +430,7 @@ export const BUILTIN_CHANGELOG_RELEASES: ChangelogRelease[] = [
     headline: 'Shared Dual-Runtime SDKs: @workspace/config, logger & runner',
     summary:
       'Established shared TypeScript and Python packages powering unified color tokens, structured terminal/devtools logging, AST export indexing, and socket port collision guards.',
-    surfaces: ['sdk'],
+    surfaces: ['package'],
     commitRef: 'f450477 · 7c8aa18',
     ctaLabel: 'Inspect Shared Packages',
     ctaRoute: 'packages',

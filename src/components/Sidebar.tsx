@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { consoleLogger } from '@workspace/logger';
 import { SoulLogo } from './SoulLogo';
+import { HeaderEqualizerBars } from './PortalVisuals';
+import { useSharedTelemetry } from '../services/telemetryStore';
 import { PackageData, ProjectData } from '../types';
 import { DOCUMENTATION_GUIDES_REGISTRY, GuideMeta } from '../features/docs/docsConstants';
 import { WORKSPACE_SCRIPTS_REGISTRY } from '../features/scripts/scriptsConstants';
@@ -124,6 +126,7 @@ export default function Sidebar({
   onNavigate,
   onClose,
 }: SidebarProps) {
+  const { isBackendLive, backendPort } = useSharedTelemetry(true);
   const [commonFilter, setCommonFilter] = useState<string>('');
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({
     projects: false,
@@ -360,6 +363,30 @@ export default function Sidebar({
 
             <button
               type="button"
+              aria-current={['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active) ? 'page' : undefined}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                ['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active)
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 shadow-sm'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
+              }`}
+              onClick={() => onNavigate('code-updates')}
+              title="Automatic git & workspace file updates grouped by date"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-base" aria-hidden="true">🧬</span>
+                <span className="truncate font-semibold text-zinc-100">Codebase Updates</span>
+              </div>
+              <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                ['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active)
+                  ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/35 font-bold'
+                  : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+              }`}>
+                Auto
+              </span>
+            </button>
+
+            <button
+              type="button"
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))
@@ -462,7 +489,7 @@ export default function Sidebar({
                       tab.keywords.some((k) => k.includes(needle))
                   ).map((tab) => {
                     const activeSub = isEverydayRoute(active) && resolveEverydayRouteToTab(active) === tab.id;
-                    const targetRoute = tab.id === 'overview' ? 'everyday' : `everyday/${tab.id}`;
+                    const targetRoute = `everyday/${tab.id}`;
                     return (
                       <button
                         key={tab.id}
@@ -918,22 +945,45 @@ export default function Sidebar({
         </nav>
 
         {/* ── Footer ── */}
-        <div className="p-4 border-t border-white/[0.08] bg-[#070708] flex items-center justify-between text-xs shrink-0">
-          <div className="flex items-center gap-3">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]"></span>
+        <div className="px-4 py-3 border-t border-white/[0.08] bg-[#070708] flex items-center justify-between gap-2.5 text-xs shrink-0">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="relative flex h-2.5 w-2.5 shrink-0">
+              {isBackendLive && (
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              )}
+              <span
+                className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
+                  isBackendLive
+                    ? 'bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]'
+                    : 'bg-neutral-500'
+                }`}
+              ></span>
             </span>
-            <div className="flex flex-col">
-              <strong className="text-xs font-semibold text-white leading-tight">4 Pillars Synced</strong>
-              <small className="text-[11px] text-zinc-400 font-mono leading-tight mt-0.5">
+            <div className="flex flex-col min-w-0">
+              <strong className="text-xs font-semibold text-white leading-tight truncate">
+                4 Pillars Synced
+              </strong>
+              <small className="text-[11px] text-zinc-400 font-mono leading-tight mt-0.5 truncate">
                 {packages.length} packages · {totalProjects} apps indexed
               </small>
             </div>
           </div>
-          <span className="w-6 h-6 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-xs font-bold shadow-[0_0_8px_rgba(16,185,129,0.25)]" aria-label="Ready">
-            ✓
-          </span>
+
+          <div
+            className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-lg text-[11px] font-mono border shrink-0 transition-all ${
+              isBackendLive
+                ? 'bg-[#13151b] border-emerald-500/30 text-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.16)]'
+                : 'bg-[#13151b] border-white/[0.08] text-zinc-400'
+            }`}
+            title={
+              isBackendLive
+                ? `Workspace service is active (port ${backendPort})`
+                : `Connecting to workspace service (port ${backendPort})`
+            }
+          >
+            <HeaderEqualizerBars active={isBackendLive} tone="emerald" />
+            <span className="font-semibold">{isBackendLive ? 'Live' : 'Sync'}</span>
+          </div>
         </div>
       </aside>
 
