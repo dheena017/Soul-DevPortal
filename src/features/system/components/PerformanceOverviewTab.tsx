@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { HistoryWindowSec, SystemLiveSnapshot, SystemSpecs } from '../../../types';
-import { formatBytes, formatClock, formatNetRate, getLoadTone, SystemSubTabId } from '../systemConstants';
+import { formatBytes, formatClock, formatNetRate, SystemSubTabId } from '../systemConstants';
 import RadialGauge from './RadialGauge';
 import TelemetrySparkline from './TelemetrySparkline';
+import TelemetryTileGrid, { TelemetryTileItem } from './TelemetryTileGrid';
 
 export interface PerformanceOverviewTabProps {
   specs: SystemSpecs;
@@ -275,46 +276,25 @@ export default function PerformanceOverviewTab({
           })()}
 
           {/* Framed Per-Logical-Core Heatmap Grid */}
-          <div className="neu-tile p-3.5 rounded-xl bg-[#16161c] border border-white/[0.06] flex flex-col gap-2.5 mt-auto">
-            <div className="flex items-center justify-between text-[11px] text-zinc-400">
-              <span className="font-semibold text-zinc-200">Per-Core Utilization ({live.cpu.perCorePercent.length} Threads)</span>
-              <span className="font-mono tabular-nums text-sky-300">
-                Peak Thread {Math.max(...(live.cpu.perCorePercent.length ? live.cpu.perCorePercent : [0])).toFixed(0)}%
-              </span>
-            </div>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-              {live.cpu.perCorePercent.map((pct, idx) => {
-                const tone = getLoadTone(pct);
-                const isPCoreThread = specs.cpu.efficientCores > 0 && idx < specs.cpu.performanceCores * 2;
-                const coreKind = specs.cpu.efficientCores > 0 ? (isPCoreThread ? 'P' : 'E') : null;
-                return (
-                  <div
-                    key={idx}
-                    title={`Logical Core ${idx}${coreKind ? ` (${coreKind}-Core Thread)` : ''}: ${pct.toFixed(1)}%`}
-                    className={`neu-tile px-2.5 py-2 rounded-xl border flex flex-col gap-1.5 font-mono tabular-nums text-[11px] transition-colors ${tone.tileBg}`}
-                  >
-                    <div className="flex items-center justify-between gap-1">
-                      <span className="flex items-center gap-1">
-                        <span className="opacity-75 font-semibold">C{idx}</span>
-                        {coreKind && (
-                          <span className={`px-1 rounded text-[9px] font-bold ${coreKind === 'P' ? 'bg-sky-500/20 text-sky-200' : 'bg-white/[0.08] text-zinc-300'}`}>
-                            {coreKind}
-                          </span>
-                        )}
-                      </span>
-                      <span className="font-bold">{Math.round(pct)}%</span>
-                    </div>
-                    <div className="w-full h-1 rounded-full bg-black/35 overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all duration-300"
-                        style={{ width: `${Math.max(4, Math.min(100, pct))}%`, backgroundColor: tone.stroke }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <TelemetryTileGrid
+            className="mt-auto"
+            title={`Per-Core Utilization (${live.cpu.perCorePercent.length} Threads)`}
+            rightLabel={`Peak Thread ${Math.max(...(live.cpu.perCorePercent.length ? live.cpu.perCorePercent : [0])).toFixed(0)}%`}
+            rightToneClass="text-sky-300"
+            items={live.cpu.perCorePercent.map((pct, idx) => {
+              const isPCoreThread = specs.cpu.efficientCores > 0 && idx < specs.cpu.performanceCores * 2;
+              const coreKind = specs.cpu.efficientCores > 0 ? (isPCoreThread ? 'P' : 'E') : null;
+              return {
+                id: `core-${idx}`,
+                label: `C${idx}`,
+                badge: coreKind,
+                badgeTone: coreKind === 'P' ? 'sky' : 'neutral',
+                valueText: `${Math.round(pct)}%`,
+                percent: pct,
+                tooltip: `Logical Core ${idx}${coreKind ? ` (${coreKind}-Core Thread)` : ''}: ${pct.toFixed(1)}%`,
+              };
+            })}
+          />
         </section>
 
         {/* Right: Disk & Net Dual-Series Graphs + Wi-Fi Meter + Top Consumers */}
@@ -554,24 +534,73 @@ export default function PerformanceOverviewTab({
             />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px] font-mono tabular-nums">
-            <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-              <span className="block text-[10px] text-zinc-400">Used RAM</span>
-              <strong className="text-white">{formatBytes(live.memory.usedBytes)}</strong>
-            </div>
-            <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-              <span className="block text-[10px] text-zinc-400">Available</span>
-              <strong className="text-emerald-300">{formatBytes(live.memory.availableBytes)}</strong>
-            </div>
-            <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-              <span className="block text-[10px] text-zinc-400">Pagefile / Swap</span>
-              <strong className="text-amber-300">{formatBytes(live.swap.usedBytes)} / {formatBytes(live.swap.totalBytes)}</strong>
-            </div>
-            <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-              <span className="block text-[10px] text-zinc-400">DIMM Speed</span>
-              <strong className="text-sky-300">{specs.memory.configuredSpeedMTs ? `${specs.memory.configuredSpeedMTs} MT/s` : specs.memory.ddrType}</strong>
-            </div>
-          </div>
+          {/* Memory Pools & Physical DIMM Slots Matrix */}
+          {(() => {
+            const memItems: TelemetryTileItem[] = [
+              {
+                id: 'mem-used',
+                label: 'RAM',
+                badge: 'USE',
+                badgeTone: 'purple',
+                valueText: `${Math.round(live.memory.percent)}%`,
+                percent: live.memory.percent,
+                tooltip: `Used RAM: ${formatBytes(live.memory.usedBytes, 2)} / ${formatBytes(live.memory.totalBytes, 2)}`,
+              },
+              {
+                id: 'mem-avail',
+                label: 'FREE',
+                badge: 'AVL',
+                badgeTone: 'emerald',
+                valueText: formatBytes(live.memory.availableBytes, 0),
+                percent: Math.max(0, 100 - live.memory.percent),
+                tooltip: `Available RAM: ${formatBytes(live.memory.availableBytes, 2)}`,
+              },
+              {
+                id: 'mem-swap',
+                label: 'SWAP',
+                badge: 'PG',
+                badgeTone: 'amber',
+                valueText: `${Math.round(live.swap.percent)}%`,
+                percent: live.swap.percent,
+                tooltip: `Pagefile / Swap: ${formatBytes(live.swap.usedBytes, 1)} / ${formatBytes(live.swap.totalBytes, 1)}`,
+              },
+              ...specs.memory.modules.map((mod, idx): TelemetryTileItem => ({
+                id: `dimm-${idx}`,
+                label: `D${idx}`,
+                badge: specs.memory.ddrType || 'DIMM',
+                badgeTone: 'sky',
+                valueText: `${mod.capacityGB}G`,
+                percent: live.memory.percent,
+                tooltip: `${mod.slotName}: ${mod.capacityGB} GB ${mod.ddrType} ${mod.manufacturer} (${mod.partNumber}) @ ${mod.configuredSpeedMTs} MT/s`,
+                onClick: () => onSelectTab('hardware'),
+              })),
+              ...Array.from({ length: Math.max(0, specs.memory.totalSlots - specs.memory.modules.length) }).map(
+                (_, emptyIdx): TelemetryTileItem => {
+                  const slotIdx = specs.memory.modules.length + emptyIdx;
+                  return {
+                    id: `dimm-empty-${slotIdx}`,
+                    label: `D${slotIdx}`,
+                    badge: 'EMP',
+                    badgeTone: 'neutral',
+                    valueText: '0G',
+                    percent: 0,
+                    muted: true,
+                    tooltip: `DIMM Slot ${slotIdx + 1}: Empty`,
+                    onClick: () => onSelectTab('hardware'),
+                  };
+                }
+              ),
+            ];
+            return (
+              <TelemetryTileGrid
+                title={`Memory & DIMM Structure (${specs.memory.populatedSlots}/${specs.memory.totalSlots} Slots · ${specs.memory.channelMode})`}
+                rightLabel={specs.memory.configuredSpeedMTs ? `${specs.memory.configuredSpeedMTs} MT/s` : specs.memory.ddrType}
+                rightToneClass="text-purple-300"
+                columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
+                items={memItems}
+              />
+            );
+          })()}
         </section>
 
         {/* GPU Activity Trend & Engine Breakdown */}
@@ -593,53 +622,338 @@ export default function PerformanceOverviewTab({
             series={[{ key: 'gpuPercent', label: 'GPU Engine', color: '#f59e0b', unit: '%', decimals: 1 }]}
           />
 
-          {nvidiaSensor ? (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px] font-mono tabular-nums">
-              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-                <span className="block text-[10px] text-zinc-400">GPU Core</span>
-                <strong className="text-amber-300">{nvidiaSensor.utilizationPercent ?? '—'}%</strong>
-              </div>
-              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-                <span className="block text-[10px] text-zinc-400">VRAM</span>
-                <strong className="text-white">{nvidiaSensor.vramUsedMB ?? '—'} / {nvidiaSensor.vramTotalMB ?? '—'} MB</strong>
-              </div>
-              {nvidiaSensor.temperatureC !== null && (
-                <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-                  <span className="block text-[10px] text-zinc-400">Temperature</span>
-                  <strong className="text-rose-300">{nvidiaSensor.temperatureC}°C</strong>
-                </div>
-              )}
-              {nvidiaSensor.powerWatts !== null && (
-                <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-                  <span className="block text-[10px] text-zinc-400">Power Draw</span>
-                  <strong className="text-emerald-300">{nvidiaSensor.powerWatts} W</strong>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11px] font-mono tabular-nums">
-              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-                <span className="block text-[10px] text-zinc-400">3D Render</span>
-                <strong className="text-amber-300">{live.gpu.engines?.['3D'] !== undefined ? `${live.gpu.engines['3D']}%` : '—'}</strong>
-              </div>
-              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-                <span className="block text-[10px] text-zinc-400">Video Decode</span>
-                <strong className="text-sky-300">{live.gpu.engines?.VideoDecode !== undefined ? `${live.gpu.engines.VideoDecode}%` : '—'}</strong>
-              </div>
-              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-                <span className="block text-[10px] text-zinc-400">Shared GPU Mem</span>
-                <strong className="text-purple-300">{formatBytes(live.gpu.sharedUsedBytes)}</strong>
-              </div>
-              <div className="neu-tile p-2.5 rounded-xl bg-[#16161c] border border-white/[0.06]">
-                <span className="block text-[10px] text-zinc-400">Display Mode</span>
-                <strong className="text-white">
-                  {primaryDisplay?.nativeWidth ? `${primaryDisplay.nativeWidth}×${primaryDisplay.nativeHeight}` : 'Active'}
-                </strong>
-              </div>
-            </div>
-          )}
+          {/* GPU Engines, VRAM & Display Matrix */}
+          {(() => {
+            const gpuItems: TelemetryTileItem[] = [];
+            const engineEntries = Object.entries(live.gpu.engines || {});
+            const engineShort: Record<string, string> = {
+              '3D': '3D',
+              Copy: 'CPY',
+              VideoDecode: 'DEC',
+              VideoEncode: 'ENC',
+              Compute: 'CMP',
+              Compute_0: 'CMP',
+            };
+            if (nvidiaSensor) {
+              const vramPct =
+                nvidiaSensor.vramUsedMB != null && nvidiaSensor.vramTotalMB
+                  ? (nvidiaSensor.vramUsedMB / nvidiaSensor.vramTotalMB) * 100
+                  : 0;
+              gpuItems.push({
+                id: 'nv-core',
+                label: 'CORE',
+                badge: 'GPU',
+                badgeTone: 'amber',
+                valueText: `${Math.round(nvidiaSensor.utilizationPercent ?? gpuLoadPct ?? 0)}%`,
+                percent: nvidiaSensor.utilizationPercent ?? gpuLoadPct ?? 0,
+                tooltip: `${nvidiaSensor.name} Core Utilization`,
+              });
+              gpuItems.push({
+                id: 'nv-vram',
+                label: 'VRAM',
+                badge: 'MEM',
+                badgeTone: 'purple',
+                valueText: `${Math.round(vramPct)}%`,
+                percent: vramPct,
+                tooltip: `VRAM: ${nvidiaSensor.vramUsedMB ?? '—'} / ${nvidiaSensor.vramTotalMB ?? '—'} MB`,
+              });
+              if (nvidiaSensor.temperatureC != null) {
+                gpuItems.push({
+                  id: 'nv-temp',
+                  label: 'TEMP',
+                  badge: 'C',
+                  badgeTone: 'rose',
+                  valueText: `${nvidiaSensor.temperatureC}°`,
+                  percent: Math.min(100, (nvidiaSensor.temperatureC / 95) * 100),
+                  tooltip: `GPU Temperature: ${nvidiaSensor.temperatureC}°C`,
+                });
+              }
+              if (nvidiaSensor.powerWatts != null) {
+                gpuItems.push({
+                  id: 'nv-pwr',
+                  label: 'PWR',
+                  badge: 'W',
+                  badgeTone: 'emerald',
+                  valueText: `${Math.round(nvidiaSensor.powerWatts)}W`,
+                  percent: Math.min(100, (nvidiaSensor.powerWatts / 150) * 100),
+                  tooltip: `GPU Power Draw: ${nvidiaSensor.powerWatts} W`,
+                });
+              }
+            } else {
+              gpuItems.push({
+                id: 'gpu-core',
+                label: 'CORE',
+                badge: 'GPU',
+                badgeTone: 'amber',
+                valueText: `${Math.round(gpuLoadPct ?? 0)}%`,
+                percent: gpuLoadPct ?? 0,
+                tooltip: `Overall GPU Engine Utilization: ${Math.round(gpuLoadPct ?? 0)}%`,
+              });
+            }
+
+            engineEntries.slice(0, 4).forEach(([engName, val]) => {
+              gpuItems.push({
+                id: `gpu-eng-${engName}`,
+                label: engineShort[engName] || engName.slice(0, 4).toUpperCase(),
+                badge: 'ENG',
+                badgeTone: 'sky',
+                valueText: `${Math.round(val)}%`,
+                percent: val,
+                tooltip: `GPU ${engName} Engine: ${val.toFixed(1)}%`,
+              });
+            });
+
+            const sharedPct = live.memory.totalBytes
+              ? Math.min(100, (live.gpu.sharedUsedBytes / (live.memory.totalBytes * 0.5)) * 100)
+              : 0;
+            gpuItems.push({
+              id: 'gpu-shared',
+              label: 'SHRD',
+              badge: 'MEM',
+              badgeTone: 'purple',
+              valueText: formatBytes(live.gpu.sharedUsedBytes, 0),
+              percent: sharedPct,
+              tooltip: `Shared GPU Memory: ${formatBytes(live.gpu.sharedUsedBytes, 2)}`,
+            });
+
+            specs.displays.slice(0, 2).forEach((disp, idx) => {
+              gpuItems.push({
+                id: `disp-${idx}`,
+                label: `D${idx}`,
+                badge: `${disp.refreshRateHz || 60}Hz`,
+                badgeTone: 'emerald',
+                valueText: `${disp.nativeHeight || 1080}p`,
+                percent: Math.min(100, ((disp.refreshRateHz || 60) / 144) * 100),
+                tooltip: `${disp.name}: ${disp.nativeWidth}×${disp.nativeHeight} @ ${disp.refreshRateHz || 60}Hz (${disp.scalePercent || 100}% Scale)`,
+                onClick: () => onSelectTab('peripherals'),
+              });
+            });
+
+            return (
+              <TelemetryTileGrid
+                title={`Graphics & Display Matrix (${specs.graphics.length} GPU · ${specs.displays.length} Display)`}
+                rightLabel={primaryDisplay?.nativeWidth ? `${primaryDisplay.nativeWidth}×${primaryDisplay.nativeHeight}` : 'Ready'}
+                rightToneClass="text-amber-300"
+                columnsClass="grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
+                items={gpuItems}
+              />
+            );
+          })()}
         </section>
       </div>
+
+      {/* ── Row 4: All Computer Component Structures (Storage, Network, Power/Board/Peripherals) ── */}
+      {(() => {
+        const storageItems: TelemetryTileItem[] = [
+          ...live.disk.volumes.map((vol, idx): TelemetryTileItem => ({
+            id: `vol-${idx}-${vol.mountpoint}`,
+            label: vol.mountpoint.replace(/\\+$/, '') || `V${idx}`,
+            badge: vol.fstype || 'FS',
+            badgeTone: 'emerald',
+            valueText: `${Math.round(vol.usedPercent)}%`,
+            percent: vol.usedPercent,
+            tooltip: `${vol.mountpoint} (${vol.device}): ${formatBytes(vol.usedBytes, 1)} / ${formatBytes(vol.totalBytes, 1)} (${formatBytes(vol.freeBytes, 1)} Free)`,
+            onClick: () => onSelectTab('storage-network'),
+          })),
+          ...specs.physicalDisks.map((disk, idx): TelemetryTileItem => ({
+            id: `pdisk-${idx}`,
+            label: `NV${idx}`,
+            badge: disk.busType || disk.mediaType || 'DISK',
+            badgeTone: disk.healthStatus === 'Healthy' ? 'sky' : 'amber',
+            valueText: formatBytes(disk.sizeBytes, 0),
+            percent: disk.healthStatus === 'Healthy' ? (primaryVol?.usedPercent ?? 40) : 85,
+            tooltip: `${disk.model} (${disk.busType} ${disk.mediaType}) · ${disk.healthStatus} · ${disk.partitionStyle}`,
+            onClick: () => onSelectTab('storage-network'),
+          })),
+          {
+            id: 'disk-read',
+            label: 'READ',
+            badge: 'I/O',
+            badgeTone: 'emerald',
+            valueText: `${live.disk.readMBps.toFixed(1)}M`,
+            percent: Math.min(100, (live.disk.readMBps / 250) * 100),
+            tooltip: `Disk Read: ${live.disk.readMBps.toFixed(2)} MB/s (${live.disk.readIops.toFixed(0)} IOPS)`,
+            onClick: () => onSelectTab('storage-network'),
+          },
+          {
+            id: 'disk-write',
+            label: 'WRTE',
+            badge: 'I/O',
+            badgeTone: 'amber',
+            valueText: `${live.disk.writeMBps.toFixed(1)}M`,
+            percent: Math.min(100, (live.disk.writeMBps / 250) * 100),
+            tooltip: `Disk Write: ${live.disk.writeMBps.toFixed(2)} MB/s (${live.disk.writeIops.toFixed(0)} IOPS)`,
+            onClick: () => onSelectTab('storage-network'),
+          },
+        ];
+
+        const prioritizedNics = [...live.networkAdapters].sort((a, b) => {
+          const av = /loopback|vethernet|wsl|virtual|pseudo/i.test(a.name) ? 1 : 0;
+          const bv = /loopback|vethernet|wsl|virtual|pseudo/i.test(b.name) ? 1 : 0;
+          if (av !== bv) return av - bv;
+          if (a.isUp !== b.isUp) return a.isUp ? -1 : 1;
+          return a.name.localeCompare(b.name);
+        });
+
+        const netItems: TelemetryTileItem[] = [
+          ...(wifi
+            ? [
+                {
+                  id: 'net-wifi',
+                  label: 'WIFI',
+                  badge: wifi.band || 'RF',
+                  badgeTone: 'emerald' as const,
+                  valueText: `${wifi.signalPercent ?? 0}%`,
+                  percent: wifi.signalPercent ?? 0,
+                  tooltip: `Wi-Fi ${wifi.ssid || ''}: ${wifi.signalPercent ?? 0}% (${wifi.rxRateMbps ?? '—'} Mbps)`,
+                  onClick: () => onSelectTab('storage-network'),
+                },
+              ]
+            : []),
+          ...prioritizedNics.slice(0, wifi ? 3 : 4).map((nic, idx): TelemetryTileItem => {
+            const shortNic = nic.name.replace(/wi-fi/i, 'WLAN').replace(/ethernet/i, 'ETH').slice(0, 5).toUpperCase();
+            return {
+              id: `nic-${idx}`,
+              label: shortNic,
+              badge: nic.isUp ? 'UP' : 'DN',
+              badgeTone: nic.isUp ? 'sky' : 'neutral',
+              valueText: nic.speedMbps >= 1000 ? `${(nic.speedMbps / 1000).toFixed(0)}G` : nic.speedMbps > 0 ? `${nic.speedMbps}M` : nic.isUp ? 'ON' : 'OFF',
+              percent: nic.isUp ? Math.min(100, Math.max(25, ((nic.rxKBps || 0) + (nic.txKBps || 0)) / 10 + 25)) : 0,
+              muted: !nic.isUp,
+              tooltip: `${nic.name} (${nic.isUp ? 'Connected' : 'Disconnected'}) · IPv4 ${nic.ipv4 || 'None'} · ↓ ${formatNetRate(nic.rxKBps || 0)} ↑ ${formatNetRate(nic.txKBps || 0)}`,
+              onClick: () => onSelectTab('storage-network'),
+            };
+          }),
+          {
+            id: 'net-estab',
+            label: 'TCP',
+            badge: 'EST',
+            badgeTone: 'purple',
+            valueText: `${live.socketCounts.established}`,
+            percent: Math.min(100, (live.socketCounts.established / 120) * 100),
+            tooltip: `Established TCP Connections: ${live.socketCounts.established}`,
+            onClick: () => onSelectTab('processes'),
+          },
+          {
+            id: 'net-ports',
+            label: 'PORT',
+            badge: 'LSN',
+            badgeTone: 'sky',
+            valueText: `${live.activePorts.length}`,
+            percent: Math.min(100, (live.activePorts.length / 60) * 100),
+            tooltip: `Listening Local Ports: ${live.activePorts.length}`,
+            onClick: () => onSelectTab('processes'),
+          },
+        ];
+
+        const usbCount = (specs.peripherals.usbControllers?.length || 0) + (specs.peripherals.usbDevices?.length || 0);
+        const sysItems: TelemetryTileItem[] = [
+          ...(live.battery
+            ? [
+                {
+                  id: 'sys-bat',
+                  label: 'BAT',
+                  badge: live.battery.powerPlugged ? 'AC' : 'DC',
+                  badgeTone: (live.battery.powerPlugged ? 'emerald' : 'amber') as 'emerald' | 'amber',
+                  valueText: `${Math.round(live.battery.percent)}%`,
+                  percent: live.battery.percent,
+                  tooltip: `Battery: ${Math.round(live.battery.percent)}% (${live.battery.statusLabel})`,
+                  onClick: () => onSelectTab('power-health'),
+                },
+              ]
+            : []),
+          {
+            id: 'sys-bios',
+            label: 'BIOS',
+            badge: specs.host.secureBoot === 'Enabled' ? 'SEC' : 'EFI',
+            badgeTone: specs.host.secureBoot === 'Enabled' ? 'emerald' : 'sky',
+            valueText: specs.motherboard.biosVersion.slice(0, 6),
+            percent: 35,
+            tooltip: `${specs.motherboard.manufacturer} ${specs.motherboard.product} · BIOS ${specs.motherboard.biosVersion} · Secure Boot: ${specs.host.secureBoot}`,
+            onClick: () => onSelectTab('hardware'),
+          },
+          {
+            id: 'sys-usb',
+            label: 'USB',
+            badge: 'DEV',
+            badgeTone: 'sky',
+            valueText: `${usbCount}`,
+            percent: Math.min(100, (usbCount / 20) * 100),
+            tooltip: `USB Controllers & Devices: ${usbCount}`,
+            onClick: () => onSelectTab('peripherals'),
+          },
+          {
+            id: 'sys-audio',
+            label: 'AUD',
+            badge: 'IO',
+            badgeTone: 'purple',
+            valueText: `${specs.peripherals.audio.length}`,
+            percent: Math.min(100, specs.peripherals.audio.length * 20),
+            tooltip: `Audio Endpoints: ${specs.peripherals.audio.length}`,
+            onClick: () => onSelectTab('peripherals'),
+          },
+          {
+            id: 'sys-pcie',
+            label: 'PCIE',
+            badge: 'BUS',
+            badgeTone: 'amber',
+            valueText: `${specs.pcieDevices?.length || 0}`,
+            percent: Math.min(100, ((specs.pcieDevices?.length || 0) / 24) * 100),
+            tooltip: `PCIe Bus Devices: ${specs.pcieDevices?.length || 0}`,
+            onClick: () => onSelectTab('hardware'),
+          },
+          {
+            id: 'sys-tools',
+            label: 'SDK',
+            badge: 'ENV',
+            badgeTone: 'emerald',
+            valueText: `${specs.runtimes.length}`,
+            percent: Math.min(100, (specs.runtimes.length / 12) * 100),
+            tooltip: `Developer Runtimes Detected: ${specs.runtimes.map((r) => r.name).join(', ')}`,
+            onClick: () => onSelectTab('environment'),
+          },
+        ];
+
+        return (
+          <section className="p-5 rounded-2xl system-card flex flex-col gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-bold text-white">Computer Components &amp; Subsystem Matrix</h3>
+                <p className="text-[11px] text-zinc-400">
+                  All storage volumes, physical drives, network interfaces, sockets, power, board &amp; peripheral structures
+                </p>
+              </div>
+              <span className="px-2.5 py-1 rounded-md bg-[#16161c] border border-white/[0.08] text-[10px] font-mono text-zinc-300">
+                Click any tile to inspect details
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+              <TelemetryTileGrid
+                title={`Storage & Drives (${live.disk.volumes.length} Vol · ${specs.physicalDisks.length} Disk)`}
+                rightLabel={primaryVol ? `${formatBytes(primaryVol.freeBytes, 1)} Free` : 'Online'}
+                rightToneClass="text-emerald-300"
+                columnsClass="grid-cols-2 sm:grid-cols-3"
+                items={storageItems}
+              />
+              <TelemetryTileGrid
+                title={`Network & Sockets (${live.networkAdapters.filter((n) => n.isUp).length} Active NICs)`}
+                rightLabel={`↓ ${formatNetRate(live.network.rxKBps)}`}
+                rightToneClass="text-sky-300"
+                columnsClass="grid-cols-2 sm:grid-cols-3"
+                items={netItems}
+              />
+              <TelemetryTileGrid
+                title={`Power, Board & Peripherals (${specs.host.chassisType})`}
+                rightLabel={live.healthPosture.label}
+                rightToneClass="text-amber-300"
+                columnsClass="grid-cols-2 sm:grid-cols-3"
+                items={sysItems}
+              />
+            </div>
+          </section>
+        );
+      })()}
     </div>
   );
 }
