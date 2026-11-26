@@ -31,6 +31,9 @@ const DocsView = lazy(() => import('./features/docs/DocsView'));
 const ScriptsView = lazy(() => import('./features/scripts/ScriptsView'));
 const SystemView = lazy(() => import('./features/system/SystemView'));
 const EverydayUtilitiesPage = lazy(() => import('./features/everyday/EverydayUtilitiesPage'));
+const ProfileView = lazy(() => import('./features/profile/ProfileView'));
+
+import { loadDeveloperProfile } from './features/profile/profileStore';
 
 import { DOCUMENTATION_GUIDES_REGISTRY, findGuideMeta } from './features/docs/docsConstants';
 import {
@@ -131,7 +134,7 @@ function App() {
     if (typeof window === 'undefined') return 'overview';
     const hash = window.location.hash.slice(1);
     if (hash) return hash;
-    return new URLSearchParams(window.location.search).get('panel') || 'overview';
+    return new URLSearchParams(window.location.search).get('panel') || loadDeveloperProfile().defaultLandingView || 'overview';
   });
   const [query, setQuery] = useState<string>('');
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -256,6 +259,7 @@ function App() {
       prefetch(() => import('./features/scripts/ScriptsView'));
       prefetch(() => import('./features/system/SystemView'));
       prefetch(() => import('./features/everyday/EverydayUtilitiesPage'));
+      prefetch(() => import('./features/profile/ProfileView'));
     }, 950);
 
     const onBeforeInstall = (evt: Event) => {
@@ -298,7 +302,7 @@ function App() {
 
     const syncHash = () => {
       const initialPanel = new URLSearchParams(window.location.search).get('panel');
-      const hashView = window.location.hash.slice(1) || initialPanel || 'overview';
+      const hashView = window.location.hash.slice(1) || initialPanel || loadDeveloperProfile().defaultLandingView || 'overview';
       setActive((prev) => (prev === hashView ? prev : hashView));
       consoleLogger.action('ROUTER', `Navigated to view: #${hashView}`);
     };
@@ -356,8 +360,9 @@ function App() {
         } else if (document.activeElement === searchInputRef.current) {
           searchInputRef.current?.blur();
         }
-      } else if ((event.ctrlKey || event.metaKey) && ['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(event.key)) {
+      } else if ((event.ctrlKey || event.metaKey) && ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(event.key)) {
         const keyMap: Record<string, string> = {
+          '0': 'profile',
           '1': 'overview',
           '2': 'projects',
           '3': 'packages',
@@ -480,6 +485,7 @@ function App() {
     if (['changelog', 'catalog', 'portfolio', 'showcase'].includes(active)) return 'Changelog';
     if (['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active)) return 'Codebase Updates by Date';
     if (active === 'portal' || active === 'hub') return 'Developer Hub & GitHub Links';
+    if (active === 'profile') return 'Developer Profile';
     if (active === 'computer' || active === 'system') return 'Computer & Performance';
     if (active === 'projects') return 'Projects & Applications';
     if (active.startsWith('projects/') || active.startsWith('project/')) {
@@ -584,6 +590,8 @@ function App() {
       crumbs.push({ label: 'codebase updates' });
     } else if (active === 'portal' || active === 'hub') {
       crumbs.push({ label: 'developer hub & github' });
+    } else if (active === 'profile') {
+      crumbs.push({ label: 'profile' });
     } else {
       crumbs.push({ label: activeTitle || active });
     }
@@ -902,6 +910,16 @@ function App() {
                 initialTab={resolveEverydayRouteToTab(active)}
                 onSelectTab={(tab) => navigate(`everyday/${tab}`)}
                 onNavigate={navigate}
+              />
+            )}
+
+            {active === 'profile' && (
+              <ProfileView
+                projects={projectsList}
+                packages={packagesList}
+                stats={stats}
+                onNavigate={navigate}
+                onBack={() => navigate('overview')}
               />
             )}
             </div>

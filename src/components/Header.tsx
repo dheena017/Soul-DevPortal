@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { consoleLogger } from '@workspace/logger';
 import { SoulLogoIcon } from './SoulLogo';
 import { MiniRadialRing } from './PortalVisuals';
@@ -6,6 +6,12 @@ import { useSharedTelemetry } from '../services/telemetryStore';
 import { SystemLiveSnapshot } from '../types';
 import { EVERYDAY_TABS, isEverydayRoute } from '../features/everyday/everydayTabsRegistry';
 import { openChangelogPanel } from '../utils/openStandalonePanel';
+import {
+  AVAILABILITY_OPTIONS,
+  DeveloperProfileData,
+  getInitials,
+  loadDeveloperProfile,
+} from '../features/profile/profileStore';
 
 export interface BreadcrumbItem {
   label: string;
@@ -51,6 +57,22 @@ export const Header: React.FC<HeaderProps> = ({
   backendPort: propBackendPort,
   liveTelemetry: propLiveTelemetry,
 }) => {
+  const isProfileActive = active === 'profile';
+  const [profile, setProfile] = useState<DeveloperProfileData>(() => loadDeveloperProfile());
+
+  useEffect(() => {
+    const syncProfile = () => setProfile(loadDeveloperProfile());
+    window.addEventListener('soul-profile-updated', syncProfile);
+    window.addEventListener('storage', syncProfile);
+    return () => {
+      window.removeEventListener('soul-profile-updated', syncProfile);
+      window.removeEventListener('storage', syncProfile);
+    };
+  }, []);
+
+  const profileStatusMeta =
+    AVAILABILITY_OPTIONS.find((opt) => opt.id === profile.status) || AVAILABILITY_OPTIONS[0];
+
   const isChangelogActive = ['changelog', 'catalog', 'portfolio', 'showcase'].includes(active);
   const isProjectsActive = active.startsWith('project');
   const isPackagesActive = active.startsWith('package') || ['logger', 'runner', 'config'].includes(active);
@@ -306,7 +328,7 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
           >
             <MiniRadialRing percent={quickTelemetry?.cpu ?? 22} color="#38bdf8" size={14} />
-            {quickTelemetry ? (
+            {quickTelemetry && profile.showHostMetricsInHeader ? (
               <span>
                 <span className="hidden 2xl:inline">CPU </span>
                 {quickTelemetry.cpu}% · <span className="hidden 2xl:inline">RAM </span>
@@ -372,6 +394,28 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="w-4 h-4 rounded bg-white/[0.08] border border-white/[0.14] flex items-center justify-center text-[10px] font-mono font-bold text-zinc-200">
               ?
             </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              consoleLogger.action('NAV', 'Opening Developer Profile');
+              onNavigate('profile');
+            }}
+            title={`Developer Profile · ${profile.displayName} (${profileStatusMeta.label}) · Ctrl+0`}
+            aria-label="Open Developer Profile"
+            aria-current={isProfileActive ? 'page' : undefined}
+            className={`neu-btn inline-flex items-center gap-1.5 h-8 px-2 rounded-lg text-xs font-semibold border transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap shrink-0 ${
+              isProfileActive
+                ? 'bg-sky-500/20 border-sky-400/45 text-white font-bold shadow-[0_0_16px_rgba(56,189,248,0.18)]'
+                : 'bg-[#16161c] border-white/[0.08] text-zinc-200 hover:text-white hover:border-white/[0.22] hover:bg-white/[0.06]'
+            }`}
+          >
+            <span className="relative inline-flex items-center justify-center w-5 h-5 rounded-md text-[11px] font-bold text-white border border-white/15 shrink-0" style={{ background: `${profile.accentColor}33` }}>
+              <span aria-hidden="true">{profile.avatarEmoji || getInitials(profile.displayName)}</span>
+              <span className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full border border-[#16161c] ${profileStatusMeta.dotClass}`} />
+            </span>
+            <span className="hidden xl:inline max-w-[96px] truncate">{profile.displayName}</span>
           </button>
         </div>
       </div>

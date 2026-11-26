@@ -313,6 +313,30 @@ export default function Sidebar({
           <div className="flex flex-col gap-1">
             <button
               type="button"
+              aria-current={isActive('profile') ? 'page' : undefined}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                isActive('profile')
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 neu-tile'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
+              }`}
+              onClick={() => onNavigate('profile')}
+              title="Developer Profile & Workspace Preferences (Ctrl+0)"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-base" aria-hidden="true">👤</span>
+                <span className="truncate font-semibold text-zinc-100">Developer Profile</span>
+              </div>
+              <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                isActive('profile')
+                  ? 'bg-sky-500/15 text-sky-300 border-sky-400/35 font-bold'
+                  : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+              }`}>
+                Ctrl+0
+              </span>
+            </button>
+
+            <button
+              type="button"
               aria-current={isActive('overview') ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 isActive('overview')
