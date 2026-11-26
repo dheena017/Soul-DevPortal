@@ -403,7 +403,7 @@ export default function PortalHubView({
 
         {activeTab === 'api' && (
           <section className="p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] flex flex-col gap-4 portal-header-sheen portal-stagger">
-            <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="Portal FastAPI REST Visual" opacityClass="opacity-70 sm:opacity-85" />
+            <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="Portal FastAPI REST Visual" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
             <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400">DEVPORTAL SERVER :8008</span>
@@ -435,7 +435,7 @@ export default function PortalHubView({
 
         {activeTab === 'blueprint' && (
           <section className="p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] flex flex-col gap-5 portal-header-sheen portal-stagger">
-            <HeroArtworkBackdrop src="/visuals/tab-env-security.jpg" alt="Portal Architecture Vault Visual" opacityClass="opacity-70 sm:opacity-85" />
+            <HeroArtworkBackdrop src="/visuals/tab-env-security.jpg" alt="Portal Architecture Vault Visual" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
             <div>
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400">ARCHITECTURE FLOW</span>
               <h2 className="text-lg font-bold text-white">Soul DevPortal Runtime Architecture</h2>

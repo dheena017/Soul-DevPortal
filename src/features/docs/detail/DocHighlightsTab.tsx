@@ -32,7 +32,7 @@ export default function DocHighlightsTab({
     <div className="w-full flex flex-col gap-6 portal-stagger">
       {/* ── Key Rules & Highlights Card: Compliance & Authoritative Mandates ── */}
       <section className="w-full p-5 md:p-6 rounded-2xl bg-[#151519] border border-[#212126] shadow-2xl flex flex-col gap-6 portal-header-sheen">
-        <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-68 sm:opacity-84" />
+        <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#19191d]">
           <div className="flex flex-col gap-0.5">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400">

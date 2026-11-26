@@ -181,7 +181,7 @@ export default function Overview({
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('projects'); }}
           >
-            <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="" opacityClass="opacity-70 sm:opacity-85" />
+            <HeroArtworkBackdrop src="/visuals/pillar-projects-topology.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
             <div className="relative z-10 flex flex-col gap-3">
               <div className="flex items-center justify-between">
                 <span className="w-12 h-12 rounded-xl bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner portal-emblem-hover">
@@ -211,7 +211,7 @@ export default function Overview({
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('packages'); }}
           >
-            <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="" opacityClass="opacity-70 sm:opacity-85" />
+            <HeroArtworkBackdrop src="/visuals/pillar-packages-core.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
             <div className="relative z-10 flex flex-col gap-3">
               <div className="flex items-center justify-between">
                 <span className="w-12 h-12 rounded-xl bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner portal-emblem-hover">
@@ -241,7 +241,7 @@ export default function Overview({
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('docs'); }}
           >
-            <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-70 sm:opacity-85" />
+            <HeroArtworkBackdrop src="/visuals/pillar-docs-blueprint.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
             <div className="relative z-10 flex flex-col gap-3">
               <div className="flex items-center justify-between">
                 <span className="w-12 h-12 rounded-xl bg-[#16161c]/90 border border-white/[0.1] flex items-center justify-center text-2xl shadow-inner portal-emblem-hover">
@@ -678,7 +678,7 @@ export default function Overview({
       {/* ── Command Runners & Computer Monitor Gateway Banners ── */}
       <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-5 portal-grid-stagger">
         <section className="group w-full p-6 rounded-2xl bg-[#121216] border border-white/[0.08] hover:border-white/[0.2] flex flex-col justify-between gap-5 shadow-2xl portal-card-hover portal-header-sheen">
-          <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="" opacityClass="opacity-70 sm:opacity-85" />
+          <HeroArtworkBackdrop src="/visuals/pillar-scripts-terminal.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
           <div className="relative z-10 flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-[#09090c]/90 border border-white/[0.08] flex items-center justify-center text-2xl shrink-0 portal-emblem-hover">
               ⚡
@@ -708,7 +708,7 @@ export default function Overview({
         </section>
 
         <section className="group w-full p-6 rounded-2xl bg-[#121216] border border-sky-400/20 hover:border-sky-400/40 flex flex-col justify-between gap-5 shadow-2xl portal-card-hover portal-header-sheen">
-          <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="" opacityClass="opacity-70 sm:opacity-85" />
+          <HeroArtworkBackdrop src="/visuals/pillar-computer-silicon.jpg" alt="" opacityClass="opacity-50 sm:opacity-65" />
           <div className="relative z-10 flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-sky-500/12 border border-sky-400/30 flex items-center justify-center text-sky-400 shrink-0 portal-emblem-hover">
               <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

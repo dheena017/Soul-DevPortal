@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { PROJECT_BRAND_MAP } from '../projects/projectsConstants';
 import {
   HumanTask,
@@ -46,10 +47,14 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
   useEffect(() => {
     if (!task) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      }
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
   }, [task, onClose]);
 
   if (!draft) return null;
@@ -90,9 +95,9 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
     onClose();
   };
 
-  return (
+  const modalMarkup = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 animate-in fade-in duration-200"
+      className="fixed inset-0 z-[90] flex items-center justify-center p-2.5 sm:p-5 bg-black/80 backdrop-blur-md portal-backdrop-enter"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -101,10 +106,10 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
       <form
         onSubmit={handleSaveSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl max-h-[90vh] rounded-2xl bg-[#111115] border border-white/[0.12] shadow-[0_24px_80px_rgba(0,0,0,0.88)] flex flex-col overflow-hidden portal-header-sheen portal-page-enter"
+        className="w-full max-w-2xl max-h-[calc(100dvh-1.25rem)] sm:max-h-[min(90dvh,780px)] rounded-2xl bg-[#0e1017] border border-white/[0.12] shadow-[0_28px_90px_rgba(0,0,0,0.92)] flex flex-col overflow-hidden portal-header-sheen"
       >
         {/* Header */}
-        <div className="shrink-0 px-5 py-4 border-b border-white/[0.08] flex items-center justify-between gap-3 bg-[#111115]">
+        <div className="shrink-0 px-5 py-3.5 border-b border-white/[0.08] flex items-center justify-between gap-3 bg-[#12141c]">
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
               Task Inspector
@@ -136,7 +141,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
         </div>
 
         {/* Scrollable Body */}
-        <div className="flex-1 min-h-0 overflow-y-auto p-5 flex flex-col gap-4 custom-scrollbar text-xs">
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 flex flex-col gap-4 sidebar-scroll text-xs">
           {/* Title */}
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
@@ -531,7 +536,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="shrink-0 px-5 py-3.5 border-t border-white/[0.08] bg-[#090a0e] flex items-center justify-between gap-3">
+        <div className="shrink-0 px-5 py-3.5 border-t border-white/[0.08] bg-[#0b0c11] flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => {
@@ -562,6 +567,11 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({
       </form>
     </div>
   );
+
+  if (typeof document !== 'undefined' && document.body) {
+    return createPortal(modalMarkup, document.body);
+  }
+  return modalMarkup;
 };
 
 export default TaskEditorModal;

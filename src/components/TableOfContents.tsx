@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { consoleLogger } from '@workspace/logger';
 import { headingId } from './Markdown';
 import { MarkdownBlock } from '../types';
@@ -886,7 +887,7 @@ export default function TableOfContents({
       {/* ── Inline TOC Card (Collapsible Accordion on Mobile, Sticky Rail on Desktop) ── */}
       <nav
         ref={navRef}
-        className={`toc-panel relative lg:sticky lg:top-4 flex flex-col gap-3 p-3.5 rounded-2xl max-h-[65vh] lg:max-h-[calc(100dvh-5.75rem)] ${className}`}
+        className={`toc-panel relative lg:sticky lg:top-4 flex flex-col gap-3 p-3.5 rounded-2xl max-h-[65vh] lg:max-h-[calc(100dvh-7.75rem)] ${className}`}
         aria-label="Table of contents navigation"
       >
         {/* Header */}
@@ -1085,209 +1086,36 @@ export default function TableOfContents({
         </div>
       </nav>
 
-      {/* ── Mobile Floating Quick-Navigation Dock (< lg) ── */}
-      <div className="fixed bottom-3.5 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md z-40 lg:hidden">
-        <div className="toc-mobile-dock relative overflow-hidden rounded-2xl p-1.5 flex items-center gap-1.5">
-          {/* Thin top progress line */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.05]">
-            <div
-              className="toc-progress-fill h-full"
-              style={{ width: `${roundedProgress}%` }}
-            />
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setMobileDrawerOpen(true)}
-            className="flex-1 min-w-0 flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl hover:bg-white/[0.05] text-left transition-colors cursor-pointer"
-            aria-label="Open table of contents drawer"
-          >
-            <span className={`w-2 h-2 rounded-full shrink-0 ${activeDotColor}`} />
-            <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-[9.5px] font-mono uppercase tracking-wider text-zinc-400 leading-none mb-0.5">
-                {title} · {stats.total} sections
-              </span>
-              <span className="text-xs font-semibold text-zinc-100 truncate leading-tight">
-                {activeItem?.cleanText || title}
-              </span>
-            </div>
-            <svg
-              className="w-4 h-4 text-zinc-400 shrink-0"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <polyline points="18 15 12 9 6 15" />
-            </svg>
-          </button>
-
-          <span className="px-2 py-1 rounded-[8px] bg-white/[0.05] border border-white/[0.08] text-[10.5px] font-mono font-semibold text-zinc-300 tabular-nums shrink-0">
-            {roundedProgress}%
-          </span>
-
-          {roundedProgress > 3 && (
-            <button
-              type="button"
-              onClick={scrollToTop}
-              className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 hover:bg-sky-500/25 flex items-center justify-center shrink-0 transition-colors cursor-pointer"
-              title="Back to top"
-              aria-label="Scroll to top of document"
-            >
-              <svg
-                className="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="12" y1="19" x2="12" y2="5" />
-                <polyline points="5 12 12 5 19 12" />
-              </svg>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* ── Mobile Slide-Up Outline Bottom Sheet Drawer (< lg) ── */}
-      {mobileDrawerOpen && (
-        <div
-          className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Document outline drawer"
-        >
-          <div
-            className="toc-sheet-backdrop absolute inset-0 bg-black/75 backdrop-blur-sm"
-            onClick={() => setMobileDrawerOpen(false)}
-          />
-
-          <div className="toc-mobile-sheet relative z-10 w-full max-w-lg mx-auto rounded-t-2xl max-h-[82dvh] flex flex-col gap-3 p-4 pb-5">
-            <div className="w-10 h-1 rounded-full bg-white/20 mx-auto shrink-0" aria-hidden="true" />
-
-            {/* Sheet Header */}
-            <div className="shrink-0 flex flex-col gap-2.5">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="toc-icon-badge w-6 h-6 rounded-[7px] flex items-center justify-center text-sky-300 shrink-0">
-                    <svg
-                      className="w-3.5 h-3.5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <line x1="8" y1="6" x2="21" y2="6" />
-                      <line x1="8" y1="12" x2="21" y2="12" />
-                      <line x1="8" y1="18" x2="21" y2="18" />
-                      <line x1="3" y1="6" x2="3.01" y2="6" />
-                      <line x1="3" y1="12" x2="3.01" y2="12" />
-                      <line x1="3" y1="18" x2="3.01" y2="18" />
-                    </svg>
-                  </div>
-                  <span className="text-[11px] font-bold text-zinc-100 tracking-[0.09em] font-mono uppercase truncate">
-                    {title}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="px-1.5 py-0.5 rounded-[6px] text-[10px] font-mono font-semibold bg-sky-500/12 border border-sky-400/25 text-sky-300 tabular-nums">
-                    {stats.h2Count} Topics
-                  </span>
-                  {stats.subCount > 0 && (
-                    <span className="px-1.5 py-0.5 rounded-[6px] text-[10px] font-mono font-medium bg-white/[0.04] border border-white/[0.08] text-zinc-400 tabular-nums">
-                      {stats.subCount} Sub
-                    </span>
-                  )}
-                  {collapsibleIds.length > 0 && !isFiltering && (
-                    <button
-                      type="button"
-                      onClick={toggleAllSections}
-                      className="w-7 h-7 rounded-[7px] flex items-center justify-center text-zinc-400 hover:text-white bg-white/[0.04] border border-white/[0.08] cursor-pointer"
-                      title={allCollapsed ? 'Expand all subtopics' : 'Collapse all subtopics'}
-                      aria-label={allCollapsed ? 'Expand all subtopics' : 'Collapse all subtopics'}
-                    >
-                      <svg
-                        className={`w-3.5 h-3.5 transition-transform duration-150 ${allCollapsed ? '-rotate-90' : 'rotate-0'}`}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="6 9 12 15 18 9" />
-                      </svg>
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => setMobileDrawerOpen(false)}
-                    className="w-7 h-7 rounded-[7px] flex items-center justify-center text-zinc-400 hover:text-white bg-white/[0.04] border border-white/[0.08] text-xs cursor-pointer"
-                    aria-label="Close document outline"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </div>
-
-              <div className="toc-progress-track h-[2px] w-full rounded-full overflow-hidden">
+      {/* ── Mobile Floating Quick-Navigation Dock (< lg, Portaled above StatusBar) ── */}
+      {(() => {
+        const mobileDock = (
+          <div className="fixed bottom-12 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md z-[60] lg:hidden">
+            <div className="toc-mobile-dock relative overflow-hidden rounded-2xl p-1.5 flex items-center gap-1.5">
+              {/* Thin top progress line */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/[0.05]">
                 <div
-                  className="toc-progress-fill h-full rounded-full"
+                  className="toc-progress-fill h-full"
                   style={{ width: `${roundedProgress}%` }}
                 />
-              </div>
-            </div>
-
-            {items.length > 5 && (
-              <TocSearchBar
-                filterText={filterText}
-                onFilterChange={setFilterText}
-                matchCount={matchCount}
-                totalCount={items.length}
-                firstMatch={firstMatch}
-                onJumpFirst={jumpToItem}
-                inputRef={sheetFilterInputRef}
-              />
-            )}
-
-            <TocTreeList
-              filteredSections={filteredSections}
-              activeHeading={activeHeading}
-              collapsedIds={collapsedIds}
-              isFiltering={isFiltering}
-              trimmedQuery={trimmedQuery}
-              normalizedQuery={normalizedQuery}
-              onItemClick={handleItemClick}
-              onToggleSection={toggleSection}
-              onResetFilter={handleResetSheetFilter}
-              listRef={sheetListRef}
-            />
-
-            <div className="shrink-0 pt-2.5 border-t border-white/[0.06] flex items-center justify-between gap-2">
-              <div className="flex items-center gap-1.5 text-[11px] font-mono text-zinc-500 tabular-nums">
-                <span className="px-1.5 py-0.5 rounded-[5px] bg-white/[0.04] border border-white/[0.08] text-zinc-300">
-                  {roundedProgress}%
-                </span>
-                <span>read</span>
               </div>
 
               <button
                 type="button"
-                onClick={scrollToTop}
-                className="toc-footer-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] text-xs font-mono text-zinc-200 cursor-pointer"
+                onClick={() => setMobileDrawerOpen(true)}
+                className="flex-1 min-w-0 flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl hover:bg-white/[0.05] text-left transition-colors cursor-pointer"
+                aria-label="Open table of contents drawer"
               >
-                <span>Back to top</span>
+                <span className={`w-2 h-2 rounded-full shrink-0 ${activeDotColor}`} />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[9.5px] font-mono uppercase tracking-wider text-zinc-400 leading-none mb-0.5">
+                    {title} · {stats.total} sections
+                  </span>
+                  <span className="text-xs font-semibold text-zinc-100 truncate leading-tight">
+                    {activeItem?.cleanText || title}
+                  </span>
+                </div>
                 <svg
-                  className="w-3.5 h-3.5"
+                  className="w-4 h-4 text-zinc-400 shrink-0"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -1296,14 +1124,206 @@ export default function TableOfContents({
                   strokeLinejoin="round"
                   aria-hidden="true"
                 >
-                  <line x1="12" y1="19" x2="12" y2="5" />
-                  <polyline points="5 12 12 5 19 12" />
+                  <polyline points="18 15 12 9 6 15" />
                 </svg>
               </button>
+
+              <span className="px-2 py-1 rounded-[8px] bg-white/[0.05] border border-white/[0.08] text-[10.5px] font-mono font-semibold text-zinc-300 tabular-nums shrink-0">
+                {roundedProgress}%
+              </span>
+
+              {roundedProgress > 3 && (
+                <button
+                  type="button"
+                  onClick={scrollToTop}
+                  className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 hover:bg-sky-500/25 flex items-center justify-center shrink-0 transition-colors cursor-pointer"
+                  title="Back to top"
+                  aria-label="Scroll to top of document"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="12" y1="19" x2="12" y2="5" />
+                    <polyline points="5 12 12 5 19 12" />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
-        </div>
-      )}
+        );
+
+        const mobileSheet = mobileDrawerOpen ? (
+          <div
+            className="fixed inset-0 z-[90] lg:hidden flex flex-col justify-end"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Document outline drawer"
+          >
+            <div
+              className="toc-sheet-backdrop absolute inset-0 bg-black/75 backdrop-blur-sm"
+              onClick={() => setMobileDrawerOpen(false)}
+            />
+
+            <div className="toc-mobile-sheet relative z-10 w-full max-w-lg mx-auto rounded-t-2xl max-h-[82dvh] flex flex-col gap-3 p-4 pb-5">
+              <div className="w-10 h-1 rounded-full bg-white/20 mx-auto shrink-0" aria-hidden="true" />
+
+              {/* Sheet Header */}
+              <div className="shrink-0 flex flex-col gap-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="toc-icon-badge w-6 h-6 rounded-[7px] flex items-center justify-center text-sky-300 shrink-0">
+                      <svg
+                        className="w-3.5 h-3.5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <line x1="8" y1="6" x2="21" y2="6" />
+                        <line x1="8" y1="12" x2="21" y2="12" />
+                        <line x1="8" y1="18" x2="21" y2="18" />
+                        <line x1="3" y1="6" x2="3.01" y2="6" />
+                        <line x1="3" y1="12" x2="3.01" y2="12" />
+                        <line x1="3" y1="18" x2="3.01" y2="18" />
+                      </svg>
+                    </div>
+                    <span className="text-[11px] font-bold text-zinc-100 tracking-[0.09em] font-mono uppercase truncate">
+                      {title}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="px-1.5 py-0.5 rounded-[6px] text-[10px] font-mono font-semibold bg-sky-500/12 border border-sky-400/25 text-sky-300 tabular-nums">
+                      {stats.h2Count} Topics
+                    </span>
+                    {stats.subCount > 0 && (
+                      <span className="px-1.5 py-0.5 rounded-[6px] text-[10px] font-mono font-medium bg-white/[0.04] border border-white/[0.08] text-zinc-400 tabular-nums">
+                        {stats.subCount} Sub
+                      </span>
+                    )}
+                    {collapsibleIds.length > 0 && !isFiltering && (
+                      <button
+                        type="button"
+                        onClick={toggleAllSections}
+                        className="w-7 h-7 rounded-[7px] flex items-center justify-center text-zinc-400 hover:text-white bg-white/[0.04] border border-white/[0.08] cursor-pointer"
+                        title={allCollapsed ? 'Expand all subtopics' : 'Collapse all subtopics'}
+                        aria-label={allCollapsed ? 'Expand all subtopics' : 'Collapse all subtopics'}
+                      >
+                        <svg
+                          className={`w-3.5 h-3.5 transition-transform duration-150 ${allCollapsed ? '-rotate-90' : 'rotate-0'}`}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setMobileDrawerOpen(false)}
+                      className="w-7 h-7 rounded-[7px] flex items-center justify-center text-zinc-400 hover:text-white bg-white/[0.04] border border-white/[0.08] text-xs cursor-pointer"
+                      aria-label="Close document outline"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+
+                <div className="toc-progress-track h-[2px] w-full rounded-full overflow-hidden">
+                  <div
+                    className="toc-progress-fill h-full rounded-full"
+                    style={{ width: `${roundedProgress}%` }}
+                  />
+                </div>
+              </div>
+
+              {items.length > 5 && (
+                <TocSearchBar
+                  filterText={filterText}
+                  onFilterChange={setFilterText}
+                  matchCount={matchCount}
+                  totalCount={items.length}
+                  firstMatch={firstMatch}
+                  onJumpFirst={jumpToItem}
+                  inputRef={sheetFilterInputRef}
+                />
+              )}
+
+              <TocTreeList
+                filteredSections={filteredSections}
+                activeHeading={activeHeading}
+                collapsedIds={collapsedIds}
+                isFiltering={isFiltering}
+                trimmedQuery={trimmedQuery}
+                normalizedQuery={normalizedQuery}
+                onItemClick={handleItemClick}
+                onToggleSection={toggleSection}
+                onResetFilter={handleResetSheetFilter}
+                listRef={sheetListRef}
+              />
+
+              <div className="shrink-0 pt-2.5 border-t border-white/[0.06] flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-[11px] font-mono text-zinc-500 tabular-nums">
+                  <span className="px-1.5 py-0.5 rounded-[5px] bg-white/[0.04] border border-white/[0.08] text-zinc-300">
+                    {roundedProgress}%
+                  </span>
+                  <span>read</span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={scrollToTop}
+                  className="toc-footer-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] text-xs font-mono text-zinc-200 cursor-pointer"
+                >
+                  <span>Back to top</span>
+                  <svg
+                    className="w-3.5 h-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <line x1="12" y1="19" x2="12" y2="5" />
+                    <polyline points="5 12 12 5 19 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null;
+
+        if (typeof document !== 'undefined' && document.body) {
+          return createPortal(
+            <>
+              {mobileDock}
+              {mobileSheet}
+            </>,
+            document.body
+          );
+        }
+        return (
+          <>
+            {mobileDock}
+            {mobileSheet}
+          </>
+        );
+      })()}
     </>
   );
 }

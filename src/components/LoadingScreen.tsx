@@ -114,7 +114,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#070708] text-white select-none transition-all duration-350 ease-out ${
+      className={`fixed inset-0 z-[95] flex flex-col items-center justify-center bg-[#070708] text-white select-none transition-all duration-350 ease-out ${
         isFadingOut ? 'opacity-0 pointer-events-none scale-102' : 'opacity-100'
       }`}
       role="progressbar"

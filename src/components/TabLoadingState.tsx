@@ -52,7 +52,7 @@ export default function TabLoadingState({
       aria-valuemax={100}
       aria-live="polite"
     >
-      <HeroArtworkBackdrop src={backdropSrc} alt="" opacityClass="opacity-55 sm:opacity-72" />
+      <HeroArtworkBackdrop src={backdropSrc} alt="" variant="corner" opacityClass="opacity-30 sm:opacity-42" />
 
       {/* Properly absolute ambient radial halo (never affects flow layout) */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

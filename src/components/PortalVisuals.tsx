@@ -66,16 +66,18 @@ export function MiniRadialRing({
 }
 
 /**
- * Blended right-side artwork canvas rendered inside Hero Header cards without reducing text contrast.
+ * Blended right-side artwork canvas rendered inside Hero Header cards (or capped header corner in sections) without reducing text contrast.
  */
 export function HeroArtworkBackdrop({
   src,
   alt,
-  opacityClass = 'opacity-80 sm:opacity-95',
+  opacityClass,
+  variant = 'banner',
 }: {
   src: string;
   alt: string;
   opacityClass?: string;
+  variant?: 'banner' | 'corner';
 }) {
   const [failed, setFailed] = useState<boolean>(false);
 
@@ -83,13 +85,18 @@ export function HeroArtworkBackdrop({
     setFailed(false);
   }, [src]);
 
+  const effectiveOpacity =
+    opacityClass ?? (variant === 'corner' ? 'opacity-45 sm:opacity-58' : 'opacity-58 sm:opacity-74');
+
+  const containerClass =
+    variant === 'corner'
+      ? 'portal-hero-art-corner absolute top-0 right-0 h-32 sm:h-40 w-[72%] sm:w-[58%] lg:w-[46%] overflow-hidden pointer-events-none select-none rounded-tr-2xl z-0'
+      : 'portal-hero-art-wrap absolute inset-y-0 right-0 w-[80%] sm:w-[70%] lg:w-[62%] overflow-hidden pointer-events-none select-none rounded-r-2xl z-0';
+
   return (
-    <div
-      className="portal-hero-art-wrap absolute inset-y-0 right-0 w-[86%] sm:w-[78%] lg:w-[70%] overflow-hidden pointer-events-none select-none rounded-r-2xl z-0"
-      aria-hidden="true"
-    >
+    <div className={containerClass} aria-hidden="true">
       {failed && (
-        <div className="absolute inset-0 bg-gradient-to-bl from-sky-500/15 via-purple-500/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-bl from-sky-500/12 via-purple-500/8 to-transparent" />
       )}
       {!failed && (
         <img
@@ -99,7 +106,7 @@ export function HeroArtworkBackdrop({
           decoding="sync"
           fetchPriority="high"
           onError={() => setFailed(true)}
-          className={`w-full h-full object-cover object-right portal-hero-art ${opacityClass}`}
+          className={`w-full h-full object-cover object-right portal-hero-art ${effectiveOpacity}`}
         />
       )}
       <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-[#0d0f15]/75 via-[#0d0f15]/25 to-transparent pointer-events-none" />

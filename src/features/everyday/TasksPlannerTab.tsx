@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { HeroArtworkBackdrop, MiniRadialRing } from '../../components/PortalVisuals';
 import { useSyncedWorkspaceState } from '../../services/workspaceStateStore';
 import { copyTextSafe } from '../../utils/clipboard';
@@ -2336,35 +2337,41 @@ export default function TasksPlannerTab({ onNavigate, embedded = false }: TasksP
       />
 
       {/* Non-blocking Undo & Status Toast */}
-      {(undoSnap || toastMsg) && (
-        <div className="fixed bottom-12 right-4 z-40 flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#16171e] border border-white/[0.15] shadow-2xl text-xs font-mono text-zinc-100 portal-page-enter">
-          <span>{toastMsg || undoSnap?.label}</span>
-          {undoSnap && (
+      {(undoSnap || toastMsg) && (() => {
+        const toastNode = (
+          <div className="fixed bottom-12 right-4 z-[85] flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#16171e] border border-white/[0.15] shadow-2xl text-xs font-mono text-zinc-100 portal-page-enter">
+            <span>{toastMsg || undoSnap?.label}</span>
+            {undoSnap && (
+              <button
+                type="button"
+                onClick={() => {
+                  setTasks(undoSnap.prevTasks);
+                  setUndoSnap(null);
+                  showToast('Restored previous tasks ✓');
+                }}
+                className="px-2.5 py-1 rounded-lg bg-sky-500/20 border border-sky-400/40 text-sky-200 font-bold hover:bg-sky-500/30 cursor-pointer"
+              >
+                Undo
+              </button>
+            )}
             <button
               type="button"
               onClick={() => {
-                setTasks(undoSnap.prevTasks);
                 setUndoSnap(null);
-                showToast('Restored previous tasks ✓');
+                setToastMsg(null);
               }}
-              className="px-2.5 py-1 rounded-lg bg-sky-500/20 border border-sky-400/40 text-sky-200 font-bold hover:bg-sky-500/30 cursor-pointer"
+              aria-label="Dismiss notification"
+              className="text-zinc-400 hover:text-white cursor-pointer"
             >
-              Undo
+              ✕
             </button>
-          )}
-          <button
-            type="button"
-            onClick={() => {
-              setUndoSnap(null);
-              setToastMsg(null);
-            }}
-            aria-label="Dismiss notification"
-            className="text-zinc-400 hover:text-white cursor-pointer"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+          </div>
+        );
+        if (typeof document !== 'undefined' && document.body) {
+          return createPortal(toastNode, document.body);
+        }
+        return toastNode;
+      })()}
     </article>
   );
 }

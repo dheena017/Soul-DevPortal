@@ -343,7 +343,7 @@ export default function ProjectApiTab({ project, beUrl, rawEndpoints, isLoading 
 
   return (
     <section className="w-full flex flex-col gap-5 p-5 md:p-6 rounded-2xl bg-[#111115] border border-white/[0.08] shadow-2xl animate-in fade-in duration-200 portal-stagger portal-header-sheen">
-      <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="REST API Pipeline Visual" opacityClass="opacity-70 sm:opacity-85" />
+      <HeroArtworkBackdrop src="/visuals/tab-api-rest.jpg" alt="REST API Pipeline Visual" variant="corner" opacityClass="opacity-45 sm:opacity-58" />
       {/* ── Top Header Bar ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
         <div className="flex flex-col gap-1">

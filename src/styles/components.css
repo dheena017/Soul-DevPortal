@@ -378,26 +378,39 @@ header[role="banner"]::after {
 }
 
 .portal-hero-art-wrap {
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.55) 14%,
-    rgba(0, 0, 0, 0.94) 30%,
-    #000 48%
+  -webkit-mask-image: radial-gradient(
+    ellipse 94% 96% at 88% 36%,
+    rgba(0, 0, 0, 0.96) 12%,
+    rgba(0, 0, 0, 0.56) 54%,
+    transparent 96%
   );
-  mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.55) 14%,
-    rgba(0, 0, 0, 0.94) 30%,
-    #000 48%
+  mask-image: radial-gradient(
+    ellipse 94% 96% at 88% 36%,
+    rgba(0, 0, 0, 0.96) 12%,
+    rgba(0, 0, 0, 0.56) 54%,
+    transparent 96%
+  );
+}
+
+.portal-hero-art-corner {
+  -webkit-mask-image: radial-gradient(
+    ellipse 88% 82% at 92% 12%,
+    rgba(0, 0, 0, 0.92) 6%,
+    rgba(0, 0, 0, 0.38) 48%,
+    transparent 86%
+  );
+  mask-image: radial-gradient(
+    ellipse 88% 82% at 92% 12%,
+    rgba(0, 0, 0, 0.92) 6%,
+    rgba(0, 0, 0, 0.38) 48%,
+    transparent 86%
   );
 }
 
 .portal-hero-art {
   pointer-events: none;
   user-select: none;
-  filter: contrast(1.06) saturate(1.1) brightness(1.12);
+  filter: contrast(1.04) saturate(1.06) brightness(0.95);
 }
 
 .portal-visual-zoom {
