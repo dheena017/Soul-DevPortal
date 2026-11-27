@@ -122,4 +122,11 @@ class PackageService:
                 "snippets": snippets,
             }
 
+        elif tab in ("preview", "previous"):
+            return {
+                "id": package_name,
+                "name": pkg_data["name"],
+                "preview": pkg_data.get("preview") or {"hasPreview": False, "folder": "Preview", "manifest": None, "files": []},
+            }
+
         return {"error": f"Unknown tab '{tab}' for package '{package_name}'"}

@@ -335,9 +335,26 @@ python Soul-DevPortal-Packages/<name>/tests/test_internal.py
 python Soul-DevPortal-Packages/<name>/tests/test_external.py
 ```
 
+### Step 7: Add Live Runtime Preview (`Package Preview` Tab)
+Register a live preview section for the new package folder in `src/features/packages/detail/PackagePreviousTab.tsx` so developers can inspect how the package renders and behaves in real workspace projects directly inside the **Package Preview** tab of `PackageDetailView`.
+
 ---
 
-## 4. Automated Verification Suite & Manifest Parity
+## 4. DevPortal Package Inspector Tabs
+
+Every package in `Soul-DevPortal-Packages/` is rendered in `PackageDetailView` with 5 canonical tabs:
+
+| Tab | Component | Purpose |
+| :--- | :--- | :--- |
+| **Documentation** | `PackageDocsTab.tsx` | Parsed `README.md` guides and architecture notes |
+| **API & Exports** | `PackageApiTab.tsx` | TypeScript & Python exported symbols and signatures |
+| **Code Generator** | `PackagePlaygroundTab.tsx` | Copy-ready import snippets and usage boilerplate |
+| **Manifest & Metadata** | `PackageManifestTab.tsx` | `package.json`, `pyproject.toml`, scripts, and dependencies |
+| **Package Preview (`LIVE`)** | `PackagePreviousTab.tsx` | Live interactive runtime preview showing how the package looks in actual projects |
+
+---
+
+## 5. Automated Verification Suite & Manifest Parity
 
 To ensure zero drift across all shared packages, execute the complete verification suite:
 

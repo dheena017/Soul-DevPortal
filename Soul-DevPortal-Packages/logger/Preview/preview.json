@@ -1,0 +1,16 @@
+{
+  "title": "@workspace/logger — Live Runtime Preview",
+  "subtitle": "5-column ANSI server logs, secret masking, browser console bridge, and Unicode startup banners",
+  "runtime": "Python + TypeScript",
+  "usedIn": ["apexmind-ai", "sonikoma", "outpass-system", "free-api-hub", "spatial-dimensions", "college-management-system", "globalpulse-ai", "postcraft-ai", "home-management", "devportal"],
+  "features": [
+    "5-column deterministic terminal formatting ([TIME] [SERVICE] [LEVEL] [TAG] MESSAGE)",
+    "Automatic PII & secret masking (api_key, password, bearer, jwt)",
+    "FastAPI RequestLoggingMiddleware with latency tracking",
+    "Browser consoleLogger with styled tags and JSON payload inspection"
+  ],
+  "commands": [
+    "from workspace_logger import setup_colored_logging, RequestLoggingMiddleware, print_backend_banner",
+    "import { consoleLogger } from '@workspace/logger';"
+  ]
+}

@@ -1,0 +1,13 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║   APEXMIND STUDIO AI — BACKEND API                                   ║
+╠══════════════════════════════════════════════════════════════════════╣
+║   Server API    : http://127.0.0.1:8000/ (Python 3.11.9 + FastAPI)   ║
+║   OpenAPI Docs  : http://127.0.0.1:8000/docs (Swagger Interactive)   ║
+║   Persistence   : SQLite (server/data/apexmind.db)                   ║
+║   Logger        : @workspace/logger v1.0.0 (5-Col ANSI + Middleware) ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+[09:50:12] [BACKEND ] INFO  [SYSTEM        ] Uvicorn running on http://127.0.0.1:8000
+[09:50:13] [SERVER  ] OK    [HEALTHCHECK   ] API server active at http://127.0.0.1:8000 (0.42s)
+[09:50:14] [DATABASE] INFO  [SQLITE-WAL    ] PRAGMA journal_mode=WAL; busy_timeout=5000ms verified
+[09:50:16] [HTTP    ] OK    [GET /api/data ] 200 OK · 14.2ms · 42 records serialized

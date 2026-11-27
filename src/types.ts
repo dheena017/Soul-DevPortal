@@ -18,6 +18,29 @@ export interface AstSymbol {
   docstring?: string;
 }
 
+export interface PackagePreviewFile {
+  name: string;
+  ext: string;
+  sizeBytes: number;
+  content: string;
+}
+
+export interface PackagePreviewManifest {
+  title?: string;
+  subtitle?: string;
+  runtime?: string;
+  usedIn?: string[];
+  features?: string[];
+  commands?: string[];
+}
+
+export interface PackagePreviewData {
+  hasPreview: boolean;
+  folder: string;
+  manifest?: PackagePreviewManifest | null;
+  files: PackagePreviewFile[];
+}
+
 export interface PackageData {
   id: string;
   name: string;
@@ -39,6 +62,7 @@ export interface PackageData {
   pythonModule?: string | null;
   pythonDependencies?: string[];
   symbols?: AstSymbol[];
+  preview?: PackagePreviewData;
   updatedAt?: string;
   relativeTime?: string;
   commitHash?: string;

@@ -147,6 +147,16 @@ for _pkg in ("logger", "config"):
 
 ---
 
+### 9. Live Package Preview Parity (`Package Preview` Tab)
+- Every shared package folder under `Soul-DevPortal-Packages/<pkg>/` must have a live, interactive runtime preview in the DevPortal Package Inspector (`PackageDetailView` -> **Package Preview** tab in `src/features/packages/detail/PackagePreviousTab.tsx`).
+- The **Package Preview** tab must demonstrate how the package actually renders and behaves inside real workspace projects:
+  - `@workspace/logger`: Interactive 5-column ANSI/JSON log stream + Unicode startup banner preview.
+  - `@workspace/runner`: Interactive `soul-dev` supervisor hotkeys + live `soul-ports` monorepo port audit.
+  - `@workspace/config`: Live Tailwind design token swatches + authoritative `PORT_REGISTRY` matrix.
+- Whenever a **new package folder** is added to `Soul-DevPortal-Packages/`, it must include a matching preview block in `PackagePreviousTab.tsx` alongside its `Documentation`, `API & Exports`, `Code Generator`, and `Manifest & Metadata` tabs.
+
+---
+
 ## Part II: Package-Specific Architectural Standards
 
 ### 1. `@workspace/logger` Invariants

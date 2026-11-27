@@ -56,14 +56,15 @@ export default function PackageDetailView({
     api: true,
     manifest: true,
     playground: true,
+    previous: true,
   });
 
   useEffect(() => {
     let isMounted = true;
-    const tabNames: PackageDetailTab[] = ['docs', 'api', 'manifest', 'playground'];
+    const tabNames: PackageDetailTab[] = ['docs', 'api', 'manifest', 'playground', 'previous'];
 
     setTabData({});
-    setLoadingTabs({ docs: true, api: true, manifest: true, playground: true });
+    setLoadingTabs({ docs: true, api: true, manifest: true, playground: true, previous: true });
 
     // Preload all tabs concurrently so exports, docs, and manifests always resolve
     tabNames.forEach(async (tab) => {
@@ -128,6 +129,9 @@ export default function PackageDetailView({
       } else if (manifestPayload.pythonDependencies?.length > 0) {
         updated.pythonDependencies = manifestPayload.pythonDependencies;
       }
+    }
+    if (tabData.previous?.preview) {
+      updated.preview = tabData.previous.preview;
     }
     return updated;
   }, [pkg, tabData]);

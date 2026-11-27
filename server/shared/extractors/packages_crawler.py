@@ -5,11 +5,12 @@ Discovers all packages in Soul-DevPortal-Packages/ and traverses AST symbols.
 
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from shared.extractors.ast_visitor import parse_python_symbols
 from shared.extractors.manifest_reader import read_json_manifest, read_pyproject_toml
@@ -65,6 +66,48 @@ def _get_path_meta(target_path: Path) -> Dict[str, Any]:
             "relativeTime": "21h",
             "commitHash": None,
         }
+
+
+def _load_package_preview(pkg_dir: Path) -> Dict[str, Any]:
+    """Reads Soul-DevPortal-Packages/<pkg>/Preview/ manifest and sample files."""
+    preview_dir = pkg_dir / "Preview"
+    if not preview_dir.is_dir():
+        preview_dir = pkg_dir / "preview"
+    if not preview_dir.is_dir():
+        return {"hasPreview": False, "folder": "Preview", "manifest": None, "files": []}
+
+    manifest: Optional[Dict[str, Any]] = None
+    files: List[Dict[str, Any]] = []
+    text_exts = {".json", ".txt", ".md", ".ts", ".tsx", ".js", ".py", ".css", ".sh", ".yml", ".yaml"}
+
+    for item in sorted(preview_dir.iterdir()):
+        if not item.is_file():
+            continue
+        ext = item.suffix.lower()
+        if ext not in text_exts:
+            continue
+        try:
+            raw = item.read_text(encoding="utf-8", errors="replace")
+        except Exception:
+            continue
+        if item.name.lower() == "preview.json":
+            try:
+                manifest = json.loads(raw)
+            except Exception:
+                manifest = None
+        files.append({
+            "name": item.name,
+            "ext": ext.lstrip(".") or "txt",
+            "sizeBytes": item.stat().st_size,
+            "content": raw[:16000],
+        })
+
+    return {
+        "hasPreview": bool(manifest or files),
+        "folder": preview_dir.name,
+        "manifest": manifest,
+        "files": files,
+    }
 
 
 def crawl_packages(packages_root: Path) -> List[Dict[str, Any]]:
@@ -151,6 +194,9 @@ def crawl_packages(packages_root: Path) -> List[Dict[str, Any]]:
             if d.is_dir() and d.name.startswith("workspace_")
         ]
         py_module = py_dirs[0] if py_dirs else None
+        preview_data = _load_package_preview(pkg_dir)
+        if preview_data.get("hasPreview") and "preview" not in tabs:
+            tabs.append("preview")
 
         packages.append({
             "id": pkg_id,
@@ -175,6 +221,7 @@ def crawl_packages(packages_root: Path) -> List[Dict[str, Any]]:
             "devDependencies": npm_manifest.get("devDependencies", {}),
             "peerDependencies": npm_manifest.get("peerDependencies", {}),
             "manifests": {"npm": npm_manifest, "python": py_manifest},
+            "preview": preview_data,
             "symbols": symbols,
             "updatedAt": git_meta["updatedAt"],
             "relativeTime": git_meta["relativeTime"],
