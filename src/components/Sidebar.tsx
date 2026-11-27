@@ -411,6 +411,30 @@ export default function Sidebar({
 
             <button
               type="button"
+              aria-current={isActive('terminal') ? 'page' : undefined}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                isActive('terminal')
+                  ? 'bg-white/[0.08] text-white font-semibold border border-white/15 neu-tile'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.04] border border-transparent'
+              }`}
+              onClick={() => onNavigate('terminal')}
+              title="Interactive Workspace Terminal (Ctrl+`)"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="font-mono text-xs font-bold text-emerald-400" aria-hidden="true">&gt;_</span>
+                <span className="truncate font-semibold text-zinc-100">Terminal</span>
+              </div>
+              <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                isActive('terminal')
+                  ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/35 font-bold'
+                  : 'bg-white/[0.04] text-zinc-400 border-white/[0.08]'
+              }`}>
+                Ctrl+`
+              </span>
+            </button>
+
+            <button
+              type="button"
               aria-current={(isActive('scripts') || isActive('commands') || isActive('runners')) ? 'page' : undefined}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
                 (isActive('scripts') || isActive('commands') || isActive('runners'))

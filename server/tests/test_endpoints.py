@@ -74,6 +74,9 @@ all_endpoints = [
     ("GET", "/api/workspace-tools/state/goals"),
     ("GET", "/api/workspace-tools/state/schedule"),
     ("GET", "/api/workspace-tools/state/checklists"),
+
+    # Workspace Terminal
+    ("GET", "/api/terminal/info"),
 ]
 
 print("=== RUNNING FASTAPI ENDPOINT TESTS ===")
@@ -107,6 +110,25 @@ assert read_res.status_code == 200 and read_res.json().get("data") == {"text": "
 if orig_scratch.get("exists"):
     client.put("/api/workspace-tools/state/scratchpad", json={"data": orig_scratch.get("data")})
 print("[200] PUT/GET /api/workspace-tools/state/scratchpad (SQLite persistence verified)")
+
+# Verify WebSocket PTY endpoint (/api/terminal/ws)
+term_info = client.get("/api/terminal/info").json()
+assert term_info.get("ptySupported") is True, f"Expected ptySupported=True, got {term_info}"
+with client.websocket_connect("/api/terminal/ws?profile=cmd&cols=80&rows=24") as ws:
+    ready_msg = ws.receive_json()
+    assert ready_msg.get("type") == "ready", f"Unexpected ready message: {ready_msg}"
+    ws.send_json({"type": "resize", "cols": 100, "rows": 30})
+    ws.send_json({"type": "input", "data": "echo SOUL_PTY_OK\r\n"})
+    collected = ""
+    for _ in range(30):
+        msg = ws.receive_json()
+        if msg.get("type") == "output":
+            collected += msg.get("data", "")
+            if "SOUL_PTY_OK" in collected:
+                break
+    assert "SOUL_PTY_OK" in collected, f"Did not receive PTY echo output: {collected!r}"
+    ws.send_json({"type": "kill"})
+print("[WS]  /api/terminal/ws (ConPTY live interactive streaming verified)")
 
 # Verify SQLite DB
 print("\n=== VERIFYING SQLITE DATABASE ===")

@@ -571,3 +571,55 @@ export async function fetchCodeUpdates(limit = 80): Promise<CodeUpdatesResponse 
     return null;
   }
 }
+
+export interface TerminalDirectoryItem {
+  label: string;
+  path: string;
+  relativePath: string;
+}
+
+export interface TerminalShellProfile {
+  id: 'powershell' | 'cmd' | 'bash' | 'python' | string;
+  label: string;
+  command: string;
+  args: string[];
+  available: boolean;
+  description: string;
+}
+
+export interface TerminalInfoResponse {
+  workspaceRoot: string;
+  shell: string;
+  platform: string;
+  ptySupported: boolean;
+  profiles: TerminalShellProfile[];
+  directories: TerminalDirectoryItem[];
+}
+
+export async function fetchTerminalInfo(): Promise<TerminalInfoResponse | null> {
+  try {
+    const res = await fetch(`${API_BASE}/terminal/info`, {
+      headers: { Accept: 'application/json' },
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as TerminalInfoResponse;
+  } catch {
+    return null;
+  }
+}
+
+export function buildTerminalWsUrl(params: {
+  profile?: string;
+  cwd?: string;
+  cols?: number;
+  rows?: number;
+}): string {
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const search = new URLSearchParams();
+  if (params.profile) search.set('profile', params.profile);
+  if (params.cwd) search.set('cwd', params.cwd);
+  if (params.cols) search.set('cols', String(params.cols));
+  if (params.rows) search.set('rows', String(params.rows));
+  return `${protocol}//${window.location.host}${API_BASE}/terminal/ws?${search.toString()}`;
+}

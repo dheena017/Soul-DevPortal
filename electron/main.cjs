@@ -498,6 +498,34 @@ function startStaticAppServer(distDir) {
           });
         });
 
+        server.on('upgrade', (req, socket, head) => {
+          if (!req.url || !(req.url === '/api' || req.url.startsWith('/api/'))) {
+            socket.destroy();
+            return;
+          }
+          const targetPort = activeBackendPort;
+          const upstream = net.connect(targetPort, BACKEND_HOST, () => {
+            let rawReq = `${req.method} ${req.url} HTTP/${req.httpVersion}\r\n`;
+            for (const [key, val] of Object.entries(req.headers)) {
+              if (val === undefined) continue;
+              const headerVal =
+                key.toLowerCase() === 'host'
+                  ? `${BACKEND_HOST}:${targetPort}`
+                  : Array.isArray(val)
+                    ? val.join(', ')
+                    : val;
+              rawReq += `${key}: ${headerVal}\r\n`;
+            }
+            rawReq += '\r\n';
+            upstream.write(rawReq);
+            if (head && head.length) upstream.write(head);
+            upstream.pipe(socket);
+            socket.pipe(upstream);
+          });
+          upstream.on('error', () => socket.destroy());
+          socket.on('error', () => upstream.destroy());
+        });
+
         server.on('error', reject);
         server.listen(preferredPort, BACKEND_HOST, () => {
           const addr = server.address();

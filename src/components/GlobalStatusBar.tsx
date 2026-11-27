@@ -976,6 +976,21 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
                 <span>Changelog</span>
                 <span className="text-[10px] opacity-80" aria-hidden="true">↗</span>
               </button>
+
+              <button
+                type="button"
+                onClick={() => onNavigate('terminal')}
+                className={`inline-flex items-center gap-1 h-5 px-2 rounded transition-colors cursor-pointer whitespace-nowrap ${
+                  active === 'terminal'
+                    ? 'bg-emerald-500/20 border border-emerald-500/35 text-emerald-200 font-bold'
+                    : 'text-emerald-300 hover:text-white hover:bg-emerald-500/15 border border-transparent hover:border-emerald-500/30'
+                }`}
+                title="Open Workspace Terminal (Ctrl+`)"
+                aria-label="Open Workspace Terminal"
+              >
+                <span className="font-mono text-[10px] font-bold">&gt;_</span>
+                <span>Terminal</span>
+              </button>
             </div>
           </div>
 

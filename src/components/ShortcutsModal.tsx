@@ -35,6 +35,7 @@ const VIEW_SHORTCUTS = [
   { keys: 'Ctrl + 8', label: 'Notes & Journal', route: 'everyday/notes' },
   { keys: 'Ctrl + 9', label: 'Focus & Breathing', route: 'everyday/focus' },
   { keys: 'Ctrl + 0', label: 'Developer Profile', route: 'profile' },
+  { keys: 'Ctrl + `', label: 'Workspace Terminal', route: 'terminal' },
 ];
 
 const HASH_SHORTCUTS = [

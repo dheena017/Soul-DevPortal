@@ -32,6 +32,7 @@ const ScriptsView = lazy(() => import('./features/scripts/ScriptsView'));
 const SystemView = lazy(() => import('./features/system/SystemView'));
 const EverydayUtilitiesPage = lazy(() => import('./features/everyday/EverydayUtilitiesPage'));
 const ProfileView = lazy(() => import('./features/profile/ProfileView'));
+const TerminalView = lazy(() => import('./features/terminal/TerminalView'));
 
 import { loadDeveloperProfile } from './features/profile/profileStore';
 
@@ -260,6 +261,7 @@ function App() {
       prefetch(() => import('./features/system/SystemView'));
       prefetch(() => import('./features/everyday/EverydayUtilitiesPage'));
       prefetch(() => import('./features/profile/ProfileView'));
+      prefetch(() => import('./features/terminal/TerminalView'));
     }, 950);
 
     const onBeforeInstall = (evt: Event) => {
@@ -360,6 +362,13 @@ function App() {
         } else if (document.activeElement === searchInputRef.current) {
           searchInputRef.current?.blur();
         }
+      } else if ((event.ctrlKey || event.metaKey) && event.key === '`') {
+        event.preventDefault();
+        setShowShortcuts(false);
+        setActive('terminal');
+        window.location.hash = 'terminal';
+        setMenuOpen(false);
+        mainRef.current?.scrollTo({ top: 0, behavior: 'instant' });
       } else if ((event.ctrlKey || event.metaKey) && ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(event.key)) {
         const keyMap: Record<string, string> = {
           '0': 'profile',
@@ -486,6 +495,7 @@ function App() {
     if (['code-updates', 'codebase-updates', 'git-updates', 'updates'].includes(active)) return 'Codebase Updates by Date';
     if (active === 'portal' || active === 'hub') return 'Developer Hub & GitHub Links';
     if (active === 'profile') return 'Developer Profile';
+    if (active === 'terminal') return 'Workspace Terminal';
     if (active === 'computer' || active === 'system') return 'Computer & Performance';
     if (active === 'projects') return 'Projects & Applications';
     if (active.startsWith('projects/') || active.startsWith('project/')) {
@@ -592,6 +602,8 @@ function App() {
       crumbs.push({ label: 'developer hub & github' });
     } else if (active === 'profile') {
       crumbs.push({ label: 'profile' });
+    } else if (active === 'terminal') {
+      crumbs.push({ label: 'terminal' });
     } else {
       crumbs.push({ label: activeTitle || active });
     }
@@ -918,6 +930,15 @@ function App() {
                 projects={projectsList}
                 packages={packagesList}
                 stats={stats}
+                onNavigate={navigate}
+                onBack={() => navigate('overview')}
+              />
+            )}
+
+            {active === 'terminal' && (
+              <TerminalView
+                projects={projectsList}
+                packages={packagesList}
                 onNavigate={navigate}
                 onBack={() => navigate('overview')}
               />
