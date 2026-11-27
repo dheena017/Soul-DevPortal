@@ -135,10 +135,12 @@ htmlcov/
 **/*.db-shm
 
 # ------------------------------------------------------------------------------
-# Monorepo Sub-projects (Tracked independently in their own git repositories)
+# Monorepo Sub-projects & Packages (Tracked/published independently)
 # ------------------------------------------------------------------------------
 Soul-DevPortal-Projects/
 **/Soul-DevPortal-Projects/
+Soul-DevPortal-Packages/
+**/Soul-DevPortal-Packages/
 
 # ------------------------------------------------------------------------------
 # Standby Prototypes, Local Archives & Large Binaries

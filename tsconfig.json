@@ -23,7 +23,8 @@
       "@workspace/config/tailwind/preset": ["Soul-DevPortal-Packages/config/external/presets/tailwind/preset.js"],
       "@workspace/config/*": ["Soul-DevPortal-Packages/config/external/presets/*"],
       "@workspace/config": ["Soul-DevPortal-Packages/config/external/presets/tailwind/tokens.js"],
-      "@workspace/runner/*": ["Soul-DevPortal-Packages/runner/*"]
+      "@workspace/runner/*": ["Soul-DevPortal-Packages/runner/*"],
+      "@workspace/*": ["Soul-DevPortal-Packages/*/external/client/index.ts"]
     }
   },
   "include": ["src", "vite.config.js"]

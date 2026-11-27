@@ -113,9 +113,15 @@ class PackageService:
                     {"lang": "bash", "title": "Run Monorepo", "code": "soul-runner all --kill-port"},
                     {"lang": "python", "title": "Port Clearance", "code": "from runner.internal.ports import ensure_port_free\nensure_port_free(8000)"},
                 ]
-            else:
+            elif package_name == "config":
                 snippets = [
                     {"lang": "ts", "title": "Tailwind Preset", "code": 'import workspacePreset from "@workspace/config/tailwind/preset";\nexport default { presets: [workspacePreset] };'},
+                ]
+            else:
+                py_mod = package_name.replace("-", "_")
+                snippets = [
+                    {"lang": "ts", "title": "React / Vite Facade", "code": f'import {{ getPackageMeta }} from "@workspace/{package_name}";\nconst meta = getPackageMeta();'},
+                    {"lang": "python", "title": "FastAPI Router", "code": f"from {py_mod}.external import router, get_capabilities\napp.include_router(router)"},
                 ]
             return {
                 "id": package_name,

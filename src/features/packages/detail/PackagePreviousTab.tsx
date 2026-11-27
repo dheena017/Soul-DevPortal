@@ -103,6 +103,43 @@ export default function PackagePreviousTab({
               </ul>
             )}
 
+            {(previewManifest?.domain || previewManifest?.layer) && (
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                {previewManifest?.domain && (
+                  <span className="px-2 py-0.5 rounded-md bg-[#16161c] border border-white/[0.08] text-[10px] font-mono text-sky-300">
+                    {previewManifest.domain}
+                  </span>
+                )}
+                {previewManifest?.layer && (
+                  <span className="px-2 py-0.5 rounded-md bg-[#16161c] border border-white/[0.08] text-[10px] font-mono text-amber-300">
+                    {previewManifest.layer}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {previewManifest?.localModels && previewManifest.localModels.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                <span className="text-[10px] font-mono text-zinc-500 uppercase mr-1">Local Models:</span>
+                {previewManifest.localModels.map((m: string) => (
+                  <span key={m} className="px-2 py-0.5 rounded-md bg-[#16161c] border border-white/[0.08] text-[10px] font-mono text-emerald-300">
+                    {m}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {previewManifest?.cloudApis && previewManifest.cloudApis.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                <span className="text-[10px] font-mono text-zinc-500 uppercase mr-1">Cloud APIs:</span>
+                {previewManifest.cloudApis.map((api: string) => (
+                  <span key={api} className="px-2 py-0.5 rounded-md bg-[#16161c] border border-white/[0.08] text-[10px] font-mono text-cyan-300">
+                    {api}
+                  </span>
+                ))}
+              </div>
+            )}
+
             {previewManifest?.usedIn && previewManifest.usedIn.length > 0 && (
               <div className="flex flex-wrap items-center gap-1.5 pt-1">
                 <span className="text-[10px] font-mono text-zinc-500 uppercase mr-1">Used In:</span>

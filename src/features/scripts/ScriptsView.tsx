@@ -94,6 +94,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
     { id: 'portal', label: 'Developer Portal', count: allScripts.filter((s) => s.category === 'portal').length },
     { id: 'pipeline', label: 'Build & Quality', count: allScripts.filter((s) => s.category === 'pipeline').length },
     { id: 'setup', label: 'Dependencies', count: allScripts.filter((s) => s.category === 'setup').length },
+    { id: 'automation', label: 'Automation Scripts', count: allScripts.filter((s) => s.category === 'automation').length },
   ];
 
   const filteredScripts = useMemo(() => {
@@ -153,7 +154,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></span>
               </span>
-              <span>19 Canonical Commands Active</span>
+              <span>{allScripts.length} Canonical Commands Active</span>
             </div>
             <CopyButton
               text="python Soul-DevPortal-Packages/runner/bin/run-all.py --kill-port"
@@ -189,7 +190,7 @@ export default function ScriptsView({ rootScripts = {}, onNavigate }: ScriptsVie
         {/* ── KPI Metric Cards Ribbon ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 portal-grid-stagger">
           <div className="flex flex-col p-3.5 rounded-xl neu-tile bg-[#16161c] border border-white/[0.08] hover:border-white/[0.2] portal-card-hover">
-            <span className="text-xl font-extrabold text-amber-400 font-mono">19</span>
+            <span className="text-xl font-extrabold text-amber-400 font-mono">{allScripts.length}</span>
             <span className="text-xs font-semibold text-white mt-1">Canonical Commands</span>
             <span className="text-[11px] text-zinc-400">0 redundant aliases</span>
           </div>

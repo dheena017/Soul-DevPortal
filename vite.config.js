@@ -615,9 +615,18 @@ export default defineConfig({
       },
     },
   ],
+  optimizeDeps: {
+    exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util'],
+  },
   server: {
     host: true,
     port: 5181,
+    headers: process.env.VITE_ENABLE_SHARED_ARRAY_BUFFER === 'true'
+      ? {
+          'Cross-Origin-Opener-Policy': 'same-origin',
+          'Cross-Origin-Embedder-Policy': 'require-corp',
+        }
+      : undefined,
     watch: {
       ignored: [
         '**/*.db',

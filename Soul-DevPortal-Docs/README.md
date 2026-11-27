@@ -14,8 +14,8 @@ The master architecture specification governing all 8 micro-applications, framew
 ---
 
 ### 📦 02. Shared Packages Architecture
-Architectural standards for reusable workspace libraries (`@workspace/*`), 2-tier internal/external isolation, and authoring guides.
-- **[Shared Packages Master Blueprint](02-packages-architecture/main.md)** — Core guides for `@workspace/config`, `@workspace/logger`, `@workspace/runner`, layout hierarchy, and step-by-step authoring walkthrough.
+Architectural standards for reusable workspace libraries (`@workspace/*`), 2-tier internal/external isolation, and the 75-package studio & AI ecosystem.
+- **[Shared Packages Master Blueprint](02-packages-architecture/main.md)** — Core guides for `@workspace/config`, `@workspace/logger`, `@workspace/runner`, plus the complete 75-package map across Core/AI and 13 studio domains.
 - **[The Golden Rules of Shared Packages](02-packages-architecture/golden-rules.md)** — The 5 golden rules, 2-tier separation, snake_case internals, and manifest parity invariants.
 
 ---

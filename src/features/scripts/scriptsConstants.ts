@@ -3,7 +3,7 @@ export interface ScriptDefinition {
   name: string;
   command: string;
   description: string;
-  category: 'orchestration' | 'apps' | 'portal' | 'pipeline' | 'setup';
+  category: 'orchestration' | 'apps' | 'portal' | 'pipeline' | 'setup' | 'automation';
   badge: string;
   badgeClass: string;
   ports?: string;
@@ -221,6 +221,99 @@ export const WORKSPACE_SCRIPTS_REGISTRY: ScriptDefinition[] = [
     category: 'setup',
     badge: 'PYTHON PIP',
     badgeClass: 'badge-setup',
+    isCanonical: true,
+  },
+
+  // ── Soul-DevPortal-scripts (Workspace Automation Utilities) ──
+  {
+    id: 'scripts:health',
+    name: 'npm run scripts:health',
+    command: 'python Soul-DevPortal-scripts/check_env_health.py',
+    description: 'Checks Python, Node, npm, Git, FFmpeg, SQLite, Torch/CUDA availability, and free disk space.',
+    category: 'automation',
+    badge: 'ENV HEALTH',
+    badgeClass: 'badge-portal',
+    isCanonical: true,
+  },
+  {
+    id: 'scripts:clean',
+    name: 'npm run scripts:clean',
+    command: 'python Soul-DevPortal-scripts/clean_workspace_caches.py --dry-run',
+    description: 'Safely previews (or removes with --apply) __pycache__, .pytest_cache, .vite, and dist directories.',
+    category: 'automation',
+    badge: 'CACHE CLEANER',
+    badgeClass: 'badge-build',
+    isCanonical: true,
+  },
+  {
+    id: 'scripts:wal',
+    name: 'npm run scripts:wal',
+    command: 'python Soul-DevPortal-scripts/audit_sqlite_wal.py',
+    description: 'Audits all .db/.sqlite files across the workspace for SQLite WAL journal mode and file size.',
+    category: 'automation',
+    badge: 'SQLITE WAL',
+    badgeClass: 'badge-server',
+    isCanonical: true,
+  },
+  {
+    id: 'scripts:catalog',
+    name: 'npm run scripts:catalog',
+    command: 'python Soul-DevPortal-scripts/sync_packages_catalog.py',
+    description: 'Audits all Soul-DevPortal-Packages for package.json / pyproject.toml version parity, Preview, and tests.',
+    category: 'automation',
+    badge: 'PKG AUDIT',
+    badgeClass: 'badge-orch',
+    isCanonical: true,
+  },
+  {
+    id: 'scripts:git',
+    name: 'npm run scripts:git',
+    command: 'python Soul-DevPortal-scripts/git_workspace_status.py',
+    description: 'Summarizes active git branch and dirty file counts across root and Soul-DevPortal-Projects/*.',
+    category: 'automation',
+    badge: 'GIT STATUS',
+    badgeClass: 'badge-app',
+    isCanonical: true,
+  },
+  {
+    id: 'scripts:env',
+    name: 'npm run scripts:env',
+    command: 'python Soul-DevPortal-scripts/gen_env_template.py',
+    description: 'Prints or writes (.env.example with --write) env keys for Core, AI Providers, and GitHub Packages.',
+    category: 'automation',
+    badge: 'ENV TEMPLATE',
+    badgeClass: 'badge-setup',
+    isCanonical: true,
+  },
+  {
+    id: 'scripts:ports',
+    name: 'npm run scripts:ports',
+    command: 'python Soul-DevPortal-scripts/kill_port_conflicts.py',
+    description: 'Inspects reserved DevPortal & micro-app TCP ports (5173-5181, 8000-8008) for active bindings.',
+    category: 'automation',
+    badge: 'PORT PROBE',
+    badgeClass: 'badge-client',
+    ports: ':5173-:5181, :8000-:8008',
+    isCanonical: true,
+  },
+  {
+    id: 'pkg:test:all',
+    name: 'npm run pkg:test:all',
+    command: 'python scripts/test_all_packages.py',
+    description: 'Runs all Tier-3 unit tests and manifest parity checks in parallel across all workspace packages.',
+    category: 'automation',
+    badge: 'PKG TESTS',
+    badgeClass: 'badge-build',
+    isCanonical: true,
+  },
+  {
+    id: 'pkg:publish',
+    name: 'npm run pkg:publish',
+    command: 'python Soul-DevPortal-scripts/publish_github_packages.py',
+    description: 'Stages and publishes all Soul-DevPortal-Packages to GitHub Packages (@dheena017/*).',
+    category: 'automation',
+    badge: 'GH PACKAGES',
+    badgeClass: 'badge-portal',
     isCanonical: true,
   },
 ];

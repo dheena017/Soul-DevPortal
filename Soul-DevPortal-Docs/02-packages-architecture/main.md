@@ -366,5 +366,42 @@ python Soul-DevPortal-Packages/runner/tests/test_registry.py; `
 python Soul-DevPortal-Packages/runner/tests/test_supervisor.py; `
 python Soul-DevPortal-Packages/logger/tests/test_internal.py; `
 python Soul-DevPortal-Packages/logger/tests/test_external.py; `
-npx tsc --noEmit -p Soul-DevPortal-Packages/logger/tsconfig.json
+npx tsc --noEmit -p Soul-DevPortal-Packages/logger/tsconfig.json; `
+python scripts/test_all_packages.py
+```
+
+---
+
+## 6. Complete 75-Package Studio & AI Ecosystem Map
+
+In addition to the three workspace infrastructure packages (`config`, `logger`, `runner`), `Soul-DevPortal-Packages/` provides **75 modular studio & AI packages** tailored strictly to **React 19 + Vite 8 + Tailwind 4** (Frontend) and **FastAPI + Uvicorn + SQLite WAL** (Backend):
+
+### Layer 0 & Layer 1 — Core Foundation & AI Orchestration (4 Packages)
+
+| Folder | NPM Scope | Frontend (React 19 + Vite 8) | Backend (FastAPI + SQLite WAL) | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| `core/` | `@workspace/core` | `react` (19), `vite` (8), `tailwindcss` (4), `@tanstack/react-query`, `zustand`, `react-router`, `lucide-react`, `openapi-fetch` | `fastapi[standard]`, `uvicorn[standard]`, `sqlalchemy[asyncio]`, `aiosqlite` (WAL), `alembic`, `pydantic-settings`, `httpx`, `ffmpeg` | Base app shell, SQLite WAL engine, Vite 8 FFmpeg/WASM preset |
+| `ai-agents/` | `@workspace/ai-agents` | `@ai-sdk/react`, `EventSource` (SSE) | `pydantic-ai`, `google-genai`, `openai`, `anthropic` | Scriptwriting, shot lists, prompt enhancement, structured JSON |
+| `ai-router/` | `@workspace/ai-router` | `@tanstack/react-query` | `litellm`, `fal-client`, `replicate` | Unified routing between Cloud APIs & local GPUs |
+| `ai-local/` | `@workspace/ai-local` | `@huggingface/transformers` (WebGPU/WASM) | `diffusers`, `transformers`, `torch`, `onnxruntime-gpu` | Local GPU & browser WebGPU inference for open-weight models |
+
+### Layer 2 — 13 Studio Domains (71 Category Packages)
+
+- **1. Video & Film (9)**: `movie-maker`, `video-editor`, `motion-2d`, `vfx-engine`, `color-luts`, `subtitles` (`faster-whisper`, `whisperx`, `Qwen3-ASR`, `NVIDIA Nemotron 3.5 ASR`), `screen-recorder`, `gif-clipper`, `video-transcoder`.
+- **2. Image & Design (6)**: `image-maker` (`FLUX.1`, `SDXL`, `comfyui`), `image-editor` (`pyvips`, `wand`), `vector-draw`, `bg-remover` (`rembg`, `bria-rmbg`, `iopaint`, `segment-anything`), `image-upscaler` (`realesrgan`, `spandrel`, `codeformer`), `whiteboard` (`tldraw`, `excalidraw`, `@xyflow/react`).
+- **3. Audio & Music (6)**: `audio-maker` (`Kokoro 82M`, `Fish Audio Drama 3`, `Breeze TTS 2`, `chatterbox-tts`, `ACE-Step 1.5`, `Meta MusicGen Large`, `audiocraft`), `audio-editor` (`wavesurfer.js`, `pedalboard`), `audio-cleanup` (`deepfilternet`, RNNoise WASM), `stem-splitter` (`demucs`, `audio-separator`), `podcast-studio` (`pyloudnorm`, `ffmpeg`), `audio-analyzer` (`meyda`, `librosa`, `essentia`).
+- **4. 3D & Spatial (3)**: `scene-3d` (`three`, `@react-three/fiber`, `bpy`, `trimesh`, `cadquery`), `render-3d` (`theatre.js`, `bpy` Cycles/EEVEE, `pyrender`), `viewer-3d` (`@google/model-viewer`, `pyassimp`, `pygltflib`).
+- **5. Publishing, Live & Management (4)**: `pdf-decks` (`@react-pdf/renderer`, `weasyprint`, `python-pptx`, `pymupdf`), `live-stream` (`@livekit/components-react`, `hls.js`, `aiortc`), `dam-search` (`@tanstack/react-virtual`, `sqlite-vec`, `open-clip-torch`, `sentence-transformers`), `media-info` (`mediainfo.js`, `exifr`, `ffprobe`).
+- **6. Generative AI & Avatars (7)**: `ai-video` (Local: `LTX-2.5`, `Wan 2.2`, `HunyuanVideo 1.5`, `CogVideoX-1.5`; Cloud: `Veo 3.1`, `Seedance 2.5`, `Wan 3.0`, `Kling 4.0`, `Runway Gen-4.5`), `ai-avatars` (`MuseTalk`, `LatentSync`, `SadTalker`, `Wav2Lip`, `HeyGen API`, `Synthesia`), `ai-dubbing`, `text-video-edit` (`@tiptap/react` + `whisperx`), `ai-inpaint` (`sam2`, `propainter`, `Kling 4.0`, `MiniMax H3`), `ai-rigging` (`@pixiv/three-vrm`, `unirig`, `mediapipe`, `bpy`), `ai-3d` (`triposr`, `hunyuan3d`, `trellis`, `meshy`).
+- **7. Brand, Marketing & E-Commerce (6)**: `brand-kits` (Tailwind 4 `@theme` + `fonttools`), `batch-render` (`remotion`, `huey`), `mockups-tryon` (`Decal`, `IDM-VTON`), `auto-reframe` (`ultralytics` YOLO, `mediapipe`), `watermark-qr` (`qrcode.react`, `segno`), `stock-media` (`httpx` + SQLite cache).
+- **8. Spatial, Interactive & Data Media (5)**: `splats-3d` (`<Splat/>`, `nerfstudio`, `gsplat`, `pycolmap`), `spatial-xr` (`@react-three/xr`, `usd-core`), `branch-video`, `data-charts` (`d3`, `recharts`, `manim`, `plotly`), `code-video` (`shiki-magic-move`, `manim`, `playwright`).
+- **9. Studio Workflow, Collaboration & Delivery (8)**: `scriptwriter`, `frame-review` (WebSocket + `frame_comments`), `version-history` (`zundo`, `immer`, `jsonpatch`), `node-pipelines` (`@xyflow/react`, `networkx`), `media-proxy` (`idb-keyval`, `hls.js`, `ffmpeg`), `render-queue` (`huey` `SqliteHuey` / `tinyjobs`), `c2pa-sign` (`@contentauth/c2pa-web`, `c2pa-python`), `social-publish` (`apscheduler`).
+- **10. Design Systems, UI Prototyping & Web Export (5)**: `ui-tokens`, `ui-prototype`, `ui-studio`, `ui-export`, `a11y-audit`.
+- **11. Game Dev, Physics & Procedural Worlds (4)**: `game-2d`, `physics-3d`, `shader-graph`, `npc-ai`.
+- **12. Security, Auth, Billing & Usage Metering (4)**: `auth-rbac`, `ai-credits`, `media-drm`, `audit-logs`.
+- **13. Testing, Telemetry, Eval & Benchmarking (4)**: `ai-evals`, `media-qc`, `dataset-studio`, `telemetry`.
+
+### Critical Stack Configuration Notes
+1. **Vite 8 + FFmpeg.wasm**: `vite.config.js` excludes `@ffmpeg/ffmpeg` and `@ffmpeg/util` from `optimizeDeps` and supports `Cross-Origin-Opener-Policy: same-origin` + `Cross-Origin-Embedder-Policy: require-corp` when `VITE_ENABLE_SHARED_ARRAY_BUFFER=true`.
+2. **SQLite WAL + Background Jobs**: Use `huey` (`SqliteHuey`) or `tinyjobs` for render queues, batch jobs, and scheduled social posts directly on SQLite WAL without Redis or RabbitMQ.
 ```

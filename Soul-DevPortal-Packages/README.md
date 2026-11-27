@@ -82,8 +82,16 @@ npm install
 
 ## 🧪 Monorepo Package Test Suite
 
-Run tests across all three packages in a single command:
+Run tests across all packages in a single command:
 
 ```bash
-python config/tests/test_ports_integrity.py && python config/tests/test_internal.py && python config/tests/test_external.py && python runner/tests/test_registry.py && python runner/tests/test_visual_len.py && python runner/tests/test_supervisor.py && python logger/tests/test_internal.py && python logger/tests/test_external.py
+npm run pkg:test:all
 ```
+
+Or scaffold/update package skeletons:
+
+```bash
+npm run pkg:scaffold
+```
+
+For the full **75-package Studio & AI Ecosystem Map** (Layer 0 `core`, Layer 1 `ai-agents`/`ai-router`/`ai-local`, and 71 packages across 13 Domains), see [Soul-DevPortal-Docs/02-packages-architecture/main.md](../Soul-DevPortal-Docs/02-packages-architecture/main.md).
