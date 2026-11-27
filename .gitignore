@@ -194,3 +194,6 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+
+# Separate Repository
+Soul-DevPortal-Packages/

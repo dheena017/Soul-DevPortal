@@ -1,1 +1,0 @@
-"""Soul Workspace Logger Package."""
