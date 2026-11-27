@@ -356,16 +356,36 @@ export default function TerminalView({
     );
   };
 
+  const resolveWorkspaceCommand = (cmd: string, cwd: string): string => {
+    const root = info?.workspaceRoot;
+    if (!root || cwd === root || cwd === '.') return cmd;
+    if (cmd.startsWith('npm run ')) {
+      return `npm --prefix "${root}" run ${cmd.slice('npm run '.length)}`;
+    }
+    if (cmd.startsWith('python server/')) {
+      return `python "${root}/${cmd.slice('python '.length)}"`;
+    }
+    if (cmd.startsWith('python scripts/')) {
+      return `python "${root}/${cmd.slice('python '.length)}"`;
+    }
+    if (cmd.startsWith('python Soul-DevPortal-Packages/')) {
+      return `python "${root}/${cmd.slice('python '.length)}"`;
+    }
+    return cmd;
+  };
+
   const sendQuickCommand = (cmd: string) => {
     if (!activeTab) return;
     if (broadcastMode) {
       for (const pane of activeTab.panes) {
-        paneRefs.current[pane.id]?.sendCommand(cmd);
+        const resolved = resolveWorkspaceCommand(cmd, pane.cwd);
+        paneRefs.current[pane.id]?.sendCommand(resolved);
       }
       return;
     }
     if (!focusedPane) return;
-    paneRefs.current[focusedPane.id]?.sendCommand(cmd);
+    const resolved = resolveWorkspaceCommand(cmd, focusedPane.cwd);
+    paneRefs.current[focusedPane.id]?.sendCommand(resolved);
   };
 
   const handleResetSession = () => {
