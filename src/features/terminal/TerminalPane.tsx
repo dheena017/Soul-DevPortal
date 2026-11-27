@@ -186,6 +186,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
   const [searchCaseSensitive, setSearchCaseSensitive] = useState<boolean>(false);
   const [copiedNotice, setCopiedNotice] = useState<boolean>(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [isScrolledUp, setIsScrolledUp] = useState<boolean>(false);
 
   const sendWsJson = useCallback((payload: Record<string, unknown>) => {
     const ws = wsRef.current;
@@ -332,6 +333,18 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
     });
     resizeObserver.observe(container);
 
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        window.requestAnimationFrame(fitAndSync);
+      }
+    });
+    intersectionObserver.observe(container);
+
+    const onScrollDisposable = term.onScroll(() => {
+      const buf = term.buffer.active;
+      setIsScrolledUp(buf.viewportY < buf.baseY);
+    });
+
     const onDataDisposable = term.onData((data) => {
       sendWsJson({ type: 'input', data });
     });
@@ -339,6 +352,8 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
     return () => {
       window.cancelAnimationFrame(rafId);
       resizeObserver.disconnect();
+      intersectionObserver.disconnect();
+      onScrollDisposable.dispose();
       onDataDisposable.dispose();
       try {
         webglAddon?.dispose();
@@ -732,15 +747,31 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       )}
 
       {/* xterm.js Canvas */}
-      <div
-        ref={containerRef}
-        onContextMenu={(e) => {
-          e.preventDefault();
-          onFocus();
-          setContextMenu({ x: e.clientX, y: e.clientY });
-        }}
-        className={`w-full ${heightClass} p-2 bg-[#09090c] overflow-hidden`}
-      />
+      <div className="relative w-full">
+        <div
+          ref={containerRef}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            onFocus();
+            setContextMenu({ x: e.clientX, y: e.clientY });
+          }}
+          className={`w-full ${heightClass} p-2 bg-[#09090c] overflow-hidden`}
+        />
+        {isScrolledUp && (
+          <button
+            type="button"
+            onClick={() => {
+              termRef.current?.scrollToBottom();
+              setIsScrolledUp(false);
+              termRef.current?.focus();
+            }}
+            className="absolute bottom-3 right-4 z-20 px-2.5 py-1 rounded-lg bg-[#16161c]/95 border border-sky-400/40 text-[11px] font-mono text-sky-200 hover:text-white shadow-lg cursor-pointer"
+            title="Jump to bottom"
+          >
+            ↓ Bottom
+          </button>
+        )}
+      </div>
 
       {/* Right-Click Context Menu */}
       {contextMenu && (

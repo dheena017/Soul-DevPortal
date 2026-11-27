@@ -27,6 +27,7 @@ export interface GlobalStatusBarProps {
   onOpenShortcuts: () => void;
   onFocusSearch?: () => void;
   terminalDrawerOpen?: boolean;
+  hasActiveTerminalDrawer?: boolean;
   onToggleTerminalDrawer?: () => void;
 }
 
@@ -111,6 +112,7 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
   onOpenShortcuts,
   onFocusSearch,
   terminalDrawerOpen = false,
+  hasActiveTerminalDrawer = false,
   onToggleTerminalDrawer,
 }) => {
   const shared = useSharedTelemetry(propBackendLive === undefined);
@@ -995,11 +997,21 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
                     ? 'bg-emerald-500/20 border border-emerald-500/35 text-emerald-200 font-bold'
                     : 'text-emerald-300 hover:text-white hover:bg-emerald-500/15 border border-transparent hover:border-emerald-500/30'
                 }`}
-                title="Toggle Bottom Workspace Terminal (Ctrl+`)"
+                title={
+                  hasActiveTerminalDrawer && !terminalDrawerOpen
+                    ? 'Toggle Bottom Workspace Terminal (Running in background · Ctrl+`)'
+                    : 'Toggle Bottom Workspace Terminal (Ctrl+`)'
+                }
                 aria-label="Toggle Bottom Workspace Terminal"
               >
                 <span className="font-mono text-[10px] font-bold">&gt;_</span>
                 <span>Terminal</span>
+                {hasActiveTerminalDrawer && !terminalDrawerOpen && (
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.85)]"
+                    title="Terminal session running in background"
+                  />
+                )}
               </button>
             </div>
           </div>

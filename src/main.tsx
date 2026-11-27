@@ -141,7 +141,14 @@ function App() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [terminalDrawerOpen, setTerminalDrawerOpen] = useState<boolean>(false);
+  const [hasOpenedTerminalDrawer, setHasOpenedTerminalDrawer] = useState<boolean>(false);
   const [terminalDrawerHeight, setTerminalDrawerHeight] = useState<number>(380);
+
+  useEffect(() => {
+    if (terminalDrawerOpen) {
+      setHasOpenedTerminalDrawer(true);
+    }
+  }, [terminalDrawerOpen]);
   const [isBootLoading, setIsBootLoading] = useState<boolean>(
     () => !(typeof window !== 'undefined' && Boolean(new URLSearchParams(window.location.search).get('panel')))
   );
@@ -951,11 +958,16 @@ function App() {
         </div>
       </main>
 
-      {terminalDrawerOpen && active !== 'terminal' && (
+      {hasOpenedTerminalDrawer && active !== 'terminal' && (
         <section
           aria-label="Bottom Terminal Drawer"
+          aria-hidden={!terminalDrawerOpen}
           style={{ height: `${terminalDrawerHeight}px` }}
-          className="w-full shrink-0 bg-[#0d0d10] border-t border-white/[0.12] flex flex-col z-30 shadow-[0_-12px_36px_rgba(0,0,0,0.55)]"
+          className={
+            terminalDrawerOpen
+              ? 'w-full shrink-0 bg-[#0d0d10] border-t border-white/[0.12] flex flex-col z-30 shadow-[0_-12px_36px_rgba(0,0,0,0.55)]'
+              : 'hidden'
+          }
         >
           {/* Drag-to-resize handle */}
           <div
@@ -1035,6 +1047,7 @@ function App() {
         onOpenShortcuts={() => setShowShortcuts(true)}
         onFocusSearch={() => searchInputRef.current?.focus()}
         terminalDrawerOpen={terminalDrawerOpen}
+        hasActiveTerminalDrawer={hasOpenedTerminalDrawer}
         onToggleTerminalDrawer={() => setTerminalDrawerOpen((prev) => !prev)}
       />
 
