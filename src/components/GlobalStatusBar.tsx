@@ -26,6 +26,8 @@ export interface GlobalStatusBarProps {
   projectsCount: number;
   onOpenShortcuts: () => void;
   onFocusSearch?: () => void;
+  terminalDrawerOpen?: boolean;
+  onToggleTerminalDrawer?: () => void;
 }
 
 const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
@@ -108,6 +110,8 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
   projectsCount,
   onOpenShortcuts,
   onFocusSearch,
+  terminalDrawerOpen = false,
+  onToggleTerminalDrawer,
 }) => {
   const shared = useSharedTelemetry(propBackendLive === undefined);
   const isBackendLive = propBackendLive ?? shared.isBackendLive;
@@ -979,14 +983,20 @@ export const GlobalStatusBar: React.FC<GlobalStatusBarProps> = ({
 
               <button
                 type="button"
-                onClick={() => onNavigate('terminal')}
+                onClick={() => {
+                  if (onToggleTerminalDrawer && active !== 'terminal') {
+                    onToggleTerminalDrawer();
+                  } else {
+                    onNavigate('terminal');
+                  }
+                }}
                 className={`inline-flex items-center gap-1 h-5 px-2 rounded transition-colors cursor-pointer whitespace-nowrap ${
-                  active === 'terminal'
+                  active === 'terminal' || terminalDrawerOpen
                     ? 'bg-emerald-500/20 border border-emerald-500/35 text-emerald-200 font-bold'
                     : 'text-emerald-300 hover:text-white hover:bg-emerald-500/15 border border-transparent hover:border-emerald-500/30'
                 }`}
-                title="Open Workspace Terminal (Ctrl+`)"
-                aria-label="Open Workspace Terminal"
+                title="Toggle Bottom Workspace Terminal (Ctrl+`)"
+                aria-label="Toggle Bottom Workspace Terminal"
               >
                 <span className="font-mono text-[10px] font-bold">&gt;_</span>
                 <span>Terminal</span>

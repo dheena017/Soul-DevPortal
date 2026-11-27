@@ -15,6 +15,43 @@ export interface TerminalViewProps {
   packages?: PackageData[];
   onNavigate: (viewId: string) => void;
   onBack?: () => void;
+  compact?: boolean;
+  paneHeightClass?: string;
+}
+
+interface CustomSnippet {
+  id: string;
+  label: string;
+  cmd: string;
+}
+
+const TERMINAL_PREFS_KEY = 'soul-terminal-prefs-v1';
+const TERMINAL_SNIPPETS_KEY = 'soul-terminal-snippets-v1';
+
+function loadTerminalPrefs(): {
+  fontSize?: number;
+  themeId?: string;
+  tabs?: TerminalTab[];
+  activeTabId?: string;
+} {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = window.localStorage.getItem(TERMINAL_PREFS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function loadCustomSnippets(): CustomSnippet[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(TERMINAL_SNIPPETS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
 }
 
 interface PaneConfig {
@@ -40,6 +77,45 @@ const QUICK_COMMANDS = [
   { label: 'vite build', cmd: 'npm run build' },
   { label: 'extract AST', cmd: 'python server/main.py --extract-only' },
   { label: 'cli menu', cmd: 'python scripts/cli.py' },
+];
+
+const COMMAND_PALETTE_GROUPS = [
+  {
+    group: 'Git',
+    items: [
+      { label: 'Status', cmd: 'git status --short' },
+      { label: 'Log (10)', cmd: 'git log -n 10 --oneline' },
+      { label: 'Diff Stat', cmd: 'git diff --stat' },
+      { label: 'Branches', cmd: 'git branch -a' },
+      { label: 'Pull', cmd: 'git pull' },
+    ],
+  },
+  {
+    group: 'Ports & Dev',
+    items: [
+      { label: 'Port Audit', cmd: 'npm run ports:status' },
+      { label: 'Kill Conflicts', cmd: 'npm run ports:kill' },
+      { label: 'Start All Apps', cmd: 'npm run dev:all' },
+      { label: 'Health JSON', cmd: 'npm run ports:json' },
+    ],
+  },
+  {
+    group: 'Build & Test',
+    items: [
+      { label: 'Typecheck', cmd: 'npx tsc --noEmit' },
+      { label: 'Vite Build', cmd: 'npm run build' },
+      { label: 'Package Tests', cmd: 'npm run pkg:test' },
+      { label: 'Lint', cmd: 'npm run lint' },
+    ],
+  },
+  {
+    group: 'Python & AST',
+    items: [
+      { label: 'Extract AST', cmd: 'python server/main.py --extract-only' },
+      { label: 'CLI Menu', cmd: 'python scripts/cli.py' },
+      { label: 'Relink Py Pkgs', cmd: 'npm run install:python' },
+    ],
+  },
 ];
 
 const DEFAULT_PROFILES: TerminalShellProfile[] = [
@@ -84,19 +160,57 @@ export default function TerminalView({
   packages = [],
   onNavigate,
   onBack,
+  compact = false,
+  paneHeightClass,
 }: TerminalViewProps) {
   const { isBackendLive, backendPort } = useSharedTelemetry(true);
   const [info, setInfo] = useState<TerminalInfoResponse | null>(null);
-  const [tabs, setTabs] = useState<TerminalTab[]>(() => [
-    createTab('term-1', 'Terminal 1', 'powershell', '.'),
-  ]);
-  const [activeTabId, setActiveTabId] = useState<string>('term-1');
-  const [fontSize, setFontSize] = useState<number>(13);
-  const [themeId, setThemeId] = useState<string>('soul-dark');
+  const initialPrefs = useMemo(() => loadTerminalPrefs(), []);
+  const [tabs, setTabs] = useState<TerminalTab[]>(() =>
+    Array.isArray(initialPrefs.tabs) && initialPrefs.tabs.length > 0
+      ? initialPrefs.tabs
+      : [createTab('term-1', 'Terminal 1', 'powershell', '.')]
+  );
+  const [activeTabId, setActiveTabId] = useState<string>(
+    () => initialPrefs.activeTabId || 'term-1'
+  );
+  const [fontSize, setFontSize] = useState<number>(
+    () => (typeof initialPrefs.fontSize === 'number' ? initialPrefs.fontSize : 13)
+  );
+  const [themeId, setThemeId] = useState<string>(
+    () => initialPrefs.themeId || 'soul-dark'
+  );
   const [editingTabId, setEditingTabId] = useState<string | null>(null);
   const [editingTabTitle, setEditingTabTitle] = useState<string>('');
+  const [customSnippets, setCustomSnippets] = useState<CustomSnippet[]>(() =>
+    loadCustomSnippets()
+  );
+  const [addingSnippet, setAddingSnippet] = useState<boolean>(false);
+  const [snippetLabel, setSnippetLabel] = useState<string>('');
+  const [snippetCmd, setSnippetCmd] = useState<string>('');
+  const [broadcastMode, setBroadcastMode] = useState<boolean>(false);
+  const [showPalette, setShowPalette] = useState<boolean>(false);
 
   const paneRefs = useRef<Record<string, TerminalPaneHandle | null>>({});
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        TERMINAL_PREFS_KEY,
+        JSON.stringify({ fontSize, themeId, tabs, activeTabId })
+      );
+    } catch {
+      // ignore storage quota errors
+    }
+  }, [fontSize, themeId, tabs, activeTabId]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(TERMINAL_SNIPPETS_KEY, JSON.stringify(customSnippets));
+    } catch {
+      // ignore storage quota errors
+    }
+  }, [customSnippets]);
 
   useEffect(() => {
     let mounted = true;
@@ -243,13 +357,54 @@ export default function TerminalView({
   };
 
   const sendQuickCommand = (cmd: string) => {
+    if (!activeTab) return;
+    if (broadcastMode) {
+      for (const pane of activeTab.panes) {
+        paneRefs.current[pane.id]?.sendCommand(cmd);
+      }
+      return;
+    }
     if (!focusedPane) return;
     paneRefs.current[focusedPane.id]?.sendCommand(cmd);
   };
 
+  const handleResetSession = () => {
+    const defaultProfile = profiles.find((p) => p.available)?.id || 'powershell';
+    const freshTab = createTab('term-1', 'Terminal 1', defaultProfile, info?.workspaceRoot || '.');
+    setTabs([freshTab]);
+    setActiveTabId(freshTab.id);
+    setFontSize(13);
+    setThemeId('soul-dark');
+    setBroadcastMode(false);
+    try {
+      window.localStorage.removeItem(TERMINAL_PREFS_KEY);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleSaveSnippet = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cmd = snippetCmd.trim();
+    if (!cmd) return;
+    const label = snippetLabel.trim() || cmd.split(/\s+/)[0];
+    setCustomSnippets((prev) => [
+      ...prev,
+      { id: `snip-${Date.now()}`, label, cmd },
+    ]);
+    setSnippetLabel('');
+    setSnippetCmd('');
+    setAddingSnippet(false);
+  };
+
+  const handleRemoveSnippet = (id: string) => {
+    setCustomSnippets((prev) => prev.filter((s) => s.id !== id));
+  };
+
   return (
-    <div className="flex flex-col gap-4 pb-8">
+    <div className={`flex flex-col ${compact ? 'gap-2.5 pb-1' : 'gap-4 pb-8'}`}>
       {/* ── Top Header Bar ── */}
+      {!compact && (
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           {onBack && (
@@ -278,7 +433,7 @@ export default function TerminalView({
                 : 'PTY Unavailable'
               : 'Backend Offline'}
           </span>
-        </div>
+      </div>
 
         <div className="flex flex-wrap items-center gap-2">
           <button
@@ -308,13 +463,48 @@ export default function TerminalView({
           </button>
           <button
             type="button"
+            onClick={() => setShowPalette((v) => !v)}
+            className={`neu-btn h-8 px-3 rounded-xl border text-xs font-semibold cursor-pointer ${
+              showPalette
+                ? 'bg-sky-500/20 border-sky-400/45 text-white'
+                : 'bg-[#16161c] border-white/[0.08] text-zinc-200 hover:text-white'
+            }`}
+            title="Toggle categorized Command Palette"
+          >
+            ⌘ Commands
+          </button>
+          {(activeTab?.panes.length || 1) > 1 && (
+            <button
+              type="button"
+              onClick={() => setBroadcastMode((b) => !b)}
+              className={`neu-btn h-8 px-3 rounded-xl border text-xs font-semibold cursor-pointer ${
+                broadcastMode
+                  ? 'bg-purple-500/20 border-purple-400/45 text-purple-200'
+                  : 'bg-[#16161c] border-white/[0.08] text-zinc-300 hover:text-white'
+              }`}
+              title="Send Quick Run commands to all split panes simultaneously"
+            >
+              {broadcastMode ? '📡 Broadcast ON' : '📡 Broadcast'}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={handleResetSession}
+            className="neu-btn h-8 px-3 rounded-xl bg-[#16161c] border border-white/[0.08] hover:border-rose-400/40 text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
+            title="Reset terminal tabs and saved session"
+          >
+            Reset
+          </button>
+          <button
+            type="button"
             onClick={() => onNavigate('scripts')}
             className="neu-btn h-8 px-3 rounded-xl bg-[#16161c] border border-white/[0.08] text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
           >
             Scripts →
           </button>
-        </div>
       </div>
+      </div>
+      )}
 
       {/* ── Directory, Shell Profile & Quick Run Bar ── */}
       <div className="rounded-2xl neu-card bg-[#111115] border border-white/[0.08] p-4 flex flex-col gap-3">
@@ -332,7 +522,7 @@ export default function TerminalView({
                 </option>
               ))}
             </select>
-          </div>
+      </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[11px] font-mono text-zinc-400 uppercase">Shell</span>
@@ -379,9 +569,9 @@ export default function TerminalView({
               >
                 A+
               </button>
-            </div>
-          </div>
-        </div>
+      </div>
+      </div>
+      </div>
 
         {/* Quick Command Chips */}
         <div className="flex flex-wrap items-center gap-1.5">
@@ -404,7 +594,7 @@ export default function TerminalView({
               onChange={(e) => {
                 const pid = e.target.value;
                 if (!pid) return;
-                sendQuickCommand(`python Soul-DevPortal-Packages/runner/bin/run-dev.py --project ${pid} --kill-port`);
+                sendQuickCommand(`python Soul-DevPortal-Packages/runner/external/run_all.py --project ${pid} --kill-port`);
               }}
               aria-label="Launch project dev server"
               className="h-7 px-2 rounded-lg bg-[#16161c] border border-emerald-500/30 text-[11px] font-mono text-emerald-300 focus:outline-none cursor-pointer"
@@ -417,7 +607,89 @@ export default function TerminalView({
               ))}
             </select>
           )}
-        </div>
+          {customSnippets.map((snip) => (
+            <span
+              key={snip.id}
+              className="inline-flex items-center rounded-lg bg-sky-500/10 border border-sky-400/30 text-[11px] font-mono text-sky-200 overflow-hidden"
+            >
+              <button
+                type="button"
+                onClick={() => sendQuickCommand(snip.cmd)}
+                title={snip.cmd}
+                className="px-2 py-1 hover:bg-sky-500/20 cursor-pointer"
+              >
+                ★ {snip.label}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleRemoveSnippet(snip.id)}
+                title="Remove pinned command"
+                className="px-1.5 py-1 text-sky-300/70 hover:text-rose-300 hover:bg-white/[0.06] cursor-pointer"
+              >
+                ×
+              </button>
+            </span>
+          ))}
+          <button
+            type="button"
+            onClick={() => setAddingSnippet((v) => !v)}
+            className="px-2 py-1 rounded-lg bg-[#16161c] border border-dashed border-white/[0.18] hover:border-sky-400/45 text-[11px] font-mono text-zinc-400 hover:text-white cursor-pointer"
+          >
+            {addingSnippet ? 'Cancel' : '+ Pin Cmd'}
+          </button>
+      </div>
+
+        {addingSnippet && (
+          <form onSubmit={handleSaveSnippet} className="flex flex-wrap items-center gap-2 pt-1">
+            <input
+              type="text"
+              value={snippetLabel}
+              onChange={(e) => setSnippetLabel(e.target.value)}
+              placeholder="Label (e.g. Git Pull)"
+              className="h-7 px-2.5 rounded-lg bg-[#09090c] border border-white/[0.1] text-xs font-mono text-white w-36 focus:outline-none focus:border-sky-400/50"
+            />
+            <input
+              type="text"
+              value={snippetCmd}
+              onChange={(e) => setSnippetCmd(e.target.value)}
+              placeholder="Command (e.g. git pull && npm run build)"
+              className="flex-1 min-w-[200px] h-7 px-2.5 rounded-lg bg-[#09090c] border border-white/[0.1] text-xs font-mono text-white focus:outline-none focus:border-sky-400/50"
+            />
+            <button
+              type="submit"
+              className="h-7 px-3 rounded-lg bg-sky-500/20 border border-sky-400/40 text-xs font-semibold text-sky-200 hover:text-white cursor-pointer"
+            >
+              Save
+            </button>
+          </form>
+        )}
+        {showPalette && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-2 border-t border-white/[0.08]">
+            {COMMAND_PALETTE_GROUPS.map((grp) => (
+              <div
+                key={grp.group}
+                className="p-2.5 rounded-xl bg-[#09090c] border border-white/[0.08] flex flex-col gap-1.5"
+              >
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
+                  {grp.group}
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {grp.items.map((item) => (
+                    <button
+                      key={item.cmd}
+                      type="button"
+                      onClick={() => sendQuickCommand(item.cmd)}
+                      title={item.cmd}
+                      className="px-2 py-1 rounded-md bg-[#16161c] border border-white/[0.08] hover:border-sky-400/40 text-[11px] font-mono text-zinc-200 hover:text-white cursor-pointer"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ── Session Tabs + Split Panes Container ── */}
@@ -485,7 +757,7 @@ export default function TerminalView({
                       ×
                     </button>
                   )}
-                </div>
+      </div>
               );
             })}
             <button
@@ -496,16 +768,16 @@ export default function TerminalView({
             >
               + New Tab
             </button>
-          </div>
+      </div>
 
           <span className="hidden md:inline text-[10px] font-mono text-zinc-500">
             xterm.js · Ctrl+F Search · Clickable Links
           </span>
-        </div>
+      </div>
 
         {/* Active Tab Panes Grid */}
         <div
-          className={`grid gap-2 p-2 bg-[#09090c] min-h-[480px] ${
+          className={`grid gap-2 p-2 bg-[#09090c] ${compact ? 'min-h-[240px]' : 'min-h-[480px]'} ${
             activeTab.panes.length === 1
               ? 'grid-cols-1'
               : activeTab.panes.length === 2
@@ -514,7 +786,7 @@ export default function TerminalView({
           }`}
         >
           {activeTab.panes.map((pane) => (
-            <div key={pane.id} className="min-h-[460px] flex flex-col">
+            <div key={pane.id} className={`${compact ? 'min-h-[220px]' : 'min-h-[460px]'} flex flex-col`}>
               <TerminalPane
                 ref={(handle) => {
                   paneRefs.current[pane.id] = handle;
@@ -528,6 +800,8 @@ export default function TerminalView({
                 canClosePane={activeTab.panes.length > 1}
                 fontSize={fontSize}
                 themeId={themeId}
+                heightClass={paneHeightClass || (compact ? 'h-[240px]' : 'h-[460px]')}
+                onSplitPane={activeTab.panes.length < 3 ? handleSplitPane : undefined}
                 onFocus={() =>
                   setTabs((prev) =>
                     prev.map((t) =>
@@ -551,9 +825,9 @@ export default function TerminalView({
                 }
                 onClosePane={() => handleClosePane(pane.id)}
               />
-            </div>
+      </div>
           ))}
-        </div>
+      </div>
       </div>
     </div>
   );

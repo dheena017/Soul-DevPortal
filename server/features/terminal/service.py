@@ -229,6 +229,8 @@ class TerminalService:
         env["COLORTERM"] = "truecolor"
         env["FORCE_COLOR"] = "1"
         env["PYTHONUNBUFFERED"] = "1"
+        env["PYTHONIOENCODING"] = "utf-8"
+        env["PYTHONUTF8"] = "1"
 
         safe_rows = max(2, min(int(rows), 500))
         safe_cols = max(10, min(int(cols), 500))

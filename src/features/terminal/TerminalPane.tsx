@@ -10,6 +10,7 @@ import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { SearchAddon } from '@xterm/addon-search';
+import { WebglAddon } from '@xterm/addon-webgl';
 import '@xterm/xterm/css/xterm.css';
 import { buildTerminalWsUrl, TerminalShellProfile } from '../../services/api';
 import { copyTextSafe } from '../../utils/clipboard';
@@ -33,9 +34,11 @@ export interface TerminalPaneProps {
   canClosePane?: boolean;
   fontSize?: number;
   themeId?: string;
+  heightClass?: string;
   onFocus: () => void;
   onChangeProfile: (profileId: string) => void;
   onClosePane?: () => void;
+  onSplitPane?: () => void;
 }
 
 export const TERMINAL_THEMES: Record<string, { label: string; theme: Record<string, string> }> = {
@@ -156,9 +159,11 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
     canClosePane = false,
     fontSize = 13,
     themeId = 'soul-dark',
+    heightClass = 'h-[460px]',
     onFocus,
     onChangeProfile,
     onClosePane,
+    onSplitPane,
   },
   ref
 ) {
@@ -168,6 +173,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
   const searchAddonRef = useRef<SearchAddon | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const pendingCommandsRef = useRef<string[]>([]);
 
   const [status, setStatus] = useState<PaneConnectionStatus>('connecting');
   const [pid, setPid] = useState<number | null>(null);
@@ -179,6 +185,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchCaseSensitive, setSearchCaseSensitive] = useState<boolean>(false);
   const [copiedNotice, setCopiedNotice] = useState<boolean>(false);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
   const sendWsJson = useCallback((payload: Record<string, unknown>) => {
     const ws = wsRef.current;
@@ -201,7 +208,15 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       sendCommand: (command: string) => {
         const trimmed = command.trim();
         if (!trimmed) return;
-        sendWsJson({ type: 'input', data: `${trimmed}\r` });
+        const ws = wsRef.current;
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'input', data: `${trimmed}\r` }));
+        } else {
+          pendingCommandsRef.current.push(trimmed);
+          if (status === 'exited' || status === 'error') {
+            restartShell();
+          }
+        }
         termRef.current?.focus();
       },
       focus: () => {
@@ -213,7 +228,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       },
       restart: restartShell,
     }),
-    [restartShell, sendWsJson]
+    [restartShell, sendWsJson, status]
   );
 
   // Initialize xterm.js instance once per pane mount
@@ -244,6 +259,23 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
     term.loadAddon(webLinksAddon);
     term.loadAddon(searchAddon);
     term.open(container);
+
+    // GPU-accelerated WebGL renderer with graceful fallback to default canvas/DOM
+    let webglAddon: WebglAddon | null = null;
+    try {
+      webglAddon = new WebglAddon();
+      webglAddon.onContextLoss(() => {
+        try {
+          webglAddon?.dispose();
+        } catch {
+          // Ignore
+        }
+        webglAddon = null;
+      });
+      term.loadAddon(webglAddon);
+    } catch {
+      webglAddon = null;
+    }
 
     // Custom keybindings: Ctrl+F opens in-terminal search; Ctrl+C copies if selection exists
     term.attachCustomKeyEventHandler((evt) => {
@@ -308,6 +340,11 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       window.cancelAnimationFrame(rafId);
       resizeObserver.disconnect();
       onDataDisposable.dispose();
+      try {
+        webglAddon?.dispose();
+      } catch {
+        // Ignore
+      }
       term.dispose();
       termRef.current = null;
       fitAddonRef.current = null;
@@ -336,6 +373,21 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       termRef.current?.focus();
     }
   }, [isFocused]);
+
+  // Close context menu on outside click or Escape
+  useEffect(() => {
+    if (!contextMenu) return;
+    const close = () => setContextMenu(null);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setContextMenu(null);
+    };
+    window.addEventListener('click', close);
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('click', close);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [contextMenu]);
 
   // Connect WebSocket PTY when profile, cwd, or sessionNonce changes
   useEffect(() => {
@@ -374,6 +426,15 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
           setStatus('live');
           if (typeof msg.pid === 'number') setPid(msg.pid);
           sendWsJson({ type: 'resize', cols: term.cols, rows: term.rows });
+          if (pendingCommandsRef.current.length > 0) {
+            const queued = [...pendingCommandsRef.current];
+            pendingCommandsRef.current = [];
+            window.setTimeout(() => {
+              for (const cmd of queued) {
+                sendWsJson({ type: 'input', data: `${cmd}\r` });
+              }
+            }, 120);
+          }
         } else if (msg.type === 'exit') {
           const code = typeof msg.code === 'number' ? msg.code : 0;
           setExitCode(code);
@@ -487,7 +548,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
   return (
     <div
       onMouseDown={onFocus}
-      className={`flex flex-col rounded-xl bg-[#09090c] border transition-colors overflow-hidden min-h-[440px] ${
+      className={`relative flex flex-col rounded-xl bg-[#09090c] border transition-colors overflow-hidden flex-1 min-h-[200px] ${
         isFocused ? 'border-sky-400/50 shadow-[0_0_0_1px_rgba(56,189,248,0.2)]' : 'border-white/[0.08]'
       }`}
     >
@@ -673,8 +734,112 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       {/* xterm.js Canvas */}
       <div
         ref={containerRef}
-        className="w-full h-[460px] p-2 bg-[#09090c] overflow-hidden"
+        onContextMenu={(e) => {
+          e.preventDefault();
+          onFocus();
+          setContextMenu({ x: e.clientX, y: e.clientY });
+        }}
+        className={`w-full ${heightClass} p-2 bg-[#09090c] overflow-hidden`}
       />
+
+      {/* Right-Click Context Menu */}
+      {contextMenu && (
+        <div
+          style={{
+            position: 'fixed',
+            left: Math.min(contextMenu.x, window.innerWidth - 190),
+            top: Math.min(contextMenu.y, window.innerHeight - 250),
+          }}
+          onClick={(e) => e.stopPropagation()}
+          className="z-[90] w-44 py-1 rounded-xl bg-[#16161c] border border-white/[0.14] shadow-2xl text-xs font-mono text-zinc-200 flex flex-col"
+          role="menu"
+        >
+          <button
+            type="button"
+            onClick={() => {
+              setContextMenu(null);
+              void handleCopySelection();
+            }}
+            className="px-3 py-1.5 text-left hover:bg-white/[0.08] hover:text-white flex justify-between cursor-pointer"
+          >
+            <span>Copy</span>
+            <span className="text-zinc-500">Ctrl+C</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setContextMenu(null);
+              void navigator.clipboard?.readText?.().then((text) => {
+                if (text) sendWsJson({ type: 'input', data: text });
+                termRef.current?.focus();
+              });
+            }}
+            className="px-3 py-1.5 text-left hover:bg-white/[0.08] hover:text-white flex justify-between cursor-pointer"
+          >
+            <span>Paste</span>
+            <span className="text-zinc-500">Ctrl+V</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setContextMenu(null);
+              termRef.current?.selectAll();
+              termRef.current?.focus();
+            }}
+            className="px-3 py-1.5 text-left hover:bg-white/[0.08] hover:text-white cursor-pointer"
+          >
+            Select All
+          </button>
+          <div className="my-1 border-t border-white/[0.08]" />
+          <button
+            type="button"
+            onClick={() => {
+              setContextMenu(null);
+              setShowSearch(true);
+              window.setTimeout(() => searchInputRef.current?.focus(), 20);
+            }}
+            className="px-3 py-1.5 text-left hover:bg-white/[0.08] hover:text-white flex justify-between cursor-pointer"
+          >
+            <span>Find</span>
+            <span className="text-zinc-500">Ctrl+F</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setContextMenu(null);
+              termRef.current?.clear();
+              termRef.current?.focus();
+            }}
+            className="px-3 py-1.5 text-left hover:bg-white/[0.08] hover:text-white flex justify-between cursor-pointer"
+          >
+            <span>Clear</span>
+            <span className="text-zinc-500">Ctrl+L</span>
+          </button>
+          {onSplitPane && (
+            <button
+              type="button"
+              onClick={() => {
+                setContextMenu(null);
+                onSplitPane();
+              }}
+              className="px-3 py-1.5 text-left hover:bg-white/[0.08] hover:text-white cursor-pointer"
+            >
+              Split Pane
+            </button>
+          )}
+          <div className="my-1 border-t border-white/[0.08]" />
+          <button
+            type="button"
+            onClick={() => {
+              setContextMenu(null);
+              restartShell();
+            }}
+            className="px-3 py-1.5 text-left hover:bg-white/[0.08] text-amber-300 hover:text-amber-200 cursor-pointer"
+          >
+            Restart Shell
+          </button>
+        </div>
+      )}
     </div>
   );
 });

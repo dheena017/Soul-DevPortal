@@ -140,6 +140,8 @@ function App() {
   const [query, setQuery] = useState<string>('');
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [terminalDrawerOpen, setTerminalDrawerOpen] = useState<boolean>(false);
+  const [terminalDrawerHeight, setTerminalDrawerHeight] = useState<number>(380);
   const [isBootLoading, setIsBootLoading] = useState<boolean>(
     () => !(typeof window !== 'undefined' && Boolean(new URLSearchParams(window.location.search).get('panel')))
   );
@@ -365,10 +367,10 @@ function App() {
       } else if ((event.ctrlKey || event.metaKey) && event.key === '`') {
         event.preventDefault();
         setShowShortcuts(false);
-        setActive('terminal');
-        window.location.hash = 'terminal';
-        setMenuOpen(false);
-        mainRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+        if (active === 'terminal') {
+          return;
+        }
+        setTerminalDrawerOpen((prev) => !prev);
       } else if ((event.ctrlKey || event.metaKey) && ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(event.key)) {
         const keyMap: Record<string, string> = {
           '0': 'profile',
@@ -949,6 +951,81 @@ function App() {
         </div>
       </main>
 
+      {terminalDrawerOpen && active !== 'terminal' && (
+        <section
+          aria-label="Bottom Terminal Drawer"
+          style={{ height: `${terminalDrawerHeight}px` }}
+          className="w-full shrink-0 bg-[#0d0d10] border-t border-white/[0.12] flex flex-col z-30 shadow-[0_-12px_36px_rgba(0,0,0,0.55)]"
+        >
+          {/* Drag-to-resize handle */}
+          <div
+            onMouseDown={(e) => {
+              e.preventDefault();
+              const startY = e.clientY;
+              const startH = terminalDrawerHeight;
+              const onMove = (ev: MouseEvent) => {
+                const delta = startY - ev.clientY;
+                const next = Math.max(240, Math.min(window.innerHeight * 0.78, startH + delta));
+                setTerminalDrawerHeight(Math.round(next));
+              };
+              const onUp = () => {
+                window.removeEventListener('mousemove', onMove);
+                window.removeEventListener('mouseup', onUp);
+              };
+              window.addEventListener('mousemove', onMove);
+              window.addEventListener('mouseup', onUp);
+            }}
+            title="Drag to resize terminal drawer"
+            className="h-1.5 w-full cursor-ns-resize bg-white/[0.03] hover:bg-sky-400/40 transition-colors shrink-0"
+          />
+
+          <div className="flex items-center justify-between px-4 py-1.5 bg-[#111115] border-b border-white/[0.08] shrink-0">
+            <div className="flex items-center gap-2 text-xs font-mono">
+              <span className="text-emerald-400 font-bold">&gt;_</span>
+              <span className="font-bold text-white">Terminal Panel</span>
+              <span className="text-[10px] text-zinc-500 hidden sm:inline">Ctrl+` to toggle</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setTerminalDrawerOpen(false);
+                  navigate('terminal');
+                }}
+                className="h-6 px-2.5 rounded-md bg-[#16161c] border border-white/[0.08] hover:border-sky-400/40 text-[11px] font-mono text-zinc-200 hover:text-white cursor-pointer"
+                title="Open full-page Terminal"
+              >
+                ⤢ Full View
+              </button>
+              <button
+                type="button"
+                onClick={() => setTerminalDrawerOpen(false)}
+                className="h-6 px-2 rounded-md bg-[#16161c] border border-white/[0.08] hover:border-rose-400/40 text-xs font-mono text-zinc-300 hover:text-white cursor-pointer"
+                title="Close Terminal Panel"
+                aria-label="Close Terminal Panel"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+
+          <div className="flex-1 min-h-0 overflow-y-auto px-3 sm:px-4 py-2">
+            <Suspense fallback={<div className="text-xs font-mono text-zinc-400 p-4">Loading Terminal...</div>}>
+              <TerminalView
+                compact
+                paneHeightClass="h-[220px]"
+                projects={projectsList}
+                packages={packagesList}
+                onNavigate={(viewId) => {
+                  setTerminalDrawerOpen(false);
+                  navigate(viewId);
+                }}
+              />
+            </Suspense>
+          </div>
+        </section>
+      )}
+
       <GlobalStatusBar
         active={active}
         onNavigate={navigate}
@@ -957,6 +1034,8 @@ function App() {
         projectsCount={projectsList.length}
         onOpenShortcuts={() => setShowShortcuts(true)}
         onFocusSearch={() => searchInputRef.current?.focus()}
+        terminalDrawerOpen={terminalDrawerOpen}
+        onToggleTerminalDrawer={() => setTerminalDrawerOpen((prev) => !prev)}
       />
 
       {/* Global Desktop App, Shortcuts & Commands Modal */}
