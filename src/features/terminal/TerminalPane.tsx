@@ -409,6 +409,8 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
     const term = termRef.current;
     if (!term) return;
 
+    term.reset();
+    setIsScrolledUp(false);
     setStatus('connecting');
     setPid(null);
     setExitCode(null);
@@ -563,12 +565,12 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
   return (
     <div
       onMouseDown={onFocus}
-      className={`relative flex flex-col rounded-xl bg-[#09090c] border transition-colors overflow-hidden flex-1 min-h-[200px] ${
-        isFocused ? 'border-sky-400/50 shadow-[0_0_0_1px_rgba(56,189,248,0.2)]' : 'border-white/[0.08]'
+      className={`relative flex flex-col rounded-lg bg-[#09090c] border transition-colors overflow-hidden flex-1 min-h-0 ${
+        isFocused ? 'border-sky-400/45' : 'border-white/[0.08]'
       }`}
     >
       {/* Pane Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-[#111115] border-b border-white/[0.08]">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-2.5 py-1 bg-[#111115] border-b border-white/[0.08] shrink-0">
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-xs font-mono font-bold text-zinc-200 truncate">{title}</span>
           <span
@@ -747,7 +749,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       )}
 
       {/* xterm.js Canvas */}
-      <div className="relative w-full">
+      <div className="relative w-full flex-1 min-h-0">
         <div
           ref={containerRef}
           onContextMenu={(e) => {
@@ -755,7 +757,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
             onFocus();
             setContextMenu({ x: e.clientX, y: e.clientY });
           }}
-          className={`w-full ${heightClass} p-2 bg-[#09090c] overflow-hidden`}
+          className={`w-full ${heightClass} p-1.5 bg-[#09090c] overflow-hidden`}
         />
         {isScrolledUp && (
           <button

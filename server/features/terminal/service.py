@@ -9,6 +9,7 @@ import importlib
 import os
 import shutil
 import sys
+import sysconfig
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -225,6 +226,16 @@ class TerminalService:
         argv = [profile["command"], *profile.get("args", [])]
 
         env = os.environ.copy()
+        extra_paths = [
+            str(WORKSPACE_ROOT / "node_modules" / ".bin"),
+            str(Path(sys.executable).parent),
+            str(Path(sys.executable).parent / "Scripts"),
+        ]
+        scripts_dir = sysconfig.get_path("scripts")
+        if scripts_dir:
+            extra_paths.append(scripts_dir)
+        existing_path = env.get("PATH", "")
+        env["PATH"] = os.pathsep.join([p for p in extra_paths if p and Path(p).is_dir()] + ([existing_path] if existing_path else []))
         env["TERM"] = "xterm-256color"
         env["COLORTERM"] = "truecolor"
         env["FORCE_COLOR"] = "1"

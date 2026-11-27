@@ -1021,11 +1021,11 @@ function App() {
             </div>
           </div>
 
-          <div className="flex-1 min-h-0 overflow-y-auto px-3 sm:px-4 py-2">
+          <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
             <Suspense fallback={<div className="text-xs font-mono text-zinc-400 p-4">Loading Terminal...</div>}>
               <TerminalView
                 compact
-                paneHeightClass="h-[220px]"
+                paneHeightClass="h-full"
                 projects={projectsList}
                 packages={packagesList}
                 onNavigate={(viewId) => {
