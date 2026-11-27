@@ -398,6 +398,27 @@ def detect_target_project(
     if "backend_cmd" not in final_config and "server_cmd" in final_config:
         final_config["backend_cmd"] = final_config["server_cmd"]
 
+    # Prevent infinite recursion when projects.json delegates to `npm run dev:client` / `dev:server`
+    # and the project's package.json itself invokes `soul-runner client` / `soul-runner server`.
+    pkg_json_path = project_dir / "package.json"
+    if pkg_json_path.is_file():
+        try:
+            with open(pkg_json_path, "r", encoding="utf-8") as fh:
+                pkg_scripts = json.load(fh).get("scripts", {})
+            fe_cmd = final_config.get("client_cmd") or []
+            if len(fe_cmd) >= 3 and fe_cmd[1] == "run" and "soul-runner" in str(pkg_scripts.get(fe_cmd[2], "")):
+                resolved_fe = _detect_frontend_command(project_dir)
+                final_config["client_cmd"] = resolved_fe
+                final_config["frontend_cmd"] = resolved_fe
+            be_cmd = final_config.get("server_cmd") or []
+            if len(be_cmd) >= 3 and be_cmd[1] == "run" and "soul-runner" in str(pkg_scripts.get(be_cmd[2], "")):
+                resolved_be = _detect_backend_command(project_dir)
+                if resolved_be:
+                    final_config["server_cmd"] = resolved_be
+                    final_config["backend_cmd"] = resolved_be
+        except Exception:
+            pass
+
     client_port_override = parsed_arguments.client_port or parsed_arguments.frontend_port
     server_port_override = parsed_arguments.server_port or parsed_arguments.backend_port
     if client_port_override:

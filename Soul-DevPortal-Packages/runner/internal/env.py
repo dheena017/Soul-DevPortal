@@ -174,6 +174,16 @@ def load_cascading_env(
     synthesized_environment["PYTHONUNBUFFERED"] = "1"
     synthesized_environment["FORCE_COLOR"] = "1"
 
+    # Ensure monorepo root node_modules/.bin (soul-runner, soul-ports, soul-dev) is in PATH
+    root_bin = resolved_root / "node_modules" / ".bin"
+    if root_bin.is_dir():
+        existing_path = synthesized_environment.get("PATH", "")
+        root_bin_str = str(root_bin)
+        if root_bin_str not in existing_path:
+            synthesized_environment["PATH"] = (
+                f"{root_bin_str}{os.pathsep}{existing_path}" if existing_path else root_bin_str
+            )
+
     return synthesized_environment, loaded_file_paths
 
 
