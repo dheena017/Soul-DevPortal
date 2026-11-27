@@ -142,7 +142,23 @@ function App() {
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [terminalDrawerOpen, setTerminalDrawerOpen] = useState<boolean>(false);
   const [hasOpenedTerminalDrawer, setHasOpenedTerminalDrawer] = useState<boolean>(false);
-  const [terminalDrawerHeight, setTerminalDrawerHeight] = useState<number>(380);
+  const [terminalDrawerHeight, setTerminalDrawerHeight] = useState<number>(() => {
+    if (typeof window === 'undefined') return 380;
+    try {
+      const saved = Number(window.localStorage.getItem('soul-terminal-drawer-height-v1'));
+      return Number.isFinite(saved) && saved >= 240 && saved <= 760 ? saved : 380;
+    } catch {
+      return 380;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('soul-terminal-drawer-height-v1', String(terminalDrawerHeight));
+    } catch {
+      // ignore
+    }
+  }, [terminalDrawerHeight]);
 
   useEffect(() => {
     if (terminalDrawerOpen) {
@@ -991,36 +1007,6 @@ function App() {
             className="h-1.5 w-full cursor-ns-resize bg-white/[0.03] hover:bg-sky-400/40 transition-colors shrink-0"
           />
 
-          <div className="flex items-center justify-between px-4 py-1.5 bg-[#111115] border-b border-white/[0.08] shrink-0">
-            <div className="flex items-center gap-2 text-xs font-mono">
-              <span className="text-emerald-400 font-bold">&gt;_</span>
-              <span className="font-bold text-white">Terminal Panel</span>
-              <span className="text-[10px] text-zinc-500 hidden sm:inline">Ctrl+` to toggle</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => {
-                  setTerminalDrawerOpen(false);
-                  navigate('terminal');
-                }}
-                className="h-6 px-2.5 rounded-md bg-[#16161c] border border-white/[0.08] hover:border-sky-400/40 text-[11px] font-mono text-zinc-200 hover:text-white cursor-pointer"
-                title="Open full-page Terminal"
-              >
-                ⤢ Full View
-              </button>
-              <button
-                type="button"
-                onClick={() => setTerminalDrawerOpen(false)}
-                className="h-6 px-2 rounded-md bg-[#16161c] border border-white/[0.08] hover:border-rose-400/40 text-xs font-mono text-zinc-300 hover:text-white cursor-pointer"
-                title="Close Terminal Panel"
-                aria-label="Close Terminal Panel"
-              >
-                ×
-              </button>
-            </div>
-          </div>
-
           <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
             <Suspense fallback={<div className="text-xs font-mono text-zinc-400 p-4">Loading Terminal...</div>}>
               <TerminalView
@@ -1028,6 +1014,11 @@ function App() {
                 paneHeightClass="h-full"
                 projects={projectsList}
                 packages={packagesList}
+                onExpandFullView={() => {
+                  setTerminalDrawerOpen(false);
+                  navigate('terminal');
+                }}
+                onCloseDrawer={() => setTerminalDrawerOpen(false)}
                 onNavigate={(viewId) => {
                   setTerminalDrawerOpen(false);
                   navigate(viewId);

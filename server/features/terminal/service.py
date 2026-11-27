@@ -140,6 +140,7 @@ class TerminalService:
             cmd_path = os.environ.get("COMSPEC") or shutil.which("cmd") or "cmd.exe"
             bash_path = cls._find_git_bash()
             python_path = sys.executable
+            node_path = shutil.which("node")
 
             return [
                 {
@@ -173,6 +174,14 @@ class TerminalService:
                     "args": ["-i", "-u"],
                     "available": bool(python_path),
                     "description": f"Python {sys.version.split()[0]} Interactive",
+                },
+                {
+                    "id": "node",
+                    "label": "Node.js REPL",
+                    "command": node_path or "node.exe",
+                    "args": ["-i"],
+                    "available": bool(node_path),
+                    "description": "Node.js Interactive REPL",
                 },
             ]
 

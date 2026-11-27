@@ -40,6 +40,7 @@ const TERMINAL_PREFS_KEY = 'soul-terminal-prefs-v1';
 function loadTerminalPrefs(): {
   fontSize?: number;
   themeId?: string;
+  cursorStyle?: 'block' | 'bar' | 'underline';
   tabs?: TerminalTab[];
   activeTabId?: string;
 } {
@@ -95,6 +96,8 @@ export default function TerminalView({
   onBack,
   compact = false,
   paneHeightClass,
+  onExpandFullView,
+  onCloseDrawer,
 }: TerminalViewProps) {
   const { isBackendLive, backendPort } = useSharedTelemetry(true);
   const [info, setInfo] = useState<TerminalInfoResponse | null>(null);
@@ -113,6 +116,10 @@ export default function TerminalView({
   const [themeId, setThemeId] = useState<string>(
     () => initialPrefs.themeId || 'soul-dark'
   );
+  const [cursorStyle, setCursorStyle] = useState<'block' | 'bar' | 'underline'>(
+    () => initialPrefs.cursorStyle || 'block'
+  );
+  const [maximizedPaneId, setMaximizedPaneId] = useState<string | null>(null);
   const [editingTabId, setEditingTabId] = useState<string | null>(null);
   const [editingTabTitle, setEditingTabTitle] = useState<string>('');
 
@@ -122,12 +129,12 @@ export default function TerminalView({
     try {
       window.localStorage.setItem(
         TERMINAL_PREFS_KEY,
-        JSON.stringify({ fontSize, themeId, tabs, activeTabId })
+        JSON.stringify({ fontSize, themeId, cursorStyle, tabs, activeTabId })
       );
     } catch {
       // ignore storage quota errors
     }
-  }, [fontSize, themeId, tabs, activeTabId]);
+  }, [fontSize, themeId, cursorStyle, tabs, activeTabId]);
 
   useEffect(() => {
     let mounted = true;
@@ -193,12 +200,15 @@ export default function TerminalView({
     return list;
   }, [info, projects, packages]);
 
-  const handleAddTab = () => {
+  const handleAddTab = (profileOverride?: string) => {
     const nextNum = tabs.length + 1;
-    const defaultProfile = profiles.find((p) => p.available)?.id || 'powershell';
+    const defaultProfile =
+      profileOverride || profiles.find((p) => p.available)?.id || 'powershell';
+    const profileMeta = profiles.find((p) => p.id === defaultProfile);
+    const tabTitle = profileOverride && profileMeta ? profileMeta.label : `Terminal ${nextNum}`;
     const newTab = createTab(
       `term-${Date.now()}`,
-      `Terminal ${nextNum}`,
+      tabTitle,
       defaultProfile,
       info?.workspaceRoot || '.'
     );
@@ -397,14 +407,32 @@ export default function TerminalView({
                 </div>
               );
             })}
-            <button
-              type="button"
-              onClick={handleAddTab}
-              className="h-7 px-2.5 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-white/25 text-xs font-mono text-zinc-300 hover:text-white cursor-pointer"
-              title="New terminal tab"
-            >
-              +
-            </button>
+            <div className="inline-flex items-center h-7 rounded-lg bg-[#16161c] border border-white/[0.08] overflow-hidden">
+              <button
+                type="button"
+                onClick={() => handleAddTab()}
+                className="px-2.5 h-full hover:bg-white/[0.06] text-xs font-mono text-zinc-300 hover:text-white cursor-pointer"
+                title="New terminal tab"
+              >
+                +
+              </button>
+              <select
+                value=""
+                onChange={(e) => {
+                  if (e.target.value) handleAddTab(e.target.value);
+                }}
+                aria-label="New tab with shell profile"
+                title="Open new tab with specific shell"
+                className="w-5 h-full bg-[#16161c] border-l border-white/[0.08] text-[10px] text-zinc-400 hover:text-white focus:outline-none cursor-pointer"
+              >
+                <option value="">▾</option>
+                {profiles.map((prof) => (
+                  <option key={prof.id} value={prof.id} disabled={!prof.available}>
+                    New {prof.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Right Controls: CWD, Theme, Font Zoom, Split, Reset */}
@@ -457,6 +485,19 @@ export default function TerminalView({
 
             <button
               type="button"
+              onClick={() =>
+                setCursorStyle((c) =>
+                  c === 'block' ? 'bar' : c === 'bar' ? 'underline' : 'block'
+                )
+              }
+              title={`Cursor style: ${cursorStyle} (click to cycle)`}
+              className="h-7 px-2 rounded-lg bg-[#09090c] border border-white/[0.1] hover:border-sky-400/40 text-[11px] font-mono text-zinc-200 hover:text-white cursor-pointer"
+            >
+              {cursorStyle === 'block' ? '▮' : cursorStyle === 'bar' ? '▏' : '_'}
+            </button>
+
+            <button
+              type="button"
               onClick={handleSplitPane}
               disabled={(activeTab?.panes.length || 1) >= 3}
               className="h-7 px-2.5 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-sky-400/40 text-[11px] font-mono text-zinc-200 hover:text-white cursor-pointer disabled:opacity-40"
@@ -473,21 +514,49 @@ export default function TerminalView({
             >
               Reset
             </button>
+
+            {compact && onExpandFullView && (
+              <button
+                type="button"
+                onClick={onExpandFullView}
+                className="h-7 px-2.5 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-sky-400/40 text-[11px] font-mono text-zinc-200 hover:text-white cursor-pointer"
+                title="Open full-page Terminal"
+              >
+                ⤢ Full View
+              </button>
+            )}
+
+            {compact && onCloseDrawer && (
+              <button
+                type="button"
+                onClick={onCloseDrawer}
+                className="h-7 px-2 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-rose-400/40 text-xs font-mono text-zinc-300 hover:text-white cursor-pointer"
+                title="Close Terminal Panel (Ctrl+`)"
+                aria-label="Close Terminal Panel"
+              >
+                ×
+              </button>
+            )}
           </div>
         </div>
 
         {/* Active Tab Panes Grid */}
         <div
           className={`grid gap-1.5 p-1.5 bg-[#09090c] ${compact ? 'flex-1 min-h-0' : 'min-h-[540px]'} ${
-            activeTab.panes.length === 1
+            maximizedPaneId || activeTab.panes.length === 1
               ? 'grid-cols-1'
               : activeTab.panes.length === 2
               ? 'grid-cols-1 lg:grid-cols-2'
               : 'grid-cols-1 lg:grid-cols-3'
           }`}
         >
-          {activeTab.panes.map((pane) => (
-            <div key={pane.id} className={`${compact ? 'h-full min-h-0' : 'min-h-[520px]'} flex flex-col`}>
+          {activeTab.panes.map((pane) => {
+            const isHiddenByMaximize = Boolean(maximizedPaneId && maximizedPaneId !== pane.id);
+            return (
+            <div
+              key={pane.id}
+              className={`${isHiddenByMaximize ? 'hidden' : 'flex'} ${compact ? 'h-full min-h-0' : 'min-h-[520px]'} flex-col`}
+            >
               <TerminalPane
                 ref={(handle) => {
                   paneRefs.current[pane.id] = handle;
@@ -501,6 +570,14 @@ export default function TerminalView({
                 canClosePane={activeTab.panes.length > 1}
                 fontSize={fontSize}
                 themeId={themeId}
+                cursorStyle={cursorStyle}
+                isMaximized={maximizedPaneId === pane.id}
+                onToggleMaximize={
+                  activeTab.panes.length > 1
+                    ? () =>
+                        setMaximizedPaneId((prev) => (prev === pane.id ? null : pane.id))
+                    : undefined
+                }
                 heightClass={paneHeightClass || (compact ? 'h-full' : 'h-[520px]')}
                 onSplitPane={activeTab.panes.length < 3 ? handleSplitPane : undefined}
                 onFocus={() =>
@@ -524,10 +601,14 @@ export default function TerminalView({
                     )
                   )
                 }
-                onClosePane={() => handleClosePane(pane.id)}
+                onClosePane={() => {
+                  if (maximizedPaneId === pane.id) setMaximizedPaneId(null);
+                  handleClosePane(pane.id);
+                }}
               />
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

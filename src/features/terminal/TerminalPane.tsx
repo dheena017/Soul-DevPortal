@@ -11,6 +11,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { SearchAddon } from '@xterm/addon-search';
 import { WebglAddon } from '@xterm/addon-webgl';
+import { Unicode11Addon } from '@xterm/addon-unicode11';
 import '@xterm/xterm/css/xterm.css';
 import { buildTerminalWsUrl, TerminalShellProfile } from '../../services/api';
 import { copyTextSafe } from '../../utils/clipboard';
@@ -34,11 +35,14 @@ export interface TerminalPaneProps {
   canClosePane?: boolean;
   fontSize?: number;
   themeId?: string;
+  cursorStyle?: 'block' | 'bar' | 'underline';
   heightClass?: string;
+  isMaximized?: boolean;
   onFocus: () => void;
   onChangeProfile: (profileId: string) => void;
   onClosePane?: () => void;
   onSplitPane?: () => void;
+  onToggleMaximize?: () => void;
 }
 
 export const TERMINAL_THEMES: Record<string, { label: string; theme: Record<string, string> }> = {
@@ -159,11 +163,14 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
     canClosePane = false,
     fontSize = 13,
     themeId = 'soul-dark',
+    cursorStyle = 'block',
     heightClass = 'h-[460px]',
+    isMaximized = false,
     onFocus,
     onChangeProfile,
     onClosePane,
     onSplitPane,
+    onToggleMaximize,
   },
   ref
 ) {
@@ -187,6 +194,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
   const [copiedNotice, setCopiedNotice] = useState<boolean>(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [isScrolledUp, setIsScrolledUp] = useState<boolean>(false);
+  const [bellFlash, setBellFlash] = useState<boolean>(false);
 
   const sendWsJson = useCallback((payload: Record<string, unknown>) => {
     const ws = wsRef.current;
@@ -241,6 +249,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
 
     const term = new Terminal({
       cursorBlink: true,
+      cursorStyle: cursorStyle as 'block' | 'bar' | 'underline',
       fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace",
       fontSize,
       lineHeight: 1.35,
@@ -255,10 +264,13 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       window.open(uri, '_blank', 'noopener,noreferrer');
     });
     const searchAddon = new SearchAddon();
+    const unicode11Addon = new Unicode11Addon();
 
     term.loadAddon(fitAddon);
     term.loadAddon(webLinksAddon);
     term.loadAddon(searchAddon);
+    term.loadAddon(unicode11Addon);
+    term.unicode.activeVersion = '11';
     term.open(container);
 
     // GPU-accelerated WebGL renderer with graceful fallback to default canvas/DOM
@@ -345,6 +357,11 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       setIsScrolledUp(buf.viewportY < buf.baseY);
     });
 
+    const onBellDisposable = term.onBell(() => {
+      setBellFlash(true);
+      window.setTimeout(() => setBellFlash(false), 350);
+    });
+
     const onDataDisposable = term.onData((data) => {
       sendWsJson({ type: 'input', data });
     });
@@ -354,6 +371,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       onScrollDisposable.dispose();
+      onBellDisposable.dispose();
       onDataDisposable.dispose();
       try {
         webglAddon?.dispose();
@@ -367,11 +385,12 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
     };
   }, [paneId, sendWsJson]);
 
-  // Live-update fontSize and theme without restarting PTY
+  // Live-update fontSize, cursorStyle, and theme without restarting PTY
   useEffect(() => {
     const term = termRef.current;
     if (!term) return;
     term.options.fontSize = fontSize;
+    term.options.cursorStyle = cursorStyle;
     term.options.theme = (TERMINAL_THEMES[themeId] || TERMINAL_THEMES['soul-dark']).theme;
     try {
       fitAddonRef.current?.fit();
@@ -380,7 +399,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
     } catch {
       // Ignore
     }
-  }, [fontSize, themeId, sendWsJson]);
+  }, [fontSize, cursorStyle, themeId, sendWsJson]);
 
   // Focus xterm when pane becomes focused
   useEffect(() => {
@@ -562,11 +581,18 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
     },
   }[status];
 
+  const currentThemeBg = (TERMINAL_THEMES[themeId] || TERMINAL_THEMES['soul-dark']).theme.background;
+
   return (
     <div
       onMouseDown={onFocus}
-      className={`relative flex flex-col rounded-lg bg-[#09090c] border transition-colors overflow-hidden flex-1 min-h-0 ${
-        isFocused ? 'border-sky-400/45' : 'border-white/[0.08]'
+      style={{ backgroundColor: currentThemeBg }}
+      className={`relative flex flex-col rounded-lg border transition-colors overflow-hidden flex-1 min-h-0 ${
+        bellFlash
+          ? 'border-amber-400 shadow-[0_0_0_1px_rgba(251,191,36,0.45)]'
+          : isFocused
+          ? 'border-sky-400/45'
+          : 'border-white/[0.08]'
       }`}
     >
       {/* Pane Toolbar */}
@@ -663,6 +689,20 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
           >
             Clear
           </button>
+          {onToggleMaximize && (
+            <button
+              type="button"
+              onClick={onToggleMaximize}
+              title={isMaximized ? 'Restore split layout' : 'Maximize this pane'}
+              className={`h-6 px-2 rounded-md border text-[11px] font-mono cursor-pointer ${
+                isMaximized
+                  ? 'bg-sky-500/20 border-sky-400/40 text-sky-200'
+                  : 'bg-[#16161c] border-white/[0.08] text-zinc-300 hover:text-white'
+              }`}
+            >
+              {isMaximized ? '⤡' : '⤢'}
+            </button>
+          )}
           {canClosePane && onClosePane && (
             <button
               type="button"
@@ -749,7 +789,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
       )}
 
       {/* xterm.js Canvas */}
-      <div className="relative w-full flex-1 min-h-0">
+      <div className="relative w-full flex-1 min-h-0" style={{ backgroundColor: currentThemeBg }}>
         <div
           ref={containerRef}
           onContextMenu={(e) => {
@@ -757,7 +797,8 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
             onFocus();
             setContextMenu({ x: e.clientX, y: e.clientY });
           }}
-          className={`w-full ${heightClass} p-1.5 bg-[#09090c] overflow-hidden`}
+          style={{ backgroundColor: currentThemeBg }}
+          className={`w-full ${heightClass} p-1.5 overflow-hidden`}
         />
         {isScrolledUp && (
           <button
