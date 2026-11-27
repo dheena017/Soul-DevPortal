@@ -30,6 +30,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Checkout Soul-DevPortal-Packages
+        uses: actions/checkout@v4
+        with:
+          repository: dheena017/Soul-DevPortal-Packages
+          path: Soul-DevPortal-Packages
+
       - name: Setup Node.js for GitHub Packages
         uses: actions/setup-node@v4
         with:

@@ -19,7 +19,7 @@ from typing import Dict
 ROOT = Path(__file__).resolve().parent.parent
 PACKAGES_ROOT = ROOT / "Soul-DevPortal-Packages"
 GITHUB_OWNER = "dheena017"
-REPO_URL = "git+https://github.com/dheena017/Soul-DevPortal.git"
+REPO_URL = "git+https://github.com/dheena017/Soul-DevPortal-Packages.git"
 REGISTRY_URL = "https://npm.pkg.github.com"
 
 
