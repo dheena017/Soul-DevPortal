@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="workspace-config",
-    version="1.0.0",
+    version="2.0.0",
     description="Centralized configuration presets, design tokens, and canonical port registry for Workspace",
     packages=find_packages(),
     include_package_data=True,

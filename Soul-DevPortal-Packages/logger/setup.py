@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="workspace-logger",
-    version="1.0.0",
+    version="2.0.0",
     description="Universal 5-column server logging, Starlette middleware, and process supervisor for Workspace",
     packages=find_packages(),
     include_package_data=True,

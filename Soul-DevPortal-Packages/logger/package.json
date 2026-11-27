@@ -1,6 +1,6 @@
 {
   "name": "@workspace/logger",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Universal 5-column logging, DevTools HMR bridge, and terminal presentation package for Workspace",
   "main": "./client/index.ts",
   "types": "./client/index.ts",

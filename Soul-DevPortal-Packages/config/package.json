@@ -1,6 +1,6 @@
 {
   "name": "@workspace/config",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Centralized, enterprise configuration presets for TypeScript, Tailwind CSS, Prettier, ESLint, and Python",
   "type": "module",
   "license": "MIT",

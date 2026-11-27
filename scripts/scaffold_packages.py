@@ -202,7 +202,7 @@ def scaffold_package(spec: PackageSpec, force: bool = False) -> int:
     # 1. package.json
     pkg_json = {
         "name": f"@workspace/{spec.name}",
-        "version": "1.0.0",
+        "version": "2.0.0",
         "private": True,
         "description": spec.description,
         "main": "./external/client/index.ts",
@@ -250,7 +250,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "{py_name}"
-version = "1.0.0"
+version = "2.0.0"
 description = "{spec.description}"
 readme = "README.md"
 license = {{ text = "MIT" }}
@@ -272,7 +272,7 @@ include = ["internal*", "external*"]
 
 setup(
     name="{py_name}",
-    version="1.0.0",
+    version="2.0.0",
     description="{spec.description}",
     packages=find_packages(include=["internal*", "external*"]),
     include_package_data=True,
