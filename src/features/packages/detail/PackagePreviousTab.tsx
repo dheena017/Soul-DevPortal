@@ -231,27 +231,6 @@ export default function PackagePreviousTab({
           </div>
         </div>
       )}
-
-      {/* ── Sibling Packages Quick Switcher ── */}
-      {allPackages.length > 1 && onSelectPackage && (
-        <div className="neu-card bg-[#111115] border border-white/[0.08] rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
-          <span className="text-xs font-mono text-zinc-400">Preview another package:</span>
-          <div className="flex flex-wrap gap-2">
-            {allPackages
-              .filter((p) => p.id !== pkg.id)
-              .map((other) => (
-                <button
-                  key={other.id}
-                  type="button"
-                  onClick={() => onSelectPackage(other.id)}
-                  className="px-3 py-1.5 rounded-lg bg-[#16161c] border border-white/[0.08] hover:border-purple-400/40 text-xs font-mono text-zinc-200 hover:text-white cursor-pointer"
-                >
-                  {other.name || other.id} →
-                </button>
-              ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
