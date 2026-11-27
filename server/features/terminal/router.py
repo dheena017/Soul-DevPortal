@@ -108,7 +108,7 @@ async def terminal_websocket(
             elif msg_type == "signal":
                 sig = str(payload.get("signal", "SIGINT")).upper()
                 if sig == "SIGINT":
-                    await asyncio.to_thread(session.write, "\x03")
+                    await asyncio.to_thread(session.interrupt)
             elif msg_type == "kill":
                 await asyncio.to_thread(session.terminate)
                 break

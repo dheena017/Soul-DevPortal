@@ -192,6 +192,7 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchCaseSensitive, setSearchCaseSensitive] = useState<boolean>(false);
   const [copiedNotice, setCopiedNotice] = useState<boolean>(false);
+  const [intrNotice, setIntrNotice] = useState<boolean>(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [isScrolledUp, setIsScrolledUp] = useState<boolean>(false);
   const [bellFlash, setBellFlash] = useState<boolean>(false);
@@ -658,11 +659,16 @@ const TerminalPane = forwardRef<TerminalPaneHandle, TerminalPaneProps>(function 
           <button
             type="button"
             disabled={status !== 'live'}
-            onClick={() => sendWsJson({ type: 'signal', signal: 'SIGINT' })}
+            onClick={() => {
+              sendWsJson({ type: 'signal', signal: 'SIGINT' });
+              termRef.current?.focus();
+              setIntrNotice(true);
+              window.setTimeout(() => setIntrNotice(false), 900);
+            }}
             title="Send Ctrl+C interrupt (SIGINT)"
             className="h-6 px-2 rounded-md bg-amber-500/15 border border-amber-500/30 text-[11px] font-mono text-amber-200 hover:bg-amber-500/25 cursor-pointer disabled:opacity-40"
           >
-            Ctrl+C
+            {intrNotice ? 'Sent ^C' : 'Ctrl+C'}
           </button>
           <button
             type="button"

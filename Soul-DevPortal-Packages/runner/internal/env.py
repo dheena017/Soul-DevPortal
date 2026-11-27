@@ -184,6 +184,18 @@ def load_cascading_env(
                 f"{root_bin_str}{os.pathsep}{existing_path}" if existing_path else root_bin_str
             )
 
+    # Ensure shared workspace Python packages (logger, config, runner) are importable
+    logger_root = resolved_root / "Soul-DevPortal-Packages" / "logger"
+    packages_root = resolved_root / "Soul-DevPortal-Packages"
+    extra_py = [str(p) for p in (logger_root, packages_root) if p.is_dir()]
+    if extra_py:
+        existing_py = synthesized_environment.get("PYTHONPATH", "")
+        py_parts = [p for p in extra_py if p not in existing_py]
+        if py_parts:
+            synthesized_environment["PYTHONPATH"] = (
+                f"{os.pathsep.join(py_parts)}{os.pathsep}{existing_py}" if existing_py else os.pathsep.join(py_parts)
+            )
+
     return synthesized_environment, loaded_file_paths
 
 

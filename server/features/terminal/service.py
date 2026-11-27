@@ -63,6 +63,15 @@ class PtySession:
             return
         self._proc.write(data)
 
+    def interrupt(self) -> None:
+        try:
+            if hasattr(self._proc, "sendintr"):
+                self._proc.sendintr()
+                return
+        except Exception:
+            pass
+        self.write("\x03")
+
     def resize(self, rows: int, cols: int) -> None:
         safe_rows = max(2, min(int(rows), 500))
         safe_cols = max(10, min(int(cols), 500))
