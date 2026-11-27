@@ -3,13 +3,14 @@ import CopyButton from '../../../components/CopyButton';
 import { HeroArtworkBackdrop, ProportionalSpectrumBar } from '../../../components/PortalVisuals';
 import { PackageData } from '../../../types';
 
-export type PackageDetailTab = 'docs' | 'api' | 'playground' | 'manifest';
+export type PackageDetailTab = 'docs' | 'api' | 'playground' | 'manifest' | 'previous';
 
 export interface PackageDetailHeaderProps {
   pkg: PackageData;
   activeTab: PackageDetailTab;
   onTabChange: (tab: PackageDetailTab) => void;
   totalExports: number;
+  previousPackagesCount?: number;
   onBack?: () => void;
 }
 
@@ -68,6 +69,7 @@ export default function PackageDetailHeader({
   activeTab,
   onTabChange,
   totalExports,
+  previousPackagesCount = 0,
   onBack,
 }: PackageDetailHeaderProps) {
   return (
@@ -294,6 +296,27 @@ export default function PackageDetailHeader({
               <line x1="12" y1="22.08" x2="12" y2="12" />
             </svg>
             <span>Manifest &amp; Metadata</span>
+          </button>
+
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'previous'}
+            className={`inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs transition-all shrink-0 cursor-pointer ${
+              activeTab === 'previous'
+                ? 'text-white font-bold border border-white/20'
+                : 'text-zinc-400 hover:text-white hover:bg-white/[0.06] border border-transparent font-medium'
+            }`}
+            onClick={() => onTabChange('previous')}
+          >
+            <svg className={`w-3.5 h-3.5 ${activeTab === 'previous' ? 'text-white' : 'text-zinc-400'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            <span>Package Preview</span>
+            <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              LIVE
+            </span>
           </button>
         </div>
       </div>

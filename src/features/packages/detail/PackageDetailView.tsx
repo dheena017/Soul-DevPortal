@@ -1,27 +1,55 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { usePersistedTab } from '../../../utils/usePersistedTab';
-import { PackageData } from '../../../types';
+import { PackageData, ProjectData } from '../../../types';
 import { fetchPackageTab } from '../../../services/api';
 import PackageDetailHeader, { PackageDetailTab } from './PackageDetailHeader';
 import PackageDocsTab from './PackageDocsTab';
 import PackageApiTab from './PackageApiTab';
 import PackagePlaygroundTab from './PackagePlaygroundTab';
 import PackageManifestTab from './PackageManifestTab';
+import PackagePreviousTab from './PackagePreviousTab';
 
 export type { PackageDetailTab };
 
 export interface PackageDetailViewProps {
   key?: React.Key;
   pkg: PackageData;
+  allPackages?: PackageData[];
+  projects?: ProjectData[];
+  onSelectPackage?: (packageId: string) => void;
   onBack?: () => void;
 }
 
-export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProps) {
+export default function PackageDetailView({
+  pkg,
+  allPackages = [],
+  projects = [],
+  onSelectPackage,
+  onBack,
+}: PackageDetailViewProps) {
   const [activeTab, setActiveTab] = usePersistedTab<PackageDetailTab>(
     `soul-tab-package-${pkg.id}`,
     'docs',
-    ['docs', 'api', 'manifest', 'playground']
+    ['docs', 'api', 'manifest', 'playground', 'previous']
   );
+
+  // Record visited package for the Previous Packages history tab
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const key = 'soul-previous-packages-v1';
+      const raw = window.localStorage.getItem(key);
+      const existing = raw ? JSON.parse(raw) : [];
+      const list = Array.isArray(existing) ? existing : [];
+      const next = [
+        { id: pkg.id, name: pkg.name, version: pkg.version, visitedAt: new Date().toISOString() },
+        ...list.filter((item: any) => item?.id !== pkg.id),
+      ].slice(0, 10);
+      window.localStorage.setItem(key, JSON.stringify(next));
+    } catch {
+      // ignore storage errors
+    }
+  }, [pkg.id, pkg.name, pkg.version]);
   const [tabData, setTabData] = useState<Record<string, any>>({});
   const [loadingTabs, setLoadingTabs] = useState<Record<PackageDetailTab, boolean>>({
     docs: true,
@@ -109,6 +137,7 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
     [livePkg.readmeBlocks]
   );
   const totalExports = (livePkg.exports || []).length + (livePkg.pythonExports || []).length + (livePkg.typeScriptExports || []).length;
+  const previousPackagesCount = allPackages.filter((item) => item.id !== pkg.id).length;
 
   return (
     <article className="w-full flex flex-col gap-6 pb-12 portal-stagger">
@@ -118,6 +147,7 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
         activeTab={activeTab}
         onTabChange={setActiveTab}
         totalExports={totalExports}
+        previousPackagesCount={previousPackagesCount}
         onBack={onBack}
       />
 
@@ -146,6 +176,15 @@ export default function PackageDetailView({ pkg, onBack }: PackageDetailViewProp
           <PackageManifestTab
             pkg={livePkg}
             isLoading={loadingTabs.manifest && !livePkg.hasNpmManifest && !livePkg.hasPythonManifest}
+          />
+        )}
+
+        {activeTab === 'previous' && (
+          <PackagePreviousTab
+            pkg={livePkg}
+            allPackages={allPackages}
+            projects={projects}
+            onSelectPackage={onSelectPackage}
           />
         )}
       </div>

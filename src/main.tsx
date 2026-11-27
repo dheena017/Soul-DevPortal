@@ -861,6 +861,9 @@ function App() {
               <PackageDetailView
                 key={pkg.id}
                 pkg={pkg}
+                allPackages={packagesList}
+                projects={projectsList}
+                onSelectPackage={(id) => navigate(`packages/${id}`)}
                 onBack={() => navigate('packages')}
               />
             );
