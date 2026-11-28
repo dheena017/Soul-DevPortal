@@ -98,7 +98,7 @@ Every shared package must declare explicit `exports` maps in `package.json` to d
 ```json
 {
   "name": "@workspace/logger",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "exports": {
     ".": "./client/index.ts",
@@ -147,13 +147,12 @@ for _pkg in ("logger", "config"):
 
 ---
 
-### 9. Live Package Preview Parity (`Package Preview` Tab)
-- Every shared package folder under `Soul-DevPortal-Packages/<pkg>/` must have a live, interactive runtime preview in the DevPortal Package Inspector (`PackageDetailView` -> **Package Preview** tab in `src/features/packages/detail/PackagePreviousTab.tsx`).
-- The **Package Preview** tab must demonstrate how the package actually renders and behaves inside real workspace projects:
-  - `@workspace/logger`: Interactive 5-column ANSI/JSON log stream + Unicode startup banner preview.
-  - `@workspace/runner`: Interactive `soul-dev` supervisor hotkeys + live `soul-ports` monorepo port audit.
-  - `@workspace/config`: Live Tailwind design token swatches + authoritative `PORT_REGISTRY` matrix.
-- Whenever a **new package folder** is added to `Soul-DevPortal-Packages/`, it must include a matching preview block in `PackagePreviousTab.tsx` alongside its `Documentation`, `API & Exports`, `Code Generator`, and `Manifest & Metadata` tabs.
+### 9. Live Package Preview Parity (`Preview/` + `Package Preview` Tab)
+- Every shared package folder under `Soul-DevPortal-Packages/<pkg>/` must include a `Preview/` directory containing:
+  - `Preview/preview.json` (with `script`, `runCommand`, `demoCommand`, `jsonDemoCommand`, `sampleInputs`, and `commands`)
+  - `Preview/USAGE.md` (standardized Quick Commands table & sample `--input-json` payload)
+  - `Preview/run_<pkg_snake>.py` (interactive prompt mode with inline `min_val`/`max_val` validation, `--demo`, `--json`, `--health`, `--no-color`, and ANSI colors)
+- `server/shared/extractors/packages_crawler.py` crawls `Preview/` automatically, and `src/features/packages/detail/PackagePreviousTab.tsx` renders the **Quick Run & Demo** card and tabbed file viewer (`USAGE.md`, `run_<pkg>.py`, `preview.json`) without hardcoding per-package UI blocks.
 
 ---
 

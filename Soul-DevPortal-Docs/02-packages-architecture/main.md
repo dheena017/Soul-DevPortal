@@ -8,7 +8,7 @@
 
 ## Architecture Topology Overview
 
-The Soul Monorepo centralizes all reusable functionality into `Soul-DevPortal-Packages/`. These packages are consumed polyglot across both TypeScript (via NPM workspaces) and Python (via pip editable packages):
+The Soul Monorepo centralizes all reusable functionality into `Soul-DevPortal-Packages/` (hosted in its own repository at `https://github.com/dheena017/Soul-DevPortal-Packages.git` and linked locally into `Soul-DevPortal`). These **78** packages are consumed polyglot across both TypeScript (via NPM workspaces) and Python (via pip editable packages):
 
 ```mermaid
 graph TD
@@ -239,37 +239,43 @@ Every shared library in `Soul-DevPortal-Packages/` strictly implements the 3-Tie
 
 ```text
 Soul-DevPortal-Packages/<package-name>/
-├── package.json                   # NPM manifest with subpath exports
+├── package.json                   # NPM manifest with subpath exports & run/demo/test scripts
 ├── pyproject.toml                 # Modern PEP 517/621 build specification
 ├── setup.py                       # Legacy setuptools build compatibility
-├── README.md                      # Architectural overview & usage guide
+├── README.md                      # Architectural overview, API exports & Running Scripts table
+├── Preview/                       # Live DevPortal Preview & Interactive/Demo CLI Runners
+│   ├── preview.json               # Manifest (title, features, runCommand, demoCommand, sampleInputs)
+│   ├── USAGE.md                   # Standardized CLI & script usage guide
+│   └── run_<pkg_snake>.py         # Interactive + --demo + --json + --health ANSI-colored runner
 ├── internal/                      # Tier 1: Private Engine (Consumers must NOT import)
 │   ├── __init__.py                # Package initialization
-│   ├── core.py                    # Core algorithms and business logic (snake_case)
-│   └── formatters.py              # Data formatting helpers
+│   ├── models.py                  # Pydantic v2 input/output schemas
+│   └── engine.py                  # Core algorithms and business logic (snake_case)
 ├── external/                      # Tier 2: Public External Facade
 │   ├── __init__.py                # Explicit __all__ facade exports
-│   └── cli.py                     # Executable command-line runner
+│   ├── routes.py                  # FastAPI APIRouter endpoints
+│   └── client/                    # Typed TypeScript/React 19 client facade
 └── tests/                         # Tier 3: Isolated Verification Suite
     ├── test_internal.py           # Unit tests targeting internal core
-    └── test_external.py           # Integration tests targeting public facade
+    └── test_external.py           # Integration tests targeting public facade & Preview runner
 ```
 
 ---
 
 ## 3. Step-by-Step Package Authoring Playbook
 
-Follow this 6-step runbook when creating a new shared library in `Soul-DevPortal-Packages/`:
+Follow this 7-step runbook when creating a new shared library in `Soul-DevPortal-Packages/`:
 
 ### Step 1: Package Naming Conventions
 * **NPM / TypeScript Scope**: `@workspace/<name>` (lowercase kebab-case).
 * **Python / PyPI Scope**: `workspace-<name>` (module name: `workspace_<name>`).
 
-### Step 2: Scaffold 3-Tier Directories
+### Step 2: Scaffold 3-Tier & Preview Directories
 ```bash
 mkdir -p Soul-DevPortal-Packages/<name>/internal
 mkdir -p Soul-DevPortal-Packages/<name>/external
 mkdir -p Soul-DevPortal-Packages/<name>/tests
+mkdir -p Soul-DevPortal-Packages/<name>/Preview
 touch Soul-DevPortal-Packages/<name>/internal/__init__.py
 touch Soul-DevPortal-Packages/<name>/external/__init__.py
 ```
@@ -297,11 +303,17 @@ __all__ = ["calculate_metric"]
 ```json
 {
   "name": "@workspace/<name>",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
+  "scripts": {
+    "run": "python Preview/run_<name_snake>.py",
+    "demo": "python Preview/run_<name_snake>.py --demo",
+    "demo:json": "python Preview/run_<name_snake>.py --demo --json",
+    "test": "python tests/test_internal.py && python tests/test_external.py"
+  },
   "exports": {
-    ".": "./index.js"
+    ".": "./external/client/index.ts"
   }
 }
 ```
@@ -314,7 +326,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "workspace-<name>"
-version = "1.0.0"
+version = "2.0.0"
 description = "Shared package in Soul monorepo"
 authors = [{ name = "Soul Team" }]
 
@@ -326,7 +338,7 @@ include = ["internal*", "external*"]
 **C. `setup.py`**:
 ```python
 from setuptools import setup, find_packages
-setup(name="workspace-<name>", version="1.0.0", packages=find_packages())
+setup(name="workspace-<name>", version="2.0.0", packages=find_packages())
 ```
 
 ### Step 6: Verify Isolated Test Suite
@@ -335,8 +347,11 @@ python Soul-DevPortal-Packages/<name>/tests/test_internal.py
 python Soul-DevPortal-Packages/<name>/tests/test_external.py
 ```
 
-### Step 7: Add Live Runtime Preview (`Package Preview` Tab)
-Register a live preview section for the new package folder in `src/features/packages/detail/PackagePreviousTab.tsx` so developers can inspect how the package renders and behaves in real workspace projects directly inside the **Package Preview** tab of `PackageDetailView`.
+### Step 7: Add Live Runtime Preview (`Preview/` + `Package Preview` Tab)
+Every package includes a `Preview/` folder automatically crawled by `server/shared/extractors/packages_crawler.py` and rendered in `src/features/packages/detail/PackagePreviousTab.tsx`:
+- **`Preview/run_<pkg_snake>.py`**: Interactive prompt mode (with inline `min_val`/`max_val` range validation), `--demo` non-interactive sample run, `--input-json`, `--json`, `--health`, `--no-color`, and ANSI terminal colors.
+- **`Preview/USAGE.md`**: Standardized usage table and sample JSON payload.
+- **`Preview/preview.json`**: Includes `script`, `runCommand`, `demoCommand`, `jsonDemoCommand`, `sampleInputs`, and `commands` for the **Quick Run & Demo** card.
 
 ---
 
@@ -350,7 +365,7 @@ Every package in `Soul-DevPortal-Packages/` is rendered in `PackageDetailView` w
 | **API & Exports** | `PackageApiTab.tsx` | TypeScript & Python exported symbols and signatures |
 | **Code Generator** | `PackagePlaygroundTab.tsx` | Copy-ready import snippets and usage boilerplate |
 | **Manifest & Metadata** | `PackageManifestTab.tsx` | `package.json`, `pyproject.toml`, scripts, and dependencies |
-| **Package Preview (`LIVE`)** | `PackagePreviousTab.tsx` | Live interactive runtime preview showing how the package looks in actual projects |
+| **Package Preview (`LIVE`)** | `PackagePreviousTab.tsx` | **Quick Run & Demo** copyable commands (`run`, `demo`, `demo:json`), sample inputs, and tabbed file viewer (`USAGE.md`, `run_<pkg>.py`, `preview.json`) |
 
 ---
 
@@ -372,9 +387,9 @@ python scripts/test_all_packages.py
 
 ---
 
-## 6. Complete 75-Package Studio & AI Ecosystem Map
+## 6. Complete 78-Package Studio & AI Ecosystem Map
 
-In addition to the three workspace infrastructure packages (`config`, `logger`, `runner`), `Soul-DevPortal-Packages/` provides **75 modular studio & AI packages** tailored strictly to **React 19 + Vite 8 + Tailwind 4** (Frontend) and **FastAPI + Uvicorn + SQLite WAL** (Backend):
+Across the three workspace infrastructure packages (`config`, `logger`, `runner`) and **75 modular studio & AI packages** (**78 total**), `Soul-DevPortal-Packages/` is tailored to **React 19 + Vite 8 + Tailwind 4** (Frontend) and **FastAPI + Uvicorn + SQLite WAL** (Backend):
 
 ### Layer 0 & Layer 1 — Core Foundation & AI Orchestration (4 Packages)
 
@@ -387,21 +402,22 @@ In addition to the three workspace infrastructure packages (`config`, `logger`, 
 
 ### Layer 2 — 13 Studio Domains (71 Category Packages)
 
-- **1. Video & Film (9)**: `movie-maker`, `video-editor`, `motion-2d`, `vfx-engine`, `color-luts`, `subtitles` (`faster-whisper`, `whisperx`, `Qwen3-ASR`, `NVIDIA Nemotron 3.5 ASR`), `screen-recorder`, `gif-clipper`, `video-transcoder`.
-- **2. Image & Design (6)**: `image-maker` (`FLUX.1`, `SDXL`, `comfyui`), `image-editor` (`pyvips`, `wand`), `vector-draw`, `bg-remover` (`rembg`, `bria-rmbg`, `iopaint`, `segment-anything`), `image-upscaler` (`realesrgan`, `spandrel`, `codeformer`), `whiteboard` (`tldraw`, `excalidraw`, `@xyflow/react`).
-- **3. Audio & Music (6)**: `audio-maker` (`Kokoro 82M`, `Fish Audio Drama 3`, `Breeze TTS 2`, `chatterbox-tts`, `ACE-Step 1.5`, `Meta MusicGen Large`, `audiocraft`), `audio-editor` (`wavesurfer.js`, `pedalboard`), `audio-cleanup` (`deepfilternet`, RNNoise WASM), `stem-splitter` (`demucs`, `audio-separator`), `podcast-studio` (`pyloudnorm`, `ffmpeg`), `audio-analyzer` (`meyda`, `librosa`, `essentia`).
-- **4. 3D & Spatial (3)**: `scene-3d` (`three`, `@react-three/fiber`, `bpy`, `trimesh`, `cadquery`), `render-3d` (`theatre.js`, `bpy` Cycles/EEVEE, `pyrender`), `viewer-3d` (`@google/model-viewer`, `pyassimp`, `pygltflib`).
-- **5. Publishing, Live & Management (4)**: `pdf-decks` (`@react-pdf/renderer`, `weasyprint`, `python-pptx`, `pymupdf`), `live-stream` (`@livekit/components-react`, `hls.js`, `aiortc`), `dam-search` (`@tanstack/react-virtual`, `sqlite-vec`, `open-clip-torch`, `sentence-transformers`), `media-info` (`mediainfo.js`, `exifr`, `ffprobe`).
-- **6. Generative AI & Avatars (7)**: `ai-video` (Local: `LTX-2.5`, `Wan 2.2`, `HunyuanVideo 1.5`, `CogVideoX-1.5`; Cloud: `Veo 3.1`, `Seedance 2.5`, `Wan 3.0`, `Kling 4.0`, `Runway Gen-4.5`), `ai-avatars` (`MuseTalk`, `LatentSync`, `SadTalker`, `Wav2Lip`, `HeyGen API`, `Synthesia`), `ai-dubbing`, `text-video-edit` (`@tiptap/react` + `whisperx`), `ai-inpaint` (`sam2`, `propainter`, `Kling 4.0`, `MiniMax H3`), `ai-rigging` (`@pixiv/three-vrm`, `unirig`, `mediapipe`, `bpy`), `ai-3d` (`triposr`, `hunyuan3d`, `trellis`, `meshy`).
-- **7. Brand, Marketing & E-Commerce (6)**: `brand-kits` (Tailwind 4 `@theme` + `fonttools`), `batch-render` (`remotion`, `huey`), `mockups-tryon` (`Decal`, `IDM-VTON`), `auto-reframe` (`ultralytics` YOLO, `mediapipe`), `watermark-qr` (`qrcode.react`, `segno`), `stock-media` (`httpx` + SQLite cache).
-- **8. Spatial, Interactive & Data Media (5)**: `splats-3d` (`<Splat/>`, `nerfstudio`, `gsplat`, `pycolmap`), `spatial-xr` (`@react-three/xr`, `usd-core`), `branch-video`, `data-charts` (`d3`, `recharts`, `manim`, `plotly`), `code-video` (`shiki-magic-move`, `manim`, `playwright`).
-- **9. Studio Workflow, Collaboration & Delivery (8)**: `scriptwriter`, `frame-review` (WebSocket + `frame_comments`), `version-history` (`zundo`, `immer`, `jsonpatch`), `node-pipelines` (`@xyflow/react`, `networkx`), `media-proxy` (`idb-keyval`, `hls.js`, `ffmpeg`), `render-queue` (`huey` `SqliteHuey` / `tinyjobs`), `c2pa-sign` (`@contentauth/c2pa-web`, `c2pa-python`), `social-publish` (`apscheduler`).
-- **10. Design Systems, UI Prototyping & Web Export (5)**: `ui-tokens`, `ui-prototype`, `ui-studio`, `ui-export`, `a11y-audit`.
-- **11. Game Dev, Physics & Procedural Worlds (4)**: `game-2d`, `physics-3d`, `shader-graph`, `npc-ai`.
-- **12. Security, Auth, Billing & Usage Metering (4)**: `auth-rbac`, `ai-credits`, `media-drm`, `audit-logs`.
-- **13. Testing, Telemetry, Eval & Benchmarking (4)**: `ai-evals`, `media-qc`, `dataset-studio`, `telemetry`.
+| # | Domain | Count | Packages | Key Stack |
+| :--- | :--- | :---: | :--- | :--- |
+| **1** | Video & Film | 9 | `movie-maker`, `video-editor`, `motion-2d`, `vfx-engine`, `color-luts`, `subtitles`, `screen-recorder`, `gif-clipper`, `video-transcoder` | `faster-whisper`, `whisperx`, `Qwen3-ASR`, `NVIDIA Nemotron 3.5 ASR`, `ffmpeg` |
+| **2** | Image & Design | 6 | `image-maker`, `image-editor`, `vector-draw`, `bg-remover`, `image-upscaler`, `whiteboard` | `FLUX.1`, `SDXL`, `comfyui`, `pyvips`, `rembg`, `realesrgan`, `tldraw`, `excalidraw` |
+| **3** | Audio & Music | 6 | `audio-maker`, `audio-editor`, `audio-cleanup`, `stem-splitter`, `podcast-studio`, `audio-analyzer` | `Kokoro 82M`, `ACE-Step 1.5`, `wavesurfer.js`, `pedalboard`, `deepfilternet`, `demucs`, `librosa` |
+| **4** | 3D & Spatial | 3 | `scene-3d`, `render-3d`, `viewer-3d` | `three`, `@react-three/fiber`, `bpy`, `trimesh`, `cadquery`, `@google/model-viewer` |
+| **5** | Publishing, Live & Management | 4 | `pdf-decks`, `live-stream`, `dam-search`, `media-info` | `@react-pdf/renderer`, `weasyprint`, `@livekit/components-react`, `hls.js`, `sqlite-vec`, `ffprobe` |
+| **6** | Generative AI & Avatars | 7 | `ai-video`, `ai-avatars`, `ai-dubbing`, `text-video-edit`, `ai-inpaint`, `ai-rigging`, `ai-3d` | `LTX-2.5`, `Veo 3.1`, `Wan 3.0`, `Kling 4.0`, `MuseTalk`, `sam2`, `triposr`, `hunyuan3d` |
+| **7** | Brand, Marketing & E-Commerce | 6 | `brand-kits`, `batch-render`, `mockups-tryon`, `auto-reframe`, `watermark-qr`, `stock-media` | `Tailwind 4 @theme`, `fonttools`, `remotion`, `huey`, `ultralytics`, `mediapipe`, `segno` |
+| **8** | Spatial, Interactive & Data Media | 5 | `splats-3d`, `spatial-xr`, `branch-video`, `data-charts`, `code-video` | `nerfstudio`, `gsplat`, `@react-three/xr`, `d3`, `recharts`, `manim`, `shiki-magic-move` |
+| **9** | Studio Workflow & Delivery | 8 | `scriptwriter`, `frame-review`, `version-history`, `node-pipelines`, `media-proxy`, `render-queue`, `c2pa-sign`, `social-publish` | `WebSocket`, `@xyflow/react`, `networkx`, `huey` (`SqliteHuey`), `c2pa-python`, `apscheduler` |
+| **10** | Design Systems & UI Export | 5 | `ui-tokens`, `ui-prototype`, `ui-studio`, `ui-export`, `a11y-audit` | Design tokens, WCAG 2.1, React/HTML export |
+| **11** | Game Dev & Physics | 4 | `game-2d`, `physics-3d`, `shader-graph`, `npc-ai` | 2D/3D simulation, shaders, behavior trees |
+| **12** | Security, Auth & Metering | 4 | `auth-rbac`, `ai-credits`, `media-drm`, `audit-logs` | RBAC, token metering, DRM licensing, audit trails |
+| **13** | Testing, Telemetry & Eval | 4 | `ai-evals`, `media-qc`, `dataset-studio`, `telemetry` | EBU-R128 QC, LLM evals, datasets, telemetry |
 
 ### Critical Stack Configuration Notes
 1. **Vite 8 + FFmpeg.wasm**: `vite.config.js` excludes `@ffmpeg/ffmpeg` and `@ffmpeg/util` from `optimizeDeps` and supports `Cross-Origin-Opener-Policy: same-origin` + `Cross-Origin-Embedder-Policy: require-corp` when `VITE_ENABLE_SHARED_ARRAY_BUFFER=true`.
 2. **SQLite WAL + Background Jobs**: Use `huey` (`SqliteHuey`) or `tinyjobs` for render queues, batch jobs, and scheduled social posts directly on SQLite WAL without Redis or RabbitMQ.
-```

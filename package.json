@@ -17,7 +17,7 @@
     "desktop:pack": "npm run build && electron-builder --win --dir",
     "desktop:build": "npm run build && electron-builder --win",
     "clean": "node -e \"['dist'].forEach(p => fs.rmSync(p, {recursive: true, force: true}))\"",
-    "dev": "soul-dev --kill-port",
+    "dev": "soul-dev --kill-port --open",
     "dev:client": "soul-runner client --kill-port",
     "dev:server": "soul-runner server --kill-port",
     "dev:portal:server": "python server/main.py --port 8008 --reload",
