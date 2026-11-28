@@ -20,7 +20,7 @@ import ShortcutsModal from './components/ShortcutsModal';
 import GlobalStatusBar from './components/GlobalStatusBar';
 
 // Lazy-loaded Pillar Feature Views (code-split cleanly)
-const PortalHubView = lazy(() => import('./components/PortalHubView'));
+const PortalHubView = lazy(() => import('./features/portal-hub/PortalHubView'));
 const ChangelogView = lazy(() => import('./features/changelog/ChangelogView'));
 const CodeUpdatesView = lazy(() => import('./features/changelog/CodeUpdatesView'));
 const ProjectsView = lazy(() => import('./features/projects/ProjectsView'));
@@ -276,7 +276,7 @@ function App() {
       });
     };
     const timer = window.setTimeout(() => {
-      prefetch(() => import('./components/PortalHubView'));
+      prefetch(() => import('./features/portal-hub/PortalHubView'));
       prefetch(() => import('./features/changelog/ChangelogView'));
       prefetch(() => import('./features/changelog/CodeUpdatesView'));
       prefetch(() => import('./features/projects/ProjectsView'));
