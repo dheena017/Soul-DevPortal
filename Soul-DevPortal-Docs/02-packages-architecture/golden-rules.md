@@ -51,6 +51,7 @@ graph TD
 > A shared package is foundational infrastructure. A bug or breaking change in a shared package cascades to all 9 applications simultaneously. Every shared library must adhere strictly to these 8 invariants.
 
 ### 1. Strict 2-Tier Architecture & Facade Encapsulation
+
 - Every package must strictly decouple its **Public External Facade** from its **Internal Implementation**.
 - Consumers must import only from approved public facades:
   - Python: `from logger.external import get_logger, server_logger` or `from workspace_logger import get_logger`
@@ -60,6 +61,7 @@ graph TD
 ---
 
 ### 2. Snake_case Identifiers for Python Modules
+
 - All Python file names within package internals and externals must use standard snake_case identifiers (e.g. `logger_engine.py`, `run_dev.py`, `format_handlers.py`), **never** kebab-case (e.g. `run-dev.py`).
 
 > [!CAUTION]
@@ -68,13 +70,16 @@ graph TD
 ---
 
 ### 3. Zero Redundant Shims & DRY Canonical Implementations
+
 - Every shared package must have exactly one canonical implementation of any feature.
 - Never introduce duplicate fallback wrapper shims or competing utility implementations. If an API evolves, refactor the canonical engine and export backward-compatible aliases from the facade with `@deprecated` docstrings.
 
 ---
 
 ### 4. Triple-Manifest Parity
+
 Packages supporting both Node.js and Python ecosystems must maintain strict metadata, versioning, and name synchronization across three manifest files:
+
 1. `package.json` (NPM workspace manifest with subpath exports)
 2. `pyproject.toml` (Modern PEP 517/621 build specification)
 3. `setup.py` (Legacy and editable `pip install -e` compatibility)
@@ -84,6 +89,7 @@ Discrepancies in version or dependencies across these manifests trigger immediat
 ---
 
 ### 5. Mandatory Isolated Unit Verification Suite
+
 - A shared package must **never** rely on downstream projects to test its functionality.
 - Every package must contain an isolated test suite (`tests/` directory) with automated tests verifying:
   - Facade exports and public signatures (`test_external.py`).
@@ -93,6 +99,7 @@ Discrepancies in version or dependencies across these manifests trigger immediat
 ---
 
 ### 6. Subpath Exports & Explicit Type Declarations
+
 Every shared package must declare explicit `exports` maps in `package.json` to define supported subpath import entrypoints:
 
 ```json
@@ -116,6 +123,7 @@ Every shared package must declare explicit `exports` maps in `package.json` to d
 ---
 
 ### 7. Deterministic `sys.path` Priority & Anti-Shadowing
+
 - Executable Python scripts in `external/` must prepend their own package root at **index 0** of `sys.path`.
 - Sibling packages (`logger`, `config`) are **appended** at the end:
 
@@ -141,6 +149,7 @@ for _pkg in ("logger", "config"):
 ---
 
 ### 8. Polyglot Zero-Config Consumption
+
 - Shared libraries must work out-of-the-box without requiring bespoke bundler configurations or loader hacks in consumer projects.
 - TypeScript packages distribute clean ES modules (`esm`) and declaration typings (`.d.ts`).
 - Python packages install cleanly in editable mode (`pip install -e Soul-DevPortal-Packages/<pkg>`).
@@ -148,6 +157,7 @@ for _pkg in ("logger", "config"):
 ---
 
 ### 9. Live Package Preview Parity (`Preview/` + `Package Preview` Tab)
+
 - Every shared package folder under `Soul-DevPortal-Packages/<pkg>/` must include a `Preview/` directory containing:
   - `Preview/preview.json` (with `script`, `runCommand`, `demoCommand`, `jsonDemoCommand`, `sampleInputs`, and `commands`)
   - `Preview/USAGE.md` (standardized Quick Commands table & sample `--input-json` payload)
@@ -159,6 +169,7 @@ for _pkg in ("logger", "config"):
 ## Part II: Package-Specific Architectural Standards
 
 ### 1. `@workspace/logger` Invariants
+
 - **5-Column Format**: All server log lines must output in deterministic 5-column format:
   `[TIMESTAMP] [LEVEL] [SERVICE] [TRACE_ID] MESSAGE`
 - **PII & Secret Masking**: Automatic regex masking of sensitive tokens (`api_key`, `password`, `secret`, `bearer`, `jwt`). Never emit raw secrets in plain text.
@@ -168,6 +179,7 @@ for _pkg in ("logger", "config"):
 ---
 
 ### 2. `@workspace/config` Invariants
+
 - **Single Source of Truth**: Port allocations, Tailwind v4 design tokens, and TypeScript presets must live here.
 - **Zero Drift Port Matrix**: Ports defined in `@workspace/config` must match `projects.json` with 100% parity.
 - **Pure CSS Tailwind v4**: Export CSS custom property presets under `@theme` for instant import in downstream apps.
@@ -175,6 +187,7 @@ for _pkg in ("logger", "config"):
 ---
 
 ### 3. `@workspace/runner` Invariants
+
 - **Atomic Process Supervision**: Child processes must be managed via Windows Job Objects (`JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE`) or POSIX process groups (`os.setsid`).
 - **Sub-Second Active Socket Prober**: Probe TCP port readiness using non-blocking socket connect before reporting service status.
 - **Interactive Hotkeys**: Support `[r]` restart backend, `[f]` restart frontend, `[p]` process telemetry, `[c]` clear screen, `[q]` quit.
