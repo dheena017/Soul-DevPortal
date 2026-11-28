@@ -28,10 +28,19 @@ export interface PackagePreviewFile {
 export interface PackagePreviewManifest {
   title?: string;
   subtitle?: string;
+  domain?: string;
+  layer?: string;
   runtime?: string;
+  localModels?: string[];
+  cloudApis?: string[];
   usedIn?: string[];
   features?: string[];
   commands?: string[];
+  script?: string;
+  runCommand?: string;
+  demoCommand?: string;
+  jsonDemoCommand?: string;
+  sampleInputs?: Record<string, unknown>;
 }
 
 export interface PackagePreviewData {

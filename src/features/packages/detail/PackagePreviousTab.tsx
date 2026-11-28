@@ -18,7 +18,17 @@ export default function PackagePreviousTab({
 }: PackagePreviousTabProps) {
   const pkgKey = (pkg.id || '').toLowerCase();
   const previewFolder = pkg.preview;
-  const previewFiles = previewFolder?.files || [];
+  const rawPreviewFiles = previewFolder?.files || [];
+  const previewFiles = useMemo(() => {
+    const rank = (name: string) => {
+      const lower = name.toLowerCase();
+      if (lower === 'usage.md') return 0;
+      if (lower.startsWith('run_') && lower.endsWith('.py')) return 1;
+      if (lower === 'preview.json') return 2;
+      return 3;
+    };
+    return [...rawPreviewFiles].sort((a, b) => rank(a.name) - rank(b.name) || a.name.localeCompare(b.name));
+  }, [rawPreviewFiles]);
   const previewManifest = useMemo(() => {
     if (previewFolder?.manifest) return previewFolder.manifest;
     const jsonFile = previewFiles.find((f) => f.name.toLowerCase() === 'preview.json');
@@ -154,6 +164,85 @@ export default function PackagePreviousTab({
               </div>
             )}
 
+            {(previewManifest?.script || previewManifest?.runCommand || previewManifest?.demoCommand) && (
+              <div className="flex flex-col gap-2 pt-2 border-t border-white/[0.06]">
+                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
+                  Quick Run &amp; Demo
+                </span>
+                <div className="flex flex-col gap-1.5">
+                  {(previewManifest?.runCommand || previewManifest?.script) && (
+                    <div className="px-2.5 py-1.5 rounded-lg bg-[#09090c] border border-emerald-500/20 flex items-center justify-between gap-2 font-mono text-[11px]">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 text-[9px] font-bold uppercase shrink-0">
+                          Script Run
+                        </span>
+                        <span className="text-emerald-200 truncate">
+                          {previewManifest.runCommand || `python ${previewManifest.script}`}
+                        </span>
+                      </div>
+                      <CopyButton
+                        text={previewManifest.runCommand || `python ${previewManifest.script}`}
+                        variant="compact"
+                        label="Copy"
+                      />
+                    </div>
+                  )}
+                  {previewManifest?.demoCommand && (
+                    <div className="px-2.5 py-1.5 rounded-lg bg-[#09090c] border border-sky-500/20 flex items-center justify-between gap-2 font-mono text-[11px]">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 text-[9px] font-bold uppercase shrink-0">
+                          Demo Run
+                        </span>
+                        <span className="text-sky-200 truncate">{previewManifest.demoCommand}</span>
+                      </div>
+                      <CopyButton text={previewManifest.demoCommand} variant="compact" label="Copy" />
+                    </div>
+                  )}
+                  {(previewManifest?.jsonDemoCommand || previewManifest?.demoCommand) && (
+                    <div className="px-2.5 py-1.5 rounded-lg bg-[#09090c] border border-violet-500/20 flex items-center justify-between gap-2 font-mono text-[11px]">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="px-1.5 py-0.5 rounded bg-violet-500/15 text-violet-300 text-[9px] font-bold uppercase shrink-0">
+                          JSON Demo
+                        </span>
+                        <span className="text-violet-200 truncate">
+                          {previewManifest.jsonDemoCommand || `${previewManifest.demoCommand} --json`}
+                        </span>
+                      </div>
+                      <CopyButton
+                        text={previewManifest.jsonDemoCommand || `${previewManifest.demoCommand} --json`}
+                        variant="compact"
+                        label="Copy"
+                      />
+                    </div>
+                  )}
+                  <div className="px-2.5 py-1.5 rounded-lg bg-[#09090c] border border-amber-500/20 flex items-center justify-between gap-2 font-mono text-[11px]">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 text-[9px] font-bold uppercase shrink-0">
+                        NPM
+                      </span>
+                      <span className="text-amber-200 truncate">npm run run / npm run demo</span>
+                    </div>
+                    <CopyButton text="npm run demo" variant="compact" label="Copy" />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {previewManifest?.sampleInputs && Object.keys(previewManifest.sampleInputs).length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                <span className="text-[10px] font-mono text-zinc-500 uppercase mr-1">Sample Inputs:</span>
+                {Object.entries(previewManifest.sampleInputs).map(([k, v]) => (
+                  <span
+                    key={k}
+                    className="px-2 py-0.5 rounded-md bg-[#16161c] border border-white/[0.08] text-[10px] font-mono text-zinc-300"
+                  >
+                    <span className="text-zinc-500">{k}=</span>
+                    <span className="text-emerald-300">{typeof v === 'string' ? v : JSON.stringify(v)}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+
             {previewManifest?.commands && previewManifest.commands.length > 0 && (
               <div className="flex flex-col gap-1.5 pt-1">
                 <span className="text-[10px] font-mono text-zinc-500 uppercase">Commands &amp; Imports:</span>
@@ -174,20 +263,29 @@ export default function PackagePreviousTab({
           <div className="neu-card bg-[#09090c] border border-white/[0.1] rounded-2xl overflow-hidden flex flex-col">
             <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-[#111115] border-b border-white/[0.08]">
               <div className="flex items-center gap-1.5 overflow-x-auto">
-                {previewFiles.map((f) => (
-                  <button
-                    key={f.name}
-                    type="button"
-                    onClick={() => setActiveFileName(f.name)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer ${
-                      activePreviewFile?.name === f.name
-                        ? 'bg-[#1a1a22] border-sky-400/40 text-white font-bold'
-                        : 'bg-[#16161c] border-white/[0.08] text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    {f.name}
-                  </button>
-                ))}
+                {previewFiles.map((f) => {
+                  const extColor =
+                    f.ext === 'py'
+                      ? 'text-sky-300'
+                      : f.ext === 'md'
+                        ? 'text-emerald-300'
+                        : 'text-amber-300';
+                  return (
+                    <button
+                      key={f.name}
+                      type="button"
+                      onClick={() => setActiveFileName(f.name)}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border cursor-pointer flex items-center gap-1.5 ${
+                        activePreviewFile?.name === f.name
+                          ? 'bg-[#1a1a22] border-sky-400/40 text-white font-bold'
+                          : 'bg-[#16161c] border-white/[0.08] text-zinc-400 hover:text-white'
+                      }`}
+                    >
+                      <span className={`text-[9px] uppercase ${extColor}`}>.{f.ext}</span>
+                      <span>{f.name}</span>
+                    </button>
+                  );
+                })}
               </div>
               {activePreviewFile && (
                 <CopyButton text={activePreviewFile.content} variant="compact" label="Copy File" />
